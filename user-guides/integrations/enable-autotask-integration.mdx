@@ -29,6 +29,38 @@ The permission screen checks vendor endpoints and reports required access, optio
 
 Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. These checks exercise **read access**; they do not prove that ticket creation, comments, warranty updates or other writes will succeed.
 
+## Project management permissions
+
+Edit the security level assigned to the **API-only user whose credentials are saved in MSPortal** under **Admin > Resources/Users > Security Levels**. Configure access to the **Projects** module and its create/update operations, as well as the supporting records below. A human technician’s security level does not replace the API user’s access.
+
+Autotask distinguishes **project tasks** from service tickets. Service Desk ticket edit permission alone is not sufficient. The table describes the effective access the API user needs; custom security levels can express this through module settings and additional options rather than a separate checkbox for each API entity.
+
+| Project operation | Required effective API-user access |
+| --- | --- |
+| Read the portfolio and project details | **Projects → Project: View (All)**, including the intended companies and Lines of Business. |
+| Create projects, including from MSPortal templates | Project **Add** access. |
+| Update project status, dates and mapped project fields | Project **Edit** access across the intended projects. |
+| Read, create and update phases | Query, create and update access to **Phases** through the Projects module. |
+| Read, create and update project tasks | Query, create and update access to **Tasks**, including status, primary resource, priority, title, estimated hours, dates and mapped task fields. Do not restrict the API user to tasks assigned to itself. |
+| Read project effort and time-entry notes | Query access to **TimeEntries** for the intended project tasks and resources. |
+| Log time against project tasks | Create access to **TimeEntries**; configure the Projects **Can enter time on** setting for the intended tasks and permission to enter time for the selected resource. Enable the applicable billing-field permissions when setting billable/non-billable time. |
+| Populate company, contact and assignment choices | Read access to **Companies**, **Contacts**, **Resources**, **Roles**, **Departments** and the work types/billing codes used by your tasks and time entries. |
+| Populate statuses, priorities, types and mapped fields | Read access to the relevant project/task picklists and user-defined-field definitions. |
+
+Use unrestricted project access within the intended organizational scope for the integration. Autotask can restrict task visibility by **Line of Business even with View All**. Baseline project tasks are read-only, and time-entry rules for completed tasks, project types and submitted/posted time still apply. See Autotask’s [task access rules](https://www.autotask.net/help/Developerhelp/Content/APIs/REST/Entities/TasksEntity.htm) and [time-entry requirements](https://ww2.autotask.net/help/developerhelp/Content/APIs/REST/Entities/TimeEntriesEntity.htm).
+
+### Notes, checklists and templates
+
+In MSPortal, Autotask project-task notes use **time-entry notes**; standalone project-task note creation and editable checklist items are not supported in this workflow. Additional note or checklist permissions will not enable an unsupported control. Creating or applying a saved MSPortal template to an Autotask project requires the project, phase and task create permissions above.
+
+MSPortal-only projects, reusable portal templates and portal project registers use MSPortal permissions. Vendor permissions apply when an action explicitly creates or updates PSA work. These project read/create/update operations do not require blanket Delete access or an administrator account.
+
+### Verify read and write access separately
+
+After saving the API user’s security level, return to **Settings > Integrations > Autotask PSA > Configure > Permissions** and select **Re-check**. A green Projects result checks project reading; it does not verify phase/task creation, edits or time entry.
+
+An Autotask administrator can also inspect the API user’s effective query/create/update access using Autotask’s [entityInformation permissions](https://www.autotask.net/help/Developerhelp/Content/APIs/REST/API_Calls/REST_EntityInformationCall.htm). Validate the intended project creation, task edit and time-entry workflows on a designated test project. If a template operation partly succeeds, inspect the created records before retrying.
+
 ## Select synchronization scope
 
 Select the intended queues and ticket categories. Decide whether to include recurring tickets. Review company/contact filters and the supported opportunity, project, invoice, product catalog, configuration-item and change-management options. Configuration items first synchronize into device staging; discovery is not a completed device import.
@@ -65,6 +97,9 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
 
 | Symptom | What to check |
 | --- | --- |
+| Projects load, but a status or task edit fails | Review the API-only user’s Projects Edit access, task restrictions and Line of Business scope. |
+| Creating a project or applying a template fails | Check create access to Projects, Phases and Tasks, and the required resource/work-type choices. Inspect partial results before retrying. |
+| Logging project time fails | Check TimeEntries create access, **Can enter time on**, resource mapping, billing-field permissions and completed-task/timesheet rules. |
 | Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
 | A data option is unavailable | Permission result and whether this provider supports that option. |
 | Companies or tickets are missing | Saved provider filters, synchronization result and company links. |

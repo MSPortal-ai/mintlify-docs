@@ -29,6 +29,35 @@ The permission screen checks vendor endpoints and reports required access, optio
 
 Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. These checks exercise **read access**; they do not prove that ticket creation, comments, warranty updates or other writes will succeed.
 
+## Project management permissions
+
+Configure both the **MSPortal API application** and the **Agent to Log in as**. Under **Configuration > Integrations > Halo API > Applications**, open the application’s permissions. Then review the selected agent and its role under **Configuration > Teams & Agents**. Application access cannot override a restriction on that agent. See [Halo’s API application guide](https://www.usehalo.com/guides/1737).
+
+Halo projects use project records with child tickets and milestones. Project access alone does not cover every child-ticket, checklist or time-entry operation.
+
+| Area | Read access | Create/update access and purpose |
+| --- | --- | --- |
+| **Projects** | **Project Read** (`read:projects`) and agent access to the intended projects | **Project Modify** and agent permission to create/edit projects: create a PSA project, update its lifecycle status or mapped fields, and create/update its milestones (phases). |
+| **Tickets** | **Ticket Read** (`read:tickets`), including child project tickets and their details | **Ticket Modify** and agent permission to create/edit the intended ticket types: create project tickets and edit supported ticket details or mapped fields. |
+| **Actions / time recorded on tickets** | Read access to actions on the project and its child tickets | Agent access to add the relevant actions and record time, together with ticket write access: post project-ticket notes and time entries. Check action visibility, allowed outcomes and billing options on the selected agent. |
+| **Checklist / To-do items** | Read the child ticket and its checklist | Permission to add/update the ticket’s to-do items: add checklist items and change completion. Confirm this operation in your Halo version’s API permissions; project read access alone does not establish it. |
+| **Customers and agents** | **Customers Read** (`read:customers`), company/site/user access, and visibility of the relevant agents | Read access supplies company/contact choices and staff mappings; these project workflows do not require modifying customers or agents. |
+| **Ticket configuration and templates** | Read the intended ticket types, statuses, priorities and project templates | Read source templates when importing or refreshing a template. Creating work from a portal template uses the project/ticket write permissions above; editing the source Halo template is not required. |
+
+**Project Read/Modify** and **Ticket Read/Modify** are the permission names used in [Halo’s API documentation](https://www.halopsa.com/apidoc/). Application labels and additional endpoint permissions can vary by version; use your instance’s **/apidoc** to confirm the permissions for projects, tickets, actions, to-do items and templates. The agent must also have module access and the corresponding create/edit/action permissions. The separate **Time entries** setup check requests `read:timesheets`; that is read access, not proof that adding time through a ticket action will succeed.
+
+### Agent scope and supported operations
+
+Add the API agent to every intended department and team. Allow it to access the required clients and ticket types, including the project type and child-ticket types. Where the connection should cover all of them, review **Allow All Clients** and **Allow All Ticket Types**. Also check access to internal actions, project templates and the actions used for time entry. A valid token can still return incomplete data or reject writes when these restrictions exclude a record.
+
+Permissions enable supported workflows; they do not add provider features. Halo project lifecycle changes, supported detail edits, notes/time and checklist addition/completion have separate controls. **Project-ticket Kanban status, owner and priority changes are not currently enabled for Halo in MSPortal.** Checklist progress-note editing and checklist deletion are not offered for Halo in this workflow.
+
+MSPortal-only projects, reusable portal templates and portal project registers use MSPortal permissions. Explicitly creating or updating PSA work requires Halo access. Do not grant blanket Delete or administrator access for these read/create/update workflows.
+
+### Verify read and write access separately
+
+Save both the application and agent changes, then return to **Settings > Integrations > Halo PSA > Configure > Permissions** and select **Re-check**. A green Projects result only confirms the project read check. Validate project creation, a supported detail edit, checklist completion, and a note/time action on a designated test project. If applying a template partly succeeds, inspect its results before retrying.
+
 ## Select synchronization scope
 
 Select the intended teams and excluded ticket statuses. Halo also offers company/contact filters, opportunities, projects, invoices, product catalog, asset sync, change management and satisfaction ratings when their permissions are available. Asset status exclusions affect synchronization; inactive Halo assets are excluded and filtering does not delete existing portal devices.
@@ -65,6 +94,9 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
 
 | Symptom | What to check |
 | --- | --- |
+| Projects load, but creating or editing one fails | Review **Project Modify** on the application and the selected agent’s project access. |
+| A project loads, but its child ticket, checklist or note cannot be changed | Review ticket write/action/to-do access, ticket-type access and team/client restrictions on the API agent. |
+| Logging project time fails | Check permission to add the time-recording action, the agent mapping and billing options. A timesheet read check does not verify time creation. |
 | Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
 | A data option is unavailable | Permission result and whether this provider supports that option. |
 | Companies or tickets are missing | Saved provider filters, synchronization result and company links. |

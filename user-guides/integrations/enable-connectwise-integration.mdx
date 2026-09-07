@@ -27,7 +27,49 @@ In ConnectWise PSA, create an active API member under **System > Members > API M
 
 The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. A denied optional sync permission keeps its corresponding sync off. Checklist write permissions are checked separately and do not turn off project synchronization.
 
-Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. Sync checks exercise **read access**. The **Project checklist writes** check also reads the connected API member’s own security settings to verify Project Ticket Tasks Add, Edit and Inquire access. It does not create or change a checklist item. A granted result confirms those role levels; it does not guarantee every write will succeed or verify other writes such as ticket creation, comments or warranty updates.
+Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. Sync checks exercise **read access**. The **Project checklist writes** check also reads the connected API member’s own security settings to verify Project Ticket Tasks Add, Edit and Inquire access. It does not create or change a checklist item. A granted result confirms those role levels; it does not guarantee every write will succeed or verify project creation, project/ticket status changes, phase edits, comments, time entries, checklist deletion or warranty updates.
+
+## Project management permissions
+
+Configure the **API member that owns MSPortal’s configured keys** for the project work your staff will perform. Open **System > Members > API Members**, check its assigned role, then edit that role under **System > Security Roles**. Your staff member’s personal ConnectWise role does not grant access to the integration.
+
+The following is the recommended project read/create/update configuration. **All** allows the API member to work across the intended projects; **My** can prevent an integration account from updating work assigned to someone else. Keep company, location and business-unit access aligned with the records you intend to manage.
+
+| Project security-role action | Required levels | Used for |
+| --- | --- | --- |
+| **Project Headers** | Inquire: All; Add: All; Edit: All | Synchronize projects, create PSA projects, and update project status, dates and mapped project fields. |
+| **Project Phase** | Inquire: All; Add: All; Edit: All | Read phases, create phases when launching or applying a template, and update phase names and dates. |
+| **Project Tickets** | Inquire: All; Add: All; Edit: All | Read and create project tickets; update their status, owner, priority, summary, budget hours, dates and mapped fields. |
+| **Close Projects** | Inquire: All; Add: None; Edit: All | Move a project into a closed status. |
+| **Close Project Tickets** | Inquire: All; Add: None; Edit: All | Move a project ticket into a closed status. |
+| **Project Notes** | Inquire: All; Add: All; Edit: All | Read and add project notes where offered, with edit access ready for supported note-editing workflows. Project-ticket comments also require access to the parent Project Tickets record. |
+| **Project Teams** | Inquire: All; Add: All; Edit: All | Read project team members and populate assignment choices, with add/edit access ready for supported team-management workflows. |
+| **Project Ticket Tasks** | Inquire: All; Add: All; Edit: All | Read and add checklist items, change completion, and update checklist progress notes. This is separate from Project Tickets. |
+
+For ticket status changes across your managed projects, configure **Project Tickets → Edit Level: All**. Granting Project Ticket Tasks Edit alone only covers checklist changes. If ordinary status changes work but closing fails, review **Close Project Tickets** or **Close Projects**, as appropriate.
+
+### Supporting access
+
+Project management also uses records outside the Project module. Retain the connection wizard’s required company, contact, member and lookup read permissions, and configure these for the features you use:
+
+| Area | Access to configure | Used for |
+| --- | --- | --- |
+| **Companies → Company Maintenance / Contacts** | Inquire: All | Select and resolve the project’s company and contact. |
+| **System → Member Maintenance** | Inquire: All | Resolve project managers, ticket owners and time-entry authors. |
+| **System → Table Setup** | Inquire: All, including the relevant project/service boards, statuses, types, priorities and work-type/work-role tables | Populate creation and editing choices. A missing lookup can block a write even when the project itself is editable. |
+| **Time & Expense → Time Entry** | Inquire: All; Add: All when logging time | Synchronize project effort and create project-ticket time entries. |
+| **Finance → Billing View Time** | Inquire: All; Edit: All when logging billable time | Read and record billable time. |
+| **Time & Expense → Time Entry Billable Option** | Inquire and Edit: All when choosing billable/non-billable time | Set the billing option on time entries. |
+| **Finance → Agreements** | Inquire: All when using agreement-related time settings | Resolve agreement references for time entry. |
+| **Project template catalog** | Read access to the source project templates and their phases/tickets | Import or refresh a PSA template where available. Check template access in your ConnectWise version; importing does not require permission to edit the source template. |
+
+These permissions support the operations above; they do not override ConnectWise validation, board restrictions, closed-record rules or missing required fields. Use the [ConnectWise security-role documentation](https://docs.connectwise.com/ConnectWise_Documentation/090/020/020/020) for your version’s role controls.
+
+### Delete access and local project work
+
+Read/create/update workflows do not require blanket Delete permissions. To use **Delete checklist item** where available, additionally grant **Project → Project Ticket Tasks → Delete Level: All**. MSPortal checks that permission separately; an unreadable or unverified role does not enable deletion. Leave Delete disabled on unrelated project records.
+
+MSPortal-only projects, reusable portal templates and portal project registers use MSPortal permissions. An explicit action that creates or updates a PSA project, phase or ticket needs the vendor permissions above. Granting vendor access does not grant a staff or client user access inside MSPortal.
 
 ## Allow project checklist changes
 
@@ -43,7 +85,7 @@ Adding a checklist item or changing its completion state writes to ConnectWise u
 | **Add Level** | **All** | Add checklist items. |
 | **Edit Level** | **All** | Update checklist completion. |
 
-Keep the role dedicated to MSPortal. If it is shared with another integration, review the effect on that integration before changing it. Checklist creation and completion do not require granting Delete access.
+Keep the role dedicated to MSPortal. If it is shared with another integration, review the effect on that integration before changing it. Checklist creation and completion do not require granting Delete access. Deleting an item has the separate requirement described above.
 
 After saving the role, return to **Settings > Integrations > ConnectWise Manage > Configure > Permissions** and select **Re-check**. The **Project checklist writes** result is separate from **Projects**:
 
@@ -91,6 +133,10 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
 
 | Symptom | What to check |
 | --- | --- |
+| Projects load, but changing a ticket status fails with a security error | Check **Project Tickets → Edit Level** on the API member’s role; Project Ticket Tasks Edit is a different permission. |
+| Only closing a project or ticket fails | Check **Close Projects** or **Close Project Tickets** Edit access and the PSA’s required closure fields. |
+| Creating a project or applying a template fails | Check Add access to **Project Headers**, **Project Phase** and **Project Tickets**, plus lookup access. Review any records already created before retrying. |
+| Checklist deletion is unavailable | Review **Project Ticket Tasks → Delete Level: All** and whether MSPortal can verify the API member’s role. |
 | Checklist is visible, but adding an item fails with a security error | Check Project Ticket Tasks **Add Level** on the API member’s role. A successful project read check does not verify creation access. |
 | Checklist completion changes fail | Check Project Ticket Tasks **Edit Level** on the same API member’s role. |
 | Checklist permissions could not be verified | Review the API member’s role in ConnectWise. Restricted access to security metadata, scoped **My** permissions or a temporary API failure can prevent verification. |
