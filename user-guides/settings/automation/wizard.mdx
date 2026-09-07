@@ -14,7 +14,7 @@ The rule wizard is a two-step flow: **Setup** (where you configure everything) a
     Fill in Basic Information, choose a Trigger, optionally add Conditions, and add at least one Action. See the sections below for each.
   </Step>
   <Step title="Review and save">
-    Click **Next** to reach the Review step, run a test against live data, then click **Create Rule** to save.
+    Use **Run Test** in Setup to inspect matches, then click **Next** to review the rule and its Active setting before choosing **Create Rule**.
   </Step>
 </Steps>
 
@@ -56,7 +56,7 @@ The entity you choose determines which fields are available in conditions and as
 
 ### Trigger Types
 
-There are two trigger types. Pick based on when the rule should evaluate.
+Choose a trigger supported for the selected entity. Date Threshold and Scheduled evaluate stored records. Where offered, Survey Response Received and Onboarding Event respond to their matching events; changing the entity can change the available triggers.
 
 <Tabs>
   <Tab title="Date Threshold">
@@ -73,7 +73,7 @@ There are two trigger types. Pick based on when the rule should evaluate.
 
     A **Preview** panel shows a plain-English description of what you configured, for example: "When warranty_end is within 30 days".
 
-    Date Threshold rules evaluate hourly so they pick up matching records within an hour of crossing the threshold.
+    Date Threshold rules evaluate in the background. The configured date window determines eligibility; execution logs establish when actions actually ran.
   </Tab>
   <Tab title="Scheduled">
     Fires on a fixed frequency regardless of any date field.
@@ -94,7 +94,7 @@ There are two trigger types. Pick based on when the rule should evaluate.
 
 ## Conditions (Optional)
 
-Conditions filter which records the rule acts on. The Conditions section sits at the top right of the Setup step. **A rule with no conditions matches every record of the chosen entity type** within the rule's scope.
+Conditions filter which records the rule acts on. The Conditions section sits at the top right of the Setup step. **A rule with no conditions adds no further filter to records selected by its trigger** within the rule's scope.
 
 ### Condition Groups
 
@@ -126,7 +126,7 @@ The value input adapts to the field type:
 - **Is one of / is not one of** operators show a multi-select
 
 <Note>
-Dynamic dropdowns pull their options from your live data. If you add a new ticket status in your PSA or a new priority in Settings, it shows up in the rule builder automatically.
+Dynamic dropdowns pull their options from your live data. For PSA options, complete the relevant reference-data sync and reopen the selector after changing provider configuration. A value absent from synchronized data may not yet appear.
 </Note>
 
 ## Actions (Required)
@@ -135,7 +135,7 @@ Every rule needs at least one action. The Actions section is below Conditions. C
 
 ### Action Types
 
-There are seven action types. Each one has its own configuration form that opens in an accordion when you add it.
+The editor offers the following action types where supported for your entity. Each one has its own configuration form that opens in an accordion when you add it.
 
 <AccordionGroup>
   <Accordion title="Add to Planner" icon="list-check">
@@ -145,9 +145,13 @@ There are seven action types. Each one has its own configuration form that opens
     |-------|---------|
     | **Task Title** | Task title. Supports template variables (see below) |
     | **Business Value** | Low, Medium, or High |
-    | **Due Offset (days)** | Days from the rule firing. Positive for future, negative for past |
+    | **Due Offset (days)** | For individual items, an offset from execution. Bundled dates can use the record date and trigger/action offsets; inspect the bundle preview |
 
-    The created task defaults to "Not Started" status. Description, status, and estimated hours are not exposed in the action form today; use an Update Field action later in the rule or edit the task manually if you need to set them.
+    The created task defaults to "Not Started". The action also offers Description and Planner Type, with date controls where applicable. Edit the created Planner item for other details. An Update Field action targets the original matched entity, not the newly created Planner item.
+  </Accordion>
+
+  <Accordion title="Set Relative Date">
+    Choose an available source date, a writable target date and a positive or negative offset in days, weeks, months or years. The editor also offers supported current-date or trigger-date sources. This writes the matched record when the rule executes; preview the date logic before enabling the rule.
   </Accordion>
 
   <Accordion title="Update Field" icon="pen-to-square">
@@ -281,7 +285,7 @@ Actions run top-to-bottom. Drag is not supported, but you can remove and re-add 
 
 ## Review Step
 
-Click **Next** in the bottom-right to move to the Review step. This page has two sections.
+Click **Next** in the bottom-right to move to the Review step. Review the summary and Active setting before saving.
 
 ### Rule Summary
 
@@ -289,7 +293,7 @@ A plain-English summary of the rule: trigger, conditions, and actions. Verify th
 
 ### Test Rule
 
-Click **Run Test** to dry-run the rule against live data. The test returns a table of every entity that currently matches, so you can confirm:
+Return to Setup for the **Test Rule** section. Click **Run Test** to dry-run the rule against live data. The test returns a match count and a sample table, so you can confirm:
 
 - The conditions match the records you expected (and only those records)
 - The field values look right for templating
@@ -301,9 +305,33 @@ Click **Run Test** to dry-run the rule against live data. The test returns a tab
 
 ## Saving the Rule
 
-When you are satisfied with the test results, click **Create Rule** in the bottom-right. The rule is saved and appears on the list. By default new rules are **enabled**, so they start firing on their next evaluation cycle.
+When you are satisfied with the test results, click **Create Rule** in the bottom-right. The rule is saved and appears on the list. New rules start inactive. Check the **Active** setting on Review before saving. An active rule can execute on its next eligible cycle; save it inactive while preparing a controlled rollout.
 
-Click **Run Now** on the list view if you want to fire the rule once immediately rather than waiting for the schedule.
+Use **Run Now** only when you intend a real execution of the enabled rule. It queues work; inspect Logs for the outcome and any pending approval.
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Will Run Test send my email or open a PSA ticket?">
+    No. It evaluates matches without executing actions. It does not prove that recipients, provider credentials or delivery will succeed during a real run.
+  </Accordion>
+  <Accordion title="Why are fewer rows shown than the match count?">
+    The preview can show a sample. Review its count and sampling information; the displayed rows are not necessarily the entire execution set.
+  </Accordion>
+  <Accordion title="Does Update Field edit the Planner item just created above it?">
+    No. It writes the matched entity. Configure supported fields in Add to Planner or edit the resulting Planner item separately.
+  </Accordion>
+  <Accordion title="What happens if I save an active rule?">
+    The saved rule becomes eligible for automatic execution. Inspect Scope, recipients, action order and approval settings before saving it active.
+  </Accordion>
+  <Accordion title="What prevents a Scheduled rule from repeating work?">
+    Its Dedup choice matters. Once per entity suppresses repeat processing for that rule; Every run intentionally allows recurring actions. A custom done flag is an additional workflow choice, not proof of exactly-once delivery.
+  </Accordion>
+  <Accordion title="Why is a field or action unavailable?">
+    Available options depend on the entity, supported fields, permissions and provider data. Choose a supported option rather than entering an arbitrary field key to bypass the editor.
+  </Accordion>
+</AccordionGroup>
 
 ## Related
 

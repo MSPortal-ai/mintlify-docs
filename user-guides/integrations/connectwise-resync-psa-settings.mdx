@@ -1,176 +1,94 @@
 ---
-title: Resync ConnectWise PSA Settings
-description: Learn about resync connectwise psa settings
+title: 'Resync ConnectWise PSA Settings'
+description: 'Refresh ConnectWise reference options and verify them before changing ticket defaults.'
+icon: 'arrows-rotate'
 ---
 
-This guide explains how to resynchronize PSA configuration data between ConnectWise Manage and MSPortal when system settings have changed.
+Use **Sync PSA Data** after changing ConnectWise boards, statuses, priorities or ticket types. This MSP staff task refreshes the reference options used by MSPortal; ticket synchronization and ticket-routing configuration are separate tasks.
 
-## Overview
+## Before you start
 
-The PSA Settings Resync feature updates MSPortal's cached configuration data from ConnectWise, including:
-- Service board configurations
-- Ticket priorities
-- Ticket statuses
-- Ticket types and subtypes
-- Project statuses
-- Activity types
+Open **Settings > Integrations** with permission to write integration settings. Find the intended connected ConnectWise instance. Its saved connection must be active, and its API member must be able to read the configuration you need.
 
-## When to Use PSA Resync
+If you have more than one connection, check the instance before requesting the sync. A successful connection test does not prove that every board or reference endpoint is accessible.
 
-Use this feature when:
-- You've made changes to ConnectWise configurations
-- Added or removed service boards
-- Modified ticket statuses or priorities
-- Changed ticket types or subtypes
-- After ConnectWise system upgrades
-- Dropdown options aren't appearing correctly
-- Initial integration setup is complete
+## Request the reference sync
 
-## What Gets Synchronized
+<Steps>
+  <Step title="Find the connected instance">
+    On **Settings > Integrations**, locate the ConnectWise row. The **Sync PSA Data** action uses a database-shaped icon; its tooltip mentions priorities, boards, statuses and types.
+  </Step>
+  <Step title="Start Sync PSA Data">
+    Click **Sync PSA Data** once. This immediately requests background work; there is no later settings Save for this action. The separate **Resync** action requests the integration's broader sync workflow.
+  </Step>
+  <Step title="Check the result">
+    A **PSA data sync started** message acknowledges the request. It does not confirm that each option was retrieved. Allow the background work to finish, then reopen the relevant settings or ticket form and check the specific board, status, priority or type you changed.
+  </Step>
+  <Step title="Review your portal configuration">
+    If a new board or status should be offered to users, review [Ticket Settings](/user-guides/settings/tickets) and any template-specific routing. Importing a reference option does not automatically make it a default or permit every user to select it.
+  </Step>
+</Steps>
 
-- **Priorities:** Priority levels and their properties
-- **Boards:** All service board names and settings
-- **Statuses:** Available ticket statuses per board
-- **Types and Subtypes:** Ticket types and subtypes per board
-- **Project Statuses:** Available project status options
-- **Activity Types:** Sales activity types (used by CSAT follow-ups)
+## What the sync covers
 
-## Steps to Resync PSA Settings
+| Reference options | Where they matter |
+| --- | --- |
+| Priorities and service boards | Ticket routing and priority choices |
+| Board-specific statuses, types and subtypes | Choices available for the selected board |
+| Project statuses | Project status references |
+| Activity types | ConnectWise activity choices, including CSAT follow-ups |
 
-### 1. Navigate to Integration Settings
+Results depend on ConnectWise API access and which endpoints finish successfully. Some reference requests can fail while other categories update. Check the option you actually need, especially if an old option remains or activity types are missing.
 
-Go to [https://app.msportal.ai/settings/integrations](https://app.msportal.ai/settings/integrations)
-
-![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/5c22dea9-95d5-4bf8-8ef1-18b72af1fb02/ascreenshot.jpeg?tl_px=130,121&br_px=1850,1083&force_format=jpeg&q=100&width=1120.0)
-
-### 2. Initiate PSA Data Sync
-
-Locate and click the **Sync PSA Data** button in the integration options.
-
-![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/5c22dea9-95d5-4bf8-8ef1-18b72af1fb02/ascreenshot.jpeg?tl_px=260,165&br_px=1980,1126&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=700,277)
-
-### 3. Wait for Synchronization
-
-After clicking the sync button:
-- A "sync started" confirmation appears
-- The process runs automatically in the background
-- Typical completion time: 1-2 minutes
-- Refresh the page to see updated options once the sync finishes
-
-## What Doesn't Get Synchronized
-
-The PSA Settings sync does NOT include:
-- Actual ticket data (use ticket sync for this)
-- Historical data or closed tickets
-- User passwords or credentials
-- Financial information
-- Document attachments
-- Time entries (unless specifically configured)
-
-## Post-Sync Verification
-
-After synchronization completes, verify:
-
-### 1. Check Dropdown Options
-- Go to ticket creation form
-- Verify all dropdowns populate correctly
-- Check that new options appear
-
-### 2. Test Board Access
-- Navigate to ticket list
-- Confirm all boards are visible
-- Verify board filtering works
-
-### 3. Validate Status Mappings
-- Review status dropdown in tickets
-- Ensure all statuses are available
-- Check status transition rules
+This action does not fetch the actual ticket history, time entries, invoices or attachments. It does not clear the ticket dataset. Use [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations) only when that separate, broader operation is what you intend.
 
 ## Troubleshooting
 
-### Sync Doesn't Start
-- Verify ConnectWise integration is enabled
-- Check API credentials are valid
-- Ensure you have proper permissions
-- Try refreshing the page first
+| Symptom | What to check |
+| --- | --- |
+| Sync PSA Data is unavailable | Confirm the connection is active and your MSP role can write integration settings. |
+| Integration is not active | Open the intended connection and resolve its connection state before requesting the sync again. |
+| A new status or type is missing | Check the selected board, the option in ConnectWise, API-member access and the relevant sync result. |
+| Old options remain | Reopen the form after the sync and check whether all reference requests succeeded. A partial run is not proof that stale options were removed. |
+| Data is present but clients cannot select it | Review ticket visibility, allowed statuses and template/company routing settings. |
+| Sync is taking longer than expected | Check the connection's errors and provider availability. There is no guaranteed one- or two-minute completion time; avoid repeated clicks while work is pending. |
 
-### Missing Options After Sync
-- The item may be inactive in ConnectWise
-- Check ConnectWise permissions
-- Verify the item meets filter criteria
-- Try running sync again
+## Frequently asked questions
 
-### Sync Takes Too Long
-- Check ConnectWise server response
-- Verify network connectivity
-- Large datasets may take longer
-- Contact support if over 5 minutes
+<Accordion title="Where is Sync PSA Data?">
+On **Settings > Integrations**, use the database-shaped **Sync PSA Data** action on the intended connected ConnectWise row. It requires permission to write integration settings.
+</Accordion>
 
-### Error Messages
-- **API Error:** Check ConnectWise API credentials
-- **Permission Denied:** Verify API key permissions
-- **Timeout:** ConnectWise server may be slow
-- **Invalid Data:** Data corruption, contact support
+<Accordion title="Do I click Save after Sync PSA Data?">
+No. Clicking the action immediately requests background work; there is no second Save for that request.
+</Accordion>
 
-## Best Practices
+<Accordion title="Does PSA data sync started mean the new options are ready?">
+No. It acknowledges the request. Check the specific options after the background work finishes.
+</Accordion>
 
-### Regular Synchronization
-- Schedule monthly PSA syncs
-- Sync after major ConnectWise changes
-- Document when syncs are performed
-- Monitor for sync failures
+<Accordion title="Does Sync PSA Data also resync tickets?">
+No. It refreshes reference options. Actual tickets and their history use separate synchronization workflows.
+</Accordion>
 
-### Change Management
-- Notify users before major config changes
-- Test in off-hours when possible
-- Document what changed in ConnectWise
-- Verify critical workflows after sync
+<Accordion title="Will importing a board make it the default for new tickets?">
+No. Review Ticket Settings and template/company routing separately before expecting users to create tickets on that board.
+</Accordion>
 
-### Performance Optimization
-- Avoid syncing during peak hours
-- Don't sync multiple times rapidly
-- Allow sync to complete fully
-- Clear browser cache after major syncs
+<Accordion title="Why are statuses missing for one board?">
+Statuses are board-specific. Check the chosen board, its configuration and the API member's access, then check whether that part of the sync succeeded.
+</Accordion>
 
-## Common Scenarios
+<Accordion title="Can some options update while others remain missing?">
+Yes. Reference categories can have different outcomes. Verify the needed status, type or activity choice instead of relying only on a started message.
+</Accordion>
 
-### Adding New Service Board
-1. Create board in ConnectWise
-2. Configure board settings
-3. Run PSA Settings sync in MSPortal
-4. Configure board in MSPortal ticket settings
-5. Test ticket creation on new board
+<Accordion title="Should I clear tickets to refresh priorities?">
+No. Use **Sync PSA Data** for reference options. Clearing and resyncing tickets is a separate operation with a broader effect.
+</Accordion>
 
-### Changing Ticket Priorities
-1. Modify priorities in ConnectWise
-2. Update any automation rules
-3. Sync PSA settings in MSPortal
-4. Verify priority mappings
-5. Test priority-based workflows
+## Related guides
 
-## Impact on Users
-
-During synchronization:
-- Ticket creation remains available
-- Existing tickets are unaffected
-- Dropdowns may briefly show old values
-- No downtime or service interruption
-
-After synchronization:
-- New options appear immediately
-- Removed options become unavailable
-- Form layouts may adjust
-- Cached pages may need refresh
-
-## Security Considerations
-
-- Sync only retrieves configuration data
-- No sensitive data is transferred
-- API permissions limit data access
-- All transfers are encrypted
-- Audit logs track sync activities
-
-## Related Articles
-
-- [ConnectWise Initial Setup](./enable-connectwise-integration)
-- [Clear and Resync Tickets](./clear-and-resync-integrations)
+- [Configure ConnectWise Integration](/user-guides/integrations/enable-connectwise-integration)
+- [Ticket Settings](/user-guides/settings/tickets)
+- [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations)

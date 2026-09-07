@@ -4,7 +4,7 @@ description: 'Real-world automation recipes: warranty alerts, meeting agendas, t
 icon: 'book-open'
 ---
 
-Concrete setups you can copy. Each example lists the Trigger, Conditions, and Actions exactly as they appear in the wizard. Pick one that matches your use case, swap in your own templates, and save.
+Adapt these patterns to the fields, statuses, recipients and provider options available in your account. Start with Specific Companies, inspect Run Test results, and save inactive until the real actions are ready to run.
 
 ## Use Case Pattern
 
@@ -38,7 +38,7 @@ Email the account manager 30 days before any device's warranty expires, and crea
     - **Direction**: Before date (approaching)
     - **Match**: Exactly 30 days
 
-    Exact match fires once per device, on the day that hits the 30-day mark.
+    Exactly 30 days defines the matching date window. Actual execution still depends on the rule being active, evaluation and duplicate suppression.
   </Step>
   <Step title="Conditions">
     Add a condition group:
@@ -62,7 +62,7 @@ Email the account manager 30 days before any device's warranty expires, and crea
     - **Business Value**: Medium
     - **Due Offset (days)**: 30
 
-      The task is created with "Not Started" status by default. Description and estimated hours are not part of the action form; edit the task after it is created if you need to fill them in.
+      The task is created with "Not Started" status by default. Use the available Description and Planner Type fields; edit the resulting task for other details.
   </Step>
 </Steps>
 
@@ -136,13 +136,13 @@ These use a **Scheduled** trigger so the rule checks for a condition on a repeat
 
 ### 4. CSAT Survey for Resolved Tickets
 
-Check every hour for tickets that have been in **Resolved** status for more than 1 hour, and send the customer a CSAT survey. This is the classic "status X for long enough, then act" pattern.
+Check hourly for tickets currently in **Resolved** status and send the configured request. These conditions do not establish how long a ticket has been resolved, and the Primary Contact recipient is not necessarily the person who opened the ticket.
 
 <Steps>
   <Step title="Basic Information">
     - **Name**: CSAT Survey on Resolved Tickets
     - **Scope**: All Companies
-    - **Description**: Send CSAT survey 1 hour after ticket is resolved.
+    - **Description**: Request feedback for matching resolved tickets on the hourly evaluation.
   </Step>
   <Step title="Trigger">
     - **Entity**: Ticket
@@ -158,7 +158,7 @@ Check every hour for tickets that have been in **Resolved** status for more than
     - **Status** equals **Resolved**
     - **custom_fields.survey_sent** is **False**
 
-    The `survey_sent` custom checkbox field acts as the "have we already done this?" gate. Set it up once under **Settings > Custom Fields** for the Ticket entity. Because the rule only sends when the flag is False, the hourly check is safe to repeat.
+    The `survey_sent` custom checkbox field acts as the "have we already done this?" gate. Set it up once under **Settings > Custom Fields** for the Ticket entity. Check how existing records initialize this flag, and keep Once per entity dedup unless repeat delivery is intentional. A flag update is not a delivery receipt.
   </Step>
   <Step title="Action 1: Send Email">
     - **Send To**: Client Contacts (PSA) &rarr; check **Primary Contact**
@@ -185,13 +185,13 @@ Check every hour for tickets that have been in **Resolved** status for more than
   </Step>
 </Steps>
 
-<Warning>
-State-driven rules need a "done" flag to stop firing. The pattern is: **Condition that checks the flag is not yet set** &rarr; **Action that does the work** &rarr; **Update Field action that sets the flag**. Without the flag, your hourly rule will re-send the survey every hour until the ticket moves out of Resolved.
-</Warning>
+<Note>
+Scheduled rules offer **Once per entity** dedup or **Every run**. Choose deliberately. A custom done flag can encode a business workflow, but action failure or pending approval can separate flag state from actual delivery. Inspect execution results before relying on it.
+</Note>
 
 ### 5. Stale Goal Nudge
 
-Once a week at 9 AM, email account managers about any client goals that have been **In Progress** for more than 60 days without a progress update.
+Once a week at the configured time, alert account managers about in-progress goals below 50% whose target date is more than 60 days overdue. These conditions measure an overdue target, not the time since the last progress update.
 
 - **Entity**: Goal
 - **Trigger**: Scheduled &rarr; Frequency **Weekly**, Time **09:00** (the weekly run is anchored to a fixed day of the week managed by the system; there is no day-of-week picker)
@@ -203,7 +203,7 @@ Once a week at 9 AM, email account managers about any client goals that have bee
 - **Action**: In-App Alert to Company Teams &rarr; Account Manager role
   - **Alert Type**: Warning
   - **Title**: `Goal stalled: {{entity.name}}`
-  - **Message**: `{{entity.name}} at {{entity.company_name}} has been in progress for 60+ days with under 50% progress.`
+  - **Message**: `{{entity.name}} at {{entity.company_name}} has a target date over 60 days overdue and is below 50% progress.`
 
 ### 6. Overdue Compliance Control
 
@@ -214,14 +214,14 @@ Every day at 7 AM, create a planner task for any compliance control that is past
 - **Conditions**:
   - **Status** is not one of your "done" statuses (compliance statuses are tenant-customizable via **Settings &rarr; Custom Fields / Status Lists**. Pick whichever values represent finished or not-applicable controls in your tenant — common ones are `Passed`, `Compliant`, or `Not Applicable`)
   - **Due Date** is older than (days) **0** (past due)
-  - **custom_fields.remediation_task_created** is **False**
+  - <code style={{ overflowWrap: "anywhere" }}>custom_fields.remediation_task_created</code> is **False**
 - **Actions**:
   1. Add to Planner &rarr; Task Title: `Remediate: {{entity.name}} ({{entity.company_name}})`, Business Value: High, Due Offset: 14
   2. Update Field &rarr; Field `custom_fields.remediation_task_created`, Value `true` (flag it so this doesn't re-create tomorrow)
 
 ### 7. Meeting Without Notes Follow-Up
 
-Every evening, check for any meeting that ended today without notes and ping the meeting owner.
+Every evening, find meetings in Pending Notes that have agenda items and alert the selected users. These conditions do not restrict matches to meetings that ended today or dynamically select each organizer.
 
 - **Entity**: Meeting
 - **Trigger**: Scheduled &rarr; Frequency **Daily**, Time **18:00**
@@ -230,16 +230,40 @@ Every evening, check for any meeting that ended today without notes and ping the
   - **Has Meeting Agenda Items** is **True**
 - **Action**: In-App Alert
   - **Alert Type**: Info
-  - **Title**: `Add notes to today's meeting: {{entity.title}}`
+  - **Title**: `Add meeting notes: {{entity.title}}`
   - **Send To**: Specific Users — pick the meeting organizer(s) from the user list. Templated user IDs are not resolved in the recipient selector today.
 
 ## Tips for Building Your Own
 
 1. **Start in the AI Designer.** Describe the outcome you want ("remind the AM 60 days before warranty ends") and review the diff. It is faster than picking every field from scratch.
 2. **Always test.** Use the **Run Test** button on the Review step. It shows exactly which records match under current data. Fix conditions before saving.
-3. **Use a "done" flag for state-driven rules.** A custom checkbox field flipped to true by an **Update Field** action is the cleanest way to prevent repeated firing.
+3. **Choose dedup and recipients deliberately.** Review Once per entity versus Every run. Use a done flag only when its state accurately represents your workflow.
 4. **Layer multiple rules.** Instead of one rule with complex logic, split into focused rules (60-day warning, 30-day warning, 7-day escalation). Each is easier to edit and test.
 5. **Duplicate before changing.** The **Duplicate** row action on the rules list creates a disabled copy. Edit the copy, test it, flip it on, then disable or delete the old one.
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Does an hourly schedule mean one hour after a status changed?">
+    No. It controls evaluation frequency. A Resolved condition selects the current status; it does not establish the duration in that status.
+  </Accordion>
+  <Accordion title="Does Primary Contact mean the ticket requester?">
+    No. It selects the company’s configured PSA contact type. Verify the recipient choice or use the supported survey workflow for the intended audience.
+  </Accordion>
+  <Accordion title="Can I paste the sample survey-link placeholder and enable the rule?">
+    No. Replace placeholders with a valid intended workflow or configure Send Survey. Previewing matches does not verify that an email contains a usable survey invitation.
+  </Accordion>
+  <Accordion title="Does the stale-goal example measure the last update?">
+    No. Its conditions measure target-date age, status and progress. Use wording that describes those fields accurately.
+  </Accordion>
+  <Accordion title="Will the meeting example notify each meeting’s owner automatically?">
+    Specific Users targets the users you select. It does not resolve a templated organizer ID for each meeting; also add a date condition if you need only today’s meetings.
+  </Accordion>
+  <Accordion title="How do I safely adapt a preset or copied rule?">
+    Keep it inactive, narrow company scope, select valid statuses and recipients, review templates and test matches. Enable only when the real writes or messages are intended.
+  </Accordion>
+</AccordionGroup>
 
 ## Related
 
@@ -247,7 +271,7 @@ Every evening, check for any meeting that ended today without notes and ping the
   <Card title="Rule Wizard Walkthrough" icon="list-check" href="/user-guides/settings/automation/wizard">
     Every option explained in order.
   </Card>
-  <Card title="Automation Overview" icon="robot" href="/user-guides/settings/automation">
+  <Card title="Automation Overview" icon="robot" href="/user-guides/settings/automation/index">
     Accessing Automation, list view, permissions, and logs.
   </Card>
 </CardGroup>

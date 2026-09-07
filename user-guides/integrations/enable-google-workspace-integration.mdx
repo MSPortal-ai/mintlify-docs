@@ -41,12 +41,12 @@ Google Workspace connects **per company**, not once for your whole tenant. Each 
 | **Popups allowed** | The Google sign-in flow opens in a popup window from MSPortal |
 
 <Tip>
-No Google Cloud project, service account key, or domain-wide delegation setup is required. MSPortal supplies the verified OAuth application, so the client only has to sign in and approve access.
+No Google Cloud project, service account key, or domain-wide delegation setup is required. MSPortal supplies the OAuth application, so the client only has to sign in and approve access.
 </Tip>
 
 ### Access MSPortal Requests
 
-Every permission requested is **read-only**. MSPortal cannot create, modify, suspend, or delete anything in Google Workspace.
+The synchronization reads Google Workspace data. Directory and usage-report scopes are read-only; Google’s **Apps licensing** scope grants read/write API access even though this integration uses it to read assignments. Review that distinction during consent. [Google documents the licensing scope here](https://developers.google.com/workspace/admin/licensing/v1/how-tos/authorizing).
 
 | Access | Purpose |
 |--------|---------|
@@ -68,12 +68,12 @@ Consent must include every one of these. If an administrator declines part of th
     Once at least one company is connected, that button reads **Manage companies**.
   </Step>
   <Step title="Find the company">
-    Every active company appears as a card. Use the **Search companies or domains** box, or the status filter, to narrow the list to **All companies**, **Needs setup**, **Connected**, or **Needs attention**.
+    The companies table shows one row per connection, or an unconnected row for a company that needs setup. Use the status selector and column filters to find the company and domain. A company with multiple Workspace connections can appear more than once.
 
     The **Connection progress** card at the top tracks how many companies are connected out of your total.
   </Step>
   <Step title="Start the connection">
-    Click **Connect** on the company card. A Google sign-in popup opens.
+    Click **Connect** on the company row. A Google sign-in popup opens.
 
     If the company already has a connection and you are adding a second Google Workspace account, click **Add connection** instead.
   </Step>
@@ -83,7 +83,7 @@ Consent must include every one of these. If an administrator declines part of th
     MSPortal then verifies the connection against Google's directory, reports, and licensing services before saving it. The popup closes on its own and the company shows a green **Connected** badge.
   </Step>
   <Step title="Let the first sync run">
-    A full synchronization starts immediately. User, group, license, and domain counts appear on the connection row as data arrives, and posture scoring begins on the next daily run.
+    The connection requests an initial synchronization. Check the row’s status, counts and last-sync time after it completes. A connected badge alone does not prove every dataset has refreshed; posture may be deferred until Google supplies complete reporting data.
   </Step>
 </Steps>
 
@@ -97,11 +97,11 @@ Each Google Workspace account can be connected to **one** MSPortal company. If y
 
 ## Reading the Connection Row
 
-Each connected Google Workspace tenant appears as a row inside the company card, labeled with its primary domain.
+Each connected Google Workspace tenant appears as a row inside the company row, labeled with its primary domain.
 
 | Element | Meaning |
 |---------|---------|
-| **Connected** | Healthy and syncing on schedule |
+| **Connected** | The connection is active; check last sync and errors to assess freshness |
 | **Syncing** | A synchronization is running right now |
 | **Paused** | Synchronization is stopped after repeated failures, usually revoked consent |
 | **Needs attention** | The last synchronization failed. The error is shown inline on the row |
@@ -110,7 +110,7 @@ Each connected Google Workspace tenant appears as a row inside the company card,
 | **Last synced** | When data was last refreshed, or **Not synced yet** |
 | **Count badges** | Synced users, groups, licenses, and domains for that connection |
 
-Cards and rows that need attention are highlighted in amber, and the **Connection progress** card shows a **needs attention** count so problems are visible without opening every company.
+The progress summary counts companies, while the table lists connections. A company may count as connected while one of its connections needs attention; inspect the individual rows.
 
 ## Choosing What to Sync
 
@@ -141,12 +141,12 @@ Leave **Daily security posture** enabled even if you disable other datasets. Pos
 
 ### Disconnecting
 
-Click **Disconnect**, then confirm in the **Disconnect Google Workspace?** dialog. MSPortal stops updating Google Workspace data for that company. Previously synchronized data may remain visible until it is replaced or removed.
+Click **Disconnect**, then confirm in the **Disconnect Google Workspace?** dialog. MSPortal stops updating Google Workspace data for that company. Do not use Disconnect as a reversible pause or assume imported data will remain available. Review the company and domain in the confirmation first; reconnecting requires administrator consent again.
 
 ## Synchronization Schedule
 
 - Google Workspace synchronizes **once per day**, deliberately offset from the Microsoft 365 secure score run so the two do not compete.
-- Each run is a **full refresh**, not an incremental update. Every record is retrieved and validated before anything is written, and records that no longer exist in Google are removed only after a complete, successful retrieval. An interrupted run can never delete good data.
+- Enabled directory datasets are refreshed from Google. Stale-record cleanup depends on complete retrieval. If a run fails, inspect its error and dataset timestamps; do not assume every dataset is equally current.
 - Use **Sync now** whenever you need data ahead of the daily schedule, for example right before a client review.
 
 <Note>
@@ -177,7 +177,37 @@ A paused connection shows **Paused** on the companies page. Click **Reconnect** 
 | Connection shows **Paused** | Consent or administrator access was withdrawn in Google. Restore access, then click **Reconnect** |
 | Counts stay at zero after connecting | Confirm the dataset is enabled under **Sync settings**, then click **Sync now** |
 | Licenses show **Unknown** capacity | Expected. Google reports license assignments but not purchased seat totals, so MSPortal shows what is assigned and does not infer capacity |
-| Posture score has not appeared yet | Posture is calculated on the daily run. It appears after the first scheduled synchronization completes |
+| Posture score has not appeared yet | Check that posture sync is enabled and allow for Google reporting delay. Incomplete reports can defer the snapshot even when directory data updates |
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Can I connect one Workspace account to two companies?">
+    No. Use the company that owns the Workspace customer. Resolve an existing mapping before reconnecting elsewhere; do not create a second company to work around the conflict.
+  </Accordion>
+  <Accordion title="Does Connected mean every dataset is current?">
+    No. Inspect last-sync times, count badges and errors. Progress counts companies, and a connected company can still have a connection needing attention.
+  </Accordion>
+  <Accordion title="Why does Google consent mention license management?">
+    Google’s Apps licensing scope permits read/write API access. MSPortal’s synchronization reads assignments. The directory and reporting scopes are read-only; the whole consent request should not be described as exclusively read-only.
+  </Accordion>
+  <Accordion title="Can I send the Google popup URL to another administrator?">
+    Complete this connection in the browser session that started it. The Google flow is bound to that MSPortal user and browser and expires after ten minutes. Restart Connect if the session expires.
+  </Accordion>
+  <Accordion title="Does disabling a dataset delete its imported records?">
+    The setting stops future updates for that dataset. It is not an erase control. Check freshness before using older values in client reporting.
+  </Accordion>
+  <Accordion title="Why are users current but posture is missing?">
+    Google usage reports can lag or be incomplete. A run can update directory data while deferring posture; a missing snapshot is not a perfect security score.
+  </Accordion>
+  <Accordion title="Does Sync now finish before the button returns?">
+    No. It queues background work. Watch the connection’s status, error and last-sync values before relying on the result.
+  </Accordion>
+  <Accordion title="What should I check after reconnecting?">
+    Confirm the correct company, Workspace domain and administrator, then verify a successful synchronization and the datasets needed for your review.
+  </Accordion>
+</AccordionGroup>
 
 ## Related Resources
 

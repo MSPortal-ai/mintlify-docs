@@ -1,298 +1,114 @@
 ---
-title: 'Configure Sherweb Integration'
-description: 'Connect your Sherweb distributor account to MSPortal.ai to sync customers, subscriptions, and per-customer product catalogs'
+title: "Configure Sherweb Integration"
+description: "Connect Sherweb, save customer mappings, and verify subscriptions and customer catalogs."
 icon: 'cloud'
 ---
 
-This guide walks you through connecting your Sherweb distributor account to MSPortal.ai using our streamlined setup wizard. The Sherweb integration is currently in Beta.
+Connect Sherweb to synchronize customers, subscriptions and per-customer catalogs. This beta integration is configured by MSP staff with integration management permission. Company users do not administer the distributor connection.
 
-## Overview
+## Prepare the credentials
 
-Sherweb is a cloud solutions distributor for MSPs. By integrating Sherweb with MSPortal.ai, you can:
+Open the **Partner Portal** link shown on Sherweb's Connect step. It opens Sherweb's **Security > APIs** page. Obtain the **Client ID**, **Client Secret** and **Subscription Key** for the Service Provider API. Keep secret values private.
 
-- View every client's Sherweb subscriptions alongside the rest of their data
-- Sync each customer's offer catalog, including pricing, from Sherweb
-- Power the Storefront with a curated, client-facing product catalog
-- Keep subscription and catalog data refreshed automatically every day
-
-## Prerequisites
-
-- Active Sherweb partner account with access to the Sherweb Partner Portal (cumulus.sherweb.com)
-- MSPortal.ai account with integration management permissions
-- Sherweb API credentials: a Client ID, Client Secret, and Subscription Key
-
-## Part 1: Generate Sherweb API Credentials
-
-Before connecting to MSPortal.ai, you need API credentials from the Sherweb Partner Portal.
+## Connect and map customers
 
 <Steps>
-  <Step title="Log into the Sherweb Partner Portal">
-    Access the Sherweb Partner Portal at [cumulus.sherweb.com](https://cumulus.sherweb.com).
+  <Step title="Open Sherweb setup">
+    Go to **Settings > Integrations** and select the intended Sherweb connection or start a new one. Setup has **Connect**, **Map Customers** and **Complete** steps.
   </Step>
+  <Step title="Test and save">
+    Enter all three credential values. **Test connection** checks them; **Save and connect** creates the connection. A passing test by itself does not save a new connection. Customer discovery starts in the background after connecting.
 
-  <Step title="Navigate to API Management">
-    Go to **Security > APIs** in the Partner Portal.
+    <Frame caption="MSP setup example; no credentials entered.">
+      <img src="/images/product/sherweb-credential-fields.png" alt="Blank Sherweb Client ID, Client Secret and Subscription Key fields." width="1020" height="424" />
+    </Frame>
   </Step>
+  <Step title="Save customer mappings">
+    Review **Quick Match** proposals or choose an MSPortal company for each customer. **Import Selected** saves pending links; **Next** also saves pending links before advancing and requests synchronization. The normal flow requires at least one saved mapping.
 
-  <Step title="Create Service Provider API Credentials">
-    Create credentials for the **Service Provider API**. Sherweb issues three values that MSPortal needs:
-
-    | Value | Purpose |
-    |-------|---------|
-    | **Client ID** | Identifies your API client |
-    | **Client Secret** | Authenticates your API client |
-    | **Subscription Key** | The `Ocp-Apim-Subscription-Key` value that authorizes access to the Service Provider API |
+    **Create new company** immediately creates an MSPortal company and stages its link. Save that pending link too. Removing an existing mapping saves immediately. See [company imports](/user-guides/integrations/import-companies) for the shared controls.
   </Step>
-
-  <Step title="Copy All Three Values">
-    Copy the Client ID, Client Secret, and Subscription Key.
-
-    <Warning>
-      **Store the Client Secret securely.** You may not be able to view it again after leaving the page. If you lose it, generate new credentials in the Partner Portal.
-    </Warning>
+  <Step title="Check subscriptions and catalogs">
+    On **Complete**, use **Run full sync** when a new sync is needed, then inspect [Storefront](/user-guides/storefront/index). **Complete Setup** leaves the wizard; it does not wait for every provider request to finish.
   </Step>
 </Steps>
 
----
+Customers must be mapped for their subscriptions and customer-specific catalog data to be useful in the correct company context. Check the selected distributor and company when comparing data. Catalog availability and prices can differ between customers; connecting Sherweb does not configure client ordering rules.
 
-## Part 2: MSPortal Setup Wizard
+## Change or test saved credentials
 
-MSPortal.ai provides a guided 3-step wizard to connect and configure your Sherweb integration: **Connect**, **Map Customers**, and **Complete**.
+Reopen the intended connection's **Connect** step. All three fields start blank so you can keep existing values.
 
-### Starting the Wizard
+- To test the saved credentials, leave **all three** fields blank and click **Test connection**.
+- To test replacement credentials before saving, fill **all three** fields. A partially entered replacement cannot be tested as a mixed set.
+- To replace only one or two values, enter those values and click **Update credentials**. Blank fields retain their saved values. The update validates the combined credentials before saving.
 
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
+After updating, the form clears. Use **Test connection** with the blank form to check the saved set. Testing alone does not persist replacements.
 
-  <Step title="Find Sherweb">
-    Locate the **Sherweb** integration card in the list of available integrations.
-  </Step>
+## Remove a connection
 
-  <Step title="Start Setup">
-    Click **Setup** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your Sherweb API credentials to establish the connection. All three values are required.
-
-<Steps>
-  <Step title="Enter Credentials">
-    Fill in the three fields:
-
-    - **Client ID**
-    - **Client Secret**
-    - **Subscription Key**
-
-    <Note>
-      Your Sherweb credentials are stored securely using Supabase Vault encryption. They are never exposed in logs or API responses.
-    </Note>
-  </Step>
-
-  <Step title="Test Connection">
-    Click **Test connection** to verify your credentials.
-
-    If the test fails:
-    - Verify you copied each value in full, without extra spaces
-    - Confirm the values came from **Security > APIs** in the Sherweb Partner Portal
-    - Ensure the credentials have not been revoked
-  </Step>
-
-  <Step title="Save and Connect">
-    Click **Save and connect** to create the integration.
-
-    MSPortal immediately starts fetching your Sherweb customer list in the background, so it is ready for the next step.
-  </Step>
-</Steps>
-
----
-
-### Step 2: Map Customers
-
-Map Sherweb customers to your MSPortal companies. This determines which data syncs to which company.
-
-<Steps>
-  <Step title="Wait for Customers to Appear">
-    The customer list fills in automatically as the initial sync completes; the page checks for new customers every few seconds. If the list stays empty, click **Sync Customers** to start the sync again.
-
-    <Info>
-      The initial customer sync usually finishes within a couple of minutes.
-    </Info>
-  </Step>
-
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Sherweb customers to MSPortal companies based on name similarity. Review the suggested matches and apply the ones that look right.
-  </Step>
-
-  <Step title="Manual Mapping">
-    For customers that were not automatically matched:
-
-    1. Find the customer in the list
-    2. Click the **Select company** dropdown in the "Mapped" column
-    3. Search for and select the correct MSPortal company
-  </Step>
-
-  <Step title="Create New Companies">
-    If a Sherweb customer does not have a corresponding MSPortal company, use **Create new company** to add one. New companies are automatically mapped to their Sherweb customers.
-  </Step>
-
-  <Step title="Apply and Proceed">
-    Click **Import Selected** to apply your pending mappings, then click **Next**. Any remaining pending mappings are saved automatically when you advance.
-
-    <Warning>
-      You must map at least one customer before proceeding. Subscriptions and catalog data are only synced for mapped customers.
-    </Warning>
-  </Step>
-</Steps>
-
-<Note>
-  When you leave the Map Customers step, MSPortal automatically starts a sync so newly mapped customers get their subscriptions and catalog data right away.
-</Note>
-
----
-
-### Step 3: Complete
-
-Confirm the integration and run your first full sync.
-
-<Steps>
-  <Step title="Run a Full Sync">
-    Click **Run full sync** to pull your Sherweb customers, then the subscriptions and offer catalog for every mapped customer.
-
-    The sync runs in the background. You can click **View company mapping** to review your customer-to-company links while it runs.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete setup** to finish the wizard and return to the Integrations page.
-  </Step>
-</Steps>
-
----
-
-## What Gets Synced
-
-The Sherweb integration syncs the following data:
-
-### Customers
-
-Every customer under your Sherweb account, ready to be mapped to MSPortal companies.
-
-### Subscriptions
-
-Subscription details and pricing for each **mapped** customer, including quantities, status, and billing information. Subscriptions appear in the [Storefront](/user-guides/storefront/index) under Subscriptions.
-
-### Catalog Items
-
-Each mapped customer's offer catalog from Sherweb, including product names, SKUs, and pricing. You control which catalog items clients can see: go to **Settings > Storefront** to mark Sherweb catalog items as **Visible** or **Featured**.
-
-<Note>
-  Sherweb subscriptions and catalogs are customer-scoped, so only data for customers mapped to an MSPortal company is stored.
-</Note>
-
----
-
-## Synchronization Schedule
-
-After initial setup, data syncs automatically:
-
-| Data Type | Sync Frequency |
-|-----------|----------------|
-| Customers | Daily at 07:00 UTC |
-| Subscriptions | Daily at 07:00 UTC |
-| Catalog Items | Daily at 07:00 UTC |
-
-The daily sync runs customers first, then subscriptions, then catalogs, so subscription and catalog data always reflects your latest customer mappings.
-
-<Note>
-You can trigger a manual sync at any time: open the Sherweb wizard from **Settings > Integrations** and click **Run full sync** on the Complete step, or use the resync action on the integration card.
-</Note>
-
----
-
-## Managing Your Integration
-
-After setup, manage your integration from **Settings > Integrations**:
-
-| Action | Description |
-|--------|-------------|
-| **Configure** | Re-open the wizard to rotate credentials or adjust customer mappings |
-| **Test connection** | Verify your saved credentials are still valid |
-| **Resync** | Trigger a full data refresh |
-| **Delete** | Remove the integration (available in the wizard footer) |
-
-### Rotating Your Credentials
-
-If you need to update your Sherweb API credentials:
-
-<Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and open the Sherweb wizard.
-  </Step>
-  <Step title="Enter New Values">
-    On the Connect step, enter only the values you want to change. Leave a field blank to keep its current value.
-  </Step>
-  <Step title="Test and Update">
-    Click **Test connection** to verify, then click **Update credentials** to save.
-  </Step>
-</Steps>
-
-### Managing Customer Mappings
-
-Manage your Sherweb customer-to-company mappings at any time:
-
-- Re-open the wizard and go to the **Map Customers** step, or
-- Go to **Settings > Integrations > Company Mapping**
-
-### Deleting the Integration
-
-Click **Delete** in the wizard footer. This removes the integration, your stored credentials, and previously synced customer records. You can reconnect at any time.
-
----
+Use **Delete** in the wizard footer and review the confirmation. This removes the MSPortal connection and associated synchronized data. It does not cancel Sherweb subscriptions or revoke the API application in Sherweb.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Connection test fails | Verify all three values (Client ID, Client Secret, Subscription Key) are correct and copied in full |
-| No customers appear on the Map step | The initial sync can take a few minutes; the list refreshes automatically. Click "Sync Customers" to retry |
-| Subscriptions or catalog missing | Only mapped customers sync; map the customer to a company, then run a full sync |
-| Catalog items not visible to clients | Check item visibility under Settings &gt; Storefront |
-| Stale data | Run a full sync from the wizard's Complete step, or wait for the daily 07:00 UTC sync |
+| Symptom | What to check |
+| --- | --- |
+| Test asks you to fill or clear fields | Either enter all three replacements or clear all three to test the stored set. |
+| Customers remain empty | Allow discovery to finish, then use **Sync Customers** and inspect the connection error if needed. |
+| Catalog or subscriptions are missing | Check the saved customer mapping, chosen distributor and successful sync. |
+| Connection saved but data is stale | A save is not background-sync completion. Check the next successful result. |
 
----
+## Frequently asked questions
 
-## Security & Privacy
+<Accordion title="Which Sherweb credentials are required for a new connection?">
 
-- **Credential Storage**: Your Sherweb Client ID, Client Secret, and Subscription Key are encrypted using Supabase Vault and never exposed in logs or responses
-- **Data Isolation**: All synced data is tenant-isolated and only visible to your organization
-- **Read-Only Access**: MSPortal only reads data from Sherweb; it never modifies your Sherweb subscriptions or places orders
+Client ID, Client Secret and Subscription Key are all required.
 
----
+</Accordion>
 
-## Next Steps
+<Accordion title="How do I test saved Sherweb credentials?">
 
-After setting up the Sherweb integration:
+Leave all three fields blank on the existing connection and click **Test connection**.
 
-<CardGroup cols={2}>
-  <Card title="Set Up the Storefront" icon="store" href="/user-guides/storefront/index">
-    Curate the client-facing catalog and manage subscriptions
-  </Card>
-  <Card title="Import Companies" icon="building" href="/user-guides/integrations/import-companies">
-    Learn more about mapping integration customers to companies
-  </Card>
-  <Card title="Sync Schedules" icon="clock" href="/user-guides/integrations/sync-schedules">
-    See when each integration refreshes its data
-  </Card>
-  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
-    Explore additional integration options
-  </Card>
-</CardGroup>
+</Accordion>
 
-## Need Help?
+<Accordion title="Can I test a partial Sherweb credential replacement?">
 
-For assistance with the Sherweb integration, contact support@msportal.ai.
+No. Fill all three replacement fields to test them, or clear all three to test the saved set.
+
+</Accordion>
+
+<Accordion title="Can I update only the Sherweb subscription key?">
+
+Yes. Enter that value and use **Update credentials**; blank fields keep their stored values. The update validates the combined set.
+
+</Accordion>
+
+<Accordion title="Does testing Sherweb save the connection?">
+
+No. Use **Save and connect** for a new connection or **Update credentials** for replacements.
+
+</Accordion>
+
+<Accordion title="Are new Sherweb company mappings saved immediately?">
+
+Manual and Quick Match links are pending until **Import Selected** or **Next** saves them. Unlinking an existing mapping saves immediately.
+
+</Accordion>
+
+<Accordion title="Is a Sherweb customer catalog the same for every company?">
+
+No. Catalogs are customer-specific. Check the intended company and distributor.
+
+</Accordion>
+
+<Accordion title="Does Complete Setup prove Sherweb sync finished?">
+
+No. Check the actual subscriptions, catalog and sync outcome after the background work runs.
+
+</Accordion>
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)

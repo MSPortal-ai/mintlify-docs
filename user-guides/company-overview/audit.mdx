@@ -4,7 +4,7 @@ description: 'Track how completely every client is set up, and who owns each gap
 icon: 'clipboard-check'
 ---
 
-Account Readiness measures how completely each client is set up in MSPortal.ai, scores it out of 100, and tells you which team member owns every remaining gap. It runs continuously rather than only at onboarding, so configuration drift shows up as soon as it happens.
+Account Readiness measures how completely each client is set up in MSPortal.ai, scores it out of 100, and tells you which team member owns every remaining gap. The Companies view evaluates current configuration when you open it; historical snapshots support comparison. It is not a continuous live monitor.
 
 <Note>Account Readiness replaces the Company Audit. The old address `/settings/companies/audit` now redirects here, and any saved links keep working.</Note>
 
@@ -19,7 +19,7 @@ Account Readiness measures how completely each client is set up in MSPortal.ai, 
   </Step>
 </Steps>
 
-Requires the **Account Readiness: Read** permission. Configuring requirements requires **Account Readiness: Manage**, and the per-person view requires its own permission so a scorecard of named staff is never granted by accident.
+This is an **MSP staff** view; Company users cannot open Account Readiness. It requires the **Account Readiness: Read** permission. Configuring requirements requires **Account Readiness: Manage**, and the per-person view requires its own permission so a scorecard of named staff is never granted by accident.
 
 ## Summary cards
 
@@ -40,7 +40,7 @@ score = ready checks / (total checks - exempt checks) x 100
 
 A company that satisfies every requirement scores 100%. Exempt checks are removed from the denominator entirely, so exempting something never quietly lowers a score.
 
-<Note>The previous Company Audit score was built from nine weighted factors that added up to a maximum of 64, which was then shown as a percentage. A perfectly configured company read 64% and fell into "Critical". Scores shipped with Account Readiness are true percentages, so expect most companies to move up on the day this releases.</Note>
+<Note>If there are no applicable requirements, the view can show **No score**. Exemption is an administrative decision, not evidence that missing configuration was fixed.</Note>
 
 ## Check states
 
@@ -59,7 +59,7 @@ Ready and Unconfirmed are separate on purpose. Some values can be present but wr
 
 Rows are companies. Columns are your requirements, grouped by area: Profile, Team, Integrations, Delivery, Engagement, and Operations.
 
-Every cell links straight to the page that fixes it, so you can open a gap in a new tab with cmd-click or middle-click without losing your place in the grid. Requirements added in the last 30 days carry a **New** badge, so a score that moved because the bar was raised is easy to tell apart from a score that slipped.
+Checks with a setup destination link to the relevant page, so you can open a gap in a new tab with cmd-click or middle-click without losing your place in the grid. Requirements added in the last 30 days carry a **New** badge, so a score that moved because the bar was raised is easy to tell apart from a score that slipped.
 
 ### Filtering
 
@@ -71,11 +71,19 @@ Every column filters in place, including:
 - **Owning role**, to see everything a role is behind on
 - **Owner**, to see everything one person is behind on
 
-Filters combine, the filtered set is what exports to CSV, and the row count reflects the filters.
+Filters combine and page through matching companies. Use **Check owner** to select **Mine**, **Everyone** or an available owner; scores and totals then reflect that owner’s checks. **Hide completed checks** hides requirement columns that are ready or not applicable for every company on the current page. It does not exempt requirements or remove completed records.
 
-### Refresh
+### Freshness
 
-The **Refresh** button recalculates readiness for the companies currently in scope and saves the result, so everyone else sees the same figures immediately afterwards. Readiness also recalculates automatically every night.
+Read **Current configuration, evaluated when you open this page** or the displayed snapshot date to identify the evidence being shown. Reopen after correcting source configuration. Nightly snapshots support history; a successful settings save is not proof of a new historical snapshot.
+
+### Bulk changes
+
+With Manage permission, select companies on the current page and click **Bulk update**, or use a row’s **Update readiness** action. Selection does not mean every matching page is selected; changing page, filters, sorting or scope clears the selection.
+
+In **Update readiness**, review the named companies and **Change** operation. Choose the requirement where relevant, and supply a reason for an exemption. Available operations exempt/remove exemption, confirm/clear confirmation, and exclude/include companies. **Apply to…** saves the operation; Cancel closes the draft. Confirmation requires an already-satisfied check for every selected company.
+
+The check menu’s **Exclude check** and **Remove exclusion** actions can save immediately. Inspect the company and requirement before using them; there is no page-level Save to undo them.
 
 ## Company drilldown
 
@@ -97,7 +105,7 @@ Two actions are available with the Manage permission:
   </Accordion>
 </AccordionGroup>
 
-Confirmations and exemptions are both listed further down the drilldown so either can be withdrawn later.
+Confirmations and exemptions are both listed further down the drilldown so either can be withdrawn later. **Confirm**, clearing a confirmation and removing an exemption are immediate actions. Marking a check not applicable opens a reason dialog and requires its submission; closing it does not save.
 
 ## Readiness by owner
 
@@ -113,7 +121,7 @@ The **By owner** tab rolls readiness up per person, based on who holds the prima
 | **Trend** | Change in their ready rate across the period |
 | **Open** | Checks still missing or unconfirmed |
 
-The **vs team** column is the number to read. Someone at 85% across 40 clients is doing better work than someone at 90% across 5, and a raw percentage says the opposite. People below the minimum client count are marked **Small book** and are left out of the team average so a very small book cannot skew everyone else's baseline.
+Interpret **vs team** with the number and nature of assigned checks, client coverage and the period. Readiness is a configuration measure; it does not by itself establish an employee’s quality of work. People below the minimum client count are marked **Small book** and are left out of the team average so a very small book cannot skew everyone else's baseline.
 
 Trend deliberately ignores requirements that did not exist at the start of the period. Adding a new requirement raises the bar, and that should not read as everyone regressing.
 
@@ -130,6 +138,10 @@ Go to **Settings > Organization > Account Readiness** to decide what "ready" mea
 | **Supporting roles** | Other roles that should see the work |
 | **Needs a person to confirm it** | Requires a confirmation on top of the data check |
 | **On** | Whether the requirement is measured at all |
+
+### Save behavior
+
+Create or edit a requirement in its dialog and click **Save**. Changing its **On** switch or moving it in the requirements list saves immediately. Delete uses confirmation and is not staged for a later page Save. Bulk requirement editing applies the fields selected in its dialog; review the chosen requirements before saving.
 
 ### Check kinds
 
@@ -152,7 +164,7 @@ The split matters. The work list shows a failing check to every role that could 
 
 ## Excluding a company
 
-Some clients are not meant to be measured at all. Set **Excluded from readiness** on the company to leave it out of the grid, the drilldown, the owner rollup, and the nightly snapshot.
+Some clients are not meant to be measured at all. Use the company row or bulk **Exclude from readiness** operation to remove the company from readiness measurement. Review excluded companies in Readiness settings and restore them there when appropriate. Excluding a company does not delete the company or fix its setup.
 
 ## Requirements you cannot fix in MSPortal.ai
 
@@ -171,6 +183,47 @@ Some clients are not meant to be measured at all. Set **Excluded from readiness*
     If a requirement genuinely does not apply to one client, exempt it there with a reason. Switching the requirement off removes it for everyone.
   </Accordion>
   <Accordion title="Review by owner in one-on-ones">
-    The By owner tab is built for that conversation: it normalises for book size, so it compares people fairly.
+    The By owner tab is built for that conversation: review the assigned work, coverage and context rather than treating the score as a complete performance ranking.
   </Accordion>
 </AccordionGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can Company users open Account Readiness?">
+    No. This is an MSP staff view. Read, Manage and By owner access are separate permissions.
+  </Accordion>
+  <Accordion title="Is Account Readiness a continuous live monitor?">
+    No. The Companies view evaluates current configuration when opened and history uses snapshots. Check the evaluation message or date before drawing conclusions.
+  </Accordion>
+  <Accordion title="Does Unconfirmed mean the value is missing?">
+    No. The underlying requirement is satisfied but needs human confirmation. A genuinely missing requirement cannot be made ready by confirmation alone.
+  </Accordion>
+  <Accordion title="Does exempting a requirement fix its underlying data?">
+    No. It removes that requirement from the company’s applicable score denominator and records the reason. The configuration itself is unchanged.
+  </Accordion>
+  <Accordion title="Does Bulk update select every matching company?">
+    No. Review the named selected companies. Page, filter, sorting and scope changes clear the selection; the grid does not select all result pages.
+  </Accordion>
+  <Accordion title="Does Hide completed checks disable requirements?">
+    No. It hides columns completed for every company on the current page. It does not change requirements or exemptions.
+  </Accordion>
+  <Accordion title="Does Check owner leave the score unchanged?">
+    No. The owner scope changes which checks contribute to the shown scores and totals. Confirm the owner scope before comparing results.
+  </Accordion>
+  <Accordion title="Is there one final Save for readiness changes?">
+    No. Confirmation and exemption-removal actions, requirement switches and reorder controls can save immediately. Requirement and bulk dialogs have their own submit actions.
+  </Accordion>
+  <Accordion title="Does excluding a company delete it?">
+    No. It removes it from readiness measurement. Restore excluded companies in Readiness settings when they should be measured again.
+  </Accordion>
+  <Accordion title="Does vs team prove someone is performing better?">
+    No. It compares readiness rates within the available coverage. Consider assigned checks, client mix, small-book flags and the period before interpreting it.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Companies](/user-guides/company-overview/index)
+- [Company settings](/user-guides/settings/companies)
+- [Client Health](/user-guides/msp-tools/client-health)

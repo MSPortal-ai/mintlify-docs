@@ -1,248 +1,124 @@
 ---
-title: 'Configure CloudRadial Integration'
-description: 'Connect CloudRadial to MSPortal.ai to import service catalog items as ticket templates'
+title: "Configure CloudRadial Integration"
+description: "Import selected CloudRadial catalog items and review their ticket-template routing and company access."
 icon: 'cloud'
 ---
 
-This guide walks you through connecting your CloudRadial account to MSPortal.ai using our streamlined setup wizard.
+Import selected CloudRadial service catalog items as MSPortal ticket templates. This is an on-demand import configured by MSP staff, with integration access plus permission to write Ticket Settings for the import itself. It is not Company self-service setup.
 
-## Overview
+<Warning>
+Import creates templates immediately. Repeating an import can create additional templates with renamed identities. Do not assume previously imported items are skipped or updated in place.
+</Warning>
 
-CloudRadial is a client portal platform where many MSPs maintain a service catalog of request forms. By integrating CloudRadial with MSPortal.ai, you can:
-
-- Import CloudRadial service catalog items directly as MSPortal ticket templates
-- Preserve each item's name, description, category, and PSA routing details
-- Import client-specific catalog items and assign them to the matching company
-- Choose exactly which items to bring over, one time or in batches
-
-## Prerequisites
-
-- Active CloudRadial partner account with API access
-- CloudRadial public and private API keys
-- MSPortal.ai account with integration management permissions
-
-## Part 1: Generate CloudRadial API Keys
-
-Before connecting to MSPortal.ai, you need API credentials from CloudRadial.
+## Connect CloudRadial
 
 <Steps>
-  <Step title="Log into CloudRadial">
-    Access your CloudRadial Partner Portal.
+  <Step title="Prepare CloudRadial API keys">
+    In CloudRadial, open **Partner > Settings**, select **Integrations** in the Configuration column, then **API** and **+Add API Key**. Copy the public/private pair before leaving; the private key is not shown again. See [CloudRadial's API instructions](https://support.cloudradial.com/hc/en-us/articles/360050153571-Using-the-CloudRadial-API).
   </Step>
+  <Step title="Test the intended region">
+    In **Settings > Integrations**, open CloudRadial setup. Select the hosting **Region** and enter **Public Key** and **Private Key**. Supported choices are United States, Canada, United Kingdom, Australia and Europe. Confirm the displayed endpoint belongs to your region, then click **Test Connection**.
 
-  <Step title="Navigate to API Keys">
-    Go to **Settings > API Keys** in the Partner Portal.
+    <Frame caption="MSP setup example; no credentials entered.">
+      <img src="/images/product/cloudradial-region-fields.png" alt="CloudRadial region and blank key fields with separate Test Connection and Create Integration controls." width="1720" height="724" />
+    </Frame>
   </Step>
-
-  <Step title="Create an API Key">
-    Create a new API key. CloudRadial issues a **Public Key** and a **Private Key** pair; MSPortal needs both.
-  </Step>
-
-  <Step title="Copy Both Keys">
-    Copy the public and private keys.
-
-    <Warning>
-      **Store the private key securely!** Treat it like a password. If you lose it, create a new key pair.
-    </Warning>
-
-    <Tip>
-      Note which region your CloudRadial account is hosted in (United States, Canada, United Kingdom, Australia, or Europe). You will select this region in the MSPortal wizard so requests go to the correct API endpoint.
-    </Tip>
+  <Step title="Save the connection">
+    Click **Create Integration** after the test passes, then **Next**. For an existing connection, test changed values and click **Update Integration**. Keep the masked private-key value unchanged when retaining the saved key. A test or navigation alone does not save changed credentials.
   </Step>
 </Steps>
 
----
+## Select and import templates
 
-## Part 2: MSPortal Setup Wizard
+| View | What it contains |
+| --- | --- |
+| **All Items** | Catalog items grouped across companies by their name, category and template pack. This is not a row for every company assignment. |
+| **Client-Specific** | Items found for one CloudRadial company, with that company's name. |
 
-MSPortal.ai provides a guided 2-step wizard to connect CloudRadial and import catalog items.
+Search and sort the active view, then select only the intended items. **Export** downloads the filtered active view, not just checked items. **Refresh** requests the catalog again. Switching views clears selection and search.
 
-### Starting the Wizard
+<Warning>
+Search does not clear earlier selections. Clear the search and review the selected count before **Import** so hidden selected items are not included accidentally.
+</Warning>
 
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
+Click **Import** to create the selected templates. Review every result; successful templates remain even if another item fails. Before retrying, inspect existing templates and select only the items that still need work. **Complete Setup** exits the wizard; it does not undo an import.
 
-  <Step title="Find CloudRadial">
-    Locate the **CloudRadial** integration card in the list of available integrations.
-  </Step>
+## Review routing and company access before use
 
-  <Step title="Start Setup">
-    Click **Connect** to launch the setup wizard.
-  </Step>
-</Steps>
+Open [Ticket Templates](/user-guides/ticketing/how-to-create-a-ticket-template) after importing. Review the template name, fields and sections, defaults, PSA routing and enabled/company settings. Conversion is a starting point for your MSPortal form, not a guarantee that every source rule or provider-specific option behaves identically.
 
----
+Client-specific assignment relies on a matching MSPortal company name. A missing or ambiguous match must be resolved before relying on the restriction. An import success can also occur without a successful company-assignment save. Verify the template's actual company defaults and assignments; imported templates are active, so do not treat the result as an unpublished draft.
 
-### Step 1: Connect
-
-Enter your CloudRadial API credentials to establish the connection.
-
-<Steps>
-  <Step title="Select Your Region">
-    Choose your CloudRadial hosting region from the **Region** dropdown: United States, Canada, United Kingdom, Australia, or Europe.
-
-    The wizard shows the API endpoint that will be used for the selected region.
-  </Step>
-
-  <Step title="Enter Your Keys">
-    Paste your credentials into the **Public Key** and **Private Key** fields.
-
-    <Note>
-      Your private key is stored securely using Supabase Vault encryption. It is never exposed in logs or API responses.
-    </Note>
-  </Step>
-
-  <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials.
-
-    You'll see a "Connection verified successfully" message when the test passes.
-
-    If the connection fails:
-    - Verify both keys were copied fully without extra spaces
-    - Confirm you selected the region that matches your CloudRadial account
-    - Check that the API key has not been revoked in CloudRadial
-  </Step>
-
-  <Step title="Create Integration">
-    Once the connection test passes, click **Create Integration** to save your credentials, then click **Next**.
-  </Step>
-</Steps>
-
----
-
-### Step 2: Import
-
-Select the catalog items you want to bring into MSPortal as ticket templates.
-
-<Steps>
-  <Step title="Browse the Catalog">
-    The Import step lists every catalog item from your CloudRadial account with sortable columns for **Name**, **Category**, **Template Pack**, and **PSA Board**.
-
-    Use the search box to filter by name, description, or category. **Refresh** re-fetches the catalog from CloudRadial, and **Export** downloads the current list as a CSV file.
-  </Step>
-
-  <Step title="Choose a View">
-    Two tabs control which items you see:
-
-    | Tab | Description |
-    |-----|-------------|
-    | **All Items** | Every catalog item, deduplicated across companies |
-    | **Client-Specific** | Items that exist for only a single company; imports from this tab assign the template to that company |
-  </Step>
-
-  <Step title="Select Items">
-    Check the items you want, or use **Select All** / **Deselect All**. Items flagged as partner managed show a **Partner** badge.
-  </Step>
-
-  <Step title="Import">
-    Click **Import** to convert the selected items into ticket templates.
-
-    The results panel lists each item's outcome. Items that were imported previously are skipped with an "Already imported" note, so it is safe to re-run imports.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page.
-  </Step>
-</Steps>
-
----
-
-## What Gets Imported
-
-CloudRadial catalog items are imported as MSPortal ticket templates, including:
-
-- Item name and description
-- Category and template pack
-- PSA routing details: board, type, subtype, status, and priority
-- Company assignment for client-specific items
-
-<Note>
-The import creates templates in MSPortal; it does not modify anything in CloudRadial.
-</Note>
-
----
-
-## Synchronization Schedule
-
-CloudRadial is an on-demand import, not a recurring sync:
-
-| Data Type | Sync Frequency |
-|-----------|----------------|
-| Catalog items | On demand, when you click **Import** in the wizard |
-
-<Note>
-When you add new catalog items in CloudRadial, open the integration again, go to the Import step, click **Refresh**, and import the new items. Previously imported items are skipped automatically.
-</Note>
-
----
-
-## Managing Your Integration
-
-After setup, manage your integration from **Settings > Integrations**:
-
-| Action | Description |
-|--------|-------------|
-| **Manage** | Re-open the wizard to import more items or update credentials |
-| **Test Connection** | Verify your API keys are still valid |
-| **Delete** | Remove the integration (available in the wizard footer) |
-
-### Updating Your API Keys
-
-<Steps>
-  <Step title="Open the Integration">
-    Go to **Settings > Integrations** and click **Manage** on the CloudRadial card.
-  </Step>
-  <Step title="Enter New Keys">
-    On the Connect step, enter the new public key. Leave the private key blank to keep the existing one, or enter a new private key to replace it.
-  </Step>
-  <Step title="Test and Update">
-    Click **Test Connection**, then **Update Integration** to save.
-  </Step>
-</Steps>
-
----
+The integration reads CloudRadial catalog data and creates MSPortal templates. It does not maintain an automatic recurring catalog sync. When source items change, review the corresponding MSPortal template rather than blindly re-importing it.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Connection test fails | Verify both keys are correct and the selected region matches your CloudRadial account |
-| No catalog items found | Confirm your CloudRadial account has catalog items and click **Refresh** |
-| Item shows "Already imported" | The item already exists as a ticket template; edit it in MSPortal instead of re-importing |
-| Some items failed to import | Check the per-item error in the import results panel, then re-select and re-import the failed items |
-| New CloudRadial items missing | Click **Refresh** on the Import step to re-fetch the catalog |
+| Symptom | What to check |
+| --- | --- |
+| Connection fails | Verify region, both keys and API access. Retest after changes, then save. |
+| Import is forbidden | Check permission to write Ticket Settings as well as integration access. |
+| Catalog is empty | Clear search, check the active view and confirm the source account contains accessible items. |
+| Only some items imported | Inspect per-item results and existing templates before retrying failures. |
+| Duplicate or renamed templates appear | Repeated imports can create copies; review and manage those templates in Ticket Settings. |
+| Client-specific access looks wrong | Inspect matching company names and actual template company settings before client use. |
 
----
+## Frequently asked questions
 
-## Security & Privacy
+<Accordion title="Does CloudRadial automatically keep templates synchronized?">
 
-- **Credential Storage**: Your CloudRadial private key is encrypted using Supabase Vault and never exposed in logs or responses
-- **Data Isolation**: All imported templates are tenant-isolated and only visible to your organization
-- **Read-Only Access**: MSPortal only reads your CloudRadial catalog; it never modifies your CloudRadial configuration
+No. Catalog import is on demand. Review later source changes in the MSPortal template.
 
----
+</Accordion>
 
-## Next Steps
+<Accordion title="Is it safe to import the same CloudRadial item again?">
 
-After setting up the CloudRadial integration:
+Do not assume it is skipped. Re-importing can create a renamed copy; inspect existing templates first.
 
-<CardGroup cols={2}>
-  <Card title="Ticket Templates" icon="file-lines" href="/user-guides/ticketing/how-to-create-a-ticket-template">
-    Review and refine the templates you imported
-  </Card>
-  <Card title="Ticketing" icon="ticket" href="/user-guides/ticketing/index">
-    Put your templates to work in the ticketing module
-  </Card>
-  <Card title="Open a Ticket with AI" icon="wand-magic-sparkles" href="/user-guides/ticketing/open-a-ticket-with-ai">
-    The AI assistant matches imported templates when creating tickets
-  </Card>
-  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
-    Explore additional integration options
-  </Card>
-</CardGroup>
+</Accordion>
 
-## Need Help?
+<Accordion title="Does Client-Specific guarantee only that company can use the template?">
 
-For assistance with the CloudRadial integration, contact support@msportal.ai.
+No. Verify the matching company and actual enabled/default assignments after import. A successful import does not prove assignment succeeded.
+
+</Accordion>
+
+<Accordion title="Does CloudRadial search clear selected items?">
+
+No. Previously selected items can remain hidden by search. Clear the search and review the count before importing.
+
+</Accordion>
+
+<Accordion title="What does CloudRadial Export download?">
+
+The filtered active catalog view, not just selected items.
+
+</Accordion>
+
+<Accordion title="Does a failed CloudRadial batch undo successful templates?">
+
+No. Inspect per-item results; successful creations remain. Check before retrying failures.
+
+</Accordion>
+
+<Accordion title="Are imported CloudRadial templates inactive drafts?">
+
+No. Review active state, fields, PSA routing and company settings immediately after import.
+
+</Accordion>
+
+<Accordion title="Which permission controls CloudRadial template import?">
+
+MSP staff need permission to write Ticket Settings in addition to the required integration access.
+
+</Accordion>
+
+<Accordion title="Does Update Integration save automatically after a test?">
+
+No. Test the changes, then explicitly click **Update Integration**. Keep the masked private key unchanged to retain it.
+
+</Accordion>
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)

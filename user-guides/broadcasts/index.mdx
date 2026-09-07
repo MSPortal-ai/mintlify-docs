@@ -4,7 +4,7 @@ description: 'Send urgent email messages to groups of clients and users, with an
 icon: 'tower-broadcast'
 ---
 
-**Emergency Broadcast** lets your team send urgent email messages to groups of users, ideal for security incidents, service outages, scheduled maintenance, and important announcements. An AI Broadcast Writer helps you draft a clear message in seconds, and a delivery history tracks exactly who received each broadcast. You can also post a **portal status banner**, an outage or maintenance notice that appears at the top of your clients' portal home page with a status-page style update timeline.
+**Emergency Broadcast** lets your team send urgent email messages to groups of users, ideal for security incidents, service outages, scheduled maintenance, and important announcements. An AI Broadcast Writer helps you draft a clear message in seconds, and delivery history records send attempts and per-recipient results. You can also post a **portal status banner**, an outage or maintenance notice that appears at the top of your clients' portal home page with a status-page style update timeline.
 
 ## Overview
 
@@ -28,7 +28,7 @@ The Broadcasts page has four tabs:
 ## Prerequisites
 
 - Broadcasts are for MSP team members. Client (company) users don't have access.
-- **Permissions**: viewing requires read access to broadcasts; sending requires write access; creating groups and managing drafts requires the manage permission. Ask an administrator if you don't see the Compose tools or the **Create Group** button.
+- **Permissions**: viewing requires read access to broadcasts; sending requires write access; creating groups and deleting drafts require manage permission; saving drafts requires write or manage permission. Ask an administrator if you don't see the Compose tools or the **Create Group** button.
 - **A verified sending domain** must be configured under [Email settings](/user-guides/settings/email). Without it, broadcasts can be drafted but will fail to send.
 
 ## Sending a broadcast
@@ -55,7 +55,7 @@ The Broadcasts page has four tabs:
 </Steps>
 
 <Warning>
-Sending cannot be undone, and broadcasts go out immediately (there is no scheduling). Always use **Send Test to Me** or **Preview** before sending to a large audience.
+Sending cannot be undone, and broadcast sending is queued immediately (there is no email-send scheduling). Always use **Send Test to Me** or **Preview** before sending to a large audience.
 </Warning>
 
 ### Saving drafts
@@ -78,7 +78,7 @@ The **AI Broadcast Writer** drafts both the subject line and the message body fo
     - **General Announcement**: share an IT policy change or update
   </Step>
   <Step title="Apply and refine">
-    The assistant drafts a subject and message and fills them into the Compose form. Keep chatting to refine it, for example *"make it shorter"* or *"add more urgency."* The writer is aware of which groups you've selected and how many people will receive the broadcast.
+    The assistant proposes subject and message changes. Review and apply the proposal to update the Compose form; applying it does not save a draft or send the broadcast. Keep chatting to refine it, for example *"make it shorter"* or *"add more urgency."* The writer is aware of which groups you've selected and how many people will receive the broadcast.
   </Step>
 </Steps>
 
@@ -102,7 +102,7 @@ Status values:
 | Status | Meaning |
 |--------|---------|
 | **Sending** | The broadcast is currently being delivered. |
-| **Completed** | All emails have been sent. |
+| **Completed** | Processing finished; inspect recipient failures, since partial success can still be Completed. |
 | **Failed** | Delivery failed. |
 | **Test** | A test sent to yourself. |
 
@@ -190,3 +190,36 @@ Active banners are shared with the portal's AI assistant. When a client asks som
 
 - [Email settings](/user-guides/settings/email), configure your verified sending domain.
 - [Notifications](/user-guides/notifications/index), in-app notifications (separate from email broadcasts).
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Does Completed mean everyone received the message?">
+    No. A broadcast with some failed recipients can still be Completed. Inspect Sent, Failed and Pending counts. A provider-accepted send is not proof that the person read it.
+  </Accordion>
+  <Accordion title="Does Preview or applying AI copy send anything?">
+    Preview shows the message and applying AI copy updates Compose. Send Test to Me sends a real email; Send Broadcast submits the intended audience after confirmation.
+  </Accordion>
+  <Accordion title="Can I schedule a broadcast email using the banner dates?">
+    No. Banner Show from and Show until control portal display. Broadcast emails have a separate immediate queueing workflow.
+  </Accordion>
+  <Accordion title="Does Save Draft publish a portal banner?">
+    No. It saves your broadcast composition. Saving an active banner can publish it immediately when its display window permits.
+  </Accordion>
+  <Accordion title="Why does the send count differ from group member totals?">
+    Recipients can overlap across selected groups and are resolved within permitted scope. Review the unique-recipient preview and the final per-recipient history.
+  </Accordion>
+  <Accordion title="Does an inactive banner lose its update history?">
+    Turning the banner off controls visibility. Use the separate deletion actions only when you intend to remove the banner or an update.
+  </Accordion>
+  <Accordion title="Should I resend the whole broadcast after partial failure?">
+    Inspect the failed recipients and successful sends first. A new broadcast can resend to people already contacted; choose the follow-up audience deliberately.
+  </Accordion>
+  <Accordion title="Does posting a banner update send another email?">
+    The banner timeline and email broadcasts are separate workflows. Check portal visibility after posting; compose and send a broadcast separately if an email notification is intended.
+  </Accordion>
+</AccordionGroup>
+
+## Continue reading
+
+- [User guides](/user-guides/getting-started/index)

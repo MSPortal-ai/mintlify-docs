@@ -41,7 +41,7 @@ An external IP describes a network connection, not a device sensor. Common reaso
   </Card>
 </CardGroup>
 
-Always interpret the pin together with the displayed accuracy radius. A larger radius means the provider has less location precision.
+Always interpret the pin together with the displayed accuracy radius. A larger radius indicates a broader estimate. See [MaxMind’s geolocation accuracy explanation](https://support.maxmind.com/knowledge-base/articles/maxmind-geolocation-accuracy).
 
 ## Lookup reuse and refresh timing
 
@@ -103,6 +103,24 @@ Automatic background enrichment is disabled by default and can be enabled centra
   </Accordion>
   <Accordion title="Why is there no city or accuracy radius?">
     Some address ranges only support a broader regional or country result. MSPortal shows the fields the provider can return instead of inventing more precise information.
+  </Accordion>
+</AccordionGroup>
+
+
+## Task questions
+
+<AccordionGroup>
+  <Accordion title="Does Last checked tell me when the device moved?">
+    No. It dates the IP-location lookup. IP observed dates the integration-reported address; neither is a movement event.
+  </Accordion>
+  <Accordion title="Does Open map send the device name or IP in its URL?">
+    The map link contains approximate coordinates, not the device name or reported IP. It opens an external website, which handles the browser visit under its own practices.
+  </Accordion>
+  <Accordion title="Can a newer lookup make a VPN address identify the device?">
+    No. It may still resolve the VPN exit point. A more recent result is not inherently a more precise physical position.
+  </Accordion>
+  <Accordion title="Can a cached location remain visible while the provider is unavailable?">
+    Yes. An authorized existing cached result can remain readable. A displayed result does not establish that a fresh provider request succeeded.
   </Accordion>
 </AccordionGroup>
 

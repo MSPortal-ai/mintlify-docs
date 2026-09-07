@@ -1,73 +1,96 @@
 ---
-title: 'Configure NinjaOne Ticketing Integration'
-description: 'Connect a NinjaOne API client for ticketing synchronization and reporting'
+title: "Configure NinjaOne Ticketing Integration"
+description: "Test and save the NinjaOne Ticketing pilot connection and understand its current limits."
 icon: 'ticket'
 ---
 
-Connect NinjaOne Ticketing to MSPortal.ai with a machine-to-machine API client. The setup verifies access to your NinjaOne ticketing account and stores the connection securely.
+NinjaOne Ticketing currently provides a pilot connection for testing and storing API-client credentials. It does **not** yet provide ticket synchronization, mapping or ticket reporting through this setup. NinjaOne RMM device synchronization is a [separate integration](/user-guides/integrations/enable-ninjaone-integration).
 
-<Note>
-NinjaOne Ticketing is currently a pilot integration. The pilot establishes and validates the API connection; ticket synchronization and reporting features build on this connection as they become available. If the integration is not available in **Settings > Integrations**, contact support@msportal.ai.
-</Note>
+## Before you start
 
-## Prerequisites
+This is an MSP staff task requiring integration management permission, NinjaOne administrator access and access to the tenant's pilot. If **NinjaOne Ticketing** is absent from **Settings > Integrations**, ask MSPortal support about availability rather than assuming a saved RMM connection enables it.
 
-- NinjaOne administrator access
-- MSPortal.ai integration management permission
-- The URL of your NinjaOne instance
-
-## Create a NinjaOne API Client
+## Test and save the connection
 
 <Steps>
-  <Step title="Open NinjaOne API settings">
-    In NinjaOne, go to **Administration > Apps > API**.
-  </Step>
-  <Step title="Create the application">
-    Create an **API Services (machine-to-machine)** application. Enable the **Client Credentials** grant type and the required Monitoring and Management scopes.
-  </Step>
-  <Step title="Copy the credentials">
-    Copy the client ID and client secret, and note the HTTPS URL you use to access your NinjaOne instance.
-  </Step>
-</Steps>
-
-## Connect in MSPortal
-
-<Steps>
-  <Step title="Open the setup page">
-    In MSPortal, go to **Settings > Integrations**, find **NinjaOne Ticketing**, and click **Configure**.
+  <Step title="Prepare the API client">
+    In NinjaOne, open **Administration > Apps > API**. Create an **API Services (machine-to-machine)** client using the **Client Credentials** grant. The MSPortal setup asks for Monitoring and Management scopes. Retain the client ID, client secret and your HTTPS instance URL. See [NinjaOne's client-credentials reference](https://app.ninjaone.com/apidocs-beta/authorization/flows/client-credentials-flow).
   </Step>
   <Step title="Enter the connection details">
-    Enter the **Instance URL**, **Client ID**, and **Client secret**.
+    In **Settings > Integrations**, open NinjaOne Ticketing and enter **Instance URL**, **Client ID** and **Client secret**. Use the supported NinjaOne instance URL, not a ticket link or arbitrary API endpoint.
+
+
   </Step>
-  <Step title="Test the connection">
-    Click **Test Connection**. MSPortal verifies the API client and reports the ticket boards it can access when available.
+  <Step title="Test API access">
+    Click **Test Connection**. A successful result reports API access and, when available, the number of ticket boards returned. This is connection verification, not a ticket import.
   </Step>
-  <Step title="Save the connection">
-    Click **Connect** after the test succeeds. The client credentials are stored securely in Vault.
+  <Step title="Save explicitly">
+    Click **Connect** after the test succeeds. When editing an existing connection, test changed values and click **Save Changes**. A passing test does not persist those edits. The form masks saved client credentials.
   </Step>
 </Steps>
 
-## Managing the Connection
+## Recheck or disconnect
 
-- Reopen **Configure** to test or replace the instance URL and credentials.
-- Removing the integration deletes its stored connection from MSPortal and does not change the NinjaOne application.
-- Users without integration management permission can review the connection but cannot change its credentials.
+Reopen the intended connection. **Retest Connection** makes a new test request; simply seeing the saved connection does not prove current access. Keep masked credential values unchanged to retain them, or replace them and test before saving. Changing a field invalidates the earlier test.
+
+**Disconnect** opens a confirmation dialog. Confirming removes the MSPortal connection and its stored credentials. It does not revoke the NinjaOne API client; manage that client separately in NinjaOne when appropriate.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Instance URL is rejected | Enter the HTTPS URL for your NinjaOne instance rather than an API path or unrelated domain. |
-| Client authentication fails | Confirm the client uses **API Services**, the **Client Credentials** grant, and the required Monitoring and Management scopes. |
-| No ticket boards are returned | Confirm the API application can access ticketing data in the connected NinjaOne account. |
+| Symptom | What to check |
+| --- | --- |
+| Instance URL is rejected | Use the HTTPS NinjaOne instance URL accepted by the setup, without a ticket or API path. |
+| Authentication fails | Check the API Services client, Client Credentials grant, scopes and complete credential values. |
+| No boards are reported | Verify ticketing availability and API access in NinjaOne. Board counts do not establish imported tickets. |
+| Save is unavailable after an edit | Complete all fields and run the test again before saving. |
+| No tickets appear after connecting | The current pilot stores and verifies credentials only. |
+| Controls are read-only | Integration management permission is required to test, change or disconnect. |
 
-## Related Resources
+## Frequently asked questions
 
-<CardGroup cols={2}>
-  <Card title="NinjaOne RMM" icon="desktop" href="/user-guides/integrations/enable-ninjaone-integration">
-    Configure device synchronization from NinjaOne
-  </Card>
-  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
-    Manage all MSPortal integrations
-  </Card>
-</CardGroup>
+<Accordion title="Does the NinjaOne Ticketing pilot sync tickets?">
+
+No. The current pilot tests and stores the connection; it does not provide ticket sync, mapping or reporting.
+
+</Accordion>
+
+<Accordion title="Does NinjaOne RMM setup also enable this ticketing pilot?">
+
+No. NinjaOne RMM device synchronization is a separate integration.
+
+</Accordion>
+
+<Accordion title="Does Test Connection save NinjaOne credentials?">
+
+No. Click **Connect** for a new connection or **Save Changes** after testing replacements.
+
+</Accordion>
+
+<Accordion title="Does a ticket-board count prove tickets were imported?">
+
+No. It is a connection-test result only.
+
+</Accordion>
+
+<Accordion title="Why is NinjaOne Ticketing missing from Integrations?">
+
+It is tenant-gated pilot functionality. Check availability with MSPortal support and your MSP permissions.
+
+</Accordion>
+
+<Accordion title="Can I leave existing NinjaOne credentials blank to retain them?">
+
+Keep the masked saved values unchanged. Blank required fields disable the test/save flow.
+
+</Accordion>
+
+<Accordion title="Does Disconnect revoke the NinjaOne API application?">
+
+No. It removes the MSPortal connection and stored credentials; provider-client revocation is separate.
+
+</Accordion>
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)

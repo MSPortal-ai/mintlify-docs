@@ -6,12 +6,12 @@ description: How often MSPortal.ai refreshes data from each connected integratio
 MSPortal.ai keeps your data current by syncing automatically from every connected integration on a regular schedule. Higher-volume data that changes often (like tickets) refreshes frequently, while reference data that rarely changes (like product catalogs) refreshes once a day. Syncs are deliberately staggered throughout the day to keep the platform fast and responsive.
 
 <Info>
-All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may be adjusted over time as we tune performance. You can always trigger an immediate refresh with **Resync**.
+All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may be adjusted over time as we tune performance. These are configured scheduling cadences, not freshness guarantees or completion deadlines. Enabled datasets, queueing, provider limits and failures affect actual completion.
 </Info>
 
 ## Need data updated right now?
 
-You don't have to wait for the next scheduled sync. On the **Integrations** page (`/settings/integrations`), click the **Resync** (refresh) icon on any integration card to pull the latest data immediately.
+Open **Settings > Integrations** and use the supported sync action for the provider and dataset you need. Labels and scope differ: **Resync**, **Sync now**, **Quick Sync** and reference-data synchronization are not interchangeable. A request queues work; check the resulting timestamp and error before using the data. **Clear & Resync** is a destructive portal-data rebuild, not the default way to get a recent update.
 
 ## Microsoft 365
 
@@ -22,6 +22,10 @@ You don't have to wait for the next scheduled sync. On the **Integrations** page
 | Domains | Daily |
 | Secure Score | Daily |
 | Calendar availability | Change notifications, with an hourly safety sync |
+
+## Google Workspace
+
+Enabled directory datasets and posture run daily. Posture can be deferred while Google usage reports are incomplete. Company-level **Sync now** queues a separate manual request. See [Google Workspace setup](/user-guides/integrations/enable-google-workspace-integration).
 
 ## PSA integrations
 
@@ -37,7 +41,8 @@ You don't have to wait for the next scheduled sync. On the **Integrations** page
     | Calendar & change-management entries | Every 30 minutes |
     | Users | Every 2 hours |
     | Opportunities | Every 2 hours |
-    | Projects & project tickets | Every 2 hours |
+    | Projects | Every 2 hours |
+    | Project tickets | Every 30 minutes |
     | Project time entries | Every 30 minutes |
     | Invoices | Every 2 hours |
     | Agreements | Every 4 hours |
@@ -71,6 +76,8 @@ You don't have to wait for the next scheduled sync. On the **Integrations** page
   </Accordion>
 
   <Accordion title="Halo PSA">
+    These are target intervals checked by a scheduler every ten minutes. Due work can start later; opt-in datasets must also be enabled.
+
     | Data Type | Frequency |
     |-----------|-----------|
     | Tickets | Every 15 minutes |
@@ -81,7 +88,11 @@ You don't have to wait for the next scheduled sync. On the **Integrations** page
     | Projects & project tickets | Every 4 hours |
     | Project time entries | Every 4 hours |
     | Contracts | Daily |
-    | Catch-up reconciliation | Weekly |
+    | Time entries | Target every 15 minutes |
+    | Opportunities | Every 2 hours when enabled |
+    | Products and reference data | Daily |
+    | Satisfaction ratings | Hourly when enabled |
+    | Catch-up reconciliation | Weekly, with additional safety checks |
   </Accordion>
 
   <Accordion title="Syncro">
@@ -278,7 +289,31 @@ You don't have to wait for the next scheduled sync. On the **Integrations** page
 
 ## I made a change in my source system and it's not showing up
 
-Changes appear in MSPortal after the next scheduled sync for that data type. For frequently-synced data like tickets, that's typically within a few minutes; for daily reference data, it may take until the next day. If you need it sooner, use **Resync** on the integration card.
+Identify the dataset and correct connection first. Check enabled scope, company mapping, the latest successful dataset timestamp and any error. A successful ticket sync does not refresh every reference list or financial dataset. After a manual request, wait for its result; refreshing the browser does not force the provider to synchronize.
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Is the scheduled interval a guaranteed maximum delay?">
+    No. It describes when work is eligible or requested. Queueing, provider limits, disabled datasets and errors can delay completion. Use successful dataset timestamps as evidence of freshness.
+  </Accordion>
+  <Accordion title="Will the card’s Resync update every dataset?">
+    Provider actions differ. Read the action and provider guide to confirm whether it refreshes tickets, reference data or a broader dataset set.
+  </Accordion>
+  <Accordion title="Why did a new ticket status not appear after Quick Sync?">
+    Quick Sync can refresh tickets while statuses and routing options come from a separate reference-data synchronization. Check the relevant metadata sync and saved provider scope.
+  </Accordion>
+  <Accordion title="Does refreshing the browser request a provider sync?">
+    No. It reloads portal data. Use a supported synchronization action when you intend background provider work.
+  </Accordion>
+  <Accordion title="Should I use Clear and Resync for every stale record?">
+    No. That action removes portal data before rebuilding it. First check scope, mapping and errors and try the appropriate normal sync.
+  </Accordion>
+  <Accordion title="What should I report when a requested sync remains stale?">
+    Provide the provider, dataset, affected company, last successful timestamp and visible error. Do not include client secrets or assume a queued request completed.
+  </Accordion>
+</AccordionGroup>
 
 ## Related Resources
 

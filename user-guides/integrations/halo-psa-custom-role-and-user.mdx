@@ -1,238 +1,79 @@
 ---
-title: 'Create Custom Halo PSA Role and API User'
-description: 'Set up a dedicated MSPortal role and API-only agent in Halo PSA for secure integration'
+title: 'Create a Halo PSA Role and API Agent'
+description: 'Prepare the dedicated Halo identity, application scopes and team access used by MSPortal setup.'
 icon: 'user-shield'
 ---
 
-This guide walks you through creating a dedicated role and API-only agent in Halo PSA for the MSPortal.ai integration. Using a custom role with specific permissions ensures a secure, least-privilege connection.
+Use this MSP administrator workflow to prepare Halo access before connecting MSPortal. Effective access depends on the API application’s scopes and its selected identity, including role and team restrictions. A dedicated identity makes the integration’s access easier to review; it does not by itself establish minimum required permissions.
 
-## Prerequisites
+## Before you start
 
-- Administrator access to your Halo PSA instance
-- Access to the Configuration area in Halo PSA
+You need a Halo administrator who can manage roles, agents and API applications. Decide which companies, teams and features MSPortal should access, including any intended ticket or warranty writes.
 
-<Info>
-Creating a dedicated MSPortal role and API-only agent is **recommended** for security best practices. This ensures the integration has only the permissions it needs and provides clear audit trails.
-</Info>
+Halo versions can offer different application identity controls. Follow [Halo’s current API application guide](https://www.usehalo.com/guides/1823) for your instance. The steps below describe the agent-based setup used in the [MSPortal Halo connection guide](/user-guides/integrations/enable-halo-integration).
 
-## Create the MSPortal Role
+## Prepare the role and agent
 
 <Steps>
-  <Step title="Navigate to Agent Roles">
-    In Halo PSA, go to **Configuration** → **Teams & Agents** → **Roles**.
-
-    ![Navigate to Roles](https://colony-recorder.s3.amazonaws.com/files/2025-12-16/158beb82-87a4-4d6e-bd98-0d10ca022cb2/stack_animation.webp)
+  <Step title="Create a dedicated role">
+    In Halo, open **Configuration > Teams & Agents > Roles**, create an **MSPortal** role and save it. Select the module access required for your chosen integration features. Do not copy a broad administrator or delete-permission list merely to make all optional checks green.
   </Step>
-
-  <Step title="Create New Role">
-    1. Click **New**
-    2. Enter **MSPortal** as the role name
-    3. Click **Submit**
+  <Step title="Assign the intended departments and teams">
+    Open the role’s **Departments & Teams** settings and add the departments and teams whose records MSPortal should access. Save the changes. Missing team access can produce incomplete results even when authentication succeeds.
   </Step>
-
-  <Step title="Configure Role Permissions">
-    Under the **Permissions** section, configure the following settings:
-
-    <AccordionGroup>
-      <Accordion title="General Permissions">
-        | Permission | Setting |
-        |------------|---------|
-        | Is a HaloPSA Administrator | Not set |
-        | Editing of own Preferences | Not set |
-        | Editing of own Notifications | Not set |
-      </Accordion>
-
-      <Accordion title="Feature Access">
-        | Module | Access Level |
-        |--------|--------------|
-        | Tickets | **Read and Modify** |
-        | Customers | **Read and Modify** |
-        | Users | **Read and Modify** |
-        | CRM | **Read and Modify** |
-        | Assets | **Read, Modify and Delete** |
-        | Calendars and Appointments | **Read and Modify** |
-        | Knowledge Base | **Read, Modify and Delete** |
-        | Suppliers | **Read and Modify** |
-        | Products | **Read and Modify** |
-        | Sales | **Read and Modify** |
-        | Quotations | **Read and Modify** |
-        | Sales Orders | **Read, Modify and Delete** |
-        | Purchase Orders | **Read and Modify** |
-        | Billing Details | **Read and Modify** |
-        | Invoices | **Read, Create, Modify and Delete** |
-        | Reporting | **Read and Modify** |
-        | Customer Agreements | **Read and Modify** |
-        | Supplier Agreements | **Read and Modify** |
-        | Service Catalogue | **Read and Modify** |
-        | Software Releases | **Read and Modify** |
-        | Timesheets | **Read and Modify (All)** |
-        | Software Licencing | **Read and Modify** |
-        | Segments | **Read and Modify** |
-        | Documents | Not set |
-        | Mail Campaign | **Read and Modify** |
-        | Event Management | Not set |
-      </Accordion>
-
-      <Accordion title="Tickets Permissions">
-        | Permission | Setting |
-        |------------|---------|
-        | Can add new Tickets | **Yes** |
-        | Can edit closed Tickets | **Yes** |
-        | Can view Unassigned Tickets | **Yes** |
-        | Can view Tickets assigned to other Agents | **Yes** |
-        | Can change a Ticket's Ticket Type | **Yes** |
-        | Can Re-assign Tickets | **Yes** |
-        | Can Edit Advanced Ticket Details | **Yes** |
-        | Editing of Actions | **Can Edit All Actions** |
-        | Can manually adjust billing time allocation per action | **All** |
-        | Can recalculate billing against Tickets | **Yes** |
-        | Can Delete Tickets | **No** |
-        | Can assign to Agents in Teams the Agent is not a member of | **Yes** |
-        | Can Edit Tickets Which Are Not Assigned To Them | **Yes** |
-        | Can override maximum priority escalation at ticket type level | **Yes** |
-        | Can Override Ticket Review Processing | **Yes** |
-        | Can use the Treat as Spam button | **Yes** |
-        | Can export tickets | **Yes** |
-        | Can always update Ticket Statuses outside of actions | **Yes** |
-        | Can remove To-Do items | **Yes** |
-      </Accordion>
-
-      <Accordion title="Calendars and Appointments Permissions">
-        | Permission | Setting |
-        |------------|---------|
-        | Editing of Appointments | **Can Edit All Appointments** |
-        | Adding New Appointments | **Can Add All Appointments** |
-        | Visibility of Appointments | **Can View All Appointments** |
-        | Deleting of Appointments | **Can Delete All Appointments** |
-      </Accordion>
-
-      <Accordion title="Restrictions">
-        | Restriction | Setting |
-        |-------------|---------|
-        | Allow use of all Ticket Types | **Yes** |
-        | Allow use of all Customers | **Yes** |
-        | Customer Group Override | Not set |
-        | Allow use of all Asset Types | **Yes** |
-        | Allow use of all Asset Fields | **Yes** |
-      </Accordion>
-
-      <Accordion title="Billing Permissions">
-        | Permission | Setting |
-        |------------|---------|
-        | Can View Item Costs | **Read Only** |
-        | Can View Item Prices | **Read Only** |
-        | Can View Product SKU | **Read Only** |
-        | Can View Agent Costs | **No** |
-      </Accordion>
-
-      <Accordion title="Configuration Permissions">
-        All configuration permissions should be set to **Not set** (disabled). The MSPortal integration does not require configuration access.
-      </Accordion>
-    </AccordionGroup>
-
-    ![Role Permissions](https://colony-recorder.s3.amazonaws.com/files/2025-12-16/9cdf2e26-232a-49a1-bd24-88fc7be0a04b/stack_animation.webp)
-  </Step>
-
-  <Step title="Save the Role">
-    Click **Submit** to save the new role.
+  <Step title="Create the API agent">
+    Under **Configuration > Teams & Agents > Agents**, create a dedicated MSPortal agent, choose the role and enable the API-only agent option. Save and review its effective permissions. This identity is for the integration; it is not the human assignee you should choose for service work.
   </Step>
 </Steps>
 
-## Create the API-Only Agent
+## Link the API application
 
-<Steps>
-  <Step title="Navigate to Agents">
-    Go to **Configuration** → **Teams & Agents** → **Agents**.
+Open **Configuration > Integrations > Halo API**, then the applications list. Create or edit the MSPortal application using **Client ID and Secret (Services)** and select the intended **Agent to Log in as** where your instance uses agent-based authentication.
 
-    ![Navigate to Agents](https://colony-recorder.s3.amazonaws.com/files/2025-12-16/efce8d3a-7c8b-42e6-909f-b69bb70253bc/stack_animation.webp)
-  </Step>
+Review the application permissions as well as the agent role. Keep the client ID and secret in your approved secret store and the MSPortal connection form. Save the application before continuing.
 
-  <Step title="Create New Agent">
-    1. Click **New**
-    2. Enter **MSPortal** as the agent name
-    3. Check **Is an API-only Agent**
-    4. Select **MSPortal** from the **Role** dropdown
+## Verify the required features
 
-    <Tip>
-    API-only agents don't require a password or email address since they're used exclusively for API access.
-    </Tip>
-  </Step>
+Return to MSPortal’s **Settings > Integrations > Halo PSA** setup. For a new integration, **Test Connection** can save the connection on success. Continue to **Permissions**, inspect required and optional results, then configure sync scope and company mappings.
 
-  <Step title="Save the Agent">
-    Click **Submit** to create the agent.
-  </Step>
-</Steps>
+| Result | What to do |
+| --- | --- |
+| Authentication fails | Check the instance URL, client credentials and application identity |
+| Required access denied | Review the named application scope and effective agent access |
+| Optional feature denied | Grant it only if that feature is intended; otherwise leave its synchronization disabled |
+| Timeout or unverified result | Resolve connectivity or endpoint availability before assuming the role is wrong |
+| Connected but records missing | Check team restrictions, saved sync filters, dataset completion and company mappings |
 
-## Assign Departments and Teams to the Role
+The permission checks establish read access to tested endpoints. They do not prove ticket creation, comments, invoice changes or warranty writeback will succeed. Verify intended writes through their normal workflow and inspect the actual result.
 
-<Warning>
-This step is required for the MSPortal integration to access tickets, customers, and other data. The API agent will only be able to see data from departments and teams assigned to the role.
-</Warning>
+## Maintain access
 
-<Steps>
-  <Step title="Open the MSPortal Role">
-    Go to **Configuration** → **Teams & Agents** → **Roles**, then click on the **MSPortal** role to edit it.
-  </Step>
+After changing a role, application scope or team assignment, repeat the relevant permission check and confirm that intended records are visible. Avoid revoking working credentials until you have verified the supported replacement path. Updating a Halo role is not the same as rotating the credentials stored by MSPortal.
 
-  <Step title="Navigate to Departments & Teams Tab">
-    Click on the **Departments & Teams** tab within the role settings.
-  </Step>
+## Questions and troubleshooting
 
-  <Step title="Add Departments and Teams">
-    Add all the departments and teams that you want MSPortal to have access to:
+<AccordionGroup>
+  <Accordion title="Is an API-only agent automatically least privilege?">
+    No. Its effective role and application scopes determine access. Review the chosen features and team restrictions; the dedicated identity mainly makes that access explicit.
+  </Accordion>
+  <Accordion title="Why does authentication pass but some tickets are absent?">
+    The agent may lack the relevant team or department access, or MSPortal filters and mappings may exclude those records. Check those boundaries and sync results before broadening permissions.
+  </Accordion>
+  <Accordion title="Do I need every optional permission?">
+    Only enable access for features you intend to use. Required denied access blocks supported setup progression; optional unavailable features can remain disabled.
+  </Accordion>
+  <Accordion title="Does a green permission test prove ticket writeback works?">
+    No. These checks test read access. Ticket creation and updates need the applicable write permissions and a verified result from the actual workflow.
+  </Accordion>
+  <Accordion title="Should I grant administrator access to fix an unverified result?">
+    First inspect the error. Timeout and endpoint failures do not prove a permission denial. Correct the identified problem and retest the affected capability.
+  </Accordion>
+  <Accordion title="Where do I continue after creating the role?">
+    Open the Halo setup wizard in MSPortal, connect the application, review Permissions, select sync scope and complete company/user imports as intended.
+  </Accordion>
+</AccordionGroup>
 
-    1. Add each department whose data should be visible in MSPortal
-    2. Add each team whose tickets and data should be visible in MSPortal
-    3. Click **Submit** to save the role
-  </Step>
-</Steps>
+## Related guides
 
-<Info>
-If you skip this step, the MSPortal integration may not be able to see tickets, customers, or other data associated with those departments and teams.
-</Info>
-
-## Link the Agent to Your API Application
-
-<Tabs>
-  <Tab title="Existing API Application">
-    If you've already created an API application for MSPortal.ai, update it to use your new agent:
-
-    <Steps>
-      <Step title="Open API Applications">
-        Navigate to **Configuration** → **Integrations** → **Halo PSA API** → **View Applications**.
-      </Step>
-
-      <Step title="Edit MSPortal Application">
-        Find the **MSPortal.ai** application you created during the initial integration setup.
-      </Step>
-
-      <Step title="Update Agent Assignment">
-        In the **Agent** dropdown, select the **MSPortal** API-only agent you just created.
-      </Step>
-
-      <Step title="Save Changes">
-        Click **Submit** to save the updated application settings.
-      </Step>
-    </Steps>
-  </Tab>
-
-  <Tab title="New Integration Setup">
-    If you haven't configured the Halo PSA integration yet, follow the complete setup guide. When you reach the step to select an agent, choose the **MSPortal** API-only agent you just created.
-
-    <Card title="Configure Halo PSA Integration" icon="plug" href="/user-guides/integrations/enable-halo-integration">
-      Complete guide to connecting Halo PSA with MSPortal.ai
-    </Card>
-  </Tab>
-</Tabs>
-
-## Next Steps
-
-Your Halo PSA integration is now configured with a dedicated role and API-only agent. Return to MSPortal.ai to:
-
-- Test the connection in **Settings** → **Integrations** → **Halo PSA**
-- Configure sync settings for tickets and opportunities
-- Verify data is syncing correctly
-
-<Card title="Configure Halo PSA Integration" icon="plug" href="/user-guides/integrations/enable-halo-integration">
-  Complete guide to connecting Halo PSA with MSPortal.ai
-</Card>
+- [Connect Halo PSA](/user-guides/integrations/enable-halo-integration)
+- [Integration troubleshooting](/user-guides/integrations/faq)

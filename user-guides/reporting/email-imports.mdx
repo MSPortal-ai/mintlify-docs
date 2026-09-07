@@ -15,7 +15,7 @@ Imports respect the global company selector. If a single company is selected, yo
 
 ## How Inbound Email Routing Works
 
-Every company in your tenant has a unique import address that lives on the `inbox.msportal.ai` domain. The local part is a short, opaque code that identifies the company (it is generated automatically the first time a file is imported, and is the same code forever after for that company).
+Every company in your tenant has a unique import address that lives on the `inbox.msportal.ai` domain. The local part is a short, opaque code that identifies the company (copy the current address shown in MSPortal rather than constructing or assuming a permanent code).
 
 A company's address looks like this:
 
@@ -38,7 +38,7 @@ acme123+vendor-quotes@inbox.msportal.ai ← lands in the "Vendor Quotes" folder
 This is the same "plus-addressing" syntax that Gmail and most other mail servers support out of the box. The mail server still delivers to `acme123@inbox.msportal.ai`, but MSPortal reads the `+vendor-quotes` portion and drops the file into the matching folder automatically.
 
 <Tip>
-Plus-addressing means you can publish a single import address to your team and let the folder slug decide where the file ends up. Set up a forwarding rule in Outlook or Gmail once, and inbound documents land in the right folder forever after.
+Plus-addressing means you can publish a single import address to your team and let the folder slug decide where the file ends up. After a folder rename or import-address change, update forwarding rules and verify a new authorized import reaches the intended destination.
 </Tip>
 
 ### Auto-Create Folders on Unknown Tags
@@ -104,7 +104,7 @@ Hover any folder in the rail and use the row menu (the three-dot icon) to:
 | **Rename** | Updates the folder name across every company (for global folders) and regenerates the slug. |
 | **Move** | Re-parents the folder under another folder. Parent and child must share scope (a global folder cannot become a subfolder of a company-scoped folder, and vice versa). |
 | **New Subfolder** | Creates a child folder. Subfolders inherit their parent's scope, so a subfolder under a global folder is automatically global too. |
-| **Delete** | Removes the folder. Files inside are moved back to the root of their company before the folder is deleted, never lost. |
+| **Delete** | Removes the folder. Files are returned to their company root by the folder-delete workflow. Deleting the files themselves is a separate destructive action. |
 
 ### Copy the Email Address
 
@@ -116,7 +116,7 @@ Each folder shows a copy icon in the rail. Click it to grab the folder's full em
 
 ## Sending Files In
 
-Any inbound email with one or more attachments will import each attachment as its own file. The `From` address, subject, and timestamp are captured alongside the file so you have context later.
+The importer accepts supported attachment types and creates a separate import for each accepted attachment. When there are no accepted attachments, it creates an Email Body document instead. The `From` address, subject, and timestamp are captured alongside the file so you have context later.
 
 **What gets imported:**
 
@@ -125,16 +125,17 @@ Any inbound email with one or more attachments will import each attachment as it
 - Word documents (.docx)
 - Excel spreadsheets (.xlsx)
 - Plain text files
-- Any other common file type
+- Other types supported by the importer; an arbitrary attachment format is not guaranteed
 
 **What does not get imported:**
 
-- Inline images embedded in the email body (signature logos, decorative banners)
-- The email body itself (only attachments are saved)
-- Anything over the per-file size limit (configured per tenant)
+- Unsupported attachment MIME types
+- Attachments that cannot be downloaded or stored successfully; inspect the import status
+
+Do not assume every signature image is filtered out: supported named image attachments can be imported. Email body content can also be available in the viewer, and a body-only message is stored as its own document.
 
 <Tip>
-If you want to capture the email body too, save it as a PDF first (most mail clients have **Print, Save as PDF**) and forward the PDF as an attachment.
+For an exact printed representation, attach a PDF of the message. Otherwise check the imported email body in the viewer; body-only messages do not need a fabricated attachment.
 </Tip>
 
 ## Working with Imports
@@ -150,7 +151,7 @@ The main table on the Imports tab shows every file you have access to, with one 
 | **Subject** | The original email subject. |
 | **Size** | File size in human-readable form. |
 | **Received** | When the file arrived. |
-| **Status** | Processing state (rare; almost always **Complete**). |
+| **Status** | Processing state, including pending, processing, completed or failed. Check completion before downloading. |
 
 ### Selecting and Moving
 
@@ -187,15 +188,15 @@ You do not have to pre-create every folder. If your team uses a new tag (say `+s
 
 ## Permissions
 
-The Imports tab is gated by the **Reporting** permission. Users without read access to Reporting will not see the tab at all. Folder management (create, rename, move, delete) follows the same read/write permission as the rest of the reporting module.
+The **Imports** tab requires **Manage Reporting** access in the Reports navigation. Import and folder actions also enforce their reporting read/write permissions and company scope. Seeing a report does not grant access to manage imported files.
 
 ## Troubleshooting
 
 <AccordionGroup>
   <Accordion title="A file I emailed in never arrived">
-    Check the `From` address. Imports only accept email from senders that MSPortal can validate (your tenant team, the company's users, or addresses you have configured as allowed import senders). Mail from unverified senders is dropped silently.
+    Check that the company import address is current and active, then inspect the import status and any processing error. Do not assume there is a configured sender allowlist or that an email’s From field establishes trusted content.
 
-    If the `From` address is correct but the file still didn't land, check that the address you sent to matches your tenant's domain exactly (`inbox.msportal.ai`) and that the import code is correct (no typos).
+    If the file still did not arrive, check that the destination uses the import domain (`inbox.msportal.ai`) and that the import code is correct (no typos).
   </Accordion>
   <Accordion title="A file landed at the root instead of in a folder">
     The `+slug` part of the address either had a typo or did not match an existing folder slug. If you have **Auto-create folders on unknown tags** working, the file should have triggered a new global folder; if it didn't, double-check the slug format (lowercase, hyphens instead of spaces, no special characters).
@@ -205,6 +206,36 @@ The Imports tab is gated by the **Reporting** permission. Users without read acc
   </Accordion>
   <Accordion title="Can a company user send files to their own import address?">
     Yes, as long as their email address is registered against the company in MSPortal. Their files land in their company's bucket. They cannot route to another company's import address (the import code is unique per company).
+  </Accordion>
+</AccordionGroup>
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Does a global folder mix different companies’ files?">
+    No. It supplies a shared folder structure; each imported file retains its company. Review the destination when moving files or copying a folder address.
+  </Accordion>
+  <Accordion title="What happens to forwarding rules after a folder rename?">
+    The folder slug changes. Copy its current email address and update senders or forwarding rules; the old tag can resolve differently or create another folder.
+  </Accordion>
+  <Accordion title="Can a message without attachments be imported?">
+    Yes. With no accepted attachments, the importer creates an Email Body document. Check its processing status and content before relying on it.
+  </Accordion>
+  <Accordion title="Why did an email signature become an imported image?">
+    Supported named image attachments can pass the importer’s type checks. Do not assume every inline or signature image is excluded.
+  </Accordion>
+  <Accordion title="Does Pending mean the attachment is already downloadable?">
+    No. Background processing must retrieve and store it. Wait for Completed, or inspect the error if it fails.
+  </Accordion>
+  <Accordion title="Does deleting a folder delete its files?">
+    The folder workflow returns files to their company root. Deleting selected import files is separate and removes their stored content; check the confirmation carefully.
+  </Accordion>
+  <Accordion title="Does Download selected produce one combined report?">
+    It downloads eligible completed files; it does not prove they were merged into a PDF or inserted into a report. Review each downloaded file and its company.
+  </Accordion>
+  <Accordion title="Can I assume an import address never changes?">
+    No. Use the address shown in MSPortal. Administrative address regeneration or folder renaming can change where existing forwarding rules point.
   </Accordion>
 </AccordionGroup>
 

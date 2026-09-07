@@ -1,6 +1,6 @@
 ---
 title: 'Connecting Companies to Microsoft 365'
-description: 'Sign in with Microsoft for each of your client companies to enable user sync, license management, and security monitoring.'
+description: 'Connect for each of your client companies to enable user sync, license management, and security monitoring.'
 icon: 'plug'
 ---
 
@@ -8,7 +8,7 @@ The **Company M365 Setup** page lets you connect each of your client companies t
 
 ## Prerequisites
 
-- You must have **Settings** access in MSPortal
+- Use an MSP staff account with permission to manage companies or integration company mappings; opening Settings alone does not grant connection rights
 - An administrator from each client's Microsoft 365 tenant must be available to approve permissions (or you must have admin credentials for their tenant)
 
 ## Connecting a Company
@@ -19,18 +19,18 @@ The **Company M365 Setup** page lets you connect each of your client companies t
 
     You'll see a list of all your companies with their current connection status. A progress bar at the top shows how many companies are connected out of your total.
   </Step>
-  <Step title="Click Sign in with Microsoft">
-    Find the company you want to connect and click the **Sign in with Microsoft** button on its row.
+  <Step title="Click Connect">
+    Find the company you want to connect and click the **Connect** button on its row.
 
     A popup window will open with the Microsoft sign-in page.
   </Step>
   <Step title="Authenticate and grant permissions">
     Sign in with an **administrator account** from the client's Microsoft 365 tenant and approve the requested permissions.
 
-    Once authentication succeeds, the popup will close automatically and the company will show a green **Connected** badge.
+    Complete any integration compliance acknowledgment shown, then finish administrator consent. On success the popup closes and MSPortal refreshes the connection list. Check the company and Microsoft tenant before using synchronized data.
   </Step>
   <Step title="Repeat for each company">
-    Work through the list, clicking **Sign in with Microsoft** for each company you want to connect. Use the search bar to quickly find specific companies.
+    Work through the list, clicking **Connect** for each company you want to connect. Use the search bar to quickly find specific companies.
   </Step>
 </Steps>
 
@@ -44,7 +44,7 @@ If you sign into client Microsoft 365 tenants using a **separate browser profile
 
 <Steps>
   <Step title="Click Generate Link">
-    Next to the company, click the **Generate Link** button. A shareable authentication URL will be generated and automatically copied to your clipboard.
+    Open the company row’s **Actions** menu and choose **Generate link**. A shareable authentication URL appears in a dialog. MSPortal attempts to copy it; if browser clipboard access is denied, copy the displayed link manually.
   </Step>
   <Step title="Open the link in your preferred browser">
     Paste the link into the browser or browser profile where you are signed into the client's Microsoft 365 admin account, and complete the authentication flow.
@@ -59,9 +59,50 @@ If you sign into client Microsoft 365 tenants using a **separate browser profile
   The Generate Link option is especially useful if you use tools like Chrome profiles or Firefox containers to manage multiple Microsoft 365 tenants. Generate the link in MSPortal, then paste it into the correct browser profile to authenticate.
 </Tip>
 
+## Reading the companies table
+
+The table lists one row per Microsoft tenant connection. A company with several connected tenants appears several times; use **Actions > Add tenant** to add another connection and **Reconnect** to renew the selected one.
+
+**Connected** identifies a saved connection. It does not prove a successful current sync. **Last synced** reflects the latest user or group sync, not every Microsoft dataset; inspect the relevant Cloud page for the data you need.
+
+For an unconnected company that does not use Microsoft 365, choose **Actions > Not applicable**. This saves immediately and removes it from the setup-progress denominator. Use **Restore** to put it back. This is a setup classification, not a Microsoft consent-revocation control.
+
 ## Reconnecting a Company
 
 If a company's Microsoft 365 connection needs to be refreshed (e.g., after a token expiry or permission change), click the **Reconnect** button on the company's row. This follows the same authentication flow as the initial connection.
+
+## Disconnecting a tenant
+
+Open **Actions > Disconnect** on the intended tenant row. Review the company and domain in the confirmation and confirm only when you intend to remove that connection. Other tenant connections for the company are separate. Do not assume reconnecting restores every prior imported record or that removing the portal connection revokes all Microsoft-side consent.
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Why does one company appear more than once?">
+    Each connected Microsoft tenant gets its own row. Use its domain and tenant ID to distinguish connections before reconnecting or disconnecting.
+  </Accordion>
+  <Accordion title="Does the progress bar measure synchronization health?">
+    No. It counts applicable companies with connections. Excluded companies do not count toward the denominator, and one company with multiple tenants still counts as one connected company.
+  </Accordion>
+  <Accordion title="Can I use a separate browser profile for consent?">
+    Yes. Generate a link from the row’s Actions menu and open it in the profile for the client administrator. The one-use link expires after seven days; share it only with the intended administrator.
+  </Accordion>
+  <Accordion title="Why did Generate link succeed without copying?">
+    Clipboard permission can be blocked. The dialog still contains the generated link; copy it there instead of repeatedly generating links.
+  </Accordion>
+  <Accordion title="Does closing the popup mean the connection succeeded?">
+    No. Check that the expected tenant appears after the list refreshes. If consent was canceled or failed, correct the reported issue and start again.
+  </Accordion>
+  <Accordion title="Does Last synced cover licenses and Secure Score?">
+    No. The companies table uses the latest user or group synchronization time. Check the relevant dataset and its timestamp before reporting on licenses, domains or posture.
+  </Accordion>
+  <Accordion title="How do I undo Not applicable?">
+    Find the company using the Not applicable status filter and choose Restore. Both classification changes save immediately; neither is a replacement for disconnecting a tenant.
+  </Accordion>
+  <Accordion title="What should I verify after consent?">
+    Confirm the company, domain and Microsoft tenant ID, then check that the expected synchronized records arrive. A saved connection alone does not establish dataset completeness.
+  </Accordion>
+</AccordionGroup>
 
 ## Related Documentation
 

@@ -1,263 +1,110 @@
 ---
-title: 'Configure Pax8 Integration'
-description: 'Connect your Pax8 distributor account to MSPortal.ai to sync subscriptions, products, and usage from the Pax8 Marketplace'
+title: "Configure Pax8 Integration"
+description: "Connect Pax8, map companies, choose invoice sync, and check imported subscription data."
 icon: 'boxes-stacked'
 ---
 
-This guide walks you through connecting your Pax8 distributor account to MSPortal.ai using the guided setup wizard. Once connected, Pax8 powers the [Storefront](/user-guides/storefront/index) and [Licensing](/user-guides/licensing/index) modules.
+Connect your Pax8 account to bring distributor data into MSPortal. This is an MSP staff setup task; Company users use the access and purchasing rules their MSP provides.
 
-## Overview
+## Before you start
 
-Pax8 is a cloud distribution marketplace for MSPs. By integrating Pax8 with MSPortal.ai, you can:
+Use an MSP account with integration management permission and a Pax8 account authorized to approve the connection. Have your Pax8 sign-in and MFA ready. Open **Settings > Integrations** and select the Pax8 connection you intend to configure, or start a new one.
 
-- Sync subscriptions, products, and companies from the Pax8 Marketplace
-- Manage active licenses and subscription quantities in the Storefront
-- Offer clients a curated product catalog with approval workflows and self-service rules
-- Monitor Azure usage by company
-
-## Prerequisites
-
-- An active [Pax8](https://www.pax8.com) partner account with admin access
-- MSPortal.ai account with integration management permissions
-- Companies set up in MSPortal to map Pax8 companies to
-
-## Part 1: Prepare Your Pax8 Account
-
-Pax8 connects through OAuth, so there are no API keys to create. You authorize MSPortal directly with your Pax8 login.
+## Connect and choose sync settings
 
 <Steps>
-  <Step title="Confirm Admin Access">
-    Make sure you can sign in to Pax8 with an account that has admin access to your partner organization.
+  <Step title="Connect to Pax8">
+    On **Connect**, click **Connect to Pax8**. Sign in and approve the requested access on Pax8's page. Return to the setup wizard after authorization. Initial company discovery runs in the background.
+
+    <Frame caption="MSP setup example; no credentials entered.">
+      <img src="/images/product/pax8-oauth-connect.png" alt="Pax8 OAuth connection card with Connect to Pax8 button." width="1024" height="380" />
+    </Frame>
   </Step>
+  <Step title="Choose invoice synchronization">
+    Click **Next** to open **Sync Settings**. **Pax8 Invoices** is optional. Changing its switch saves immediately; enabling it also requests the first invoice sync. Check the Invoices page after that sync rather than treating the saved switch as proof that invoices arrived.
+  </Step>
+  <Step title="Map companies">
+    On **Map Companies**, use **Quick Match** to propose links or choose an MSPortal company manually. Review every proposal. **Import Selected** saves pending mappings; **Next** also saves them before advancing and requests a data sync. Save at least one mapping before continuing through the normal setup sequence.
 
-  <Step title="Have Your Login Ready">
-    During setup you will be redirected to the Pax8 login page to approve the connection, so keep your Pax8 credentials (and any MFA device) at hand.
-
-    <Note>
-      MSPortal.ai never stores your Pax8 password. Only encrypted OAuth tokens are saved, using Supabase Vault encryption.
-    </Note>
+    **Create new company** creates the MSPortal company immediately, but its provider link is still pending until imported. Removing an existing link saves immediately. For the shared controls, see [company imports](/user-guides/integrations/import-companies).
+  </Step>
+  <Step title="Review the imported data">
+    On **Complete**, **Sync Subscriptions** requests a background sync. **Sync started** acknowledges the request; it does not confirm that all subscriptions or products were imported. Use **View Storefront** to check subscriptions, then **Complete Setup** to leave the wizard.
   </Step>
 </Steps>
 
----
+## Check the result
 
-## Part 2: MSPortal Setup Wizard
+Confirm the intended companies are mapped and inspect their subscriptions in [Storefront](/user-guides/storefront/index). Products and Azure usage depend on available provider data; invoices additionally require the saved invoice-sync setting. Client catalog visibility, approvals and purchasing rules are separate from connecting the distributor.
 
-MSPortal.ai provides a guided 3-step wizard to connect and configure your Pax8 integration.
+Sync runs in the background. Check the latest successful data and errors for the specific connection rather than relying on a fixed completion time or the setup step's green indicator.
 
-### Starting the Wizard
+## Reconnect or remove a connection
 
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
+Open the intended connection and use **Reconnect** on **Connect** to repeat Pax8 authorization, including choosing another account when needed. Recheck the company mappings afterward. The connected indicator describes the saved connection, not a fresh API test.
 
-  <Step title="Find Pax8">
-    Locate the **Pax8** integration card in the list of available integrations.
-  </Step>
-
-  <Step title="Start Setup">
-    Click **Configure** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Authenticate with your Pax8 account to sync companies, subscriptions, and products.
-
-<Steps>
-  <Step title="Start the OAuth Flow">
-    Click **Connect to Pax8**. You are redirected to the Pax8 login page.
-  </Step>
-
-  <Step title="Authorize Access">
-    Sign in to Pax8 and approve the authorization request. Pax8 then redirects you back to the MSPortal wizard.
-  </Step>
-
-  <Step title="Connection Confirmed">
-    Back in the wizard, you'll see "Pax8 account connected successfully". MSPortal begins fetching your Pax8 companies in the background.
-
-    If you need to switch to a different Pax8 account later, use the **Reconnect** button on this step; it forces the Pax8 login screen so you can choose another account.
-  </Step>
-
-  <Step title="Proceed">
-    Click **Next** to continue to company mapping.
-  </Step>
-</Steps>
-
----
-
-### Step 2: Map Companies
-
-Map Pax8 companies to your MSPortal companies. This determines which subscriptions and usage data belong to which company.
-
-<Steps>
-  <Step title="Wait for Company Sync">
-    After connecting, MSPortal fetches your Pax8 companies automatically. The list refreshes itself as the initial sync completes, typically in under a minute. If it stays empty, click **Sync Companies** to start a fetch manually.
-  </Step>
-
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Pax8 companies to MSPortal companies based on name similarity. Review the suggested matches and apply the ones that look correct.
-  </Step>
-
-  <Step title="Manual Mapping">
-    For companies that weren't automatically matched:
-
-    1. Find the company in the list
-    2. Click the **Select company** dropdown in the "Mapped To" column
-    3. Search for and select the correct MSPortal company
-
-    To remove a mapping, use the unmap button next to the company badge.
-  </Step>
-
-  <Step title="Create New Companies">
-    If a Pax8 company doesn't have a corresponding MSPortal company, use **Create new company** to add one. New companies are automatically mapped to their Pax8 counterparts.
-  </Step>
-
-  <Step title="Import Selected">
-    Pending mappings show a **Pending** badge. Click **Import Selected** to save them, or click **Next**, which saves pending mappings automatically.
-
-    <Warning>
-      You must map at least one company before proceeding. Only mapped companies have their subscriptions imported.
-    </Warning>
-  </Step>
-</Steps>
-
----
-
-### Step 3: Complete
-
-Trigger the first full data sync and finish setup.
-
-<Steps>
-  <Step title="Sync Subscriptions">
-    Click **Sync Subscriptions** to pull active licenses from Pax8 into the Storefront module. Only mapped companies have their subscriptions imported.
-
-    Once triggered, you'll see "Sync started" and can click **View Storefront** to open the Storefront's Subscriptions page.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page. You can access the Storefront module anytime from the sidebar.
-  </Step>
-</Steps>
-
----
-
-## What Gets Synced
-
-Pax8 integration syncs the following data types to MSPortal:
-
-### Companies
-
-Your Pax8 company list, used for mapping Pax8 companies to MSPortal companies.
-
-### Products
-
-The Pax8 product catalog, which powers the Storefront catalog and the products your clients can browse and request.
-
-### Subscriptions
-
-Active subscriptions and license quantities for mapped companies, shown in the Storefront's Subscriptions section and used by the Licensing module's approval and self-service workflows.
-
-### Azure Usage
-
-Azure consumption data by company, shown in the Storefront's Azure Usage section.
-
-<Note>
-  For how to use this data day to day, see the [Storefront guide](/user-guides/storefront/index) and the [Licensing module](/user-guides/licensing/index), which covers approval workflows, catalog visibility, and client self-service.
-</Note>
-
----
-
-## Synchronization Schedule
-
-After initial setup, data syncs automatically:
-
-| Data Type | Sync Frequency |
-|-----------|----------------|
-| Companies | Daily (06:00 UTC) |
-| Products | Daily (06:00 UTC) |
-| Subscriptions | Daily (06:00 UTC) |
-| Azure Usage | Daily (06:00 UTC) |
-
-All Pax8 data types run in a single daily sync. Data types sync sequentially for each integration to keep the Pax8 connection stable.
-
-<Note>
-You can trigger a manual sync at any time by returning to the Pax8 wizard's Complete step and clicking **Sync Subscriptions**.
-</Note>
-
----
-
-## Managing Your Integration
-
-After setup, manage your integration from **Settings > Integrations**:
-
-| Action | Description |
-|--------|-------------|
-| **Configure** | Re-open the wizard to reconnect, adjust mappings, or trigger a sync |
-| **Reconnect** | Re-run the OAuth flow on the Connect step, with the option to switch Pax8 accounts |
-| **Delete** | Remove the integration (available in the wizard footer) |
-
-### Reconnecting Your Account
-
-If your Pax8 connection expires or you need to switch accounts:
-
-<Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the Pax8 card.
-  </Step>
-  <Step title="Reconnect">
-    On the Connect step, click **Reconnect** and sign in to Pax8 again.
-  </Step>
-</Steps>
-
-### Deleting the Integration
-
-Click **Delete** in the wizard footer. This permanently deletes the Pax8 integration, all synced data (subscriptions, products, companies), and settings. This action cannot be undone.
-
----
+The wizard's **Delete** action requires confirmation and removes the MSPortal integration and associated synchronized data. It is not a cancellation of subscriptions in Pax8. Review which connection you selected before confirming.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Authorization fails | Ensure you have admin access to your Pax8 account, then retry the OAuth flow |
-| No companies in the Map step | The list refreshes automatically after connecting; if it stays empty, click "Sync Companies" |
-| Subscriptions missing in Storefront | Ensure the company is mapped; only mapped companies have subscriptions imported |
-| Connection stops syncing | Open the wizard and click "Reconnect" on the Connect step to re-authorize |
-| Stale data | Data refreshes daily; use "Sync Subscriptions" on the Complete step for an immediate refresh |
+| Symptom | What to check |
+| --- | --- |
+| Authorization does not finish | Confirm your Pax8 access and complete its sign-in/MFA/consent, then return to MSPortal. |
+| No companies are listed | Allow discovery to finish; use **Sync Companies** if a new fetch is needed, then check for errors. |
+| A subscription is missing | Confirm the source account, saved company mapping and successful subscription sync. |
+| Invoice switch saved but nothing appeared | Check invoice sync outcome, source invoices and mapped company coverage. |
 
----
+## Frequently asked questions
 
-## Security & Privacy
+<Accordion title="Does Pax8 setup require an API key?">
 
-- **Token Storage**: OAuth tokens are encrypted using Supabase Vault; your Pax8 password is never stored
-- **Data Isolation**: All synced data is tenant-isolated and only visible to your organization
-- **Protected Authorization**: The OAuth flow uses signed state tokens to prevent forged connection requests
+No. Use **Connect to Pax8** and complete Pax8 OAuth authorization.
 
----
+</Accordion>
 
-## Next Steps
+<Accordion title="Where do I enable Pax8 invoices?">
 
-After setting up the Pax8 integration:
+Open **Sync Settings** and enable **Pax8 Invoices**. The switch saves immediately and requests invoice synchronization.
 
-<CardGroup cols={2}>
-  <Card title="Storefront" icon="store" href="/user-guides/storefront/index">
-    Manage subscriptions, catalog, and Azure usage
-  </Card>
-  <Card title="Licensing" icon="key" href="/user-guides/licensing/index">
-    Configure approval workflows and client self-service
-  </Card>
-  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
-    Explore additional integration options
-  </Card>
-  <Card title="Integration FAQ" icon="circle-question" href="/user-guides/integrations/faq">
-    Answers to common integration questions
-  </Card>
-</CardGroup>
+</Accordion>
 
-## Need Help?
+<Accordion title="Does Quick Match save Pax8 company links?">
 
-For assistance with the Pax8 integration, contact support@msportal.ai.
+It proposes pending links. Review and save them with **Import Selected** or **Next**.
+
+</Accordion>
+
+<Accordion title="Does creating a company also finish its Pax8 mapping?">
+
+The company is created immediately; its pending provider link still needs to be saved.
+
+</Accordion>
+
+<Accordion title="Does Sync started mean Pax8 subscriptions are ready?">
+
+No. Inspect the background result and actual Storefront subscription data.
+
+</Accordion>
+
+<Accordion title="Does Pax8 setup enable client purchasing automatically?">
+
+No. Configure catalog visibility, permissions and purchasing or approval rules separately.
+
+</Accordion>
+
+<Accordion title="Is Reconnect a fresh authorization?">
+
+Yes. It starts Pax8 authorization again. Recheck the intended account and mappings afterward.
+
+</Accordion>
+
+<Accordion title="Does deleting Pax8 in MSPortal cancel subscriptions?">
+
+No. It removes the MSPortal connection and associated synchronized data; subscription cancellation is a separate provider operation.
+
+</Accordion>
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)

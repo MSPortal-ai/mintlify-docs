@@ -1,30 +1,31 @@
 ---
 title: 'Compliance AI'
-description: 'Ask questions, draft notes, and safely update compliance with an AI assistant that never changes anything without your approval'
+description: 'Ask questions, draft notes, and safely update compliance with scoped proposals and explicit apply actions'
 icon: 'sparkles'
 ---
 
-Compliance AI is an assistant built into the Compliance module. It answers questions about your compliance data, drafts check notes, plans updates, and prepares runs, always scoped to the companies you have selected. Every change it suggests arrives as a proposal you review before anything is applied.
+Compliance AI is an assistant built into the Compliance module. It answers questions about your compliance data, drafts check notes, plans updates, and prepares runs, always scoped to the companies you have selected. Review proposed work and its target before choosing an apply or risk-creation action. An answer or draft is not proof that anything was saved.
 
 ## Opening the Assistant
 
-On the **Compliance** page, click the floating **Compliance AI** button in the bottom-right corner. The assistant opens in a side panel showing your current view (Tree, List, or Risk view) and company scope, so you always know what data it is working with.
+On the **Compliance** page, select **Open assistant** at the right edge. The shared **Assistant** panel opens. Check its current view (Tree, List, or Risks) and company scope before asking a question. When the Compliance drafting tools are available, the composer shows **Draft editor: Compliance AI**. You do not need a separate floating Compliance AI button.
 
 <Note>
-Compliance AI appears when AI features are enabled for your tenant and you have compliance access. What the assistant can do follows your permissions: read-only users can ask questions and get summaries, while users with compliance write access can also apply proposed changes.
+Compliance AI appears when AI features are enabled for your tenant and you have compliance access. What the assistant can do follows your permissions: read-only users can ask questions and get summaries, while eligible users with compliance write access can also apply supported proposals. Public-note drafting and risk-assessment proposals are MSP staff workflows; Company access remains limited by its role and company scope.
 </Note>
 
 ## What You Can Ask
 
-Quick prompts get you started:
+Type a request in the shared message input and review it before sending. The panel’s starter buttons send their displayed question immediately; they do not merely fill the composer. The former specialist shortcut list is not shown in the shared panel. Example requests include:
 
 - **Summarize compliance**: A summary of compliance posture for the companies in scope
-- **Draft check notes**: Drafted notes for compliance checks (write access)
+- **Draft check notes**: Public-note drafts for compliance checks, based on available evidence (MSP staff with write access)
 - **Plan check updates**: A proposed set of status or field updates across checks (write access)
 - **Prepare a run**: A drafted compliance run (write access)
-- **Find risk candidates**: Ranks confirmed compliance gaps that deserve human risk review (shown when risk tracking is enabled)
+- **Find risk candidates**: Ranks confirmed gaps for human risk review (MSP staff with write access and enabled risk tracking)
+- **Complete risk assessments**: Proposes supported updates for risks needing assessment under the same risk prerequisites
 
-You can also ask free-form questions. When you have a specific check or risk open, the assistant understands "this check" or "this risk" in context.
+You can also ask free-form questions. The panel shows its active view and company scope. When risk context is available, name the finding or risk you intend to discuss and check the proposal target. Do not assume “this check” uniquely identifies a record; specify it when uncertain. Changing company scope resets the scoped conversation and pending review state. This does not undo applied changes.
 
 ## Reviewing Proposals
 
@@ -40,16 +41,55 @@ When the assistant wants to change something, it emits a proposal card rather th
 
 Pending proposals collect at the bottom of the panel under **Pending proposals — review before applying**. Each card shows an expandable before-and-after diff of every field it would change.
 
-- Click **Apply** to make the change, or **Dismiss** to discard it. Nothing changes until you apply a proposal.
-- **Risk assessment** proposals never write directly. Clicking **Use this assessment** opens the standard risk editor pre-filled with the draft, marked as an **AI-assisted assessment**. Review and edit every field; the risk is only created when you click **Add risk**. See [Risk Management](/user-guides/compliance/risk-management) for the full risk workflow.
+- Click **Apply** to submit supported check/run/note changes, or **Dismiss** to discard the pending proposal. Applying draft notes saves the proposed notes; there is no separate later note Save for that action.
+- A batch can partially succeed. Review the updated/failed counts and any retry proposal; inspect the saved checks before retrying uncertain results. Dismissing a proposal does not undo earlier applied changes.
+- For an individual new **Risk assessment**, **Use this assessment** opens the risk editor. Review its fields, ownership and visibility before **Add risk**. An existing-risk proposal opens **Edit risk** instead; verify the current fields and save deliberately.
+- When multiple new risk proposals are pending, **Add all (count)** submits those proposals directly as a bulk creation action. It does not open each risk editor first. Review every proposal before clicking it; partial success is possible. Check created risks and remaining failures before retrying.
+
+See [Risk Management](/user-guides/compliance/risk-management) for approval, visibility and the manual risk workflow. AI-generated assessment text does not establish risk approval or completed remediation.
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| No Compliance AI button | AI features are disabled for your tenant, or you lack compliance access |
+| No separate Compliance AI button | Use **Open assistant**. The shared panel replaces the separate specialist launcher; access still depends on AI availability and your compliance permissions |
 | Cannot apply a proposal | Applying changes requires compliance write access |
 | Answers cover the wrong companies | The assistant follows your company selector. Adjust the selected companies and ask again |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does clicking a quick prompt submit changes?">
+    A starter button sends its displayed question immediately. Type your own request when you want to review it before sending. Sending a question is separate from applying a Compliance proposal or creating a risk; inspect any requested action and its result.
+  </Accordion>
+  <Accordion title="Can Company users draft notes from private check answers?">
+    Public-note drafting is an MSP staff workflow. Company readers do not gain access to private answers through the assistant.
+  </Accordion>
+  <Accordion title="Does Apply on Draft notes save the notes?">
+    Yes. Review the proposed public notes before applying. The apply action saves them; it is not just opening an unsaved note editor.
+  </Accordion>
+  <Accordion title="Can applying several check updates partly succeed?">
+    Yes. Read the updated/failed counts and any retry proposal. Inspect the saved records before retrying a result you are uncertain about.
+  </Accordion>
+  <Accordion title="Does Use this assessment immediately create one risk?">
+    The individual action opens the risk editor for review. Add risk is the create action; existing-risk proposals open an edit workflow.
+  </Accordion>
+  <Accordion title="Does Add all open an editor for every proposed risk?">
+    No. Add all submits the pending new risk proposals as a bulk creation action. Review each proposal first, then verify individual successes and failures.
+  </Accordion>
+  <Accordion title="Does Dismiss undo a change that was already applied?">
+    No. It discards a pending proposal. Use the normal record editor to deliberately correct an applied change.
+  </Accordion>
+  <Accordion title="Does changing company scope preserve the same pending conversation?">
+    Scope changes reset the scoped conversation and proposal review state. Confirm scope before sending; already-applied changes remain saved.
+  </Accordion>
+  <Accordion title="Does an AI risk assessment approve the risk?">
+    No. Assessment text, saved risk details, risk approval and remediation completion are separate steps. Follow the Risk Management guide.
+  </Accordion>
+  <Accordion title="What should I do when an AI answer has weak evidence?">
+    Check the records, dates and company scope. Keep uncertainty explicit and use the manual workflow rather than applying unsupported statuses or notes.
+  </Accordion>
+</AccordionGroup>
 
 ## Related Resources
 

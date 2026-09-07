@@ -1,159 +1,148 @@
 ---
-title: Financial Reporting Settings
-description: Configure revenue categories and the reporting model for financial profitability analysis
-icon: dollar-sign
+title: 'Financial Reporting Settings'
+description: 'Classify PSA revenue, choose endpoint rules, and configure company seat profiles with the correct save controls'
+icon: 'dollar-sign'
 ---
 
-Financial Reporting Settings let you control how PSA data is classified into revenue categories and how profitability metrics are calculated. The settings page has two tabs: **Revenue Categories** and **Reporting Model**.
+Open **Settings > MSP Tools > Financial Reporting** to configure the evidence behind [Financial Reporting](/user-guides/msp-tools/financial-reporting). The page has **Revenue Categories** and **Reporting Model** tabs.
 
-## Accessing Financial Reporting Settings
+## Access and save boundaries
 
-1. Click **Settings** in the sidebar
-2. Under the **MSP Tools** group, select **Financial Reporting**
+This guide is for MSP staff with Financial Reporting settings access. Viewing settings and changing them require separate read and manage permissions. ConnectWise, Autotask or Halo PSA supplies the supported revenue classifications; synchronized company, device, user and license data determines which model options are useful.
 
-## Revenue Categories Tab
+| Area | How changes persist |
+|---|---|
+| Revenue Categories mappings, bulk categories and per-contract overrides | Stage changes, then click the header **Save Changes** on that tab. |
+| Reporting Model tenant defaults, targets, device types and support boards | Stage changes, then click the header **Save Changes** on that tab. |
+| Company Seat Profiles | Use its own **Save Company Model** button. **Discard Changes** restores that company's last loaded/saved model. |
 
-The Revenue Categories tab maps your PSA product types and billing items to revenue categories. This classification drives all financial metrics and grading.
+Save the active tab before switching tabs or leaving. Header **Save Changes** does not save the Company Seat Profiles editor. While that company editor has unsaved changes, its company picker is disabled until you save or discard.
 
-### Revenue Categories
+A settings save updates MSPortal's configuration and requests background financial recalculation. It does not change the PSA contract, issue an invoice or change a license assignment. A saved message is not proof that financial summaries or Client Health scores have finished updating.
 
-| Category | Description |
-|----------|-------------|
-| **Managed Recurring** | Recurring revenue from managed service contracts (e.g., per-seat agreements, monthly monitoring) |
-| **Non-Recurring** | One-time or project-based revenue (e.g., hardware sales, migration projects) |
-| **Other Recurring** | Other recurring revenue that is not core managed services (e.g., software resale, support plans) |
-| **Product Revenue** | Revenue from product sales |
+## Classify revenue
 
-### Configuring Mappings
+### Categories
 
-<Steps>
-  <Step title="Navigate to Financial Reporting settings">
-    Go to **Settings > MSP Tools > Financial Reporting** and select the **Revenue Categories** tab.
-  </Step>
-  <Step title="Review detected classifications">
-    The page shows product types or billing item types automatically detected from your connected PSA integration, grouped by provider.
-  </Step>
-  <Step title="Assign revenue categories">
-    For each product type, select the appropriate revenue category from the dropdown. Items left as **Uncategorized** are excluded from financial calculations.
-  </Step>
-  <Step title="Save your mappings">
-    Click **Save** to apply the changes. Financial metrics will reflect the new mappings on the next data refresh.
-  </Step>
-</Steps>
+The selectable categories are:
 
-### Summary Cards
+| Category | Use |
+|---|---|
+| **Monthly Recurring Revenue (MRR)** | Baseline managed-service recurring revenue. |
+| **Other Recurring Revenue (ORR)** | Other ongoing recurring services, such as separately classified subscriptions. |
+| **Non-recurring Revenue** | One-time/project work and product sales. |
 
-Three summary cards at the top of the tab show:
+**Uncategorized** clears the rule at that level when saved. It does not necessarily exclude the revenue: another rule or the provider's fallback can still classify it. Product sales are not a fourth selectable category in this editor.
 
-- **Total Types** - Total number of detected product type classifications
-- **Categorized** - How many have been assigned a revenue category
-- **Uncategorized** - How many still need to be mapped (shown as a warning if greater than zero)
+### Set mappings and overrides
 
-### PSA-Specific Classifications
+1. On **Revenue Categories**, find the provider and expand the relevant section.
+2. Start with broad contract-type defaults where appropriate, then use addition/service or line-item rules for exceptions.
+3. Use **Per-Contract Overrides** only when an individual agreement or contract needs a more specific category. Check its company and name carefully.
+4. Select categories individually, or select rows and use the bulk category action. These are drafts until **Save Changes**.
+5. For a recurring per-contract override, review **Billing Cadence**. **Use PSA cadence**, Monthly, Quarterly, Semiannual and Annual control monthly normalization. Non-recurring revenue is not spread over a recurring cadence.
+6. Click **Save Changes** and wait for success. Reopen the financial detail after recalculation to verify the result.
 
-The classification structure varies by PSA provider:
+Changing a recurring override to Non-recurring resets its cadence to one-time treatment. Clearing the category removes the override, including its custom cadence. Changing back to recurring requires reviewing the cadence again.
 
-<Tabs>
-  <Tab title="ConnectWise">
-    ConnectWise uses **Product Types** and **Product Classes** to categorize billing items. The settings page shows all detected type/class combinations with item counts.
-  </Tab>
-  <Tab title="Autotask">
-    Autotask uses **Billing Item Types** and **Sub Types** to categorize line items. The settings page shows all detected type/sub-type combinations with item counts.
-  </Tab>
-  <Tab title="Halo PSA">
-    Halo PSA uses **Asset Type Names** to categorize recurring items. The settings page shows all detected asset types with item counts.
-  </Tab>
-</Tabs>
+The **Total Types**, **Categorized** and **Uncategorized** cards count detected mapping/override entries. They are not revenue amounts or a guarantee that every billing event is classified as intended. Where offered, **View example line items** helps inspect actual source examples before assigning a category.
 
-<Warning>
-Revenue category mappings must be configured before Financial Reporting shows meaningful data. Without mappings, the system cannot distinguish managed revenue from project revenue.
-</Warning>
+### Which rule wins?
 
-## Reporting Model Tab
+Use the provider's on-page order of operations. A more specific matching rule wins over a broad default, with provider-specific system rules taking precedence.
 
-The Reporting Model tab configures how endpoints are counted and how financial profitability thresholds are set.
+| Provider | User-controlled order, from most specific to broadest |
+|---|---|
+| ConnectWise | Per-contract override; agreement addition/product; product type and class; contract type. |
+| Autotask | Per-contract override; service/SKU; billing item type and subtype; contract type. |
+| Halo PSA | Per-contract override; service/SKU; line item type; Contract Type; Charge Type. |
 
-### Target Seat Price
+For Autotask and Halo, project-linked events are treated as Non-recurring before user rules. Their unmatched fallback is also Non-recurring. Halo's **Contract Types** are the types maintained in Halo; **Charge Types** are its broader Fixed/Pre-Pay and recurring-invoice fallback distinctions.
 
-Set a custom target for your all-in seat price. This adjusts the grade thresholds used in financial scoring.
+A save can fail after earlier mapping operations succeeded. If an error appears, reopen and inspect the affected entries before retrying; do not assume the whole batch rolled back.
 
-| Grade | Default Threshold | With Custom Target |
-|-------|------------------|--------------------|
-| **A** | $200+ | Scales based on target |
-| **B** | $150+ | Scales based on target |
-| **C** | $100+ | Scales based on target |
-| **D** | $75+ | Scales based on target |
-| **F** | Below $75 | Scales based on target |
+## Configure the tenant Reporting Model
 
-<Tip>
-Leave this blank to use the default thresholds. Set a custom value if your market or service model has different pricing norms.
-</Tip>
+1. Select **Reporting Model**.
+2. Set **Target Seat Price**, or leave it empty for the ordinary model's default thresholds. Enter a positive value. The preview shows how the target changes seat-price thresholds; it does not change the other grade components.
+3. Choose **Per Device**, **Per User** or **Hybrid**.
+4. For a user-based model, choose **User Count Source**: MSPortal Users, Microsoft 365 or PSA Users. These sources can have different populations.
+5. For Hybrid, set **Default Fallback** and any **Per-Type Rules**. **Use Default** inherits the fallback; **Greater of Both** uses the larger count, not the sum. The page explains precedence for companies with multiple types.
+6. Review **Managed Device Types** where shown and the **Support Hour** boards/queues for your PSA. These settings determine which source records contribute to the model.
+7. Click the header **Save Changes** before leaving this tab.
 
-### Endpoint Model
+Check the actual endpoint and hours details afterward. A company-specific pricing choice can take precedence over tenant and company-type defaults, and a missing user/device source is not proof of a zero managed population.
 
-Choose how endpoints are counted for per-seat calculations. This affects **Reactive Hrs/Endpoint** and **All-in Seat Price** metrics.
+## Configure Company Seat Profiles
 
-| Model | Description |
-|-------|-------------|
-| **Per Device** | Count managed devices as endpoints |
-| **Per User** | Count users associated with each company |
-| **Hybrid** | Set endpoint counting rules per company type |
+<Frame caption="MSP settings: choose the company inside the Company Seat Profiles section.">
+  <img src="/images/product/financial-company-model-entry.png" alt="Company picker inside Financial Reporting Company Seat Profiles" width="1152" height="128" />
+</Frame>
 
-#### Hybrid Endpoint Rules
+Use this section when one company needs managed-device pricing or separate commercial seat categories, such as full users and email-only users.
 
-When using the Hybrid model, you can set different counting methods for different company types:
+1. In **Reporting Model > Company Seat Profiles**, select the company in this section's own picker. License and billing choices load for that company.
+2. Choose **Company pricing basis**: **Use tenant model**, **Managed devices** or **Seat profiles**. An explicit company choice takes precedence over the defaults.
+3. For Seat profiles, review the initial Full user and Email-only user drafts. Their names alone do not configure mappings. Use **Add Profile** if needed, up to 20 profiles.
+4. Set each **Profile name** and **Target monthly price**, or deliberately inherit a configured tenant target.
+5. Select **Licenses that count seats** from the company's synced Microsoft 365 or Google Workspace choices. Distinct active users count once; earlier profiles win when licenses overlap. Reorder with the profile's move controls.
+6. Select **Billing items that allocate revenue** from the company's available PSA services and line-item types. License mappings count seats; billing mappings allocate revenue. One does not replace the other.
+7. Choose **Count toward support endpoints** separately for each profile. Clear it for pricing seats that should not be part of the reactive-support denominator.
+8. Click **Save Company Model**. Review that company's endpoint/seat detail in Financial Reporting after recalculation.
 
-<Steps>
-  <Step title="Select Hybrid as the endpoint model">
-    Choose **Hybrid** from the endpoint model options.
-  </Step>
-  <Step title="Set a default fallback">
-    Select the default endpoint source for company types without a specific rule.
-  </Step>
-  <Step title="Configure per-type rules">
-    For each company type (pulled from your PSA), select the endpoint source:
-    - **Use Default** - Falls back to the default setting
-    - **Per Device** - Count devices for this company type
-    - **Per User** - Count users for this company type
-    - **Greater of Both** - Use whichever count is higher
-  </Step>
-</Steps>
+Adding, removing or reordering a profile edits the draft until **Save Company Model**. **Discard Changes** abandons those draft changes; it does not undo an earlier successful save.
 
-<Tip>
-Hybrid mode is useful when you have a mix of company types. For example, you might count per-device for companies with large device fleets but per-user for companies where you manage user-based services.
-</Tip>
+For seat-profile grading, every populated profile needs an explicit or inherited target, pricing seats must exist, and managed revenue must be allocated coherently. Missing mappings, revenue without matching seats or unmapped managed revenue can produce **Needs setup** instead of a grade. Review options marked **no longer synced** and the source integration rather than assuming old mappings still represent current data.
 
-### Managed Device Types
+## Troubleshooting and FAQs
 
-When using Per Device or Hybrid endpoint models, select which device types count as managed endpoints.
+<AccordionGroup>
+  <Accordion title="Do category dropdowns and bulk actions save immediately?">
+    No. They change the draft. Click Save Changes on Revenue Categories and wait for success before switching tabs or leaving.
+  </Accordion>
+  <Accordion title="Does the header Save Changes save Company Seat Profiles?">
+    No. Company Seat Profiles has its own Save Company Model button. Header Save Changes saves the active tab's revenue mappings or tenant reporting defaults.
+  </Accordion>
+  <Accordion title="Why can I no longer choose another company in the profile editor?">
+    The company picker is disabled while its current model has unsaved changes, is loading or is saving. Save Company Model or Discard Changes before switching companies.
+  </Accordion>
+  <Accordion title="Does Uncategorized exclude those items from revenue?">
+    Not necessarily. Saving Uncategorized clears that rule or override. Another matching rule or the provider's fallback can classify the event. Inspect the resulting financial detail.
+  </Accordion>
+  <Accordion title="Where is the Product Revenue category?">
+    The editor offers MRR, ORR and Non-recurring Revenue. Classify one-time product sales as Non-recurring; Product Revenue is not a fourth selectable category here.
+  </Accordion>
+  <Accordion title="Can a per-contract override make Autotask or Halo project revenue recurring?">
+    No. Their project-linkage rule classifies those events as Non-recurring before user-defined rules are considered.
+  </Accordion>
+  <Accordion title="Does Billing Cadence change the PSA's billing schedule?">
+    No. It controls MSPortal's monthly normalization for a recurring contract override. Use PSA cadence inherits the synchronized cadence. Non-recurring revenue is not spread across recurring months.
+  </Accordion>
+  <Accordion title="Does a failed mapping save leave every entry unchanged?">
+    Do not assume that. A save can fail after earlier operations succeeded. Reopen the settings and inspect the affected mappings and overrides before retrying.
+  </Accordion>
+  <Accordion title="Are MSPortal Users, Microsoft 365 and PSA Users interchangeable?">
+    No. User Count Source selects a different synchronized user population. Choose the source that represents the intended model and verify the resulting endpoint detail.
+  </Accordion>
+  <Accordion title="Does Greater of Both add users and devices together?">
+    No. It chooses the larger of the user and device counts. An explicit company pricing model can still take precedence over those tenant or company-type defaults.
+  </Accordion>
+  <Accordion title="Do Full user and Email-only user work without mappings?">
+    No. They are starter profiles. Configure license rules, billing allocation and targets, review which profiles count toward support endpoints, then Save Company Model.
+  </Accordion>
+  <Accordion title="What happens when a user matches two seat profiles?">
+    Earlier profiles win the overlap so the person is not counted twice. Review profile order and the conflicts shown in the financial seat detail.
+  </Accordion>
+  <Accordion title="Can I leave all seat-profile targets blank?">
+    A populated profile needs its own target or a configured tenant target for complete grading. Leaving both blank can produce Needs setup, even though an ordinary endpoint model has default grade thresholds.
+  </Accordion>
+  <Accordion title="Does Discard Changes undo the last company-model save?">
+    No. It restores the currently loaded or last successfully saved company model and discards only the unsaved edits. To reverse a saved change, edit the model and save it again.
+  </Accordion>
+</AccordionGroup>
 
-Only devices matching the selected types are included in per-endpoint calculations. This lets you exclude device types that are not part of your managed services (e.g., network infrastructure, printers).
+## Related guides
 
-### Support Hour Boards
-
-Select which PSA service boards contribute to the **Support Hours** metric. Only time entries from selected boards count as reactive support hours.
-
-<Tip>
-Select only your reactive support boards. Exclude project boards, internal boards, and pre-sales boards to get an accurate picture of break/fix support costs.
-</Tip>
-
-## Permissions
-
-| Permission | Access Level |
-|-----------|--------------|
-| `read_settings_financial_reporting` | View revenue categories and reporting model configuration |
-| `manage_settings_financial_reporting` | Modify revenue categories and reporting model configuration |
-
-## Related Resources
-
-<CardGroup cols={2}>
-  <Card title="Financial Reporting" icon="dollar-sign" href="/user-guides/msp-tools/financial-reporting">
-    View financial metrics and grading for your client portfolio
-  </Card>
-  <Card title="Client Health" icon="heart-pulse" href="/user-guides/msp-tools/client-health">
-    See how financial grades feed into overall health scores
-  </Card>
-  <Card title="MSP Tools Overview" icon="heart-pulse" href="/user-guides/msp-tools/index">
-    Overview of all MSP Tools features
-  </Card>
-</CardGroup>
+- [Financial Reporting](/user-guides/msp-tools/financial-reporting)
+- [Client Health](/user-guides/msp-tools/client-health)
+- [Integration Company Mapping](/user-guides/settings/integration-company-mapping)

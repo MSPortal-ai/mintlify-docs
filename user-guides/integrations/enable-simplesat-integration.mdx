@@ -1,155 +1,110 @@
 ---
-title: 'Configure Simplesat Integration'
-description: 'Connect Simplesat to sync customer satisfaction surveys and responses into MSPortal reporting'
+title: "Configure Simplesat Integration"
+description: "Save the Simplesat connection, configure response sync, map companies, and review CSAT coverage."
 icon: 'face-smile'
 ---
 
-Connect Simplesat to bring your customer satisfaction surveys into MSPortal, where the scores sit next to the tickets and technicians that earned them. Responses flow into the same CSAT and NPS reporting MSPortal already uses, so your Simplesat data appears on the CSAT dashboard, in reporting blocks, and in the Service Stats scorecard.
+Connect Simplesat to bring customer company names, surveys, questions and satisfaction responses into MSPortal. Setup is for MSP staff with integration management permission. The integration is beta; its availability and reporting visibility depend on your tenant and permissions.
 
-<Note>
-Simplesat is currently a beta integration. If it is not available in **Settings > Integrations**, contact support@msportal.ai.
-</Note>
-
-## Prerequisites
-
-- A Simplesat account with permission to create API keys
-- A Simplesat API key
-- MSPortal.ai integration management permission
-- Your Simplesat customer names, so they can be matched to MSPortal companies
-
-## Connect Simplesat
+## Connect and configure sync
 
 <Steps>
-  <Step title="Create an API key">
-    In Simplesat, open **Account Settings** and create an API key for MSPortal. Copy it to a secure location.
-  </Step>
-  <Step title="Open the setup wizard">
-    In MSPortal, go to **Settings > Integrations**, find **Simplesat**, and click **Configure**. Setup runs as four steps: Connect, Configure sync, Map companies, and Review.
-  </Step>
-  <Step title="Test the connection">
-    Paste the API key and run the connection test. MSPortal reports how many customers, surveys, and responses your account exposes, so you can confirm the key reaches the data you expect.
+  <Step title="Prepare and test an API key">
+    Create a key with access to the required data in Simplesat's API-key settings. See [Simplesat's API documentation](https://developer.simplesat.io/api). In MSPortal, open **Settings > Integrations**, select Simplesat and paste the **API Key** on **Connect**. Click **Test Connection** and review the returned customer, survey and response counts.
+
+    <Frame caption="MSP setup example; no credentials entered.">
+      <img src="/images/product/simplesat-api-key-field.png" alt="Simplesat connection card with blank API Key field and separate test and creation buttons." width="1344" height="768" />
+    </Frame>
   </Step>
   <Step title="Save the connection">
-    Once the test succeeds, click **Save connection**. MSPortal stores the key in Vault and does not display it again.
+    Click **Create Integration** for a new connection. Initial company discovery runs in the background. For an existing connection, replace the key, retest, then click **Save connection**. Retain the masked value to keep the existing key; an empty field is not the retention control.
+  </Step>
+  <Step title="Choose response sync">
+    On **Configure sync**, **Companies** is required for mapping. Choose whether to enable **Surveys and responses**, then click **Save sync settings**. The switch is a draft until that save. Saving requests the configured background syncs; it is not proof that responses have arrived.
+  </Step>
+  <Step title="Map companies">
+    On **Map companies**, review **Quick Match** proposals or choose an MSPortal company manually. Save pending links with **Import Selected** or **Next**. Quick Match can consider more companies than the current filtered page, so review its own selection carefully.
+
+    Creating a company saves the company immediately and stages its link. Removing an existing link saves immediately. Saved mappings also attach existing synchronized responses to the chosen company; leaving the mapping step can request response synchronization.
+  </Step>
+  <Step title="Review coverage">
+    Open **Review** and check **Companies mapped**, **Surveys**, **Responses**, **CSAT responses**, **NPS responses**, **Unprojected responses** and the last company/response sync times. Read **Latest sync error** when present. Use **Open CSAT dashboard** to inspect reporting and **CSAT display settings** to review visibility.
   </Step>
 </Steps>
 
-## Choose What to Sync
+## Interpret the result
 
-The **Configure sync** step controls which Simplesat data MSPortal pulls.
+Response totals, scoreable CSAT/NPS responses and company mapping coverage answer different questions. A connection test is a sample of API access, not a completed import. **Unprojected responses** means records have not been converted into reporting scores; check the rating question, survey data and sync outcome before assuming a zero or favorable score.
 
-| Option | What it syncs |
-|--------|---------------|
-| Companies | Company names discovered from your Simplesat customers, so they can be mapped to MSPortal companies. Always on, because mapping depends on it. |
-| Surveys and responses | Your survey catalog, its questions, and every CSAT and NPS response, projected into MSPortal's CSAT and NPS reporting. |
+Disabling **Surveys and responses** and saving stops subsequent configured response sync work. It is not a promise to delete already imported feedback. Company discovery remains enabled.
 
-Click **Save sync settings** after changing the toggle.
+The mapping step's sync control requests company discovery. Use the connection's integration-list sync action for the configured datasets when needed; check **Review** afterward. There is no universal **Sync now** button on every wizard step.
 
-<Tip>
-Turn **Surveys and responses** off if you only want Simplesat customers available for company mapping. The background response sync honors the setting and skips its run rather than syncing anyway.
-</Tip>
+## Manage or troubleshoot the connection
 
-## Map Companies
+Reopening an existing connection can resume at **Map companies**. Select **Connect** to test or change credentials and **Configure sync** to change the response setting. The saved connection indicator is not a fresh API test.
 
-The **Map companies** step matches the company names discovered from Simplesat to companies in MSPortal. Company discovery runs in the background, so new names may take a few minutes to appear.
+| Symptom | What to check |
+| --- | --- |
+| No companies appear | Allow discovery to finish; check the API key, sync error and company-discovery control. |
+| Responses exist but a company has no score | Verify saved mappings and whether those responses can be scored. |
+| Response sync is disabled | Enable **Surveys and responses** and click **Save sync settings** if you want those datasets. |
+| Counts do not match the provider immediately | Check successful sync times, mapping and projection coverage; background imports are not instantaneous. |
+| Controls are unavailable | Ask an MSP administrator to check integration management permission. |
 
-Use **Quick match** to propose matches automatically. It reads your full Simplesat customer list against your full MSPortal company list, so large tenants do not lose valid matches. Review the proposals, adjust anything it got wrong, and save.
+**Delete** requires confirmation and removes the MSPortal connection, synchronized Simplesat data and mappings. It does not delete the original surveys or responses in Simplesat.
 
-<Note>
-Saving a mapping also attaches responses that already synced under that name, so history is not stranded on an unmapped company. You do not need to re-sync after mapping.
-</Note>
+## Frequently asked questions
 
-## Review Sync Status
+<Accordion title="Which button saves a new Simplesat connection?">
 
-The **Review** step is the health check for the connection. It reports:
+After a successful test, click **Create Integration**. **Save connection** is the existing-connection action.
 
-| Field | What it tells you |
-|-------|-------------------|
-| Companies mapped | How many discovered Simplesat companies are mapped, out of the total |
-| Surveys | Surveys synced from your Simplesat catalog |
-| Responses | Total responses MSPortal has staged |
-| CSAT responses | Responses scored into CSAT reporting |
-| NPS responses | Responses scored into NPS reporting |
-| Unprojected responses | Responses MSPortal could not score yet |
-| Companies last synced | When company discovery last ran |
-| Responses last synced | When the response sync last ran |
+</Accordion>
 
-The step also calls out the connection's overall state: a sync in progress, a sync that needs attention with the latest error, incomplete company mapping with a count of what is left, or confirmation that everything is mapped and up to date.
+<Accordion title="Does the Simplesat response switch autosave?">
 
-From here you can jump straight to the **CSAT dashboard** or to **CSAT display settings** to control how much satisfaction detail appears around MSPortal.
+No. Click **Save sync settings** after changing **Surveys and responses**.
 
-## Where Simplesat Data Appears
+</Accordion>
 
-Once responses are syncing, Simplesat scores show up wherever CSAT and NPS already do:
+<Accordion title="Can I disable Simplesat company discovery?">
 
-<CardGroup cols={2}>
-  <Card title="CSAT dashboard" icon="chart-line" href="/user-guides/surveys/index">
-    Scores, trends, and verbatim feedback at **Surveys > CSAT**
-  </Card>
-  <Card title="Service Stats" icon="gauge" href="/user-guides/msp-tools/index">
-    Per-technician CSAT alongside tickets and SLA at **User Statistics > Service Stats**
-  </Card>
-  <Card title="Client Health" icon="heart-pulse" href="/user-guides/msp-tools/client-health">
-    Satisfaction as a scored component of each client's health
-  </Card>
-  <Card title="Reporting blocks" icon="table-columns" href="/user-guides/reporting/index">
-    CSAT overview, trend, by-company, and recent-feedback blocks on any report
-  </Card>
-</CardGroup>
+Companies remains enabled because mapping depends on discovery. Response sync is optional.
 
-### Scores attach to technicians
+</Accordion>
 
-Simplesat lists the team members on each response. MSPortal attributes a response to its technician by email address, which is what puts a real CSAT figure next to that person's tickets, resolution time, and SLA attainment on **User Statistics > Service Stats**.
+<Accordion title="Does disabling Simplesat response sync erase existing feedback?">
 
-<Note>
-A technician's Simplesat email must match their PSA email for the response to land on the right person. Responses whose technician cannot be matched still count toward company and tenant CSAT.
-</Note>
+Do not assume deletion. The setting controls future configured response synchronization.
 
-## Run a Sync on Demand
+</Accordion>
 
-- Click **Sync now** in the wizard to run company discovery and, when response sync is enabled, the survey, question, and response sync.
-- Click **Refresh** on the Simplesat card in **Settings > Integrations** to do the same from outside the wizard.
+<Accordion title="Can Simplesat mapping fix existing response attribution?">
 
-Both run in the background. The Review step updates on its own as the sync progresses.
+Saved mappings attach existing synchronized responses to the selected company. Check actual reporting afterward.
 
-## Managing the Connection
+</Accordion>
 
-- Reopen the wizard to replace the API key or change the sync toggle. An unchanged key saves without re-testing.
-- Disconnecting Simplesat removes the integration, its Vault credential, the synced Simplesat data, and the company mappings. This cannot be undone, and it does not remove anything from Simplesat itself.
+<Accordion title="Does the Simplesat mapping sync control fetch every dataset?">
 
-## Troubleshooting
+It requests company discovery. Other configured response syncs have separate triggers; inspect Review for both timestamps.
 
-| Issue | Solution |
-|-------|----------|
-| Connection test fails | Confirm the API key is active in Simplesat under **Account Settings** and paste it again without surrounding spaces. |
-| No companies to map | Company discovery runs in the background. Wait a few minutes, then reopen the **Map companies** step. Run **Sync now** if nothing appears. |
-| Responses are syncing but no scores appear | Confirm **Surveys and responses** is enabled in **Configure sync**. A responses-only sync does nothing while the toggle is off. |
-| Unprojected responses stay above zero | Those responses have no rating question MSPortal can score, or their survey is missing from the synced catalog. MSPortal retries them on later syncs, so a small number that clears itself is normal. |
-| CSAT appears for the company but not the technician | The technician's Simplesat email does not match their PSA email. Align the two and re-run the sync. |
-| Responses landed on the wrong company | Correct the mapping in **Map companies** and save. Existing responses re-attach to the company you chose. |
-| Setup buttons are disabled | Using the wizard requires integration management permission, not just integration write access. |
-| Sync shows an error on Review | The **Latest sync error** panel names the failure. Re-test the connection, then run **Sync now**. |
+</Accordion>
 
-## Best Practices
+<Accordion title="What does Unprojected responses mean?">
 
-- Map every discovered company before you rely on client-facing CSAT reporting, so no responses sit without a company.
-- Keep technician email addresses consistent between Simplesat and your PSA so Service Stats attributes scores correctly.
-- Check the Review step after the first full sync, then use the mapped count as your ongoing coverage signal.
-- Use CSAT display settings to decide how much satisfaction detail client users see before you share reports.
+Those responses have not been converted into reporting scores. Review rating/survey data and sync errors; do not treat them as favorable or zero scores.
 
-## Related Resources
+</Accordion>
 
-<CardGroup cols={2}>
-  <Card title="Surveys" icon="square-poll-vertical" href="/user-guides/surveys/index">
-    Build MSPortal's own CSAT and NPS campaigns
-  </Card>
-  <Card title="MSP Tools" icon="screwdriver-wrench" href="/user-guides/msp-tools/index">
-    Where User Statistics and Service Stats live
-  </Card>
-  <Card title="Integrations" icon="plug" href="/user-guides/integrations/index">
-    Connect and manage every MSPortal integration
-  </Card>
-  <Card title="Reporting" icon="chart-column" href="/user-guides/reporting/index">
-    Add CSAT blocks to client reports
-  </Card>
-</CardGroup>
+<Accordion title="Does a healthy Simplesat setup grant Company access to all feedback?">
+
+No. Company scope, reporting permissions and CSAT display settings still apply.
+
+</Accordion>
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)

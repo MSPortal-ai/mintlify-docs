@@ -10,17 +10,17 @@ Automation rules run repeatable work for you on a schedule or when specific data
 2. Optional **conditions** (which records to match)
 3. One or more **actions** (what to do)
 
-Rules can target any of nine entity types: Devices, Companies, Compliance Controls, Planner Tasks, Users, Goals, Training, Tickets, or Meetings. Most selectors are guided dropdowns, including PSA values like service boards, ticket categories, and issue types which populate from your connected PSA integration. A few fields (the Update Field `field`/`value` pair, Custom Email, ConnectWise issue-type IDs, and template bodies) are free-text inputs.
+Rules can target the entity types offered by your editor, including Devices, Companies, Compliance Controls, Planner Tasks, Users, Goals, Training, Tickets, Meetings, Survey Responses and Onboarding. Most selectors are guided dropdowns, including PSA values like service boards, ticket categories, and issue types which populate from your connected PSA integration. A few fields (the Update Field `field`/`value` pair, Custom Email, ConnectWise issue-type IDs, and template bodies) are free-text inputs.
 
 <CardGroup cols={2}>
   <Card title="Create a Rule" icon="wand-magic-sparkles" href="/user-guides/settings/automation/wizard">
     Step-by-step walkthrough of every option in the rule wizard.
   </Card>
   <Card title="Bundling Expirations" icon="layer-group" href="/user-guides/settings/automation/bundling">
-    Combine many matching records into one ticket or planner item per company per month or quarter.
+    Group matching records for tickets, Planner work and recipient-specific digests.
   </Card>
   <Card title="Example Rules" icon="lightbulb" href="/user-guides/settings/automation/examples">
-    Ready-to-copy setups for warranty alerts, meeting agendas, ticket surveys, and more.
+    Adaptable setups for warranty alerts, meeting agendas, ticket surveys, and more.
   </Card>
 </CardGroup>
 
@@ -31,7 +31,7 @@ Navigate to **Settings > Automation** from the sidebar. The main page lists ever
 Each row shows:
 
 - **Rule Name** and description
-- **Trigger** type badge (Date Threshold or Scheduled — the list filter may also show Field Change and Data Absence for rules created via the API or internal tools)
+- **Trigger** type badge (including Date Threshold, Scheduled and supported event triggers)
 - **Entity** type badge (Device, Ticket, Meeting, etc.)
 - **Actions** summary (either the single action label or "N actions")
 - **Scope** badge (All Companies or Specific)
@@ -44,7 +44,7 @@ Hover over any rule row for the action menu:
 | Action | What it does |
 |--------|--------------|
 | **Edit** | Opens the wizard for that rule |
-| **Run Now** | Executes the rule once against current data, outside the normal schedule |
+| **Run Now** | Queues a real execution of an enabled rule; actions can send messages, create records or write to your PSA |
 | **Duplicate** | Creates a copy of the rule named "Copy of {original}", disabled by default |
 | **Delete** | Permanently removes the rule and its execution history |
 
@@ -71,11 +71,11 @@ Click **Logs** in the top-right of the rules page to open the execution history.
 - Which actions ran and whether each succeeded
 - Any error messages if an action failed
 
-Logs are scoped by the company selector, so switching companies filters logs to only those executions that touched companies in scope.
+Logs are scoped by the company selector, so switching companies changes the visible execution history; it does not rewrite a rule’s saved scope.
 
 ## AI Rule Designer
 
-While editing or creating a rule, click the purple **Sparkles** tab on the right edge of the screen to open the **AI Rule Designer**. Describe what you want the rule to do in plain English, for example:
+While editing or creating a rule, open the page’s **AI Rule Designer** from the assistant control available in your account. Describe what you want the rule to do in plain English, for example:
 
 > Remind account managers 30 days before each company's warranty expires, and send them the device list.
 
@@ -83,10 +83,34 @@ The designer proposes a complete rule (trigger, conditions, actions, templates) 
 
 ## How Rules Fire
 
-- **Date Threshold** rules check every date on the chosen field and fire when it matches the configured window (for example, 30 days before warranty expiration). They evaluate hourly.
+- **Date Threshold** rules check every date on the chosen field and fire when it matches the configured window (for example, 30 days before warranty expiration). They are evaluated in the background; check execution logs for the actual run time.
 - **Scheduled** rules run on a fixed frequency: every hour, every 6 hours, every 12 hours, daily, or weekly. You set the time of day for daily and weekly runs. Weekly runs are anchored to a fixed day managed by the system; there is no day-of-week picker.
 
 Both trigger types respect the rule's **scope**. A rule scoped to specific companies only evaluates records belonging to those companies.
+
+
+## Questions and troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Does Run Now just preview the rule?">
+    No. It queues a real execution and may send email, create a ticket or modify records. Use Run Test in the editor to preview matching records without executing actions.
+  </Accordion>
+  <Accordion title="Can a disabled rule be run manually?">
+    No. Run Now requires the rule to be enabled. Review its scope and actions before enabling it; a recent or running execution may also block another manual request.
+  </Accordion>
+  <Accordion title="Does an AI proposal save the rule?">
+    Accepting proposed changes updates the editor. Review the resulting configuration, test the matches and save the rule explicitly.
+  </Accordion>
+  <Accordion title="Does changing the company selector limit an All Companies rule?">
+    No. A rule’s saved Scope determines which companies it evaluates. The selector can filter logs without changing the rule.
+  </Accordion>
+  <Accordion title="Why did a run match records without sending anything?">
+    Inspect each action result, recipient resolution, approval state and duplicate suppression. A match count is not a delivery receipt or proof that a PSA ticket was created.
+  </Accordion>
+  <Accordion title="How should I handle a partially failed run?">
+    Inspect successful and failed actions and any external records before retrying. A failure does not roll back emails or tickets already created; do not assume a retry is side-effect free.
+  </Accordion>
+</AccordionGroup>
 
 ## Next Steps
 
