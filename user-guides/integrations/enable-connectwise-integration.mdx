@@ -25,9 +25,35 @@ In ConnectWise PSA, create an active API member under **System > Members > API M
 
 ## Check permissions
 
-The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. An optional permission that is not granted keeps its corresponding sync off.
+The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. A denied optional sync permission keeps its corresponding sync off. Checklist write permissions are checked separately and do not turn off project synchronization.
 
-Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. These checks exercise **read access**; they do not prove that ticket creation, comments, warranty updates or other writes will succeed.
+Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. Sync checks exercise **read access**. The **Project checklist writes** check also reads the connected API member’s own security settings to verify Project Ticket Tasks Add, Edit and Inquire access. It does not create or change a checklist item. A granted result confirms those role levels; it does not guarantee every write will succeed or verify other writes such as ticket creation, comments or warranty updates.
+
+## Allow project checklist changes
+
+Adding a checklist item or changing its completion state writes to ConnectWise using the **API member that owns the integration’s configured keys**. The staff member needs the appropriate MSPortal project permission, and the API member separately needs ConnectWise access. Changing the staff member’s personal ConnectWise role does not change the integration’s permissions.
+
+1. In ConnectWise, open **System > Members > API Members** and identify the member that owns the public key configured in MSPortal.
+2. Check that member’s assigned security role, then open it under **System > Security Roles**.
+3. Expand **Project** and review **Project Ticket Tasks**:
+
+| Level | Setting | Purpose |
+| --- | --- | --- |
+| **Inquire Level** | **All** | Read checklist items. |
+| **Add Level** | **All** | Add checklist items. |
+| **Edit Level** | **All** | Update checklist completion. |
+
+Keep the role dedicated to MSPortal. If it is shared with another integration, review the effect on that integration before changing it. Checklist creation and completion do not require granting Delete access.
+
+After saving the role, return to **Settings > Integrations > ConnectWise Manage > Configure > Permissions** and select **Re-check**. The **Project checklist writes** result is separate from **Projects**:
+
+- **Granted**: all three task permission levels are All.
+- **Not permitted**: the role explicitly denies at least one required task permission.
+- **Could not verify**: the role settings could not be read or interpreted, or access is scoped to **My** and cannot establish access to every intended ticket. Review the role and ticket scope in ConnectWise; this result does not prove the action is denied.
+
+<Note>
+A green Projects read check can coexist with denied checklist writes. For example, Project Ticket Tasks with Inquire Level All and Add/Edit Level None allows viewing the checklist but blocks additions and completion changes. Project synchronization can remain enabled while you correct those write permissions.
+</Note>
 
 ## Select synchronization scope
 
@@ -65,6 +91,9 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
 
 | Symptom | What to check |
 | --- | --- |
+| Checklist is visible, but adding an item fails with a security error | Check Project Ticket Tasks **Add Level** on the API member’s role. A successful project read check does not verify creation access. |
+| Checklist completion changes fail | Check Project Ticket Tasks **Edit Level** on the same API member’s role. |
+| Checklist permissions could not be verified | Review the API member’s role in ConnectWise. Restricted access to security metadata, scoped **My** permissions or a temporary API failure can prevent verification. |
 | Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
 | A data option is unavailable | Permission result and whether this provider supports that option. |
 | Companies or tickets are missing | Saved provider filters, synchronization result and company links. |
@@ -78,7 +107,7 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
     For a new connection, a successful test also creates the integration. Enter credentials only when you intend to connect it.
   </Accordion>
   <Accordion title="Does a green permissions result verify ticket writes?">
-    No. The permission checks probe read access. Creating tickets, comments or other vendor changes needs the relevant write permission and a successful action.
+    Not every write. Sync checks probe read access, while Project checklist writes reads the API member’s task permission levels without changing data. Creating tickets, comments or other vendor changes still needs the relevant write permission and a successful action.
   </Accordion>
   <Accordion title="Does Complete Setup mean all data is ready?">
     No. Check the background sync result and verify company, user and device imports separately.
