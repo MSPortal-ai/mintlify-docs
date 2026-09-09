@@ -59,6 +59,18 @@ Tools cover tickets, devices, reporting, Planner, goals, budgets, meetings, comp
 
 The available set depends on deployed tools, consent scopes, your role, company access, provider availability and client-side selection. A Company identity does not inherit MSP-only tools by granting broader scopes. List results can be paginated or truncated; a small response is not proof of a complete portfolio search.
 
+### A smaller tool catalog
+
+The consolidated catalog groups related operations into **93 public tools**, covering the same **260 existing operations**. Read tools use names such as `query_planner`; changes use names such as `manage_planner`, with a separate action for creating, editing or archiving an item. The assistant uses the input schema to choose the action and its arguments.
+
+The full catalog fits below a 128-tool client budget without deselecting feature areas. Your consent screen counts the grouped tools available to your account. Scopes, role permissions and company access still apply to each action, and other connected servers may contribute additional tools to your client's total. The exact catalog depends on the deployed server version.
+
+### Existing connections
+
+Existing tool names remain callable with their original arguments and response shapes, including the two compatibility aliases. Pending confirmations retain their original operation identity and expiry. You do not need to change the server URL or grant broader access just because the catalog is consolidated.
+
+When your client refreshes its tool list, it sees the grouped names. Update any tool-name allowlist when adopting those names. Custom clients that require old names to appear in `tools/list` must update their discovery logic; preserving old calls does not preserve the old discovery response. See [grouped calls and legacy compatibility](/user-guides/mcp-server/tools-reference#existing-connections-and-legacy-names).
+
 A useful first request is: “Use read tools to identify the company I name and summarize the available evidence. Do not change records or send messages.” Check cited records, dates and gaps before requesting follow-up work.
 
 ### Confirmation before changes
@@ -103,8 +115,8 @@ Revocation does not erase data already returned to the external client, undo com
 | Setup cards are disabled | MCP Server write permission; read-only page access is insufficient. |
 | Sign-in does not open | Client authentication action, remote HTTP/OAuth support and organization policy. |
 | Wrong tenant or company | Stop the task and verify the signed-in identity and regional URL before requesting data. |
-| A tool is missing | Deployed version, scopes, permissions, integrations and the client's enabled-tool selection. |
-| Too many tools for the client | Enable only the areas/tools needed for the task and reconnect if required. |
+| A tool is missing | Look for its grouped public tool in the reference, then check deployed version, scopes, permissions, integrations and client tool selection. |
+| Too many tools for the client | Refresh the client's discovered catalog. The consolidated MSPortal catalog has 93 tools before access filtering; also check other connected servers and any lower client limit. If necessary, enable only the areas/tools needed. |
 | Confirmation expired | Request a new proposal and review it; do not claim the old proposal was saved. |
 | Revoke failed | Reopen the connections list and verify state before assuming access was removed. |
 
@@ -119,6 +131,9 @@ Revocation does not erase data already returned to the external client, undo com
   </Accordion>
   <Accordion title="Do broader OAuth scopes override my portal permissions?">
     No. Scopes, role permissions, company scope and tool-specific restrictions all apply. Company identities remain subject to MSP-only restrictions.
+  </Accordion>
+  <Accordion title="Will consolidation break calls using the old tool names?">
+    The 260 legacy names remain callable with their original arguments and result shapes, and pending confirmations retain their operation identity. Discovery now returns grouped names, so client allowlists and custom discovery checks may need updating. Existing grants do not expand automatically.
   </Accordion>
   <Accordion title="Does a proposal mean a record was created?">
     No. A proposal awaits confirmation. Inspect the final result and target record after confirming.

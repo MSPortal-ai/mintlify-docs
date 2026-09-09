@@ -1,17 +1,66 @@
 ---
 title: "MCP Tools Reference"
-description: "Browse MCP tools by module, their permission requirements and their confirmation or immediate-action behavior."
+description: "Find grouped MCP tools, their actions, permissions, confirmations and compatibility with existing connections."
 icon: "screwdriver-wrench"
 ---
 
-This reference describes **260 registered tools across 30 modules** in the reviewed application source. Your connected client receives a subset according to the deployed version, granted OAuth access, MSPortal permissions, company scope, integrations and client tool selection. A listed tool is not proof that it is available in your session.
+The reviewed consolidated catalog exposes **93 public tools covering 260 existing operations across 30 modules**. Related operations share a tool, so full MSPortal access fits below a 128-tool client budget without removing feature areas. Your connected client receives a subset according to the deployed version, granted OAuth access, MSPortal permissions, company scope, integrations and client tool selection. A listed tool is not proof that it is available in your session.
+
+## Grouped tools and actions
+
+- **`query_*`** tools retrieve related records or summaries, such as `query_planner` or `query_projects`.
+- **`manage_*`** tools stage and confirm related changes, such as `manage_planner` or `manage_meeting_participants`.
+- **Standalone tools** retain their names and original arguments: `get_current_user`, `search_portal`, `submit_feedback`, `draft_compliance_notes` and `mark_notification_read`.
+
+The **Public tool** column identifies the name returned by `tools/list`. The **Action / legacy name** column identifies the `request.action` value inside that tool. Each action has its own argument schema and access checks; seeing a grouped tool does not grant every action in it.
+
+<Note>
+Use the catalog and schemas returned by your connected server. A server that lists individual names such as `list_planner_items` instead of `query_planner` has not switched to the consolidated catalog. Counts can be lower because of permissions, scopes or integrations, and tools from other connected servers may also count toward your client's limit.
+</Note>
+
+For example, call `query_planner` with these tool arguments to list Planner items:
+
+```json
+{
+  "request": {
+    "action": "list_planner_items",
+    "arguments": { "page": 1, "limit": 25 }
+  }
+}
+```
+
+For a change, call the appropriate `manage_*` tool with the action and its arguments. Review the returned proposal. After approval, call the **same tool and action** with `confirm: true` and the returned `confirmationId` inside `request.arguments`. For example, a proposal from `manage_planner` with action `create_planner_item` is confirmed using:
+
+```json
+{
+  "request": {
+    "action": "create_planner_item",
+    "arguments": {
+      "confirm": true,
+      "confirmationId": "REPLACE_WITH_RETURNED_CONFIRMATION_ID"
+    }
+  }
+}
+```
+
+Do not resend changed values on a confirmation call. Request a new proposal to change the target or payload. Standalone tools continue to accept their original arguments directly, without a `request` wrapper.
+
+## Existing connections and legacy names
+
+All **260 legacy operation names** remain accepted by `tools/call` with their original arguments and result shapes. Existing connections keep their OAuth grants and access restrictions; consolidation alone does not require a different server URL or a new grant.
+
+Pending confirmations keep the original operation identity. A proposal for an operation can be confirmed through its legacy tool name or the corresponding grouped action, subject to the same user/client identity, expiry and replay checks. The compatibility aliases `update_compliance_status` and `list_compliance_templates` remain callable directly but are not separately advertised. Confirmations created through an alias must continue using that alias's identity.
+
+<Warning>
+The discovery response changes: `tools/list` returns grouped names rather than every legacy operation name. Cached legacy calls still work. When adopting the grouped catalog, update any client tool-name allowlist to include the public tool names you need. A custom client that requires a legacy name to appear in `tools/list` must update its discovery logic.
+</Warning>
 
 ## Read the access column
 
 - **Read**: retrieves data without a normal portal write confirmation. Read calls still transmit their results to the connected client.
 - **Write (confirm)**: stages a proposal; review it and authorize the follow-up confirmation before committing. A proposal is not a saved record.
 - **Immediate action**: runs without the server's proposal/confirmation round trip. Check the description: marking notifications changes state; drafting compliance notes generates output without saving it.
-- **Send feedback**: immediately sends an external feedback message. Although the protocol currently labels it read, it is a sending action, restricted to MSP staff and requiring an explicit user request to send feedback.
+- **Send feedback**: immediately sends an external feedback message. It is restricted to MSP staff and requires an explicit user request to send feedback; the consolidated catalog does not mark it read-only.
 
 Module scopes shown below are a summary, not a requirement to grant every scope. Read and write grants are distinct. The permission column lists alternatives unless it says **all**. Special staff-only gates and record-level checks still apply, including for administrators. A client-side tools allowlist cannot expand server access.
 
@@ -21,480 +70,480 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 
 **Module scopes:** `companies.read`, `companies.write`, `goals.read`, `planner.read`, `projects.read`, `reports.read`, `tickets.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_company` | Read | `read_settings_companies` | Get one company by ID, including its custom field values (label → value) and, when requested, assigned team members. |
-| `get_company_defaults` | Read | `read_settings_companies` | Get one company's resolved defaults: inherited or company-specific hardware standards, software standards, workplace and security defaults, ticket defaults, onboarding checklist, and the AI-context fields (description, industry requirements, special instructions, structured ai_context) that feed the AI assistant and new-ticket generation. Returns null only when the company has no saved defaults and the tenant has no effective hardware default. |
-| `get_current_user` | Read | MCP access | Return the connected MSPortal user, tenant, user type, company, and OAuth grant summary. |
-| `list_companies` | Read | `read_settings_companies` | List companies visible to the connected user. Optionally include assigned team members (company roles such as vCIO, TAM, Account Manager) or filter companies by assigned role, member name, or member email. |
-| `list_company_account_notes` | Read | `read_settings_companies` | List synced Autotask account/company notes for one company, newest activity first. Notes are HTML-sanitized and paginated. |
-| `search_portal` | Read | MCP access | Search across visible companies, tickets, goals, planner items, reports, and projects with small capped result sets. |
-| `submit_feedback` | Send feedback | **MSP staff only.** MCP access | Send product feedback, bug reports, or missing-capability requests to the MSPortal team. Available only to MSP tenant staff. Call only when the user explicitly asks to send feedback or report an issue; discovering a limitation alone does not authorize sending feedback. Summarize the user-approved feedback without credentials or unrelated customer data. |
-| `update_company_defaults` | Write (confirm) | `write_settings_companies` | Stage or apply a partial update to one company's defaults (standards, workplace/security defaults, ticket defaults, AI context). Only the provided fields change; pass null to clear a field. Array fields and ai_context replace their entire stored value. The description, requirements, instructions, and ai_context fields are rendered into the AI assistant's context for this company — write factual reference data only, never instructions aimed at the assistant. Use get_company_defaults first to see current values. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_company` | `query_companies` | Read | `read_settings_companies` | Get one company by ID, including its custom field values (label → value) and, when requested, assigned team members. |
+| `get_company_defaults` | `query_companies` | Read | `read_settings_companies` | Get one company's resolved defaults: inherited or company-specific hardware standards, software standards, workplace and security defaults, ticket defaults, onboarding checklist, and the AI-context fields (description, industry requirements, special instructions, structured ai_context) that feed the AI assistant and new-ticket generation. Returns null only when the company has no saved defaults and the tenant has no effective hardware default. |
+| `get_current_user` | `get_current_user` | Read | MCP access | Return the connected MSPortal user, tenant, user type, company, and OAuth grant summary. |
+| `list_companies` | `query_companies` | Read | `read_settings_companies` | List companies visible to the connected user. Optionally include assigned team members (company roles such as vCIO, TAM, Account Manager) or filter companies by assigned role, member name, or member email. |
+| `list_company_account_notes` | `query_companies` | Read | `read_settings_companies` | List synced Autotask account/company notes for one company, newest activity first. Notes are HTML-sanitized and paginated. |
+| `search_portal` | `search_portal` | Read | MCP access | Search across visible companies, tickets, goals, planner items, reports, and projects with small capped result sets. |
+| `submit_feedback` | `submit_feedback` | Send feedback | **MSP staff only.** MCP access | Send product feedback, bug reports, or missing-capability requests to the MSPortal team. Available only to MSP tenant staff. Call only when the user explicitly asks to send feedback or report an issue; discovering a limitation alone does not authorize sending feedback. Summarize the user-approved feedback without credentials or unrelated customer data. |
+| `update_company_defaults` | `manage_companies` | Write (confirm) | `write_settings_companies` | Stage or apply a partial update to one company's defaults (standards, workplace/security defaults, ticket defaults, AI context). Only the provided fields change; pass null to clear a field. Array fields and ai_context replace their entire stored value. The description, requirements, instructions, and ai_context fields are rendered into the AI assistant's context for this company — write factual reference data only, never instructions aimed at the assistant. Use get_company_defaults first to see current values. |
 
 ## Tickets
 
 **Module scopes:** `tickets.read`, `tickets.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `add_ticket_note` | Write (confirm) | `write_tickets_notes`, `write_tickets` | Stage or post a note to a ticket. The note is written to the client's PSA (Halo, ConnectWise, Autotask, Syncro) via its API, not just locally. |
-| `create_ticket` | Write (confirm) | `write_tickets_create`, `write_tickets` | Stage or create a PSA ticket through the tenant's active PSA integration. |
-| `get_ticket` | Read | `read_tickets` | Get a ticket with its normalized dueDate, Autotask resolution when available, and public notes. |
-| `list_ticket_notes` | Read | `read_tickets` | List the notes/updates on a ticket. Internal notes are only returned for tenant users that request them. |
-| `list_ticket_status_options` | Read | `read_tickets` | List the valid PSA statuses for a ticket's integration. Use the returned externalId with update_ticket_status. ConnectWise statuses are board-scoped: prefer options whose boardExternalId matches the ticket's board. |
-| `list_tickets` | Read | `read_tickets` | List visible PSA tickets, including normalized dueDate and Autotask resolution fields when available. |
-| `update_ticket_status` | Write (confirm) | `write_tickets_status`, `write_tickets` | Stage or update a ticket's status in the client's PSA via its API. statusExternalId must come from list_ticket_status_options. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `add_ticket_note` | `manage_tickets` | Write (confirm) | `write_tickets_notes`, `write_tickets` | Stage or post a note to a ticket. The note is written to the client's PSA (Halo, ConnectWise, Autotask, Syncro) via its API, not just locally. |
+| `create_ticket` | `manage_tickets` | Write (confirm) | `write_tickets_create`, `write_tickets` | Stage or create a PSA ticket through the tenant's active PSA integration. |
+| `get_ticket` | `query_tickets` | Read | `read_tickets` | Get a ticket with its normalized dueDate, Autotask resolution when available, and public notes. |
+| `list_ticket_notes` | `query_tickets` | Read | `read_tickets` | List the notes/updates on a ticket. Internal notes are only returned for tenant users that request them. |
+| `list_ticket_status_options` | `query_tickets` | Read | `read_tickets` | List the valid PSA statuses for a ticket's integration. Use the returned externalId with update_ticket_status. ConnectWise statuses are board-scoped: prefer options whose boardExternalId matches the ticket's board. |
+| `list_tickets` | `query_tickets` | Read | `read_tickets` | List visible PSA tickets, including normalized dueDate and Autotask resolution fields when available. |
+| `update_ticket_status` | `manage_tickets` | Write (confirm) | `write_tickets_status`, `write_tickets` | Stage or update a ticket's status in the client's PSA via its API. statusExternalId must come from list_ticket_status_options. |
 
 ## Ticket Templates
 
 **Module scopes:** `ticket_templates.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_ticket_template` | Write (confirm) | `write_settings_templates` | Stage or create a reusable parent ticket template definition with metadata, sections, fields, and optional rules. This does not submit a ticket and does not create template branches or visibility assignments. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_ticket_template` | `manage_ticket_templates` | Write (confirm) | `write_settings_templates` | Stage or create a reusable parent ticket template definition with metadata, sections, fields, and optional rules. This does not submit a ticket and does not create template branches or visibility assignments. |
 
 ## Devices
 
 **Module scopes:** `devices.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `device_summary` | Read | `read_devices` | Fleet-wide device summary: total count and grouped counts by status, OS family (Windows/macOS/Linux/…), device type, and manufacturer; warranty status (active/expired/unknown/expiring in the next 90 days) with upcoming expiries by calendar quarter; activity/staleness (never seen, not seen in 30/90 days); and the top companies by device count. Pass companyId to scope the summary to one company. Respects the caller's company scope. |
-| `get_device` | Read | `read_devices` | Get one device, including its custom field values (label → value). |
-| `list_device_alerts` | Read | `read_devices` | List active device alerts: offline servers (status offline or not seen in 7 days; workstations are excluded as expected noise) and devices with warranties expiring within the next 30 days. The limit applies per alert category. |
-| `list_device_types` | Read | `read_devices` | List device types. |
-| `list_devices` | Read | `read_devices` | List devices with filters, including fleet/lifecycle queries: os contains-match (e.g. "server", "windows 10"), warranty expiry windows (warrantyExpiresBefore/After), stale devices (lastSeenBefore), and hardware age (firstSeenBefore). |
-| `list_locations` | Read | `read_devices` | List locations. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `device_summary` | `query_devices` | Read | `read_devices` | Fleet-wide device summary: total count and grouped counts by status, OS family (Windows/macOS/Linux/…), device type, and manufacturer; warranty status (active/expired/unknown/expiring in the next 90 days) with upcoming expiries by calendar quarter; activity/staleness (never seen, not seen in 30/90 days); and the top companies by device count. Pass companyId to scope the summary to one company. Respects the caller's company scope. |
+| `get_device` | `query_devices` | Read | `read_devices` | Get one device, including its custom field values (label → value). |
+| `list_device_alerts` | `query_devices` | Read | `read_devices` | List active device alerts: offline servers (status offline or not seen in 7 days; workstations are excluded as expected noise) and devices with warranties expiring within the next 30 days. The limit applies per alert category. |
+| `list_device_types` | `query_devices` | Read | `read_devices` | List device types. |
+| `list_devices` | `query_devices` | Read | `read_devices` | List devices with filters, including fleet/lifecycle queries: os contains-match (e.g. "server", "windows 10"), warranty expiry windows (warrantyExpiresBefore/After), stale devices (lastSeenBefore), and hardware age (firstSeenBefore). |
+| `list_locations` | `query_devices` | Read | `read_devices` | List locations. |
 
 ## Reporting
 
 **Module scopes:** `reports.read`, `reports.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_report` | Write (confirm) | `write_reporting` | Stage or create a report configuration. |
-| `delete_report` | Write (confirm) | `manage_reporting` | Stage or delete a report. |
-| `edit_report` | Write (confirm) | `write_reporting` | Stage or edit a report configuration. |
-| `get_report` | Read | `read_reporting` | Get one report. Report structures are only returned when explicitly requested. |
-| `get_report_schedule` | Read | `read_reporting` | Get one report schedule. |
-| `list_report_schedules` | Read | `read_reporting` | List report schedules. |
-| `list_report_templates` | Read | `read_reporting` | List report templates. |
-| `list_report_types` | Read | `read_reporting` | List report types. |
-| `list_reports` | Read | `read_reporting` | List report summaries with pagination and optional filters. |
-| `publish_report` | Write (confirm) | `write_reporting` | Stage or publish a report by setting status to published. |
-| `run_report_schedule` | Write (confirm) | `write_reporting` | Stage or trigger a report schedule run immediately. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_report` | `manage_reports` | Write (confirm) | `write_reporting` | Stage or create a report configuration. |
+| `delete_report` | `manage_reports` | Write (confirm) | `manage_reporting` | Stage or delete a report. |
+| `edit_report` | `manage_reports` | Write (confirm) | `write_reporting` | Stage or edit a report configuration. |
+| `get_report` | `query_reports` | Read | `read_reporting` | Get one report. Report structures are only returned when explicitly requested. |
+| `get_report_schedule` | `query_report_schedules` | Read | `read_reporting` | Get one report schedule. |
+| `list_report_schedules` | `query_report_schedules` | Read | `read_reporting` | List report schedules. |
+| `list_report_templates` | `query_reports` | Read | `read_reporting` | List report templates. |
+| `list_report_types` | `query_reports` | Read | `read_reporting` | List report types. |
+| `list_reports` | `query_reports` | Read | `read_reporting` | List report summaries with pagination and optional filters. |
+| `publish_report` | `manage_reports` | Write (confirm) | `write_reporting` | Stage or publish a report by setting status to published. |
+| `run_report_schedule` | `manage_report_schedules` | Write (confirm) | `write_reporting` | Stage or trigger a report schedule run immediately. |
 
 ## Analytics
 
 **Module scopes:** `analytics.read`, `companies.read`, `companies.write`, `training.read`, `users.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `bulk_update_readiness` | Write (confirm) | **MSP staff only.** `manage_client_readiness` | Stage a reviewed readiness change for 1–100 explicitly selected companies. Exclude/include companies; exempt or restore a requirement; confirm or withdraw a reviewed confirmation. Use get_company_readiness for requirementId. Role mappings are configured per check in Readiness settings. Exemptions need a reason. Confirmations represent the approving person's review and fail if ANY check is unsatisfied. The entire batch is atomic. Always show the proposal for human review before committing. |
-| `get_company_readiness` | Read | **MSP staff only.** `read_client_readiness` | Read every readiness check for one company, including ready and exempt checks, evidence, the responsible person and requirement IDs. Use this before proposing exemptions, removing exemptions or reviewing confirmations through bulk_update_readiness. |
-| `get_portfolio_summary` | Read | `read_dashboards`, `read_settings_companies` | Get portfolio analytics summary, optionally filtered to companies assigned to a specific company role (for example vCIO) or assigned team member. |
-| `get_readiness_assignment_options` | Read | **MSP staff only.** **All:** `read_client_readiness`, `read_settings_companies`, `read_settings_users` | Find company owner roles and active MSP team members for readiness bulk changes. Returns role IDs and public user IDs. Search matches names and email, up to 50 users; narrow the search to find a person. Only team-menu roles are assignable. |
-| `get_team_activity` | Read | `read_team_activity` | Get a tenant-scoped record of what the team did in MSPortal. Returns daily totals plus teammate and company rollups; set includeFeed to true for a paginated, redacted who-did-what feed. This is the auditing tool for activity detail; get_user_activity remains useful for engagement trends. |
-| `get_ticket_trends` | Read | `read_ticket_trends` | Get pre-computed weekly ticket trend analytics: created/closed/backlog per week, per-company totals (default top 15 by volume, max 50), per-category totals (same caps), and a deterministic forecast with volume direction, backlog outlook, resolution trend, and the top 10 company/category risk watchlist entries. Data is aggregated weekly — use list_tickets for individual tickets. |
-| `get_training_analytics` | Read | `read_training` | Get training analytics. |
-| `get_user_activity` | Read | `read_settings_users`, `read_dashboards` | Get user activity analytics with optional company, user, company-role, and date filters. |
-| `list_company_audit` | Read | `read_settings_companies`, `read_dashboards` | Superseded by list_company_readiness. List company audit metrics; its auditScore and missingItems are now computed from the tenant's Account Readiness requirements. Supports filtering by company, assigned company role (for example vCIO), or assigned team member. |
-| `list_company_readiness` | Read | `read_client_readiness` | List Account Readiness state per company: an honest 0-100 score plus every open check with its area, owner and the in-app page that fixes it. Use bulk_update_readiness to propose changes for human review. Confirmations require the approving person to review each company. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `bulk_update_readiness` | `manage_readiness` | Write (confirm) | **MSP staff only.** `manage_client_readiness` | Stage a reviewed readiness change for 1–100 explicitly selected companies. Exclude/include companies; exempt or restore a requirement; confirm or withdraw a reviewed confirmation. Use get_company_readiness for requirementId. Role mappings are configured per check in Readiness settings. Exemptions need a reason. Confirmations represent the approving person's review and fail if ANY check is unsatisfied. The entire batch is atomic. Always show the proposal for human review before committing. |
+| `get_company_readiness` | `query_readiness` | Read | **MSP staff only.** `read_client_readiness` | Read every readiness check for one company, including ready and exempt checks, evidence, the responsible person and requirement IDs. Use this before proposing exemptions, removing exemptions or reviewing confirmations through bulk_update_readiness. |
+| `get_portfolio_summary` | `query_analytics` | Read | `read_dashboards`, `read_settings_companies` | Get portfolio analytics summary, optionally filtered to companies assigned to a specific company role (for example vCIO) or assigned team member. |
+| `get_readiness_assignment_options` | `query_readiness` | Read | **MSP staff only.** **All:** `read_client_readiness`, `read_settings_companies`, `read_settings_users` | Find company owner roles and active MSP team members for readiness bulk changes. Returns role IDs and public user IDs. Search matches names and email, up to 50 users; narrow the search to find a person. Only team-menu roles are assignable. |
+| `get_team_activity` | `query_analytics` | Read | `read_team_activity` | Get a tenant-scoped record of what the team did in MSPortal. Returns daily totals plus teammate and company rollups; set includeFeed to true for a paginated, redacted who-did-what feed. This is the auditing tool for activity detail; get_user_activity remains useful for engagement trends. |
+| `get_ticket_trends` | `query_analytics` | Read | `read_ticket_trends` | Get pre-computed weekly ticket trend analytics: created/closed/backlog per week, per-company totals (default top 15 by volume, max 50), per-category totals (same caps), and a deterministic forecast with volume direction, backlog outlook, resolution trend, and the top 10 company/category risk watchlist entries. Data is aggregated weekly — use list_tickets for individual tickets. |
+| `get_training_analytics` | `query_analytics` | Read | `read_training` | Get training analytics. |
+| `get_user_activity` | `query_analytics` | Read | `read_settings_users`, `read_dashboards` | Get user activity analytics with optional company, user, company-role, and date filters. |
+| `list_company_audit` | `query_readiness` | Read | `read_settings_companies`, `read_dashboards` | Superseded by list_company_readiness. List company audit metrics; its auditScore and missingItems are now computed from the tenant's Account Readiness requirements. Supports filtering by company, assigned company role (for example vCIO), or assigned team member. |
+| `list_company_readiness` | `query_readiness` | Read | `read_client_readiness` | List Account Readiness state per company: an honest 0-100 score plus every open check with its area, owner and the in-app page that fixes it. Use bulk_update_readiness to propose changes for human review. Confirmations require the approving person to review each company. |
 
 ## Planner
 
 **Module scopes:** `planner.read`, `planner.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `archive_planner_item` | Write (confirm) | `write_planner` | Stage or archive a planner item. |
-| `create_planner_item` | Write (confirm) | `write_planner` | Stage or create a planner item. |
-| `edit_planner_item` | Write (confirm) | `write_planner` | Stage or edit a planner item. |
-| `get_planner_item` | Read | `read_planner` | Get one planner item, including its custom field values (label → value). |
-| `link_planner_item_entities` | Write (confirm) | `write_planner` | Stage or attach existing goals, assigned compliance checks, secure score controls, or devices to a planner item. Idempotent: re-linking the same entity is a no-op. |
-| `list_planner_item_links` | Read | `read_planner` | List the goals, assigned compliance checks, secure score controls, and devices linked to a planner item. |
-| `list_planner_items` | Read | `read_planner` | List planner items with filters. |
-| `list_planner_types` | Read | `read_planner` | List planner item types. |
-| `unlink_planner_item_entity` | Write (confirm) | `manage_planner` | Stage or remove one linked goal, assigned compliance check, secure score control, or device from a planner item. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `archive_planner_item` | `manage_planner` | Write (confirm) | `write_planner` | Stage or archive a planner item. |
+| `create_planner_item` | `manage_planner` | Write (confirm) | `write_planner` | Stage or create a planner item. |
+| `edit_planner_item` | `manage_planner` | Write (confirm) | `write_planner` | Stage or edit a planner item. |
+| `get_planner_item` | `query_planner` | Read | `read_planner` | Get one planner item, including its custom field values (label → value). |
+| `link_planner_item_entities` | `manage_planner_links` | Write (confirm) | `write_planner` | Stage or attach existing goals, assigned compliance checks, secure score controls, or devices to a planner item. Idempotent: re-linking the same entity is a no-op. |
+| `list_planner_item_links` | `query_planner_links` | Read | `read_planner` | List the goals, assigned compliance checks, secure score controls, and devices linked to a planner item. |
+| `list_planner_items` | `query_planner` | Read | `read_planner` | List planner items with filters. |
+| `list_planner_types` | `query_planner` | Read | `read_planner` | List planner item types. |
+| `unlink_planner_item_entity` | `manage_planner_links` | Write (confirm) | `manage_planner` | Stage or remove one linked goal, assigned compliance check, secure score control, or device from a planner item. |
 
 ## Goals
 
 **Module scopes:** `goals.read`, `goals.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_goal` | Write (confirm) | `write_goals` | Stage or create a goal. |
-| `delete_goal` | Write (confirm) | `manage_goals` | Stage or delete a goal. |
-| `edit_goal` | Write (confirm) | `write_goals` | Stage or edit a goal. |
-| `get_goal` | Read | `read_goals` | Get a goal with tasks, updates, and custom field values (label → value). |
-| `list_goal_options` | Read | `read_goals` | List goal status, priority, and category options. |
-| `list_goals` | Read | `read_goals` | List goals with filters. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_goal` | `manage_goals` | Write (confirm) | `write_goals` | Stage or create a goal. |
+| `delete_goal` | `manage_goals` | Write (confirm) | `manage_goals` | Stage or delete a goal. |
+| `edit_goal` | `manage_goals` | Write (confirm) | `write_goals` | Stage or edit a goal. |
+| `get_goal` | `query_goals` | Read | `read_goals` | Get a goal with tasks, updates, and custom field values (label → value). |
+| `list_goal_options` | `query_goals` | Read | `read_goals` | List goal status, priority, and category options. |
+| `list_goals` | `query_goals` | Read | `read_goals` | List goals with filters. |
 
 ## Compliance
 
 **Module scopes:** `compliance.read`, `compliance.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_compliance_group` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a tenant-wide compliance group. Optionally provide checkIds to set its exact check-definition membership. |
-| `create_compliance_risk` | Write (confirm) | `write_compliance` | Stage or promote one eligible unaddressed compliance gap into the risk register. This never creates a standalone risk and requires explicit confirmation. |
-| `create_compliance_run` | Write (confirm) | `write_compliance` | Stage or commit creating compliance runs (one per company) and enqueue assignment from reusable run templates, compliance groups, and/or individual check definitions. Resolve templateIds with list_compliance_run_templates; list_compliance_templates returns check definitions instead. At least one source is required. |
-| `create_compliance_run_template` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a reusable compliance run template with exact group and individual-check memberships. |
-| `create_compliance_template` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a base compliance check definition (the records listed by list_compliance_templates / list_compliance_check_definitions). New definitions start pending review. groupIds optionally sets exact group membership. |
-| `delete_compliance_group` | Write (confirm) | `manage_compliance` | Stage or permanently delete a compliance group. Its check mappings, device-type mappings, and run-template memberships are removed; historical assignments keep the check but lose the group link. |
-| `delete_compliance_run_template` | Write (confirm) | `manage_compliance` | Stage or permanently delete a reusable compliance run template. Its group/check memberships and every schedule that references it are also deleted. |
-| `delete_compliance_template` | Write (confirm) | `manage_compliance` | Stage or permanently delete a base compliance check definition. This cascades to its assigned compliance checks and related history, group mappings, run-template memberships, and completed-meeting links. Risk register entries and risk findings derived from the check are kept and detached from it. |
-| `dismiss_compliance_risk_gap` | Write (confirm) | `write_compliance` | Stage or dismiss one eligible compliance gap with a reason. A later failed run can create a new gap. |
-| `draft_compliance_notes` | Immediate action | `write_compliance` | Generate sanitized PUBLIC-note drafts from authoritative private-note answers. Pass one to 10 assignedCheckIds, or selection=all_answered to resolve up to 50 active-run answers in scope. This does not save anything. Review suggestedNotesPublicHtml (which preserves existing public notes), then call update_compliance_checks with that exact notesPublic value and confirm the staged update. If selectionCoverage.hasMore is true, continue with selectionCoverage.nextSelectionOffset. |
-| `get_compliance_check` | Read | `read_compliance` | Get one assigned compliance check with its run, company, scope, status, exact note bodies, due date, and completion details. Internal notes are never returned to company users. |
-| `get_compliance_check_definition` | Read | `read_compliance` | Get a base compliance check definition, including instructions, rationale, remediation, references, scope, priority, and approval state. |
-| `get_compliance_company_summary` | Read | `read_compliance` | Return authoritative active-run compliance totals and scores grouped by company, with explicit tie-aware leaders for most outstanding checks and best/worst simple and weighted percentages. Use this for portfolio comparisons instead of counting paginated check lists. |
-| `get_compliance_group` | Read | `read_compliance` | Get one compliance group with its exact checkIds membership and check count. Use this before replacement edits. |
-| `get_compliance_risk` | Read | `read_compliance` | Get one risk with occurrences, source compliance state, linked remediation work, standards references, and audit history. |
-| `get_compliance_risk_gap` | Read | `write_compliance` | Get one exact eligible compliance risk gap by assignment id before explaining, promoting, or dismissing it. |
-| `get_compliance_run` | Read | `read_compliance` | Get a compliance run and one paginated page of compact assigned-check summaries. Rich descriptions and note bodies are omitted; follow assignedChecksPagination for more pages and use get_compliance_check for exact detail. Private-note presence is never disclosed to company users. |
-| `get_compliance_run_template` | Read | `read_compliance` | Get one reusable compliance run template with the exact groupIds and checkIds it will assign. |
-| `list_compliance_check_definitions` | Read | `read_compliance` | List base compliance check definitions from compliance_checks. These ids may be used as checkIds when creating a run; they are not run-template ids. |
-| `list_compliance_checks` | Read | `read_compliance` | List compact assigned-check summaries across runs with company, run, status, priority, flag, and search filters. Note bodies are omitted; use get_compliance_check for exact notes. Private-note presence is never disclosed to company users. |
-| `list_compliance_groups` | Read | `read_compliance` | List tenant compliance groups with their type, auto-map setting, and check count. Group ids can be used when creating runs. |
-| `list_compliance_risk_categories` | Read | `read_compliance` | List active tenant-owned risk categories. Use the returned ids when creating or recategorizing a risk. |
-| `list_compliance_risk_gaps` | Read | `write_compliance` | List latest explicit failed compliance results that are eligible for internal promotion or dismissal. Criticality informs impact; priority informs remediation urgency. |
-| `list_compliance_risks` | Read | `read_compliance` | List compliance-derived risks with company, status, category, severity, owner, target-date, and search filters. Company users receive only explicitly visible risks in their allowed company scope. |
-| `list_compliance_run_templates` | Read | `read_compliance` | List reusable run templates from compliance_runs_templates. Pass these returned ids as templateIds to create_compliance_run. |
-| `list_compliance_runs` | Read | `read_compliance` | List compact compliance-run summaries with company, completion, date, note-presence flags, and passed/failed/pending check counts. Full run note bodies are omitted. |
-| `list_compliance_status_options` | Read | `read_compliance` | List the valid statuses for one assigned check. Use a returned id as statusItemId when updating that same assignment. |
-| `list_compliance_templates` | Read | `read_compliance` | Backward-compatible alias that lists base check definitions from compliance_checks. For reusable run templates, call list_compliance_run_templates. |
-| `update_compliance_check` | Write (confirm) | `write_compliance` | Stage or commit an assigned check update. Supports status, public/private notes, priority, flag, and due date. Use list_compliance_status_options before changing status. |
-| `update_compliance_checks` | Write (confirm) | `write_compliance` | Stage or commit exact updates to one to 25 assigned compliance checks. Each item may change status, public/private notes, priority, flag, or due date. |
-| `update_compliance_group` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update a compliance group's editable fields. Only provided fields change; checkIds replaces the exact membership and an empty array clears it. |
-| `update_compliance_risk` | Write (confirm) | `write_compliance` | Stage or update a non-closed risk's assessment, status, ownership, treatment, target date, category, or client visibility. Closed risks are terminal. |
-| `update_compliance_run` | Write (confirm) | `write_compliance` | Stage or commit safe edits to a compliance run: name, notes, run date, and completion state. |
-| `update_compliance_run_template` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update a reusable compliance run template. Only provided fields change; groupIds and checkIds each replace their exact membership when supplied. |
-| `update_compliance_status` | Write (confirm) | `write_compliance` | Backward-compatible alias for update_compliance_check. Stages or commits status, notes, priority, flag, or due-date changes on one assigned check. |
-| `update_compliance_template` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update any editable field on a base compliance check definition. Only provided fields change; null clears nullable fields, and groupIds replaces exact group membership. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_compliance_group` | `manage_compliance_groups` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a tenant-wide compliance group. Optionally provide checkIds to set its exact check-definition membership. |
+| `create_compliance_risk` | `manage_compliance_risks` | Write (confirm) | `write_compliance` | Stage or promote one eligible unaddressed compliance gap into the risk register. This never creates a standalone risk and requires explicit confirmation. |
+| `create_compliance_run` | `manage_compliance_runs` | Write (confirm) | `write_compliance` | Stage or commit creating compliance runs (one per company) and enqueue assignment from reusable run templates, compliance groups, and/or individual check definitions. Resolve templateIds with list_compliance_run_templates; list_compliance_templates returns check definitions instead. At least one source is required. |
+| `create_compliance_run_template` | `manage_compliance_run_templates` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a reusable compliance run template with exact group and individual-check memberships. |
+| `create_compliance_template` | `manage_compliance_definitions` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or create a base compliance check definition (the records listed by list_compliance_templates / list_compliance_check_definitions). New definitions start pending review. groupIds optionally sets exact group membership. |
+| `delete_compliance_group` | `manage_compliance_groups` | Write (confirm) | `manage_compliance` | Stage or permanently delete a compliance group. Its check mappings, device-type mappings, and run-template memberships are removed; historical assignments keep the check but lose the group link. |
+| `delete_compliance_run_template` | `manage_compliance_run_templates` | Write (confirm) | `manage_compliance` | Stage or permanently delete a reusable compliance run template. Its group/check memberships and every schedule that references it are also deleted. |
+| `delete_compliance_template` | `manage_compliance_definitions` | Write (confirm) | `manage_compliance` | Stage or permanently delete a base compliance check definition. This cascades to its assigned compliance checks and related history, group mappings, run-template memberships, and completed-meeting links. Risk register entries and risk findings derived from the check are kept and detached from it. |
+| `dismiss_compliance_risk_gap` | `manage_compliance_risk_gaps` | Write (confirm) | `write_compliance` | Stage or dismiss one eligible compliance gap with a reason. A later failed run can create a new gap. |
+| `draft_compliance_notes` | `draft_compliance_notes` | Immediate action | `write_compliance` | Generate sanitized PUBLIC-note drafts from authoritative private-note answers. Pass one to 10 assignedCheckIds, or selection=all_answered to resolve up to 50 active-run answers in scope. This does not save anything. Review suggestedNotesPublicHtml (which preserves existing public notes), then call update_compliance_checks with that exact notesPublic value and confirm the staged update. If selectionCoverage.hasMore is true, continue with selectionCoverage.nextSelectionOffset. |
+| `get_compliance_check` | `query_compliance_checks` | Read | `read_compliance` | Get one assigned compliance check with its run, company, scope, status, exact note bodies, due date, and completion details. Internal notes are never returned to company users. |
+| `get_compliance_check_definition` | `query_compliance_definitions` | Read | `read_compliance` | Get a base compliance check definition, including instructions, rationale, remediation, references, scope, priority, and approval state. |
+| `get_compliance_company_summary` | `query_compliance_checks` | Read | `read_compliance` | Return authoritative active-run compliance totals and scores grouped by company, with explicit tie-aware leaders for most outstanding checks and best/worst simple and weighted percentages. Use this for portfolio comparisons instead of counting paginated check lists. |
+| `get_compliance_group` | `query_compliance_groups` | Read | `read_compliance` | Get one compliance group with its exact checkIds membership and check count. Use this before replacement edits. |
+| `get_compliance_risk` | `query_compliance_risks` | Read | `read_compliance` | Get one risk with occurrences, source compliance state, linked remediation work, standards references, and audit history. |
+| `get_compliance_risk_gap` | `query_compliance_risk_gaps` | Read | `write_compliance` | Get one exact eligible compliance risk gap by assignment id before explaining, promoting, or dismissing it. |
+| `get_compliance_run` | `query_compliance_runs` | Read | `read_compliance` | Get a compliance run and one paginated page of compact assigned-check summaries. Rich descriptions and note bodies are omitted; follow assignedChecksPagination for more pages and use get_compliance_check for exact detail. Private-note presence is never disclosed to company users. |
+| `get_compliance_run_template` | `query_compliance_run_templates` | Read | `read_compliance` | Get one reusable compliance run template with the exact groupIds and checkIds it will assign. |
+| `list_compliance_check_definitions` | `query_compliance_definitions` | Read | `read_compliance` | List base compliance check definitions from compliance_checks. These ids may be used as checkIds when creating a run; they are not run-template ids. |
+| `list_compliance_checks` | `query_compliance_checks` | Read | `read_compliance` | List compact assigned-check summaries across runs with company, run, status, priority, flag, and search filters. Note bodies are omitted; use get_compliance_check for exact notes. Private-note presence is never disclosed to company users. |
+| `list_compliance_groups` | `query_compliance_groups` | Read | `read_compliance` | List tenant compliance groups with their type, auto-map setting, and check count. Group ids can be used when creating runs. |
+| `list_compliance_risk_categories` | `query_compliance_risks` | Read | `read_compliance` | List active tenant-owned risk categories. Use the returned ids when creating or recategorizing a risk. |
+| `list_compliance_risk_gaps` | `query_compliance_risk_gaps` | Read | `write_compliance` | List latest explicit failed compliance results that are eligible for internal promotion or dismissal. Criticality informs impact; priority informs remediation urgency. |
+| `list_compliance_risks` | `query_compliance_risks` | Read | `read_compliance` | List compliance-derived risks with company, status, category, severity, owner, target-date, and search filters. Company users receive only explicitly visible risks in their allowed company scope. |
+| `list_compliance_run_templates` | `query_compliance_run_templates` | Read | `read_compliance` | List reusable run templates from compliance_runs_templates. Pass these returned ids as templateIds to create_compliance_run. |
+| `list_compliance_runs` | `query_compliance_runs` | Read | `read_compliance` | List compact compliance-run summaries with company, completion, date, note-presence flags, and passed/failed/pending check counts. Full run note bodies are omitted. |
+| `list_compliance_status_options` | `query_compliance_checks` | Read | `read_compliance` | List the valid statuses for one assigned check. Use a returned id as statusItemId when updating that same assignment. |
+| `list_compliance_templates` | Legacy call only | Read | `read_compliance` | Backward-compatible alias that lists base check definitions from compliance_checks. For reusable run templates, call list_compliance_run_templates. |
+| `update_compliance_check` | `manage_compliance_checks` | Write (confirm) | `write_compliance` | Stage or commit an assigned check update. Supports status, public/private notes, priority, flag, and due date. Use list_compliance_status_options before changing status. |
+| `update_compliance_checks` | `manage_compliance_checks` | Write (confirm) | `write_compliance` | Stage or commit exact updates to one to 25 assigned compliance checks. Each item may change status, public/private notes, priority, flag, or due date. |
+| `update_compliance_group` | `manage_compliance_groups` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update a compliance group's editable fields. Only provided fields change; checkIds replaces the exact membership and an empty array clears it. |
+| `update_compliance_risk` | `manage_compliance_risks` | Write (confirm) | `write_compliance` | Stage or update a non-closed risk's assessment, status, ownership, treatment, target date, category, or client visibility. Closed risks are terminal. |
+| `update_compliance_run` | `manage_compliance_runs` | Write (confirm) | `write_compliance` | Stage or commit safe edits to a compliance run: name, notes, run date, and completion state. |
+| `update_compliance_run_template` | `manage_compliance_run_templates` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update a reusable compliance run template. Only provided fields change; groupIds and checkIds each replace their exact membership when supplied. |
+| `update_compliance_status` | Legacy call only | Write (confirm) | `write_compliance` | Backward-compatible alias for update_compliance_check. Stages or commits status, notes, priority, flag, or due-date changes on one assigned check. |
+| `update_compliance_template` | `manage_compliance_definitions` | Write (confirm) | `write_compliance`, `manage_compliance` | Stage or update any editable field on a base compliance check definition. Only provided fields change; null clears nullable fields, and groupIds replaces exact group membership. |
 
 ## Meetings & Calendar
 
 **Module scopes:** `calendar.read`, `calendar.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `add_meeting_action_item` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or add an action item to a meeting, optionally assigned to a portal user with a due date and priority. |
-| `add_meeting_agenda_items` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or append agenda items to a meeting. Link existing planner items, assigned compliance checks (e.g. failed checks from list_compliance_checks), goals, budgets, reports, training courses, or devices, or insert text blocks and dividers. |
-| `add_meeting_participants` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or add attendees to an existing meeting. Provide a userId (tenant user, from list_users) or an external email per attendee. Idempotent: already-attached attendees are skipped. |
-| `cancel_meeting` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or cancel an entire meeting series or one recurring occurrence. Published meetings are cancelled through their existing Graph or ICS transport and retain their organizer identity. |
-| `create_meeting` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or book a meeting owned by the authenticated MCP user. Omit sendInvitation (or set false) to Save a portal draft; set it true to Save & Send. Supports attendees, IANA timezones, Teams, RFC 5545 rules, and typed recurrence (quarterly is monthly interval 3). No creator override is accepted. |
-| `get_meeting` | Read | `read_calendar`, `read_meetings` | Get a meeting with participants. |
-| `list_meeting_action_items` | Read | `read_calendar`, `read_meetings` | List a meeting's action items, including assignee, status, priority, and due date. |
-| `list_meeting_agenda` | Read | `read_calendar`, `read_meetings` | List a meeting's agenda items in order, including linked planner items, assigned compliance checks, goals, budgets, reports, training courses, and devices. |
-| `list_meeting_participants` | Read | `read_calendar`, `read_meetings` | List the attendees on a meeting. |
-| `list_meeting_types` | Read | `read_calendar`, `read_meetings` | List meeting types. |
-| `list_meetings` | Read | `read_calendar`, `read_meetings` | List visible calendar meetings. Set mineOnly to return only meetings organized by the authenticated MCP user. |
-| `remove_meeting_agenda_item` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or remove one agenda item from a meeting (remaining items shift up). |
-| `remove_meeting_participant` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or remove one attendee from a meeting, identified by userId or email. |
-| `reorder_meeting_agenda_item` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or move one agenda item to a new zero-based position within its meeting (other items shift). |
-| `retry_meeting_publication` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or retry the latest failed/retryable Graph or ICS calendar operation. Only the authenticated meeting organizer can retry; the original transport and series/occurrence semantics are preserved. |
-| `update_meeting` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or update a meeting or one recurring occurrence, including attendees, timezone, Teams, recurrence, and Save & Send publication. Use cancel_meeting for cancellation. Published meetings retain their original authenticated organizer. |
-| `update_meeting_action_item` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or update a meeting action item's description, assignee, due date, status, priority, or notes. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `add_meeting_action_item` | `manage_meeting_action_items` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or add an action item to a meeting, optionally assigned to a portal user with a due date and priority. |
+| `add_meeting_agenda_items` | `manage_meeting_agenda` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or append agenda items to a meeting. Link existing planner items, assigned compliance checks (e.g. failed checks from list_compliance_checks), goals, budgets, reports, training courses, or devices, or insert text blocks and dividers. |
+| `add_meeting_participants` | `manage_meeting_participants` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or add attendees to an existing meeting. Provide a userId (tenant user, from list_users) or an external email per attendee. Idempotent: already-attached attendees are skipped. |
+| `cancel_meeting` | `manage_meetings` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or cancel an entire meeting series or one recurring occurrence. Published meetings are cancelled through their existing Graph or ICS transport and retain their organizer identity. |
+| `create_meeting` | `manage_meetings` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or book a meeting owned by the authenticated MCP user. Omit sendInvitation (or set false) to Save a portal draft; set it true to Save & Send. Supports attendees, IANA timezones, Teams, RFC 5545 rules, and typed recurrence (quarterly is monthly interval 3). No creator override is accepted. |
+| `get_meeting` | `query_meetings` | Read | `read_calendar`, `read_meetings` | Get a meeting with participants. |
+| `list_meeting_action_items` | `query_meeting_action_items` | Read | `read_calendar`, `read_meetings` | List a meeting's action items, including assignee, status, priority, and due date. |
+| `list_meeting_agenda` | `query_meeting_agenda` | Read | `read_calendar`, `read_meetings` | List a meeting's agenda items in order, including linked planner items, assigned compliance checks, goals, budgets, reports, training courses, and devices. |
+| `list_meeting_participants` | `query_meeting_participants` | Read | `read_calendar`, `read_meetings` | List the attendees on a meeting. |
+| `list_meeting_types` | `query_meetings` | Read | `read_calendar`, `read_meetings` | List meeting types. |
+| `list_meetings` | `query_meetings` | Read | `read_calendar`, `read_meetings` | List visible calendar meetings. Set mineOnly to return only meetings organized by the authenticated MCP user. |
+| `remove_meeting_agenda_item` | `manage_meeting_agenda` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or remove one agenda item from a meeting (remaining items shift up). |
+| `remove_meeting_participant` | `manage_meeting_participants` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or remove one attendee from a meeting, identified by userId or email. |
+| `reorder_meeting_agenda_item` | `manage_meeting_agenda` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or move one agenda item to a new zero-based position within its meeting (other items shift). |
+| `retry_meeting_publication` | `manage_meetings` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or retry the latest failed/retryable Graph or ICS calendar operation. Only the authenticated meeting organizer can retry; the original transport and series/occurrence semantics are preserved. |
+| `update_meeting` | `manage_meetings` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or update a meeting or one recurring occurrence, including attendees, timezone, Teams, recurrence, and Save & Send publication. Use cancel_meeting for cancellation. Published meetings retain their original authenticated organizer. |
+| `update_meeting_action_item` | `manage_meeting_action_items` | Write (confirm) | `write_calendar`, `write_meetings`, `manage_calendar`, `manage_meetings` | Stage or update a meeting action item's description, assignee, due date, status, priority, or notes. |
 
-## Training
+## Security Awareness
 
 **Module scopes:** `training.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_security_awareness_summary` | Read | `read_security_awareness` | Get company-scoped security awareness training and phishing simulation metrics from connected Phin, Breach Secure Now, Huntress, and CyberHoot providers. Includes completion, users behind, provider rollups, and a capped list of users needing attention. Phishing send/click/campaign, breach, and captured-credential metrics that CyberHoot does not provide are returned as null, never zero. This tool is only advertised when the current tenant or company has mapped security-awareness data. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_security_awareness_summary` | `query_security_awareness` | Read | `read_security_awareness` | Get company-scoped security awareness training and phishing simulation metrics from connected Phin, Breach Secure Now, Huntress, and CyberHoot providers. Includes completion, users behind, provider rollups, and a capped list of users needing attention. Phishing send/click/campaign, breach, and captured-credential metrics that CyberHoot does not provide are returned as null, never zero. This tool is only advertised when the current tenant or company has mapped security-awareness data. |
 
 ## Training
 
 **Module scopes:** `training.read`, `training.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `assign_training` | Write (confirm) | `write_training` | Stage or assign a training course to users. |
-| `edit_training_enrollment` | Write (confirm) | `write_training` | Stage or edit a training enrollment. |
-| `get_training_course` | Read | `read_training` | Get one training course. |
-| `list_training_categories` | Read | `read_training` | List training categories. |
-| `list_training_courses` | Read | `read_training` | List training courses. |
-| `list_training_enrollments` | Read | `read_training` | List training enrollments. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `assign_training` | `manage_training` | Write (confirm) | `write_training` | Stage or assign a training course to users. |
+| `edit_training_enrollment` | `manage_training` | Write (confirm) | `write_training` | Stage or edit a training enrollment. |
+| `get_training_course` | `query_training` | Read | `read_training` | Get one training course. |
+| `list_training_categories` | `query_training` | Read | `read_training` | List training categories. |
+| `list_training_courses` | `query_training` | Read | `read_training` | List training courses. |
+| `list_training_enrollments` | `query_training` | Read | `read_training` | List training enrollments. |
 
 ## Budgets
 
 **Module scopes:** `budgets.read`, `budgets.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `add_budget_item` | Write (confirm) | `write_budgets` | Stage or add a line item to a Draft or PendingApproval budget. |
-| `create_budget` | Write (confirm) | `write_budgets` | Stage or create a Draft or PendingApproval budget. Approval uses MSPortal's managed lifecycle workflow. |
-| `delete_budget` | Write (confirm) | `manage_budgets` | Stage or delete a budget. |
-| `edit_budget` | Write (confirm) | `write_budgets` | Stage or edit a Draft or PendingApproval budget. This tool cannot approve, archive, or modify a locked budget. |
-| `get_budget` | Read | `read_budgets` | Get one budget with line items and custom field values (label → value). |
-| `list_budget_categories` | Read | `read_budgets` | List budget categories. |
-| `list_budget_products` | Read | `read_budgets` | List budget products. |
-| `list_budgets` | Read | `read_budgets` | List budgets. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `add_budget_item` | `manage_budgets` | Write (confirm) | `write_budgets` | Stage or add a line item to a Draft or PendingApproval budget. |
+| `create_budget` | `manage_budgets` | Write (confirm) | `write_budgets` | Stage or create a Draft or PendingApproval budget. Approval uses MSPortal's managed lifecycle workflow. |
+| `delete_budget` | `manage_budgets` | Write (confirm) | `manage_budgets` | Stage or delete a budget. |
+| `edit_budget` | `manage_budgets` | Write (confirm) | `write_budgets` | Stage or edit a Draft or PendingApproval budget. This tool cannot approve, archive, or modify a locked budget. |
+| `get_budget` | `query_budgets` | Read | `read_budgets` | Get one budget with line items and custom field values (label → value). |
+| `list_budget_categories` | `query_budgets` | Read | `read_budgets` | List budget categories. |
+| `list_budget_products` | `query_budgets` | Read | `read_budgets` | List budget products. |
+| `list_budgets` | `query_budgets` | Read | `read_budgets` | List budgets. |
 
 ## Surveys
 
 **Module scopes:** `surveys.read`, `surveys.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_survey` | Write (confirm) | `write_surveys` | Stage or create a complete general survey: title, description, and questions with answer types and options. Created inactive by default — chain with set_survey_status to activate, send_survey_invites to dispatch, and list_survey_responses to read results. |
-| `get_nps_summary` | Read | `read_surveys` | Pre-computed NPS analytics rows (promoters/passives/detractors, NPS score, response rate) bucketed by period (daily/weekly/monthly/quarterly/yearly/all_time), tenant-wide and per company. Filter by companyId for 'NPS by client', by periodType for trend questions, or by surveyId for one NPS campaign. Returns the newest 200 periods; narrow with periodType or a date window for longer histories. |
-| `get_survey` | Read | `read_surveys` | Get a general survey with questions. |
-| `get_survey_stats` | Read | `read_surveys` | Aggregated stats for one general survey: invites sent, completed responses, response rate, and per-question rollups (average value for numeric/likert/NPS/rating questions, option counts for select questions). Use instead of re-aggregating list_survey_responses. |
-| `list_survey_responses` | Read | `view_all_survey_answers`, `manage_surveys` | List responses for a general survey. |
-| `list_surveys` | Read | `read_surveys` | List general surveys. |
-| `send_survey_invites` | Write (confirm) | `write_surveys` | Stage or send email invitations for an active general survey to a list of recipients. Sends real emails on commit. |
-| `set_survey_status` | Write (confirm) | `write_surveys` | Stage or set the active status of a general survey (activate or deactivate). |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_survey` | `manage_surveys` | Write (confirm) | `write_surveys` | Stage or create a complete general survey: title, description, and questions with answer types and options. Created inactive by default — chain with set_survey_status to activate, send_survey_invites to dispatch, and list_survey_responses to read results. |
+| `get_nps_summary` | `query_surveys` | Read | `read_surveys` | Pre-computed NPS analytics rows (promoters/passives/detractors, NPS score, response rate) bucketed by period (daily/weekly/monthly/quarterly/yearly/all_time), tenant-wide and per company. Filter by companyId for 'NPS by client', by periodType for trend questions, or by surveyId for one NPS campaign. Returns the newest 200 periods; narrow with periodType or a date window for longer histories. |
+| `get_survey` | `query_surveys` | Read | `read_surveys` | Get a general survey with questions. |
+| `get_survey_stats` | `query_surveys` | Read | `read_surveys` | Aggregated stats for one general survey: invites sent, completed responses, response rate, and per-question rollups (average value for numeric/likert/NPS/rating questions, option counts for select questions). Use instead of re-aggregating list_survey_responses. |
+| `list_survey_responses` | `query_surveys` | Read | `view_all_survey_answers`, `manage_surveys` | List responses for a general survey. |
+| `list_surveys` | `query_surveys` | Read | `read_surveys` | List general surveys. |
+| `send_survey_invites` | `manage_surveys` | Write (confirm) | `write_surveys` | Stage or send email invitations for an active general survey to a list of recipients. Sends real emails on commit. |
+| `set_survey_status` | `manage_surveys` | Write (confirm) | `write_surveys` | Stage or set the active status of a general survey (activate or deactivate). |
 
 ## Automation
 
 **Module scopes:** `automation.read`, `automation.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_automation_rule` | Write (confirm) | `write_settings_automation` | Stage or create an automation rule (trigger + conditions + actions). Actions can open tickets, send email, send surveys, update fields, and more. |
-| `delete_automation_rule` | Write (confirm) | `manage_settings_automation` | Stage or permanently delete an automation rule. |
-| `edit_automation_rule` | Write (confirm) | `write_settings_automation` | Stage or apply a partial update to an existing automation rule. |
-| `get_automation_rule` | Read | `read_settings_automation` | Get one automation rule. |
-| `list_automation_executions` | Read | `read_settings_automation` | List automation execution history. |
-| `list_automation_rules` | Read | `read_settings_automation` | List automation rules. |
-| `toggle_automation_rule` | Write (confirm) | `write_settings_automation` | Stage or toggle an automation rule. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_automation_rule` | `manage_automation` | Write (confirm) | `write_settings_automation` | Stage or create an automation rule (trigger + conditions + actions). Actions can open tickets, send email, send surveys, update fields, and more. |
+| `delete_automation_rule` | `manage_automation` | Write (confirm) | `manage_settings_automation` | Stage or permanently delete an automation rule. |
+| `edit_automation_rule` | `manage_automation` | Write (confirm) | `write_settings_automation` | Stage or apply a partial update to an existing automation rule. |
+| `get_automation_rule` | `query_automation` | Read | `read_settings_automation` | Get one automation rule. |
+| `list_automation_executions` | `query_automation` | Read | `read_settings_automation` | List automation execution history. |
+| `list_automation_rules` | `query_automation` | Read | `read_settings_automation` | List automation rules. |
+| `toggle_automation_rule` | `manage_automation` | Write (confirm) | `write_settings_automation` | Stage or toggle an automation rule. |
 
 ## Users & Contacts
 
 **Module scopes:** `users.read`, `users.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `invite_user` | Write (confirm) | `write_settings_users`, `write_settings_company_users` | Stage or commit inviting a user to the tenant by email. Sends an invitation email (or links an existing account). Provide companyId to invite a company (client portal) user. |
-| `list_company_contacts` | Read | `read_settings_company_users` | List company users (client portal contacts) with optional search, status, and company filters. |
-| `set_user_status` | Write (confirm) | `write_settings_users`, `write_settings_company_users` | Stage or commit changing a user's status (active, disabled, pending, imported). Disabling a user blocks their portal access. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `invite_user` | `manage_users` | Write (confirm) | `write_settings_users`, `write_settings_company_users` | Stage or commit inviting a user to the tenant by email. Sends an invitation email (or links an existing account). Provide companyId to invite a company (client portal) user. |
+| `list_company_contacts` | `query_users` | Read | `read_settings_company_users` | List company users (client portal contacts) with optional search, status, and company filters. |
+| `set_user_status` | `manage_users` | Write (confirm) | `write_settings_users`, `write_settings_company_users` | Stage or commit changing a user's status (active, disabled, pending, imported). Disabling a user blocks their portal access. |
 
 ## Microsoft 365 & Secure Score
 
 **Module scopes:** `m365.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_m365_license_summary` | Read | `read_m365` | Get aggregated Microsoft 365 license totals: SKU count, purchased vs consumed vs available units, utilization percent, and company count. |
-| `get_secure_score_summary` | Read | `read_m365` | Get the Microsoft Secure Score posture summary: current vs max score, percentage, trend over the recorded history, per-category breakdown, and industry comparison when available. Returns null data when no secure score snapshot exists for the scope. |
-| `get_secure_score_trend` | Read | `read_m365` | Get daily Microsoft Secure Score data points (current score, max score, percentage) over a configurable lookback window (default 90 days), for charting or trend analysis. |
-| `list_m365_domains` | Read | `read_m365` | List Microsoft 365 domains with verification, default/initial flags, authentication type, and supported services. |
-| `list_m365_licenses` | Read | `read_m365` | List Microsoft 365 license SKUs with consumed/enabled units, assigned user counts, renewal dates, and subscription status. One row per company + SKU; optionally filtered to a single company. |
-| `list_m365_users` | Read | `read_m365` | List Microsoft 365 users with pagination, free-text search, and filters for department, office, user type, account state, and license SKU. |
-| `list_secure_score_recommendations` | Read | `read_m365` | List Microsoft Secure Score improvement actions sorted by points remaining (highest impact first), with category, tier, implementation cost, user impact, remediation guidance, and current state. By default only actions that still have points to gain are returned. Pair with create_planner_item to build a remediation plan. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_m365_license_summary` | `query_m365` | Read | `read_m365` | Get aggregated Microsoft 365 license totals: SKU count, purchased vs consumed vs available units, utilization percent, and company count. |
+| `get_secure_score_summary` | `query_m365` | Read | `read_m365` | Get the Microsoft Secure Score posture summary: current vs max score, percentage, trend over the recorded history, per-category breakdown, and industry comparison when available. Returns null data when no secure score snapshot exists for the scope. |
+| `get_secure_score_trend` | `query_m365` | Read | `read_m365` | Get daily Microsoft Secure Score data points (current score, max score, percentage) over a configurable lookback window (default 90 days), for charting or trend analysis. |
+| `list_m365_domains` | `query_m365` | Read | `read_m365` | List Microsoft 365 domains with verification, default/initial flags, authentication type, and supported services. |
+| `list_m365_licenses` | `query_m365` | Read | `read_m365` | List Microsoft 365 license SKUs with consumed/enabled units, assigned user counts, renewal dates, and subscription status. One row per company + SKU; optionally filtered to a single company. |
+| `list_m365_users` | `query_m365` | Read | `read_m365` | List Microsoft 365 users with pagination, free-text search, and filters for department, office, user type, account state, and license SKU. |
+| `list_secure_score_recommendations` | `query_m365` | Read | `read_m365` | List Microsoft Secure Score improvement actions sorted by points remaining (highest impact first), with category, tier, implementation cost, user impact, remediation guidance, and current state. By default only actions that still have points to gain are returned. Pair with create_planner_item to build a remediation plan. |
 
 ## Backup
 
 **Module scopes:** `backup.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_backup_summary` | Read | `read_backup` | Get a unified backup protection summary across Cove, Acronis, NinjaOne, Kaseya SaaS Protection, and Spanning Backup, including device protection/storage/alerts plus SaaS workload health, 24-hour service coverage, initial backups, and last full success. |
-| `get_saas_protection_customer` | Read | `read_backup` | Read one mapped SaaS backup customer in detail (Kaseya SaaS Protection by default, or Spanning Backup via provider), including all workload metrics and its successful-backup trend (10-30 days for Kaseya, up to 7 for Spanning). |
-| `list_backup_alerts` | Read | `read_backup` | List backup alerts (Acronis) with pagination and severity/status/search filters. Returns an empty list when no Acronis integration is active. |
-| `list_backup_devices` | Read | `read_backup` | List backed-up devices/resources across all active backup providers (Cove, Acronis, NinjaOne), excluding M365 mailbox/site backups. Cross-provider pagination is approximate: page applies per provider, so one page may return up to (active providers x limit) rows and totalCount is summed across providers. |
-| `list_saas_protection_customers` | Read | `read_backup` | List mapped SaaS backup customers (Kaseya SaaS Protection by default, or Spanning Backup via provider) with overall health, Exchange/OneDrive/SharePoint/Teams status, services backed up in the last 24 hours versus active services, initial backups, and last 100% successful backup. |
-| `list_saas_protection_seats` | Read | `read_backup` | List Kaseya SaaS Protection seat/service inventory for a portal company, with customer, type, state, billable status, and sync details. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_backup_summary` | `query_backup` | Read | `read_backup` | Get a unified backup protection summary across Cove, Acronis, NinjaOne, Kaseya SaaS Protection, and Spanning Backup, including device protection/storage/alerts plus SaaS workload health, 24-hour service coverage, initial backups, and last full success. |
+| `get_saas_protection_customer` | `query_backup` | Read | `read_backup` | Read one mapped SaaS backup customer in detail (Kaseya SaaS Protection by default, or Spanning Backup via provider), including all workload metrics and its successful-backup trend (10-30 days for Kaseya, up to 7 for Spanning). |
+| `list_backup_alerts` | `query_backup` | Read | `read_backup` | List backup alerts (Acronis) with pagination and severity/status/search filters. Returns an empty list when no Acronis integration is active. |
+| `list_backup_devices` | `query_backup` | Read | `read_backup` | List backed-up devices/resources across all active backup providers (Cove, Acronis, NinjaOne), excluding M365 mailbox/site backups. Cross-provider pagination is approximate: page applies per provider, so one page may return up to (active providers x limit) rows and totalCount is summed across providers. |
+| `list_saas_protection_customers` | `query_backup` | Read | `read_backup` | List mapped SaaS backup customers (Kaseya SaaS Protection by default, or Spanning Backup via provider) with overall health, Exchange/OneDrive/SharePoint/Teams status, services backed up in the last 24 hours versus active services, initial backups, and last 100% successful backup. |
+| `list_saas_protection_seats` | `query_backup` | Read | `read_backup` | List Kaseya SaaS Protection seat/service inventory for a portal company, with customer, type, state, billable status, and sync details. |
 
 ## Projects
 
 **Module scopes:** `projects.read`, `projects.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `add_project_ticket_note` | Write (confirm) | `write_projects_notes` | Stage or commit adding a note to a project ticket in the PSA (ConnectWise project ticket notes, attributed to your linked PSA member; Halo ticket actions). Autotask project tasks do not support notes. |
-| `delete_project_client_action` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a client action from a project's overlay. Removing a pending decision that came from a weekly update also removes that decision bullet from the update. |
-| `delete_project_deliverable` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a deliverable from a project's overlay. |
-| `delete_project_milestone` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a milestone from a project's overlay. |
-| `delete_project_weekly_update` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a weekly update from a project's overlay. Pending decision client actions that only existed because of this update are removed as well. |
-| `get_project` | Read | `read_projects` | Get one project with its client-visibility overlay. Heavy overlay detail (deliverables, milestones, client actions, weekly updates) is only returned when explicitly requested. Use get_project_detail for phases, tickets, and time entries. |
-| `get_project_detail` | Read | `read_projects` | Full project detail bundle: PSA project fields, the health overlay (outcome, phase, health, contacts, deliverables, milestones, client actions, weekly updates), PSA phases, and bounded slices of tickets (including scheduled start/end dates) and time entries. ticketsTruncated / timeEntriesTruncated tell you when to page with list_project_tickets / list_project_time_entries. |
-| `get_project_display_settings` | Read | `read_settings_projects` | Tenant-level project display settings (client visibility mode, section/field toggles, status mappings, Kanban configuration). Returns defaults with isDefault=true when nothing has been customized. |
-| `get_project_kanban_options` | Read | `read_projects` | Assignable catalogs for a project's Kanban board: project statuses, ticket statuses per service board (ConnectWise; Autotask returns one board-less entry for its shared task status picklist), and (for callers who can edit projects on ConnectWise/Autotask) the owner roster (ConnectWise: live project team) and priority catalog, each as { name, externalId }. MSPortal-native projects return the fixed ticket statuses in one board-less group; their project lifecycle status is free text, so projectStatuses is empty and update_project_status accepts statusName directly. |
-| `list_project_assignable_users` | Read | `read_projects` | Users who can be assigned to a project's client actions: contacts of the project's company plus tenant staff. Use the returned ids as assigneeIds in upsert_project_client_action. |
-| `list_project_ticket_notes` | Read | `read_projects` | Notes on one project ticket: synced notes first, otherwise fetched live from the PSA (ConnectWise project ticket notes; Halo actions, cached afterwards). Autotask project tasks have no notes. |
-| `list_project_tickets` | Read | `read_projects` | Tickets (PSA project tasks) for one project with status, owner, priority, phase, hours, scheduled start/end dates, and closed state. Filter by status name, owner, phase, closed flag, or search text; paginated. |
-| `list_project_time_entries` | Read | `read_projects` | Time entries logged against one project (most recent 500), newest first. Filter by ticket, phase, member, or date range; paginated. Notes are truncated. |
-| `list_projects` | Read | `read_projects` | List PSA projects with health overlay data, pagination, and optional filters. Returns lean summaries — use get_project for deliverables, milestones, client actions, and weekly updates. |
-| `set_project_document_visibility` | Write (confirm) | `write_projects_overlays` | Stage or commit sharing one of a deliverable's documents with the client portal, or returning it to internal only. Documents are internal when uploaded and are only ever shared on purpose. Uploading and deleting documents is not available here. A shared document still stays hidden while its deliverable is internal; the result reports reachesClient so you can tell the difference. |
-| `update_project_client_visibility` | Write (confirm) | `write_projects_overlays` | Stage or commit whether a project (and its overlay) is visible in the client portal (is_client_visible). |
-| `update_project_display_settings` | Write (confirm) | `write_settings_projects` | Stage or commit a partial update of the tenant-level project display settings (client visibility mode and filters, section/field toggles, project and Kanban status mappings, Kanban technician roster). Only provided keys change; the merged settings are validated exactly like the settings page (visibility and roster selections must exist in the tenant's catalog). Returns the saved settings row. |
-| `update_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit a partial update of a project's health overlay: outcome title/description, current phase, health status/reason/override, MSP lead, client sponsor, and internal notes. Only provided fields change; null clears a field. Creates the overlay if the project has none. Use update_project_client_visibility for client visibility toggles. |
-| `update_project_status` | Write (confirm) | `write_projects_status` | Stage or commit a change of a project's lifecycle status. PSA-backed projects are written through to the PSA (ConnectWise / Autotask; Halo updates the portal cache only) and then reflected in the portal; MSPortal-native projects are updated in the portal only. Target by PSA status name or external id (get_project_kanban_options projectStatuses), or by Kanban display group (its configured default status is used). |
-| `update_project_ticket_owner` | Write (confirm) | `write_projects` | Stage or commit assigning (or unassigning with null) the owner of one or more tickets on a project, written through to the PSA (ConnectWise project team members; Autotask assigned resource) and then reflected in the portal cache. Owner ids come from get_project_kanban_options owners. |
-| `update_project_ticket_priority` | Write (confirm) | `write_projects` | Stage or commit a priority change for one or more tickets on a project, written through to the PSA (ConnectWise / Autotask) and then reflected in the portal cache. Priority ids come from get_project_kanban_options priorities. |
-| `update_project_ticket_status` | Write (confirm) | `write_projects_status` | Stage or commit a status change for one or more tickets on a project, written through to the PSA (ConnectWise service-board statuses per ticket board; Autotask task status picklist) and then reflected in the portal cache. Resolve the target by name or PSA external id from get_project_kanban_options. |
-| `upsert_project_client_action` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a client action (decision, approval, question, access request, scheduling item, or action item) on a project's overlay, or updating one by clientActionId. Assignees are validated against list_project_assignable_users. Pending decisions/approvals stay in sync with the weekly-update decisions list. |
-| `upsert_project_deliverable` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a deliverable on a project's overlay (omit deliverableId) or updating one (pass deliverableId; only provided fields change). Moving status to complete stamps completed_at. |
-| `upsert_project_milestone` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a milestone on a project's overlay (omit milestoneId) or updating one (pass milestoneId; only provided fields change). |
-| `upsert_project_weekly_update` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a weekly status update on a project's overlay (omit weeklyUpdateId; weekOf required) or editing one (pass weeklyUpdateId; only provided fields change). Each decisionsNeeded bullet is mirrored as a pending decision client action. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `add_project_ticket_note` | `manage_project_tickets` | Write (confirm) | `write_projects_notes` | Stage or commit adding a note to a project ticket in the PSA (ConnectWise project ticket notes, attributed to your linked PSA member; Halo ticket actions). Autotask project tasks do not support notes. |
+| `delete_project_client_action` | `manage_project_client_actions` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a client action from a project's overlay. Removing a pending decision that came from a weekly update also removes that decision bullet from the update. |
+| `delete_project_deliverable` | `manage_project_deliverables` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a deliverable from a project's overlay. |
+| `delete_project_milestone` | `manage_project_milestones` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a milestone from a project's overlay. |
+| `delete_project_weekly_update` | `manage_project_updates` | Write (confirm) | `write_projects_overlays` | Stage or commit removing a weekly update from a project's overlay. Pending decision client actions that only existed because of this update are removed as well. |
+| `get_project` | `query_projects` | Read | `read_projects` | Get one project with its client-visibility overlay. Heavy overlay detail (deliverables, milestones, client actions, weekly updates) is only returned when explicitly requested. Use get_project_detail for phases, tickets, and time entries. |
+| `get_project_detail` | `query_projects` | Read | `read_projects` | Full project detail bundle: PSA project fields, the health overlay (outcome, phase, health, contacts, deliverables, milestones, client actions, weekly updates), PSA phases, and bounded slices of tickets (including scheduled start/end dates) and time entries. ticketsTruncated / timeEntriesTruncated tell you when to page with list_project_tickets / list_project_time_entries. |
+| `get_project_display_settings` | `query_project_settings` | Read | `read_settings_projects` | Tenant-level project display settings (client visibility mode, section/field toggles, status mappings, Kanban configuration). Returns defaults with isDefault=true when nothing has been customized. |
+| `get_project_kanban_options` | `query_projects` | Read | `read_projects` | Assignable catalogs for a project's Kanban board: project statuses, ticket statuses per service board (ConnectWise; Autotask returns one board-less entry for its shared task status picklist), and (for callers who can edit projects on ConnectWise/Autotask) the owner roster (ConnectWise: live project team) and priority catalog, each as { name, externalId }. MSPortal-native projects return the fixed ticket statuses in one board-less group; their project lifecycle status is free text, so projectStatuses is empty and update_project_status accepts statusName directly. |
+| `list_project_assignable_users` | `query_projects` | Read | `read_projects` | Users who can be assigned to a project's client actions: contacts of the project's company plus tenant staff. Use the returned ids as assigneeIds in upsert_project_client_action. |
+| `list_project_ticket_notes` | `query_project_tickets` | Read | `read_projects` | Notes on one project ticket: synced notes first, otherwise fetched live from the PSA (ConnectWise project ticket notes; Halo actions, cached afterwards). Autotask project tasks have no notes. |
+| `list_project_tickets` | `query_project_tickets` | Read | `read_projects` | Tickets (PSA project tasks) for one project with status, owner, priority, phase, hours, scheduled start/end dates, and closed state. Filter by status name, owner, phase, closed flag, or search text; paginated. |
+| `list_project_time_entries` | `query_projects` | Read | `read_projects` | Time entries logged against one project (most recent 500), newest first. Filter by ticket, phase, member, or date range; paginated. Notes are truncated. |
+| `list_projects` | `query_projects` | Read | `read_projects` | List PSA projects with health overlay data, pagination, and optional filters. Returns lean summaries — use get_project for deliverables, milestones, client actions, and weekly updates. |
+| `set_project_document_visibility` | `manage_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit sharing one of a deliverable's documents with the client portal, or returning it to internal only. Documents are internal when uploaded and are only ever shared on purpose. Uploading and deleting documents is not available here. A shared document still stays hidden while its deliverable is internal; the result reports reachesClient so you can tell the difference. |
+| `update_project_client_visibility` | `manage_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit whether a project (and its overlay) is visible in the client portal (is_client_visible). |
+| `update_project_display_settings` | `manage_project_settings` | Write (confirm) | `write_settings_projects` | Stage or commit a partial update of the tenant-level project display settings (client visibility mode and filters, section/field toggles, project and Kanban status mappings, Kanban technician roster). Only provided keys change; the merged settings are validated exactly like the settings page (visibility and roster selections must exist in the tenant's catalog). Returns the saved settings row. |
+| `update_project_overlay` | `manage_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit a partial update of a project's health overlay: outcome title/description, current phase, health status/reason/override, MSP lead, client sponsor, and internal notes. Only provided fields change; null clears a field. Creates the overlay if the project has none. Use update_project_client_visibility for client visibility toggles. |
+| `update_project_status` | `manage_projects` | Write (confirm) | `write_projects_status` | Stage or commit a change of a project's lifecycle status. PSA-backed projects are written through to the PSA (ConnectWise / Autotask; Halo updates the portal cache only) and then reflected in the portal; MSPortal-native projects are updated in the portal only. Target by PSA status name or external id (get_project_kanban_options projectStatuses), or by Kanban display group (its configured default status is used). |
+| `update_project_ticket_owner` | `manage_project_tickets` | Write (confirm) | `write_projects` | Stage or commit assigning (or unassigning with null) the owner of one or more tickets on a project, written through to the PSA (ConnectWise project team members; Autotask assigned resource) and then reflected in the portal cache. Owner ids come from get_project_kanban_options owners. |
+| `update_project_ticket_priority` | `manage_project_tickets` | Write (confirm) | `write_projects` | Stage or commit a priority change for one or more tickets on a project, written through to the PSA (ConnectWise / Autotask) and then reflected in the portal cache. Priority ids come from get_project_kanban_options priorities. |
+| `update_project_ticket_status` | `manage_project_tickets` | Write (confirm) | `write_projects_status` | Stage or commit a status change for one or more tickets on a project, written through to the PSA (ConnectWise service-board statuses per ticket board; Autotask task status picklist) and then reflected in the portal cache. Resolve the target by name or PSA external id from get_project_kanban_options. |
+| `upsert_project_client_action` | `manage_project_client_actions` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a client action (decision, approval, question, access request, scheduling item, or action item) on a project's overlay, or updating one by clientActionId. Assignees are validated against list_project_assignable_users. Pending decisions/approvals stay in sync with the weekly-update decisions list. |
+| `upsert_project_deliverable` | `manage_project_deliverables` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a deliverable on a project's overlay (omit deliverableId) or updating one (pass deliverableId; only provided fields change). Moving status to complete stamps completed_at. |
+| `upsert_project_milestone` | `manage_project_milestones` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a milestone on a project's overlay (omit milestoneId) or updating one (pass milestoneId; only provided fields change). |
+| `upsert_project_weekly_update` | `manage_project_updates` | Write (confirm) | `write_projects_overlays` | Stage or commit creating a weekly status update on a project's overlay (omit weeklyUpdateId; weekOf required) or editing one (pass weeklyUpdateId; only provided fields change). Each decisionsNeeded bullet is mirrored as a pending decision client action. |
 
 ## Client Health
 
 **Module scopes:** `customer_success.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_client_health_history` | Read | `read_customer_success` | Get daily health score snapshots for one company, including per-dimension scores, over a configurable lookback window (default 180 days). |
-| `get_client_health_summary` | Read | `read_customer_success` | Get portfolio-wide client health summary stats: average health score, counts by risk level, average NPS, tool stack adoption, and overdue invoices. |
-| `get_csat_summary` | Read | `read_customer_success` | CSAT (customer satisfaction) rollup from ticket-close survey responses: overall stats (total responses, average score, CSAT %, satisfied/neutral/dissatisfied counts, low-score count) plus a per-company breakdown. Filter by date window (periodStart/periodEnd) for 'CSAT this quarter' questions, or by a single CSAT survey campaign. |
-| `list_client_health` | Read | `read_customer_success` | List client health scores across companies with risk level, trend, dimension scores, and key engagement/financial signals. Supports pagination, risk filtering, and search. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_client_health_history` | `query_customer_success` | Read | `read_customer_success` | Get daily health score snapshots for one company, including per-dimension scores, over a configurable lookback window (default 180 days). |
+| `get_client_health_summary` | `query_customer_success` | Read | `read_customer_success` | Get portfolio-wide client health summary stats: average health score, counts by risk level, average NPS, tool stack adoption, and overdue invoices. |
+| `get_csat_summary` | `query_customer_success` | Read | `read_customer_success` | CSAT (customer satisfaction) rollup from ticket-close survey responses: overall stats (total responses, average score, CSAT %, satisfied/neutral/dissatisfied counts, low-score count) plus a per-company breakdown. Filter by date window (periodStart/periodEnd) for 'CSAT this quarter' questions, or by a single CSAT survey campaign. |
+| `list_client_health` | `query_customer_success` | Read | `read_customer_success` | List client health scores across companies with risk level, trend, dimension scores, and key engagement/financial signals. Supports pagination, risk filtering, and search. |
 
 ## Financials
 
 **Module scopes:** `financial.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_invoice` | Read | `read_invoices` | Get one synced invoice by ID with full amounts, payments, and billing detail. |
-| `get_invoice_summary` | Read | `read_invoices` | Get aggregate invoice totals: invoice count, total billed, outstanding balance, open count, and overdue count/amount. Optionally scoped to specific companies. |
-| `get_quote` | Read | `read_quotes` | Get one quote by ID with full pricing totals and lifecycle dates. |
-| `get_revenue_summary` | Read | `read_financial_reporting` | Get monthly revenue over a lookback window (default 12 months), grouped by classification (managed / other recurring / non-recurring), PSA provider, or line type. One row per month + group. Useful for QBR prep, revenue trend analysis, and profitability conversations. |
-| `list_invoices` | Read | `read_invoices` | List PSA-synced invoices with status, type, dates, totals, payments, and balances. Supports pagination, company filtering, status/type/date filters, and search. Invoices are owned by the PSA — this is a read-only view. |
-| `list_quotes` | Read | `read_quotes` | List quotes from active quoting integrations with stage, owner, company, and monthly/annual/one-time totals. Supports pagination, company filtering, stage filtering, and search. Quotes are created and managed in the source quoting provider — this is a read-only view. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_invoice` | `query_financial` | Read | `read_invoices` | Get one synced invoice by ID with full amounts, payments, and billing detail. |
+| `get_invoice_summary` | `query_financial` | Read | `read_invoices` | Get aggregate invoice totals: invoice count, total billed, outstanding balance, open count, and overdue count/amount. Optionally scoped to specific companies. |
+| `get_quote` | `query_financial` | Read | `read_quotes` | Get one quote by ID with full pricing totals and lifecycle dates. |
+| `get_revenue_summary` | `query_financial` | Read | `read_financial_reporting` | Get monthly revenue over a lookback window (default 12 months), grouped by classification (managed / other recurring / non-recurring), PSA provider, or line type. One row per month + group. Useful for QBR prep, revenue trend analysis, and profitability conversations. |
+| `list_invoices` | `query_financial` | Read | `read_invoices` | List PSA-synced invoices with status, type, dates, totals, payments, and balances. Supports pagination, company filtering, status/type/date filters, and search. Invoices are owned by the PSA — this is a read-only view. |
+| `list_quotes` | `query_financial` | Read | `read_quotes` | List quotes from active quoting integrations with stage, owner, company, and monthly/annual/one-time totals. Supports pagination, company filtering, stage filtering, and search. Quotes are created and managed in the source quoting provider — this is a read-only view. |
 
 ## Integrations
 
 **Module scopes:** `integrations.read`, `integrations.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_integration` | Read | `read_settings_integrations` | Get one integration's sync health, including a lastRuns map of per-entity last-sync timestamps. Never returns credentials or configuration. |
-| `list_integrations` | Read | `read_settings_integrations` | List tenant integrations with sync health (status, derived health, failure counters, last error, per-entity last-sync timestamps). Never returns credentials or configuration. Returns a detail object { integrations, companyIntegrations }; companyIntegrations is null unless includeCompanyIntegrations is true. |
-| `pause_integration` | Write (confirm) | `write_settings_integrations` | Stage or pause an integration. Pausing stops all background syncs for the provider until it is resumed (status becomes 'paused' with reason 'manual_pause'). |
-| `resume_integration` | Write (confirm) | `write_settings_integrations` | Stage or resume a paused integration. Sets status to 'active' and clears the pause and failure state (paused_at, paused_reason, last error fields, consecutive failures). |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_integration` | `query_integrations` | Read | `read_settings_integrations` | Get one integration's sync health, including a lastRuns map of per-entity last-sync timestamps. Never returns credentials or configuration. |
+| `list_integrations` | `query_integrations` | Read | `read_settings_integrations` | List tenant integrations with sync health (status, derived health, failure counters, last error, per-entity last-sync timestamps). Never returns credentials or configuration. Returns a detail object { integrations, companyIntegrations }; companyIntegrations is null unless includeCompanyIntegrations is true. |
+| `pause_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or pause an integration. Pausing stops all background syncs for the provider until it is resumed (status becomes 'paused' with reason 'manual_pause'). |
+| `resume_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or resume a paused integration. Sets status to 'active' and clears the pause and failure state (paused_at, paused_reason, last error fields, consecutive failures). |
 
 ## Documentation
 
 **Module scopes:** `documentation.read`, `documentation.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_documentation_page` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Create a built-in documentation page (inline HTML custom document) in the tenant's documentation library. Optionally scoped to a company and placed in a custom folder. The page gets a first revision and a visibility rule, like pages created from Settings: shared with all company users by default, or restricted to specific permission-group roles via roleIds (see list_documentation_visibility_roles). |
-| `get_documentation_document` | Read | `read_documentation` | Get one documentation document with its full HTML content: a built-in custom page, a Hudu article (with attachment metadata and public share links where sharing is enabled), or an IT Glue document. Per-item visibility rules are enforced. |
-| `list_documentation_documents` | Read | `read_documentation` | List documentation from the merged library: built-in custom pages plus articles synced from Hudu and IT Glue. Returns a short plain-text excerpt per document; use get_documentation_document for full content. Supports search, company, folder, and source filters. |
-| `list_documentation_folders` | Read | `read_documentation` | List documentation folders across all sources (custom, Hudu, IT Glue) with per-folder document counts. Use the returned folderKey to filter list_documentation_documents, and the UUID of custom:&lt;uuid> keys as folderId when creating pages. |
-| `list_documentation_visibility_roles` | Read | `write_settings_documentation`, `write_settings_onboarding` | List the company permission-group roles (client portal roles) that can be used as visibility targets when creating documentation pages. Pass the returned role ids as roleIds to create_documentation_page to restrict a page to company users in those roles. |
-| `set_documentation_page_visibility` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Replace the visibility rules of an existing built-in documentation page: restrict it to specific company permission-group roles (see list_documentation_visibility_roles) or share it with all company users in scope. Use this to share a page that was created from the onboarding page library into the documentation hub for a specific role, or to change who can see a page after creation. Existing rules are replaced, not merged. Only custom pages support this; Hudu and IT Glue articles are managed from Settings. |
-| `update_documentation_page` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Update the title, HTML body, and/or summary of a built-in documentation page. Creates a new revision (the previous content stays in revision history). Only custom inline pages can be edited — Hudu and IT Glue articles are managed in their source system. contentHtml replaces the entire body, so fetch the current content with get_documentation_document and apply your edit to it. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_documentation_page` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Create a built-in documentation page (inline HTML custom document) in the tenant's documentation library. Optionally scoped to a company and placed in a custom folder. The page gets a first revision and a visibility rule, like pages created from Settings: shared with all company users by default, or restricted to specific permission-group roles via roleIds (see list_documentation_visibility_roles). |
+| `get_documentation_document` | `query_documentation` | Read | `read_documentation` | Get one documentation document with its full HTML content: a built-in custom page, a Hudu article (with attachment metadata and public share links where sharing is enabled), or an IT Glue document. Per-item visibility rules are enforced. |
+| `list_documentation_documents` | `query_documentation` | Read | `read_documentation` | List documentation from the merged library: built-in custom pages plus articles synced from Hudu and IT Glue. Returns a short plain-text excerpt per document; use get_documentation_document for full content. Supports search, company, folder, and source filters. |
+| `list_documentation_folders` | `query_documentation` | Read | `read_documentation` | List documentation folders across all sources (custom, Hudu, IT Glue) with per-folder document counts. Use the returned folderKey to filter list_documentation_documents, and the UUID of custom:&lt;uuid> keys as folderId when creating pages. |
+| `list_documentation_visibility_roles` | `query_documentation` | Read | `write_settings_documentation`, `write_settings_onboarding` | List the company permission-group roles (client portal roles) that can be used as visibility targets when creating documentation pages. Pass the returned role ids as roleIds to create_documentation_page to restrict a page to company users in those roles. |
+| `set_documentation_page_visibility` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Replace the visibility rules of an existing built-in documentation page: restrict it to specific company permission-group roles (see list_documentation_visibility_roles) or share it with all company users in scope. Use this to share a page that was created from the onboarding page library into the documentation hub for a specific role, or to change who can see a page after creation. Existing rules are replaced, not merged. Only custom pages support this; Hudu and IT Glue articles are managed from Settings. |
+| `update_documentation_page` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Update the title, HTML body, and/or summary of a built-in documentation page. Creates a new revision (the previous content stays in revision history). Only custom inline pages can be edited — Hudu and IT Glue articles are managed in their source system. contentHtml replaces the entire body, so fetch the current content with get_documentation_document and apply your edit to it. |
 
 ## Onboarding
 
 **Module scopes:** `onboarding.read`, `onboarding.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `add_onboarding_portal_contact` | Write (confirm) | `write_settings_onboarding` | Stage or add a client contact to an onboarding portal. No invite email is sent by this tool; invites are emailed when the portal is started, or from the app via Send invite. |
-| `add_onboarding_portal_phase` | Write (confirm) | `write_settings_onboarding` | Stage or add a phase to an onboarding portal. The phase is appended at the end in pending status. |
-| `add_onboarding_portal_task` | Write (confirm) | `write_settings_onboarding` | Stage or add a task to an onboarding portal phase. The task is appended at the end of the phase in pending status. |
-| `archive_onboarding_checklist` | Write (confirm) | `manage_settings_onboarding` | Stage or apply archiving (archived: true) or restoring (archived: false) of an onboarding checklist template. Archived templates are hidden from pickers but existing task links keep working. |
-| `archive_onboarding_portal` | Write (confirm) | `write_settings_onboarding` | Stage or archive an onboarding portal (archived: true, revokes all active client portal sessions) or unarchive it back to draft (archived: false; only valid for archived portals). |
-| `complete_onboarding_portal` | Write (confirm) | `write_settings_onboarding` | Stage or mark an active onboarding portal as completed (active → completed). Logs a portal_completed event and fires portal-completion automations on commit. |
-| `create_onboarding_checklist` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable onboarding checklist template with ordered items and optional tags. Link the template to onboarding template tasks in the app to attach it to client portals. |
-| `create_onboarding_form` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable client-facing onboarding form, optionally with its fields. Forms are created in draft status by default; active forms can be attached to onboarding form tasks for clients to fill in. |
-| `create_onboarding_page` | Write (confirm) | `write_settings_onboarding` | Stage or create a standalone onboarding documentation page in the page catalog. The body HTML is sanitized on save. The page is not attached to any template until linked with link_onboarding_page_to_template. |
-| `create_onboarding_portal` | Write (confirm) | `write_settings_onboarding` | Stage or create a client onboarding portal from a template, with optional client contacts. The portal is created in draft status and no client emails are sent — use start_onboarding_portal to activate it and send invites. |
-| `delete_onboarding_page` | Write (confirm) | `manage_settings_onboarding` | Stage or apply deletion (archival) of an onboarding documentation page. On commit the page is archived and removed from every template and portal that references it. This cannot be undone from the API. |
-| `delete_onboarding_portal_task` | Write (confirm) | `manage_settings_onboarding` | Stage or permanently delete an onboarding portal task. This cannot be undone. Requires the manage onboarding permission. |
-| `get_onboarding_checklist` | Read | `read_settings_onboarding` | Get one onboarding checklist template with its full ordered items array, tags, and archive status. |
-| `get_onboarding_form` | Read | `read_settings_onboarding` | Get one onboarding form with its full field definitions (label, field key, type, required flag, help text, placeholder, options, default value, display order). |
-| `get_onboarding_page` | Read | `read_settings_onboarding` | Get one onboarding documentation page including its full body HTML, summary, icon, section label, and template/portal usage counts. |
-| `get_onboarding_portal` | Read | `read_settings_onboarding` | Get the full detail of one onboarding portal: phases with tasks, documents, surveys, approvals, contacts, key dates, dependencies, and PSA project links. |
-| `link_onboarding_page_to_template` | Write (confirm) | `write_settings_onboarding` | Stage or apply linking a documentation page into an onboarding template. The page is appended at the end of the template's page list. Idempotent: linking an already linked page returns the existing link. |
-| `list_onboarding_checklists` | Read | `read_settings_onboarding` | List reusable onboarding checklist templates with item counts, tags, and archive status. Use a checklist ID with get_onboarding_checklist to see its items. |
-| `list_onboarding_forms` | Read | `read_settings_onboarding` | List reusable client-facing onboarding forms with status, field counts, and multiple-entry settings. Filter by status (draft, active, archived). |
-| `list_onboarding_pages` | Read | `read_settings_onboarding` | List the standalone onboarding documentation page catalog with summaries, icon and section metadata, body length, and usage counts (templates and portals referencing each page). Use get_onboarding_page for the full body HTML. |
-| `list_onboarding_portals` | Read | `read_settings_onboarding` | List client onboarding portals with status, progress counts (phases, tasks, documents), and contact counts. Filter by company or status (draft, active, completed, converted, archived). |
-| `list_onboarding_templates` | Read | `read_settings_onboarding` | List client onboarding templates with phase/task counts and estimated duration. Use a template ID with create_onboarding_portal to spin up a portal for a new client. |
-| `start_onboarding_portal` | Write (confirm) | `write_settings_onboarding` | Stage or activate a draft onboarding portal (draft → active). Sends real invite emails to all portal contacts on commit. |
-| `unlink_onboarding_page_from_template` | Write (confirm) | `manage_settings_onboarding` | Stage or apply removal of a documentation page link from an onboarding template. The page itself stays in the catalog and remains linked to any other templates. |
-| `update_onboarding_checklist` | Write (confirm) | `write_settings_onboarding` | Stage or apply changes to an onboarding checklist template. Only the provided fields change; the items array, when provided, replaces ALL existing items. Use get_onboarding_checklist first to fetch the current items before editing them. |
-| `update_onboarding_form` | Write (confirm) | `write_settings_onboarding` | Stage or apply changes to an onboarding form: rename it, change its description, status (draft, active, archived), or multiple-entry setting, and add, update, or remove its fields in one call. |
-| `update_onboarding_page` | Write (confirm) | `write_settings_onboarding` | Stage or apply a partial update to an onboarding documentation page (title, summary, body HTML, icon, section label). At least one field besides pageId is required. Each update records a new page revision. |
-| `update_onboarding_portal` | Write (confirm) | `write_settings_onboarding` | Stage or apply an update to an onboarding portal's name and/or description. Pass description: null to clear it. |
-| `update_onboarding_portal_phase` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding portal phase's name and/or description. Pass description: null to clear it. |
-| `update_onboarding_portal_task` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding task's title, description, owner, priority, or due date. Use update_onboarding_task_status to change its status. |
-| `update_onboarding_task_status` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding task's status (pending, in_progress, completed, blocked). Completing a task logs an event, fires task-completion automations, and syncs the status to a linked PSA ticket if one exists. |
-| `update_onboarding_template_page_link` | Write (confirm) | `write_settings_onboarding` | Stage or apply an update to a template page link: change its display order within the template or toggle client visibility. At least one field besides linkId is required. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `add_onboarding_portal_contact` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or add a client contact to an onboarding portal. No invite email is sent by this tool; invites are emailed when the portal is started, or from the app via Send invite. |
+| `add_onboarding_portal_phase` | `manage_onboarding_phases` | Write (confirm) | `write_settings_onboarding` | Stage or add a phase to an onboarding portal. The phase is appended at the end in pending status. |
+| `add_onboarding_portal_task` | `manage_onboarding_tasks` | Write (confirm) | `write_settings_onboarding` | Stage or add a task to an onboarding portal phase. The task is appended at the end of the phase in pending status. |
+| `archive_onboarding_checklist` | `manage_onboarding_checklists` | Write (confirm) | `manage_settings_onboarding` | Stage or apply archiving (archived: true) or restoring (archived: false) of an onboarding checklist template. Archived templates are hidden from pickers but existing task links keep working. |
+| `archive_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or archive an onboarding portal (archived: true, revokes all active client portal sessions) or unarchive it back to draft (archived: false; only valid for archived portals). |
+| `complete_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or mark an active onboarding portal as completed (active → completed). Logs a portal_completed event and fires portal-completion automations on commit. |
+| `create_onboarding_checklist` | `manage_onboarding_checklists` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable onboarding checklist template with ordered items and optional tags. Link the template to onboarding template tasks in the app to attach it to client portals. |
+| `create_onboarding_form` | `manage_onboarding_forms` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable client-facing onboarding form, optionally with its fields. Forms are created in draft status by default; active forms can be attached to onboarding form tasks for clients to fill in. |
+| `create_onboarding_page` | `manage_onboarding_pages` | Write (confirm) | `write_settings_onboarding` | Stage or create a standalone onboarding documentation page in the page catalog. The body HTML is sanitized on save. The page is not attached to any template until linked with link_onboarding_page_to_template. |
+| `create_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or create a client onboarding portal from a template, with optional client contacts. The portal is created in draft status and no client emails are sent — use start_onboarding_portal to activate it and send invites. |
+| `delete_onboarding_page` | `manage_onboarding_pages` | Write (confirm) | `manage_settings_onboarding` | Stage or apply deletion (archival) of an onboarding documentation page. On commit the page is archived and removed from every template and portal that references it. This cannot be undone from the API. |
+| `delete_onboarding_portal_task` | `manage_onboarding_tasks` | Write (confirm) | `manage_settings_onboarding` | Stage or permanently delete an onboarding portal task. This cannot be undone. Requires the manage onboarding permission. |
+| `get_onboarding_checklist` | `query_onboarding_checklists` | Read | `read_settings_onboarding` | Get one onboarding checklist template with its full ordered items array, tags, and archive status. |
+| `get_onboarding_form` | `query_onboarding_forms` | Read | `read_settings_onboarding` | Get one onboarding form with its full field definitions (label, field key, type, required flag, help text, placeholder, options, default value, display order). |
+| `get_onboarding_page` | `query_onboarding_pages` | Read | `read_settings_onboarding` | Get one onboarding documentation page including its full body HTML, summary, icon, section label, and template/portal usage counts. |
+| `get_onboarding_portal` | `query_onboarding_portals` | Read | `read_settings_onboarding` | Get the full detail of one onboarding portal: phases with tasks, documents, surveys, approvals, contacts, key dates, dependencies, and PSA project links. |
+| `link_onboarding_page_to_template` | `manage_onboarding_pages` | Write (confirm) | `write_settings_onboarding` | Stage or apply linking a documentation page into an onboarding template. The page is appended at the end of the template's page list. Idempotent: linking an already linked page returns the existing link. |
+| `list_onboarding_checklists` | `query_onboarding_checklists` | Read | `read_settings_onboarding` | List reusable onboarding checklist templates with item counts, tags, and archive status. Use a checklist ID with get_onboarding_checklist to see its items. |
+| `list_onboarding_forms` | `query_onboarding_forms` | Read | `read_settings_onboarding` | List reusable client-facing onboarding forms with status, field counts, and multiple-entry settings. Filter by status (draft, active, archived). |
+| `list_onboarding_pages` | `query_onboarding_pages` | Read | `read_settings_onboarding` | List the standalone onboarding documentation page catalog with summaries, icon and section metadata, body length, and usage counts (templates and portals referencing each page). Use get_onboarding_page for the full body HTML. |
+| `list_onboarding_portals` | `query_onboarding_portals` | Read | `read_settings_onboarding` | List client onboarding portals with status, progress counts (phases, tasks, documents), and contact counts. Filter by company or status (draft, active, completed, converted, archived). |
+| `list_onboarding_templates` | `query_onboarding_portals` | Read | `read_settings_onboarding` | List client onboarding templates with phase/task counts and estimated duration. Use a template ID with create_onboarding_portal to spin up a portal for a new client. |
+| `start_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or activate a draft onboarding portal (draft → active). Sends real invite emails to all portal contacts on commit. |
+| `unlink_onboarding_page_from_template` | `manage_onboarding_pages` | Write (confirm) | `manage_settings_onboarding` | Stage or apply removal of a documentation page link from an onboarding template. The page itself stays in the catalog and remains linked to any other templates. |
+| `update_onboarding_checklist` | `manage_onboarding_checklists` | Write (confirm) | `write_settings_onboarding` | Stage or apply changes to an onboarding checklist template. Only the provided fields change; the items array, when provided, replaces ALL existing items. Use get_onboarding_checklist first to fetch the current items before editing them. |
+| `update_onboarding_form` | `manage_onboarding_forms` | Write (confirm) | `write_settings_onboarding` | Stage or apply changes to an onboarding form: rename it, change its description, status (draft, active, archived), or multiple-entry setting, and add, update, or remove its fields in one call. |
+| `update_onboarding_page` | `manage_onboarding_pages` | Write (confirm) | `write_settings_onboarding` | Stage or apply a partial update to an onboarding documentation page (title, summary, body HTML, icon, section label). At least one field besides pageId is required. Each update records a new page revision. |
+| `update_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or apply an update to an onboarding portal's name and/or description. Pass description: null to clear it. |
+| `update_onboarding_portal_phase` | `manage_onboarding_phases` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding portal phase's name and/or description. Pass description: null to clear it. |
+| `update_onboarding_portal_task` | `manage_onboarding_tasks` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding task's title, description, owner, priority, or due date. Use update_onboarding_task_status to change its status. |
+| `update_onboarding_task_status` | `manage_onboarding_tasks` | Write (confirm) | `write_settings_onboarding` | Stage or update an onboarding task's status (pending, in_progress, completed, blocked). Completing a task logs an event, fires task-completion automations, and syncs the status to a linked PSA ticket if one exists. |
+| `update_onboarding_template_page_link` | `manage_onboarding_pages` | Write (confirm) | `write_settings_onboarding` | Stage or apply an update to a template page link: change its display order within the template or toggle client visibility. At least one field besides linkId is required. |
 
 ## Technology Standards
 
 **Module scopes:** `standards.read`, `standards.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `create_standard_category` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a Standards catalog category with its description, icon, Planner type, require-one-of behavior, and display order. After creating it, add its standards/subentries with create_standard_item. |
-| `create_standard_item` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a standard item (the subentry beneath a Standards category) with its vendor, requirement flag, internal default price, description, and display order. Items in a require-one-of category are always optional individually. |
-| `get_company_standards` | Read | `read_tool_stack` | Get one company's standards deployment: every catalog item with its lifecycle status, item-level deploymentOptions, selectedOption, target tier inherited from its PSA company type, and deploymentAlignment (meets_target, below_target, unmapped_target, unclassified, or not_deployed), plus vCIO notes and the linked planner item. Items with no recorded status are not_started. |
-| `get_standard_adoption` | Read | `read_tool_stack` | Adoption of standards across all companies, item by item. Without itemId: status counts for every standard (how many companies have each tool deployed / in progress / not started / N/A / declined). With itemId (from list_standards): also lists the company names in each status bucket (capped at 100 per bucket) — answers 'which clients are not on our standard EDR'. Companies excluded from standards tracking are not counted. |
-| `get_standards_compliance` | Read | `read_tool_stack` | Per-company standards compliance rollup, scored like the /standards page: each required item that isn't N/A or declined counts as one check; requireOneOf categories count as one check satisfied by any deployed item. Returns per-company score, status counts, missingRequiredCount, and tenant-wide totals. The missingRequired name list (capped at 25) is only populated when companyId is provided — call again with one companyId to see WHICH checks a company is missing. Companies excluded from standards tracking are flagged and unscored (an excluded companyId returns one flagged record with null score). Ideal for QBR prep and 'which clients are below our standards' questions. |
-| `list_standards` | Read | `read_tool_stack` | List the tenant's technology standards catalog (also called the tool stack): categories, standard items, and each item's named deploymentOptions. Every deployment option includes its tenant-configured Standards tier. Categories marked requireOneOf are satisfied when any one item in them is deployed. Use these IDs with the Standards update tools and get_standard_adoption. |
-| `update_standard_category` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable Standards category field. Only provided fields change; null clears description, icon, or Planner type. Setting requireOneOf to true also makes every item in the category optional so the category acts as one grouped requirement. |
-| `update_standard_item` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable standard item field, including moving it to another category. Only provided fields change; null clears description or vendor. Use list_standards first to preserve fields you do not intend to change. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `create_standard_category` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a Standards catalog category with its description, icon, Planner type, require-one-of behavior, and display order. After creating it, add its standards/subentries with create_standard_item. |
+| `create_standard_item` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a standard item (the subentry beneath a Standards category) with its vendor, requirement flag, internal default price, description, and display order. Items in a require-one-of category are always optional individually. |
+| `get_company_standards` | `query_standards` | Read | `read_tool_stack` | Get one company's standards deployment: every catalog item with its lifecycle status, item-level deploymentOptions, selectedOption, target tier inherited from its PSA company type, and deploymentAlignment (meets_target, below_target, unmapped_target, unclassified, or not_deployed), plus vCIO notes and the linked planner item. Items with no recorded status are not_started. |
+| `get_standard_adoption` | `query_standards` | Read | `read_tool_stack` | Adoption of standards across all companies, item by item. Without itemId: status counts for every standard (how many companies have each tool deployed / in progress / not started / N/A / declined). With itemId (from list_standards): also lists the company names in each status bucket (capped at 100 per bucket) — answers 'which clients are not on our standard EDR'. Companies excluded from standards tracking are not counted. |
+| `get_standards_compliance` | `query_standards` | Read | `read_tool_stack` | Per-company standards compliance rollup, scored like the /standards page: each required item that isn't N/A or declined counts as one check; requireOneOf categories count as one check satisfied by any deployed item. Returns per-company score, status counts, missingRequiredCount, and tenant-wide totals. The missingRequired name list (capped at 25) is only populated when companyId is provided — call again with one companyId to see WHICH checks a company is missing. Companies excluded from standards tracking are flagged and unscored (an excluded companyId returns one flagged record with null score). Ideal for QBR prep and 'which clients are below our standards' questions. |
+| `list_standards` | `query_standards` | Read | `read_tool_stack` | List the tenant's technology standards catalog (also called the tool stack): categories, standard items, and each item's named deploymentOptions. Every deployment option includes its tenant-configured Standards tier. Categories marked requireOneOf are satisfied when any one item in them is deployed. Use these IDs with the Standards update tools and get_standard_adoption. |
+| `update_standard_category` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable Standards category field. Only provided fields change; null clears description, icon, or Planner type. Setting requireOneOf to true also makes every item in the category optional so the category acts as one grouped requirement. |
+| `update_standard_item` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable standard item field, including moving it to another category. Only provided fields change; null clears description or vendor. Use list_standards first to preserve fields you do not intend to change. |
 
 ## Security
 
 **Module scopes:** `security.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_security_summary` | Read | `read_security` | Cross-provider security posture summary: Cork (compliance findings, vulnerabilities incl. critical/known-exploited, endpoints), Acronis EDR (incident counts by state/severity/mitigation, endpoint protection), and Huntress (agents, escalations, incident reports, remediations, SAT learner counts). A provider section is null when its data is unavailable; zero counts mean no data synced. Pair with get_secure_score_summary (M365) for the full QBR risk story. |
-| `list_edr_incidents` | Read | `read_security` | List Acronis EDR incidents (newest first) with severity (HIGH/MEDIUM/LOW), state (NOT_STARTED/INVESTIGATING/CLOSED), mitigation state, verdict, and affected host. Search matches host name/domain. |
-| `list_huntress_items` | Read | `read_security` | List Huntress security items — escalations, incident reports, and remediations — with status, severity, category, the affected company/organization, and a link to the Huntress portal. Filter by itemType to focus on one kind. |
-| `list_vulnerabilities` | Read | `read_security` | List Cork vulnerabilities sorted by CVSS score (highest first): CVE id/description, affected software, CVSS/EPSS scores, priority (critical/accelerated/routine), and known-exploited flag. Search matches CVE id and software fields. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_security_summary` | `query_security` | Read | `read_security` | Cross-provider security posture summary: Cork (compliance findings, vulnerabilities incl. critical/known-exploited, endpoints), Acronis EDR (incident counts by state/severity/mitigation, endpoint protection), and Huntress (agents, escalations, incident reports, remediations, SAT learner counts). A provider section is null when its data is unavailable; zero counts mean no data synced. Pair with get_secure_score_summary (M365) for the full QBR risk story. |
+| `list_edr_incidents` | `query_security` | Read | `read_security` | List Acronis EDR incidents (newest first) with severity (HIGH/MEDIUM/LOW), state (NOT_STARTED/INVESTIGATING/CLOSED), mitigation state, verdict, and affected host. Search matches host name/domain. |
+| `list_huntress_items` | `query_security` | Read | `read_security` | List Huntress security items — escalations, incident reports, and remediations — with status, severity, category, the affected company/organization, and a link to the Huntress portal. Filter by itemType to focus on one kind. |
+| `list_vulnerabilities` | `query_security` | Read | `read_security` | List Cork vulnerabilities sorted by CVSS score (highest first): CVE id/description, affected software, CVSS/EPSS scores, priority (critical/accelerated/routine), and known-exploited flag. Search matches CVE id and software fields. |
 
 ## Broadcasts
 
 **Module scopes:** `broadcasts.read`, `broadcasts.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_broadcast` | Read | `read_broadcasts` | Get one broadcast including its HTML body and dark-wrapper setting. |
-| `list_broadcast_groups` | Read | `read_broadcasts` | List broadcast groups with member counts. Use these group IDs when sending a broadcast. Optionally scoped to one company. |
-| `list_broadcast_recipients` | Read | `read_broadcasts` | List the recipients of one broadcast with per-recipient delivery status (paginated). |
-| `list_broadcasts` | Read | `read_broadcasts` | List emergency broadcast history with delivery counts and status (paginated). Excludes the HTML body; use get_broadcast for full content. |
-| `send_broadcast` | Write (confirm) | `write_broadcasts` | Stage or send an emergency broadcast email to every member of the selected broadcast groups. The proposal preview shows the resolved recipient count and group names before anything is sent. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_broadcast` | `query_broadcasts` | Read | `read_broadcasts` | Get one broadcast including its HTML body and dark-wrapper setting. |
+| `list_broadcast_groups` | `query_broadcasts` | Read | `read_broadcasts` | List broadcast groups with member counts. Use these group IDs when sending a broadcast. Optionally scoped to one company. |
+| `list_broadcast_recipients` | `query_broadcasts` | Read | `read_broadcasts` | List the recipients of one broadcast with per-recipient delivery status (paginated). |
+| `list_broadcasts` | `query_broadcasts` | Read | `read_broadcasts` | List emergency broadcast history with delivery counts and status (paginated). Excludes the HTML body; use get_broadcast for full content. |
+| `send_broadcast` | `manage_broadcasts` | Write (confirm) | `write_broadcasts` | Stage or send an emergency broadcast email to every member of the selected broadcast groups. The proposal preview shows the resolved recipient count and group names before anything is sent. |
 
 ## Notifications
 
 **Module scopes:** `notifications.read`, `notifications.write`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `list_notifications` | Read | MCP access | List in-app notifications for the calling user (paginated). Defaults to unread only; set includeRead to true for full history. |
-| `mark_notification_read` | Immediate action | MCP access | Mark one of the calling user's notifications as read (notificationId), or all of their unread notifications (all: true). Only touches notifications addressed to the caller — tenant-wide notifications (shared by all users) are never modified; already-read notifications are skipped. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `list_notifications` | `query_notifications` | Read | MCP access | List in-app notifications for the calling user (paginated). Defaults to unread only; set includeRead to true for full history. |
+| `mark_notification_read` | `mark_notification_read` | Immediate action | MCP access | Mark one of the calling user's notifications as read (notificationId), or all of their unread notifications (all: true). Only touches notifications addressed to the caller — tenant-wide notifications (shared by all users) are never modified; already-read notifications are skipped. |
 
 ## Dashboards
 
 **Module scopes:** `dashboards.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_external_dashboard` | Read | `read_dashboards` | Get one external dashboard. |
-| `list_external_dashboards` | Read | `read_dashboards` | List external dashboards. |
-| `list_internal_dashboards` | Read | `read_dashboards_internal`, `read_dashboards` | List internal dashboards. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_external_dashboard` | `query_dashboards` | Read | `read_dashboards` | Get one external dashboard. |
+| `list_external_dashboards` | `query_dashboards` | Read | `read_dashboards` | List external dashboards. |
+| `list_internal_dashboards` | `query_dashboards` | Read | `read_dashboards_internal`, `read_dashboards` | List internal dashboards. |
 
 ## User Directory
 
 **Module scopes:** `users.read`
 
-| Tool | Access | Permissions | Description |
-| --- | --- | --- | --- |
-| `get_user` | Read | `read_settings_users`, `manage_settings_users` | Get one tenant user, including their custom field values (label → value). |
-| `list_users` | Read | `read_settings_users`, `manage_settings_users` | List tenant users. |
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_user` | `query_users` | Read | `read_settings_users`, `manage_settings_users` | Get one tenant user, including their custom field values (label → value). |
+| `list_users` | `query_users` | Read | `read_settings_users`, `manage_settings_users` | List tenant users. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why does my client list fewer tools than this reference?">
-    The deployed server, your consent scopes, permissions, company access, integrations and client tool filters determine the available subset. The reference is not a grant of access.
+    The tables list operations, which are grouped into 93 public tools in the reviewed catalog. Your deployed server, consent scopes, permissions, company access, integrations and client filters can reduce that set further. The reference is not a grant of access.
   </Accordion>
   <Accordion title="Does Read mean a tool can never send anything?">
-    No. Tool results go to your connected client. submit_feedback is a special sending action despite its protocol read classification and needs an explicit request to send feedback.
+    No. Tool results go to your connected client. submit_feedback is a separate sending action, is not marked read-only in the consolidated catalog, and needs an explicit request to send feedback.
   </Accordion>
   <Accordion title="Do all writes require a server confirmation?">
     No. Proposal tools stage a confirmation, but immediate actions run directly. Read the access column and exact tool description before authorizing a call.

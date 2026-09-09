@@ -115,6 +115,14 @@ You can configure the same connection in `~/.copilot/mcp-config.json`:
 VS Code and Copilot CLI use different configuration formats. VS Code uses a `servers` object in its `mcp.json`; Copilot CLI uses an `mcpServers` object in `~/.copilot/mcp-config.json`. Do not assume the CLI reads `.vscode/mcp.json` directly. Workspace `.mcp.json` and user configurations can have different precedence; inspect which entry your client actually loaded.
 </Note>
 
+## Grouped tools and existing connections
+
+The consolidated MSPortal catalog exposes up to **93 public tools** covering 260 existing operations. Copilot can discover tools such as `query_projects` and `manage_planner`, then choose the relevant action using the tool's schema. The available subset depends on your deployed server version and access.
+
+Existing calls using individual names, such as `list_projects`, continue to work with their original arguments. Pending confirmations retain their operation identity and expiry. Consolidation alone does not require a new server URL or broader OAuth access.
+
+When adopting the grouped catalog, refresh the client's discovered tools and review **Configure Tools** or any explicit `tools` allowlist. Enable the new public names you need. The example `"tools": ["*"]` above is not tied to individual legacy names, but grants no extra server permissions. Custom clients that expect old names in `tools/list` need to update their discovery logic. See the [action-to-tool mapping](/user-guides/mcp-server/tools-reference).
+
 ## Before requesting changes
 
 Ask Copilot to start with read tools and the intended company. Review the tool calls and output before requesting writes. The client’s tool-approval prompt, MSPortal OAuth consent and a portal proposal confirmation are different steps.
@@ -139,7 +147,7 @@ Revocation does not remove local configuration or erase previously returned data
   </Accordion>
 
   <Accordion title="Copilot cannot see an MSPortal tool">
-    In VS Code, open **Configure Tools** in Copilot Chat and confirm the tool is enabled. Then check that you approved the related MCP access and that your MSPortal role grants the required permission.
+    Look up the operation's public tool name in the MCP Tools Reference. In VS Code, open **Configure Tools** in Copilot Chat and confirm that grouped tool is enabled. Update any explicit legacy-name allowlist when adopting the grouped catalog, then check your MCP consent and MSPortal role permissions.
   </Accordion>
 
   <Accordion title="Your organization blocks the MCP server">
