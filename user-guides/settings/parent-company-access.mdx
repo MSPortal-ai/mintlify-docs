@@ -1,0 +1,104 @@
+---
+title: "Give a parent-company user access to child companies"
+sidebarTitle: "Parent-company access"
+description: "Fix a client admin at a holding or parent company who only sees their own company's tickets and data."
+icon: "sitemap"
+---
+
+**Audience:** MSP staff with Companies settings write access. Company users ask their IT provider to make this change.
+
+## Symptom
+
+A Company user belongs to a parent company that has child companies linked in MSPortal. When they sign in, or when you impersonate them:
+
+- The ticket list shows only a few tickets, while the PSA shows many more across the group.
+- The company selector is missing from the top bar, or lists only their own company.
+- Devices, reports and other company data cover only the parent company.
+
+For example, Nick is IT Admin at Burando Holding. Nine companies are linked under Burando Holding, and Autotask shows 33 tickets across all of them. Nick sees only the tickets logged against Burando Holding itself.
+
+## Cause
+
+A Company user sees only their own company by default. Their Permissions Group and their ticket display group do not add other companies, even when both are admin-level.
+
+To reach child companies, the user needs the **Parent Admin** Team Role for their parent company. MSPortal creates this role automatically for every company that has children, and names it after the parent, such as **Parent Admin: Burando Holding**.
+
+Assigning the role on the parent company does two things:
+
+- MSPortal adds the same role for that user on every child company.
+- The user gets a company selector listing their own company, each child company and **Global View**.
+
+## Fix
+
+<Steps>
+  <Step title="Confirm the user's company">
+    Open **Settings > Users & Roles > Company Users** and find the user. Their company must be the parent company. If the user record sits on one of the child companies, change it to the parent company first.
+  </Step>
+  <Step title="Open the parent company's Team tab">
+    Open **Settings > Companies**, find the parent company and choose **Edit Company** from the row menu. Select the **Team** tab.
+  </Step>
+  <Step title="Add the user to the Parent Admin role">
+    Find the role named **Parent Admin:** followed by the parent company's name. It is highlighted in blue and shows a **Parent Company Role** badge. Use the role's user picker to add the user.
+  </Step>
+  <Step title="Save">
+    Select **Save Changes**. MSPortal adds the role for this user on every child company.
+  </Step>
+  <Step title="Verify">
+    Open one child company's **Team** tab and confirm the user appears under the Parent Admin role. Then impersonate the user, open the company selector and choose **Global View**. The ticket list now includes tickets from every child company.
+  </Step>
+</Steps>
+
+<Note>
+Impersonation opens on the user's own company. Choose **Global View** in the company selector to see every company at once, or pick a single child company to check it alone.
+</Note>
+
+## Child companies added later
+
+When you link a new child with **Set Parent Company** in **Settings > Companies**, MSPortal adds every existing Parent Admin to that child automatically.
+
+After linking a child any other way, such as a PSA import, open the child's **Team** tab and confirm the Parent Admin role lists the user. If it does not, add the user to the role on that child's **Team** tab and select **Save Changes**.
+
+<Warning>
+The parent company's row menu also offers **Sync Roles to Children**. This action replaces every Team Role assignment on each child company with the parent company's assignments. Assignments that exist only on a child, such as a different account manager, are removed. To fix a single missing child, add the user on that child's **Team** tab instead.
+</Warning>
+
+## If the user still sees too few tickets
+
+Once the user holds the Parent Admin role and the selector is on **Global View**, any remaining gap comes from ticket rules or sync.
+
+| Check | Where |
+| --- | --- |
+| The display group for the user's Permissions Group uses **All Tickets**, not **Same Location Only** or **Own Tickets Only** | **Settings > Tickets > Display Groups**, for the PSA provider |
+| Board or queue restrictions and **Allowed Ticket Statuses** include the missing tickets | The same display group |
+| Each child company is imported and linked to its PSA company | [Integration Company Mapping](/user-guides/settings/integration-company-mapping) |
+| The ticket list's own filters, such as status, are not hiding tickets | The ticket list |
+
+## FAQs
+
+<AccordionGroup>
+  <Accordion title="The user has an admin Permissions Group. Why can't they see child companies?">
+    The Permissions Group controls what the user can do. Which companies they can see comes from the Parent Admin Team Role.
+  </Accordion>
+  <Accordion title="Does All Tickets in a display group add child companies?">
+    No. All Tickets widens ticket visibility inside the companies the user can already access. It does not add companies.
+  </Accordion>
+  <Accordion title="Can I use a different Team Role, such as Account Manager?">
+    No. Only the Parent Admin role for the user's own parent company turns on the company selector and adds the child companies.
+  </Accordion>
+  <Accordion title="Can the user see some child companies but not others?">
+    Yes. Assign the Parent Admin role on the parent company first, then open each child the user should not see and remove them from the Parent Admin role on that child's Team tab. Linking another child with **Set Parent Company** adds Parent Admins back to every child, so recheck those children afterward.
+  </Accordion>
+  <Accordion title="The Parent Admin role is missing from the Team tab">
+    Check that the company has children in **Settings > Companies**. If it does, select one child, choose **Set Parent Company** and apply the same parent again. This creates the Parent Admin role for the parent company.
+  </Accordion>
+  <Accordion title="I assigned the role but the user's session looks unchanged">
+    Have the user reload the page. If the company selector still does not appear, ask them to sign out and back in.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Companies Settings](/user-guides/settings/companies)
+- [Ticket settings](/user-guides/settings/tickets)
+- [Change a Company user's permissions](/user-guides/settings/change-company-user-permissions)
+- [Account teams and Team Roles](/user-guides/getting-started/onboarding/company-roles)
