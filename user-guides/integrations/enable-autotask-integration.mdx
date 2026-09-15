@@ -1,10 +1,12 @@
 ---
 title: 'Configure Autotask PSA Integration'
-description: 'Connect Autotask PSA, choose data scope and import the intended companies and users'
+description: 'Connect Autotask PSA, import native survey results for CSAT dashboards and reports, and choose data scope'
 icon: 'plug'
 ---
 
 Use this **MSP staff** workflow to connect Autotask PSA and configure the data available to your portal. The wizard follows **Connect → Permissions → Sync → Configure → Import**. Company users do not administer this connection.
+
+MSPortal supports syncing **Autotask native survey results** and presenting them in the **CSAT Dashboard**, custom dashboard widgets, report blocks and CSV exports. Enable **Import satisfaction ratings** in the Autotask connection's **Sync** step; it is off by default. You can continue collecting feedback through Autotask's own surveys.
 
 ## Before you start
 
@@ -63,13 +65,38 @@ An Autotask administrator can also inspect the API user’s effective query/crea
 
 ## Select synchronization scope
 
-Select the intended queues and ticket categories. Decide whether to include recurring tickets. Review company/contact filters and the supported opportunity, project, invoice, product catalog, configuration-item and change-management options. Configuration items first synchronize into device staging; discovery is not a completed device import.
+Select the intended queues and ticket categories. Decide whether to include recurring tickets. Review company/contact filters and the supported opportunity, project, invoice, product catalog, configuration-item, change-management and satisfaction-rating options. Configuration items first synchronize into device staging; discovery is not a completed device import.
 
 Review filters before continuing. Synchronizing source records, linking them to companies and importing portal records are separate steps. Automatic company/contact import options can create portal records when matching source records arrive. Review any import preview and the selected categories carefully; do not rely on a confirmation appearing for every save.
 
 Proceeding from Sync saves the selected scope and starts background synchronization. Options in later steps may remain incomplete while it runs. Check errors and the connection’s actual sync result before treating an empty list as the final dataset.
 
 Warranty writeback is an optional **vendor write**. Enable it only when you intend resolved warranty data to update the connected PSA records.
+
+## Import Autotask native CSAT for dashboards and reports
+
+This imports survey results already collected by Autotask's built-in surveys. You do not need Simplesat or a new MSPortal survey to present those responses.
+
+1. Open **Settings > Integrations > Autotask PSA > Configure**.
+2. Give the API user's security level the survey rating rights. In Autotask, open **Admin > Resources/Users > Security Levels**, edit the level assigned to the API user, and under **Other > Surveys** enable **Can view Organization Survey Ratings and Contact Survey Ratings** and **Can view Resource Survey Ratings**. In **Permissions**, check the **Satisfaction feedback** result and use **Re-check** after resolving denied access.
+3. Open **Sync** and enable **Import satisfaction ratings**. There is no rating scale to choose: Autotask survey questions rate **1 to 5**, and each completed survey's overall rating is rounded to a whole rating on that scale.
+4. Continue from Sync to save the selection, or use **Save & Exit**. Saving starts the first import; later imports run hourly. Saving is not proof that all responses have arrived.
+5. Ensure the results' companies are linked to portal companies and their tickets have synchronized. A result whose company is not linked will not appear in company-scoped CSAT results until a later sync can resolve it. Technician attribution uses the assigned resource on the synchronized ticket.
+6. Grant intended readers **Surveys > Read > CSAT** in their role. Dashboard and report authoring also require the corresponding permissions.
+
+Only completed surveys are imported. Surveys that were sent but not answered, and surveys completed without answering any rated question, are not counted as responses. Autotask's REST API does not expose free-text survey answers, so imported responses carry ratings only.
+
+### Present the imported results
+
+- **CSAT Dashboard:** open **Surveys > CSAT Dashboard** to read scores and trends, or export responses. Imported Autotask results are grouped under **Autotask PSA satisfaction**. See [Read and export support satisfaction feedback](/user-guides/surveys/read-csat-feedback).
+- **Custom dashboards:** add **CSAT Overview**, **CSAT Trend**, **CSAT by Company**, or **Recent CSAT Feedback** from the widget library, then save the dashboard. See [Create and edit a dashboard](/user-guides/dashboards/create-and-edit-dashboard).
+- **Reports:** use the same CSAT blocks in the report builder, select the intended company and reporting period, and save. See [Reporting](/user-guides/reporting/index#native-psa-csat-in-reports).
+
+These CSAT views can include other connected feedback sources alongside Autotask. Check company selection, dates and any available survey filter before interpreting a total as Autotask-only.
+
+### If Autotask CSAT is missing
+
+An empty dashboard or missing widget does not mean Autotask native CSAT is unsupported. Check the saved import toggle, the survey rating permissions, integration status and last import result, company links, synchronized tickets, selected dates and the reader's CSAT permission. Merely connecting Autotask does not turn on satisfaction imports. If the **Import satisfaction ratings** control itself is absent, contact MSPortal support to check the connection and feature availability.
 
 ## Configure portal behavior
 
@@ -105,6 +132,7 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
 | Companies or tickets are missing | Saved provider filters, synchronization result and company links. |
 | New statuses are absent | Metadata synchronization, selected board/team/queue scope and latest load. |
 | Setup finished but records are absent | Pending imports, background errors and the correct company context. |
+| Survey results are missing from CSAT views | Saved **Import satisfaction ratings** toggle, the security level's survey rating rights, company links, synchronized tickets and the reader's CSAT permission. |
 
 ## Frequently asked questions
 
@@ -120,6 +148,9 @@ Reopen setup to inspect scope and errors. A successful retest of changed fields 
   </Accordion>
   <Accordion title="Will every discovered contact receive portal access?">
     Discovery and import are separate. Review user matches, company links and the permissions assigned to portal users; invitation is a separate workflow.
+  </Accordion>
+  <Accordion title="Can I dashboard or report on Autotask native survey results?">
+    Yes. Enable Import satisfaction ratings in the Autotask integration's Sync step and grant the API user's security level the survey rating rights. Completed survey results are available in the CSAT Dashboard, custom dashboard CSAT widgets, report blocks and CSV exports, subject to company mapping and role access. You can keep using Autotask's own surveys; Simplesat is not required.
   </Accordion>
   <Accordion title="Can I replace saved credentials by retesting the form?">
     Do not treat a successful retest as proof that replacement credentials were saved. This wizard does not provide a separate credential-update action; confirm the supported update path before revoking the old credential.

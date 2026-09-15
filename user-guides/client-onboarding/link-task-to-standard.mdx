@@ -1,0 +1,109 @@
+---
+title: 'Link an onboarding template task to a Standard'
+description: 'Configure a Standards link once in an onboarding template and carry it into new client portals.'
+icon: 'link'
+---
+
+<Note>
+Preview documentation for the upcoming Standards update. Screenshots show
+MSPortal Demo running the September 18 release branch. These controls are
+available after the application update is released.
+</Note>
+
+**Audience:** MSP staff managing onboarding templates. The link control needs
+Planner write, onboarding settings write, and Standards read access. Reading
+saved links also requires onboarding settings read access. Saving requires active
+billing.
+
+Link a template task when its progress represents delivery of a standard—for
+example, setting up endpoint protection. New portals created from that template
+inherit the link. Configure it on the template rather than each company's task.
+The link tracks delivery; it does not install software or change an external PSA
+record.
+
+## Configure the template link
+
+<Steps>
+  <Step title="Open the template task">
+    Open **Settings > Client Onboarding**, choose the template, select **Phases**
+    from its menu, expand the phase, and open the task. Expand **Link to a standard**.
+  </Step>
+  <Step title="Choose the Standard">
+    Select the standard and, when appropriate, its deployment option. Choose
+    **No deployment option** if the task does not establish a specific option.
+  </Step>
+  <Step title="Choose the completion result">
+    Set **When completed** to **Deployed**, **In progress**, or **Declined**, then
+    select **Save**. Reopen the template task to confirm the saved link.
+  </Step>
+  <Step title="Use the template for a new portal">
+    Create a company's onboarding portal from this template. Its task inherits
+    the saved link and completion result. As the task progresses, review the
+    company's answer under **MSP Tools > Standards**.
+  </Step>
+</Steps>
+
+<Frame caption="Open the task inside the onboarding template's phase.">
+  <img src="/images/product/standards-onboarding-tasks.png" alt="Endpoint Readiness Demo onboarding template with its endpoint setup tasks." width="2880" height="1920" />
+</Frame>
+
+<Frame caption="Configure the Standard and completion result once on the template task.">
+  <img src="/images/product/standards-onboarding-link.png" alt="An onboarding template task linked to Endpoint Setup with Deployed as its completion result." width="3840" height="2400" />
+</Frame>
+
+## Understand progress and reopening
+
+The inherited link follows the company's task:
+
+| Task state | Linked Standards answer |
+| --- | --- |
+| Pending | Not Started |
+| In progress | In Progress |
+| Blocked | Not Started |
+| Completed | Your selected When completed result |
+| Reopened to Pending | Not Started |
+
+The standard must apply to the company. Task progress cannot override its
+device-platform or company-field exclusion.
+
+A manual, non-default answer remains authoritative. For example, manually
+marking the standard **Deployed** preserves that decision when the task is
+reopened. An unanswered **Not Started** cell can be controlled by onboarding.
+
+## Change or remove a template link
+
+Template edits affect future portal tasks. Existing portal tasks keep the link
+and completion result they inherited; editing or clearing the template link does
+not rewrite them.
+
+To stop future tasks inheriting the link, open **Link to a standard** on the
+template task, choose **No linked standard**, and select **Save**.
+
+Changing the selected standard clears the deployment-option selection. Choose
+an option belonging to the new standard before saving.
+
+Only one task in a template can link to the same standard. When another task
+already owns that link, saving reports the conflict. Remove the earlier template
+link before assigning it to a different task. If an existing company task already
+controls that standard, applying another template preserves the company's
+existing owner.
+
+## Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Link to a standard is missing | Open the template task in Settings and check the required permissions. Individual company tasks do not configure this link. |
+| An existing portal did not change after a template edit | Existing tasks retain their inherited link. The updated template applies to future portal tasks. |
+| Another task already links this standard | Review the other tasks and phases in the same template. |
+| Completing a task did not deploy the standard | Check the inherited completion result, applicability, and whether a manual answer already owns the cell. |
+| Reopening did not clear a manual deployment | Manual non-default answers are intentionally preserved. |
+| Billing does not answer the pending linked standard | An onboarding-controlled answer retains its onboarding ownership. |
+
+<CardGroup cols={2}>
+  <Card title="Client onboarding" icon="list-check" href="/user-guides/client-onboarding/index">
+    Review the broader onboarding workflow.
+  </Card>
+  <Card title="Read the Standards matrix" icon="table-cells" href="/user-guides/msp-tools/read-standards-matrix">
+    Understand the resulting deployment status.
+  </Card>
+</CardGroup>
