@@ -1,6 +1,6 @@
 ---
 title: 'Choose which Standards apply'
-description: 'Use device platforms and company field values to keep Standards relevant to each client.'
+description: 'Use conditions on platform, industry, company type, tier and company fields to keep Standards relevant to each client.'
 icon: 'filter'
 ---
 
@@ -11,75 +11,72 @@ Branch preview for the September 18 release. These controls are not yet publishe
 </Note>
 
 **Audience:** MSP staff who manage the Standards catalog. Company platform
-changes require Planner write access. Editing catalog rules requires Standards
-settings management; selecting company fields also requires custom-fields read
-access. Saving requires active billing.
+changes require Planner write access. Editing a standard's conditions requires
+Standards settings management; company field conditions also require
+custom-fields read access. Saving requires active billing.
 
 Applicability answers “should this client have this standard?” It does not change
 whether a tool is installed or whether a deployment has been completed.
 
-## Match a standard to a device platform
+## Set a company's device platform
 
-<Steps>
-  <Step title="Set the company's platform">
-    Open **MSP Tools > Standards**, expand **Company device platform**, and choose
-    the company. Select **Only PCs**, **Only Macs**, or **PCs and Macs**, then
-    select **Save**.
-  </Step>
-  <Step title="Set the standard's platform">
-    Open **Settings > MSP Tools > Standards**, expand the category, and select
-    the standard's name to open its editor. Under **Standards applicability**,
-    choose its **Device platform** and select **Save**.
-  </Step>
-  <Step title="Check the matrix">
-    Return to Standards and select the company. A Mac-only standard is N/A for a
-    PC-only company, and a PC-only standard is N/A for a Mac-only company. Choosing
-    **PCs and Macs** on either side permits both platforms.
-  </Step>
-</Steps>
-
+Open **MSP Tools > Standards**, expand **Company device platform**, and choose the
+company. Select **Only PCs**, **Only Macs**, or **PCs and Macs**, then select
+**Save**. Standards can then test the platform with a **Device platform** condition.
 
 <Frame caption="Choose the company and its device platform.">
   <img src="/images/product/standards-company-platform.png" alt="Acme Corporation configured for Only PCs with the Mac-only standard excluded." width="3840" height="2160" />
 </Frame>
 
-<Frame caption="This standard applies to Mac environments.">
-  <img src="/images/product/standards-item-platform.png" alt="Mac Device Readiness restricted to Only Macs in its inline Standards applicability editor." width="3840" height="2160" />
-</Frame>
+## Add conditions to a standard
+
+<Steps>
+  <Step title="Open the standard">
+    Open **Settings > MSP Tools > Standards**, expand the category, and select the
+    standard's name to open its editor. Find **Applies to**.
+  </Step>
+  <Step title="Add a condition">
+    Select **Add condition**. Choose what to test, a comparison such as **is any of**,
+    and the values. A new standard applies to every company until you add one.
+  </Step>
+  <Step title="Combine conditions">
+    With two or more conditions, choose whether the standard applies when
+    **all conditions match** or when **any condition matches**.
+  </Step>
+  <Step title="Save and check the matrix">
+    Select **Save**, then return to Standards. Companies that don't match show the
+    standard as a locked N/A.
+  </Step>
+</Steps>
+
+| Condition | Tests |
+| --- | --- |
+| **Device platform** | The company's platform. A Mac standard uses **Device platform is any of Only Macs, PCs and Macs**. |
+| **Industry** | The company's industry. |
+| **Company type** | The company's PSA company type. |
+| **Standards tier** | The tier mapped to the company's type. |
+| **Company fields** | Any company custom field. Option fields use **is any of** or **is none of**. Text fields support **contains**, and number and date fields support greater, less, before and after comparisons. |
+
+Standards that used a device platform or one company field before this release
+keep the same result. Their rules appear as conditions in **Applies to**.
 
 Rule-driven N/A cells cannot be edited and do not count as compliance gaps.
 Their previous deployment answers are retained. If a later rule change makes a
 standard applicable again, its saved answer becomes visible again.
 
-## Match a standard to company field values
+## Missing values
 
-Use a company field with selectable options, for example, a service profile with
-different client needs.
+A company with no value for a condition keeps the standard, so incomplete records
+cannot silently improve its compliance percentage. To target companies with no
+value, use **is empty** or **is not empty**. For example, **Industry is not empty**
+excludes companies whose industry was never set.
 
-1. Open the standard's editor in **Settings > MSP Tools > Standards** and find
-   **Standards applicability**.
-2. Choose its **Company field**.
-3. Under **Applies when the company has any of these values**, select one or more
-   accepted values.
-4. Select **Save**. Check a company with a matching value and one with a different
-   value in the Standards matrix.
-
-
-<Frame caption="Select the accepted company-field values.">
-  <img src="/images/product/standards-company-field.png" alt="Managed Endpoint Protection applies to the Managed service company field value." width="3840" height="2160" />
-</Frame>
-
-A multiselect needs only one matching accepted value. A company with no value
-keeps the standard applicable, so incomplete records cannot silently improve its
-compliance percentage. Complete the company field to apply the intended rule.
-
-Choose **All companies** and save to remove the field condition. If a field is
-selected with no accepted values, Save is disabled. Changing the field clears
-the previously selected values; choose values for the new field before saving.
+Compliance checks use the same conditions, plus device conditions. See
+[Compliance Settings](/user-guides/settings/compliance#choosing-which-companies-and-devices-get-a-check).
 
 ## Understand scoring and service plans
 
-Platform and company-field exclusions remove inapplicable checks from the
+Condition exclusions remove inapplicable checks from the
 Standards compliance calculation and the corresponding Client Health scoring.
 Client Health can reflect an earlier scoring run; compare scope and refresh time.
 
@@ -93,9 +90,10 @@ reduce the compliance denominator.
 | Symptom | Check |
 | --- | --- |
 | The company is missing from the picker | Check the app's company selector and your permitted company scope. |
-| The field is missing | Use a company field with selectable options and check custom-fields read access. |
-| A company with no field value still has the standard | This is intentional. Complete the field to apply the condition. |
-| A cell is locked N/A | Review its device platform and company-field rule. Changing a deployment status cannot override the rule. |
+| A company field is missing | Check custom-fields read access. User fields cannot be used in conditions. |
+| A company with no value still has the standard | This is intentional. Complete the value, or use **is empty** or **is not empty**. |
+| A cell is locked N/A | Review the standard's **Applies to** conditions. Changing a deployment status cannot override them. |
+| Save is disabled | Finish or remove incomplete conditions, such as **is any of** with no values. |
 | A higher score appears without new deployments | Excluding a required check changes the number of applicable checks. Review the exclusions alongside the percentage. |
 
 <CardGroup cols={2}>
