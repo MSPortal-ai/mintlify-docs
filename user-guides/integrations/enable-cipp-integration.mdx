@@ -48,6 +48,57 @@ Use **View Microsoft 365 posture** for the reporting view and **Manage company m
 
 **Data** opens the CIPP data explorer, including dataset coverage, sync issues and synchronized records. Some entries expose detailed provider payloads; use the intended company and dataset filters before investigating a record. Missing or failed data is not a passing security result.
 
+{/* Post-release follow-up: verify the CIPP Compliance group import and automatic updates in production, capture clean production media for the Data step panel and the generated group, and remove the branch-preview notice. */}
+
+## Import CIPP standards into Compliance
+
+<Note>
+Branch preview for the September 18 release. These controls are not yet published.
+</Note>
+
+CIPP standards can become a reusable company-level Compliance group. MSPortal creates one check per standard, and you assign the group to runs through your normal Compliance workflow.
+
+You need read access to integrations and Compliance settings to preview standards. Creating or updating the group also requires Compliance settings write access. This is a tenant-wide MSP task, so a user limited to specific companies cannot run it.
+
+### Preview and create the group
+
+1. Open the CIPP connection and select **Data**.
+2. Select **CIPP Compliance group** to expand the panel.
+3. Review the count line, for example **12 standards available · 0 imported**, and the list of standard names. The list includes standards synced from mapped companies in the last 48 hours.
+4. Choose whether to keep **Automatically update these checks in active runs from CIPP results.** selected. It is selected by default.
+5. Select **Create group**. A **Compliance group saved.** message confirms the import.
+6. Select **Open Compliance groups** to review the new **CIPP Microsoft 365 Standards** group in **Settings > Compliance > Groups**.
+
+If the panel shows **Map companies and sync CIPP standards to see available checks.**, map companies and let a sync finish first. **Create group** stays unavailable until at least one standard is available.
+
+The import also creates a **CIPP Standards** status list with **Unknown**, **Compliant** and **Noncompliant**. **Unknown** is the default status.
+
+### Assign the group to runs
+
+The import does not add checks to any run. Add **CIPP Microsoft 365 Standards** to a run template on the **Runs** tab, then create an assessment or [schedule assessments](/user-guides/settings/compliance-schedules) from that template. See [Compliance settings](/user-guides/settings/compliance#runs-tab).
+
+### Import again
+
+After the group exists, the button reads **Update group**. Select it to add checks for standards that CIPP reports since your last import. Existing standards keep their current checks, so repeat imports do not create duplicates. Use the same button to save a change to the automatic updates setting.
+
+### How automatic updates set results
+
+With automatic updates on, MSPortal sets each imported check in active runs after every CIPP sync. It also evaluates results right after you create or update the group.
+
+| CIPP evidence | Result in the run |
+| --- | --- |
+| CIPP reports the standard as compliant | **Compliant** |
+| CIPP reports the standard as noncompliant | **Noncompliant** |
+| No evidence, results older than 48 hours, malformed data or an unavailable license | **Unknown** |
+
+When one company maps to more than one CIPP tenant, the check uses the worst result. Any **Noncompliant** tenant makes the check **Noncompliant**. The check is **Compliant** only when every tenant reports compliant; otherwise it is **Unknown**.
+
+Automatic updates change only the status. They never touch completed runs or notes. They apply to company-level assignments in runs that are still in progress, and they run only while the CIPP connection is active.
+
+### Delete or restore the group
+
+Deleting **CIPP Microsoft 365 Standards** in **Settings > Compliance > Groups** pauses automatic updates. The imported checks stay in your library. To restore the group, return to the **Data** step and select **Create group** again. MSPortal rebuilds the group from the same checks and resumes automatic updates if that setting is selected.
+
 ## Maintain the connection
 
 Reopen the specific connection to update its API client values. Test the revised values and choose **Save connection**. Existing masked secrets are not displayed in clear text. A saved verified indicator is not evidence of a fresh retest.
