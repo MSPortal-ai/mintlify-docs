@@ -3,6 +3,73 @@ title: "Release Notes"
 description: "Product updates, improvements, and upcoming features for MSPortal.ai"
 ---
 
+{/* Post-release follow-up: confirm every feature below in production, then remove this branch-preview notice. */}
+
+## September 18, 2026
+
+<Note>
+Branch preview. These release notes describe the September 18 release before it is published.
+</Note>
+
+### A Redesigned Backup Dashboard
+
+See backup health for each provider at a glance. The Backup dashboard now opens with summary tiles for **Protected devices**, **Needs attention**, **Failed backups**, **Unprotected devices**, and **Storage used**, plus **Active alerts** when Acronis is connected.
+
+- **Provider cards**: Cove, Acronis, and NinjaOne each get an overview card with device status, workloads, protection coverage, and storage. Cove and Acronis cards add last-backup age and daily backup sessions for the past 7 days.
+- **Trends that count sessions**: When session history is available, **Needs attention** and **Failed backups** show a 7-day trend line.
+- **Cove Microsoft 365 at a glance**: A dedicated card shows backup status and workloads for Exchange, OneDrive, SharePoint, and Teams.
+- **Click through to the records**: Select a tile, status segment, or bar to open Devices already filtered to that status and provider. Acronis alert severity bars open Alerts.
+
+[Read the Backup Dashboard](/user-guides/backup/read-dashboard)
+
+### Survey Response Notifications
+
+Let the right account manager know when a client responds to a survey. Select **Response notifications** on a survey to import a response email rule with that survey already selected.
+
+- **Email the company's role**: Choose a **Team role**, such as vCIO, and MSPortal emails the people assigned to that role for the responding company. Select **All surveys** to cover every current and future survey.
+- **Fallback recipient**: Choose an MSPortal team member or an email address to receive the notification when no one holds the role for that company. Fallback recipients are also available on any **Send Email** action that sends to **Role Members**.
+- **Review before it runs**: The rule imports disabled and opens in the rule editor so you can check it before enabling it.
+
+[Set Up Response Notifications](/user-guides/surveys/index#response-notifications)
+
+### CIPP Standards in Compliance
+
+Turn your CIPP Microsoft 365 standards into Compliance checks. From the CIPP integration's **Data** step, preview the available standards and select **Create group** to build a **CIPP Microsoft 365 Standards** group with one check per standard.
+
+- **Automatic results**: Imported checks in active runs update after each CIPP sync to **Compliant**, **Noncompliant**, or **Unknown**. Stale, missing, or unlicensed results stay **Unknown** instead of passing.
+- **Safe to import again**: **Update group** adds checks for new standards without duplicating existing ones.
+- **Your runs stay yours**: Assign the group to runs through your normal Compliance workflow. Completed runs and notes are never changed.
+
+[Import CIPP Standards](/user-guides/integrations/enable-cipp-integration#import-cipp-standards-into-compliance)
+
+### Standards and Compliance That Fit Each Client
+
+Standards and compliance checks now follow what each client actually uses, and more Standards answers can fill themselves in.
+
+- **Conditions on each standard**: Choose which companies a standard applies to with conditions on device platform, industry, company type, Standards tier, or any company field. Match all conditions or any of them. A standard that does not apply shows as a locked N/A and does not count against the company's compliance.
+- **Device platform**: Mark a company as **Only PCs**, **Only Macs**, or **PCs and Macs** for standards to test.
+- **Conditions on compliance checks**: The same conditions decide which companies get a check, and device checks can also test operating system, device type, manufacturer, and RMM. A FileVault check reaches only Macs, even inside a mixed PC and Mac client.
+- **Answers from PSA billing**: The new **SKU Mapping** tab in Financial Reporting settings links billed services and contract types to Standards. Matching billing marks unanswered standards as deployed, while manual decisions stay in place.
+- **Answers from onboarding**: Link an onboarding template task to a standard. New portals inherit the link, and the task's progress updates the company's answer.
+
+[Choose Which Standards Apply](/user-guides/settings/standards-applicability) · [Choose Which Companies and Devices Get a Check](/user-guides/settings/compliance#choosing-which-companies-and-devices-get-a-check) · [Use PSA Billing to Answer Standards](/user-guides/settings/standards-sku-automation) · [Link an Onboarding Task to a Standard](/user-guides/client-onboarding/link-task-to-standard)
+
+### Improvements and Fixes
+
+- **Private notes on every ticket**: Keep private working notes on tickets from any connected PSA and on MSPortal project tickets. Choose **Private** in the note composer. Private notes are visible only to you and stay in MSPortal. [Explore Ticketing](/user-guides/ticketing/index)
+- **Settings shortcuts in the sidebar**: Drag individual settings pages, such as **Settings: Companies**, from the new **Settings** panel into your sidebar layout. Shortcuts appear only for people who can already open that settings page. [Customize the Sidebar](/user-guides/getting-started/customizing-the-sidebar)
+
+### Preview: Coming Next Week
+
+Next week's update brings two project planning tools. They are not available yet.
+
+- **Smart Scheduling**: Plan a project's tasks in one workspace. Drag work onto the calendar, link dependencies, and review a proposed schedule based on capacity, skills, and working days before you save it to your PSA.
+- **Project Gantt**: See a project's phases, tasks, and milestones on one timeline from the project's **Schedule** tab.
+
+We'll share full guides when they launch.
+
+---
+
 ## September 15, 2026
 
 ### Private Notes for ConnectWise Tickets
@@ -40,14 +107,20 @@ Daily status bars now appear in the Microsoft 365 backup table and history panel
 
 ### Improvements and Fixes
 
+- **Device IP addresses**: View all reported IP addresses in device lists and detail panels, expand longer lists, and include the addresses in CSV exports. IP handling is more consistent across connected RMM sources.
+- **Apple model names and device search**: Recognized Apple model identifiers appear as readable model names in inventory, device details, and exports. Device search also recognizes these model names.
+- **Cleaner device tables**: Empty columns are hidden across more inventory views, while columns with active filters or sorting remain available.
+- **Copy ticket display groups**: Create a copy of an existing display group with its field visibility and restrictions preserved, including hidden fields. Assign roles separately so the original group's assignments stay intact.
+- **Tickets by Submitter**: Dashboard drilldowns load more reliably and match the selected submitter group, including the combined Unknown group.
+- **Technician performance**: Empty metrics and columns containing only zero values are hidden. Measured 0% first-response and CSAT scores remain visible when supporting data exists.
 - **AI patch-health answers**: Ask the assistant about synced RMM patch health from any page, including NinjaOne-specific questions. Answers distinguish missing or stale information and identify devices needing attention.
-- **Confirmed Mac warranty dates**: Open Apple's coverage guidance from a device with missing warranty dates and save dates you have verified. Automatic checks no longer estimate Apple warranty dates from serial numbers; existing saved dates are preserved.
+- **Confirmed Mac warranty dates**: Open Apple's coverage guidance from a device with missing warranty dates and save dates you have verified. Apple coverage checks handle confirmed purchase and coverage dates more reliably, save them together, and avoid treating month-only purchase estimates as exact dates. Checks that fill missing coverage preserve existing saved dates.
 - **Onboarding templates**: Switching an item between task and document now saves reliably. Pending edits are better protected during navigation and AI updates, and the template list includes an archive-status filter.
 - **Ticket meeting links**: Add a ticket to a meeting from its row menu. Agenda links resolve the correct ticket across PSA providers and avoid duplicate entries.
 - **AI ticket creation**: Explicit template requests and onboarding requests match more reliably, choice fields use valid options, and longer assistant workflows have more room to finish preparing their result.
 - **Ticket forms and agent identity**: The New User request's software field supports multiple selections. PSA agent linking and time-entry eligibility more reliably identify the correct technician, and ticket searches ignore surrounding whitespace.
 - **Compliance runs and reports**: Choose saved runs in compliance report blocks. Run lists follow the company selector, and notes, completion changes, and deletions update more reliably.
-- **Roadmap and feedback**: Use **Mine** to filter the roadmap to items linked to your feedback, including older submissions. Feedback acknowledgement emails resume where feedback emails are enabled.
+- **Roadmap and feedback**: Use **Mine** to filter the roadmap to items linked to your feedback, including older submissions. Clearer generated feedback titles make requests easier to identify. Feedback acknowledgement emails resume where feedback emails are enabled.
 - **Saving changes**: Conflicting edits to documentation, meetings, projects, and the launch center return a conflict instead of leaving saves stuck retrying.
 - **Sherweb catalog**: Catalog sync more reliably removes large numbers of stale subscription items.
 
@@ -392,7 +465,7 @@ Bring your Simplesat survey results into MSPortal so client satisfaction sits ne
 
 [Documentation: Configure Simplesat](/user-guides/integrations/enable-simplesat-integration)
 
-### Improvements
+### Improvements and Fixes
 
 - **Contact phone on ticket templates**: Add a **Contact phone** field to a ticket template. The person submitting the ticket enters a number and chooses **Just this time** to use it on that ticket only, or **Always** to save it to their contact in ConnectWise, Autotask, Halo PSA, or Syncro.
 - **Ticketing audit by who acted**: The ticketing audit in Settings now opens on client portal activity, and you can filter events by client users or staff across the full history.
@@ -500,7 +573,7 @@ Linking customer records from your integrations to MSPortal companies is now a g
 
 [Documentation: Integration Company Mapping](/user-guides/settings/integration-company-mapping)
 
-### Improvements
+### Improvements and Fixes
 
 - **Documentation Hub editing**: Edit custom pages, uploaded-file details, and custom folders directly from the Documents library, visibility settings, or Hub layout. Moving a folder keeps everything inside it with the right company. Searching the Hub settings list now returns the full set of results.
 - **Training analytics**: The recent activity feed, course counts, and exported training reports return complete results across every report type.
@@ -563,7 +636,7 @@ Reschedule projects, phases, and tasks without leaving the Projects module, and 
 
 [Documentation: Projects](/user-guides/projects/index)
 
-### Improvements
+### Improvements and Fixes
 
 - **Focused Project Settings**: Client access, display configuration, Kanban behavior, and status mapping now have dedicated tabs with consistent Save and Reset controls. Unsaved changes are protected when leaving the page.
 - **Clearer status mapping**: See mapping completion at a glance, preserve manual placements when using Smart Match, and manage status groups from a cleaner workspace.
@@ -692,7 +765,7 @@ MSPortal is now available in 18 languages. Estonian and Lithuanian join the exis
 
 [Documentation: Calendar](/user-guides/calendar)
 
-### Improvements
+### Improvements and Fixes
 
 - **Redesigned Ticket Trends executive summary**: The executive summary that opens a Ticket Trends report has a cleaner layout and clearer hierarchy, so it reads as the client-facing summary it is meant to be.
 - **Complete report exports**: PDF exports wait for every reporting block to finish rendering before the file is produced, so an exported report matches what you see on screen.
@@ -731,7 +804,7 @@ Mark a company as **Compliance Required** when connecting an integration needs e
 - **Visible company status**: Review and update the Compliance Required setting from the company details page.
 - **Approval confirmation**: Staff receive a warning before connecting Microsoft 365, Google Workspace, or Meraki, and before creating a Microsoft 365 connection link.
 
-### Improvements
+### Improvements and Fixes
 
 - **Unused cloud license filter**: Turn on **Only unused seats** in Cloud Licenses to focus on licenses with available capacity.
 - **DNSimple domains in Cloud**: Company-mapped DNSimple domains now appear in Cloud Domains with registration status, expiration, and auto-renew details. Domains not found in any connected Microsoft 365 or Google Workspace tenant are marked **Secondary**.
@@ -793,7 +866,7 @@ Connected AI assistants can now maintain more of your compliance catalog. Create
 
 [Documentation: MSPortal MCP Server](/user-guides/mcp-server/index)
 
-### Improvements
+### Improvements and Fixes
 
 - **Faster ticket workflows**: Ticket lists and new-ticket submission now do less background work, and the ticket template editor loads server-first and saves changes atomically.
 - **Reliable Ticket Trends history**: Full historical trend processing now completes for tenants with very large ticket datasets instead of timing out.
@@ -861,7 +934,7 @@ Give every custom domain a sign-in experience that matches your brand. A new Sig
 
 [Documentation: Custom Sign-In Page](/user-guides/settings/tenant#custom-sign-in-page)
 
-### Improvements
+### Improvements and Fixes
 
 - **Integration company management**: Microsoft 365 and Google Workspace company setup now uses sortable, filterable tables with status summaries, CSV export, and clearer connection actions.
 - **Faster navigation**: Smarter tab and sidebar prefetching avoids loading pages you never open, keeps recent pages warm, and reduces unnecessary data refreshes.
@@ -954,7 +1027,7 @@ Adobe joins Microsoft 365 in a unified license inventory. Connect your Adobe VIP
 - **License Inventory Summary block**: Bring the combined license picture into dashboards and client reports.
 - **Fast company mapping**: Adobe customers map to your companies with quick match and bulk actions.
 
-### Improvements
+### Improvements and Fixes
 
 - **Microsoft 365 company connections**: Connect client Microsoft 365 tenants right from the integration company mapping page: sign in with Microsoft, copy a consent link to send to the client, or mark a company as not on Microsoft 365. Team members with the company mapping permission can handle connections without full integration management access.
 - **Backup dashboard speed**: Acronis Microsoft 365 backup views now load in a fraction of the time on large backup histories, and summary counts always reflect the full dataset. Resources with no backup activity in the last 90 days age out of the views automatically.
@@ -985,7 +1058,7 @@ The product and service catalog from ConnectWise, Autotask, and Halo PSA is now 
 - **On or off, your call**: Turn the catalog sync off for integrations where you do not use it, and leave it on where you quote from it.
 - **Feeds quoting and budgets**: Synced catalog items are available to quotes and budget planning.
 
-### Improvements
+### Improvements and Fixes
 
 - **Company matching**: Quick Match on the integration company mapping page now returns results in under a second on large PSA datasets, including tenants with thousands of unmatched companies.
 - **Ticket sync**: Onboarding a new client no longer delays live ticket updates for your other clients. Ticket processing is now shared fairly across companies, so a large first-time import and everyday updates run alongside each other.
@@ -1071,7 +1144,7 @@ You asked, and we listened. Premium Training no longer has to be all-or-nothing 
 
 [Documentation: Enabling Training](/user-guides/training/enabling-training)
 
-### Improvements
+### Improvements and Fixes
 
 - **Meraki device import**: A new Devices page for the Meraki integration gives you the same staged-import workflow as other device integrations: per-type mappings with auto-sync, AI-assisted type matching, and selective import or ignore of staged devices.
 - **Role presets**: Creating a role now starts from a preset (Administrator, Manager, Technician, Read Only, and company-user presets) instead of a blank permission list.
@@ -1102,7 +1175,7 @@ Client users signed in to MSPortal can now jump into their onboarding portals di
 
 [Documentation: Client Onboarding Portal](/user-guides/client-onboarding/client-portal)
 
-### Improvements
+### Improvements and Fixes
 
 - **Dashboard**: Client feedback cards (30-day CSAT, 90-day NPS, and recent comments) load faster, and loading placeholders now match the final card layout for a smoother first paint.
 - **Reporting**: Dashboard blocks with an empty custom title now show the block's standard name instead of a blank header.
@@ -1158,7 +1231,7 @@ Choose which sign-in options appear on each of your custom domains: Microsoft, G
 
 [Documentation: Tenant Settings](/user-guides/settings/tenant)
 
-### Improvements
+### Improvements and Fixes
 
 - **Onboarding portals**: Dates on an onboarding portal can now be changed after the portal is created.
 - **Currency-aware settings**: Prices and grade thresholds in settings, including the Client Health target seat price, now display in your organization's currency instead of assuming dollars.
@@ -1229,7 +1302,7 @@ The sidebar navigation editor now goes beyond reordering the built-in pages.
 
 [Documentation: Customizing the Sidebar](/user-guides/getting-started/customizing-the-sidebar)
 
-### Improvements
+### Improvements and Fixes
 
 - **Meeting agenda ticket search**: Linking tickets to a meeting is much faster to search on large tenants.
 - **Public API**: The calendar meeting endpoints support the same meeting features as the portal, including drafts and recurrence.
@@ -1328,7 +1401,7 @@ Building a budget is faster this release. Start from a spreadsheet you already h
 
 [Documentation: Budgets](/user-guides/budgets/index)
 
-### Improvements
+### Improvements and Fixes
 
 - **Edit client company users**: Update a client portal user's email address, role, and company assignment directly from the company's Users list.
 - **Ticket Trends: choose your analysis window**: Ticket Trends now detects the weeks that have data and lets you pick the window to analyze, instead of always using a fixed 12 weeks.
@@ -1422,7 +1495,7 @@ Set the language once and let it flow to the right people. MSPortal now resolves
 - **Users can inherit**: Users can now choose "Use company/tenant default" instead of a fixed language.
 - **Emails included**: Outgoing MSPortal emails now use each recipient's resolved language, not just the portal UI.
 
-### Improvements
+### Improvements and Fixes
 
 - **Tickets**: Autotask closed statuses are now detected correctly in any language, and a new Closed Statuses setting in the Autotask integration lets you define exactly which statuses count as closed. Fixes open-ticket counts for PSAs running in languages other than English.
 - **Client portal**: Contacts deactivated in ConnectWise, Halo, or Autotask now automatically lose portal access, and disabled users are hidden from company user lists by default.
@@ -1486,7 +1559,7 @@ A new reporting block surfaces device patch status from your RMM, so you can sho
 
 When you import a new company from your PSA, MSPortal now backfills that company's full ticket and record history in the background. A newly added client arrives with their existing data already in place, instead of only tracking activity from the import date forward.
 
-### Improvements
+### Improvements and Fixes
 
 - **Budgets**: Carry recurring services forward into a new fiscal year. The budget editor's new "Import from previous year" action pulls a client's recurring line items from their most recent prior-year budget, flagging any that already exist so you don't double up.
 - **Automation**: The "Add to Planner" automation action can now assign a Planner Type to the items it creates, chosen from your configured planner types.
@@ -1535,7 +1608,7 @@ Make the AI home page your own. Tenants can now tailor the welcome experience so
 - **Personalized welcome**: Customize the greeting and suggested prompts so the AI home page speaks to your team's day-to-day.
 - **Custom background**: Set a background to brand the experience.
 
-### Improvements
+### Improvements and Fixes
 
 - **Granular permissions for company users**: Managing company users, client permission groups, and team roles now has its own dedicated permission, separate from internal user and company settings. You can grant client-user administration without opening up broader settings access, and existing roles keep the access they already had.
 - **Notifications**: The Pending Approvals tab now shows your full approval history by default, including approved, rejected, and expired items, instead of only open ones.
@@ -1573,7 +1646,7 @@ EU data residency is now available for MSPortal. Keep your tenant's data stored 
 
 Interested in EU data residency? Email [info@msportal.ai](mailto:info@msportal.ai) and we'll get you set up.
 
-### Improvements
+### Improvements and Fixes
 
 - **External Dashboards**: External dashboards are now assigned to specific companies through company-specific URLs. A company only sees an external dashboard when it has a URL assigned to it, and always opens its own URL, so dashboards no longer appear for every company by default.
 
@@ -1629,7 +1702,7 @@ Bring your Autotask configuration items into MSPortal as devices.
 
 [Documentation: Autotask Integration](/user-guides/integrations/enable-autotask-integration)
 
-### Improvements
+### Improvements and Fixes
 
 - **Dark mode reads cleanly across the app**: A broad readability pass fixed text boxes, form inputs, dropdowns, and reporting blocks that were hard to read in dark mode across onboarding, the Planner, reporting, surveys, compliance, and goals. The client onboarding portal now has its own dark-mode toggle too.
 - **Integrations auto-pause on repeated auth failures**: Autotask and Datto integrations that keep failing on a permanent authentication error now pause themselves instead of retrying dead credentials, and they notify your admins. A new Reactivate Integration button turns them back on once the credentials are fixed.
@@ -1705,7 +1778,7 @@ The narrative report builder gained three ways to make client reports richer and
 
 [Documentation: Reporting](/user-guides/reporting)
 
-### Improvements
+### Improvements and Fixes
 
 - **Impersonation shows the right tickets**: While impersonating a user, ticket lists on the home page, the AI assistant, and the ticket pages now match exactly what that user can see, instead of occasionally showing too few tickets or every ticket in the tenant.
 - **Company Defaults for settings-only roles**: Roles scoped to settings can now open and save a company's defaults.
@@ -1957,7 +2030,7 @@ A new **Sherweb** integration is available in Beta. Connect your Sherweb account
 
 [Documentation: Integrations](/user-guides/integrations)
 
-### Improvements
+### Improvements and Fixes
 
 - **Rows per page**: The Devices, Tickets, Users, Companies, Compliance, and Invoices lists now have a "rows per page" selector, so you can show 25, 50, 100, or 250 rows at a time instead of paging through 25 at a time.
 - **Actions are always visible**: On every list page, the actions ("⋯") button now stays pinned to the right edge and can no longer be hidden by the column toggle.
@@ -1992,7 +2065,7 @@ The Devices list has a new **OS** column showing each device's operating system,
 
 - **Duplicate devices across RMMs**: When the same physical machine was imported from two different RMMs, it appeared as two separate devices because each tool names the machine differently (for example, the same Mac synced from both Addigy and NinjaOne). Devices are now matched by hardware serial number, and existing duplicates were merged automatically so device counts are accurate again. Cloned-image and virtual-desktop fleets that legitimately share a placeholder serial are deliberately left untouched. [Documentation: Importing Devices](/user-guides/integrations/import-devices)
 
-### Improvements
+### Improvements and Fixes
 
 - **Company dashboard**: The **Users** count on the company overview now matches the users list it links to. It previously counted only active users, so it under-reported when a company had imported, pending, or disabled users.
 - **Documentation settings**: The **Inherited** tag shown on folders and articles is now clearly legible. It was previously dim text on a dark background that was hard to read.
@@ -2006,7 +2079,7 @@ A role's Ticket Display Group can now be limited to specific PSA service boards 
 
 [Documentation: Ticket Settings](/user-guides/settings/tickets)
 
-### Improvements
+### Improvements and Fixes
 
 - **Ticket visibility**: Client users with "own tickets" visibility now reliably see their assigned tickets. Previously some users could see an empty ticket list until their PSA next synced.
 - **Halo tickets**: Ticket discussions no longer show blank entries for automated Halo workflow actions like Claim, Assignment, and Hold.
@@ -2154,7 +2227,7 @@ The "Add to budget" button on the planner sidebar inside the budget editor now k
 
 The Run Compliance Checks dialog now shows an info banner at the top reminding you that "Only checks with status Approved will be generated. Pending or rejected checks are skipped, even when they belong to a selected template or group." If you pick a template whose checks are all still in pending review, you'll know up front why the run produces zero assignments rather than wondering after the fact.
 
-### Improvements
+### Improvements and Fixes
 
 - **New budgets default to the company's currency**: Creating a new budget for a Canadian client opens pre-set to CAD, a UK client to GBP, a German client to EUR, resolved from the selected company's country (with the tenant's country as a fallback) instead of always starting at USD
 - **AI narrative reports use the company's currency**: AI-generated narrative reports render every monetary value in the report subject's currency, so a report on a Canadian client shows CAD, a UK client GBP, and a German client EUR; applies to manual generation, scheduled reports, and retries
@@ -2298,7 +2371,7 @@ A new **Import Opportunities** dialog on the Planner page lets you pull existing
 - **One-way link (PSA -> planner)** with a unique constraint per opportunity so overlapping syncs cannot create duplicates. Sync runs cover Halo, ConnectWise, and Autotask.
 - **Quarterly Roadmap reporting block** groups planner items by fiscal year and quarter with configurable columns, density, and pagination — makes the imported opportunities client-presentable in one drop.
 
-### Improvements
+### Improvements and Fixes
 
 - **Halo opportunity errors surfaced in the UI**: When Halo rejects an opportunity (missing Category 4, required fields, validation errors), the planner now shows the real error message from Halo instead of failing silently. The Halo setup wizard also gained native pickers for all four opportunity category lists.
 - **Create Opportunity available everywhere it should be**: Companies that came into MSPortal through a PSA sync (rather than a direct integration setup) now show the Create Opportunity action correctly, the option is only offered for PSA providers (so RMM-only links no longer see it), and the opportunity search returns the right matches in a few edge cases where it previously came back empty.
@@ -2368,7 +2441,7 @@ The **Revenue Categories** settings page now shows three clear sections: contrac
 
 [Documentation: Financial Reporting](/user-guides/msp-tools/financial-reporting)
 
-### Improvements
+### Improvements and Fixes
 
 - **Unified date and time pickers**: Every date and time input across the app (calendars, filters, custom device fields, surveys, reports, onboarding, admin pages) now uses the same picker. It is branded to your tenant color, behaves identically across browsers, and has a built-in clear button so you can remove a selected date with one click.
 - **Refreshed meeting agenda cards**: Every agenda item card in the meeting builder and presentation view was rebuilt for a cleaner, client-ready look with consistent layouts, typography, and spacing across tickets, projects, invoices, licenses, budgets, planner items, and action items.
@@ -2391,7 +2464,7 @@ Every reporting block has been rebuilt on a shared responsive system, so blocks 
 - **Integration-aware block palette**: Blocks that depend on integrations like Cork, Liongard, and Microsoft 365 now only appear in the block picker when those integrations are actually connected. Previously they would show up for every tenant and fail to load.
 - **Empty-state clarity**: When a block is placed in a report but the required integration is not connected, it now displays a clear empty state with a prompt to connect the integration instead of rendering a broken chart.
 
-### Improvements
+### Improvements and Fixes
 
 - **Report Builder**: Chart tooltips, colors, and grid spacing now pull from shared tokens, so reports look identical whether you build them from scratch or from a template.
 - **Company scope**: Reporting blocks now always reflect the company selector at the top of the page instead of carrying over a stale company filter from when the block was first added to the report.
@@ -2876,7 +2949,7 @@ Pull configuration audit data from Liongard into MSPortal with automatic complia
 
 Hudu procedures and IT Glue checklists now automatically sync into MSPortal's onboarding checklist template library. Use your existing documentation platform checklists as starting points for client onboarding portals without recreating them manually.
 
-### Improvements
+### Improvements and Fixes
 
 - **Customer Success Dashboard**: Fixed sorting across all dimension score columns including service quality, engagement, financial, and operational scores
 - **Financial Reporting**: Grade column now sorts by underlying numeric score instead of alphabetical letter order
@@ -3041,7 +3114,7 @@ A new table view that breaks down Microsoft 365 license assignments by office lo
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Report Block Responsiveness**: All 40+ reporting blocks now scale properly across all grid sizes (1x1 through 4x8) with no scrollbars or overflow issues
 - **Narrative Report Enhancements**: Project completion data source, visual widget picker for embedding charts, and improved AI generation reliability
@@ -3088,7 +3161,7 @@ ConnectWise ticket descriptions now display reliably in the ticket detail modal.
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Time Entry Dates**: Fixed a timezone issue where time entry dates could shift by one day depending on your browser timezone
 - **Activity Feed**: Description note now pins to the bottom of the activity timeline for clearer reading order
@@ -3144,7 +3217,7 @@ A flexible grouping system for organizing users across training and surveys, wit
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **M365 License Blocks**: Free and trial licenses are now automatically filtered from license reporting blocks for cleaner data
 - **Faster Report Generation**: Reports with multiple data sources now generate significantly faster
@@ -3215,7 +3288,7 @@ A new dedicated area in Settings makes it easier to see which companies have Mic
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Faster Performance**: Speed optimizations across the app including faster page loads and panel rendering
 - **More Reliable Syncs**: Integration sync tasks are now more secure and resilient
@@ -3267,7 +3340,7 @@ Add notes to tickets with optional time tracking directly from the ticket detail
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Devices Dashboard**: New summary cards showing device counts by warranty status and device type
 - **Bulk User Import**: Improved company user import with better error handling
@@ -3339,7 +3412,7 @@ Present invoices, licenses, and projects directly in meetings with new agenda vi
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Autotask Sync Resilience**: Page-level progress tracking with automatic resume on retry
 - **Ticket Notes**: Fixed "Show more" button not responding on first click
@@ -3393,7 +3466,7 @@ Company locations now sync with ConnectWise Manage sites for better site-to-loca
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Company Locations UI**: Redesigned locations table with better responsive layout
 - **Integration Wizard**: Improved setup flow for ConnectWise configurations sync
@@ -3453,7 +3526,7 @@ Fine-grained control over which companies can access each template.
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Templates in Settings**: Template management has moved from the Tickets menu to **Settings → Tickets → Templates** for better organization
 - **Expandable Template Rows**: Templates with branches show an expandable row in the list to view all branches at a glance
@@ -3492,7 +3565,7 @@ Create professional surveys faster with our new AI-assisted survey wizard. Descr
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Redesigned Settings Tabs**: Consistent header patterns across all settings pages with cleaner navigation
 - **Compliance Run Filtering**: Filter compliance views by specific run dates for historical analysis
@@ -3552,7 +3625,7 @@ Your profile page has been completely redesigned with a modern, card-based layou
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Loading Skeletons**: Improved loading states across dashboards, settings, and training pages for a smoother experience
 - **Settings Navigation**: Enhanced settings menu organization with clearer groupings
@@ -3687,7 +3760,7 @@ Never miss an update! A new "What's New" section on your dashboard highlights th
 
 ---
 
-### Improvements
+### Improvements and Fixes
 
 - **Dark Mode**: Resolved various dark mode styling inconsistencies
 - **Feedback System**: You can now include screenshots when submitting feedback
@@ -3757,7 +3830,7 @@ The dashboard editor has been completely rebuilt with a more intuitive drag-and-
 - **Auto-Layout**: New widgets automatically find the best available position
 - **In-Line Configuration**: Edit widget titles and settings directly on the canvas
 
-### Improvements
+### Improvements and Fixes
 
 - **External Items Unified**: External URLs and iframes are now managed alongside dashboards in Settings → Dashboards with a tabbed interface
 - **Dashboard Access Controls**: Tenant users can access all shared dashboards; unauthorized users see a friendly "Access Restricted" message instead of a 404 error
@@ -3774,7 +3847,7 @@ The dashboard editor has been completely rebuilt with a more intuitive drag-and-
 - **AI Home Page Assistant**: Get instant answers about your data with the new AI-powered chat assistant on your home page. Ask questions about clients, tickets, compliance status, and more—the assistant provides intelligent responses based on your MSPortal.ai data.
 - **Settings Customization Section**: New customization options in settings allow you to personalize your MSPortal.ai experience with your preferred configurations.
 
-### Improvements
+### Improvements and Fixes
 
 - **AI Template Designer**: The template designer now features a streamlined chat-based interface, making it easier and more intuitive to create and refine ticket templates with AI assistance.
 - **Training Certificates**: Certificates are now easier to access after completing training—a congratulations dialog appears immediately upon completion with quick links to view, download, or share your certificate.
@@ -3801,7 +3874,7 @@ The dashboard editor has been completely rebuilt with a more intuitive drag-and-
   - **Compliance Progress**: Track compliance improvement over time
   - **Compliance Score Overview**: Show overall compliance scores with trend indicators
 
-### Improvements
+### Improvements and Fixes
 
 - **Planner Density Controls**: Adjust the visual density of your planner view between comfortable, compact, and dense layouts to see more or fewer items at once.
 - **M365 Users & Groups Sync**: Enhanced Microsoft 365 integration now syncs users and groups, making it easier to manage M365 accounts alongside your company users.
@@ -3824,7 +3897,7 @@ The dashboard editor has been completely rebuilt with a more intuitive drag-and-
 - Improved reporting blocks with better visual design and faster rendering.
 - Reduced loading delays throughout the application, with smoother transitions between pages and faster data retrieval.
 
-### Improvements
+### Improvements and Fixes
 
 - **Product Import**: Enhanced product import with entity type filtering for services, recurring, and one-time products across all PSA integrations.
 - **Device Management**: Better sorting controls and improved company selector UI.

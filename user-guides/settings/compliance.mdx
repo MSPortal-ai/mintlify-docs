@@ -82,9 +82,10 @@ Click any check to open it in the detail pane. The form covers everything about 
 | **Assessment** | Criticality (1-5), priority, frequency (Daily through Annually) |
 | **Classification** | Status list, compliance type |
 | **Note templates by status** | Per-answer template links (see below) |
+| **Applies to** | Conditions that decide which companies and devices get the check (see below) |
 | **Group assignments** | Which groups this check belongs to |
 
-Click **Save** to persist the check fields. Changes to note-template links and group membership save separately and immediately; cancelling the main editor does not undo those changes. Save the status-list choice before editing its note-template links. Custom-field values are a separate save operation within the overall save flow: if that section fails, verify the already-saved check before retrying. The **Improve with AI** button in the header uses AI to suggest a better description, how-to-check, remediation, and references based on the title.
+Click **Save** to persist the check fields and its **Applies to** conditions. Changes to note-template links and group membership save separately and immediately; cancelling the main editor does not undo those changes. Save the status-list choice before editing its note-template links. Custom-field values are a separate save operation within the overall save flow: if that section fails, verify the already-saved check before retrying. The **Improve with AI** button in the header uses AI to suggest a better description, how-to-check, remediation, and references based on the title.
 
 ### Linking note templates to statuses
 
@@ -106,6 +107,40 @@ Each check uses a **status list** that defines its answer choices (for example, 
 Only templates categorized as **Compliance Check Note** appear in the picker. Create those under **Settings > Templated Notes** first. Auto-apply runs once per (status, template) pair in a single dialog session, so toggling between statuses does not duplicate the template text.
 </Note>
 
+### Choosing which companies and devices get a check
+
+By default a check is assigned to every company, location or device a run covers. Add conditions under **Applies to** to narrow that. For example, a FileVault check can go only to Macs, and a HIPAA policy check only to healthcare clients.
+
+<Note>
+Branch preview for the September 18 release. These controls are not yet published.
+</Note>
+
+<Steps>
+  <Step title="Add a condition">
+    Open the check, scroll to **Applies to** and select **Add condition**. Choose what to test, a comparison such as **is any of**, and the values.
+  </Step>
+  <Step title="Combine conditions">
+    With two or more conditions, choose whether the check applies when **all conditions match** or when **any condition matches**.
+  </Step>
+  <Step title="Save">
+    Select **Save** in the check header. New runs, and checks added to runs, use the conditions. Existing assignments stay as they are.
+  </Step>
+</Steps>
+
+| Condition | Tests |
+|-----------|-------|
+| **Device platform** | The company's platform: **Only PCs**, **Only Macs** or **PCs and Macs** |
+| **Industry**, **Company type**, **Standards tier** | The company's industry, PSA company type, or the Standards tier mapped to its company type |
+| **Company fields** | Any company custom field. Text fields support **contains**, number and date fields support greater, less, before and after comparisons |
+| **Operating system** | The device's OS family, such as **Windows**, **Windows Server**, **macOS** or **Linux** |
+| **Device type**, **Manufacturer**, **RMM** | The device's type, manufacturer and source RMM |
+
+Device conditions apply only to checks with the **Device** compliance type. Company, location and control checks use their company conditions and skip device conditions.
+
+<Tip>
+A company or device with no value for a condition still gets the check, so missing data never hides a check. To target records with no value, use **is empty** or **is not empty**. For example, add **Operating system is not empty** to skip devices whose OS is unknown.
+</Tip>
+
 ### Creating checks
 
 Click the **+** icon on the checks tab header (or **New check here** on a folder's menu) to open the new-check form. New checks default to the currently selected folder, or Uncategorized if none is selected. The **Bulk generate** option is also available from the page header if you want AI to draft multiple checks at once.
@@ -117,6 +152,12 @@ Open the three-dot menu on any check row in the sidebar and choose **Delete**. D
 ## Groups Tab
 
 Groups bundle related checks together so you can assign a whole category (for example, "Microsoft 365 security baseline") to a run with one action. A check can belong to any number of groups.
+
+{/* Post-release follow-up: verify the CIPP group import in production and remove the branch-preview notice. */}
+
+<Note>
+Branch preview for the September 18 release. The CIPP integration can create a **CIPP Microsoft 365 Standards** group for you. See [Import CIPP standards into Compliance](/user-guides/integrations/enable-cipp-integration#import-cipp-standards-into-compliance).
+</Note>
 
 ### Layout
 
