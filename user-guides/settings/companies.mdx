@@ -60,12 +60,74 @@ Select company checkboxes, then open **Actions (count)**. Review whether selecti
 | Set Parent Company | Correct parent/child relationship; a company cannot parent itself or one of its ancestors |
 | Manage Types | Add, Remove or Replace mode and whether types are manual or PSA-synced |
 | Set Language / Set Currency | The override that will apply to each selected company |
+| Edit Custom Field (branch preview) | The field and value; Apply replaces each company's existing value. See [Set a custom field on many companies](#set-a-custom-field-on-many-companies) |
 | Set Meeting Schedules | The intended compliance/business-review meeting frequencies |
 | Enable / Disable Premium Training | Training permission, company defaults and possible billing/access impact |
 | Enable / Disable AI Home | Company Home setting; manage access is required |
 | Delete selected | Every target and the permanent-deletion warning |
 
 Dialog-based changes use the dialog's apply/save control. Premium Training and AI Home actions call their update immediately after selection; do not click them expecting an unsaved preview. Training availability, user overrides and enrollment are separate: see [Enable Training](/user-guides/training/enabling-training).
+
+## Set a custom field on many companies
+
+<Note>
+Branch preview for the 2026-09-25 release. This action is not yet generally available. Screenshots show MSPortal Demo running the release branch.
+</Note>
+
+Use **Edit Custom Field** to give one company custom field the same value on many companies at once. For example, set the same contract renewal date for a group of clients.
+
+### Before you start
+
+- You need write access to Companies settings, and your MSPortal billing must be active.
+- Create the field first. Open **Settings > Customization > Fields**, choose **Companies**, and save the field. See [Custom Fields](/user-guides/settings/custom-fields).
+- A **Dropdown**, **Multi-Select** or **Radio Buttons** field appears only after it has at least one saved option.
+
+### Set the value
+
+<Steps>
+  <Step title="Select the companies">
+    In **Settings > Companies**, tick the checkbox beside each company. To include companies on other pages, select all matching companies across pages.
+  </Step>
+  <Step title="Open Edit Custom Field">
+    Select **Actions (count)**, then **Edit Custom Field**.
+  </Step>
+  <Step title="Check the selected companies">
+    The **Selected Companies** list shows the first 30 names, then a **+N more** badge. Close the dialog and adjust your selection if a company is wrong.
+  </Step>
+  <Step title="Choose the field and value">
+    Choose a field under **Custom field**. Then enter the **Value**. The input matches the field type, such as a date picker for a date field or a list for a dropdown.
+  </Step>
+  <Step title="Apply the value">
+    Select **Apply**. A message confirms how many companies were updated, and the selection clears.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview: Edit Custom Field in the Actions menu for one selected company.">
+  <img src="/images/product/companies-bulk-custom-field-menu-branch-preview.png" alt="Branch preview: Actions menu on Settings > Companies with Edit Custom Field listed below Set Currency, and one Example company selected" width="2304" height="1160" />
+</Frame>
+
+<Frame caption="Branch preview: The Edit Custom Field dialog with a required date field and a value chosen. Clear Value is unavailable because the field is required.">
+  <img src="/images/product/companies-bulk-custom-field-dialog-branch-preview.png" alt="Branch preview: Edit Custom Field dialog with Contract Renewal Date selected, Sep 29, 2026 as the value, a disabled Clear Value button, and Cancel and Apply buttons" width="1000" height="868" />
+</Frame>
+
+### Replace, clear and required fields
+
+- **Apply replaces the existing value** on every selected company. It does not add to it. For a **Multi-Select** field, the companies end up with exactly the options you chose.
+- **Clear Value removes the field's value** from every selected company. You do not need to enter a value first.
+- **Required fields cannot be cleared.** The dialog disables **Clear Value** and says the field cannot be cleared. Apply still works.
+- Apply updates all selected companies together. If it fails, no company changes.
+- Clear Value works through the companies in batches. If it stops partway, the message says how many companies were cleared. Run Clear Value again to clear the rest.
+- A Company user only sees fields that are visible to company users, and can only change their own companies.
+
+To check the result, open **Columns** and turn on the field's column. Custom field columns are hidden by default.
+
+| Problem | What to check |
+| --- | --- |
+| The dialog says no company custom fields are defined | Create a field on the **Companies** tab under **Settings > Customization > Fields**. |
+| A field is missing from the list | Check that it is a Companies field. A choice field needs at least one saved option. |
+| **Apply** is unavailable | Enter a value first. |
+| **Clear Value** is unavailable | The field is required, or no field is chosen yet. |
+| An error says one or more companies are not accessible | Your selection includes a company you cannot edit. Clear the selection and choose again. |
 
 ## Company Types
 
