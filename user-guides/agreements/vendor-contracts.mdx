@@ -1,0 +1,83 @@
+---
+title: 'Show vendor contracts'
+description: 'Map a PSA configuration type as a vendor contract so it appears on the Contracts page beside your own agreements.'
+icon: 'store'
+---
+
+Many MSPs record a client's contracts with other vendors as PSA configurations: software licenses, SSL certificates, domain registrations, internet circuits, or copier leases. Mark those configuration types as **Vendor contract**, and the portal lists them on the **Agreements** or **Contracts** page next to the contracts your clients hold with you. Your clients then see every contract in one place.
+
+**Audience:** MSP staff who manage integrations.
+
+<Note>Branch preview. This guide describes the September 25 release before it reaches production.</Note>
+
+## Before you start
+
+- Connect Halo PSA, Autotask, or ConnectWise, and let its configuration sync run. The types you can mark are the ones that sync has found.
+- Map each PSA client to a portal company. A configuration appears only when its client is mapped.
+- You need write access to integration settings.
+
+Nothing appears on the Contracts page until you mark a type. Configuration types you leave alone keep working as they do today.
+
+## Mark a configuration type as a vendor contract
+
+<Steps>
+  <Step title="Open the type mappings">
+    Go to **Settings > Integrations** and open the PSA connection. Open **Assets** for Halo PSA, or **Configurations** for Autotask and ConnectWise. The **Device Type Mappings** card lists every configuration type the sync found.
+  </Step>
+  <Step title="Choose Vendor contract">
+    Find the type, for example "Software Licensing" or "Renewal - SSL Certificate". In **Maps To**, choose **Vendor contract**. The change saves immediately, and the count badge now reads in contracts instead of devices.
+  </Step>
+  <Step title="Review the Contracts page">
+    Open **Agreements** or **Contracts**. Every active configuration of that type now appears as a row, with **Vendor** in the new **Source** column.
+  </Step>
+</Steps>
+
+<img src="/images/product/vendor-contracts-maps-to.png"
+  alt="Halo PSA Device Type Mappings card with the Maps To menu open on Business Application, showing the Vendor contract option under None"
+  width="1440" height="1000" />
+
+To stop showing a type, set **Maps To** back to **None**, or choose a device type instead. The rows leave the Contracts page straight away.
+
+<Warning>A vendor-contract type is never imported as a device: auto-sync is unavailable for it, and imports skip it. Configurations that were already imported as devices before you marked the type stay on the Devices page. Remove them there if you no longer want them.</Warning>
+
+## What the Contracts page shows
+
+Each vendor contract row takes its details from the PSA configuration:
+
+| Column | Source |
+| --- | --- |
+| **Name** | The configuration name |
+| **Type** | The PSA configuration type |
+| **Vendor** | ConnectWise vendor, Autotask vendor company, or the manufacturer when no vendor is set |
+| **Start Date** | Purchase or install date (Halo PSA: warranty start) |
+| **End Date** | Warranty expiration. Autotask falls back to domain or SSL expiry. |
+| **Status** | **Active**, **Expiring soon** within 60 days of the end date, or **Expired** |
+
+Use the **Source** filter to show only **MSP** contracts or only **Vendor** contracts, and the **Vendor** filter to narrow to one vendor. Both columns appear once at least one vendor contract exists.
+
+Select a row to open its panel. **Summary** shows the vendor, status, dates, type, serial or reference, and site. **Documents** works like it does for your own agreements, so you can attach the vendor's signed PDF. See [Upload and manage agreement PDFs](/user-guides/agreements/manage-documents).
+
+## What your clients see
+
+Company users see their own company's vendor contracts with the vendor, type, status, dates, and documents. The serial or reference, PSA notes, and PSA custom fields are shown to MSP staff only, because they often hold license keys and portal credentials.
+
+Vendor contracts are read-only in the portal. Change a date or vendor in the PSA configuration, and the portal shows it after the next configuration sync.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| **Vendor contract** is not in **Maps To** | The option is available for Halo PSA, Autotask, and ConnectWise configuration types only. |
+| A configuration is missing from the Contracts page | Check that it is active in the PSA, that its client is mapped to a portal company, and that the company selector includes that company. |
+| **Status** shows a dash | The configuration has no end date in the PSA. Placeholder dates such as 1/1/1900 count as no date. |
+| **Vendor** is empty | Set the vendor on the PSA configuration. Halo PSA assets show the manufacturer. |
+| The same item appears on Devices and Contracts | It was imported as a device before the type was marked. Remove the device if you only want the contract. |
+
+<CardGroup cols={2}>
+  <Card title="Find and review an agreement" icon="file-contract" href="/user-guides/agreements/view-agreements">
+    How clients browse the Contracts page.
+  </Card>
+  <Card title="Upload and manage agreement PDFs" icon="file-arrow-up" href="/user-guides/agreements/manage-documents">
+    Attach signed documents to any contract.
+  </Card>
+</CardGroup>
