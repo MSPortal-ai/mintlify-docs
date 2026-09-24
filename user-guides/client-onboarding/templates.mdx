@@ -251,7 +251,7 @@ See [Previewing as a Client](/user-guides/client-onboarding/managing-portals#pre
 
 ## Import & Export
 
-Share templates across tenants, back them up, or build them in a spreadsheet using the **Import / Export** button in the template builder. The dialog has two formats:
+Share templates across tenants, back them up, or build them in a spreadsheet using the **Import / Export** button in the template builder. The dialog has three formats:
 
 <Tabs>
   <Tab title="JSON">
@@ -265,6 +265,23 @@ Share templates across tenants, back them up, or build them in a spreadsheet usi
 
     - **Export CSV** downloads the tasks as a spreadsheet.
     - **Select CSV File** then **Import as New Template** **creates a brand-new template** (named after the original with "(imported)" appended) rather than overwriting the current one.
+  </Tab>
+  <Tab title="Excel">
+    <Note>Branch preview. Excel export is not yet generally available. The screenshots show the unreleased branch UI.</Note>
+
+    Excel gives you a formatted, read-only workbook for reviewing a template or sharing it with people who do not use MSPortal. It cannot be imported. Use JSON to move a template between tenants.
+
+    - **Export Excel** downloads an `.xlsx` workbook named after the template.
+    - The **Overview** sheet lists the template settings, portal settings, key dates, automations, and a linked list of phases.
+    - Each phase has its own sheet. The **Items** table lists every task and document in builder order with its type, owner, assignee role, required and client-visible flags, milestone, priority, estimated hours, category, due rule, dependencies, required documents, and type-specific details.
+    - Below the items, each phase sheet prints the full content of every linked record: checklist items, form fields with their options and defaults, survey questions with answer types and options, and email subject and body. A record used by several items prints once and names each item under **Used by**.
+    - Templates with client pages add a **Client Pages** sheet with each page's section, summary, visibility, and content as plain text.
+
+    <img src="/images/product/onboarding-template-excel-export-dialog-branch-preview.png" alt="Branch preview: Excel tab of the Import / Export Template dialog with the Export Excel button" width="720" height="540" />
+
+    <img src="/images/product/onboarding-template-excel-phase-sheet-branch-preview.png" alt="Branch preview: phase sheet of an exported onboarding template workbook showing the Items table and a linked survey's questions" width="2100" height="810" />
+
+    The workbook uses your tenant's brand color and your current language. It includes the linked records your role can read.
   </Tab>
 </Tabs>
 
@@ -335,6 +352,9 @@ The template builder provides a **Change History** panel for recorded template c
   </Accordion>
   <Accordion title="Does Apply only preview the AI suggestion?">
     No. Review the proposal before Apply; applying persists accepted changes. A partial failure requires checking the actual saved template before a retry.
+  </Accordion>
+  <Accordion title="Can I import an Excel workbook?">
+    No. The Excel export is for review and sharing. Use JSON to update a template or CSV to create one from a task list.
   </Accordion>
   <Accordion title="Does importing JSON create a separate template?">
     The builder JSON import updates the current template. CSV Import as New Template creates a separate template. Check the selected format and destination before importing.
