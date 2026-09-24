@@ -1,0 +1,103 @@
+---
+title: 'Where Financial Reporting data comes from'
+description: 'See which PSA records feed revenue, how revenue categories are chosen, and how support hours, endpoints and grades are calculated.'
+icon: 'magnifying-glass-dollar'
+---
+
+**Audience:** MSP staff answering "where do these numbers come from?" for [Financial Reporting](/user-guides/msp-tools/financial-reporting).
+
+Financial Reporting combines three kinds of synced data:
+
+- Billing records from your PSA, which supply revenue.
+- Ticket time entries, which supply support hours.
+- Device and user counts, which supply endpoints.
+
+MSPortal assigns each revenue record to a category using the rules in **Settings > MSP Tools > Financial Reporting**. It then calculates monthly averages, ratios and a grade. MSPortal never writes these numbers back to the PSA.
+
+## Where revenue comes from
+
+| PSA | Records used | Amount |
+| --- | --- | --- |
+| ConnectWise | Agreement additions | The addition's extended price, counted in each month the addition is active |
+| ConnectWise | Invoices | The invoice's service total, dated on the invoice date |
+| Autotask | Billing items (posted invoice items), excluding non-billable items | The item's extended price, dated on the item date |
+| Halo | Invoice lines | The line's net amount |
+| Halo | Invoices without synced lines | The invoice total |
+| Halo | Contract assets | Monthly amount for each active month |
+| Halo | Billable time entries | Hours multiplied by the charge rate |
+| Halo | Contract bill amount | Used only when a contract has no billable items or invoices, spread over its billing cycle |
+
+A record must belong to a mapped company to count. Check [company mapping](/user-guides/settings/integration-company-mapping) when a company's revenue is missing.
+
+## How a revenue category is chosen
+
+Each record receives one category, **Monthly Recurring Revenue (MRR)**, **Other Recurring Revenue (ORR)** or **Non-recurring Revenue**. MSPortal checks the rules below in order, and the first rule that matches decides the category.
+
+1. **Project linkage.** Anything tied to a project, project charge or milestone is always Non-recurring. You cannot override this rule.
+2. **Per-Contract Overrides.** A category pinned to one specific agreement or contract.
+3. **Agreement Additions (Products)** for ConnectWise, or **Services (SKUs)** for Autotask and Halo. A category set for one product or service, whatever contract it is on. Revenue categories set on the **SKU Mapping** tab are saved as these same rules.
+4. **Line Item Types.** A category for a type of line:
+   - ConnectWise: product type and product class.
+   - Autotask: billing item type and sub-type.
+   - Halo: item category, time entry, contract, or recurring and one-off invoice lines.
+5. **Contract Types.** A broad default for every line on a contract of that type.
+6. **Charge Types** (Halo only). Halo's Fixed and Pre-Pay charge types, plus revenue that arrived on a recurring invoice.
+7. **Fallback.** Anything that matches no rule counts as Non-recurring. The revenue is still included in the report.
+
+### Defaults provided by MSPortal
+
+Some rules are filled in when a PSA connects. The table shows these defaults, and you can change any of them.
+
+| PSA | Default rules |
+| --- | --- |
+| Autotask | Recurring Service and Retainer contracts are MRR. Block Hours and Block Money contracts are ORR. Time & Materials, Fixed Price, Per Ticket and Incident contracts are Non-recurring. Labor, ticket charge, project charge, expense and milestone lines are Non-recurring. |
+| Halo | Fixed charge type and recurring-invoice revenue are MRR. Pre-Pay is ORR. Time entries and one-off invoices are Non-recurring. |
+| ConnectWise | No defaults. Map agreement additions or agreement types, or the revenue counts as Non-recurring. |
+
+**Uncategorized** in the settings editor means no rule is set at that level. The record is not excluded, because a lower rule or the fallback still assigns a category.
+
+## How billing cadence affects monthly amounts
+
+Recurring revenue billed for several months at once is spread across those months. For example, an annual MRR charge adds one twelfth of its amount to each of the 12 months it covers.
+
+- Autotask uses the contract's billing period (monthly, quarterly, semiannual or annual).
+- Halo uses the billing period in the item's category name, such as "annual" or "quarterly". Contract bill amounts are already divided by the contract's billing cycle.
+- ConnectWise agreement additions are counted in each active month.
+- **Per-Contract Overrides** have a **Billing Cadence** choice for a contract that needs a different spread. Non-recurring revenue is never spread.
+
+## Other metrics
+
+| Metric | How it is calculated |
+| --- | --- |
+| **Support hours** | Hours worked on tickets in the boards or queues selected on the **Reporting Model** tab under **Support Hour Service Boards** (ConnectWise), **Support Hour Queues** (Autotask) or **Support Hour Teams** (Halo). These are hours worked, not billable hours. |
+| **Endpoints** | Managed devices, users or both, depending on the **Endpoint Model** and **User Count Source** on the **Reporting Model** tab. Only device types selected as managed count. |
+| **Effective Hourly Rate** | MRR divided by support hours. Shown only when there is at least one support hour per month. |
+| **All-in Seat Price** | MRR divided by endpoints, or the company's seat profile price when one is set up. |
+| **Reactive Hours per Endpoint** | Support hours divided by endpoints. |
+| **Grade** | The average of the scores for Effective Hourly Rate, All-in Seat Price and Reactive Hours per Endpoint. **Target Seat Price**, when set, changes the seat price thresholds. |
+
+Portfolio cards divide totals by totals, so they are not an average of each company's ratio.
+
+## When numbers update
+
+- **Period.** Revenue figures are monthly averages for the selected period. **Trailing 3 Months (Avg)** uses the last three complete months.
+- **Nightly refresh.** Monthly figures are rebuilt every night from the latest synced data.
+- **After saving settings.** Saving **Revenue Categories** or **Reporting Model** starts a background recalculation of the last 12 months. The report can show the previous figures for a few minutes while it runs. Revenue categories changed on the **SKU Mapping** tab reach the report through the scheduled refresh. The current and previous month update overnight, and older months update later in the weekly and monthly refresh.
+- **PSA changes.** A change in the PSA appears after its next sync and the following refresh.
+
+## Common questions
+
+<AccordionGroup>
+  <Accordion title="Where do the revenue categories come from?">
+    From the rules on **Settings > MSP Tools > Financial Reporting > Revenue Categories**. Each billing record takes the category from the first matching rule, from Per-Contract Overrides down to Contract Types. Autotask and Halo start with default rules based on contract and charge types. Anything unmatched counts as Non-recurring.
+  </Accordion>
+  <Accordion title="Why is revenue showing as Non-recurring when it should be recurring?">
+    Either no rule matched or the record is linked to a project. Open the revenue value to see which rule classified each record. Then map the product, line type or contract type on the **Revenue Categories** tab. Project-linked revenue always stays Non-recurring.
+  </Accordion>
+  <Accordion title="Where do endpoint counts and support hours come from?">
+    Endpoints come from synced devices and users, counted according to the **Reporting Model** tab. Support hours come from time entries on tickets in the support boards, queues or teams selected on the **Reporting Model** tab. None of it is sample data.
+  </Accordion>
+  <Accordion title="Why doesn't MRR match my PSA's agreement total?">
+    MRR includes only records categorized as MRR, averaged across the selected period, with multi-month charges spread over the months they cover. Check the period, the category rules and company mapping, then open the MRR value to compare individual records.
+  </Accordion>
+</AccordionGroup>

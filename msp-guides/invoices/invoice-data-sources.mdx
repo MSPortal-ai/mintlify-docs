@@ -1,0 +1,82 @@
+---
+title: 'Where invoice data comes from'
+description: 'See which PSA field fills each Invoices column, including Due Date, Terms, Status and Balance, and where to fix a wrong value.'
+icon: 'file-invoice-dollar'
+---
+
+**Audience:** MSP staff answering "where is this value pulling from?" for the [Invoices](/user-guides/invoices/view-invoices) page.
+
+MSPortal does not create or calculate invoices. Each invoice is copied from your PSA (ConnectWise, Autotask or Halo) during a scheduled sync, and each column shows the matching PSA field. MSPortal never writes invoice changes back to the PSA. To correct a value, change it in the PSA and wait for the next sync.
+
+## How often invoices sync
+
+| PSA | Schedule | Notes |
+| --- | --- | --- |
+| ConnectWise | Every 2 hours | Each run also rechecks unpaid invoices, because ConnectWise does not mark an invoice as changed when a payment is applied. |
+| Autotask | Every 2 hours | Only invoices for companies linked in company mapping are synced. |
+| Halo | Every 2 hours | Invoice sync is opt-in for Halo. Only invoices for mapped companies are synced. |
+| Pax8 | Daily | Opt-in. See [Pax8 invoices](#pax8-invoices). |
+
+ConnectWise invoices deleted in the PSA are removed by a daily check.
+
+## Where each column comes from
+
+Values are shown as the PSA supplied them. Dates keep only the calendar date. Columns marked "Not supplied" stay empty for that PSA.
+
+| Column | ConnectWise | Autotask | Halo |
+| --- | --- | --- | --- |
+| **Invoice #** | Invoice number | Invoice number | Invoice number, or the Halo invoice ID when no number is set |
+| **Date** | Invoice date | Invoice date | Invoice date |
+| **Due Date** | Invoice due date | Invoice due date | Invoice due date |
+| **Terms** | Billing terms on the invoice | Payment terms on the invoice | Usually empty |
+| **Status** | Billing status name | Derived: **Voided** if voided, **Paid** if a paid date exists, otherwise **Open** | Invoice status text, or **Paid**, **Outstanding** or **Draft** when Halo supplies only a status code |
+| **Total** | Invoice total | Invoice total | Invoice total |
+| **Subtotal** | Invoice subtotal | Total minus tax. Empty when tax is unknown. | Total minus tax, or the sum of the invoice lines |
+| **Sales Tax** | Sales tax | Total tax | Tax total |
+| **Balance** | Balance | Total until paid or voided, then 0 | Amount outstanding |
+| **Payments** | Payments applied | Total once paid, otherwise 0 | Total minus amount outstanding |
+| **Company** | Company name as it appears in ConnectWise | Company name in MSPortal | Company name in MSPortal |
+| **Type** | Invoice type | Always **Standard** | Invoice type, or **Standard** |
+| **Reference** | Reference | Not supplied | Reference, or the PO number |
+| **Apply To** | The agreement, ticket, project or phase the invoice applies to | Not supplied | Not supplied |
+| **Bill To** | Bill-to company | Not supplied | Not supplied |
+| **PO #** | Customer PO | Not supplied | PO number |
+| **Sent** | Sent flag | Not supplied | Sent flag |
+| **Synced** | Time MSPortal last received the invoice | Same | Same |
+
+### Due Date
+
+The due date is copied straight from the PSA invoice. MSPortal does not calculate it. Your PSA normally sets it from the invoice date plus the invoice's billing terms. For example, a "Net 10 days" invoice is due 10 days after its invoice date, and "Due Upon Receipt" is due on the invoice date. If a due date looks wrong, check the billing terms on the invoice or the company's default terms in the PSA.
+
+### Overdue highlighting
+
+A **Due Date** turns red with a warning icon when the date has passed and the **Balance** is above zero. Status does not affect the highlight. A **Balance** above zero is shown in amber.
+
+## Why an invoice is missing or hidden
+
+- **Zero or negative totals.** Invoices with a total of zero or less, such as credit memos, are not shown.
+- **Hidden statuses.** Open **Settings > Integrations**, select your PSA, and on the **Configure** step find **Invoice Display Settings > Hide Invoice Statuses**. Invoices with the selected statuses are still synced but not displayed. This option is available for ConnectWise and Autotask, not Halo.
+- **Company mapping.** Autotask and Halo invoices are synced only for companies linked in [company mapping](/user-guides/settings/integration-company-mapping). ConnectWise invoices for unmapped companies are synced but appear only when no company is selected.
+- **Company selector.** The list follows the selected company. Clear the selection to see all invoices.
+- **Timing.** A new or changed invoice appears after the next sync.
+
+## Pax8 invoices
+
+The [Pax8 tab](/user-guides/invoices/view-pax8-invoices) splits each Pax8 invoice by company. **Invoice Date**, **Due Date**, **Status** and **Reference** come from the Pax8 invoice. **Total**, **Sales Tax** and **Items** add up only that company's line items, and **Invoice Total** shows the whole Pax8 invoice. Only Pax8 companies mapped to an MSPortal company appear. Pax8 invoices sync daily after Pax8 invoice sync is turned on.
+
+## Common questions
+
+<AccordionGroup>
+  <Accordion title="Where is the due date pulling from?">
+    From the due date on the invoice in your PSA. MSPortal copies it unchanged. The PSA usually sets it from the invoice date plus the billing terms shown in the **Terms** column.
+  </Accordion>
+  <Accordion title="Why does the balance differ from the PSA?">
+    The balance updates on the next sync, and payments can take up to 2 hours to appear. Autotask does not supply a running balance, so an Autotask invoice shows its full total until the PSA marks it paid.
+  </Accordion>
+  <Accordion title="Can I edit an invoice in MSPortal?">
+    No. Invoices are read-only in MSPortal. Edit the invoice in the PSA and the change arrives with the next sync.
+  </Accordion>
+  <Accordion title="Why is the Terms column empty?">
+    The PSA did not supply terms for those invoices. Halo usually does not send a terms name with its invoices.
+  </Accordion>
+</AccordionGroup>
