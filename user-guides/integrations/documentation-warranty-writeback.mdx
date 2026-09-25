@@ -1,32 +1,14 @@
 ---
-title: 'Warranty Writeback to Hudu and IT Glue'
-description: 'Write warranty dates to IT Glue configurations, Hudu assets or IT Glue flexible assets, and verify the provider result.'
+title: 'Warranty Writeback to Hudu and IT Glue Flexible Assets'
+description: 'Map device types and warranty fields for Hudu assets or IT Glue flexible assets, and verify the provider result.'
 icon: 'shield-halved'
 ---
 
-Warranty writeback copies eligible MSPortal device warranty dates into **Hudu assets**, **IT Glue flexible assets** or **IT Glue configurations**. It is an optional **MSP integration management** task that changes the connected provider.
+Warranty writeback copies eligible MSPortal device warranty dates into **Hudu assets** or **IT Glue flexible assets**. It is an optional **MSP integration management** task that changes the connected provider.
 
-## IT Glue: write to configurations
-
-For IT Glue, configurations are the usual target. MSPortal writes each device's expiration date to IT Glue's built-in **Warranty Expires** field on the configuration linked to that device. IT Glue accepts it on configurations synced from Autotask or another PSA too. No field or type mapping is needed for warranty.
-
-<Frame caption="Branch preview: the IT Glue Warranty Writeback card, with configurations first and flexible assets collapsed.">
-  <img src="/images/product/itglue-warranty-writeback-card.png" alt="IT Glue Warranty Writeback card with the Write warranty dates to IT Glue configurations switch on, a Map configuration types button, and a collapsed Flexible assets (optional) section" width="832" height="452" />
-</Frame>
-
-<Steps>
-  <Step title="Open Warranty Writeback">
-    Open **Settings > Integrations > IT Glue > Configure > Sync & Sharing** and find **Warranty Writeback**.
-  </Step>
-  <Step title="Turn on configurations">
-    Turn on **Write warranty dates to IT Glue configurations**, then select **Save warranty settings**. The first save requests an immediate background run; after that it runs daily.
-  </Step>
-  <Step title="Check the device links">
-    Configuration sync links IT Glue configurations to MSPortal devices by serial number, MAC address or name within the mapped organization. Select **Map configuration types** to choose which IT Glue configuration types, such as workstations or firewalls, are imported as MSPortal device types. A linked configuration receives dates whatever its type.
-  </Step>
-</Steps>
-
-Only devices with a successful warranty check and a known expiration date are sent. The first run covers every linked device; later runs send only devices whose warranty was checked again. If your Autotask configuration items already sync into IT Glue, [Autotask warranty writeback](/user-guides/integrations/enable-autotask-integration#write-warranty-dates-back-to-autotask) alone may be enough.
+<Note>
+For IT Glue, configurations are the usual target and need no field mapping. See [Warranty writeback to IT Glue configurations](/user-guides/integrations/itglue-configuration-warranty-writeback). This guide covers Hudu assets and IT Glue flexible assets.
+</Note>
 
 ## Hudu assets and IT Glue flexible assets
 
@@ -95,7 +77,7 @@ Use **Not mapped** to remove a device type from the draft, then save. Saving map
     No. It uses a unique usable serial within the mapped company and selected asset type. Ambiguous, missing and placeholder serials are skipped.
   </Accordion>
   <Accordion title="Can IT Glue configurations receive warranty dates?">
-    Yes, and it is the usual choice. Turn on **Write warranty dates to IT Glue configurations** to set **Warranty Expires** on each device's linked configuration. Flexible asset mappings are an optional extra.
+    Yes, and it is the usual choice. See [Warranty writeback to IT Glue configurations](/user-guides/integrations/itglue-configuration-warranty-writeback). Flexible asset mappings are an optional extra.
   </Accordion>
   <Accordion title="Why did another warranty mapping row change when I selected a field?">
     Device types mapped to the same asset type must share serial and warranty fields. The draft applies those field changes to all rows using that type.

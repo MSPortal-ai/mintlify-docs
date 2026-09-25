@@ -75,32 +75,7 @@ Warranty writeback is an optional **vendor write**. Enable it only when you inte
 
 ## Write warranty dates back to Autotask
 
-Warranty writeback copies each device's warranty expiration date from MSPortal into the **Warranty Expiration Date** of its Autotask configuration item. It does not need **Enable configuration item sync**, so it also works when your configuration items are created by Datto RMM rather than imported into MSPortal.
-
-<Frame caption="Branch preview: Warranty writeback on the Sync step, with configuration item sync turned off.">
-  <img src="/images/product/autotask-sync-warranty-writeback.png" alt="Autotask Sync step showing the Warranty writeback switch and its matching description while Enable configuration item sync is off" width="1090" height="390" />
-</Frame>
-
-MSPortal matches each device to a configuration item in this order:
-
-1. **RMM device UID.** A device from Datto RMM matches the configuration item that carries the same RMM device UID.
-2. **Serial number.** Otherwise, MSPortal looks for exactly one active configuration item with the same serial number in the Autotask company mapped to the device's company.
-
-Devices imported by configuration item sync are already linked to their configuration item and are updated directly. A match is skipped when the serial number is missing, a placeholder such as "To be filled by O.E.M.", or shared by more than one configuration item. A configuration item that matches two MSPortal devices is also skipped, so two devices never compete for one record. MSPortal never matches by device name.
-
-<Steps>
-  <Step title="Grant edit access">
-    Give the API user's security level **Inventory > Configuration Item** access of **View (All)** and **Edit**, then use **Re-check** under **Permissions**.
-  </Step>
-  <Step title="Turn it on">
-    Open **Settings > Integrations > Autotask PSA > Configure > Sync** and turn on **Warranty writeback**. Continue from Sync, or use **Save & Exit**, to save the setting.
-  </Step>
-  <Step title="Verify a device">
-    Writeback runs daily. The first run covers every device with a successful warranty check; later runs send only devices whose warranty was checked again. Open a known device's configuration item in Autotask and confirm **Warranty Expiration Date**.
-  </Step>
-</Steps>
-
-Only devices with a successful warranty check and a known expiration date are written. A configuration item that already shows the same date is left unchanged. If your Autotask configuration items sync one way into IT Glue, that sync carries the date into the IT Glue configuration as well. To write IT Glue configurations directly, see [Warranty writeback to Hudu and IT Glue](/user-guides/integrations/documentation-warranty-writeback).
+Turn on **Warranty writeback** on the **Sync** step to write MSPortal's warranty expiration dates to your Autotask configuration items. It does not need configuration item sync: devices from Datto RMM are matched by RMM device UID, then by serial number in the mapped company. See [Warranty writeback to Autotask](/user-guides/integrations/autotask-warranty-writeback) for permissions, matching rules and troubleshooting.
 
 ## Import Autotask native CSAT for dashboards and reports
 
