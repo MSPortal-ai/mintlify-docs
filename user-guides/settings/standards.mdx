@@ -46,6 +46,7 @@ The editor is one form. Each row shows its label and a short hint on the left an
 | Deployment options | Named implementations classified by your Standards tiers. See [tiers and options](/user-guides/settings/standards-tiers). |
 | Standards applicability | Conditions that decide which companies the standard applies to. See [Choose which Standards apply](/user-guides/settings/standards-applicability). |
 | Answered by billing | PSA products that answer the standard automatically. See [Use PSA billing to answer Standards](/user-guides/settings/standards-sku-automation). |
+| Planner template | Optional template applied to the standard's open Planner items on sync. See [Apply a Planner template](#apply-a-planner-template). |
 
 New items are Required by default in an ordinary category and Optional in a one-of group. An optional standard can still receive company tracking and Planner work during sync.
 
@@ -54,6 +55,39 @@ New items are Required by default in an ordinary category and Optional in a one-
 <Note>
 Branch preview. The Service plans field, the single-form editor layout and automatic saving of applicability conditions are not yet in production.
 </Note>
+
+## Apply a Planner template
+
+Pick a template on a standard to set up its Planner items from the start, instead of applying a template to each item after sync creates it.
+
+1. Create the template in [Planner templates](/user-guides/planner/manage-templates) if it does not exist yet.
+2. Open the standard's row and choose the template under **Planner template**. The choice saves automatically. **None** is the default.
+3. Select **Sync All Companies**. Choosing a template does not change any Planner item until you sync.
+
+<Frame caption="The Planner template row in the standard's editor. Choose None to stop applying a template.">
+  <img src="/images/product/standards-planner-template.png" alt="Standards item editor row labeled Planner template with a None selection." width="2174" height="262" />
+</Frame>
+
+On sync, each **open** Planner item for the standard gets the template:
+
+| From the template | What happens |
+| --- | --- |
+| Business value, hours, probability, public and private notes | Written to the item. |
+| Description and Planner type | Used instead of the standard's description and the category's Planner type. Empty template values fall back to those. |
+| Cost rows | Added to the item, or the template's single cost estimate as one row. A template with no cost keeps the standard's **Default Price**. |
+| Compliance checks | Linked for each company that has the check assigned. |
+| Hide from company users | A template can make items internal. It never shows an internal item to company users. |
+
+The standard's name stays the item title, and the Standards matrix still sets the status. Completed, Cancelled and archived items are not changed. If one is reopened, a later sync applies the template.
+
+### Change or remove a template
+
+- **Switch templates.** On the next sync, open items drop the old template's cost rows and get the new template. Cost rows added by hand stay. The new template's compliance links are added; the old links stay.
+- **Choose None.** On the next sync, the old template's cost rows are removed. When no rows remain, the standard's **Default Price** comes back. The description and type return to the standard's; the other fields stay.
+- **Delete the template.** The standard's choice returns to **None**, but its items keep what the template gave them.
+- **Edit the template.** Changes to a template's contents are not re-applied to items that already have it. Only choosing a different template updates them.
+
+Editing a template cost row on a Planner item turns it into a row the sync no longer replaces. Returning the row to its original values keeps it a template row.
 
 ## Require one of a group
 
@@ -119,6 +153,18 @@ Catalog saving and distributing Planner changes are separate. Review [Sync Stand
   </Accordion>
   <Accordion title="Where is Planner Type on mobile?">
     Open the category pencil, Edit category details, to find the Planner Type choice on narrow screens.
+  </Accordion>
+  <Accordion title="Does choosing a Planner template change items right away?">
+    No. The template is applied to open Planner items on the next Sync All Companies.
+  </Accordion>
+  <Accordion title="Are completed items updated when I change the template?">
+    No. Completed, Cancelled and archived items keep what they already have. Only open items are updated.
+  </Accordion>
+  <Accordion title="Why is the Planner template list empty?">
+    The MSP has no Planner templates yet. Use the link in the row to create one in Planner templates.
+  </Accordion>
+  <Accordion title="Do I need Planner access to choose a template?">
+    No. Standards settings Manage permission is enough to pick a template for a standard.
   </Accordion>
   <Accordion title="Does entering a vendor install or connect the product?">
     No. Vendor is a descriptive catalog field; it does not install software or configure an integration.

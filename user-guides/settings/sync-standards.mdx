@@ -31,12 +31,14 @@ The confirm button is disabled while **On a specific date** has no chosen date. 
 | Missing company/standard tracking pair | Creates a Not Started tracking record for an active company. |
 | Tracking record without a linked Planner item | Creates linked work, including for optional standards and categories without a Planner type. |
 | Existing company deployment status | Keeps the recorded Standards status. |
-| Existing linked Planner title, description, estimate and type | Refreshes these from the catalog when they differ. |
+| Existing linked Planner title, description and type | Refreshes these from the catalog, or from the standard's [Planner template](/user-guides/settings/standards#apply-a-planner-template), when they differ. |
+| Existing linked Planner estimate | Refreshes from **Default Price** when the item has no cost rows. When it has cost rows, their total is the estimate. |
+| Open item without the standard's current Planner template | Applies the template: business value, hours, probability, notes, cost rows and compliance links. Completed, Cancelled and archived items are skipped. |
 | Existing linked Planner status | Reconciles it with Standards, while preserving Planner-only On Hold and Pending Approval states. |
-| Existing Planner dates, Company visibility and public/private notes | The new-item schedule and visibility choices do not replace these existing values. |
+| Existing Planner dates, Company visibility and public/private notes | The new-item schedule and visibility choices do not replace these existing values. Applying a Planner template writes its notes and can make an item internal. |
 
 <Warning>
-The dialog's statement that existing company statuses are preserved does not mean all Planner fields are untouched. A sync can replace a company-specific Planner title, description, estimate or type with the shared catalog values.
+The dialog's statement that existing company statuses are preserved does not mean all Planner fields are untouched. A sync can replace a company-specific Planner title, description, estimate or type with the shared catalog values. When a standard has a Planner template, a sync can also replace the notes, business value, hours and probability on its open items.
 </Warning>
 
 A new Planner item's default estimate is not a purchase or approved quote. **Hide from company users** makes newly created work internal; leaving it off does not grant a Company user access to unrelated Planner work. Their permissions and company scope still apply.
@@ -77,10 +79,10 @@ For Company-facing interpretation, share [Understand Standards items in Planner]
     Existing company Standards statuses are preserved. Linked Planner statuses can be reconciled from them.
   </Accordion>
   <Accordion title="Which existing Planner fields can change?">
-    The title, description, estimate, type and mapped status can refresh from Standards. On Hold and Pending Approval are preserved.
+    The title, description, estimate, type and mapped status can refresh from Standards. When the standard has a Planner template, open items also get the template's fields. On Hold and Pending Approval are preserved.
   </Accordion>
   <Accordion title="Does sync replace Company notes?">
-    The reconciliation does not replace existing public or private Planner notes.
+    Not on its own. Notes change only when a Planner template is applied to an open item, because the template's notes are written to it.
   </Accordion>
   <Accordion title="Does a started message mean all companies finished?">
     No. It confirms submission to a background task. Review the matrix and linked work afterward.
