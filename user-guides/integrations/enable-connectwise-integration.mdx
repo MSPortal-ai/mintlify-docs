@@ -1,173 +1,509 @@
 ---
 title: 'Configure ConnectWise Manage Integration'
-description: 'Connect ConnectWise Manage, choose data scope and import the intended companies and users'
+description: 'Connect your ConnectWise Manage instance to MSPortal.ai using the step-by-step setup wizard'
 icon: 'plug'
 ---
 
-Use this **MSP staff** workflow to connect ConnectWise Manage and configure the data available to your portal. The wizard follows **Connect → Permissions → Sync → Configure → Import**. Company users do not administer this connection.
+This guide walks you through connecting your ConnectWise Manage instance to MSPortal.ai using our streamlined setup wizard.
 
-## Before you start
+## Prerequisites
 
-You need integration-management permission, authorized provider credentials and access to the companies you intend to synchronize. Ticket configuration can additionally require Ticket Settings permission. Keep credentials in the connection form and your approved secret store.
+Before you begin, ensure you have:
+- Admin access to both ConnectWise Manage and MSPortal.ai
+- Your ConnectWise company ID (visible on the ConnectWise login screen)
+- Access to create API members and security roles in ConnectWise
 
-In ConnectWise PSA, create an active API member under **System > Members > API Members** with a dedicated security role. In its **API Keys** tab, add a named key and save it; securely retain both keys because the private key is shown only when created. Use the API hostname for your region, such as `na.myconnectwise.net`, and your ConnectWise Company ID. The [vendor API-member instructions](https://docs.connectwise.com/ITBoost/100/ConnectWise_Manage_Integration) show key creation; use MSPortal’s permission results for the capabilities you intend to enable, rather than copying another integration’s role wholesale.
+## Part 1: Configure ConnectWise Manage
 
-## Connect the provider
+Before connecting to MSPortal.ai, you need to create an API member and security role in ConnectWise.
 
-1. Open **Settings > Integrations**, find **ConnectWise Manage**, and open setup. Use **Configure** for the existing connection.
-2. Enter **API URL**, **Company ID**, **Public Key** and **Private Key**.
-3. Select **Test Connection** when ready to connect. **For a new connection, a successful test also creates and saves the integration.** There is no separate Create Integration button in this PSA wizard.
-4. Review the result and continue to **Permissions**. An existing connection can initialize with a Connected indicator; that is not proof of a fresh test.
+### Create Security Role
 
-<Frame caption="MSP example: the setup steps for an existing connection. The Connect checkmark does not represent a new test.">
-  <img src="/images/product/connectwise-setup-steps.png" alt="Connectwise setup steps with Permissions selected" width="1852" height="226" />
-</Frame>
+<Steps>
+  <Step title="Access System Settings">
+    Login to ConnectWise Manage and navigate to **System > Security Roles**.
+  </Step>
 
-## Check permissions
+  <Step title="Create Security Role">
+    Create a security role named "MSPortal" with the following permissions. These permissions enable MSPortal to sync companies, contacts, tickets, opportunities, agreements, and related data.
 
-The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. A denied optional sync permission keeps its corresponding sync off. Checklist write permissions are checked separately and do not turn off project synchronization.
+    For **every category** listed below, set **Add Level**, **Edit Level**, and **Inquire Level** to **All**. Leave **Delete Level** as **None**.
 
-Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. Sync checks exercise **read access**. The **Project checklist writes** check also reads the connected API member’s own security settings to verify Project Ticket Tasks Add, Edit and Inquire access. It does not create or change a checklist item. A granted result confirms those role levels; it does not guarantee every write will succeed or verify project creation, project/ticket status changes, phase edits, comments, time entries, checklist deletion or warranty updates.
+    | Category | Add | Edit | Delete | Inquire |
+    |----------|-----|------|--------|---------|
+    | Companies | All | All | None | All |
+    | Finance | All | All | None | All |
+    | Marketing | All | All | None | All |
+    | Procurement | All | All | None | All |
+    | Project | All | All | None | All |
+    | Sales | All | All | None | All |
+    | Service Desk | All | All | None | All |
+    | System | All | All | None | All |
+    | Time & Expense | All | All | None | All |
+
+    <Tip>
+      The easiest way to configure this is to expand each category and set all sub-permissions to **All** for Add, Edit, and Inquire. You can leave Delete as **None** for all categories.
+    </Tip>
+
+    Click **Save and Close** to finalize the security role settings.
+  </Step>
+</Steps>
+
+### Create API Member
+
+<Steps>
+  <Step title="Navigate to API Members">
+    1. Go to **System > Members**
+    2. Click the **API Members** tab
+    3. Click **+** to create a new API member
+  </Step>
+
+  <Step title="Configure API Member">
+    1. Name it "MSPortal"
+    2. Select the **MSPortal** security role you created
+    3. Enter your **Business Unit** and **Location**
+    4. Click **Save**
+  </Step>
+
+  <Step title="Generate API Keys">
+    1. With the API member open, click the **API Keys** tab
+    2. Click **+** to add a new key
+    3. Name it "MSPortal" and click **Save**
+    4. **Important:** Copy the **Public Key** and **Private Key** immediately
+
+    <Warning>
+      The API keys cannot be retrieved again after closing this dialog. Make sure to save them securely before proceeding.
+    </Warning>
+  </Step>
+</Steps>
 
 ## Project management permissions
 
-Configure the **API member that owns MSPortal’s configured keys** for the project work your staff will perform. Open **System > Members > API Members**, check its assigned role, then edit that role under **System > Security Roles**. Your staff member’s personal ConnectWise role does not grant access to the integration.
+Skip this section unless you will create or update ConnectWise projects from MSPortal. If you set every Project permission to **All** in the role above, you only need to confirm these levels.
 
-The following is the recommended project read/create/update configuration. **All** allows the API member to work across the intended projects; **My** can prevent an integration account from updating work assigned to someone else. Keep company, location and business-unit access aligned with the records you intend to manage.
+The settings go on the role of the **API member that owns the keys saved in MSPortal**. Your staff member's personal ConnectWise role does not give the integration any access.
 
-| Project security-role action | Required levels | Used for |
-| --- | --- | --- |
-| **Project Headers** | Inquire: All; Add: All; Edit: All | Synchronize projects, create PSA projects, and update project status, dates and mapped project fields. |
-| **Project Phase** | Inquire: All; Add: All; Edit: All | Read phases, create phases when launching or applying a template, and update phase names and dates. |
-| **Project Tickets** | Inquire: All; Add: All; Edit: All | Read and create project tickets; update their status, owner, priority, summary, budget hours, dates and mapped fields. |
-| **Close Projects** | Inquire: All; Add: None; Edit: All | Move a project into a closed status. |
-| **Close Project Tickets** | Inquire: All; Add: None; Edit: All | Move a project ticket into a closed status. |
-| **Project Notes** | Inquire: All; Add: All; Edit: All | Read and add project notes where offered, with edit access ready for supported note-editing workflows. Project-ticket comments also require access to the parent Project Tickets record. |
-| **Project Teams** | Inquire: All; Add: All; Edit: All | Read project team members and populate assignment choices, with add/edit access ready for supported team-management workflows. |
-| **Project Ticket Tasks** | Inquire: All; Add: All; Edit: All | Read and add checklist items, change completion, and update checklist progress notes. This is separate from Project Tickets. |
+<Steps>
+  <Step title="Open the API member's role">
+    In ConnectWise, go to **System > Members > API Members**, open the MSPortal API member and note its security role. Then open that role under **System > Security Roles**.
+  </Step>
 
-For ticket status changes across your managed projects, configure **Project Tickets → Edit Level: All**. Granting Project Ticket Tasks Edit alone only covers checklist changes. If ordinary status changes work but closing fails, review **Close Project Tickets** or **Close Projects**, as appropriate.
+  <Step title="Set the Project permissions">
+    Expand **Project** and set the levels below. Use **All**, not **My**, because **My** can stop the integration from updating work assigned to someone else.
 
-### Supporting access
+    | Project permission | Required levels | Used for |
+    |--------------------|-----------------|----------|
+    | **Project Headers** | Inquire: All; Add: All; Edit: All | Sync projects, create PSA projects, and update project status, dates and mapped fields |
+    | **Project Phase** | Inquire: All; Add: All; Edit: All | Read phases, create phases when launching or applying a template, and update phase names and dates |
+    | **Project Tickets** | Inquire: All; Add: All; Edit: All | Read and create project tickets, and update their status, owner, priority, summary, budget hours, dates and mapped fields |
+    | **Close Projects** | Inquire: All; Add: None; Edit: All | Move a project into a closed status |
+    | **Close Project Tickets** | Inquire: All; Add: None; Edit: All | Move a project ticket into a closed status |
+    | **Project Notes** | Inquire: All; Add: All; Edit: All | Read and add project notes. Project ticket comments also need access to the parent Project Tickets record. |
+    | **Project Teams** | Inquire: All; Add: All; Edit: All | Read project team members and fill assignment choices |
+    | **Project Ticket Tasks** | Inquire: All; Add: All; Edit: All | Read and add checklist items, change completion and update checklist progress notes. This is separate from Project Tickets. |
+    | **Project Templates** | Inquire: All | Import project templates into **Settings** > **Projects** > **Templates** |
 
-Project management also uses records outside the Project module. Retain the connection wizard’s required company, contact, member and lookup read permissions, and configure these for the features you use:
+    Project ticket status changes need **Project Tickets** > **Edit Level: All**. **Project Ticket Tasks** Edit only covers checklist changes.
+  </Step>
 
-| Area | Access to configure | Used for |
-| --- | --- | --- |
-| **Companies → Company Maintenance / Contacts** | Inquire: All | Select and resolve the project’s company and contact. |
-| **System → Member Maintenance** | Inquire: All | Resolve project managers, ticket owners and time-entry authors. |
-| **System → Table Setup** | Inquire: All, including the relevant project/service boards, statuses, types, priorities and work-type/work-role tables | Populate creation and editing choices. A missing lookup can block a write even when the project itself is editable. |
-| **Time & Expense → Time Entry** | Inquire: All; Add: All when logging time | Synchronize project effort and create project-ticket time entries. |
-| **Finance → Billing View Time** | Inquire: All; Edit: All when logging billable time | Read and record billable time. |
-| **Time & Expense → Time Entry Billable Option** | Inquire and Edit: All when choosing billable/non-billable time | Set the billing option on time entries. |
-| **Finance → Agreements** | Inquire: All when using agreement-related time settings | Resolve agreement references for time entry. |
-| **Project template catalog** | Read access to the source project templates and their phases/tickets | Import or refresh a PSA template where available. Check template access in your ConnectWise version; importing does not require permission to edit the source template. |
+  <Step title="Set the supporting permissions">
+    Project management also uses records outside the Project module. Keep the wizard's required company, contact, member and lookup permissions, and set these for the features you use:
 
-These permissions support the operations above; they do not override ConnectWise validation, board restrictions, closed-record rules or missing required fields. Use the [ConnectWise security-role documentation](https://docs.connectwise.com/ConnectWise_Documentation/090/020/020/020) for your version’s role controls.
+    | Area | Access | Used for |
+    |------|--------|----------|
+    | **Companies** > **Company Maintenance** and **Contacts** | Inquire: All | Select the project's company and contact |
+    | **System** > **Member Maintenance** | Inquire: All | Resolve project managers, ticket owners and time entry authors |
+    | **System** > **Table Setup** | Inquire: All | Fill boards, statuses, types, priorities, work types and work roles. A missing lookup can block a write even when the project is editable. |
+    | **Time & Expense** > **Time Entry** | Inquire: All; Add: All when logging time | Sync project effort and create project ticket time entries |
+    | **Finance** > **Billing View Time** | Inquire: All; Edit: All when logging billable time | Read and record billable time |
+    | **Time & Expense** > **Time Entry Billable Option** | Inquire and Edit: All when choosing billable or non-billable time | Set the billing option on time entries |
+    | **Finance** > **Agreements** | Inquire: All when using agreement time settings | Resolve agreement references for time entry |
 
-### Delete access and local project work
+    These permissions do not override ConnectWise validation, board restrictions, closed record rules or required fields.
+  </Step>
 
-Read/create/update workflows do not require blanket Delete permissions. To use **Delete checklist item** where available, additionally grant **Project → Project Ticket Tasks → Delete Level: All**. MSPortal checks that permission separately; an unreadable or unverified role does not enable deletion. Leave Delete disabled on unrelated project records.
+  <Step title="Decide on checklist deletion">
+    Read, create and update work does not need Delete access. To use **Delete checklist item**, also set **Project** > **Project Ticket Tasks** > **Delete Level: All**. Leave Delete off on other project records.
+  </Step>
 
-MSPortal-only projects, reusable portal templates and portal project registers use MSPortal permissions. An explicit action that creates or updates a PSA project, phase or ticket needs the vendor permissions above. Granting vendor access does not grant a staff or client user access inside MSPortal.
-
-## Allow project checklist changes
-
-Adding a checklist item or changing its completion state writes to ConnectWise using the **API member that owns the integration’s configured keys**. The staff member needs the appropriate MSPortal project permission, and the API member separately needs ConnectWise access. Changing the staff member’s personal ConnectWise role does not change the integration’s permissions.
-
-1. In ConnectWise, open **System > Members > API Members** and identify the member that owns the public key configured in MSPortal.
-2. Check that member’s assigned security role, then open it under **System > Security Roles**.
-3. Expand **Project** and review **Project Ticket Tasks**:
-
-| Level | Setting | Purpose |
-| --- | --- | --- |
-| **Inquire Level** | **All** | Read checklist items. |
-| **Add Level** | **All** | Add checklist items. |
-| **Edit Level** | **All** | Update checklist completion. |
-
-Keep the role dedicated to MSPortal. If it is shared with another integration, review the effect on that integration before changing it. Checklist creation and completion do not require granting Delete access. Deleting an item has the separate requirement described above.
-
-After saving the role, return to **Settings > Integrations > ConnectWise Manage > Configure > Permissions** and select **Re-check**. The **Project checklist writes** result is separate from **Projects**:
-
-- **Granted**: all three task permission levels are All.
-- **Not permitted**: the role explicitly denies at least one required task permission.
-- **Could not verify**: the role settings could not be read or interpreted, or access is scoped to **My** and cannot establish access to every intended ticket. Review the role and ticket scope in ConnectWise; this result does not prove the action is denied.
+  <Step title="Save and re-check">
+    Save the role. In MSPortal, go to **Settings** > **Integrations** > **ConnectWise Manage** > **Configure** > **Permissions** and click **Re-check**.
+  </Step>
+</Steps>
 
 <Note>
-A green Projects read check can coexist with denied checklist writes. For example, Project Ticket Tasks with Inquire Level All and Add/Edit Level None allows viewing the checklist but blocks additions and completion changes. Project synchronization can remain enabled while you correct those write permissions.
+MSPortal-only projects, portal templates and project registers use MSPortal permissions only. ConnectWise access never grants a staff or client user access inside MSPortal.
 </Note>
 
-## Select synchronization scope
+### Allow project checklist changes
 
-Select the intended service boards and excluded ticket statuses. Review company type/status filters and the supported opportunity, project, invoice, product catalog and change-management options. A company excluded by synchronization filters will not be made available merely by changing its portal mapping.
+Adding a checklist item or changing its completion writes to ConnectWise as the API member. The staff member needs the MSPortal project permission, and the API member separately needs ConnectWise access.
 
-Review filters before continuing. Synchronizing source records, linking them to companies and importing portal records are separate steps. Automatic company/contact import options can create portal records when matching source records arrive. Review any import preview and the selected categories carefully; do not rely on a confirmation appearing for every save.
+<Steps>
+  <Step title="Find the API member">
+    In ConnectWise, open **System > Members > API Members** and find the member that owns the public key saved in MSPortal.
+  </Step>
 
-Proceeding from Sync saves the selected scope and starts background synchronization. Options in later steps may remain incomplete while it runs. Check errors and the connection’s actual sync result before treating an empty list as the final dataset.
+  <Step title="Open its security role">
+    Note the member's security role, then open it under **System > Security Roles**.
+  </Step>
 
-Warranty writeback is an optional **vendor write**. Enable it only when you intend resolved warranty data to update the connected PSA records.
+  <Step title="Set Project Ticket Tasks">
+    Expand **Project** and set **Project Ticket Tasks**:
 
-## Configure portal behavior
+    | Level | Setting | Purpose |
+    |-------|---------|---------|
+    | **Inquire Level** | **All** | Read checklist items |
+    | **Add Level** | **All** | Add checklist items |
+    | **Edit Level** | **All** | Update checklist completion |
 
-Configure closed statuses and client-comment status for the selected boards, then review the resolution status groups. Configure opportunity stages/types/probabilities and invoice settings where enabled. Use [Resync PSA settings](/user-guides/integrations/connectwise-resync-psa-settings) when newly created vendor boards or statuses are missing.
+    Keep the role dedicated to MSPortal. If another integration shares it, check the effect on that integration first.
+  </Step>
 
-Configuration forms save changes automatically after editing. Wait for the saved state; wizard navigation waits for pending saves and reports failures. Leaving the screen is not a substitute for checking a failed save. Ticket defaults additionally require Ticket Settings permission.
+  <Step title="Re-check in MSPortal">
+    Save the role, then go to **Settings** > **Integrations** > **ConnectWise Manage** > **Configure** > **Permissions** and click **Re-check**. Read the **Project checklist writes** result:
 
-**Quick Sync** requests ticket synchronization. **Clear & Resync** clears portal ticket data for this connection before reloading it. Use the latter only for an intended rebuild, and check the subsequent result; it is not a harmless refresh.
+    | Result | Meaning |
+    |--------|---------|
+    | **Granted** | All three task permission levels are **All** |
+    | **Not permitted** | The role denies at least one of the three levels |
+    | **Could not verify** | MSPortal could not read the role, or a level is set to **My**. Review the role in ConnectWise. |
+  </Step>
+</Steps>
 
-## Import and finish
+<Note>
+**Projects** and **Project checklist writes** are separate checks. With Project Ticket Tasks at Inquire **All** and Add/Edit **None**, staff can view checklists but cannot add items or change completion. Project sync keeps running while you fix the write permissions.
+</Note>
 
-The Import step offers **Users**, **Companies** and **Locations**. Review the parent company before linking a location. Review existing portal records before creating duplicates. Company links determine which client can see synchronized data.
+---
 
-Apply the intended company and user selections and check the result. **Complete Setup** also attempts to apply pending company/user imports before completing the wizard. It can start background work, so setup completion is not proof that every import or sync succeeded. An import-page link only navigates to that workflow.
+## Part 2: MSPortal Setup Wizard
 
-Use **Save & Exit** to save wizard progress when pausing. Reopen the connection to continue and verify the saved state. Portal invitations and client permissions remain separate from discovering provider contacts.
+MSPortal.ai provides a guided setup wizard that walks you through connecting and configuring your ConnectWise Manage integration in 5 easy steps.
 
-## Maintain the connection
+### Starting the Wizard
 
-Reopen setup to inspect scope and errors. A successful retest of changed fields is not proof of credential rotation: this wizard has no separate update-credentials action. Confirm the supported replacement path before revoking working vendor credentials.
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings** > **Integrations**.
+  </Step>
 
-**Delete Integration** opens a named confirmation. Confirm **Delete** only to remove the connection and its associated settings; cancel preserves it. Vendor-side credential revocation is separate.
+  <Step title="Start Setup">
+    Find **ConnectWise Manage** and click **Connect** (or **Configure** if previously connected) to launch the setup wizard.
+  </Step>
+</Steps>
+
+---
+
+### Step 1: Connect
+
+Enter your ConnectWise API credentials to establish the connection.
+
+<Steps>
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
+
+    | Field | Description | Example |
+    |-------|-------------|---------|
+    | **API URL** | Your ConnectWise API URL | `na.myconnectwise.net` or `eu.myconnectwise.net` |
+    | **Company ID** | Your company identifier (shown on login screen) | `YourCompanyID` |
+    | **Public Key** | API public key from API member | `abc123...` |
+    | **Private Key** | API private key from API member | `xyz789...` |
+
+    <Note>
+      **API URL Examples:**
+      - Cloud-hosted: `na.myconnectwise.net`, `aus.myconnectwise.net`, `eu.myconnectwise.net`
+      - On-premise: `cw.yourcompany.com` (without https://)
+    </Note>
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials. You'll see a green "Connected" status when successful.
+
+    For a new connection, a successful test also creates and saves the integration. There is no separate create button.
+
+    If the connection fails:
+    - Verify your API URL is correct (no https:// prefix)
+    - Check that your Company ID matches exactly
+    - Confirm the API keys are copied correctly
+    - Ensure the API member has the correct security role assigned
+  </Step>
+
+  <Step title="Proceed">
+    Once connected, click **Next** to continue to the permission check.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Permissions
+
+MSPortal checks which parts of ConnectWise your API member is allowed to read, and shows the result for each area of data.
+
+<Frame caption="The setup wizard steps, with Permissions selected.">
+  <img src="/images/product/connectwise-setup-steps.png" alt="ConnectWise setup steps with Permissions selected" width="1852" height="226" />
+</Frame>
+
+<Steps>
+  <Step title="Review the results">
+    The check runs automatically when you reach this step. Each area of data is listed as granted, not permitted or could not verify.
+
+    Areas marked **Required** must be granted before you can continue: Companies, Contacts and staff, Tickets, and Boards and statuses. Without these the integration cannot function.
+
+    Optional areas cover Configurations, Opportunities, Product catalog, Invoices, Agreements, Projects, Project checklist writes, and Time entries.
+
+    Importing project templates from ConnectWise into **Settings > Projects > Templates** also needs **Project > Project Templates** with **Inquire Level: All**. If the import dialog reports that ConnectWise refused the request, add that permission to the MSPortal security role and try again.
+  </Step>
+
+  <Step title="Grant anything missing">
+    Any area that is not permitted shows the exact ConnectWise security role setting to change, for example **Procurement -> Product Catalog (Inquire Level: All)**.
+
+    Update the MSPortal security role in **System > Security Roles**, then come back and click **Re-check**.
+
+    <Note>
+      **Could not verify** usually means ConnectWise was slow or unavailable, not that a permission is missing. Click **Re-check** before you change the role.
+    </Note>
+  </Step>
+
+  <Step title="Continue">
+    You can continue with optional areas ungranted. Those syncs stay switched off and their toggles are locked on the next step until you grant the permission and re-check. **Project checklist writes** never turns off project sync.
+  </Step>
+</Steps>
+
+<Tip>
+  If a permission is removed later, MSPortal switches off the affected sync and notifies your integration admins rather than retrying against an endpoint it can no longer read.
+</Tip>
+
+---
+
+### Step 3: Sync
+
+Configure what data to sync from ConnectWise and set up company filters.
+
+<Steps>
+  <Step title="Configure Data Sync Options">
+    Enable or disable the following sync options:
+
+    | Option | Description |
+    |--------|-------------|
+    | **Sync Users** | Sync member data from ConnectWise |
+    | **Sync Companies** | Sync company data from ConnectWise |
+    | **Enable Ticket Sync** | Sync service tickets from ConnectWise |
+    | **Enable Opportunity Sync** | Sync opportunities from ConnectWise |
+    | **Enable Project Sync** | Sync projects from ConnectWise |
+    | **Enable Invoice Sync** | Sync invoices from ConnectWise |
+    | **Sync product catalog** | Import the product and service catalog for quoting and budgets |
+    | **Enable change management** | Import ConnectWise changes into the change calendar |
+    | **Warranty writeback** | Write warranty data back to ConnectWise configurations when MSPortal resolves a device's warranty |
+  </Step>
+
+  <Note>
+    A toggle appears locked when the permission check found that your API member cannot read that data. Grant the permission named beside it in ConnectWise, then re-run the check on the Permissions step to unlock it.
+  </Note>
+
+  <Step title="Configure Contact Auto-Import">
+    If you want contacts to be automatically imported when companies are added:
+
+    1. Turn on **Enable Auto-Import** to automatically create user accounts for active contacts
+    2. Select a **Default Role for Imported Contacts** (e.g., Viewer)
+    3. Optionally, map specific ConnectWise contact types to other portal roles. Unmapped types use the default role.
+
+    <Tip>
+      We recommend choosing a role with minimal permissions if you plan to import all contacts.
+    </Tip>
+  </Step>
+
+  <Step title="Configure Company Auto-Import">
+    Under **Auto-Import Company Types**, select the company types to create in the portal automatically during sync. MSPortal asks you to confirm before it imports a new batch, because companies are a billed item.
+  </Step>
+
+  <Step title="Configure Company Filters">
+    ConnectWise has additional filtering options under **Company & Data Sync Filters**:
+
+    | Setting | Description |
+    |---------|-------------|
+    | **Skip Inactive Companies** | Only sync active companies (recommended) |
+    | **Auto Import Locations** | Import synced sites as locations during each sync |
+    | **Exclude Company Types** | Select company types to exclude from sync |
+    | **Exclude Company Statuses** | Select company statuses to exclude from sync |
+    | **Exclude Opportunity Types** | Select opportunity types to exclude from sync |
+    | **Exclude Project Types** | Select project types to exclude from sync |
+  </Step>
+
+  <Step title="Configure Ticket Sync Scope">
+    Define which tickets to sync:
+
+    | Setting | Description |
+    |---------|-------------|
+    | **Boards to Sync** | Select which ConnectWise service boards' tickets to sync |
+    | **Exclude Statuses** | Select ticket statuses to exclude from sync |
+
+    <Info>
+      When you proceed to the next step, data sync will begin in the background. This may take a few minutes depending on the amount of data in your ConnectWise instance.
+
+      Syncs are automatically deduplicated - if you navigate back and forth between steps, the same sync will not run multiple times within a 2-minute window.
+    </Info>
+  </Step>
+
+  <Step title="Proceed">
+    Click **Next** to continue to ticket and opportunity configuration.
+  </Step>
+</Steps>
+
+---
+
+### Step 4: Configure
+
+Set up ticket defaults, status mapping and opportunity defaults. These settings save automatically as you edit them. Wait for the saved indicator before you leave the step.
+
+#### Ticket Settings
+
+<Steps>
+  <Step title="Review Ticket Defaults">
+    **Ticket Defaults** sets the board and other PSA values used for new tickets created in the portal. These are the same defaults as **Settings** > **Tickets**, and editing them requires the Ticket Settings permission.
+  </Step>
+
+  <Step title="Configure Resolution Status Stepper">
+    The Resolution Status Stepper provides a visual indicator of ticket progress. Click each stage, then map your ConnectWise statuses to it. Statuses are listed with their board name.
+
+    | Stage | Description |
+    |-------|-------------|
+    | **New** | Tickets that are newly created or not yet triaged |
+    | **Triaged** | Tickets that have been reviewed and prioritized |
+    | **Working** | Tickets actively being worked on |
+    | **Waiting** | Tickets waiting for customer response or approval |
+    | **Resolved** | Tickets that are completed or closed |
+
+    <Tip>
+      You can map multiple ConnectWise statuses to each stage. The stepper will show the appropriate stage based on the ticket's current status. MSPortal warns you if a stage is still empty when you click **Next**.
+    </Tip>
+  </Step>
+
+  <Step title="Sync Actions">
+    Use these buttons to manage ticket sync:
+
+    | Action | Description |
+    |--------|-------------|
+    | **Quick Sync** | Trigger an immediate sync of ticket data |
+    | **Clear & Resync** | Delete this integration's synced tickets in MSPortal and perform a fresh sync (useful after major configuration changes). Tickets in ConnectWise are not affected. |
+
+    See [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) before you use **Clear & Resync**.
+  </Step>
+</Steps>
+
+#### Opportunity Settings
+
+<Steps>
+  <Step title="Configure Opportunity Defaults">
+    Set default values for opportunities created from MSPortal:
+
+    | Setting | Description |
+    |---------|-------------|
+    | **Default Stage** | The starting stage for new opportunities |
+    | **Default Type** | The default opportunity type |
+    | **Fallback Sales Rep** | Sales rep assigned when the user doesn't have a linked ConnectWise member |
+
+    <Note>
+      Opportunity sync can be enabled or disabled in the Sync step. These settings only apply when opportunity sync is enabled.
+    </Note>
+  </Step>
+
+  <Step title="Configure Planner Auto-Import (Optional)">
+    Turn on **Auto-import opportunities into the Planner** to create a planner item for each new ConnectWise opportunity. Use **Minimum opportunity value** and **Opportunity types to auto-import** to limit which ones come through. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities).
+  </Step>
+
+  <Step title="Configure Invoice Display Settings">
+    If invoice sync is on, use **Hide Invoice Statuses** to hide closed, voided or other statuses from the Invoices page. All invoices still sync.
+  </Step>
+
+  <Step title="Proceed">
+    Click **Next** to continue to the import step.
+  </Step>
+</Steps>
+
+---
+
+### Step 5: Import (Optional)
+
+Import users, companies, and locations from ConnectWise. This step is optional - you can skip it and import later from the respective settings pages. The step is organized into **Users**, **Companies**, and **Locations** tabs.
+
+<Tabs>
+  <Tab title="Users">
+    Import members (your MSP staff) from ConnectWise to create user accounts.
+
+    1. Select users from the list to create accounts for
+    2. Choose a role for imported users
+
+    <Note>
+      Client contacts are not imported here. They can be managed via Company settings after companies are imported.
+    </Note>
+  </Tab>
+
+  <Tab title="Companies">
+    Import companies from ConnectWise to sync their data.
+
+    1. Select companies to import or link to existing MSPortal companies
+
+    <Tip>
+      Companies will sync automatically based on your sync settings and filters. Use this tab if you want to import specific companies immediately.
+    </Tip>
+  </Tab>
+
+  <Tab title="Locations">
+    Import ConnectWise locations and map them to MSPortal locations. Only locations for mapped companies are shown.
+  </Tab>
+</Tabs>
+
+---
+
+### Complete Setup
+
+Click **Complete Setup** to finish the wizard. MSPortal applies any pending company and user selections, then finishes setup. Imports and syncs keep running in the background.
+
+<Note>
+You can return to the setup wizard at any time by clicking **Configure** on the ConnectWise Manage integration. The wizard will resume with your current settings. Use **Save & Exit** to save your progress and leave the wizard part way through.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, you can manage your integration from **Settings** > **Integrations**:
+
+- **Configure**: Re-open the setup wizard to modify settings
+- **Resync**: Trigger a manual sync of data
+- **Sync PSA Data**: Refresh configuration data (priorities, boards, statuses, types) from ConnectWise
+- **Import Configurations**: Import device configurations from ConnectWise. The configurations import page lets you map ConnectWise configuration types to MSPortal device types, enable auto-sync, and ignore categories you don't need. See [Import Devices](/user-guides/integrations/import-devices) for the full guide.
+
+To remove the integration, open the wizard and click **Delete Integration**. This deletes the integration and its settings in MSPortal. Delete the API keys in ConnectWise separately.
+
+---
+
+## Next Steps
+
+After connecting, you can explore related guides:
+
+- [Re-sync PSA Settings](/user-guides/integrations/connectwise-resync-psa-settings) - Refresh configuration data from ConnectWise
+- [Clear and Resync Tickets](/user-guides/integrations/clear-and-resync-integrations) - Perform a full ticket resync if needed
+- [Integrations FAQ](/user-guides/integrations/faq) - Common questions about integrations
+
+---
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Projects load, but changing a ticket status fails with a security error | Check **Project Tickets → Edit Level** on the API member’s role; Project Ticket Tasks Edit is a different permission. |
-| Only closing a project or ticket fails | Check **Close Projects** or **Close Project Tickets** Edit access and the PSA’s required closure fields. |
-| Creating a project or applying a template fails | Check Add access to **Project Headers**, **Project Phase** and **Project Tickets**, plus lookup access. Review any records already created before retrying. |
-| Checklist deletion is unavailable | Review **Project Ticket Tasks → Delete Level: All** and whether MSPortal can verify the API member’s role. |
-| Checklist is visible, but adding an item fails with a security error | Check Project Ticket Tasks **Add Level** on the API member’s role. A successful project read check does not verify creation access. |
-| Checklist completion changes fail | Check Project Ticket Tasks **Edit Level** on the same API member’s role. |
-| Checklist permissions could not be verified | Review the API member’s role in ConnectWise. Restricted access to security metadata, scoped **My** permissions or a temporary API failure can prevent verification. |
-| Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
-| A data option is unavailable | Permission result and whether this provider supports that option. |
-| Companies or tickets are missing | Saved provider filters, synchronization result and company links. |
-| New statuses are absent | Metadata synchronization, selected board/team/queue scope and latest load. |
-| Setup finished but records are absent | Pending imports, background errors and the correct company context. |
-
-## Frequently asked questions
-
-<AccordionGroup>
-  <Accordion title="Does Test Connection only test credentials?">
-    For a new connection, a successful test also creates the integration. Enter credentials only when you intend to connect it.
-  </Accordion>
-  <Accordion title="Does a green permissions result verify ticket writes?">
-    Not every write. Sync checks probe read access, while Project checklist writes reads the API member’s task permission levels without changing data. Creating tickets, comments or other vendor changes still needs the relevant write permission and a successful action.
-  </Accordion>
-  <Accordion title="Does Complete Setup mean all data is ready?">
-    No. Check the background sync result and verify company, user and device imports separately.
-  </Accordion>
-  <Accordion title="Will every discovered contact receive portal access?">
-    Discovery and import are separate. Review user matches, company links and the permissions assigned to portal users; invitation is a separate workflow.
-  </Accordion>
-  <Accordion title="Can I replace saved credentials by retesting the form?">
-    Do not treat a successful retest as proof that replacement credentials were saved. This wizard does not provide a separate credential-update action; confirm the supported update path before revoking the old credential.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Integration settings](/user-guides/settings/integrations)
-- [Company mapping](/user-guides/settings/integration-company-mapping)
-- [Ticket settings](/user-guides/settings/tickets)
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify API URL format (no https://), Company ID, and API keys are correct |
+| Missing companies after sync | Check if company types or statuses are excluded in sync settings |
+| Permission errors | Verify the API member has the MSPortal security role assigned |
+| Sync not starting | Ensure the integration shows "Connected" status before syncing |
+| Tickets from wrong boards | Verify the correct boards are selected in Ticket Sync Scope |
+| Contacts not importing | Verify **Enable Auto-Import** is on and a default role is selected in the Sync step |
+| New boards or statuses are missing | Run [Sync PSA Data](/user-guides/integrations/connectwise-resync-psa-settings) |
+| Changing a project ticket status fails with a security error | Check **Project Tickets** > **Edit Level** on the API member's role. **Project Ticket Tasks** Edit is a different permission. |
+| Only closing a project or ticket fails | Check **Close Projects** or **Close Project Tickets** Edit access and ConnectWise's required closure fields |
+| Creating a project or applying a template fails | Check Add access to **Project Headers**, **Project Phase** and **Project Tickets**, plus lookup access. Check records already created before retrying. |
+| Checklist deletion is unavailable | Check **Project Ticket Tasks** > **Delete Level: All** and whether MSPortal can verify the API member's role |
+| Adding a checklist item fails with a security error | Check **Project Ticket Tasks** > **Add Level** on the API member's role |
+| Checklist completion changes fail | Check **Project Ticket Tasks** > **Edit Level** on the same role |
+| Checklist permissions could not be verified | Review the API member's role in ConnectWise. Restricted access to security settings, **My** levels or a temporary API failure can block the check. |

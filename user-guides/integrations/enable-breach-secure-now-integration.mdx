@@ -1,107 +1,324 @@
 ---
 title: 'Configure Breach Secure Now Integration'
-description: 'Connect your BSN partner, map clients and inspect training and breach metrics.'
+description: 'Connect Breach Secure Now to MSPortal.ai to sync security awareness training, phishing, and dark web breach metrics'
 icon: 'shield-halved'
 ---
 
-Use Breach Secure Now (BSN) to bring client and user awareness metrics into MSPortal. Setup is for **MSP staff with integration management permission**. Mapping assigns provider records to MSPortal companies; it does not invite users or change their portal roles.
+This guide walks you through connecting Breach Secure Now (BSN) to MSPortal.ai using the guided setup wizard.
 
-## Prepare the connection
+## Overview
 
-In your Breach Secure Now partner portal, locate the MSPortal integration and obtain its **Partner integration key**. If MSPortal or the key is unavailable, ask BSN to check the partner's integration access. MSPortal resolves the partner from that key; no separate Partner ID is entered.
+Breach Secure Now is a security awareness training and dark web monitoring platform for MSPs. By integrating BSN with MSPortal.ai, you can:
 
-Open **Settings > Integrations**, find **Breach Secure Now** under **Add integration**, and connect it. Open **Configure** on an existing connection when maintaining that account.
+- View security awareness training progress for every client in one place
+- Track Employee Secure Score (ESS), phishing fail rates, and micro training completion
+- Monitor dark web breach exposure per client and per user
+- Include security awareness metrics in client reports and QBRs
 
-## Connect
+## Prerequisites
+
+- An active Breach Secure Now partner account
+- The MSPortal integration enabled for your partner account in Breach Secure Now
+- An MSPortal.ai account with integration management permissions
+
+## Part 1: Enable the Integration in Breach Secure Now
+
+Before connecting, you need your **Partner Integration Key** from Breach Secure Now.
 
 <Steps>
-  <Step title="Enter the key and endpoint">
-    Enter **Partner integration key**. Keep **API base URL** at the prefilled `https://api.pii-protect.com/securedapiaccess` unless you have verified different connection instructions.
+  <Step title="Log into the Breach Secure Now Partner Portal">
+    Sign in to your Breach Secure Now (PII Protect) partner portal with a partner administrator account.
   </Step>
-  <Step title="Test the account">
-    Select **Test Connection** and review the returned partner or sample-client information. A test may show a sample count; do not use it as proof that the complete client inventory has synchronized.
+
+  <Step title="Open the Integrations Section">
+    Navigate to the integrations area of your partner configuration and locate **MSPortal** in the list of available integrations.
   </Step>
-  <Step title="Save the connection">
-    Select **Connect**, wait for success, then **Next**. This saves the connection and requests client discovery in the background. For a saved connection, **Save connection** persists credential changes; testing alone does not.
+
+  <Step title="Enable MSPortal">
+    Enable the MSPortal integration for your partner account.
+
+    <Note>
+      If MSPortal does not appear in your integrations list, contact Breach Secure Now support and ask them to enable the MSPortal API integration for your partner account.
+    </Note>
+  </Step>
+
+  <Step title="Copy Your Partner Integration Key">
+    Copy the **Partner Integration Key**, the secret key generated when the integration is enabled. This is the only value you enter in MSPortal.
+
+    <Note>
+      You do not need your Partner ID. MSPortal identifies your partner account from the Partner Integration Key automatically.
+    </Note>
+
+    <Warning>
+      Treat the Partner Integration Key like a password. Anyone with the key can read your client and user training data.
+    </Warning>
   </Step>
 </Steps>
 
-## Map companies
+---
 
-On **Map companies**, wait for discovered BSN clients. If the list is empty, use **Sync Clients**, then revisit the list after discovery completes. Review **Quick Match** proposals or select a company manually.
+## Part 2: MSPortal Setup Wizard
 
-Pending links require **Import Selected**, or **Next** to save pending choices. Saving BSN mappings also requests user-data synchronization. Check for a successful save before leaving; a queued sync is not completed user coverage.
+MSPortal.ai provides a guided 3-step wizard to connect and configure your Breach Secure Now integration.
 
-<Warning>
-**Create new company** saves the MSPortal company before its pending mapping is applied. Removing a saved mapping is immediate. Closing the wizard does not undo either operation.
-</Warning>
+### Starting the Wizard
 
-## Review Status
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings > Integrations**.
+  </Step>
 
-| Statistic | What to check |
-| --- | --- |
-| **Linked clients** | Mapped clients compared with discovered clients. |
-| **Active users** | Active users compared with synchronized users. |
-| **Avg. employee secure score** | Available BSN score information. |
-| **Training completion** | Available training completion information. |
-| **Users with breaches** / **Total user breaches** | Reported exposure in the available synchronized data. |
+  <Step title="Find Breach Secure Now">
+    Locate the **Breach Secure Now** card under **Add integration**. You can type "breach" in the search box or use the **Security** filter to find it quickly.
 
-Use **Sync clients** for discovery, **Sync users** for mapped user data, or **Sync all** for the combined workflow. These request background work. The page checks again shortly after starting a sync, but a long run may need you to revisit Status later.
+    ![Breach Secure Now card on the Integrations page](/images/bsn/search-for-bsn.png)
+  </Step>
 
-Missing values shown as **Not synced**, zero counts and a setup-active message do not establish that everyone is trained or free of breach exposure. Check the mapped scope and freshness, then inspect the relevant Security Awareness or reporting view. **Complete Setup** returns to Integrations without waiting for completion.
+  <Step title="Start Setup">
+    Click **Connect** on its row to launch the setup wizard.
+  </Step>
+</Steps>
 
-## Update or remove the connection
+---
 
-On an existing connection, the saved key can be retested without re-entering it. To rotate it, enter the replacement and select **Save connection**. Check discovery afterward; a credential-save success does not establish that new client records arrived.
+### Step 1: Connect
 
-**Delete** opens a confirmation for removing this connection, its synchronized BSN data and stored credentials. Correct a mapping or update a key without deleting the entire connection.
+Enter the Partner Integration Key you copied from the Breach Secure Now portal.
+
+<Steps>
+  <Step title="Enter Your Partner Integration Key">
+    Fill in the connection fields:
+
+    | Field | Value |
+    |-------|-------|
+    | **Partner integration key** | The integration key from the BSN portal |
+    | **API base URL** | Pre-filled with `https://api.pii-protect.com/securedapiaccess`. Leave the default unless Breach Secure Now has given you a different endpoint. |
+
+    ![Connect step with the Partner integration key and API base URL fields](/images/bsn/connect-step-empty.png)
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your key.
+
+    When the test passes, a green confirmation shows your partner name and a client count. This confirms MSPortal matched your key to the right partner account.
+
+    <Note>
+      The test reads only the first five clients, so the count tops out at 5. Your full client list appears on the Map Companies step.
+    </Note>
+
+    ![Connect step showing a verified Breach Secure Now connection](/images/bsn/connection-verified.png)
+
+    If the connection fails:
+    - Verify the Partner Integration Key was copied in full, without extra spaces
+    - Confirm the MSPortal integration is enabled for your partner account in the BSN portal
+    - If you see "That Partner Integration Key was not recognized by Breach Secure Now," return to Part 1, enable MSPortal for that partner account, copy the key again, then test again
+  </Step>
+
+  <Step title="Connect">
+    Once the test passes, click **Connect** to save your credentials and proceed.
+
+    <Note>
+      Your credentials are stored with encryption and are never exposed in logs or API responses.
+    </Note>
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Map Companies
+
+Map your Breach Secure Now clients to MSPortal companies. This determines which data syncs to which company.
+
+<Steps>
+  <Step title="Sync Your Clients">
+    If this is your first time on this step, you'll see **No Clients Found**. Click **Sync Clients** to pull your client list from Breach Secure Now. The sync usually takes less than a minute. Click **Check for Clients** if the list has not appeared yet.
+
+    ![No Clients Found message with the Sync Clients button](/images/bsn/map-no-clients-sync.png)
+  </Step>
+
+  <Step title="Review the Client List">
+    Once clients are synced, the page shows a summary of total, mapped, and unmapped clients, with each BSN client listed below.
+
+    ![Map companies step showing synced clients and mapping controls](/images/bsn/map-companies.png)
+  </Step>
+
+  <Step title="Use Quick Match">
+    Click **Quick Match** to automatically match BSN clients to MSPortal companies based on name similarity.
+
+    Use the confidence slider to auto-select matches, review the suggestions, and check or uncheck individual matches. Then click **Apply Matches**. The matches appear as **Pending** in the client list until you save them.
+
+    ![Quick Match results dialog with the confidence slider](/images/bsn/quick-match-results.png)
+  </Step>
+
+  <Step title="Manual Mapping">
+    For clients that were not automatically matched:
+
+    1. Find the client in the list
+    2. Click the **Select company** dropdown in the "Mapped" column
+    3. Search for and select the correct MSPortal company
+  </Step>
+
+  <Step title="Create New Companies">
+    If a BSN client does not have a corresponding MSPortal company yet, click the **+** button next to the client, or select clients and use **Create new company**. New companies are automatically mapped to their BSN clients.
+
+    <Note>
+      MSPortal creates the new company right away, even before you save its mapping. Closing the wizard does not remove it.
+    </Note>
+  </Step>
+
+  <Step title="Save Your Mappings">
+    Click **Import Selected** to save pending mappings. Saving a mapping also starts a user training sync for that client.
+
+    <Note>
+      Removing a saved mapping takes effect immediately.
+    </Note>
+  </Step>
+
+  <Step title="Proceed">
+    Once your clients are mapped, click **Next** to continue. **Next** also saves any mappings that are still pending.
+
+    <Warning>
+      You must map at least one client before proceeding. Only data from mapped clients syncs to MSPortal.
+    </Warning>
+  </Step>
+</Steps>
+
+---
+
+### Step 3: Status
+
+Review the connection status and start the first sync.
+
+<Steps>
+  <Step title="Start the Initial Sync">
+    Click **Sync all** to pull clients and user training data from Breach Secure Now.
+
+    The sync runs in the background. Depending on how many clients and users you have, the first sync can take several minutes.
+  </Step>
+
+  <Step title="Review Sync Stats">
+    The Status step shows a live summary of your synced data:
+
+    | Stat | Description |
+    |------|-------------|
+    | **Linked clients** | Mapped clients out of total BSN clients |
+    | **Active users** | Active users out of total synced users |
+    | **Avg. employee secure score** | Average ESS across linked clients |
+    | **Training completion** | Overall training completion percentage |
+    | **Users with breaches** | Users with at least one dark web breach |
+    | **Total user breaches** | Total dark web breaches attributed to synced users |
+
+    ![Status step showing sync stats and sync buttons](/images/bsn/status-step.png)
+
+    <Info>
+      User-level stats show "Not synced" until the first user sync finishes. Check back after a few minutes and the scores will fill in.
+    </Info>
+  </Step>
+
+  <Step title="Complete Setup">
+    Click **Complete Setup** to finish the wizard and return to the Integrations page. The background sync keeps running after you leave.
+  </Step>
+</Steps>
+
+---
+
+## What Gets Synced
+
+The Breach Secure Now integration syncs the following data for mapped clients:
+
+### Client Metrics
+
+- Average Employee Secure Score (ESS)
+- Average phishing fail rate
+- Dark web breach counts (breached employees and total breaches)
+- Active user count and product type
+
+### User Training Data
+
+Per-user security awareness details, including:
+
+- Security training courses available and completed
+- Micro training completion percentage and average score
+- Employee Secure Score (ESS)
+- Phishing simulation results (emails sent, clicked, captured data, phish caught)
+- Dark web breach count and last breach date
+- Last login and enrollment status
+
+---
+
+## Synchronization Schedule
+
+After the initial setup, data syncs automatically once per day. Clients sync first, followed by user training data.
+
+<Note>
+You can trigger a manual sync at any time: go to **Settings > Integrations**, open the Breach Secure Now wizard, and use **Sync clients**, **Sync users**, or **Sync all** on the Status step.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, manage your integration from **Settings > Integrations**:
+
+| Action | Description |
+|--------|-------------|
+| **Configure** | Re-open the wizard to update credentials or add more client mappings |
+| **Test Connection** | Verify your credentials are still valid. The saved key is retested without re-entering it. |
+| **Save connection** | On the Connect step, enter a new Partner Integration Key and click **Save connection** to replace the stored key. Testing alone does not save it. |
+| **Sync** | Trigger a manual data refresh from the Status step |
+| **Delete** | Remove the integration from the wizard footer. After you confirm, MSPortal deletes the connection, synced BSN data, and stored credentials. |
+
+### Adding More Client Mappings
+
+As you onboard new clients in Breach Secure Now:
+
+<Steps>
+  <Step title="Open the Wizard">
+    Go to **Settings > Integrations** and click **Configure** on the Breach Secure Now card.
+  </Step>
+  <Step title="Go to Map Companies">
+    Click **Map companies** in the wizard stepper.
+  </Step>
+  <Step title="Map New Clients">
+    Use Quick Match or manual mapping to link new BSN clients to companies, then click **Next** and **Complete Setup**.
+  </Step>
+</Steps>
+
+---
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Key not recognized | Copy the complete Partner integration key from the intended partner's MSPortal integration. Confirm that integration is enabled in BSN. |
-| Setup reports a service configuration problem | Ask MSPortal support to investigate the reported error; a new Partner ID is not required. |
-| No clients | Verify the saved connection and run client discovery before mapping. |
-| No user metrics | Save company mappings, request user sync and inspect its outcome. |
-| Counts still look old | Revisit Status after the background work; the initial success message only confirms the request. |
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Re-copy the Partner Integration Key from the BSN portal, checking for extra spaces |
+| "That Partner Integration Key was not recognized" | Confirm the key was copied in full, and that the MSPortal integration is enabled for your partner account in the Breach Secure Now portal, then test again |
+| "Breach Secure Now returned a web page instead of API data" | The API base URL points at the BSN portal website. Set it back to `https://api.pii-protect.com/securedapiaccess` |
+| "The Breach Secure Now API base URL must be a pii-protect.com address" | Only `pii-protect.com` addresses are accepted. Restore the default API base URL |
+| No clients appear on the Map step | Click **Sync Clients**, wait a moment for the background sync, then refresh the list |
+| Stats show "Not synced" | Run **Sync all** and allow a few minutes for the background sync to finish |
+| A client's data is missing | Confirm the client is mapped to a company; only mapped clients sync |
 
-## Frequently asked questions
+---
 
-<AccordionGroup>
-  <Accordion title="Do I need a Partner ID for Breach Secure Now?">
-    No. Enter the **Partner integration key** from the BSN MSPortal integration; MSPortal resolves the partner account from it.
-  </Accordion>
-  <Accordion title="Does the BSN test count prove that every client was imported?">
-    No. The connection test can report sample-client information. Review the discovered client list and saved mappings for actual coverage.
-  </Accordion>
-  <Accordion title="Does Test Connection rotate the stored BSN key?">
-    No. After entering the replacement, use **Save connection**. A test only checks credentials.
-  </Accordion>
-  <Accordion title="When are pending BSN mappings saved?">
-    Use **Import Selected**, or **Next** to save pending mappings. A created company already exists before its pending link is saved.
-  </Accordion>
-  <Accordion title="What is the difference between Sync clients and Sync users?">
-    **Sync clients** discovers the mapping inventory; **Sync users** requests training and user data for mapped clients. **Sync all** runs the combined workflow.
-  </Accordion>
-  <Accordion title="Does zero BSN breach exposure mean a client is safe?">
-    A zero only describes available synchronized data. Check company mapping, freshness and provider coverage before drawing conclusions.
-  </Accordion>
-  <Accordion title="Does Complete Setup wait for BSN synchronization?">
-    No. Check Status and actual reporting data after the background work completes.
-  </Accordion>
-  <Accordion title="Can Company users connect their own BSN account?">
-    The wizard requires MSP integration management access. Mapping provider users does not invite them or grant portal roles.
-  </Accordion>
-</AccordionGroup>
+## Next Steps
 
-## Related guides
+After setting up the Breach Secure Now integration:
 
 <CardGroup cols={2}>
-  <Card title="Company mapping" icon="arrow-right" href="/user-guides/settings/integration-company-mapping">
-    Review company matching and save boundaries.
+  <Card title="View Security Data" icon="shield-halved" href="/user-guides/security/index">
+    Explore security awareness scores and breach exposure per client
   </Card>
-  <Card title="Security awareness" icon="arrow-right" href="/user-guides/training/security-awareness">
-    Read available awareness metrics and their limitations.
+  <Card title="Build Reports" icon="chart-bar" href="/user-guides/reporting/index">
+    Include training and phishing metrics in client reports
+  </Card>
+  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
+    Explore additional integration options
+  </Card>
+  <Card title="Integration FAQ" icon="circle-question" href="/user-guides/integrations/faq">
+    Common questions about syncing and mapping
   </Card>
 </CardGroup>
+
+## Need Help?
+
+For assistance with the Breach Secure Now integration, contact support@msportal.ai.

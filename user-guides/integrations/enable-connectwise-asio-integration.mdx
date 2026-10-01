@@ -4,99 +4,175 @@ description: 'Connect ConnectWise Asio, map companies to companies, and import d
 icon: 'plug'
 ---
 
-Connect **ConnectWise Asio** to bring its companies and device inventory into MSPortal. The setup flow is **Connect → Sync → Map → Map Locations → Import**.
+ConnectWise Asio (formerly ConnectWise RMM) is a remote monitoring and management platform. This guide is for MSP staff who connect Asio so its companies, devices, hypervisors and network devices appear in MSPortal. The setup steps are **Connect**, **Map**, **Map Locations** and **Import**.
 
 ## Before you start
 
-This is an **MSP staff** task. You need access to **Settings > Integrations**, permission to manage integrations, authorized vendor credentials, and companies to receive the imported records. Company users do not configure this connection.
+- You are MSP staff with permission to manage integrations. Company users cannot set this up.
+- You have admin access to ConnectWise Asio.
+- Your companies already exist in MSPortal, usually from your PSA integration. Asio companies are mapped to those existing companies.
+- ConnectWise PSA keys do not work here. Asio uses its own API Client ID and Client Secret.
 
-Obtain an Asio API Client ID and Client Secret from your ConnectWise administrator, together with their environment. These are Asio credentials; ConnectWise PSA public/private keys are a different connection.
+<Note>
+The first sync can take hours, or even days, for a large account. Companies appear on the **Map** step as they sync, and devices appear in staging as the sync progresses.
+</Note>
 
-## Connect the provider
+## Create API credentials in Asio
 
-1. Open **Settings > Integrations**, find **ConnectWise Asio**, and choose its connection/setup action. Use **Configure** on the existing connection when managing an established setup.
-2. Enter the connection fields below.
-3. Choose **Test Connection** and resolve any reported error.
-4. After a successful test, choose **Create Integration**. This saves the connection. Continue through **Sync** to choose data categories and start discovery. A successful test alone does not create it.
+<Steps>
+  <Step title="Open API Access">
+    Sign in to ConnectWise Asio as an admin and go to **Integrations > API Access**.
+  </Step>
+  <Step title="Add an API key">
+    Select **Generate API Access** (or **+ Add** if you already have keys) and enter **MSPortal** as the **API Key Name**.
+  </Step>
+  <Step title="Choose the scopes">
+    Grant these scopes.
 
-| Field | What to enter |
-| --- | --- |
-| **Environment** | Select the environment where your Asio API application was issued. |
-| **Client ID** | The client identifier for that environment. |
-| **Client Secret** | The matching secret from your Asio API application. |
+    | Scope | Permission |
+    | --- | --- |
+    | Platform - Agent | Read |
+    | Platform - Assets | Read |
+    | Platform - Companies | Read |
+    | Platform - Custom Fields values | Read |
+    | Platform - DataMapping | Read |
+    | Platform - DeviceGroups | Read |
+    | Platform - Devices | Read |
+    | Platform - Sites | Read |
+    | Platform - Tickets | Create, Read and Update |
+  </Step>
+  <Step title="Save and copy the credentials">
+    Select **Save**. Copy the **Client ID** and **Client Secret** now. Asio does not show them again after you close the dialog.
+  </Step>
+</Steps>
 
-The form checks the Client ID prefix against the selected environment: **NA: 0e30**, **EU: 0e31**, **AU: 0e32**, and **QA: 0e11**. A prefix mismatch must be resolved before testing. Initial discovery can take substantially longer for large environments; check actual results rather than assuming a fixed completion time.
+## Connect Asio to MSPortal
 
-<img src="/images/product/asio-setup-connection.png" alt="ConnectWise Asio setup in MSPortal with blank credential inputs" width="1024" height="908" />
+<Steps>
+  <Step title="Start the setup">
+    In MSPortal, go to **Settings > Integrations**, find **ConnectWise Asio** and select **Connect**. To change an existing connection, select **Configure** on its row instead.
+  </Step>
+  <Step title="Enter the connection details">
+    On the **Connect** step, fill in these fields.
 
-MSP example: a new connection before credentials are entered.
+    | Field | What to enter |
+    | --- | --- |
+    | **Environment** | The region your Asio account runs in: **Production - AU**, **Production - NA**, **Production - EU** or **QA**. |
+    | **Client ID** | The Client ID you copied. It must start with the prefix for your environment: NA `0e30`, EU `0e31`, AU `0e32`, QA `0e11`. |
+    | **Client Secret** | The matching Client Secret. |
 
-## Choose what to sync
+    <img src="/images/product/asio-setup-connection.png" alt="ConnectWise Asio setup in MSPortal with blank credential inputs" width="1024" height="908" />
+  </Step>
+  <Step title="Test the connection">
+    Select **Test Connection**. A **Connection tested successfully** message means the credentials work. If it fails, check the environment, the Client ID prefix, the secret and the scopes.
+  </Step>
+  <Step title="Create the integration">
+    Select **Create Integration**. A successful test alone does not save the connection. The secret is stored in encrypted vault storage.
+  </Step>
+</Steps>
 
-<Note>Branch preview: this setup flow includes a dedicated **Sync** step.</Note>
+If your account shows a **Sync** step after **Connect**, use it to choose which data to import. The choices are **Companies**, **Locations**, **Devices**, **Networks**, **Tickets** and **Software**. Select **Next** to save them. Turning a category off stops future syncs of it. Turning **Software** off removes that integration's software inventory, and turning it back on starts a new inventory sync.
 
-After connecting, open **Sync** and choose the data to import: **Companies, Locations, Devices, Networks, Tickets, and Software**. Only categories supported by this provider appear. Continue with **Next** to save your choices before discovery and mapping. Existing connections keep their current behavior until you change a choice.
+<Frame caption="The Sync step with its data categories.">
+  <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio Sync step with six supported data categories" width="1440" height="960" />
+</Frame>
 
-Disabling a category stops future synchronization for that category. Turning **Software** off removes that integration's software inventory; turning it back on starts a new inventory sync. Device and company mapping still determine which records can appear in the portal.
+## Map companies
 
-## Map companies to companies
+<Steps>
+  <Step title="Open the Map step">
+    Continue to **Map**. The list shows each Asio company and whether it is mapped. Use the filter to show **All**, **Mapped** or **Unmapped** companies.
+  </Step>
+  <Step title="Match companies">
+    Select **Quick Match** to suggest matches by name, then review each suggestion. For the rest, use **Select company...** on each row to pick the MSPortal company.
+  </Step>
+  <Step title="Save the mappings">
+    Select **Import Selected** to save the pending mappings, check that the rows show saved links, then select **Next**. **Next** also tries to save pending mappings.
+  </Step>
+</Steps>
 
-1. Continue to **Map** after discovery has returned the provider’s companies.
-2. Select an existing company for each intended record, or use **Quick Match** and review each suggested company.
-3. Review the pending links, then choose **Import Selected** to apply the selected imports and pending links. Check the selected records as well as the pending-link count before submitting. The wizard’s **Next** also attempts to save pending mappings before continuing. Check that the rows show saved links before proceeding.
-4. Remove a pending suggestion to discard that draft. Removing an already saved link takes effect immediately.
+<Tip>
+Map Asio companies to companies you already have. Creating a new company from this screen adds it immediately, so check for an existing one first.
+</Tip>
 
-Creating a company from the mapping screen creates the company immediately; its new mapping still needs to be saved. Check for an existing company first to avoid duplicates. Moving forward from mapping can start synchronization using the saved links.
+Removing a pending suggestion discards it. Removing a saved link takes effect immediately.
 
-## Map locations when needed
+## Map locations (optional)
 
-In **Map Locations**, match discovered locations to the PSA locations of the mapped company. A manual location selection or removal saves immediately. **Quick Match** suggestions remain pending until saved with **Save All** or the wizard’s **Next**.
+<Steps>
+  <Step title="Open Map Locations">
+    Only locations for mapped companies appear. If you do not need location mapping, select **Skip**.
+  </Step>
+  <Step title="Match locations">
+    Use **Quick Match** to suggest matches by name within each company, or pick a PSA location on each row. Manual picks and removals save immediately.
+  </Step>
+  <Step title="Save">
+    Select **Save All** to confirm pending **Quick Match** suggestions, then continue.
+  </Step>
+</Steps>
 
-This step is optional. If no locations appear, check that the company is mapped and location discovery has completed; you can return later. Location mapping does not create missing PSA locations.
+Location mapping does not create missing PSA locations.
 
 ## Import devices
 
-The **Import** step is an entry point. Select **Open Device Import** to open the actual device staging and type-mapping page.
+<Steps>
+  <Step title="Open the import page">
+    On the **Import** step, select **Open Device Import**. You can return later with the **Import Devices** action on the ConnectWise Asio row under **Settings > Integrations**.
+  </Step>
+  <Step title="Map device types">
+    In **Device Type Mappings**, map each Asio device type to an MSPortal device type. Turn on **Auto-Sync** for types you want imported automatically. Select **Ignore** for categories you do not need.
+  </Step>
+  <Step title="Import the devices you want">
+    In **Staged Devices**, select the devices and choose **Import Selected**.
+  </Step>
+  <Step title="Finish setup">
+    Return to the wizard and select **Complete Setup**.
+  </Step>
+</Steps>
 
-Review the company and device type before importing. Map provider categories to MSPortal device types, then import the intended records. Where offered, **Auto-Sync** enables future imports for the mapped category and **Ignore** excludes a category. These are saved configuration choices, not temporary list filters.
-
-Follow [Import Devices](/user-guides/integrations/import-devices) for selection, type mappings and result handling. Check the import result and resulting Devices records. **Complete Setup** finishes the wizard; its success message does not prove every background sync or device import has completed.
+For selections, type mappings and results, see [Import Devices](/user-guides/integrations/import-devices).
 
 ## Manage an existing connection
 
-The environment and Client ID are locked on an existing connection. A newly entered secret can be used for **Retest Connection**, but this screen has no credential-update button. Do not assume retesting replaces the saved secret.
-
-Reopen the specific connection to review mappings and imports. An existing **Connection verified** state is not evidence that a fresh retest just ran. Inspect recent sync status and errors when diagnosing stale inventory.
-
-The wizard’s **Delete** action opens a **Delete Integration** confirmation. Read it before proceeding: deletion is not a refresh or a temporary pause. It does not revoke vendor credentials on the vendor’s behalf.
+<Steps>
+  <Step title="Reopen the connection">
+    Go to **Settings > Integrations** and select **Configure** on the ConnectWise Asio row. Use it to review mappings and imports.
+  </Step>
+  <Step title="Retest if needed">
+    The environment and Client ID are locked. You can enter a secret and select **Retest Connection**, but this screen has no button to replace the saved secret.
+  </Step>
+  <Step title="Delete the connection (optional)">
+    Select **Delete Integration** and read the confirmation. Deleting removes the connection and its settings. It does not revoke the API key in Asio, so remove that key in Asio yourself.
+  </Step>
+</Steps>
 
 ## Troubleshooting
 
-| Symptom | What to check |
+| Problem | What to do |
 | --- | --- |
-| Connection test fails | Credential type, vendor access, host/region, expired or revoked credentials, and the reported error. |
-| Map is empty | Discovery status and the vendor account’s access to the intended records. Avoid repeatedly creating connections. |
-| A mapping disappeared | Check whether it was pending or saved. Reopen the connection to verify the saved state. |
-| Devices are missing | Saved company mappings, completed device sync, type mappings, Ignore settings and the import result. |
-| Inventory is old | Last successful provider sync, any paused state, and connection errors. A scheduled time does not guarantee a successful run. |
+| Connection test fails | Check the **Environment**, the Client ID prefix, the Client Secret and that every scope above is granted. |
+| No companies on the Map step | Wait for the first sync to progress, and confirm the API key has the **Platform - Companies** Read scope. |
+| A mapping disappeared | Reopen **Configure** and check which rows show a saved link. Suggestions stay pending until you select **Import Selected**. |
+| Devices are missing | Check that the company is mapped, the first sync has finished, the device type is mapped and not set to **Ignore**, and the devices were imported from **Staged Devices**. |
+| Inventory is old | Check the last successful sync and any paused or error state on the integration. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Test Connection save the integration?">
-    No. For a new connection, complete the successful test and then choose **Create Integration**. Existing-connection retesting is also distinct from any credential-update action.
+    No. After a successful test, select **Create Integration**.
   </Accordion>
-  <Accordion title="Does Quick Match immediately save every suggested link?">
-    No. Review and apply the intended suggestions, then save the pending mappings. Removing a saved link is an immediate change.
+  <Accordion title="Does Quick Match save every suggestion?">
+    No. Suggestions are pending until you select **Import Selected** (companies) or **Save All** (locations).
   </Accordion>
-  <Accordion title="Does Complete Setup mean all devices are imported?">
-    No. Device discovery, saved mappings and inventory imports have separate results. Open the device import page and check the resulting inventory.
+  <Accordion title="Does Complete Setup mean every device is imported?">
+    No. Device sync and import run separately. Open the device import page to check what was imported.
   </Accordion>
-  <Accordion title="Can a Company user configure this provider?">
-    No. Provider setup is an MSP settings task. Company access to resulting data depends on portal permissions and company scope.
+  <Accordion title="Can a company user set up Asio?">
+    No. Setup is an MSP staff task.
   </Accordion>
   <Accordion title="Does Asio replace my ConnectWise PSA setup?">
-    No. Asio is the RMM connection. ConnectWise PSA has a separate setup for its service workflows, company imports and ticket settings.
+    No. Asio is the RMM connection. ConnectWise PSA has its own setup for tickets and company imports.
   </Accordion>
 </AccordionGroup>
 
@@ -106,7 +182,4 @@ The wizard’s **Delete** action opens a **Delete Integration** confirmation. Re
 - [Import Devices](/user-guides/integrations/import-devices)
 - [Devices](/user-guides/devices/index)
 - [Integration settings](/user-guides/settings/integrations)
-
-<Frame caption="Branch preview: Asio Sync step with six supported data categories.">
-  <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio Sync step with six supported data categories" width="1440" height="960" />
-</Frame>
+- [Clear and resync integrations](/user-guides/integrations/clear-and-resync-integrations)

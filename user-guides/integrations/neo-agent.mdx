@@ -1,85 +1,103 @@
 ---
 title: 'Neo Agent Compatibility'
-description: 'Understand the shared-PSA workflow and verify routing, automation eligibility and returning ticket updates.'
+description: 'MSPortal works with Neo Agent through your PSA, with no direct integration to set up.'
 icon: 'robot'
 ---
 
-MSPortal and Neo Agent can participate in a shared-PSA workflow. MSPortal delivers a request to the PSA; Neo Agent can process eligible PSA tickets according to its own connection, triggers and workflow configuration. MSPortal has no direct Neo Agent setup card.
+MSPortal and Neo Agent work together through your PSA. MSPortal writes each ticket into the PSA, and Neo Agent picks up eligible tickets from the same PSA and runs its workflows. This guide is for MSP staff. Company users submit requests through their portal and do not set up Neo Agent or the PSA connection.
 
-This is an **MSP staff** configuration task. Company users submit requests through their portal and do not configure Neo Agent or the PSA connection.
+<Note>
+You will not find a Neo Agent card under **Settings > Integrations**. Nothing connects directly between the two products, and you do not enter a Neo Agent API key in MSPortal.
+</Note>
 
 ## Before you start
 
-- Configure a supported PSA connection in MSPortal and verify company/requester mappings.
-- Configure Neo Agent for that same PSA account and the intended ticket scope. Confirm current provider support in [Neo Agent’s integration documentation](https://docs.neoagent.io/integrations/intro).
-- Review **Settings > Tickets** in MSPortal, including delivery method, selected PSA, routing defaults and template/company overrides.
-- Review Neo Agent's workflow triggers, conditions and enabled state. Its [triggered workflow documentation](https://docs.neoagent.io/core/triggers-and-schedules/triggered-workflows) describes event-driven execution.
+- A PSA integration is connected in MSPortal, and companies and requesters are mapped. See [Import Companies](/user-guides/integrations/import-companies).
+- Neo Agent is connected to the same PSA account and watches the boards or queues you want. Set this up in Neo Agent.
+- You reviewed **Settings > Tickets** in MSPortal: the delivery method, the selected PSA, the routing defaults and any template or company overrides.
+- Neo Agent has a workflow whose trigger conditions match the tickets MSPortal creates, and it is enabled.
 
-<Note>
-No direct connector is required between the products, but both PSA connections and the relevant automation still need configuration. Compatibility does not guarantee that every ticket will trigger or complete an automation.
-</Note>
-
-## Check the ticket flow
+## How tickets flow
 
 <Steps>
-  <Step title="Submit through the intended workflow">
-    Company users should start with the Home AI Assistant and review the request before submitting. Tickets > New Ticket is the manual alternative; your configured template or workflow can also create requests.
+  <Step title="A ticket is created in MSPortal">
+    Company users should start with the AI Assistant on **Home** and review the request before they submit. **Tickets > New Ticket** is the manual option. Ticket templates and forms can also create requests.
   </Step>
-  <Step title="Verify delivery to the PSA">
-    Confirm the actual ticket exists in the intended PSA with the expected company, requester and routing. MSPortal also supports Email (SMTP) delivery and fallback email, so a portal submission is not proof that a PSA ticket was created directly.
+  <Step title="MSPortal writes the ticket to your PSA">
+    With **PSA Integration** as the delivery method, the ticket lands in the PSA with its board or queue, type, status, priority, mapped company and requester. With **Email (SMTP)** delivery, or if the PSA is unavailable and a fallback email is set, the ticket is emailed instead. Email-to-ticket then works as a separate PSA workflow.
   </Step>
-  <Step title="Check automation eligibility in Neo Agent">
-    Confirm the ticket meets the watched board/queue, type, status and other trigger conditions. A ticket being present in the PSA is only one prerequisite. Review the Neo Agent execution result separately.
+  <Step title="Neo Agent picks it up">
+    Neo Agent sees the ticket on a board it watches and runs a matching workflow if the ticket meets its trigger conditions.
   </Step>
-  <Step title="Check returning updates">
-    Verify the resulting PSA changes and allow the relevant MSPortal ticket/note synchronization to complete. Supported fields and visibility depend on the provider and portal permissions. A private PSA note does not become client-visible merely because it synchronized.
+  <Step title="Updates sync back to MSPortal">
+    Notes, status changes and resolutions Neo Agent writes to the PSA sync back through your PSA integration. Private PSA notes stay hidden from clients.
   </Step>
 </Steps>
 
-## Routing and data boundaries
+## Verify the flow end to end
 
-Review the subject, description, company, requester, board/queue, status, priority and available classification fields on the actual PSA ticket. Fields vary by provider and request workflow; do not assume every ticket contains every classification or that generated wording is correct.
+<Steps>
+  <Step title="Submit a test ticket">
+    Create a ticket for a test company through the workflow your clients use.
+  </Step>
+  <Step title="Find it in the PSA">
+    Confirm the ticket exists in the PSA with the right company, requester, board or queue, status and priority.
+  </Step>
+  <Step title="Check Neo Agent">
+    In Neo Agent, confirm the workflow ran. If it did not, compare the ticket with the workflow's board, type, status and other trigger conditions.
+  </Step>
+  <Step title="Check the update in MSPortal">
+    Wait for the next ticket and note sync, then open the ticket in MSPortal and look for Neo Agent's update.
+  </Step>
+</Steps>
 
-Template and company overrides can change routing from the General defaults. If Email (SMTP) is selected, any later email-to-ticket processing is a separate PSA workflow that must be verified.
+## What each ticket carries
 
-MSPortal does not report Neo Agent's complete execution state or configure its automation from the integration catalog. Use Neo Agent and PSA logs for that part of the investigation.
+| Field | What MSPortal sends |
+| --- | --- |
+| **Summary** | A short subject line |
+| **Description** | Details captured at creation, including requester context |
+| **Board / Queue** | The board you configured, including template or company overrides |
+| **Status and priority** | Set from your routing configuration |
+| **Company** | The mapped PSA company |
+| **Contact** | The requester, matched to a PSA contact |
+| **Type and subtype** | Included where the PSA provider supports them |
+
+Template and company overrides can change routing from the defaults on **Settings > Tickets**. Available classification fields vary by PSA provider.
 
 ## Troubleshooting
 
-| Symptom | What to check |
+| Problem | What to do |
 | --- | --- |
-| No Neo Agent integration card | Expected: this uses shared PSA data rather than a direct MSPortal connector. |
-| Request is missing in the PSA | Delivery method, fallback email, provider errors and the actual submission outcome. |
-| Ticket exists but Neo Agent does nothing | Same PSA account, watched board/queue, workflow trigger conditions and enabled state. |
-| Automation changed the wrong classification | Actual PSA fields, provider support and template/company routing overrides. |
-| Update exists in the PSA but not MSPortal | Ticket/note sync coverage, freshness, errors and role/display-group visibility. |
+| No Neo Agent card in Integrations | This is expected. There is no direct connector. |
+| The ticket is missing in the PSA | Check the delivery method and fallback email on **Settings > Tickets**, and look for provider errors. |
+| The ticket exists but Neo Agent does nothing | Check Neo Agent uses the same PSA account, watches that board or queue, and has an enabled workflow whose conditions match. |
+| Neo Agent set the wrong classification | Check the fields on the PSA ticket and any template or company routing overrides. |
+| A Neo Agent update is missing in MSPortal | Wait for the next sync, then check the ticket and note sync status and who can see that note. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Do I enter a Neo Agent API key in MSPortal?">
-    No. There is no direct Neo Agent setup card. Configure each product's connection to the same supported PSA.
+    No. Connect each product to the same PSA. There are no credentials to exchange between them.
   </Accordion>
   <Accordion title="Does every MSPortal request create a PSA ticket?">
-    No. Ticket delivery can use PSA Integration or Email (SMTP), and failures can use configured fallback delivery. Verify the actual PSA ticket before investigating automation.
+    No. Delivery can be **PSA Integration** or **Email (SMTP)**, and a fallback email is used when the PSA is down. Check the PSA ticket before you investigate Neo Agent.
   </Accordion>
-  <Accordion title="Does a PSA ticket automatically prove Neo Agent ran?">
-    No. The ticket must meet the enabled workflow's conditions. Check Neo Agent's execution result independently.
+  <Accordion title="Does a ticket in the PSA mean Neo Agent ran?">
+    No. The ticket must meet an enabled workflow's conditions. Check Neo Agent's own execution results.
   </Accordion>
-  <Accordion title="Does every ticket have the same type and subtype fields?">
-    No. Available classifications and defaults depend on the PSA provider and creation workflow. Inspect the ticket that was actually created.
+  <Accordion title="Will clients see all of Neo Agent's updates?">
+    Only updates that sync back and that their portal permissions allow. Private notes stay hidden.
   </Accordion>
-  <Accordion title="Will all Neo Agent updates immediately appear to Company users?">
-    No. Returning updates depend on supported PSA synchronization and portal visibility. Private notes and restricted fields remain subject to those rules.
-  </Accordion>
-  <Accordion title="Where should Company users start a request?">
-    Start with the Home AI Assistant and review before submission. Tickets > New Ticket is the manual alternative; the MSP manages delivery and automation setup.
+  <Accordion title="Where should company users start a request?">
+    With the AI Assistant on **Home**, or **Tickets > New Ticket**. The MSP manages delivery and automation.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Ticket settings and delivery](/user-guides/settings/tickets)
-- [Integration Company Mapping](/user-guides/settings/integration-company-mapping)
+- [Integration company mapping](/user-guides/settings/integration-company-mapping)
 - [Ticketing](/user-guides/ticketing/index)
 - [Integrations](/user-guides/integrations/index)

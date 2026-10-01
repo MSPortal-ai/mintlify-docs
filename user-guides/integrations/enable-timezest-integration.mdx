@@ -1,89 +1,112 @@
 ---
 title: 'Configure TimeZest Integration'
-description: 'Connect appointment scheduling and control client access to TimeZest features'
-icon: 'plug'
+description: 'Connect TimeZest and control scheduling capabilities for client users'
+icon: 'calendar-clock'
 ---
 
-Use TimeZest to offer scheduling from ticket templates and display appointments in supported portal views. The setup flow is **Connect → Configure → Status**.
+Connect TimeZest to create scheduling requests after client tickets, display appointments in MSPortal calendars and tickets, and provide secure appointment management links.
 
-## Before you start
+<Note>
+TimeZest is currently a beta integration. If the integration is not available in **Settings > Integrations**, contact support@msportal.ai.
+</Note>
 
-This is an **MSP staff** task requiring integration-management permission and authorized vendor credentials. This provider is available only when enabled for your MSP tenant. If its setup page is unavailable, check availability with your MSPortal administrator. Company users do not configure this connection.
+## Prerequisites
 
-Use a **read/write TimeZest API key** for scheduling. The connection test checks read access by retrieving appointment types and scheduling resources. It does not create a test appointment and therefore does not verify write access.
+- A TimeZest account with permission to create API keys
+- A TimeZest API key with read and write access
+- MSPortal.ai integration management permission
+- Client roles or company groups if you plan to restrict scheduling access
 
-## Connect the API key
+<Warning>
+Use a read/write API key. MSPortal tests read access during setup, but it does not test write access because doing so would create a real scheduling request.
+</Warning>
 
-1. Open **Settings > Integrations**, find **TimeZest**, and open setup.
-2. Enter the **API Key**, then choose **Test Connection**.
-3. Review the returned appointment-type and resource counts. Resolve access errors before continuing.
-4. Select **Create Integration** for a new connection. To replace an existing key, test the replacement and select **Update API Key**.
+## Connect TimeZest
 
-The saved key is masked. A successful read test is not proof that ticket scheduling will succeed with that key.
+<Steps>
+  <Step title="Create an API key">
+    In TimeZest, create a dedicated read/write API key for MSPortal and copy it to a secure location.
+  </Step>
+  <Step title="Open the setup page">
+    In MSPortal, go to **Settings > Integrations**, find **TimeZest** under **Add integration**, and click **Connect**. If TimeZest is already connected, click **Configure** on its row instead.
+  </Step>
+  <Step title="Test the connection">
+    Enter the key in the **API Key** field and click **Test Connection**. MSPortal verifies read access and reports how many appointment types and scheduling resources it found. Resolve any access error before you continue.
+  </Step>
+  <Step title="Save the connection">
+    After the test succeeds, click **Create Integration**. MSPortal stores the key securely and does not display it again. A successful test on its own does not save the key.
+  </Step>
+</Steps>
 
-## Configure features and client access
+## Configure Scheduling Capabilities
 
-Choose each capability independently in **Configure**:
+Enable each capability independently in the **Configure** step:
 
-| Capability | Result |
-| --- | --- |
-| **Schedule from ticket templates** | Eligible clients can continue from a supported PSA ticket request to TimeZest scheduling. |
-| **Show appointments on calendars** | Eligible clients can see synchronized TimeZest appointments on calendars. |
-| **Show appointments on tickets** | Eligible ticket details offer an Appointments tab. |
-| **Allow appointment changes** | Eligible users can open the secure TimeZest management link for appointment actions. |
+| Capability | What it enables |
+|------------|-----------------|
+| Schedule from ticket templates | Creates a PSA ticket and then sends the client to TimeZest to select an appointment time |
+| Show appointments on calendars | Displays scheduled TimeZest appointments in MSPortal calendars |
+| Show appointments on tickets | Adds an Appointments tab to supported ticket details |
+| Allow appointment changes | Exposes the secure TimeZest link for scheduling, rescheduling, or canceling an appointment |
 
-For each enabled capability, choose **Client security roles** and **Company groups** if access should be restricted. Empty lists mean all client roles or all company groups for that dimension. When both restrictions are selected, a client must match **both**. MSP staff retain access to enabled capabilities.
+For each capability, you can optionally select **Client security roles** and **Company groups**. Leaving a list empty means all client roles or all company groups. When both restrictions are set, a client must match both rules. MSP staff retain access to enabled capabilities.
 
-Select **Save All** to persist feature and audience changes. The switches and selections do not save immediately. Feature access still depends on the underlying ticket/calendar permissions and compatible request workflow.
+Click **Save All** after changing the capabilities or their audience restrictions. Switches and selections do not save until you click it.
 
-## Configure the ticket template and review status
+## Turn On Scheduling in a Ticket Template
 
-Enable the relevant scheduling option in the intended ticket template and select an appointment type and schedulable resource offered by TimeZest. A connection alone does not configure every request template. See [Request templates](/user-guides/ticketing/understand-request-templates).
+Connecting TimeZest does not turn on scheduling for any template. Turn it on in each [request template](/user-guides/ticketing/understand-request-templates) that should offer it.
 
-In **Status**, review the currently returned **Appointment types**, **Scheduling resources**, durations and fetched time. Empty lists or a load error need investigation before clients use the template. No specific appointment is booked until the scheduling workflow succeeds.
+<Steps>
+  <Step title="Open the template">
+    Open the ticket template that clients use to request the appointment.
+  </Step>
+  <Step title="Enable scheduling">
+    In **TimeZest appointment scheduling**, turn on **Offer Schedule Appointment for this template**.
 
-## Scheduling and changes
+    <Note>
+      Webhook-only templates cannot offer scheduling, because they do not create a PSA ticket.
+    </Note>
+  </Step>
+  <Step title="Choose the appointment details">
+    Select the **TimeZest integration**, an **Appointment type**, and up to four **Scheduling resources**. Selecting more than one resource requires TimeZest Professional.
+  </Step>
+  <Step title="Save the template">
+    Save the template. Clients who use it create the ticket first and then continue to TimeZest to pick a time. The appointment is booked only when the client finishes the TimeZest step.
+  </Step>
+</Steps>
 
-A scheduling request, a booked appointment and a changed appointment are separate outcomes. Follow the TimeZest management link to select a time or make an allowed change, then check the resulting appointment state. Creating a PSA ticket does not itself prove an appointment was booked.
+## Review Connection Status
 
-Changing an existing appointment can affect real attendees and provider records. This is a scheduling workflow, not a read-only status check.
+The **Status** step lists the active and inactive appointment types, their durations, and the schedulable users or teams returned by TimeZest, with the time they were fetched. Use this page to confirm the API key can see the resources you expect to use in ticket templates.
 
-## Remove the connection
+## Managing the Connection
 
-Choose **Delete Integration**, read the confirmation naming TimeZest, and confirm **Delete** only when you intend to remove the saved connection. Cancel leaves it in place. Manage existing appointments in TimeZest; removing a portal connection is not an appointment cancellation workflow.
+- Reopen the **Configure** step to change capabilities or audience restrictions, then click **Save All**.
+- To replace the API key, open the **Connect** step, enter the new key, click **Test Connection**, then click **Update API Key**.
+- **Delete** in the wizard footer opens a confirmation. Confirming deletes the stored key and TimeZest configuration from MSPortal. It does not remove or cancel appointments in TimeZest.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Read test passes but scheduling fails | The key must also allow writes; setup deliberately does not test a real scheduling request. |
-| Client cannot see scheduling | Feature enabled, saved role and company-group restrictions, template configuration and underlying permissions. |
-| Appointment type is missing | Current TimeZest types/resources and the Status fetch result. |
-| Calendar or ticket appointment is absent | Correct company/ticket, enabled display capability, sync freshness and an actually booked appointment. |
-| Configuration did not persist | Select **Save All** on Configure; key replacement uses **Update API Key** separately. |
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Confirm the API key is active and has read access to appointment types and scheduling resources. |
+| Scheduling request fails after setup | Replace the key with one that has both read and write access. Setup intentionally tests only read access. |
+| A client cannot see a capability | Confirm the capability is enabled and saved with **Save All**, and that the client matches both the selected security-role and company-group restrictions. |
+| Clients cannot schedule from a template | Confirm **Offer Schedule Appointment for this template** is on and the template has an appointment type and resource selected. |
+| Settings did not persist | Click **Save All** on the Configure step. Key changes use **Update API Key** on the Connect step instead. |
+| An appointment type or resource is missing | Confirm it is active and visible to the API key in TimeZest, then reopen the **Status** step. |
 
-## Frequently asked questions
+## Related Resources
 
-<AccordionGroup>
-  <Accordion title="Does the setup test verify appointment creation?">
-    No. It verifies read access only. Scheduling needs a read/write key and an actual successful scheduling workflow.
-  </Accordion>
-  <Accordion title="Do role and company-group rules use OR?">
-    No. When both are restricted, a client must match both. An empty restriction list allows all for that dimension.
-  </Accordion>
-  <Accordion title="Do the feature switches save immediately?">
-    No. Select **Save All** in Configure.
-  </Accordion>
-  <Accordion title="Does opening a ticket mean an appointment is booked?">
-    No. The client must complete the subsequent TimeZest scheduling flow.
-  </Accordion>
-  <Accordion title="Can I replace the key by testing it?">
-    Test the replacement, then select **Update API Key** to save it.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Request templates](/user-guides/ticketing/understand-request-templates)
-- [Calendar](/user-guides/calendar/index)
-- [Integration settings](/user-guides/settings/integrations)
+<CardGroup cols={2}>
+  <Card title="Ticketing" icon="ticket" href="/user-guides/ticketing/index">
+    Learn how clients create and manage tickets
+  </Card>
+  <Card title="Calendar" icon="calendar" href="/user-guides/calendar/index">
+    Review appointments in MSPortal calendars
+  </Card>
+  <Card title="Request Templates" icon="file-lines" href="/user-guides/ticketing/understand-request-templates">
+    Turn on TimeZest scheduling for a template
+  </Card>
+</CardGroup>

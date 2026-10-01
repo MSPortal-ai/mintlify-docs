@@ -1,65 +1,104 @@
 ---
 title: "Read Kaseya and Spanning backup health"
-description: "Interpret workload coverage, trends, customer results, and imported-data refresh."
+description: "Read workload coverage, trends and customer results for Kaseya SaaS Protection and Spanning Backup."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access, an enabled provider feature, an active connection, and mapped company data.
+These reports summarize Microsoft 365 backup health for Exchange, OneDrive, SharePoint and Teams from Kaseya SaaS Protection and Spanning Backup. MSP staff and company users with Backup read access can use them. They are not restore browsers for individual files.
+
+## Before you start
+
+- You have Backup read access.
+- Kaseya SaaS Protection or Spanning Backup is connected, its feature is turned on for your account, and its customers are mapped to companies.
+- The company selector shows the companies you want.
 
 ## Open the report
 
-1. Open **Backup > Microsoft 365**.
-2. Select **SaaS Protection** for Kaseya or **Spanning Backup** when several providers are available. With only one available provider, its report opens directly.
-3. Confirm the company selection and customers in scope.
-4. Expand **Overall backup health** to review **Workload health**.
-5. Expand **Backup result trend** and review **Customer backup health** below it.
-
-These reports summarize Exchange, OneDrive, SharePoint, and Teams services. They are not individual-file restore browsers.
+<Steps>
+  <Step title="Open Microsoft 365">
+    Go to **Backup > Microsoft 365**.
+  </Step>
+  <Step title="Choose the provider">
+    When several providers have data, choose **SaaS Protection** for Kaseya or **Spanning Backup**. With one provider, its report opens directly.
+  </Step>
+  <Step title="Check the scope">
+    Confirm the companies in scope. The header shows how many customers are included.
+  </Step>
+  <Step title="Expand Overall backup health">
+    Open **Overall backup health** to see **Workload health**.
+  </Step>
+  <Step title="Expand Backup result trend">
+    Open **Backup result trend**, then read **Customer backup health** below it.
+  </Step>
+</Steps>
 
 ## Read coverage and status
 
-**Backed up in the last 24 hours** compares backed-up services with active services in the imported snapshot. The displayed percentage weights the selected customers by their active-service counts; it is not an equal average of company percentages.
+**Backed up in the last 24 hours** compares backed-up services with active services in the imported snapshot. The percentage weights each customer by its active services. It is not an average of company percentages.
 
-Kaseya also shows **Services in initial backup**. For its workload summaries:
+Kaseya also shows **Services in initial backup**. Its workload statuses read as follows.
 
-| Label | Interpretation |
+| Label | Meaning |
 | --- | --- |
-| **Healthy** | Backed-up services cover the active-service count, with no services still in initial backup. |
-| **Needs attention** | Coverage is at least 90% but below full protection, or initial backups remain. |
+| **Healthy** | Backed-up services cover all active services, and none are in initial backup. |
+| **Needs attention** | Coverage is at least 90% but below full, or initial backups remain. |
 | **Critical** | Coverage is below 90%. |
-| **No data** / **N/A** | There is no usable active-service basis for the calculation. |
+| **No data** or **N/A** | There is no active-service count to calculate from. |
 
-Spanning uses its reported workload health status and does not show Kaseya's initial-backup metric. Do not apply Kaseya's percentage thresholds to Spanning's labels.
+Spanning uses its own reported workload health and has no initial-backup metric. Do not apply Kaseya's thresholds to Spanning.
 
-Overall health summarizes customer statuses. Check individual customer and workload rows even when the overall label is Healthy: a missing workload can still have no data. A percentage from an old snapshot does not establish current protection.
+Check individual customer and workload rows even when the overall label is **Healthy**, because a workload can still have no data. A percentage from an old snapshot does not show current protection.
 
-**Last 100% successful backup** summarizes available customer dates. It is not proof that every customer completed a backup at the same moment, and customers without a date require separate investigation. **Last synced** describes imported-data freshness, not when a backup operation ran; the header timestamp should not be assumed to prove every customer has refreshed.
+**Last 100% successful backup** is the most recent date every active workload in scope was fully protected. Customers without a date need a separate check. **Last synced** shows when the data was imported, not when a backup ran.
 
-## Review trends and customer rows
+## Read the trend and customer rows
 
-Kaseya offers **10 days** and **30 days** for the trend. Spanning uses **7 days**. Expand the trend and hover a plotted point to read its available percentage. The lines combine successful-service coverage by workload and day. Missing dates or a line drawn between points do not prove a backup ran during the gap.
+<Steps>
+  <Step title="Pick the trend range">
+    Kaseya offers **10 days** and **30 days**. Spanning always shows 7 days.
+  </Step>
+  <Step title="Read the lines">
+    Hover a point to read its percentage. The lines combine successful-service coverage by workload and day. A line drawn across a gap does not prove a backup ran in it.
+  </Step>
+  <Step title="Read Customer backup health">
+    The table lists each company with its mapped provider customer, **Health**, a ratio per workload and **Last full success**. Kaseya also shows **Initial**. On a narrow screen, scroll the table sideways.
+  </Step>
+</Steps>
 
-The customer table shows the portal company and mapped provider customer, health, workload ratios, and Last full success. Kaseya also shows Initial. On a narrow screen, scroll the table horizontally to reach its remaining columns. Customer rows do not open a restore or editing form.
+Customer rows do not open a restore or edit form.
 
-## Refresh and investigate missing data
+## Refresh the report
 
-Select **Refresh** to reload the imported report. It does not trigger a provider sync, run a backup, or repair a failed service. Check the displayed dates after refreshing.
+Select **Refresh** to reload the imported report. It does not start a provider sync, run a backup or repair a failed service. Check the dates after you refresh.
 
-If the report says **Backup health could not be loaded**, try Refresh. If the issue continues, Company users should contact their MSP. MSP staff should inspect the selected provider's connection, sync status, company mapping, and feature access. Some shared Spanning empty/error text still mentions Kaseya; use the selected provider to identify the integration to check.
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Backup health could not be loaded** | Select **Refresh**. If it continues, company users contact their MSP. MSP staff check the provider's connection, sync status, company mapping and feature access. Some Spanning messages still mention Kaseya, so use the provider you selected. |
+| **No mapped SaaS Protection customers** | The connection synced customers, but none are mapped to a company. MSP staff select **Open company mapping** and map them. |
+| **Check your integration** | MSPortal could not load backup data. MSP staff select **Open integration settings** and check the connection and sync. |
+| The 30-day option is missing | Spanning shows 7 days only. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Refresh start a new backup?">
-    No. It reloads data already imported into MSPortal. Provider synchronization and backup execution are separate operations.
+    No. It reloads data already imported into MSPortal.
   </Accordion>
   <Accordion title="Why can 100% still need attention in Kaseya?">
-    Services can still be in initial backup. Read the initial-backup count and individual workload status alongside the percentage.
+    Services can still be in initial backup. Read the initial-backup count and each workload's status with the percentage.
   </Accordion>
-  <Accordion title="Why is Spanning missing the 30-day selector and Initial column?">
-    Spanning uses a seven-day trend and its own reported health status. The initial-backup metric and 10/30-day choices belong to Kaseya.
+  <Accordion title="Why does Spanning have no Initial column or 30-day option?">
+    Those belong to Kaseya. Spanning uses a 7-day trend and its own health status.
   </Accordion>
-  <Accordion title="Does Healthy prove that every workload has data?">
-    No. Check individual workload results, missing values, and snapshot freshness. An overall status can coexist with missing workload data.
+  <Accordion title="Does Healthy prove every workload has data?">
+    No. Check each workload and the snapshot date.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read Microsoft 365 backups](/user-guides/backup/read-microsoft-365-backups)
+- [Kaseya SaaS Protection setup](/user-guides/integrations/enable-kaseya-saas-protection-integration)
+- [Spanning Backup setup](/user-guides/integrations/enable-spanning-integration)

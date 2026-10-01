@@ -1,79 +1,110 @@
 ---
 title: 'Find and export domains'
-description: 'Filter the domain inventory and download the currently loaded page with its defined CSV fields.'
+description: 'Filter the domain inventory and download the page you are viewing as a CSV.'
 icon: 'filter'
 ---
 
-Use column filters on **Cloud > Domains** to find accessible domain records, then **Export CSV** to download the currently loaded filtered page.
+Use the column filters on **Cloud > Domains** to find domains, then **Export CSV** to download the page you are viewing. This page is for MSP staff and company users who can see the Domains tab.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. Export uses read access; it does not require domain-management permission.
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). You do not need write or manage access to export.
+- The filters and the export follow the company selector in the top bar.
+- The table shows up to 50 domains per page.
 
 ## Find a domain
 
-1. Confirm the top-bar company scope.
-2. Enter the domain name or part of it in the **Domain** column filter. Matching ignores letter case and surrounding spaces.
-3. Choose **Provider** or **Company** where those columns appear. Click the checkbox beside the required option.
-4. Choose **Verification** or **Authentication**, or show **Primary** and **Cloud presence** through Columns and use their filters.
-5. Wait for the result count and rows to update. Filters search across list pages and return the list to page 1. Use Previous and Next to read further pages of up to 50 rows.
+<Steps>
+  <Step title="Open Cloud > Domains">
+    Click **Cloud** in the sidebar, then click the **Domains** tab. Check the company selector in the top bar.
+  </Step>
+  <Step title="Search by name">
+    Type all or part of the name in the filter box under the **Domain** column heading. Case does not matter. This filter searches domain names only. It does not search company names or aliases.
+  </Step>
+  <Step title="Narrow by provider or company">
+    If the **Provider** or **Company** columns are shown, open their filters and check the options you want. With several options checked, a row matches any one of them. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected.
+  </Step>
+  <Step title="Narrow by verification or authentication">
+    Open the **Verification** filter and choose **Verified** or **Unverified**. Open the **Authentication** filter to pick an authentication type such as Managed or Federated. To filter by **Primary** or **Cloud presence**, first show those columns with **Columns > Save Changes**.
+  </Step>
+  <Step title="Read the results">
+    The table reloads from page 1. Use the page controls under the table to read further pages.
+  </Step>
+</Steps>
 
-Domain searches the stored domain name. It does not search company names, email addresses or aliases. Multiple selected providers or authentication types are alternatives; different active fields must all match.
+Filters in different columns must all match. Click **Clear Filters** to remove every column filter. This does not change the company selector.
 
-For multi-select filters such as Provider, if clicking an option name leaves the filter at All, click its checkbox instead and confirm the selection before continuing.
+There are no filters for **Services**, **Expires**, **Auto-renew**, **Registrar status**, **Aliases**, **Created**, or **Last synced**. The table cannot be sorted. To sort by expiry date, export the list and sort it in a spreadsheet.
 
-## Find unverified records
+## Find unverified domains
 
-Open **Verification** and choose **Unverified**. All clears that field; Verified selects records with a true verification flag.
+<Steps>
+  <Step title="Open the Verification filter">
+    Click the filter under the **Verification** column heading.
+  </Step>
+  <Step title="Choose Unverified">
+    Choose **Unverified**. Choose **All** to remove the filter.
 
-<Frame caption="Unverified includes records without a supplied verification flag, including DNSimple registrar rows.">
-  <img src="/images/product/cloud-domain-verification-options.png" alt="Cloud Domains Verification filter options All, Verified, and Unverified." width="256" height="204" />
-</Frame>
+    <Frame caption="The Verification filter has three options.">
+      <img src="/images/product/cloud-domain-verification-options.png" alt="Cloud Domains Verification filter options All, Verified, and Unverified." width="256" height="204" />
+    </Frame>
+  </Step>
+  <Step title="Check the provider">
+    DNSimple rows always show **Unverified** because DNSimple does not report a verification flag. Look at the **Provider** column before you act on a row.
+  </Step>
+</Steps>
 
-There is no separate Unknown option in the current table. Review Provider before interpreting the result. A missing verification value is grouped with Unverified; it is not proof of a failed provider check.
+## Export the page you are viewing
 
-**Clear Filters** removes table filters, including a provider supplied by an entry URL. It keeps the top-bar company scope and your access limits. Reopening an entry link can restore the provider specified by that link.
+<Steps>
+  <Step title="Set your filters">
+    Set the company selector and any column filters first.
+  </Step>
+  <Step title="Go to the page you need">
+    Use the page controls under the table. The export includes only the rows on the current page.
+  </Step>
+  <Step title="Click Export CSV">
+    Click **Export CSV** above the table. The browser downloads `cloud-domains`. When one company is selected, the company name is added to the file name.
+  </Step>
+  <Step title="Repeat for other pages">
+    If more than 50 domains match, go to the next page and export again. The file does not include rows from pages you did not open.
+  </Step>
+</Steps>
 
-Services, Expires, Auto-renew, Registrar status, Aliases, Created and Last synced have no dedicated column filters on this page. Column sorting is not offered. Export the relevant pages if you need to sort recorded expiry dates in a spreadsheet.
+The CSV columns are **Domain**, **Provider**, **Company**, **Primary**, **Verification**, **Cloud presence**, **Expires**, **Auto-renew**, **Registrar status**, **Services**, **Authentication**, **Aliases**, and **Last synced**. Hidden table columns are still exported. **Services** and **Aliases** use semicolons between values. **Created** is not exported.
 
-## Export the loaded page
+The summary counts at the top of the page cover every page, so they can be larger than the rows in your CSV.
 
-1. Confirm the company, provider and other filters.
-2. Navigate to the list page you need and wait for it to load.
-3. Click **Export CSV** above the table.
-4. Open the downloaded CSV and verify the rows before using it for a review.
-5. For more than 50 matching records, repeat on each required page. This export does not fetch unopened pages automatically.
+## Troubleshooting
 
-The CSV contains **Domain**, **Provider**, **Company**, **Primary**, **Verification**, **Cloud presence**, **Expires**, **Auto-renew**, **Registrar status**, **Services**, **Authentication**, **Aliases**, and **Last synced**. Fields are defined independently of column visibility. Services and aliases use semicolon-separated values. **Created** is not included.
+| Problem | What to do |
+| --- | --- |
+| You see **No cloud domains match these filters.** | Click **Clear Filters** and check the company selector. |
+| A domain you know is missing | Check the company selector and the **Provider** filter. DNSimple domains appear only when mapped to a company. |
+| **Export CSV** is missing | Your role does not have Cloud read access. |
+| The CSV has fewer rows than **Total domains** | The export covers the current page only. Export each page. |
+| The **Primary** or **Cloud presence** filter is not on screen | Show the column with **Columns**, then click **Save Changes**. |
 
-Missing values can be blank, while the Verification export uses the same Unverified fallback as the table. The file is synchronized inventory, not a live provider or DNS audit. If no rows match, broaden filters before exporting. Check browser downloads if a file is not obvious.
-
-Summary cards are company/provider totals, while this export uses the currently loaded filtered rows; their counts can differ.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Export CSV download all matching domain pages?">
-    No. It exports the currently loaded filtered page, up to 50 records. Open and export each required page separately.
+  <Accordion title="Does Export CSV download every matching page?">
+    No. It exports the rows on the page you are viewing, up to 50 domains.
   </Accordion>
-  <Accordion title="Do I need management permission to export domains?">
-    No. Microsoft 365 read access permits export of the domain data you can access.
+  <Accordion title="Do I need management permission to export?">
+    No. Cloud read access is enough.
   </Accordion>
-  <Accordion title="Do hidden columns disappear from the CSV?">
-    No. The export has defined fields independent of column visibility. Created is omitted, while fields such as Auto-renew and Registrar status are included.
-  </Accordion>
-  <Accordion title="Can I search by company name or a domain alias in Domain?">
-    No. Domain searches the stored domain name. Use the Company filter or top-bar company selector for company scope; aliases are not searched by this field.
+  <Accordion title="Can I search by company name or alias in the Domain filter?">
+    No. It searches the domain name only. Use the company selector or the **Company** filter for companies.
   </Accordion>
   <Accordion title="Can I filter or sort by expiry date?">
-    The current table has no expiry-date filter or column sorting. Export the relevant loaded pages for additional sorting and analysis.
+    No. Export the pages you need and sort in a spreadsheet.
   </Accordion>
-  <Accordion title="Why does Unverified include registrar rows?">
-    The current filter treats missing verification flags as false. DNSimple rows do not supply cloud verification here, so they match Unverified.
+  <Accordion title="Why does Unverified include DNSimple rows?">
+    DNSimple does not report a verification flag, so those rows count as **Unverified**.
   </Accordion>
-  <Accordion title="Does Clear Filters broaden my account access?">
-    No. It clears table filters while retaining top-bar scope and permission restrictions.
-  </Accordion>
-  <Accordion title="Why is the CSV row count smaller than Total domains?">
-    Total domains follows company/provider scope across pages. The CSV contains only the loaded page and follows the other active column filters too.
+  <Accordion title="Does Clear Filters change which companies I can see?">
+    No. It clears column filters only. The company selector and your permissions stay the same.
   </Accordion>
 </AccordionGroup>
 

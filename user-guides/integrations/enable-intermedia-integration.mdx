@@ -1,63 +1,70 @@
 ---
 title: 'Configure Intermedia Integration'
-description: 'Verify and save an Intermedia Unite Extend service account'
-icon: 'plug'
+description: 'Connect Intermedia Unite Extend Analytics to prepare call and usage reporting'
+icon: 'phone'
 ---
 
-Intermedia setup currently provides a **credential pilot** for Unite Extend Analytics. It verifies and stores a service account for integration work. A connected status does not establish that call history, usage dashboards or automatic analytics synchronization are available.
+This guide walks you through connecting Intermedia Unite to MSPortal.ai through the Unite Extend Analytics API.
 
-## Before you start
+<Note>
+Intermedia is currently a **Pilot** integration available to selected tenants. If you don't see Intermedia in **Settings > Integrations**, contact support@msportal.ai. The pilot secures and validates the API connection and notifies the MSPortal integration team. It does not sync call or usage data yet; data sync features build on this connection.
+</Note>
 
-This is an **MSP staff** task requiring integration-management permission and authorized vendor credentials. This provider is available only when enabled for your MSP tenant. If its setup page is unavailable, check availability with your MSPortal administrator. Company users do not configure this connection.
+## Prerequisites
 
-Obtain a **Client ID** and **Secret key** for an Intermedia Unite Extend service account with Analytics API access. The setup page identifies the HostPilot Unite Extend API access area; have your Intermedia administrator confirm the appropriate service account and access.
+- An Intermedia Unite account with HostPilot admin access
+- MSPortal.ai integration management permission
 
-## Test and connect
+## Part 1: Create a Unite Extend Service Account
 
-1. Open **Settings > Integrations**, find **Intermedia**, and open the setup page.
-2. Enter **Client ID** and **Secret key** in the service-account form.
-3. Select **Test Connection**. A successful result means Intermedia issued an Analytics API token for that account.
-4. Select **Connect** to save the connection. Saving the credential intake also notifies the MSPortal team that the account has been connected for integration work.
+<Steps>
+  <Step title="Open HostPilot">
+    Log in to HostPilot, Intermedia's admin portal.
+  </Step>
+  <Step title="Create a Service Account">
+    Go to **Intermedia Unite > Apps & Integrations > Unite Extend API access** and create a Service Account with **Analytics API** access.
+  </Step>
+  <Step title="Copy the Credentials">
+    Copy the **Client ID** and **Secret Key**.
+  </Step>
+</Steps>
 
-## Update an existing connection
+## Part 2: Connect in MSPortal
 
-Open **Configure** for the correct Intermedia connection. Stored values are masked. Enter the replacement values, test them, then choose **Save Changes**. Editing a field invalidates the prior test state. A successful retest alone does not persist the replacement; saved connection text on entry is not a new test.
+<Steps>
+  <Step title="Open the Setup Page">
+    Go to **Settings > Integrations**, find **Intermedia**, and click **Connect**.
+  </Step>
+  <Step title="Enter Your Credentials">
+    | Field | Value |
+    |-------|-------|
+    | **Client ID** | The service account's client ID |
+    | **Secret key** | The service account's secret key |
+  </Step>
+  <Step title="Test the Connection">
+    Click **Test Connection**. On success you'll see **Connection verified** with the message "Intermedia issued an Analytics API access token for this service account." You must pass the test before you can save.
+  </Step>
+  <Step title="Secure Your Credentials">
+    Click **Secure credentials** to save. Both values are stored only in Vault, and the MSPortal integration team is notified that your account is connected.
+  </Step>
+</Steps>
 
-Changed credential submissions can also notify the MSPortal team. Do not submit a replacement merely to explore the form.
+## Managing the Connection
 
-## Disconnect
-
-Choose **Disconnect**, read the **Disconnect Intermedia?** confirmation, and confirm only if you intend to remove the connection and its stored credentials. Cancel leaves it in place. This does not revoke the Intermedia service account itself.
+- To update credentials later, click **Configure** on your Intermedia connection, enter the new values, click **Test Connection**, then click **Update credentials**. Changing a field clears the earlier test result, so test again before you save.
+- To disconnect, click **Disconnect** and confirm in the **Remove Intermedia credentials?** dialog. This removes the connection and its stored Vault credentials and cannot be undone. It does not delete the service account in HostPilot.
+- Users without integration management permission see the connection read-only.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Pilot not visible | Tenant availability and integration permissions. |
-| Test fails | Correct Client ID/Secret key pair and Analytics API access. |
-| Save disabled | Required fields, a successful test of the current values and management permission. |
-| Connected but no call reports | The current pilot verifies credentials; it does not promise a completed analytics sync or dashboard. |
+| Issue | Solution |
+|-------|----------|
+| Credentials rejected | The client ID or secret key was rejected, or the Analytics API scope is not enabled on the service account. Recheck the service account in HostPilot |
 
-## Frequently asked questions
+## Related Resources
 
-<AccordionGroup>
-  <Accordion title="Does Connected mean call reporting is ready?">
-    No. The current pilot verifies and stores the service-account credentials. It does not prove analytics records are being synchronized.
-  </Accordion>
-  <Accordion title="What does Test Connection verify?">
-    That Intermedia can issue an Analytics API access token for the service account. It does not load and verify a complete call-reporting dataset.
-  </Accordion>
-  <Accordion title="Does submitting credentials have another effect?">
-    Yes. Credential intake notifies the MSPortal team so integration work can proceed. Changed credential submissions can notify them too.
-  </Accordion>
-  <Accordion title="Can I update credentials by retesting?">
-    No. Test the changed values and choose **Save Changes**.
-  </Accordion>
-  <Accordion title="Does Disconnect delete the vendor account?">
-    No. It removes the MSPortal connection and stored credentials; vendor account administration is separate.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Integrations](/user-guides/settings/integrations)
+<CardGroup cols={2}>
+  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+    Explore all available integrations
+  </Card>
+</CardGroup>

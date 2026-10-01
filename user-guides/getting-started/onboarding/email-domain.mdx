@@ -5,49 +5,87 @@ description: "Verify the displayed DNS records and save your notification sender
 icon: "envelope"
 ---
 
-**Audience:** MSP administrators with Email settings access and someone authorized to manage the sending domain's DNS.
+Send portal notifications from your own domain, such as `support@yourdomain.com`, instead of the default MSPortal sender. This page is for MSP administrators with Email settings access and someone who manages the domain's DNS. It is not a Launch Center step, so do it when you are ready to email clients.
+
+## Before you start
+
+- You need write access to Email settings. Without it, you see **No sending domain configured. Contact an administrator to set one up.**
+- Have access to your DNS provider, or ask the person who does.
+- Pick the domain you want to send from, for example `yourdomain.com`.
 
 ## Add and verify the domain
 
-1. Open **Settings > Email > Sending Domain**. Review any existing domain before adding another configuration.
-2. Enter the intended domain and select **Add Domain**. This creates the sending-domain configuration.
-3. Copy the DNS record types, names and values displayed for that domain into your DNS provider. Use those exact values; generic SPF or DKIM examples are not a substitute.
-4. Select **Check Verification** after the records are available. Inspect the resulting status; the action can return pending instead of verified.
-5. Use **Refresh Status** to retrieve the current state. Resolve incorrect or missing records before repeatedly submitting verification.
-6. Review **Default From Address** and save its change using the adjacent control. Domain verification and sender-address saving are separate actions.
+<Steps>
+  <Step title="Open Sending Domain">
+    Go to **Settings > Email** and open the **Sending Domain** tab. If a domain is already listed, review it before you add another.
+  </Step>
+  <Step title="Add the domain">
+    Under **Custom Sending Domain**, enter your domain in **Domain Name** and click **Add Domain**. You see **Domain added successfully. Please add the DNS records to verify.**
+  </Step>
+  <Step title="Copy the DNS records">
+    Copy each record shown for the domain, with its type, name, and value, into your DNS provider. Use exactly what the page shows. Example SPF and DKIM values from other guides will not work.
+  </Step>
+  <Step title="Check verification">
+    When the records are in place, click **Check Verification**. The status shows **Pending DNS**, **Verifying**, **Verified**, or **Failed**. Pending does not mean verified.
+  </Step>
+  <Step title="Refresh the status">
+    Click **Refresh Status** to get the latest result. If it still says **Pending DNS** or **Failed**, compare each record with your DNS provider before you try again. Some providers add your domain name to the host name for you, so check for a doubled suffix.
+  </Step>
+  <Step title="Save the sender address">
+    Once the status is **Verified**, the page shows **Domain verified and ready to use** and the **Default From Address** field. Enter the address, such as `support@yourdomain.com`, and click **Save**. Wait for **Default from address updated**.
+  </Step>
+</Steps>
 
-There is no guaranteed propagation time. Your DNS provider and the displayed verification result determine when the configuration is ready. Verification improves sender authentication but does not guarantee inbox placement.
-
-<Frame caption="Start on Sending Domain. This is the unconfigured form, not evidence of DNS verification.">
-  <img src="/images/product/email-sending-domain.png" alt="Start on Sending Domain. This is the unconfigured form, not evidence of DNS verification." width="1850" height="860" />
+<Frame caption="Email settings separates templates, sender verification and receiving addresses.">
+  <img src="/images/product/email-sending-domain.png" alt="Email settings separates templates, sender verification and receiving addresses." width="1850" height="860" />
 </Frame>
 
-## Understand the boundaries
+DNS changes can take time to spread. Your DNS provider and the status on the page tell you when it is ready. Verification improves sender trust but does not guarantee inbox placement.
 
-A sending domain identifies outbound messages. It does not configure ticket delivery, the support mailbox or inbound receiving. Those are separate settings. Launch Center's support-identity check requires the support email; it is not a sending-domain verification check.
+## Remove a sending domain
 
-## Remove or replace a domain
+<Steps>
+  <Step title="Open the Sending Domain tab">
+    Go to **Settings > Email > Sending Domain**.
+  </Step>
+  <Step title="Click Remove">
+    Click **Remove**. A dialog explains what happens. MSPortal stops sending from the domain, goes back to the default msportal.ai sender, and needs a new verification if you add the domain again.
+  </Step>
+  <Step title="Confirm">
+    Click **Remove Domain**. This does not delete the DNS records at your provider, so clean those up yourself.
+  </Step>
+</Steps>
 
-**Remove Domain** opens a confirmation describing the effects. Review it before confirming: this changes the organization's sending configuration. A refresh does not undo a removal, and removing the MSPortal configuration does not automatically clean up records at your DNS provider.
+## What this setting does not do
 
-If verification remains pending, compare the exact displayed record name and value with DNS, including any hostname suffix the DNS provider appends. Ask the domain administrator to review conflicting records rather than copying an example from another tenant.
+A sending domain sets the sender of outbound messages. It does not set up ticket delivery, your support mailbox, or inbound email. Those are separate. Launch Center's support check needs only a **Support email**.
 
-## FAQs
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| Status stays **Pending DNS** | Compare each record's type, name, and value with your DNS provider. Check for a doubled domain suffix. Wait, then **Check Verification** again. |
+| Status shows **Failed** | Fix the record the page points to, then check verification again. Ask the domain administrator to check for conflicting records. |
+| No **Default From Address** field | It appears only after the domain is **Verified**. |
+| **Save** is greyed out | The address field is empty. Enter an address on the verified domain. |
+| You cannot add a domain | You need write access to Email settings. |
+
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Can I copy generic SPF and DKIM examples from a guide?">
-    No. Use the exact DNS records displayed for your configured domain.
+  <Accordion title="Can I copy generic SPF and DKIM examples?">
+    No. Use the exact records shown for your domain.
   </Accordion>
-  <Accordion title="Does Check Verification guarantee that verification succeeded?">
-    No. Inspect the returned status; it can remain pending.
+  <Accordion title="Does Check Verification mean the domain is verified?">
+    No. Read the status. It can stay pending.
   </Accordion>
-  <Accordion title="Does a sending domain configure incoming support tickets?">
-    No. Outbound sender identity, receiving and ticket delivery are separate settings.
+  <Accordion title="Does a sending domain set up incoming support tickets?">
+    No. Sending, receiving, and ticket delivery are separate settings.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Email Settings](/user-guides/settings/email)
-- [AI Settings](/user-guides/getting-started/onboarding/ai-settings)
+- [Support identity and AI settings](/user-guides/getting-started/onboarding/ai-settings)
 - [Ticket Settings](/user-guides/getting-started/onboarding/ticket-settings)

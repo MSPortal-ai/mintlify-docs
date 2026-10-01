@@ -27,7 +27,7 @@ Domotz is currently a **Pilot** integration available to selected tenants. If yo
   </Card>
 </CardGroup>
 
-These setup steps are for MSP staff. Network readers have separate Devices permissions and company scope; a setup screenshot does not establish Company-user access.
+These setup steps are for MSP staff. Viewing the **Networks** tab uses your Devices permissions and company scope.
 
 ## Prerequisites
 
@@ -45,7 +45,7 @@ Create MSPortal locations before setup if you want to link Domotz sites during t
 
 <Steps>
   <Step title="Open the Domotz Portal">
-    Sign in to the Domotz Portal and open **Settings > API Key**. Follow [Domotz's API-key instructions](https://help.domotz.com/admin-global-features/domotz-api/).
+    Sign in to the Domotz Portal and open its API access settings (**Settings > API Key**).
   </Step>
   <Step title="Create a Full Access API key">
     Create an API key with **Full Access**, then copy both the key and its assigned **API server URL**.
@@ -68,7 +68,7 @@ Create MSPortal locations before setup if you want to link Domotz sites during t
   <Step title="Test the connection">
     On **Connect**, enter the **API server URL** and **API key**, then click **Test connection**.
 
-    <Frame caption="MSP setup example; no credentials entered.">
+    <Frame caption="The Connect step before credentials are entered.">
       <img src="/images/product/domotz-api-fields.png" alt="Domotz API server URL and blank API key field." width="1404" height="272" />
     </Frame>
 
@@ -80,7 +80,7 @@ Create MSPortal locations before setup if you want to link Domotz sites during t
   <Step title="Map companies">
     On **Map**, link each Domotz organization to the matching MSPortal company. A Collector that does not belong to a Domotz organization appears as an **Orphan Collector** and can be mapped independently.
 
-    Use **Quick Match** or the company picker to stage links, then save with **Import Selected**. Leaving Map also saves pending links; moving forward after edits can queue synchronization. Creating a new company saves the company immediately but leaves its link pending. Removing an existing mapping saves immediately. A partial batch can leave some links saved: inspect the list before retrying.
+    Use **Quick Match** or the company picker to stage links, then select **Import Selected** to save them. Leaving the step also saves pending links, and moving forward after edits queues a synchronization. Creating a new company saves the company immediately, but its link stays pending until you save. Removing an existing mapping saves immediately. If a batch save fails part way, some links are saved, so check the list before you retry.
   </Step>
   <Step title="Map sites">
     On **Map sites**, link each mapped Collector to an existing MSPortal location. Use the location picker in the **Site** column.
@@ -124,7 +124,7 @@ The table shows one row per mapped Collector:
     Search by site or ISP, filter by company, location, or issue state, and sort the supported columns. Use the column selector to show only the fields you need.
   </Step>
   <Step title="Review issues">
-    A site with none of the counted issues shows **Healthy**. This is not proof that every optional Domotz capability returned data; also check freshness and setup warnings. When a site has issues, point to or focus the issue badge to see the breakdown of IP conflicts, failing TCP sensors, active alerts, and packet-loss findings.
+    A site with none of the counted issues shows **Healthy**. **Healthy** covers only the counted issues, so also check **Last synced** and any warnings from setup. When a site has issues, point to or focus the issue badge to see the breakdown of IP conflicts, failing TCP sensors, active alerts, and packet-loss findings.
   </Step>
   <Step title="Open the site's devices">
     Click the value under **Devices online** to open Devices filtered to the linked location and company. If the site is not linked to a location, MSPortal filters by company only.
@@ -158,11 +158,22 @@ The reporting block requires a Domotz connection and permission to read Devices.
 
 ## Manage the Connection
 
-- To update credentials, reopen Domotz under **Settings > Integrations**, enter the new API server URL and key, click **Retest connection**, then **Save connection**
-- To change company mappings, reopen the **Map** step
-- To change site links, use **Map sites** or edit the **Location** column under **Devices > Networks**
-- To disconnect, use the delete action in the wizard and confirm. This removes the integration and its stored credentials
-- Users with integration read access can review the connection; credential testing, saving and deletion require integration management access
+<Steps>
+  <Step title="Reopen Domotz">
+    Go to **Settings > Integrations** and open Domotz.
+  </Step>
+  <Step title="Update credentials">
+    Enter the new API server URL and key, select **Retest connection**, then select **Save connection**.
+  </Step>
+  <Step title="Change mappings or site links">
+    Reopen the **Map** step for companies, or **Map sites** for locations. You can also edit the **Location** column under **Devices > Networks**.
+  </Step>
+  <Step title="Disconnect">
+    Use the delete action in the wizard and confirm. This removes the integration and its stored credentials.
+  </Step>
+</Steps>
+
+Users with integration read access can review the connection. Testing, saving and deleting credentials needs integration management permission.
 
 ## Troubleshooting
 
@@ -181,53 +192,32 @@ The reporting block requires a Domotz connection and permission to read Devices.
 
 ## Frequently asked questions
 
-<Accordion title="Why is Domotz not listed for my tenant?">
-
-Domotz is a pilot controlled by tenant availability. Check access with MSPortal support.
-
-</Accordion>
-
-<Accordion title="Can I use a Domotz Collector activation key?">
-
-No. Use a Full Access Public API key and its assigned API server URL, with at least one API-enabled Collector.
-
-</Accordion>
-
-<Accordion title="Does a successful Domotz test save credentials?">
-
-No. Click **Create integration** or **Save connection** after testing the new values.
-
-</Accordion>
-
-<Accordion title="What is an Orphan Collector in Domotz mapping?">
-
-It is a Collector without a Domotz organization. Map it independently to the intended MSPortal company.
-
-</Accordion>
-
-<Accordion title="Does choosing a Domotz site location need Complete setup?">
-
-No. Selecting or removing the location saves immediately.
-
-</Accordion>
-
-<Accordion title="Does Domotz Healthy mean every capability is available?">
-
-No. The badge covers counted issues. Check source freshness, optional capability warnings and sync errors too.
-
-</Accordion>
-
-<Accordion title="What happens when I open devices for an unlinked Domotz site?">
-
-The device link uses company scope without a location filter. Link the correct location to narrow it further.
-
-</Accordion>
-
-<Accordion title="Does Complete setup mean Domotz discovery finished?">
-
-No. Background synchronization can continue; inspect Review counts, warnings and actual network data.
-
-</Accordion>
+<AccordionGroup>
+  <Accordion title="Why is Domotz not listed for my tenant?">
+    Domotz is a pilot integration available to selected tenants. Contact support@msportal.ai to ask for access.
+  </Accordion>
+  <Accordion title="Can I use a Domotz Collector activation key?">
+    No. Use a Full Access Public API key and its assigned API server URL, with at least one API-enabled Collector.
+  </Accordion>
+  <Accordion title="Does a successful test save my credentials?">
+    No. Select **Create integration** or **Save connection** after testing.
+  </Accordion>
+  <Accordion title="What is an Orphan Collector?">
+    A Collector that does not belong to a Domotz organization. Map it on its own to the MSPortal company it serves.
+  </Accordion>
+  <Accordion title="Do I need to complete setup before choosing a site location?">
+    No. Selecting or removing a location saves immediately.
+  </Accordion>
+  <Accordion title="Does Healthy mean every Domotz capability is available?">
+    No. It means no IP conflicts, failing TCP sensors, active alerts or packet loss were counted. Check **Last synced** and setup warnings too.
+  </Accordion>
+  <Accordion title="What happens when I open devices for a site with no location link?">
+    Devices opens filtered by company only. Link a location to narrow it.
+  </Accordion>
+  <Accordion title="Does Complete setup mean discovery has finished?">
+    No. Synchronization continues in the background. Check the **Review** counts and the **Networks** tab.
+  </Accordion>
+</AccordionGroup>
 
 ## Related Resources
 

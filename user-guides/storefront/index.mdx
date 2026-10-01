@@ -1,47 +1,155 @@
 ---
 title: 'Storefront'
-description: 'Review subscriptions, browse your provider’s catalog, and inspect available Azure usage.'
+description: 'Review subscriptions, browse your provider catalog, request products or quantity changes, and check Azure usage.'
 icon: 'store'
 ---
 
-Open **Storefront** to review the subscriptions and products available through your MSP’s connected distributors. The portal supports Pax8 and Sherweb; the sections and controls you see depend on your MSP’s setup and your permissions.
+Use **Storefront** to see the subscriptions and products your MSP sells through Pax8 and Sherweb, and to ask for more licenses or new products. This page is for company users and MSP staff. MSP staff also review the requests here.
 
-## Find the right area
+## Before you start
 
-| Section | Purpose |
+- Your MSP must have Pax8 or Sherweb connected in **Settings > Integrations**. Without one, Storefront shows nothing to manage.
+- You need Storefront read access to open the module. You need Storefront write access to send a request. In the role editor this is the **Storefront** resource with **Read** or **Write** access.
+- MSP staff need **Manage** access to the **Storefront** resource to see prices and costs, change settings, and mark requests fulfilled.
+- A request is not a change. Quantities and products change only after your MSP fulfills the request with the distributor and the next sync confirms it.
+
+## Open Storefront
+
+<Steps>
+  <Step title="Click Storefront in the sidebar">
+    **Subscriptions** opens first.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. Company users see only their own company.
+  </Step>
+  <Step title="Choose a tab">
+    The tabs are **Subscriptions**, **Catalog**, **Azure Usage**, and **Requests**. **Azure Usage** appears only when Pax8 is connected. **Requests** is for MSP staff and does not appear for company users.
+  </Step>
+</Steps>
+
+| Tab | What it is for |
 | --- | --- |
-| **Subscriptions** | [Review existing subscriptions](/user-guides/storefront/view-subscriptions), quantities, status, and available terms. |
-| **Catalog** | Browse the products your MSP makes available and use the request or pricing controls when available. |
-| **Requests** | Review recorded requests and their progress when this workflow is available in your portal. |
-| **Azure Usage** | [Inspect available Pax8 Azure usage](/user-guides/storefront/view-azure-usage). This tab requires an enabled Pax8 integration. |
+| **Subscriptions** | Active subscriptions, quantities, and terms. See [Review your subscriptions](/user-guides/storefront/view-subscriptions). |
+| **Catalog** | Products your MSP offers. Get a price or request a product. |
+| **Azure Usage** | Pax8 Azure usage by month and resource group. See [Review Azure usage](/user-guides/storefront/view-azure-usage). |
+| **Requests** | MSP staff only. Review, approve, reject, and fulfill requests. |
 
-MSP staff configure the catalog, company mappings, permissions, and request policy. Company users ask their IT provider for access or setup changes.
+## Request a product
 
-## Requesting products or quantity changes
+<Steps>
+  <Step title="Open the Catalog tab">
+    Click **Catalog**. Featured products appear first.
+  </Step>
+  <Step title="Pick one company">
+    For Pax8 products, select one company in the top bar. The **Request** button is disabled until you do, and its tooltip reads **Select one company to request this product.** The button is also disabled without Storefront write access.
+  </Step>
+  <Step title="Check the price (Pax8)">
+    Click **Get Price** on a Pax8 product. If more than one company is selected, pick one in the dialog. The dialog lists each offer with its price, billing term, and commitment.
+  </Step>
+  <Step title="Click Request">
+    Click **Request** on the product row.
+  </Step>
+  <Step title="Fill in the request">
+    Enter the quantity. For Pax8, pick a billing and commitment option if the list appears. Add notes if you want. Click **Send Request**.
+  </Step>
+  <Step title="Keep the confirmation">
+    A message confirms that the request was recorded. Your MSP is notified. The product is not added until your MSP fulfills the request.
+  </Step>
+</Steps>
 
-A request is separate from an active subscription or a confirmed quantity change. Review the company, product, requested total quantity, and displayed terms before using a submission control. Keep its result and use **Requests**, when available, or contact your MSP to check progress.
+## Request a quantity change
 
-An approval message, self-service badge, or button labeled **Update Quantity** is not proof that the distributor has changed the subscription. Wait for fulfillment confirmation and the updated subscription data. If requesting or loading requests fails, contact your MSP; do not repeatedly submit the same change.
+<Steps>
+  <Step title="Open the Subscriptions tab">
+    Click **Subscriptions**. Find the subscription. A **Self-service** badge next to the quantity means changes are allowed.
+  </Step>
+  <Step title="Open Change Quantity (Pax8)">
+    Click the **...** menu on the row and choose **Change Quantity**. You can also click the row, then click **Edit** in the details dialog.
+  </Step>
+  <Step title="Enter the new total">
+    Enter the new total quantity, not the number to add. To go from 10 to 12, enter 12. The dialog shows the minimum, maximum, and increment. Add notes if you want.
+  </Step>
+  <Step title="Submit">
+    Click **Submit Request**. A message says the request was submitted for approval, or that it was approved and is awaiting fulfillment.
+  </Step>
+  <Step title="Sherweb: use Request Change">
+    For a Sherweb subscription, click **Request Change** on the row, enter the new quantity, and click **Send Request**.
+  </Step>
+</Steps>
+
+If **Change Quantity** is missing, your MSP has not turned on self-service for that subscription.
+
+## Review requests (MSP staff)
+
+<Steps>
+  <Step title="Open the Requests tab">
+    Click **Storefront**, then **Requests**. The table shows **Product**, **Company**, **Quantity**, **Status**, and **Requested**, 25 requests per page.
+  </Step>
+  <Step title="Open a request">
+    Click the product name. The dialog shows the company, provider, SKU, billing and commitment terms, the old and new quantity, and any notes.
+  </Step>
+  <Step title="Approve or reject">
+    Click **Approve** for a request that is **Pending approval**. To reject a request, type the reason in the **Resolution notes / provider order reference** box and click **Reject**. A reason is required.
+  </Step>
+  <Step title="Make the change with the distributor">
+    Place or change the order in Pax8 or Sherweb. MSPortal does not send the change for you.
+  </Step>
+  <Step title="Wait for the sync, then mark fulfilled">
+    After the next sync shows the new quantity, open the request, type the order reference in the notes box, and click **Mark fulfilled**. This needs **Manage** access to the **Storefront** resource. If the sync has not confirmed the quantity, an error says so. Try again after the next sync.
+  </Step>
+</Steps>
+
+| Status | What it means |
+| --- | --- |
+| **Pending approval** | Waiting for an approver. |
+| **Awaiting fulfillment** | Approved. The MSP still has to make the change with the distributor. |
+| **Fulfilled** | The MSP completed it. |
+| **Rejected** | The MSP declined it. |
+| **Cancelled** | The person who asked cancelled it while it was pending. |
+
+Only MSP staff with **Manage** access, or users who hold the **Approver Role** for that company, can approve or reject. The person who sent a pending request sees **Cancel request** on it. A Pax8 quantity change sent by staff with **Manage** access is approved automatically, and one from a company user can skip approval when the subscription does not require it. New product requests and Sherweb requests always start as **Pending approval**. Set the approver role in [Licensing settings](/user-guides/licensing/index).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| Storefront is empty | Your MSP has not connected Pax8 or Sherweb, or your company is not mapped. Ask your MSP. |
+| The **Azure Usage** tab is missing | It needs the Pax8 integration. |
+| The **Requests** tab is missing | It is for MSP staff. Company users do not see it. |
+| **Request** is disabled | Select one company in the top bar. You also need Storefront write access. |
+| **Change Quantity** is missing | Self-service is off for that subscription. Ask your MSP. |
+| You see a message that a request for this item is already open | An earlier request for the same item is still open. Ask your MSP about its status. |
+| You see an error about quantity limits | The quantity is outside the minimum, maximum, or increment shown in the dialog. |
+| **Mark fulfilled** fails | The sync has not confirmed the new quantity yet. Try again after the next sync. |
+| A request failed to load | Reload the page. If it persists, tell your MSP. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Storefront open on the Catalog?">
-    Storefront opens on **Subscriptions**. Select **Catalog** to browse available products.
+    No. It opens on **Subscriptions**. Click **Catalog** to browse products.
   </Accordion>
-  <Accordion title="Can I manage the catalog as a Company administrator?">
-    Catalog configuration and portal user permissions are MSP-managed. Ask your IT provider to change availability or access.
+  <Accordion title="Does approval mean the licenses are ready?">
+    No. **Awaiting fulfillment** means approved but not done. The subscription quantity changes after your MSP fulfills it and the next sync confirms it.
   </Accordion>
-  <Accordion title="Does requesting more licenses assign them to employees?">
-    A subscription quantity request is separate from license assignment to individual users. Confirm fulfillment and ask your MSP about user assignments.
+  <Accordion title="Does requesting more licenses assign them to people?">
+    No. A quantity request changes the subscription total. Assigning a license to a person is separate.
   </Accordion>
-  <Accordion title="Does approval mean the licenses are already available?">
-    No. Approval, fulfillment, and the synchronized subscription quantity are separate things. Check the request result and your provider’s confirmation.
+  <Accordion title="Can a company administrator manage the catalog?">
+    No. MSP staff set catalog visibility and self-service rules in **Settings > Storefront**.
   </Accordion>
-  <Accordion title="Why is Azure Usage missing?">
-    The tab requires an enabled Pax8 integration. Available usage also depends on source data, company mapping, and your permissions.
+  <Accordion title="How do I track my request?">
+    Company users do not have a **Requests** tab. You get an in-app notification when the status changes. Ask your MSP if you need more detail.
   </Accordion>
-  <Accordion title="What should I do if Requests fails to load?">
-    Ask your MSP to investigate and tell it the company and product involved. Do not assume a failed view means there are no requests, or submit duplicates to test it.
+  <Accordion title="Should I send the request again if nothing happens?">
+    No. A duplicate is refused while the first request is open. Ask your MSP for an update.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Review your subscriptions](/user-guides/storefront/view-subscriptions)
+- [Review Azure usage](/user-guides/storefront/view-azure-usage)
+- [Licensing settings](/user-guides/licensing/index)
+- [Configure Pax8 Integration](/user-guides/integrations/enable-pax8-integration)
+- [Notifications](/user-guides/notifications/index)

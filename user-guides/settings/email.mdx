@@ -1,71 +1,149 @@
 ---
 title: "Email settings"
-description: "Manage notification templates, outbound sender identity and receiving addresses."
+description: "Manage email templates, set up a custom sending domain and manage the addresses that receive imported reports."
 icon: 'envelope'
 ---
 
-**Audience:** MSP staff with Email settings access. Open **Settings > Email**. The three tabs are **Email Templates**, **Sending Domain** and **Receiving**. Each has its own save and action behavior.
+Email settings control how MSPortal emails look, who they come from, and where reports can be forwarded to be imported. This page is for MSP staff. The page has three tabs: **Email Templates**, **Sending Domain** and **Receiving**.
 
-## Edit notification templates
+## Before you start
 
-1. In **Email Templates**, preview the relevant template or open its editor. Create a new template when the existing category needs another option.
-2. Review the category, name, subject, HTML content, plain-text content and supported variables. For an onboarding invitation, retain the required portal-link variable.
-3. Save in the editor, wait for confirmation and reopen the saved template.
-4. Review the default for its category before using a workflow that chooses the default automatically.
-
-Creating and editing require Save. **Duplicate** creates a saved copy immediately; it does not merely open an unsaved draft. **Set as default** saves immediately for the template's category. Delete opens a confirmation. Previewing or saving a template is not a delivery test and does not itself send a message.
+- Open **Settings > Platform > Email**. You need Email settings access. Read access lets you view and preview. Write access lets you create, edit, duplicate and set defaults, add a sending domain and manage receiving addresses. Manage access is also needed to delete templates.
+- To use a custom sender address, you need to edit DNS records for your domain.
+- Opening this page creates receiving addresses for any company that does not have one yet.
 
 <Frame caption="Email settings separates templates, sender verification and receiving addresses.">
   <img src="/images/product/email-sending-domain.png" alt="Email settings separates templates, sender verification and receiving addresses." width="1850" height="860" />
 </Frame>
 
-## Configure the sending domain
+## Create an email template
 
-Open **Sending Domain**, add the intended domain, and copy its exact displayed DNS records to your DNS provider. Use **Check Verification** and inspect the returned status; pending is not verified. **Refresh Status** retrieves the current result. Save **Default From Address** with its separate control.
+<Steps>
+  <Step title="Open Email Templates">
+    Go to **Settings > Platform > Email** and stay on the **Email Templates** tab. The table shows each template's **Name**, **Category**, **Used when**, **Recipients**, **Subject** and **Status**.
+  </Step>
+  <Step title="Click Create Template">
+    Click **Create Template**. The **Create Email Template** dialog opens.
+  </Step>
+  <Step title="Choose the category and name">
+    Pick a **Category**. It decides which variables are available and cannot be changed later. Enter a **Template Name**.
+  </Step>
+  <Step title="Set the options">
+    Turn on **Set as default template** to make this the template used for that category. Turn on **Use dark theme email wrapper** to wrap the email in the MSPortal dark theme. With it off, your content is sent as designed.
+  </Step>
+  <Step title="Write the subject and content">
+    Enter the **Subject Line**. Design the body under **Email Content (HTML)**. In **Available Variables**, click a variable to insert it at your cursor in the subject, HTML or plain text. Add a **Plain Text Version (Optional)** for mail clients that cannot show HTML. Use **Insert Company Logo** to add your logo. Upload it in your branding settings first.
+  </Step>
+  <Step title="Save">
+    Click **Create Template**. A toast says **Template created successfully**.
+  </Step>
+</Steps>
 
-Follow [sending-domain setup](/user-guides/getting-started/onboarding/email-domain) for the sequence. Do not copy generic DNS examples. Domain removal has a confirmation and changes the organization's sender configuration; it does not remove DNS records at your provider.
+Template categories include Survey, Invitation, Onboarding Email, Onboarding Invitation, Meeting, the meeting booking categories, Report, Training Reminder, Project Action & Decision, Ticket Fallback and Emergency Broadcast. The **Used when** and **Recipients** columns say when each is sent.
+
+For an **Onboarding Invitation** template, keep the `{{portal_url}}` variable. MSPortal will not save the template without it.
+
+## Edit, preview and manage templates
+
+Open the **...** menu on a template row.
+
+| Action | What it does |
+|--------|--------------|
+| **Preview** | Shows the subject, HTML and plain-text versions. Pick a recipient under **Preview as** to see real values. Preview does not send an email |
+| **Edit** | Opens the editor. Click **Save Changes** when done. The category cannot change |
+| **Duplicate** | Creates a saved copy at once |
+| **Set as Default** | Makes this the default for its category at once. A **Default** badge shows in the **Status** column |
+| **Delete** | Asks you to confirm, then deletes the template. This cannot be undone. Needs manage access |
+
+## Set up a custom sending domain
+
+By default MSPortal sends from its own domain. A custom domain lets emails come from an address such as `support@yourdomain.com`. For the full walkthrough, see [Set up a sending domain](/user-guides/getting-started/onboarding/email-domain).
+
+<Steps>
+  <Step title="Open Sending Domain">
+    Go to **Settings > Platform > Email** and click **Sending Domain**.
+  </Step>
+  <Step title="Add the domain">
+    Under **Custom Sending Domain**, enter your **Domain Name** and click **Add Domain**. You can have one sending domain. Remove it before you add another.
+  </Step>
+  <Step title="Copy the DNS records">
+    The **DNS Records Required** table lists each record's **Type**, **Name**, **Value**, **Priority** and **Status**. Copy each **Name** and **Value** exactly as shown and add them at your DNS provider. Do not copy generic examples.
+  </Step>
+  <Step title="Check verification">
+    After your DNS changes spread, click **Check Verification**. The status badge shows **Pending DNS**, **Verifying**, **Verified** or **Failed**. Pending means the records are not found yet. **Refresh Status** gets the latest result.
+  </Step>
+  <Step title="Save the From address">
+    Once the status is **Verified**, enter an address on your domain in **Default From Address**, then save it. The address must use the verified domain. A toast says **Default from address updated**.
+  </Step>
+</Steps>
+
+DNS changes usually finish within minutes but can take up to 48 hours.
+
+To remove the domain, click **Remove** and confirm **Remove Domain**. MSPortal stops sending from it and goes back to the default sender. You must verify again to re-add it. Removing it does not delete your DNS records. Delete those at your DNS provider.
 
 ## Manage receiving addresses
 
-Opening Email settings can provision missing receiving addresses for existing companies. This is saved configuration even before you switch to the Receiving tab.
+Every company has a permanent email address for importing reports from RMM, backup and security tools. Forward a report to a company's address and MSPortal imports its attachments. See [email imports](/user-guides/reporting/email-imports). These addresses are not mailboxes.
 
-**Receiving** lists company-specific email import addresses with active/inactive status. Copy the address for the intended company, or use **Export CSV** to download the displayed address list. Treat the exported addresses as configuration information and share them only with the people setting up those imports.
+<Steps>
+  <Step title="Open Receiving">
+    Go to **Settings > Platform > Email** and click **Receiving**. The table lists each **Company**, its **Email Address** and **Status**.
+  </Step>
+  <Step title="Copy an address">
+    Click **Copy address** next to the company. To get the whole list, click **Export CSV**. Share the file only with people who set up imports.
+  </Step>
+  <Step title="Turn an address on or off">
+    Click **Activate address** or **Deactivate address**. It saves at once. A toast confirms.
+  </Step>
+  <Step title="Regenerate an address (only if needed)">
+    Click **Regenerate address** on a row, read the warning and click **Regenerate**. The old address stops working at once. Update every forwarding rule that used it.
+  </Step>
+  <Step title="Regenerate every address (rare)">
+    Click **Regenerate All**, read the warning and click **Regenerate All**. Every old address stops working at once. The toast says how many were updated and how many were already correct.
+  </Step>
+</Steps>
 
-Activation and deactivation save immediately. Regenerating one address or all addresses requires confirmation and changes the address used by incoming senders. Review the scope before confirming, then update any forwarding or report-delivery configuration that uses the old address.
-
-**Regenerate All** can report updated, skipped and failed results. Inspect the refreshed list before retrying; a partial result does not mean every address remained unchanged. These addresses support [email imports](/user-guides/reporting/email-imports), not a general mailbox interface.
+If a regenerate fails partway, reload the list and look at the current addresses before you try again.
 
 ## Troubleshooting
 
-| Problem | Check |
-| --- | --- |
-| A template preview looks correct but delivery failed | The sending workflow, recipient, sender verification and actual delivery result. |
-| A sender still uses an old address | Confirm the saved From address and the workflow's selected template/sender settings. |
-| An import stopped after regeneration | Update the source system to the new company address and check its active state. |
-| A save or bulk action failed | Reopen the current values and inspect partial results before repeating it. |
+| Problem | What to do |
+|---------|-----------|
+| Verification stays on **Pending DNS** | Check each record for typos, wait 15 to 30 minutes, and click **Check Verification** again |
+| **Failed** appears | Fix the DNS records shown, then check again |
+| **Email address must use your verified domain** | Enter a From address on the domain you verified |
+| Raw variables such as `{{recipient_name}}` appear in an email | Insert variables from **Available Variables** and use only variables available for the template's category. Preview to check |
+| A template preview looks right but the email never arrived | Check the recipient, the spam folder, your domain status and the sending workflow. Preview does not send mail |
+| A sender still uses the old address | Check the saved **Default From Address** and the workflow's template |
+| Imports stopped after a regenerate | Change the forwarding rule to the company's new address and check that it is **Active** |
+| **Create Template** or **Add Domain** is missing | You need write access to Email settings |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does duplicating an email template save it immediately?">
-    Yes. Duplicate creates a saved copy; editing that copy is a separate save.
+  <Accordion title="Does duplicating a template save it?">
+    Yes. Duplicate saves a copy at once, named with **(Copy)**. Editing the copy is a separate save.
   </Accordion>
   <Accordion title="Does a preview send an email?">
-    No. Preview and template saves are separate from actual sending and delivery verification.
+    No. Preview only shows how the template looks.
   </Accordion>
   <Accordion title="Does the default apply to every category?">
-    No. Default selection is scoped to the template category.
+    No. Each category has its own default.
   </Accordion>
-  <Accordion title="Do receiving address toggles need a header Save?">
-    No. Activation and deactivation persist immediately.
+  <Accordion title="Do the receiving address switches need a Save?">
+    No. Activate and Deactivate save at once.
   </Accordion>
-  <Accordion title="What should I do after regenerating an address?">
-    Copy the new company address and update the forwarding or report source that used the old one; inspect partial bulk results.
+  <Accordion title="Can I change a template's category later?">
+    No. Create a new template in the right category.
+  </Accordion>
+  <Accordion title="Why can I not see Email in Settings?">
+    Your role needs Email settings access. Ask an administrator.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Set up a sending domain](/user-guides/getting-started/onboarding/email-domain)
-- [email-imports](/user-guides/reporting/email-imports)
+- [Email imports](/user-guides/reporting/email-imports)
 - [Onboarding Settings](/user-guides/settings/onboarding)
+- [Surveys](/user-guides/surveys/index)

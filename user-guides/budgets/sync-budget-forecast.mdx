@@ -4,121 +4,123 @@ description: 'Refresh starting costs or merge planned spending while preserving 
 icon: 'arrows-rotate'
 ---
 
-Open **Budgets > Budgets Menu > Forecast**, select one company and check **Base Year** before using **Sync from Budget** or **Sync from Planner**. Both update the proposed forecast worksheet. Choose **Save** afterward to persist the result.
+Use **Sync from Budget** and **Sync from Planner** to fill the forecast worksheet from your budgets or from Planner. Both only change the worksheet on screen. Click **Save** afterward to keep the result. This guide is for MSP staff whose role has **manage_budgets**.
 
-**Audience:** MSP staff and Company users with budget management permission assigned by their MSP. Ordinary budget read or edit permission alone does not show the Sync and Save buttons.
+## Before you start
+
+- You need **manage_budgets**. Without it the **Sync from Budget**, **Sync from Planner** and **Save** buttons are not shown.
+- Select one company in the top bar and check the **Base Year**. See [Read and adjust a company budget forecast](/user-guides/budgets/read-budget-forecast).
 
 ## Refresh starting costs from budgets
 
-1. Check the company, Base Year and current forecast adjustments.
-2. Choose **Sync from Budget**.
-3. Wait for the refreshed confirmation, then compare each Base Year amount and the resulting totals.
-4. Review future overrides and percentages, then choose **Save** if the result is correct.
+<Steps>
+  <Step title="Check the worksheet">
+    Check the company, the **Base Year** and your current overrides and percentages.
+  </Step>
+  <Step title="Click Sync from Budget">
+    A **Budget data has been refreshed from current budget.** message appears.
+  </Step>
+  <Step title="Compare the amounts">
+    Look at each **Base Year** amount and the totals.
+  </Step>
+  <Step title="Save">
+    If the result is right, click **Save** and wait for **Budget forecast rules have been saved successfully.**
+  </Step>
+</Steps>
 
-This refresh replaces starting amounts for the worksheet's current categories with the current company/year budget totals. Categories without a matching total become zero. It keeps the category percentages, inclusion settings and future manual overrides, so future years may still reflect your earlier adjustments.
+This replaces the **Base Year** amount of each current category with the company's budget total for that year. A category with no budget cost becomes zero. It keeps your percentages, **Include** switches and future overrides, so later years can still show earlier adjustments. It does not change any budget.
 
-Budget totals combine categorized costs across matching budgets, rather than selecting one approved plan. Review duplicates, rejected spend and currencies as explained in [Read a company forecast](/user-guides/budgets/read-budget-forecast). Sync does not change the source budgets.
+The budget total adds every budget the company has for that year, including rejected lines. See [Read and adjust a company budget forecast](/user-guides/budgets/read-budget-forecast).
 
 ## Merge planned costs from Planner
 
 <Steps>
-  <Step title="Check the company and horizon">
-    Confirm Base Year and Years to Forecast. Planner sync uses that base year and the displayed future years.
+  <Step title="Check the horizon">
+    Confirm the **Base Year** and **Years to Forecast**. The sync uses them.
   </Step>
-  <Step title="Choose Sync from Planner">
-    Read the dialog and select a Merge Strategy. The initial choice is **Overwrite All**; check it every time rather than accepting it automatically.
+  <Step title="Click Sync from Planner">
+    The **Sync from Planner** dialog opens. Under **Merge Strategy**, pick **Overwrite All**, **Add to Current** or **Merge (Keep Higher)**. It starts on **Overwrite All**, so check it each time.
+
+    <img src="/images/product/budget-forecast-merge-strategies.png" alt="Planner merge choices: Overwrite All, Add to Current and Merge Keep Higher." width="808" height="300" />
   </Step>
-  <Step title="Select Categories to Sync">
-    Clear categories you want to preserve. Use Select All or Deselect All as needed. At least one category must be selected before syncing.
+  <Step title="Choose the categories">
+    Under **Categories to Sync**, clear any category you want to leave alone. Use **Select All** or **Deselect All**. You must pick at least one.
   </Step>
-  <Step title="Apply and inspect">
-    Choose the dialog's **Sync from Planner** button and wait for the result. Compare the selected categories' base amounts and future Override cells before proceeding.
+  <Step title="Run the sync">
+    Click **Sync from Planner** in the dialog. A **Budget data has been synced from planner items.** message appears. Check the base amounts and the **Override** cells in the chosen categories.
   </Step>
-  <Step title="Save the reviewed forecast">
-    Choose **Save** on the forecast toolbar. Sync confirmation means the worksheet changed; it is not a saved forecast.
+  <Step title="Save">
+    Click **Save** on the toolbar. The sync alone does not save anything.
   </Step>
 </Steps>
 
-<img src="/images/product/budget-forecast-merge-strategies.png" alt="Planner merge choices: Overwrite All, Add to Current and Merge Keep Higher." width="808" height="300" />
-
-*MSP example: read the merge behavior below before confirming; future years use manual overrides.*
-
 ## Choose the merge strategy
 
-The strategies affect only the selected categories. They leave category percentages and Include settings in place.
+A strategy only affects the categories you select. It leaves percentages and **Include** switches alone.
 
-| Strategy | Base amount when Planner has a positive cost | Future year when Planner has a positive cost |
+| Strategy | Base amount when Planner has a cost above zero | Future year when Planner has a cost above zero |
 | --- | --- | --- |
-| **Overwrite All** | Replaces the base amount with Planner's amount. | Replaces the year's manual override with Planner's amount. |
-| **Add to Current** | Adds Planner's amount to the current base amount. | Adds Planner's amount to an existing manual override, or to zero when no override exists. |
-| **Merge (Keep Higher)** | Keeps the larger of the current base and Planner amount. | Keeps the larger of an existing manual override and Planner amount; an absent override is treated as zero. |
+| **Overwrite All** | Replaces the base amount with Planner's amount. | Replaces that year's override with Planner's amount. |
+| **Add to Current** | Adds Planner's amount to the base amount. | Adds Planner's amount to the existing override, or to zero if there is none. |
+| **Merge (Keep Higher)** | Keeps the larger of the base amount and Planner's amount. | Keeps the larger of the existing override and Planner's amount. No override counts as zero. |
 
 <Note>
-For future years, Add and Merge compare with the stored manual override, not the percentage-calculated amount displayed in the cell. If a calculated cell shows 1,050 with no override and Planner supplies 500, Add to Current sets an override of 500, not 1,550. Review every changed year.
+For future years, Add and Merge look at the stored override, not the calculated number you see in the cell. If a cell shows 1,050 with no override and Planner has 500, **Add to Current** sets an override of 500, not 1,550. Check every year that changed.
 </Note>
 
-When Planner has no positive cost for a selected category's base year, the existing base amount remains. For a future year without positive Planner data, Overwrite All clears the override and returns the cell to its percentage or flat calculation. Add and Merge keep existing overrides in that case. Overwrite All does not mean every missing Planner cost becomes zero.
+If Planner has no cost above zero for a category's base year, the base amount stays as it is. For a future year with no Planner cost, **Overwrite All** clears the override so the calculation applies again. **Add to Current** and **Merge (Keep Higher)** keep existing overrides. **Overwrite All** does not turn missing Planner costs into zero.
 
-Repeating Add to Current can add the same Planner amounts again. This is a merge of numbers, not duplicate detection by Planner item. Do not resync repeatedly as a way to refresh the same costs.
+Running **Add to Current** twice adds the same Planner amounts twice. Do not repeat it to refresh costs.
 
-## Which Planner costs are included?
+## Which Planner costs are included
 
-The sync uses the selected company's dated, categorized, non-archived Planner items. Cancelled work is excluded; Completed work can still contribute. This differs from the budget builder's Planner source panel, which excludes Completed items.
+The sync uses the company's Planner items that have a category, a Due date or Start date, and are not archived or Cancelled. Completed items still count. The budget editor's Planner panel works differently, because it leaves out Completed items.
 
-The cost year follows Due date, falling back to Start date. The sync uses separate positive cost components when present; otherwise it can use the item's positive overall estimate.
+The cost year follows the Due date, or the Start date if there is no Due date. The sync uses an item's separate cost lines when it has them, and otherwise the item's overall estimate.
 
-- **One-time** costs contribute only in their scheduled year within the horizon.
-- **Monthly** costs contribute twelve times the monthly amount in each year from their starting year through the horizon.
-- **Annual** costs contribute once per year over that same range.
+- **One-time** costs count once, in their year, inside the forecast years.
+- **Monthly** costs count twelve times the monthly amount in each year from their first year to the end.
+- **Annual** costs count once each year over the same range.
 
-Recurring Planner costs are not prorated to the remaining months in their first year. Check late-year starts, completed recurring work and costs already represented in a budget before merging. The sync summarizes costs by category and year; it does not create individual budget lines or mark Planner tasks complete.
+A recurring cost is not cut down for a late start in its first year. Check late starts, completed recurring work and costs already in a budget before you merge. The sync adds up costs by category and year. It does not create budget lines or change Planner items.
 
 ## Troubleshooting
 
-| Result | What to check |
+| Problem | What to do |
 | --- | --- |
-| Sync is unavailable | Select one company and ask the MSP to check budget management permission. |
-| Dialog confirmation is disabled | Select at least one category. |
-| A cost is missing | Company, category, Due/Start date, archive/cancelled status, positive cost and forecast horizon. |
-| Add produced a smaller future value than expected | Check whether the original value was calculated or a manual override; Add uses the override, not the calculated cell. |
-| Values grew again after another sync | Repeated Add can count the same amounts again. Review the worksheet before Save. |
-| A year lost its Override badge | Overwrite clears overrides where Planner has no positive data, restoring calculation. |
-| Sync failed | Keep the current worksheet and check the error/access with your MSP. Failure is not evidence that Planner has no costs. |
-| Changes disappeared after leaving | Sync does not save. Wait for a successful toolbar Save before leaving. |
+| The sync buttons are missing | You need **manage_budgets**, and one company must be selected. |
+| **Please select at least one category to sync** | Tick at least one category in the dialog. |
+| A Planner cost is missing | Check the company, the item's category, its Due or Start date, that it is not archived or Cancelled, that the cost is above zero, and the forecast years. |
+| **Add to Current** gave a smaller future value than you expected | It adds to the stored override, not the calculated cell. |
+| Values grew after a second sync | **Add to Current** counted the same amounts again. Check the worksheet before you save. |
+| An **Override** badge disappeared | **Overwrite All** clears overrides in years with no Planner cost. |
+| **Failed to sync from planner.** or **Failed to sync from current budget.** | Keep the worksheet and try again. Ask your MSP admin if it keeps failing. |
+| Your changes vanished | A sync is not a save. Click **Save** before you leave. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where can I refresh a forecast from current budget costs?">
-    In the selected company's Forecast, check Base Year and choose Sync from Budget. Review the replaced base amounts and existing future overrides, then Save.
+  <Accordion title="Does Sync from Budget replace future overrides?">
+    No. It only replaces the base amounts. Overrides, percentages and **Include** switches stay.
   </Accordion>
-  <Accordion title="Does Sync from Budget replace all future overrides?">
-    No. It replaces the current categories' base amounts while keeping future overrides, category percentages and Include settings.
+  <Accordion title="Does Sync from Planner save by itself?">
+    No. Click **Save** on the toolbar.
   </Accordion>
-  <Accordion title="Does Sync from Planner save automatically?">
-    No. It updates the proposed worksheet. Review the result and choose the toolbar Save to persist it.
+  <Accordion title="Does Merge (Keep Higher) always keep the larger number I see?">
+    No. For future years it compares Planner with the stored override, and counts a missing override as zero.
   </Accordion>
-  <Accordion title="What does Add to Current add to in a future year?">
-    It adds to an existing manual override, or zero if no override exists. It does not add to a percentage-calculated cell value.
+  <Accordion title="Are Completed Planner items left out?">
+    No. Archived and Cancelled items are left out. The item also needs a category, a date and a cost above zero.
   </Accordion>
-  <Accordion title="Does Merge Keep Higher always preserve the larger displayed forecast?">
-    No. For future years it compares Planner with a manual override, treating an absent override as zero. Review calculated cells before merging.
+  <Accordion title="Are monthly Planner costs cut down for a late start?">
+    No. They count twelve months in each year from their first year.
   </Accordion>
-  <Accordion title="Does Overwrite All set missing Planner years to zero?">
-    No. A base amount without positive Planner data remains. A future year without positive data has its override cleared, so its normal calculation applies.
-  </Accordion>
-  <Accordion title="Can syncing with Add to Current twice double count costs?">
-    Yes. It adds the amounts again. Review the existing worksheet and choose a suitable strategy instead of repeating Add as a refresh.
-  </Accordion>
-  <Accordion title="Are Completed Planner items excluded from forecasting?">
-    No. Completed items can contribute. Archived and Cancelled items are excluded, and the source must have a category, date and positive cost.
-  </Accordion>
-  <Accordion title="Are monthly Planner costs prorated when they start late in the year?">
-    No. Monthly costs contribute twelve times the monthly amount for each projected year from their starting year. Review partial-year assumptions separately.
-  </Accordion>
-  <Accordion title="Does syncing a forecast change Planner tasks or budget line items?">
-    No. It merges category/year amounts into the proposed forecast. Save records forecast rules; source tasks, source budgets and provider records are unchanged.
+  <Accordion title="Does syncing change Planner tasks or budgets?">
+    No. It only changes the worksheet. Saving stores the forecast rules.
   </Accordion>
 </AccordionGroup>
 
-Related: [Read and adjust a forecast](/user-guides/budgets/read-budget-forecast), [Add Planner costs to budget lines](/user-guides/budgets/import-planning-and-products).
+## Related guides
+
+- [Read and adjust a company budget forecast](/user-guides/budgets/read-budget-forecast)
+- [Add Planner, goal and product costs to a budget](/user-guides/budgets/import-planning-and-products)

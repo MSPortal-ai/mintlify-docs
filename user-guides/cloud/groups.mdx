@@ -1,79 +1,105 @@
 ---
 title: 'Read cloud groups and members'
-description: 'Review accessible Microsoft and Google groups, synchronized members, and the limits of account and membership information.'
+description: 'Review Microsoft and Google groups, open a group to see its synced members, and learn what the member list does and does not show.'
 icon: 'user-group'
 ---
 
-Open **Cloud > Groups** to review synchronized Microsoft 365 and Google Workspace groups available to your account. Company users see accessible groups that their MSP has kept visible to clients. MSP readers can also see groups hidden from clients.
+Use **Cloud > Groups** to see the Microsoft 365 and Google Workspace groups synced for your companies, and to open a group to read its members. This page is for MSP staff and company users.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. The same read permission covers Google groups. Your MSP manages access and provider account changes.
+## Before you start
 
-## Open a group
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). It covers both Microsoft 365 and Google Workspace groups.
+- Company users see only the groups their MSP has left visible to clients. MSP staff see every group, including hidden ones.
+- Opening a group does not make you a member and does not give you access to anything the group controls.
 
-1. Open **Cloud**, then select **Groups**.
-2. Check the company selector in the top bar. Select the company you are reviewing if your account can choose companies.
-3. Find the group using the **Group** or **Email** column filter. Check Company and Type to distinguish groups with similar names.
-4. Click the group row to open its member dialog.
-5. Check the group name, company and provider badge before reading the list. Close the dialog with its close control or Escape when finished.
+## Open a group and read its members
 
-A group appearing here does not make you a member or grant access to its resources. To request a membership change, [open a ticket through the Home AI Assistant](/user-guides/ticketing/open-a-ticket) with the company, group, person and requested change.
+<Steps>
+  <Step title="Open Cloud > Groups">
+    Click **Cloud** in the sidebar, then click the **Groups** tab.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. MSP staff can pick one company, **Global View**, or **Assigned Companies** if their access is limited.
+  </Step>
+  <Step title="Find the group">
+    Type in the filter box under the **Group** or **Email** column heading. Use **Type** and **Company** to tell similar groups apart.
+  </Step>
+  <Step title="Click the group row">
+    A dialog opens with the group name, the company, and a provider badge.
+  </Step>
+  <Step title="Read the members">
+    The dialog lists **Name**, **Email**, **Type**, **Role**, and **Status**. It shows 100 members per page. Use the page controls at the bottom to see more.
+  </Step>
+  <Step title="Close the dialog">
+    Close it with the close button or press Escape.
+  </Step>
+</Steps>
 
-## Understand the group list
+The dialog is read only. It has no member search, no export, no add or remove member action, and no expansion of nested groups.
 
-| Column | Meaning |
+## Show more columns
+
+<Steps>
+  <Step title="Open the column list">
+    Click **Columns** above the table.
+  </Step>
+  <Step title="Turn on the columns you want">
+    Check the columns to show, such as **Aliases** and **Last synced**. Drag a column to change its order.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes**. Click **Cancel** to discard your changes.
+  </Step>
+</Steps>
+
+## What each column shows
+
+| Column | What it shows |
 | --- | --- |
-| **Group** | Synchronized name, with description beneath it when present. |
-| **Email** | Recorded group email, or a dash. A security group can have no email. |
-| **Provider / Company** | Source and mapped company. Provider is omitted for a single-provider scope; Company is omitted when the top bar selects one company. |
-| **Type** | Distribution, Security, Microsoft 365, Mail-enabled security, Google group, or Other, depending on synchronized records. |
-| **Members** | Recorded count; **Not available** means no count was supplied. This is different from zero. |
-| **Aliases** | Additional recorded addresses. Hidden by default; Microsoft rows do not supply aliases in this view. **None** is not proof of no aliases in the provider. |
-| **Last synced** | Synchronization date for the group record, hidden by default. It does not separately report when every member was last checked. |
-
-Use **Columns**, select the extra fields, then **Save Changes**. **Cancel** or closing the panel discards unsaved choices; **Reset** also needs Save Changes to apply. Scope-dependent columns cannot be forced into view. MSP staff with write access also see [Client visible controls](/user-guides/cloud/manage-group-visibility).
+| **Group** | The group name, with its description underneath when there is one. |
+| **Email** | The group email, or a dash. Some security groups have no email. |
+| **Provider** and **Company** | The source and mapped company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
+| **Type** | **Distribution**, **Security**, **Microsoft 365**, **Mail-enabled security**, **Google group**, or **Other**. |
+| **Members** | The member count, or **Not available** when the provider did not send one. **Not available** is not zero. |
+| **Client visible** | A switch per group. MSP staff with write access see it. See [Manage client group visibility](/user-guides/cloud/manage-group-visibility). |
+| **Aliases** | Hidden by default. Google group aliases, or **None**. Microsoft groups always show **None**. |
+| **Last synced** | Hidden by default. When the group record last synced. |
 
 ## Read the member dialog
 
-The dialog lists **Name**, **Email**, **Type**, **Role**, and **Status** for the synchronized member records. A missing name can fall back to email; missing values use a dash or **Not available**.
+- **Type** says whether the member is a user, a group, or another kind of entry.
+- Microsoft members show **Not available** for **Role** and **Status**. Google members show the role and status Google reports.
+- A nested group appears as one member row. The dialog does not list the people inside it.
+- The count in the dialog heading comes from the group record. The page controls count the synced member rows. The two can differ.
 
-Microsoft member rows show **Not available** for Role and Status in this view. This does not mean the member has no role or that the account is disabled. Google rows can supply member role and status, but these are synchronized group-member attributes rather than a complete account-security review.
+## Troubleshooting
 
-Use **Previous** and **Next** to read more members; the dialog loads 100 per page. Opening another group starts its member list at page 1. The count beside the group name comes from the group record; the pager counts synchronized member rows. They can differ when source counts and member synchronization do not agree.
+| Problem | What to do |
+| --- | --- |
+| The **Groups** tab is missing | Your role does not have Cloud read access. Ask your MSP to add it. |
+| You see **No cloud groups match these filters.** | Click **Clear Filters** and check the company selector. |
+| A group is missing for a company user | MSP staff may have hidden it from clients. Ask your MSP. |
+| You see **No members were synchronized for this group.** | The group is empty, or its members have not synced. Ask your MSP to check the integration. |
+| **Members** shows **Not available** | The provider did not send a count. Open the group to read its rows. |
+| The member count does not match the list | The heading count and the list count come from different synced data. Ask your MSP to check the integration. |
+| You see **Cloud data is temporarily unavailable. Try again shortly.** | Reload the page after a minute. |
 
-A nested group can appear as a member record. There is no nested-group expansion or recursive effective-membership view in this dialog. There is also no member search, CSV export, or add/remove-member control here.
-
-## Missing or stale membership
-
-**No members were synchronized for this group** means this view has no member rows to show. The group may be empty or its members may not have synchronized. A missing group can also reflect filters, company access, mapping, or client visibility. Ask your MSP to check the provider and synchronization before treating either case as a completed access review or offboarding result.
-
-Company users should request corrections from their MSP. There is no Sync now action on Cloud Groups. Provider connection and synchronization management are separate MSP workflows.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Can I add or remove a group member here?">
-    No. The dialog reads synchronized membership. Ask your MSP through a support ticket to make the provider change.
-  </Accordion>
-  <Accordion title="Does opening a group give me access to its files or email?">
-    No. Viewing synchronized information does not change group membership or provider permissions.
+    No. This page is read only. MSP staff change membership in Microsoft 365 or Google Workspace. Company users can [open a ticket](/user-guides/ticketing/open-a-ticket) with the group, the person, and the change they need.
   </Accordion>
   <Accordion title="Does an empty dialog prove the group has no members?">
-    No. It can mean membership has not synchronized. Confirm the provider state with your MSP, especially during an access review or offboarding.
+    No. Members may not have synced yet. Confirm in the provider before you rely on it for an access review or offboarding.
   </Accordion>
-  <Accordion title="Why does the member count differ from the dialog list?">
-    The heading uses the group record count; the list uses synchronized member records. Synchronization or source-data differences can make them disagree. Ask your MSP to investigate.
+  <Accordion title="Can I expand a nested group?">
+    No. A nested group shows as one member row. Check the nested group in the provider to see its people.
   </Accordion>
   <Accordion title="Why do Microsoft members show Not available for Role and Status?">
-    Those fields are not supplied for Microsoft rows in this view. It does not establish account status or absence of a role.
+    MSPortal does not sync those fields for Microsoft group members.
   </Accordion>
-  <Accordion title="Can I expand a nested group to see all effective members?">
-    No. Nested groups can appear as member records, but the dialog does not recursively expand them. Your MSP can verify effective membership in the provider.
-  </Accordion>
-  <Accordion title="Does Aliases = None prove there are no other group addresses?">
-    No. Microsoft aliases are not supplied in this view. Google aliases reflect synchronized data. Ask your MSP to verify the provider if aliases matter.
-  </Accordion>
-  <Accordion title="Does Last synced prove every member is current?">
-    No. This date belongs to the group record. It is not a separate freshness guarantee for every synchronized membership entry.
+  <Accordion title="Can I sync a group now from this page?">
+    No. Groups update on the integration's regular sync.
   </Accordion>
 </AccordionGroup>
 
@@ -81,3 +107,4 @@ Company users should request corrections from their MSP. There is no Sync now ac
 
 - [Find and filter cloud groups](/user-guides/cloud/find-groups)
 - [Manage client group visibility](/user-guides/cloud/manage-group-visibility)
+- [Cloud overview](/user-guides/cloud/index)

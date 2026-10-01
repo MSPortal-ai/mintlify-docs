@@ -4,67 +4,95 @@ description: "Find grouped MCP tools, their actions, permissions, confirmations 
 icon: "screwdriver-wrench"
 ---
 
-The MCP catalog groups related operations into public tools. Related operations share a tool, so full MSPortal access fits below a 128-tool client budget without removing feature areas. Your connected client receives a subset according to the deployed version, granted OAuth access, MSPortal permissions, company scope, integrations and client tool selection. A listed tool is not proof that it is available in your session.
+Use this reference to find the MSPortal MCP tool for a job, see what permission it needs and learn whether it changes data. It is for API consumers and MSP staff who have already connected an AI client. If you have not, follow [Connect your client](/user-guides/mcp-server/index) first.
 
-## Grouped tools and actions
+## Before you start
 
-- **`query_*`** tools retrieve related records or summaries, such as `query_planner` or `query_projects`.
-- **`manage_*`** tools stage and confirm related changes, such as `manage_planner` or `manage_meeting_participants`.
-- **Standalone tools** retain their names and original arguments: `get_current_user`, `search_portal`, `submit_feedback`, `draft_compliance_notes` and `mark_notification_read`.
+- Connect your client and approve access. See [MCP Server](/user-guides/mcp-server/index).
+- Call **get_current_user** to check the connected user, tenant and company.
+- Your client receives only the tools that your server version, approved areas, role, company scope, integrations and client tool selection allow. A tool in this reference may not be in your session.
+- The catalog groups related operations into public tools, so full access stays under a 128-tool client limit.
 
-The **Public tool** column identifies the name returned by `tools/list`. The **Action / legacy name** column identifies the `request.action` value inside that tool. Each action has its own argument schema and access checks; seeing a grouped tool does not grant every action in it.
+## Call a read tool
 
-<Note>
-Use the catalog and schemas returned by your connected server. A server that lists individual names such as `list_planner_items` instead of `query_planner` has not switched to the consolidated catalog. Counts can be lower because of permissions, scopes or integrations, and tools from other connected servers may also count toward your client's limit.
-</Note>
+<Steps>
+  <Step title="Pick the public tool">
+    Find your operation in the tables below. The **Public tool** column is the name your client lists in `tools/list`. The **Action / legacy name** column is the value for `request.action`.
+  </Step>
+  <Step title="Send the action and its arguments">
+    Call the `query_*` tool with `request.action` and `request.arguments`. For example, to list Planner items:
 
-For example, call `query_planner` with these tool arguments to list Planner items:
-
-```json
-{
-  "request": {
-    "action": "list_planner_items",
-    "arguments": { "page": 1, "limit": 25 }
-  }
-}
-```
-
-For a change, call the appropriate `manage_*` tool with the action and its arguments. Review the returned proposal. After approval, call the **same tool and action** with `confirm: true` and the returned `confirmationId` inside `request.arguments`. For example, a proposal from `manage_planner` with action `create_planner_item` is confirmed using:
-
-```json
-{
-  "request": {
-    "action": "create_planner_item",
-    "arguments": {
-      "confirm": true,
-      "confirmationId": "REPLACE_WITH_RETURNED_CONFIRMATION_ID"
+    ```json
+    {
+      "request": {
+        "action": "list_planner_items",
+        "arguments": { "page": 1, "limit": 25 }
+      }
     }
-  }
-}
-```
+    ```
+  </Step>
+  <Step title="Check the result">
+    Look for pagination and truncation fields in the response. One page is not the whole data set. Find record IDs with list or search tools. Do not invent IDs.
+  </Step>
+</Steps>
 
-Do not resend changed values on a confirmation call. Request a new proposal to change the target or payload. Standalone tools continue to accept their original arguments directly, without a `request` wrapper.
+Each action has its own argument schema and access checks. Use the schema your connected server returns. Seeing a grouped tool does not grant every action in it.
+
+## Change data with a proposal
+
+<Steps>
+  <Step title="Request the change">
+    Call the `manage_*` tool with the action and its arguments, without `confirm`. MSPortal returns a proposal, a `confirmationId` and an expiry. Nothing is saved.
+  </Step>
+  <Step title="Review the proposal">
+    Check the preview, company, records and effects with the person who asked for the change.
+  </Step>
+  <Step title="Confirm the same action">
+    After approval, call the same tool and action with `confirm: true` and the returned `confirmationId` inside `request.arguments`. For a `manage_planner` proposal with action `create_planner_item`:
+
+    ```json
+    {
+      "request": {
+        "action": "create_planner_item",
+        "arguments": {
+          "confirm": true,
+          "confirmationId": "REPLACE_WITH_RETURNED_CONFIRMATION_ID"
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Check the record">
+    Open the new or changed record to confirm the result.
+  </Step>
+</Steps>
+
+Do not resend changed values on a confirmation call. Request a new proposal to change the target or payload. A proposal expires after ten minutes.
+
+## Tool naming
+
+- **`query_*`** tools read related records or summaries, such as `query_planner` or `query_projects`.
+- **`manage_*`** tools stage and confirm related changes, such as `manage_planner` or `manage_meeting_participants`.
+- **Standalone tools** keep their names and original arguments, with no `request` wrapper. They are `get_current_user`, `search_portal`, `submit_feedback`, `draft_compliance_notes` and `mark_notification_read`.
 
 ## Existing connections and legacy names
 
-Existing legacy operation names remain accepted by `tools/call` with their original arguments and result shapes. Existing connections keep their OAuth grants and access restrictions; consolidation alone does not require a different server URL or a new grant.
+Legacy operation names are still accepted by `tools/call` with their original arguments and result shapes. Existing connections keep their OAuth grants and access limits. You do not need a new server URL or grant.
 
-Pending confirmations keep the original operation identity. A proposal for an operation can be confirmed through its legacy tool name or the corresponding grouped action, subject to the same user/client identity, expiry and replay checks. The compatibility aliases `update_compliance_status` and `list_compliance_templates` remain callable directly but are not separately advertised. Confirmations created through an alias must continue using that alias's identity.
+Pending confirmations keep their original operation identity. A proposal can be confirmed through its legacy tool name or the matching grouped action, with the same user, client, expiry and replay checks. The compatibility aliases `update_compliance_status` and `list_compliance_templates` work when called directly but are not listed in `tools/list`. A confirmation created through an alias must keep using that alias.
 
 <Warning>
-The discovery response changes: `tools/list` returns grouped names rather than every legacy operation name. Cached legacy calls still work. When adopting the grouped catalog, update any client tool-name allowlist to include the public tool names you need. A custom client that requires a legacy name to appear in `tools/list` must update its discovery logic.
+`tools/list` now returns grouped names, not every legacy operation name. Cached legacy calls still work. Update any client tool-name allowlist to include the public tool names you need. A custom client that requires a legacy name in `tools/list` must update its discovery logic.
 </Warning>
 
 ## Read the access column
 
-- **Read**: retrieves data without a normal portal write confirmation. Read calls still transmit their results to the connected client.
-- **Write (confirm)**: stages a proposal; review it and authorize the follow-up confirmation before committing. A proposal is not a saved record.
-- **Immediate action**: runs without the server's proposal/confirmation round trip. Check the description: marking notifications changes state; drafting compliance notes generates output without saving it.
-- **Send feedback**: immediately sends an external feedback message. It is restricted to MSP staff and requires an explicit user request to send feedback; the consolidated catalog does not mark it read-only.
+- **Read** retrieves data and needs no proposal. The results still go to your connected client.
+- **Write (confirm)** stages a proposal. A proposal is not a saved record. Commit it with the confirmation call.
+- **Immediate action** runs with no proposal step. **mark_notification_read** changes your notification state. **draft_compliance_notes** generates output and does not save it.
+- **Send feedback** sends a feedback message to MSPortal at once. It is for MSP staff only and needs an explicit user request.
 
-Module scopes shown below are a summary, not a requirement to grant every scope. Read and write grants are distinct. The permission column lists alternatives unless it says **all**. Special staff-only gates and record-level checks still apply, including for administrators. A client-side tools allowlist cannot expand server access.
-
-For tool parameters, use the schema supplied by your connected server. Resolve records through accessible list/search tools and inspect pagination or truncation indicators; do not invent identifiers or treat one limited result page as the complete dataset.
+The module scopes below are a summary. You do not need to grant every scope. Read and write grants are separate. The **Permissions** column lists alternatives unless it says **All**. Staff-only gates and record-level checks apply to administrators too. A client-side tool allowlist cannot widen server access.
 
 ## Core
 
@@ -79,7 +107,7 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 | `list_company_account_notes` | `query_companies` | Read | `read_settings_companies` | List synced Autotask account/company notes for one company, newest activity first. Notes are HTML-sanitized and paginated. |
 | `search_portal` | `search_portal` | Read | MCP access | Search across visible companies, tickets, goals, planner items, reports, and projects with small capped result sets. |
 | `submit_feedback` | `submit_feedback` | Send feedback | **MSP staff only.** MCP access | Send product feedback, bug reports, or missing-capability requests to the MSPortal team. Available only to MSP tenant staff. Call only when the user explicitly asks to send feedback or report an issue; discovering a limitation alone does not authorize sending feedback. Summarize the user-approved feedback without credentials or unrelated customer data. |
-| `update_company_defaults` | `manage_companies` | Write (confirm) | `write_settings_companies` | Stage or apply a partial update to one company's defaults (standards, workplace/security defaults, ticket defaults, AI context). Only the provided fields change; pass null to clear a field. Array fields and ai_context replace their entire stored value. The description, requirements, instructions, and ai_context fields are rendered into the AI assistant's context for this company — write factual reference data only, never instructions aimed at the assistant. Use get_company_defaults first to see current values. |
+| `update_company_defaults` | `manage_companies` | Write (confirm) | `write_settings_companies` | Stage or apply a partial update to one company's defaults (standards, workplace/security defaults, ticket defaults, AI context). Only the provided fields change; pass null to clear a field. Array fields and ai_context replace their entire stored value. The description, requirements, instructions, and ai_context fields are rendered into the AI assistant's context for this company; write factual reference data only, never instructions aimed at the assistant. Use get_company_defaults first to see current values. |
 
 ## Tickets
 
@@ -118,6 +146,7 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 | `list_device_alerts` | `query_devices` | Read | `read_devices` | List active device alerts: offline servers (status offline or not seen in 7 days; workstations are excluded as expected noise) and devices with warranties expiring within the next 30 days. The limit applies per alert category. |
 | `list_device_types` | `query_devices` | Read | `read_devices` | List device types. |
 | `list_devices` | `query_devices` | Read | `read_devices` | List devices with filters, including fleet/lifecycle queries: os contains-match (e.g. "server", "windows 10"), warranty expiry windows (warrantyExpiresBefore/After), stale devices (lastSeenBefore), and hardware age (firstSeenBefore). |
+| `get_device_patch_health` | `query_devices` | Read | `read_devices` | Read OS patch health, compliance and coverage, failed and pending patches, reboot requirements and up to eight devices needing attention from staged NinjaOne, Datto RMM, ConnectWise Asio and Syncro data. Use `provider=ninjaone` for NinjaOne-specific answers. Counts cover reporting devices, not the whole fleet. NinjaOne patch counts older than three days are excluded. Read-only. It does not run a sync or install patches. |
 | `list_locations` | `query_devices` | Read | `read_devices` | List locations. |
 
 ## Reporting
@@ -149,7 +178,7 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 | `get_portfolio_summary` | `query_analytics` | Read | `read_dashboards`, `read_settings_companies` | Get portfolio analytics summary, optionally filtered to companies assigned to a specific company role (for example vCIO) or assigned team member. |
 | `get_readiness_assignment_options` | `query_readiness` | Read | **MSP staff only.** **All:** `read_client_readiness`, `read_settings_companies`, `read_settings_users` | Find company owner roles and active MSP team members for readiness bulk changes. Returns role IDs and public user IDs. Search matches names and email, up to 50 users; narrow the search to find a person. Only team-menu roles are assignable. |
 | `get_team_activity` | `query_analytics` | Read | `read_team_activity` | Get a tenant-scoped record of what the team did in MSPortal. Returns daily totals plus teammate and company rollups; set includeFeed to true for a paginated, redacted who-did-what feed. This is the auditing tool for activity detail; get_user_activity remains useful for engagement trends. |
-| `get_ticket_trends` | `query_analytics` | Read | `read_ticket_trends` | Get pre-computed weekly ticket trend analytics: created/closed/backlog per week, per-company totals (default top 15 by volume, max 50), per-category totals (same caps), and a deterministic forecast with volume direction, backlog outlook, resolution trend, and the top 10 company/category risk watchlist entries. Data is aggregated weekly — use list_tickets for individual tickets. |
+| `get_ticket_trends` | `query_analytics` | Read | `read_ticket_trends` | Get pre-computed weekly ticket trend analytics: created/closed/backlog per week, per-company totals (default top 15 by volume, max 50), per-category totals (same caps), and a deterministic forecast with volume direction, backlog outlook, resolution trend, and the top 10 company/category risk watchlist entries. Data is aggregated weekly; use list_tickets for individual tickets. |
 | `get_training_analytics` | `query_analytics` | Read | `read_training` | Get training analytics. |
 | `get_user_activity` | `query_analytics` | Read | `read_settings_users`, `read_dashboards` | Get user activity analytics with optional company, user, company-role, and date filters. |
 | `list_company_audit` | `query_readiness` | Read | `read_settings_companies`, `read_dashboards` | Superseded by list_company_readiness. List company audit metrics; its auditScore and missingItems are now computed from the tenant's Account Readiness requirements. Supports filtering by company, assigned company role (for example vCIO), or assigned team member. |
@@ -309,7 +338,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
-| `create_survey` | `manage_surveys` | Write (confirm) | `write_surveys` | Stage or create a complete general survey: title, description, and questions with answer types and options. Created inactive by default — chain with set_survey_status to activate, send_survey_invites to dispatch, and list_survey_responses to read results. |
+| `create_survey` | `manage_surveys` | Write (confirm) | `write_surveys` | Stage or create a complete general survey: title, description, and questions with answer types and options. Created inactive by default; chain with set_survey_status to activate, send_survey_invites to dispatch, and list_survey_responses to read results. |
 | `get_nps_summary` | `query_surveys` | Read | `read_surveys` | Pre-computed NPS analytics rows (promoters/passives/detractors, NPS score, response rate) bucketed by period (daily/weekly/monthly/quarterly/yearly/all_time), tenant-wide and per company. Filter by companyId for 'NPS by client', by periodType for trend questions, or by surveyId for one NPS campaign. Returns the newest 200 periods; narrow with periodType or a date window for longer histories. |
 | `get_survey` | `query_surveys` | Read | `read_surveys` | Get a general survey with questions. |
 | `get_survey_stats` | `query_surveys` | Read | `read_surveys` | Aggregated stats for one general survey: invites sent, completed responses, response rate, and per-question rollups (average value for numeric/likert/NPS/rating questions, option counts for select questions). Use instead of re-aggregating list_survey_responses. |
@@ -383,12 +412,12 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `get_project` | `query_projects` | Read | `read_projects` | Get one project with its client-visibility overlay. Heavy overlay detail (deliverables, milestones, client actions, weekly updates) is only returned when explicitly requested. Use get_project_detail for phases, tickets, and time entries. |
 | `get_project_detail` | `query_projects` | Read | `read_projects` | Full project detail bundle: PSA project fields, the health overlay (outcome, phase, health, contacts, deliverables, milestones, client actions, weekly updates), PSA phases, and bounded slices of tickets (including scheduled start/end dates) and time entries. ticketsTruncated / timeEntriesTruncated tell you when to page with list_project_tickets / list_project_time_entries. |
 | `get_project_display_settings` | `query_project_settings` | Read | `read_settings_projects` | Tenant-level project display settings (client visibility mode, section/field toggles, status mappings, Kanban configuration). Returns defaults with isDefault=true when nothing has been customized. |
-| `get_project_kanban_options` | `query_projects` | Read | `read_projects` | Assignable catalogs for a project's Kanban board: project statuses, ticket statuses per service board (ConnectWise; Autotask returns one board-less entry for its shared task status picklist), and (for callers who can edit projects on ConnectWise/Autotask) the owner roster (ConnectWise: live project team) and priority catalog, each as { name, externalId }. MSPortal-native projects return the fixed ticket statuses in one board-less group; their project lifecycle status is free text, so projectStatuses is empty and update_project_status accepts statusName directly. |
+| `get_project_kanban_options` | `query_projects` | Read | `read_projects` | Assignable catalogs for a project's Kanban board: project statuses, ticket statuses per service board (ConnectWise; Autotask returns one board-less entry for its shared task status picklist), and (for callers who can edit projects on ConnectWise/Autotask) the owner roster (ConnectWise: live project team) and priority catalog, each as `{ name, externalId }`. MSPortal-native projects return the fixed ticket statuses in one board-less group; their project lifecycle status is free text, so projectStatuses is empty and update_project_status accepts statusName directly. |
 | `list_project_assignable_users` | `query_projects` | Read | `read_projects` | Users who can be assigned to a project's client actions: contacts of the project's company plus tenant staff. Use the returned ids as assigneeIds in upsert_project_client_action. |
 | `list_project_ticket_notes` | `query_project_tickets` | Read | `read_projects` | Notes on one project ticket: synced notes first, otherwise fetched live from the PSA (ConnectWise project ticket notes; Halo actions, cached afterwards). Autotask project tasks have no notes. |
 | `list_project_tickets` | `query_project_tickets` | Read | `read_projects` | Tickets (PSA project tasks) for one project with status, owner, priority, phase, hours, scheduled start/end dates, and closed state. Filter by status name, owner, phase, closed flag, or search text; paginated. |
 | `list_project_time_entries` | `query_projects` | Read | `read_projects` | Time entries logged against one project (most recent 500), newest first. Filter by ticket, phase, member, or date range; paginated. Notes are truncated. |
-| `list_projects` | `query_projects` | Read | `read_projects` | List PSA projects with health overlay data, pagination, and optional filters. Returns lean summaries — use get_project for deliverables, milestones, client actions, and weekly updates. |
+| `list_projects` | `query_projects` | Read | `read_projects` | List PSA projects with health overlay data, pagination, and optional filters. Returns lean summaries; use get_project for deliverables, milestones, client actions, and weekly updates. |
 | `set_project_document_visibility` | `manage_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit sharing one of a deliverable's documents with the client portal, or returning it to internal only. Documents are internal when uploaded and are only ever shared on purpose. Uploading and deleting documents is not available here. A shared document still stays hidden while its deliverable is internal; the result reports reachesClient so you can tell the difference. |
 | `update_project_client_visibility` | `manage_project_overlay` | Write (confirm) | `write_projects_overlays` | Stage or commit whether a project (and its overlay) is visible in the client portal (is_client_visible). |
 | `update_project_display_settings` | `manage_project_settings` | Write (confirm) | `write_settings_projects` | Stage or commit a partial update of the tenant-level project display settings (client visibility mode and filters, section/field toggles, project and Kanban status mappings, Kanban technician roster). Only provided keys change; the merged settings are validated exactly like the settings page (visibility and roster selections must exist in the tenant's catalog). Returns the saved settings row. |
@@ -423,8 +452,8 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `get_invoice_summary` | `query_financial` | Read | `read_invoices` | Get aggregate invoice totals: invoice count, total billed, outstanding balance, open count, and overdue count/amount. Optionally scoped to specific companies. |
 | `get_quote` | `query_financial` | Read | `read_quotes` | Get one quote by ID with full pricing totals and lifecycle dates. |
 | `get_revenue_summary` | `query_financial` | Read | `read_financial_reporting` | Get monthly revenue over a lookback window (default 12 months), grouped by classification (managed / other recurring / non-recurring), PSA provider, or line type. One row per month + group. Useful for QBR prep, revenue trend analysis, and profitability conversations. |
-| `list_invoices` | `query_financial` | Read | `read_invoices` | List PSA-synced invoices with status, type, dates, totals, payments, and balances. Supports pagination, company filtering, status/type/date filters, and search. Invoices are owned by the PSA — this is a read-only view. |
-| `list_quotes` | `query_financial` | Read | `read_quotes` | List quotes from active quoting integrations with stage, owner, company, and monthly/annual/one-time totals. Supports pagination, company filtering, stage filtering, and search. Quotes are created and managed in the source quoting provider — this is a read-only view. |
+| `list_invoices` | `query_financial` | Read | `read_invoices` | List PSA-synced invoices with status, type, dates, totals, payments, and balances. Supports pagination, company filtering, status/type/date filters, and search. Invoices are owned by the PSA; this is a read-only view. |
+| `list_quotes` | `query_financial` | Read | `read_quotes` | List quotes from active quoting integrations with stage, owner, company, and monthly/annual/one-time totals. Supports pagination, company filtering, stage filtering, and search. Quotes are created and managed in the source quoting provider; this is a read-only view. |
 
 ## Integrations
 
@@ -433,7 +462,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
 | `get_integration` | `query_integrations` | Read | `read_settings_integrations` | Get one integration's sync health, including a lastRuns map of per-entity last-sync timestamps. Never returns credentials or configuration. |
-| `list_integrations` | `query_integrations` | Read | `read_settings_integrations` | List tenant integrations with sync health (status, derived health, failure counters, last error, per-entity last-sync timestamps). Never returns credentials or configuration. Returns a detail object { integrations, companyIntegrations }; companyIntegrations is null unless includeCompanyIntegrations is true. |
+| `list_integrations` | `query_integrations` | Read | `read_settings_integrations` | List tenant integrations with sync health (status, derived health, failure counters, last error, per-entity last-sync timestamps). Never returns credentials or configuration. Returns a detail object `{ integrations, companyIntegrations }`; companyIntegrations is null unless includeCompanyIntegrations is true. |
 | `pause_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or pause an integration. Pausing stops all background syncs for the provider until it is resumed (status becomes 'paused' with reason 'manual_pause'). |
 | `resume_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or resume a paused integration. Sets status to 'active' and clears the pause and failure state (paused_at, paused_reason, last error fields, consecutive failures). |
 
@@ -449,7 +478,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `list_documentation_folders` | `query_documentation` | Read | `read_documentation` | List documentation folders across all sources (custom, Hudu, IT Glue) with per-folder document counts. Use the returned folderKey to filter list_documentation_documents, and the UUID of custom:&lt;uuid> keys as folderId when creating pages. |
 | `list_documentation_visibility_roles` | `query_documentation` | Read | `write_settings_documentation`, `write_settings_onboarding` | List the company permission-group roles (client portal roles) that can be used as visibility targets when creating documentation pages. Pass the returned role ids as roleIds to create_documentation_page to restrict a page to company users in those roles. |
 | `set_documentation_page_visibility` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Replace the visibility rules of an existing built-in documentation page: restrict it to specific company permission-group roles (see list_documentation_visibility_roles) or share it with all company users in scope. Use this to share a page that was created from the onboarding page library into the documentation hub for a specific role, or to change who can see a page after creation. Existing rules are replaced, not merged. Only custom pages support this; Hudu and IT Glue articles are managed from Settings. |
-| `update_documentation_page` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Update the title, HTML body, and/or summary of a built-in documentation page. Creates a new revision (the previous content stays in revision history). Only custom inline pages can be edited — Hudu and IT Glue articles are managed in their source system. contentHtml replaces the entire body, so fetch the current content with get_documentation_document and apply your edit to it. |
+| `update_documentation_page` | `manage_documentation` | Write (confirm) | `write_settings_documentation`, `write_settings_onboarding` | Update the title, HTML body, and/or summary of a built-in documentation page. Creates a new revision (the previous content stays in revision history). Only custom inline pages can be edited; Hudu and IT Glue articles are managed in their source system. contentHtml replaces the entire body, so fetch the current content with get_documentation_document and apply your edit to it. |
 
 ## Onboarding
 
@@ -466,7 +495,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `create_onboarding_checklist` | `manage_onboarding_checklists` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable onboarding checklist template with ordered items and optional tags. Link the template to onboarding template tasks in the app to attach it to client portals. |
 | `create_onboarding_form` | `manage_onboarding_forms` | Write (confirm) | `write_settings_onboarding` | Stage or create a reusable client-facing onboarding form, optionally with its fields. Forms are created in draft status by default; active forms can be attached to onboarding form tasks for clients to fill in. |
 | `create_onboarding_page` | `manage_onboarding_pages` | Write (confirm) | `write_settings_onboarding` | Stage or create a standalone onboarding documentation page in the page catalog. The body HTML is sanitized on save. The page is not attached to any template until linked with link_onboarding_page_to_template. |
-| `create_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or create a client onboarding portal from a template, with optional client contacts. The portal is created in draft status and no client emails are sent — use start_onboarding_portal to activate it and send invites. |
+| `create_onboarding_portal` | `manage_onboarding_portals` | Write (confirm) | `write_settings_onboarding` | Stage or create a client onboarding portal from a template, with optional client contacts. The portal is created in draft status and no client emails are sent; use start_onboarding_portal to activate it and send invites. |
 | `delete_onboarding_page` | `manage_onboarding_pages` | Write (confirm) | `manage_settings_onboarding` | Stage or apply deletion (archival) of an onboarding documentation page. On commit the page is archived and removed from every template and portal that references it. This cannot be undone from the API. |
 | `delete_onboarding_portal_task` | `manage_onboarding_tasks` | Write (confirm) | `manage_settings_onboarding` | Stage or permanently delete an onboarding portal task. This cannot be undone. Requires the manage onboarding permission. |
 | `get_onboarding_checklist` | `query_onboarding_checklists` | Read | `read_settings_onboarding` | Get one onboarding checklist template with its full ordered items array, tags, and archive status. |
@@ -499,8 +528,8 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `create_standard_category` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a Standards catalog category with its description, icon, Planner type, require-one-of behavior, and display order. After creating it, add its standards/subentries with create_standard_item. |
 | `create_standard_item` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or create a standard item (the subentry beneath a Standards category) with its vendor, requirement flag, internal default price, description, and display order. Items in a require-one-of category are always optional individually. |
 | `get_company_standards` | `query_standards` | Read | `read_tool_stack` | Get one company's standards deployment: every catalog item with its lifecycle status, item-level deploymentOptions, selectedOption, target tier inherited from its PSA company type, and deploymentAlignment (meets_target, below_target, unmapped_target, unclassified, or not_deployed), plus vCIO notes and the linked planner item. Items with no recorded status are not_started. |
-| `get_standard_adoption` | `query_standards` | Read | `read_tool_stack` | Adoption of standards across all companies, item by item. Without itemId: status counts for every standard (how many companies have each tool deployed / in progress / not started / N/A / declined). With itemId (from list_standards): also lists the company names in each status bucket (capped at 100 per bucket) — answers 'which clients are not on our standard EDR'. Companies excluded from standards tracking are not counted. |
-| `get_standards_compliance` | `query_standards` | Read | `read_tool_stack` | Per-company standards compliance rollup, scored like the /standards page: each required item that isn't N/A or declined counts as one check; requireOneOf categories count as one check satisfied by any deployed item. Returns per-company score, status counts, missingRequiredCount, and tenant-wide totals. The missingRequired name list (capped at 25) is only populated when companyId is provided — call again with one companyId to see WHICH checks a company is missing. Companies excluded from standards tracking are flagged and unscored (an excluded companyId returns one flagged record with null score). Ideal for QBR prep and 'which clients are below our standards' questions. |
+| `get_standard_adoption` | `query_standards` | Read | `read_tool_stack` | Adoption of standards across all companies, item by item. Without itemId: status counts for every standard (how many companies have each tool deployed / in progress / not started / N/A / declined). With itemId (from list_standards): also lists the company names in each status bucket (capped at 100 per bucket); answers 'which clients are not on our standard EDR'. Companies excluded from standards tracking are not counted. |
+| `get_standards_compliance` | `query_standards` | Read | `read_tool_stack` | Per-company standards compliance rollup, scored like the /standards page: each required item that isn't N/A or declined counts as one check; requireOneOf categories count as one check satisfied by any deployed item. Returns per-company score, status counts, missingRequiredCount, and tenant-wide totals. The missingRequired name list (capped at 25) is only populated when companyId is provided; call again with one companyId to see WHICH checks a company is missing. Companies excluded from standards tracking are flagged and unscored (an excluded companyId returns one flagged record with null score). Ideal for QBR prep and 'which clients are below our standards' questions. |
 | `list_standards` | `query_standards` | Read | `read_tool_stack` | List the tenant's technology standards catalog (also called the tool stack): categories, standard items, and each item's named deploymentOptions. Every deployment option includes its tenant-configured Standards tier. Categories marked requireOneOf are satisfied when any one item in them is deployed. Use these IDs with the Standards update tools and get_standard_adoption. |
 | `update_standard_category` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable Standards category field. Only provided fields change; null clears description, icon, or Planner type. Setting requireOneOf to true also makes every item in the category optional so the category acts as one grouped requirement. |
 | `update_standard_item` | `manage_standards` | Write (confirm) | `manage_settings_tool_stack` | Stage or update any editable standard item field, including moving it to another category. Only provided fields change; null clears description or vendor. Use list_standards first to preserve fields you do not intend to change. |
@@ -514,7 +543,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `get_security_summary` | `query_security` | Read | `read_security` | Cross-provider security posture summary: Cork (compliance findings, vulnerabilities incl. critical/known-exploited, endpoints), Acronis EDR (incident counts by state/severity/mitigation, endpoint protection), and Huntress (agents, escalations, incident reports, remediations, SAT learner counts), and Avanan email security over the last 30 days (threats by phishing/malware/other, open threats, spam and graymail blocked, protected users). A provider section is null when its data is unavailable; zero counts mean no data synced. Pair with get_secure_score_summary (M365) for the full QBR risk story. |
 | `list_avanan_email_threats` | `query_security` | Read | `read_security` | List Avanan (Check Point Harmony Email & Collaboration) email threats from the last 30 days, newest first: threat type (phishing, malware, suspicious, DLP, malicious URL, and so on), state (new/detected/pending are open; remediated and dismissed are closed), severity (critical/high/medium/low), sender, the protected email tenant and mapped company, remediation actions taken, and a link to the Avanan portal. Search matches sender, description, tenant and company name. |
 | `list_edr_incidents` | `query_security` | Read | `read_security` | List Acronis EDR incidents (newest first) with severity (HIGH/MEDIUM/LOW), state (NOT_STARTED/INVESTIGATING/CLOSED), mitigation state, verdict, and affected host. Search matches host name/domain. |
-| `list_huntress_items` | `query_security` | Read | `read_security` | List Huntress security items — escalations, incident reports, and remediations — with status, severity, category, the affected company/organization, and a link to the Huntress portal. Filter by itemType to focus on one kind. |
+| `list_huntress_items` | `query_security` | Read | `read_security` | List Huntress security items; escalations, incident reports, and remediations; with status, severity, category, the affected company/organization, and a link to the Huntress portal. Filter by itemType to focus on one kind. |
 | `list_vulnerabilities` | `query_security` | Read | `read_security` | List Cork vulnerabilities sorted by CVSS score (highest first): CVE id/description, affected software, CVSS/EPSS scores, priority (critical/accelerated/routine), and known-exploited flag. Search matches CVE id and software fields. |
 
 ## Broadcasts
@@ -536,7 +565,7 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
 | `list_notifications` | `query_notifications` | Read | MCP access | List in-app notifications for the calling user (paginated). Defaults to unread only; set includeRead to true for full history. |
-| `mark_notification_read` | `mark_notification_read` | Immediate action | MCP access | Mark one of the calling user's notifications as read (notificationId), or all of their unread notifications (all: true). Only touches notifications addressed to the caller — tenant-wide notifications (shared by all users) are never modified; already-read notifications are skipped. |
+| `mark_notification_read` | `mark_notification_read` | Immediate action | MCP access | Mark one of the calling user's notifications as read (notificationId), or all of their unread notifications (all: true). Only touches notifications addressed to the caller; tenant-wide notifications (shared by all users) are never modified; already-read notifications are skipped. |
 
 ## Dashboards
 

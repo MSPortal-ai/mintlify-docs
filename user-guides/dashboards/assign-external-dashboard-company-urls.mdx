@@ -4,115 +4,117 @@ description: 'Give each company its own external dashboard destination and maint
 icon: 'chart-mixed'
 ---
 
-**Audience:** MSP staff with permission to manage dashboard settings.
+Each company needs its own URL before its users can open an external dashboard. This guide is for MSP staff with Dashboards access under Settings.
 
-Each company needs an assigned URL to access an external dashboard. Company users always use their company-specific URL; an unassigned company does not fall back to the default URL. The default remains useful for MSP global viewing.
+## Before you start
+
+- Add the external dashboard first. See [Configure external dashboards](/user-guides/dashboards/configure-external-dashboards).
+- Company users always use their company's URL. A company with no URL never falls back to the default URL, and the dashboard is hidden from it. The default URL is used for MSP staff in **Global View**.
+- Every URL must start with `https://`.
 
 ## Add a company URL
 
 <Steps>
-  <Step title="Open the assignments">
-    Go to **Settings > Dashboards > External Dashboards**. Find the item and choose **… > Company URLs**.
+  <Step title="Open Company URLs">
+    Go to **Settings > Dashboards > External Dashboards**. On the item's row, open **... > Company URLs**. The **Company-Specific URLs** dialog opens.
   </Step>
-  <Step title="Choose the company and destination">
-    Under **Add Manually**, choose the company and enter its **HTTPS** dashboard URL. The selector lists companies not already assigned to this item.
+  <Step title="Choose the company">
+    Under **Add Manually**, pick a company in **Company**. The list shows only companies that do not have a URL for this item yet.
   </Step>
-  <Step title="Save the assignment">
-    Select **Add Company URL**. This saves immediately. Check **Assigned URLs** afterward; reopen Company URLs if the table reload closes the dialog.
+  <Step title="Enter the URL">
+    Type the company's `https://` dashboard address in **URL**.
   </Step>
-  <Step title="Verify access">
-    Confirm the company URL, active status and eligible Company roles. Open the dashboard in the intended company context and check the external service’s own access. The default URL’s frame-policy result does not verify this company URL.
+  <Step title="Click Add Company URL">
+    The URL is saved at once and appears under **Assigned URLs**.
+  </Step>
+  <Step title="Test it">
+    Open the dashboard with that company selected, or as a user of that company, and confirm it loads. The embedding check covers the default URL only, so test each company URL yourself.
   </Step>
 </Steps>
 
 <img src="/images/product/external-dashboard-company-form.png" alt="Add Manually form with Company selector and company-specific dashboard URL." width="952" height="476" />
 
-The image shows the MSP assignment form before a company and URL are entered.
+The image shows the **Add Manually** form before a company and URL are entered.
 
 ## Edit or remove an assignment
 
-Use the **Assigned URLs** filter to find a company or URL. Select its pencil icon, edit the URL and select the checkmark to save. The X cancels that unsaved inline edit.
+<Steps>
+  <Step title="Find the company">
+    The right side lists **Assigned URLs (n)**. Use **Filter by company or URL...** to narrow it.
+  </Step>
+  <Step title="Edit the URL">
+    Click the pencil icon, change the URL, then click the check mark to save. The **X** cancels the edit.
+  </Step>
+  <Step title="Or remove the assignment">
+    Click the trash icon. The assignment is removed at once with no confirmation. That company no longer sees the dashboard.
+  </Step>
+</Steps>
 
-The trash icon removes the company assignment immediately, without a separate confirmation. The company will no longer qualify through that assignment. Removing the URL does not delete the company or the external service’s dashboard.
+Removing a URL does not delete the company or the dashboard in the external service. **Close** only closes the dialog. It does not undo saved changes. To restore a removed assignment, add the company and URL again.
 
-<Warning>Adding, saving an inline edit and removing a URL are immediate changes. **Close** only closes the dialog; it does not undo saved changes. To restore an assignment, add the company and its correct URL again.</Warning>
+## Import and export with CSV
 
-## CSV controls
+The dialog works on one external item at a time.
 
-The dialog also offers **Export CSV** and **Upload CSV**. These work with company assignments for this one external item, not the external-dashboard catalog’s table export.
+<Steps>
+  <Step title="Export the current list">
+    Click **Export CSV** above the list. Choose **Export Current (n)** for assigned URLs only. Choose **Export All Companies (n)** for every company, with a blank URL for those not assigned. The filter box does not narrow either export.
+  </Step>
+  <Step title="Edit the file">
+    Keep the header `"Company Name","URL"`. Put both values in double quotes, one company per line. Match the company's name. Use `https://` addresses.
+  </Step>
+  <Step title="Upload it">
+    Under **Import from CSV**, click **Upload CSV** and choose the file. It processes as soon as you pick it. There is no preview.
+  </Step>
+  <Step title="Read the result">
+    A message reports how many rows were added, updated, skipped or failed. Open **Assigned URLs** to check the actual result.
+  </Step>
+</Steps>
 
-| Control | Purpose |
-| --- | --- |
-| **Export Current** | Export all assigned company URLs for the item. The on-screen text filter does not narrow this export. |
-| **Export All Companies** | Export the company list with existing URLs and blanks for companies not assigned to this item. Blank rows do not create assignments. |
-| **Upload CSV** | Process a file and add or update matching company assignments. Selecting the file begins processing; there is no separate approval preview. |
-
-Use the exact two-column format displayed in the dialog, with quoted **Company Name** and **URL** fields. Match the company’s name and use HTTPS destinations. Leave an unchanged URL alone; a blank URL is skipped and does not remove an assignment. Use the trash icon for removal.
-
-The importer can save some rows while others fail. Read the result counts and reopen Assigned URLs to verify the changes. Do not assume a failed import rolled back successful rows. Use manual assignment for names containing quotation marks or where company names are duplicated, and verify the intended company before saving.
+The import matches company names without regard to case. It skips rows with a blank URL and rows whose URL has not changed. Blank rows never remove an assignment. Use the trash icon for that. Rows are saved one at a time, so some can save while others fail. A failed import does not roll back rows that already saved. For a company name that contains a quotation mark, or when two companies share a name, add the URL manually.
 
 ## Troubleshooting
 
-| Symptom | Check |
+| Problem | What to do |
 | --- | --- |
-| Company is not in Add Manually | It may already be assigned. Find it under Assigned URLs and edit there. |
-| Company still cannot open the dashboard | Check its exact assignment, dashboard active status, Company role and external-service account. |
-| URL saves but cannot be embedded | Verify the company URL directly. The automatic policy check uses the default URL only. |
-| Closing the dialog did not undo the change | Changes save individually. Edit the value back or recreate the removed assignment. |
-| CSV import only changed some rows | Inspect result counts and actual assignments. Unchanged or blank URLs are skipped; other rows can fail independently. |
+| The company is not in the **Company** list | It already has a URL. Edit it under **Assigned URLs**. |
+| A company cannot open the dashboard | Check its assigned URL, that the item is **Active**, that the user's Company role is allowed, and that the user can sign in to the external service. |
+| The URL saves but does not load in the frame | Open the URL on its own. The embedding check covers only the default URL. |
+| Closing the dialog did not undo a change | Each change saves on its own. Edit the value back or add the assignment again. |
+| A CSV import changed only some rows | Read the message and check **Assigned URLs**. Unchanged and blank rows are skipped and other rows can fail alone. |
+| A URL is rejected | It must be a full `https://` address. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Where do I give a company its own dashboard URL?">
+    **Settings > Dashboards > External Dashboards**, then the item's **... > Company URLs**.
+  </Accordion>
+  <Accordion title="Does the default URL give unassigned companies access?">
+    No. Each company needs its own URL. The default URL is for MSP staff.
+  </Accordion>
+  <Accordion title="Can two companies use different links for the same item?">
+    Yes. Assign each company its own URL under the same item.
+  </Accordion>
+  <Accordion title="Does Add Company URL save at once?">
+    Yes. **Close** is not an undo.
+  </Accordion>
+  <Accordion title="Does removing a URL ask for confirmation?">
+    No. The trash icon removes it right away.
+  </Accordion>
+  <Accordion title="Does Export All Companies assign every company?">
+    No. It only creates a list. Blank rows do nothing when you import them.
+  </Accordion>
+  <Accordion title="Does CSV upload have a preview?">
+    No. Choosing the file starts the import and saves valid rows.
+  </Accordion>
+  <Accordion title="Can Company users change these assignments?">
+    No. Ask the MSP.
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
 - [Configure external dashboards](/user-guides/dashboards/configure-external-dashboards)
 - [Open an external dashboard](/user-guides/dashboards/open-external-dashboard)
 - [Understand your access](/user-guides/account/understand-your-access)
-
-## Frequently asked questions
-
-<AccordionGroup>
-  <Accordion title="Where do I give a company its own dashboard URL?">
-    Use Settings > Dashboards > External Dashboards, then the item’s Company URLs action.
-  </Accordion>
-  <Accordion title="Does the default URL give unassigned companies access?">
-    No. Each company needs an assigned URL. The default URL serves MSP global viewing.
-  </Accordion>
-  <Accordion title="Can two companies use different links for the same dashboard item?">
-    Yes. Assign each company its own intended HTTPS URL under the same external item.
-  </Accordion>
-  <Accordion title="When is Add Company URL saved?">
-    Immediately when Add Company URL succeeds. Close is not an undo action.
-  </Accordion>
-  <Accordion title="How do I change an existing company URL?">
-    Find it under Assigned URLs, select the pencil, change the URL and select the checkmark. The X cancels only the unsaved inline edit.
-  </Accordion>
-  <Accordion title="Does removing a company URL ask for confirmation?">
-    No. The trash control removes the assignment immediately. Review the company and URL before selecting it.
-  </Accordion>
-  <Accordion title="Does removing an assignment delete the company or provider dashboard?">
-    No. It removes that company’s association with this external item in MSPortal.
-  </Accordion>
-  <Accordion title="Why is an assigned company absent from the company selector?">
-    Add Manually lists companies not already assigned. Edit the company’s existing Assigned URLs entry instead.
-  </Accordion>
-  <Accordion title="Does Export Current respect the Assigned URLs text filter?">
-    No. It exports all assigned URLs for this item, even when the list is filtered.
-  </Accordion>
-  <Accordion title="Does Export All Companies assign every company?">
-    No. It produces a list with blanks for unassigned companies. Exporting does not create assignments.
-  </Accordion>
-  <Accordion title="Does a blank URL in an import remove the assignment?">
-    No. Blank URLs are skipped. Use the assignment’s trash control when removal is intended.
-  </Accordion>
-  <Accordion title="Does CSV upload have a preview before saving?">
-    No. Selecting the file begins processing and can save valid rows immediately. Inspect the result counts and assignments afterward.
-  </Accordion>
-  <Accordion title="Will a failed CSV import undo rows that already saved?">
-    Do not assume so. Rows are processed separately and partial success is possible. Verify the actual assignments.
-  </Accordion>
-  <Accordion title="Does the frame check verify every company URL?">
-    No. It checks the default URL. Test each intended company destination and its external-service access separately.
-  </Accordion>
-  <Accordion title="Can Company users change these assignments?">
-    Ask the MSP to manage company URL assignments, dashboard role restrictions and user permissions.
-  </Accordion>
-</AccordionGroup>

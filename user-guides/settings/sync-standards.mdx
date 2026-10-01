@@ -4,96 +4,125 @@ description: 'Choose schedules and visibility for new work and understand what a
 icon: 'arrows-rotate'
 ---
 
-**Audience:** MSP staff managing Standards settings. This operation can affect all active companies in the MSP.
+Sync Standards creates a tracking record and a Planner item for every standard at every active company, and refreshes the Planner items that already exist. This page is for MSP staff who manage the Standards catalog.
 
-Open **Settings > MSP Tools > Standards** after [preparing the catalog](/user-guides/settings/standards). Review names, descriptions, prices and category Planner types before distributing them.
+## Before you start
 
-## Start a sync
+- You need Manage access to Standards settings and an active billing status. Company administrator access does not grant this.
+- The catalog needs at least one category. **Sync All Companies** is disabled while the catalog is empty.
+- Review names, descriptions, default prices and category Planner types first. See [Manage the Standards catalog](/user-guides/settings/standards).
+- The sync covers every active company. The company selector at the top of the page does not limit it to one company.
 
-1. Finish inline edits and wait for them to save. Resolve any save errors first.
-2. Select **Sync All Companies**.
-3. Review the number of catalog items and categories. The operation covers every active company; the top company selector is not a one-company rollout control for this action.
-4. Under **Schedule new planner items**, choose **On a specific date** and pick a date, or choose **Send to Unscheduled**.
-5. Decide whether to turn on **Hide from company users** for newly created Planner items.
-6. Select the dialog's **Sync All Companies** to submit, or **Cancel** before submission to abandon these choices.
-7. Wait for background processing, then review the matrix and linked Planner items. A started message confirms submission, not completion of every record.
+## Sync Standards to all companies
 
-<Frame caption="Review the scope, schedule and Company visibility before submitting. Counts depend on your catalog.">
-  <img src="/images/product/standards-sync-options.png" alt="Standards sync dialog with specific-date, Unscheduled and Hide from company users choices." width="1024" height="1420" />
-</Frame>
+<Steps>
+  <Step title="Open Settings > MSP Tools > Standards">
+    Stay on the **Standards** tab. The sync saves any edits that are still pending before it starts.
+  </Step>
+  <Step title="Click Sync All Companies">
+    The **Sync Standards to All Companies** dialog opens. It shows how many items across how many categories will be synced.
+  </Step>
+  <Step title="Choose a schedule under Schedule new planner items">
+    Pick **On a specific date** and choose a date with the date picker. The date becomes both the start date and the due date of each new Planner item. Or pick **Send to Unscheduled**. New items land in the Unscheduled lane with no start or due date.
 
-The confirm button is disabled while **On a specific date** has no chosen date. A chosen date becomes both the start and due date for newly created items. Unscheduled leaves both dates empty. These dates are planning choices, not appointments or booked engineer time.
+    **Sync All Companies** in the dialog stays disabled until you pick a date or choose **Send to Unscheduled**.
+  </Step>
+  <Step title="Decide whether to turn on Hide from company users">
+    Turn it on to mark each new Planner item as internal-only, so company users do not see it in the client portal. Leave it off to let company users see new items.
+  </Step>
+  <Step title="Click Sync All Companies in the dialog">
+    The dialog closes and a message says **Standards sync started. Company records will be updated in the background.** Click **Cancel** instead to leave without syncing. Your schedule and visibility choices are not remembered for the next sync.
 
-## New records and existing work
+    <Frame caption="Review the scope, schedule and visibility before you submit. Counts depend on your catalog.">
+      <img src="/images/product/standards-sync-options.png" alt="Standards sync dialog with specific-date, Unscheduled and Hide from company users choices." width="1024" height="1420" />
+    </Frame>
+  </Step>
+  <Step title="Wait for the background task to finish">
+    The started message means the task was submitted, not that every record is done. Large MSPs can take a moment.
+  </Step>
+</Steps>
+
+## Check the result
+
+<Steps>
+  <Step title="Open MSP Tools > Standards in the sidebar">
+    This is the company matrix. Check a few company rows and open their linked work.
+  </Step>
+  <Step title="Or open Planner > List and filter Source to Standards">
+    Confirm the names, statuses, dates, estimates and visibility of the new items.
+  </Step>
+</Steps>
+
+## What a sync changes
 
 | Record | What the sync does |
 | --- | --- |
-| Missing company/standard tracking pair | Creates a Not Started tracking record for an active company. |
-| Tracking record without a linked Planner item | Creates linked work, including for optional standards and categories without a Planner type. |
-| Existing company deployment status | Keeps the recorded Standards status. |
-| Existing linked Planner title, description and type | Refreshes these from the catalog, or from the standard's [Planner template](/user-guides/settings/standards#apply-a-planner-template), when they differ. |
-| Existing linked Planner estimate | Refreshes from **Default Price** when the item has no cost rows. When it has cost rows, their total is the estimate. |
+| A company and standard with no tracking record | Creates a **Not Started** tracking record for each active company where the standard applies. See [Choose which Standards apply](/user-guides/settings/standards-applicability). |
+| A tracking record with no linked Planner item | Creates the Planner item, including for optional standards and for categories with no Planner type. |
+| A standard that no longer applies to a company | Archives the Planner item the sync created. The sync restores an item it archived if the standard applies again. |
+| Existing company deployment status | Kept as recorded. |
+| Linked Planner title, description and type | Refreshed from the catalog, or from the standard's [Planner template](/user-guides/settings/standards#apply-a-planner-template) when it has one. |
+| Linked Planner estimate | Set from **Default Price** when the item has no cost rows. When it has cost rows, their total is the estimate. |
 | Open item without the standard's current Planner template | Applies the template: business value, hours, probability, notes, cost rows and compliance links. Completed, Cancelled and archived items are skipped. |
-| Existing linked Planner status | Reconciles it with Standards, while preserving Planner-only On Hold and Pending Approval states. |
-| Existing Planner dates, Company visibility and public/private notes | The new-item schedule and visibility choices do not replace these existing values. Applying a Planner template writes its notes and can make an item internal. |
+| Linked Planner status | Matched to the Standards status. Planner-only **On Hold** and **Pending Approval** states are kept. |
+| Existing Planner dates and visibility | Not changed. The schedule and **Hide from company users** choices apply to new items only. |
+| Existing public and private Planner notes | Not changed, unless a Planner template is applied to an open item. The template's notes are then written to it. |
 
 <Warning>
-The dialog's statement that existing company statuses are preserved does not mean all Planner fields are untouched. A sync can replace a company-specific Planner title, description, estimate or type with the shared catalog values. When a standard has a Planner template, a sync can also replace the notes, business value, hours and probability on its open items.
+The dialog says existing company statuses are not overwritten. That covers statuses only. A sync can replace a company-specific Planner title, description, estimate or type with the shared catalog values. When a standard has a Planner template, it can also replace the notes, business value, hours and probability on open items.
 </Warning>
 
-A new Planner item's default estimate is not a purchase or approved quote. **Hide from company users** makes newly created work internal; leaving it off does not grant a Company user access to unrelated Planner work. Their permissions and company scope still apply.
+The default estimate on a new Planner item is a planning number. It is not a purchase or an approved quote.
 
-## Verify the result
+## Troubleshooting
 
-Open **MSP Tools > Standards**, check relevant company rows, then open their linked work. You can also use **Planner > List** and the **Standards** Source filter. Confirm names, statuses, dates, estimates and Company visibility before relying on the rollout.
+| Problem | What to do |
+| --- | --- |
+| **Sync All Companies** is disabled. | The catalog has no categories, or a sync is already starting. Add a category and standard first. |
+| The dialog's **Sync All Companies** button is disabled. | **On a specific date** is selected and no date is chosen. Pick a date or choose **Send to Unscheduled**. |
+| The sync fails to start (**Failed to start sync** or an error message). | Check that you have Manage access to Standards settings and that billing is active. Then try again. |
+| Some companies or standards have no new Planner item. | The sync may have only partly finished, or the standard does not apply to that company. Check the matrix, wait a few minutes, then run the sync again. Do not delete tracking or Planner records to force a retry. |
+| Existing Planner items did not change. | Completed, Cancelled and archived items keep their template. Check the item's status. |
+| Company users cannot see new items. | **Hide from company users** was on for that sync. Change visibility on the Planner items. |
 
-If submission or processing fails, inspect what already exists before retrying: background work can make partial progress. Do not delete tracking or Planner records merely to force a retry. Report the workflow failure to the MSP administrator with the affected company and standard.
-
-For Company-facing interpretation, share [Understand Standards items in Planner](/user-guides/planner/understand-standards-items).
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does saving a new standard distribute it automatically?">
-    No. Catalog saving is separate from Sync All Companies.
+    No. Saving the catalog and **Sync All Companies** are separate steps.
   </Accordion>
   <Accordion title="Can I sync only the company selected at the top?">
-    Sync All Companies covers every active company in the MSP. The top company selector does not restrict this action to one company.
-  </Accordion>
-  <Accordion title="Why is the sync confirmation disabled?">
-    On a specific date requires a chosen date. Pick one or select Send to Unscheduled.
-  </Accordion>
-  <Accordion title="What dates do new Planner items receive?">
-    The selected date becomes both start and due date, or Send to Unscheduled leaves both empty.
+    No. The sync covers every active company in the MSP.
   </Accordion>
   <Accordion title="Does the schedule reschedule existing work?">
-    No. These schedule choices apply to newly created Planner items.
+    No. The date and the Unscheduled choice apply only to Planner items the sync creates.
   </Accordion>
   <Accordion title="Does Hide from company users hide existing work?">
-    No. This sync option applies to newly created Planner items; review existing items separately.
+    No. It applies only to newly created Planner items. Change existing items in Planner.
   </Accordion>
-  <Accordion title="Can optional or untyped standards create work?">
-    Yes. Sync can create tracking and linked Planner work for optional standards and categories without a Planner type.
+  <Accordion title="Can optional standards or categories with no Planner type create work?">
+    Yes. The sync creates tracking records and Planner items for them too.
   </Accordion>
   <Accordion title="Does sync reset existing deployment statuses?">
-    Existing company Standards statuses are preserved. Linked Planner statuses can be reconciled from them.
+    No. Company Standards statuses are kept. Linked Planner statuses are matched to them, except On Hold and Pending Approval.
   </Accordion>
   <Accordion title="Which existing Planner fields can change?">
-    The title, description, estimate, type and mapped status can refresh from Standards. When the standard has a Planner template, open items also get the template's fields. On Hold and Pending Approval are preserved.
+    The title, description, estimate, type and status can refresh from Standards. When the standard has a Planner template, open items also get the template's fields.
   </Accordion>
-  <Accordion title="Does sync replace Company notes?">
-    Not on its own. Notes change only when a Planner template is applied to an open item, because the template's notes are written to it.
+  <Accordion title="Does sync replace company notes?">
+    Only when a Planner template is applied to an open item. Then the template's notes are written to it.
   </Accordion>
-  <Accordion title="Does a started message mean all companies finished?">
-    No. It confirms submission to a background task. Review the matrix and linked work afterward.
-  </Accordion>
-  <Accordion title="Where can I find the generated items?">
-    Open Planner > List and choose Standards in the Source filter, or open linked work from the Standards matrix.
+  <Accordion title="Where do the generated items show up?">
+    In **Planner > List** with the **Source** filter set to **Standards**, and from the linked work in the Standards matrix.
   </Accordion>
   <Accordion title="Does syncing place an order or create a support ticket?">
-    No. Standards creates planning and deployment tracking. Use the Home AI Assistant to submit a support ticket.
-  </Accordion>
-  <Accordion title="What should I do after a sync failure?">
-    Inspect existing records before retrying because some work may already have completed; report affected companies and standards to the MSP administrator.
+    No. Standards creates planning and deployment tracking only.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Manage the Standards catalog](/user-guides/settings/standards)
+- [Choose which Standards apply](/user-guides/settings/standards-applicability)
+- [Retire Standards definitions](/user-guides/settings/retire-standards)
+- [Understand Standards items in Planner](/user-guides/planner/understand-standards-items)

@@ -1,61 +1,82 @@
 ---
 title: "Read CyberHoot company summaries"
-description: "Review company compliance, learner coverage, Hoot Score, and sync information in Security Awareness."
+description: "Review each company's Hoot Score, HootRank, compliance percentages, and last sync in Security Awareness."
 icon: shield-check
 ---
 
-**Audience:** Company users and MSP staff with Security Awareness read access. Your MSP must connect CyberHoot and map its customers to companies you can access.
+Use this page to read CyberHoot results for your companies. It is for company users and MSP staff.
 
-## Review your company
+## Before you start
 
-1. Open **Security > Security Awareness**.
-2. Confirm the main company selection and wait for **CyberHoot security awareness** to load.
-3. Review the summary cards, then find the company in the table or cards below.
-4. If more than six mapped entries are available, select **Show all … companies**. Select **Show fewer companies** to collapse the list again.
-5. Read the individual compliance categories before deciding what needs follow-up.
+- You need the Security Awareness read permission. It is separate from Security read access.
+- Your MSP must connect CyberHoot and map its customers to companies. See [Enable the CyberHoot integration](/user-guides/integrations/enable-cyberhoot-integration).
+- If you have more than one awareness integration, **Security Awareness** shows a tab for each. Choose **CyberHoot**.
 
-On a wide screen, the company table shows Hoot Score, HootRank, and compliance categories. On a narrower screen, company cards also show the source customer name, active status, learner counts, and any HootPhish badge. The layout changes with screen width.
+## Review your companies
 
-## Understand the summary cards
+<Steps>
+  <Step title="Open Security Awareness">
+    Open **Security > Security Awareness** and check the company selector. If a **CyberHoot** tab is shown, select it.
+  </Step>
+  <Step title="Read the summary cards">
+    The cards at the top cover every mapped company in your selection. See the table below.
+  </Step>
+  <Step title="Find your company in the table">
+    Each row shows the company name, with the CyberHoot customer name underneath, then **Hoot Score**, **HootRank**, and the compliance percentages. Use the column filters to narrow the list, and choose 25, 50, or 100 rows per page at the bottom.
+  </Step>
+  <Step title="Show or hide columns">
+    Use the column menu above the table to show or hide columns when the table is too wide.
+  </Step>
+  <Step title="Check the sync time">
+    **Last synced** above the table shows the latest sync time among the companies shown.
+  </Step>
+</Steps>
+
+## Read the summary cards
 
 | Card | Meaning |
 | --- | --- |
-| Mapped companies | Number of mapped CyberHoot customer entries returned for the selected scope. Multiple customer entries can represent the same portal company. |
-| Active learners | Sum of the entries' supplied active-user counts. If any entry lacks that count, the total is Not provided. |
-| Average Hoot Score | Simple average of supplied company scores, excluding missing scores. It is not weighted by learner count. |
-| Phishing compliance | Simple average of supplied company phishing-compliance percentages, excluding missing values. It is not the percentage of all individual learners who passed. |
+| **Mapped companies** | The number of mapped CyberHoot customer entries. One company can have more than one entry. |
+| **Active learners** | The sum of the active-user counts. It shows **Not provided** if any entry has no count. |
+| **Average Hoot Score** | The simple average of the company scores, leaving out missing scores. It is not weighted by learners. |
+| **Phishing compliance** | The simple average of the company phishing percentages, leaving out missing values. It is not the share of all learners who passed. |
 
-The cards describe the full selected scope, including entries hidden behind **Show all … companies**. Searching HootPhish challenges below does not filter these company cards.
+The cards cover every mapped company in your selection and do not change when you filter the table.
 
-**Last synced** is the most recent available timestamp among the returned company entries. It does not certify that every company or every participant result was synced at that time. Ask your MSP to inspect provider sync information when freshness matters.
+## Read the compliance columns
 
-## Read the compliance categories
+The table separates **Policy compliance**, **Video compliance**, **Survey compliance**, **Phishing compliance**, **ZAC foundational compliance**, **ZAC training compliance**, **Required CustomHoot compliance**, and **Optional CustomHoot compliance**. Read the column name and company before you compare values.
 
-The company view separates **Policy compliance**, **Video compliance**, **Survey compliance**, **Phishing compliance**, **ZAC foundational compliance**, **ZAC training compliance**, **Required CustomHoot compliance**, and **Optional CustomHoot compliance**. Read the category name and company before comparing values.
+**Hoot Score** is a score. **HootRank** is the rank label from CyberHoot. A dash means CyberHoot supplied no value. It does not mean 0%.
 
-Hoot Score is a score and HootRank is the provider's rank label. A dash or **Not provided** means missing information, not a failing score or 0%. A 100% value in one category does not establish that every other category is complete.
+To look at a campaign, see [Review HootPhish challenges](/user-guides/security/read-hootphish-challenges). This view has no date range, export, learner editing, or reminder action.
 
-These are imported summaries. This view has no date-range/history control, CSV export, learner editing, assignment, or reminder action. To inspect a campaign, continue to [HootPhish challenges](/user-guides/security/read-hootphish-challenges).
+## Troubleshooting
 
-## Missing data and help
-
-**No mapped CyberHoot companies** means there are no returned company entries for this scope. Company users should ask their MSP to check access, customer mapping, and sync status. MSP staff can review the [CyberHoot integration](/user-guides/integrations/enable-cyberhoot-integration).
-
-For **CyberHoot data could not be loaded**, select **Try again**. That retries loading the summaries and challenges; it does not start a provider sync. If the error continues, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket), review the prepared request, and confirm it.
+| Problem | What to do |
+| --- | --- |
+| **No mapped CyberHoot companies** | Nothing is mapped for your selection. Ask your MSP to map CyberHoot customers to companies and finish a sync. |
+| **CyberHoot data could not be loaded** | Click **Try again**. It reloads the page data and does not start a CyberHoot sync. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
+| **Active learners** shows **Not provided** | At least one entry has no active-user count. This is not zero. |
+| The **Security Awareness** tab is missing | You lack the Security Awareness read permission, or no awareness integration is connected. Ask your MSP admin. |
+| A value is a dash | CyberHoot supplied no value for that column. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Is Phishing compliance weighted by company size?">
-    No. It averages the supplied company percentages equally and excludes missing values.
+    No. It averages the company percentages equally and leaves out missing values.
   </Accordion>
   <Accordion title="Does Last synced prove every company is current?">
-    No. It is the latest available company timestamp in the returned scope. Other entries or participant results may be older.
+    No. It is the latest sync time among the companies shown. Others can be older.
   </Accordion>
-  <Accordion title="Why is Active learners Not provided?">
-    The total is not shown when any returned company entry lacks an active-user count. Do not treat it as zero.
-  </Accordion>
-  <Accordion title="Does Try again sync CyberHoot or change assignments?">
-    No. It retries reading the page data. Your MSP manages provider synchronization and assignment changes separately.
+  <Accordion title="Does Try again sync CyberHoot?">
+    No. It reloads the data MSPortal already has. Your MSP manages the CyberHoot sync.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Review HootPhish challenges](/user-guides/security/read-hootphish-challenges)
+- [Read HootPhish participant results](/user-guides/security/read-hootphish-participants)
+- [Security awareness overview](/user-guides/training/security-awareness)

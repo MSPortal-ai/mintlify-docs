@@ -4,79 +4,109 @@ description: 'MSP guide to revealing a credential handoff, downloading a secure 
 icon: 'shield-halved'
 ---
 
-Open a company's **Onboarding** workspace, choose the relevant portal, then open the credential or secure-file task in **Tasks**. Its details show the submission controls when a submission is available.
+This guide shows MSP staff how to reveal a credential handoff, download a secure file, and deal with submissions that were already used or have expired. Clients submit through [credential handoff](/user-guides/client-onboarding/hand-over-credentials) and [file uploads](/user-guides/client-onboarding/upload-files). They never see these retrieval controls.
 
-<Note>
-For MSP staff with onboarding write access and an active subscription. Company contacts use [credential handoff](/user-guides/client-onboarding/hand-over-credentials) or [file uploads](/user-guides/client-onboarding/upload-files) to submit information; they do not use these retrieval controls.
-</Note>
+## Before you start
+
+- You need onboarding write access (`write_settings_onboarding`) and an active subscription.
+- Each submission can be retrieved once. **Reveal & Delete** and **Download & Destroy** permanently delete the stored copy, so be ready to save what you get.
+- Submissions are encrypted with AES-256-GCM and expire 30 days after the client sends them.
+- Have the place ready where you will keep the information, such as your password manager or documentation system.
+
+## Find the submission
+
+<Steps>
+  <Step title="Open the project">
+    Go to **Projects**, choose **Project category > Onboarding projects**, and open the project.
+  </Step>
+  <Step title="Open the task">
+    Go to **Project Plan > Tasks** and open the credential or secure-file task. If the project has more than one portal, pick the right one with **Portal:** first.
+  </Step>
+</Steps>
+
+The task details show the submission and its controls. In the earlier company workspace, open the company's **Onboarding** tab, choose the portal, and open the task under **Tasks**.
 
 ## Reveal a credential handoff
 
 <Steps>
   <Step title="Check the submission">
-    Open the credential task and check its **Pending Reveal** status, submitter, date, and displayed expiry information. A Bulk submission may also identify an attached file.
+    Check the **Pending Reveal** status, the person who sent it, the date, and the expiry. A Bulk submission may say **Includes file** with a filename.
   </Step>
-  <Step title="Prepare to retain the information">
-    Have the destination for the required credentials ready. Revealing consumes the portal's retrieval opportunity; it is not a read-only preview.
+  <Step title="Get ready to save it">
+    Open the place where you will store the credentials. A reveal is not a preview. It uses up the one retrieval.
   </Step>
-  <Step title="Review the confirmation">
-    Select **Reveal Credentials**. Read the confirmation, then select **Reveal & Delete** when ready. **Cancel** closes the confirmation without revealing.
+  <Step title="Reveal">
+    Select **Reveal Credentials**. Read the confirmation, then select **Reveal & Delete**. Select **Cancel** to close it without revealing.
   </Step>
-  <Step title="Save what you need">
-    For Single submissions, use the field copy controls and password/API-key show controls. For Bulk submissions, use **Copy All** for text and **Download** for an attached file. Complete this while the revealed information is displayed.
+  <Step title="Copy what you need">
+    For a Single submission, use the copy button on each field. Use the show and hide control for the password and API key. For a Bulk submission, select **Copy All** for the text, and **Download** for an attached file. Do this while the details are on screen.
   </Step>
 </Steps>
 
-The view automatically hides revealed information after its display window. Reopening or refreshing the task does not retrieve the submission again. Use the time shown by the application and save what you need promptly.
+After the reveal, the details show for 5 minutes, then hide on their own. The encrypted copy is already deleted. Refreshing or reopening the task does not bring them back, so save what you need right away.
 
 ## Download a secure file
 
-1. Open the Secure File Drop task and find the required filename.
-2. Select **Download Once**.
-3. Review the filename and task in **Download Secure File**.
-4. Select **Download & Destroy** to retrieve it, or **Cancel** to leave it pending.
-5. Check your browser's downloads and confirm the file was saved to the intended location.
+<Steps>
+  <Step title="Find the file">
+    Open the **Secure File Drop** task and find the filename.
+  </Step>
+  <Step title="Start the download">
+    Select **Download Once**.
+  </Step>
+  <Step title="Confirm">
+    In **Download Secure File**, check the filename and task. Select **Download & Destroy** to download, or **Cancel** to leave it waiting.
+  </Step>
+  <Step title="Check your browser">
+    Confirm your browser saved the file where you expect.
+  </Step>
+</Steps>
 
-The retrieval action marks the file **Downloaded** before the browser finishes saving the returned file. That status does not prove that a local copy was successfully saved. If the browser blocks the download or the transfer is interrupted, check its downloads before requesting a replacement from the client.
+The file is marked **Downloaded** when the portal sends it, before your browser finishes saving it. If your browser blocks the download or the transfer stops, check your downloads and ask the client for a replacement.
+
+## Upload a file on an MSP-owned task
+
+An MSP-owned Secure File Drop task can show **Upload Secure File** in its details. Choose a file up to 10MB and the upload starts at once. It has no confirmation step like the client's **Encrypt & Upload**. Wait for the filename to appear. This control is for your own work. It does not change who owns the client's request.
 
 ## Understand the statuses
 
-| Submission | Pending | Processed | Expired |
+| Submission | Waiting | Used | Expired |
 | --- | --- | --- | --- |
-| Credentials | **Pending Reveal**; a reveal action is available | **Revealed**; no new retrieval through the task | **Expired**; arrange a new handoff |
-| Secure files | **Download Once** is available | **Downloaded**; no second server download | **Expired**; arrange a replacement |
+| Credentials | **Pending Reveal**, with **Reveal Credentials** available | **Revealed**, with no new retrieval from the task | **Expired**, so arrange a new handoff |
+| Secure files | **Download Once** is available | **Downloaded**, with no second download | **Expired**, so arrange a replacement |
 
-If a credential submission is wrong, already revealed, or expired, create a new credential handoff task for the client. The original Company task does not provide an edit or resubmit control. For a missing or expired secure file, arrange an appropriate new upload request.
+If a credential submission is wrong, already revealed, or expired, create a new credential handoff task and ask the client to submit again. The original task cannot be edited or resubmitted. For a missing or expired secure file, create a new upload request.
 
-## Upload a file for an MSP-owned task
+## Troubleshooting
 
-An MSP-owned Secure File Drop task can expose **Upload Secure File** in its details. Choosing a file starts the upload immediately in this MSP control; it does not use the Company's extra upload-confirmation step. Keep the file within the displayed 10MB limit and wait for the filename to appear.
-
-This control is for provider-owned work. It does not change who owns the client's upload request.
+| Problem | What to do |
+| --- | --- |
+| You can see the task but not the reveal or download button | You may lack onboarding write access or an active subscription. The submission may also already be used or expired. |
+| You revealed a credential and did not copy it | It cannot be retrieved again. Ask the client to submit a new handoff. |
+| A file shows **Downloaded** but is not on your computer | Check your browser's downloads. If the file is gone, ask the client to upload it again. |
+| The client submitted a mistake | Create a new credential handoff task. Clients cannot edit a submission. |
+| A submission shows **Expired** | Submissions expire after 30 days. Create a new request. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Can I reveal a credential just to check that the client submitted something?">
-    Check its status and submission details instead. **Reveal & Delete** consumes the retrieval opportunity and returns the actual contents.
+  <Accordion title="Can I reveal a credential just to check that the client sent something?">
+    No. Check the status and submission details instead. **Reveal & Delete** returns the contents and uses up the retrieval.
   </Accordion>
   <Accordion title="Can another technician reveal the same submission afterward?">
-    The portal provides one successful retrieval of a pending submission. After it is marked **Revealed**, reopening it does not provide another retrieval.
+    No. A pending submission can be retrieved once. After it shows **Revealed**, nobody can retrieve it again.
   </Accordion>
   <Accordion title="Can I cancel after opening the confirmation?">
-    Yes. Cancel before selecting **Reveal & Delete** or **Download & Destroy**. Closing the confirmation does not consume the submission.
+    Yes. Select **Cancel** before **Reveal & Delete** or **Download & Destroy**. Closing the confirmation does not use up the submission.
   </Accordion>
-  <Accordion title="Does Downloaded mean the file exists on my computer?">
-    No. It records portal retrieval. Confirm the browser completed the local download; the server action and browser save are separate steps.
+  <Accordion title="Does Downloaded mean the file is on my computer?">
+    No. It records that the portal sent it. Confirm your browser saved it.
   </Accordion>
-  <Accordion title="Can clients edit an incorrect credential handoff?">
-    No. Create a new credential handoff task and ask the client to submit the correction there.
+  <Accordion title="Can clients fix an incorrect credential handoff?">
+    No. Create a new handoff task and ask the client to submit the correction there.
   </Accordion>
-  <Accordion title="Why can I see the task but cannot retrieve its submission?">
-    Viewing onboarding and retrieving a secure submission require different access. Check your onboarding write permission, subscription state, and whether the item has already been processed or expired.
-  </Accordion>
-  <Accordion title="Does uploading to an MSP-owned secure-file task require confirmation?">
-    The MSP upload control starts when you choose the file. The Company Secure File Drop has a separate **Encrypt & Upload** confirmation.
+  <Accordion title="Does uploading to an MSP-owned secure-file task need a confirmation?">
+    No. Your upload starts when you choose the file. The client's **Encrypt & Upload** confirmation is separate.
   </Accordion>
 </AccordionGroup>
 
@@ -85,3 +115,4 @@ This control is for provider-owned work. It does not change who owns the client'
 - [Manage onboarding portals](/user-guides/client-onboarding/managing-portals)
 - [Company credential handoff](/user-guides/client-onboarding/hand-over-credentials)
 - [Company file uploads](/user-guides/client-onboarding/upload-files)
+- [Secure credential handoff security overview](/user-guides/onboarding/secure-credential-handoff)

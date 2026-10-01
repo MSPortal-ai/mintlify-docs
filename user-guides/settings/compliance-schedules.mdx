@@ -4,85 +4,121 @@ description: "Choose a run template, target companies and recurrence, then manag
 icon: "calendar"
 ---
 
-**Audience:** MSP staff with Compliance settings access. Creating, editing and pausing schedules requires write access; deleting requires manage access. The Compliance feature must be available to your tenant.
+A compliance schedule creates assessment runs for your companies on a repeating or one-time basis. This page is for MSP staff who manage Compliance settings. A schedule is tenant-wide. The top Company selector does not limit it. Its **Targets** decide which companies get runs.
 
-Open **Settings > Compliance > Schedule**. This is tenant-wide configuration. The top Company selector does not limit a schedule to the company you happen to be viewing: its **Targets** determine who receives runs.
+## Before you start
 
-## Before creating a schedule
+- The Compliance feature must be available for your account.
+- You need write access to Compliance settings to create, edit and pause schedules. Deleting needs manage access.
+- Create an active run template first. Go to **Settings > Operations > Compliance**, open the **Runs** tab and build a template with the groups and checks you want. Only active templates appear in the schedule's template list. A template is the assessment package. A schedule decides when and for whom to create runs.
 
-Prepare an active template under **Settings > Compliance > Runs** with the intended groups and individual checks. Review its contents before scheduling it. Only active templates appear in the schedule picker. A template defines the assessment package; a schedule decides when and for whom to create runs.
+## Create a schedule
 
-## Create the schedule
+<Steps>
+  <Step title="Open the Schedule tab">
+    Go to **Settings > Operations > Compliance** and click **Schedule**.
+  </Step>
+  <Step title="Click Create Schedule">
+    Click **Create Schedule** in the page header. The **Create Schedule** dialog opens.
+  </Step>
+  <Step title="Fill in the details">
+    Enter a **Schedule Name**, an optional description and the **Run Template**.
+  </Step>
+  <Step title="Choose the targets">
+    Under **Targets**, pick one option. The form starts on **All companies**.
 
-1. Select **Create Schedule**. Enter a recognizable **Schedule Name**, optional description, and **Run Template**.
-2. Choose **Targets** deliberately. The new form starts with **All companies**, which targets active companies across the tenant. Choose **Specific companies** for an explicit client list, **Company groups** for the available groups, or **Industries** for company industry matches.
-3. For a targeted mode, select at least one entry. The summary counts selected groups or industries in those modes; it is not a preview of the final company count. If no groups are offered, use Specific companies or review company classification; do not assume every PSA-synced type is a schedulable group.
-4. Set the **Frequency** and the additional recurrence controls. Review the preview after changing frequency because its recurrence options reset to defaults for that frequency.
-5. Choose the **Start date**, or **Run date** for a one-time schedule. The form offers dates and patterns, not an exact time-of-day or time-zone selector.
-6. Select **Create Schedule** and wait for success. New schedules are created active. **Cancel** closes the unsaved draft.
-7. Reopen the saved schedule with **Edit** to verify its template, target mode, selections and recurrence. Review resulting runs in Compliance when the schedule executes.
+    | Option | Who gets runs |
+    |--------|---------------|
+    | **All companies** | Every active company in your tenant |
+    | **Specific companies** | The companies you pick |
+    | **Company groups** | Companies in the groups you pick |
+    | **Industries** | Companies whose industry matches the ones you pick |
 
-<Frame caption="Targets in an unsaved MSP schedule. All companies is selected by default; the displayed count belongs to this Demo session.">
+    For any option except **All companies**, pick at least one entry. The summary under the picker counts targets selected. In the groups and industries options it counts groups or industries, not companies.
+  </Step>
+  <Step title="Set the cadence">
+    Choose the **Frequency** and fill in the fields it shows (see the table below). The **Preview** box shows the dates. Changing the frequency resets its fields to defaults, so set the frequency first.
+  </Step>
+  <Step title="Choose the start date">
+    Choose the **Start date**. For a one-time schedule, choose the **Run date**. The first run is created on or after that date. The form has no time-of-day or time-zone setting.
+  </Step>
+  <Step title="Save">
+    Click **Create Schedule**. A toast says **Schedule created successfully**. New schedules are active. **Cancel** closes the form.
+  </Step>
+</Steps>
+
+<Frame caption="Targets in an unsaved schedule. All companies is selected by default.">
   <img src="/images/product/compliance-schedule-target-choices.png" alt="Schedule target choices for all companies, specific companies, company groups or industries." width="1184" height="468" />
 </Frame>
 
 ## Recurrence choices
 
-| Frequency | Configure |
-|---|---|
-| One-time | Run date |
-| Weekly | Day of the week and start date |
-| Semi-monthly | Two offered days of the month; the second can be the last day |
-| Monthly | A day of the month, last day, or an ordinal weekday such as the first Monday |
-| Quarterly | Starting month and day pattern; repeats every three months |
-| Semi-annual | Starting month and day pattern; repeats every six months |
-| Annual | Month and day pattern |
+| Frequency | What you set |
+|-----------|--------------|
+| **One-time** | **Run date** |
+| **Weekly** | **Day of the week** and **Start date** |
+| **Semi-monthly** | Two **Days of the month**. The second can be the last day |
+| **Monthly** | A **Day of the month**, the last day, or a weekday such as the first Monday |
+| **Quarterly** | **Starting month** and **Day pattern**. Repeats every three months |
+| **Semi-annual** | **Starting month** and **Day pattern**. Repeats every six months |
+| **Annual** | **Month** and **Day pattern** |
 
-Use the offered day choices rather than assuming an unavailable date is supported. A saved schedule is not proof that assessments already exist: background processing creates runs and then assigns checks. A processing failure or no eligible active companies can prevent expected results. No exact execution-time guarantee is implied by the date preview.
+**Day pattern** is **On a specific day of the month** or **On a specific weekday**. Pick from the day choices the form offers.
 
-## Edit, pause and delete
+## Check a schedule
 
-- **Edit** opens a draft of the saved configuration. **Update Schedule** persists it; Cancel leaves it unchanged.
-- The row's **Active/Paused** switch saves immediately. There is no separate page Save for the status switch. Pausing controls future scheduling; it does not undo assessments already created.
-- **Delete** opens a confirmation. Confirm **Delete Schedule** only when future scheduling should stop. Removing a schedule is not a way to delete historical runs or completed evidence.
+The **Schedule** table shows each schedule's **Schedule Name**, **Run Template**, **Targets**, **Frequency**, **Starts**, **Last Run** and **Status**. Open **Edit** to check the template, targets and cadence. Runs are created in the background. After a run is created, open Compliance to see the runs and their checks.
 
-Review **Last Run** separately from completion of the resulting checks. A last-run timestamp does not certify that assignments finished or that a company passed its assessment.
+## Edit, pause or delete a schedule
+
+<Steps>
+  <Step title="Edit">
+    Click **Edit** on the row, change the form and click **Update Schedule**. **Cancel** leaves it unchanged.
+  </Step>
+  <Step title="Pause or resume">
+    Use the **Status** switch on the row. It saves at once and shows **Active** or **Paused**. Pausing stops future runs. It does not remove runs already created.
+  </Step>
+  <Step title="Delete">
+    Click **Delete**, then **Delete Schedule** to confirm. Runs that have not executed yet are cancelled. Completed runs and their evidence stay.
+  </Step>
+</Steps>
 
 ## Troubleshooting
 
-If Create Schedule is disabled, check the name, template and target selection. If a template is absent, check whether it is active. If an edit cannot save, review permissions and field errors, then reopen the record before retrying. If no assessment appears, check Active/Paused, start date, target membership, active-company status and the resulting Compliance runs; do not create duplicate schedules to compensate for delayed processing.
+| Problem | What to do |
+|---------|-----------|
+| **Create Schedule** is disabled or will not save | Check the **Schedule Name**, **Run Template** and that you picked at least one target |
+| The template is missing from the list | Only active templates show. Activate it in the **Runs** tab |
+| **No company groups yet** appears | Use **Specific companies** or **Industries**, or create a group first |
+| **No industries on file** appears | Set the **Industry** field on your companies first |
+| No runs appeared | Check that the schedule is **Active**, that its start date has passed, that the targets match active companies, and look in Compliance for new runs. Do not create a duplicate schedule |
+| The switch or **Edit** is disabled | You need write access to Compliance settings. **Delete** needs manage access |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does the Company selector restrict my schedule?">
+    No. Schedules are tenant-wide. Choose the companies in **Targets**.
+  </Accordion>
+  <Accordion title="What does a new schedule target?">
+    All active companies in your tenant. Change **Targets** before saving for a narrower schedule.
+  </Accordion>
+  <Accordion title="Does Pausing need a Save?">
+    No. The **Status** switch saves at once.
+  </Accordion>
+  <Accordion title="Does Last Run mean all checks are done?">
+    No. It shows when MSPortal last created a run. Checks are finished separately.
+  </Accordion>
+  <Accordion title="Can I pick an exact time or time zone?">
+    No. The form offers dates and recurrence patterns only.
+  </Accordion>
+  <Accordion title="Does deleting a schedule delete past assessments?">
+    No. It stops future runs. Completed assessments stay.
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
 - [Build checks, groups and run templates](/user-guides/settings/compliance)
 - [Manage companies](/user-guides/settings/companies)
 - [Find and read compliance checks](/user-guides/compliance/find-and-read-checks)
-
-## FAQs
-
-<AccordionGroup>
-  <Accordion title="Does the Company selector restrict my schedule?">
-    No. Schedule configuration is tenant-wide. Choose the intended companies in Targets.
-  </Accordion>
-  <Accordion title="What does a new schedule target by default?">
-    All active companies in the tenant. Change Targets before saving if you need a narrower assessment.
-  </Accordion>
-  <Accordion title="Why is my run template missing?">
-    The schedule picker offers active templates. Review the template under Settings > Compliance > Runs.
-  </Accordion>
-  <Accordion title="Does the target summary show the final number of companies?">
-    Only a company selection directly counts companies. Group and industry modes count the selected groups or industries.
-  </Accordion>
-  <Accordion title="Does pausing require Save Changes?">
-    No. The row status switch saves immediately. It does not cancel or delete runs already created.
-  </Accordion>
-  <Accordion title="Does Last Run mean all checks finished?">
-    No. Run creation and check assignment are separate from assessment completion.
-  </Accordion>
-  <Accordion title="Can I choose an exact time or time zone?">
-    The schedule editor offers dates and recurrence patterns, without a time-of-day or time-zone selector.
-  </Accordion>
-  <Accordion title="Does deleting a schedule remove completed evidence?">
-    No. It removes the schedule for future execution, not the historical assessments.
-  </Accordion>
-</AccordionGroup>

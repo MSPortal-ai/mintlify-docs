@@ -5,44 +5,75 @@ description: "Connect the selected RMM and verify its data before continuing."
 icon: "desktop"
 ---
 
-**Audience:** MSP staff with integration-management access. Have the provider administrator prepare the credentials and permissions required by its setup guide.
+Connect your primary RMM so MSPortal can pull in sites and devices. This page is for MSP staff with integration-management access. The same flow covers Datto RMM, NinjaOne, ConnectWise Asio, N-central, Addigy, Meraki, UniFi, and WatchGuard.
 
-## Connect the intended instance
+## Before you start
 
-1. In **Launch Center**, review the selected RMM and connection instance, then open its setup step. You can also open the provider from **Settings > Integrations**.
-2. Follow the provider's credential and connection workflow. Exact fields, test controls and supported features differ by provider.
-3. Use the displayed connection/save action and wait for its result. Correct credential, region or permission errors before proceeding.
-4. Review synchronization status and available sites, devices and supported monitoring information. A successful credential check is not the same as a completed import.
-5. Map provider companies or sites to the intended MSPortal company. Review import settings before importing or enabling continuing synchronization.
-6. Return to Launch Center and inspect the selected connection's readiness and the separate client-data findings.
+- Choose your RMM in the **Integrations** step first. See [Choose launch integrations](/user-guides/getting-started/onboarding/integration-selection).
+- Have your RMM administrator create API credentials. The fields differ by provider, so keep the provider's setup guide open (see Related guides).
+- Connect your PSA first and map your companies. RMM sites map to those companies. See [PSA connection](/user-guides/getting-started/onboarding/psa-setup).
+
+## Connect your RMM
+
+<Steps>
+  <Step title="Open the step">
+    In **Launch Center**, select **Connect your RMM** in **Setup guide**. The RMM wizard opens inside the plan. You can also use **Settings > Integrations**.
+  </Step>
+  <Step title="Connect">
+    On the **Connect** step, enter your API credentials, such as a key and secret, and a region or URL where the provider asks for one. Click **Test Connection**. When the test passes, click **Create Integration**, then **Next**. If you see **Connection failed**, check the credentials and the region, then retest.
+  </Step>
+  <Step title="Map sites or companies">
+    On the **Map** step, wait for the first sync to finish. It can take a few minutes, and much longer for a large ConnectWise Asio account. If the list is empty, click the sync button or check for updates. For each provider site or company, click **Select company...** and choose the matching MSPortal company. **Quick Match** suggests matches by name, so check each one. Click **Create new company** if no match exists. Click **Import Selected** to save the mappings. You must map at least one before you continue.
+  </Step>
+  <Step title="Map locations (optional)">
+    Providers that support it show a **Map Locations** step. Map each location to a PSA location, then click **Save All**, or click **Skip**.
+  </Step>
+  <Step title="Open device import">
+    On the **Import** step, click **Open Device Import**. You land on the integration's device page. Continue in [Import rollout devices](/user-guides/getting-started/onboarding/device-import).
+  </Step>
+  <Step title="Complete setup">
+    Return to the wizard and click **Complete Setup** when you have finished.
+  </Step>
+</Steps>
 
 <Frame caption="PSA and primary RMM selections have separate controls.">
   <img src="/images/product/launch-integration-choices.png" alt="PSA and primary RMM selections have separate controls." width="1780" height="650" />
 </Frame>
 
-## Connection versus readiness
+## Check the connection
 
-The connection check applies to the provider instance selected for the plan. An unrelated active integration does not satisfy it. Data requirements are checked separately for the rollout companies. Do not assume all provider features, records or writeback operations are supported because the connection succeeds.
+<Steps>
+  <Step title="Look at the sync status">
+    Open the integration in **Settings > Integrations**. Check that the last sync finished and that your sites show the right device counts.
+  </Step>
+  <Step title="Check Launch Center">
+    In **Launch Center**, open **Live verification**. **A healthy RMM connection is available** is blocking when your plan needs an RMM. It checks the instance chosen in your plan. An unrelated active integration does not satisfy it.
+  </Step>
+</Steps>
 
-Next, review device mappings and import actual devices. Staged devices alone do not satisfy inventory readiness.
+Staged devices alone do not satisfy device readiness. Import them next.
 
 ## Troubleshooting
 
-If the selected connection is missing, return to the strategy step and choose the intended instance. If synchronization has no expected records, inspect its status, provider permissions, scope and company mappings. Preserve the current connection while investigating; clearing and resyncing can remove staged or mapped data and is not a harmless refresh.
+| Problem | What to do |
+| --- | --- |
+| **Connection failed** | Check the key, secret, region or URL, and that the API user is active in your RMM. |
+| The **Map** list is empty | The first sync may still be running. Wait, then click the check or sync button. |
+| "You must map at least one site before proceeding." | Map one site to a company and click **Import Selected**. |
+| The wrong connection is checked | Go back to **Integrations** and choose the intended instance. |
+| No devices show later | Check the sync status, the mapping, and the API user's permissions. Do not clear and resync before you know why. |
 
-Use the specific guide below for credential preparation and provider behavior.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does a successful RMM credential test complete the rollout?">
-    No. Verify the selected connection, company mapping, actual imported records and remaining readiness findings.
+  <Accordion title="Does a successful credential test complete the rollout?">
+    No. Check the sync, the site mappings, the imported devices, and the remaining findings.
   </Accordion>
   <Accordion title="Can any active connection satisfy this step?">
-    No. The check applies to the provider instance selected in the plan.
+    No. The check applies to the instance selected in your plan.
   </Accordion>
-  <Accordion title="Should I clear and resync immediately when data is missing?">
-    No. Inspect status, permissions, scope and mappings first; clearing data is a separate consequential operation.
+  <Accordion title="Can I use Addigy without another RMM?">
+    Yes. Pick Addigy under **Other integrations**. Launch Center then uses it for the device step.
   </Accordion>
 </AccordionGroup>
 
@@ -50,7 +81,7 @@ Use the specific guide below for credential preparation and provider behavior.
 
 - [Configure Datto RMM Integration](/user-guides/integrations/enable-datto-rmm-integration)
 - [Configure NinjaOne Integration](/user-guides/integrations/enable-ninjaone-integration)
-- [Enable connectwise asio integration](/user-guides/integrations/enable-connectwise-asio-integration)
+- [Enable ConnectWise Asio integration](/user-guides/integrations/enable-connectwise-asio-integration)
 - [Configure Addigy Integration](/user-guides/integrations/enable-addigy-integration)
 - [Integrations](/user-guides/settings/integrations)
-- [Device Import](/user-guides/getting-started/onboarding/device-import)
+- [Import rollout devices](/user-guides/getting-started/onboarding/device-import)

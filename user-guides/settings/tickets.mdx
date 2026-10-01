@@ -4,108 +4,269 @@ description: "Configure ticket delivery, request forms, role display groups and 
 icon: ticket
 ---
 
-**Audience:** MSP staff with access to Ticket settings. Editing requires the relevant settings write or manage permission. Company users ask their IT provider to change these rules.
+Use Ticket settings to choose where new tickets go, set their default routing, and control which tickets and fields each role sees. This page is for MSP staff. Company users ask their IT provider to change these rules.
 
-Open **Settings > Tickets**. The page has **General**, **Display Groups**, **Companies**, **Compliance**, **Change Approvals** and **Templates**. Available PSA fields depend on the active connection and synchronized lookup data.
+## Before you start
 
-## Choose ticket delivery
+- You need the **write** or **manage** Tickets settings permission to change anything. With read access only, the controls are disabled.
+- Deleting a ticket category or a display group needs the **manage** permission.
+- To route tickets to a PSA, connect it first under [Integrations](/user-guides/settings/integrations). The board, status, priority and type lists come from your PSA's synced data. If a list is empty, sync the integration.
+- Open **Settings > Tickets**. The tabs are **General**, **Display Groups**, **Companies**, **Compliance**, **Change Approvals** and **Templates**.
 
-In **General**, use **Ticket Delivery Method** to select **PSA Integration** or **Email (SMTP)**. This determines how requests are delivered; it is not a choice between email notifications and portal access.
+## Choose where tickets are delivered
 
-1. For PSA delivery, select the intended active **PSA Integration**.
-2. Review **Fallback Email Address** for delivery when the PSA connection fails.
-3. For email delivery, enter the destination **Email Address**.
-4. Inspect the save result before leaving. Delivery and integration selectors save immediately. Email fields save when you leave the field.
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    The **Ticket Delivery & Defaults** card is at the top.
+    <Frame>
+      <img src="/images/settings/settings-tickets-general.png" alt="Ticket delivery settings with Delivery Method and PSA Integration selectors" />
+    </Frame>
+  </Step>
+  <Step title="Set Delivery Method">
+    Choose **PSA Integration** to create tickets in your PSA. Choose **Email (SMTP)** to send them to an email address. The change saves immediately.
+  </Step>
+  <Step title="For PSA delivery, pick the PSA Integration">
+    Select the connected PSA that should receive tickets. If you have more than one, the page tells you how many it found. The change saves immediately.
+  </Step>
+  <Step title="Enter a Fallback Email Address">
+    Under PSA delivery, enter an address that receives the ticket by email if the PSA connection fails. It saves when you click out of the field.
+  </Step>
+  <Step title="For email delivery, enter the Email Address">
+    The **Email Address (for email delivery)** field is only editable when **Delivery Method** is **Email (SMTP)**. It saves when you click out of the field.
+  </Step>
+</Steps>
 
-Changing delivery does not configure every category, template or company override. Review those separately. Avoid changing a real delivery address merely to preview this screen.
+## Set ticket defaults
 
-## Set ordinary ticket defaults
+The **Ticket Defaults** card appears under the delivery settings once a PSA is selected. Templates and company overrides can supply their own values and take priority over these defaults.
 
-In **General**, configure the **Ticket Defaults** card for the selected PSA. Choose from the available board or queue, status, priority and ticket-type fields. Provider-dependent fields can change when the board or ticket type changes. Click **Save Defaults** to persist this card.
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    Scroll to **Ticket Defaults**.
+  </Step>
+  <Step title="Pick the routing values">
+    The fields depend on your PSA.
 
-These defaults do not guarantee identical routing for every request: templates and company settings can supply their own values. A missing option can mean that the provider lookup has not synchronized or does not belong to the selected board.
+    | PSA | Fields |
+    |---|---|
+    | ConnectWise | **Service Board**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype** |
+    | Autotask | **Queue**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype**, **Ticket Category** |
+    | Halo PSA | **Team**, **Priority**, **Status**, **Category**, **Impact**, **Urgency** |
+    | Syncro | **Priority**, **Status** |
 
-## Choose the new-ticket presentation
+    ConnectWise and Autotask require a board or queue and a status. Halo requires a category and a status. Status and type lists narrow to the board you pick.
+  </Step>
+  <Step title="Click Save Defaults">
+    A confirmation toast appears when the defaults are saved.
+  </Step>
+</Steps>
 
-**New Ticket View** controls whether the AI sidebar starts open, whether request templates appear as **Cards** or **List**, and whether template sections use **Tabs** or **All sections**. Each choice saves immediately; the sample cards are built-in previews.
+## Choose how the new-ticket page looks
 
-<Frame caption="MSP example: built-in Cards and List previews. Choosing a presentation saves immediately.">
-  <img src="/images/product/ticket-settings-new-request-view.png" alt="Manual template selection with Cards and List previews in Ticket settings." width="842" height="692" />
-</Frame>
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    Find the **New Ticket View** card.
+  </Step>
+  <Step title="Set the options">
+    - **Default to AI sidebar open**: on, users start with the assistant visible. Off, they start at manual template selection.
+    - **Manual template selection**: choose **Cards** or **List**.
+    - **Form section layout**: choose **Tabs** or **All sections** for templates with several sections.
 
-This configures the new-ticket page. Users can still start a support request from the [Home assistant](/user-guides/ticketing/open-a-ticket-with-ai), or use the [manual ticket form](/user-guides/ticketing/open-a-ticket). Display choices do not grant access to a template or submit a ticket.
+    Each choice saves immediately.
+    <Frame>
+      <img src="/images/product/ticket-settings-new-request-view.png" alt="Manual template selection with Cards and List previews in Ticket settings." width="842" height="692" />
+    </Frame>
+  </Step>
+</Steps>
 
-## Maintain categories
+These options change the new-ticket page only. Users can still start a request from the [Home assistant](/user-guides/ticketing/open-a-ticket-with-ai) or the [manual ticket form](/user-guides/ticketing/open-a-ticket).
 
-Use **Add Category** to draft a category, enter its name and visual details, and save the row. To change an existing category, open its edit control and use the row Save or Cancel control. Where offered, map the category to an existing PSA ticket type.
+## Manage ticket categories
 
-A category is not a new ticket type created in your PSA. Deleting a category uses its row delete action; do not expect a separate page-level Save to stage or undo the deletion.
+The **Ticket Categories** card lists each category with its name, icon and color.
+
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    Scroll to **Ticket Categories**.
+  </Step>
+  <Step title="Add a category">
+    Click **Add Category**. Enter a name, pick an icon and a color, then click the save icon on the row. Click the X to cancel.
+  </Step>
+  <Step title="Edit or delete a category">
+    Click the pencil icon on a row to edit it, then save or cancel. Click the trash icon to delete it and confirm. Deleting needs the **manage** permission.
+  </Step>
+</Steps>
 
 ## Create a display group for a role
 
-Display groups control ticket scope and visible fields for assigned roles and a PSA provider.
+A display group controls which tickets a role sees, which boards and statuses it can use, and which ticket fields appear. Each group applies to one PSA provider.
 
-1. Open **Display Groups** and choose **Create Group**.
-2. Enter a name and optional description.
-3. Choose **All Tickets**, **Same Location Only** or **Own Tickets Only**. These operate inside the companies the user can already access. All Tickets does not add companies. A user at a parent company reaches the child companies through the [Parent Admin role](/user-guides/settings/parent-company-access).
-4. Select the **PSA Provider** and **Assigned Roles**. A role has one display-group assignment per provider, so review existing assignments before moving it.
-5. Optionally restrict boards or queues, choose **Allowed Ticket Statuses**, and hide ticket types. Empty restrictions mean unrestricted choices for that control. Status choices follow the provider and selected boards.
-6. Select the fields to display, using the field sections or select-all controls as needed.
-7. Click **Create Group** or **Update Group**. Reopen the group and verify the result with a representative user of the assigned role.
+<Steps>
+  <Step title="Open Settings > Tickets > Display Groups">
+    The table lists each group with its PSA provider, assigned roles and created date. You can copy, edit or delete a group from its row.
+    <Frame>
+      <img src="/images/settings/settings-tickets-display-groups.png" alt="Display Groups list showing group name, PSA provider and assigned roles" />
+    </Frame>
+  </Step>
+  <Step title="Click Create Group">
+    The **Create Display Group** dialog opens.
+  </Step>
+  <Step title="Enter a Name and Description">
+    For example, "Standard Technician" or "Manager View". The description is optional.
+  </Step>
+  <Step title="Choose Ticket Visibility">
+    - **All Tickets**: every ticket in the companies the user can already access.
+    - **Same Location Only**: tickets at the user's assigned location. Set the user's location first, or they see no location-scoped tickets.
+    - **Own Tickets Only**: only tickets the user opened or is the contact on.
 
-Company users see exactly the fields their group selects. Hours and financial fields are off until you select them: **Hours Worked**, **Estimated Hours**, **Total Hours** and the ConnectWise billing fields. Select **Hours Worked** to show a ticket's worked hours and the hours on each time entry. MSP staff always see these fields. Internal notes, project budget and billable hours, and PSA reference IDs stay hidden from company users whatever the group selects.
+    None of these add companies. A user at a parent company reaches child companies through the [Parent Admin role](/user-guides/settings/parent-company-access).
+  </Step>
+  <Step title="Select the PSA Provider">
+    With one PSA connected, it is selected for you. Changing the provider clears the boards, ticket types and fields you picked.
+  </Step>
+  <Step title="Pick Assigned Roles">
+    Select one or more roles. A role can have one display group per PSA provider, so check existing assignments before you move a role.
+  </Step>
+  <Step title="Optional: narrow the tickets">
+    - **Restrict to Boards / Queues**: leave empty to allow every board.
+    - **Allowed Ticket Statuses**: leave empty to allow every status. The list follows the provider and the boards you selected.
+    - **Hide Ticket Types**: leave empty to show every type. New types in your PSA stay visible.
 
-For location-based visibility, first verify the user's assigned location and the tickets' location data. Hiding a column is not the same as restricting which tickets the role can access. Autotask groups can also expose a recurring-ticket setting.
+    For Autotask, a **Show recurring tickets** switch lets the role see tickets generated from recurring ticket templates.
+  </Step>
+  <Step title="Choose Field Visibility">
+    Check the fields to show. Use **Select All Fields** or a section's **All in...** checkbox to select many at once.
+  </Step>
+  <Step title="Click Create Group">
+    When you edit an existing group, the button reads **Update Group**. Check the result by signing in as, or asking, a user with the assigned role.
+  </Step>
+</Steps>
+
+### Hours and billing fields for company users
+
+Company users see only the fields their group selects. These fields are off until you select them.
+
+| PSA | Opt-in fields |
+|---|---|
+| ConnectWise | **Hours Worked**, **Billing Method**, **Billing Amount**, **Hourly Rate**, **Currency**, **Est. Time Cost**, **Est. Time Revenue** |
+| Autotask | **Hours Worked**, **Estimated Hours** |
+| Halo PSA | **Hours Worked** |
+| Syncro | **Total Hours** |
+
+Select **Hours Worked** to show a ticket's worked hours and the hours on each time entry. MSP staff always see these fields. Internal notes, project budget and billable hours, and PSA reference IDs stay hidden from company users whatever the group selects.
+
+### Example: most users see only their own tickets
+
+<Steps>
+  <Step title="Create a Standard User group">
+    Set **Ticket Visibility** to **Own Tickets Only** and assign the role most company users hold.
+  </Step>
+  <Step title="Create a Company Admin group">
+    For the same PSA provider, set **Ticket Visibility** to **All Tickets** and assign the role your trusted contacts hold.
+  </Step>
+  <Step title="Move users between roles">
+    Change a user's role to change what they see. No per-user ticket setting is needed.
+  </Step>
+</Steps>
 
 ## Set company routing overrides
 
-Open **Companies**, locate the exact company and review the displayed effective values and their source. Change the needed routing field using its cell editor. These edits save immediately. Clear an override using the available inherit/default choice to return to the applicable default, then inspect the resolved value.
+The **Companies** tab shows each company's PSA routing values. These apply when a ticket is created for that company and override the General defaults.
 
-Bulk actions affect selected companies. Check the selected set before applying a bulk change; a filtered view alone is not a substitute for reviewing selection.
+<Steps>
+  <Step title="Open Settings > Tickets > Companies">
+    The grid lists each company with its company types and its board or queue, priority, status and type. Halo adds **Category**, **Impact** and **Halo Urgency**. The **Last Updated** column shows when the row last changed.
+  </Step>
+  <Step title="Change a value">
+    Click a cell and pick a value. Each change saves immediately and shows **Saved**. Choose **None (use default)** to clear an override and fall back to the default.
+  </Step>
+  <Step title="Optional: edit several companies at once">
+    Tick the checkbox on each company row, click **Bulk Edit (N)**, check the fields to change, set their values and click **Update N Companies**.
+  </Step>
+  <Step title="Optional: set defaults by company type">
+    Click **Manage type mappings** to set routing defaults for a company type. They apply to companies that have one matching type and no company override. Use **Apply to all companies of this type** to overwrite the overrides on every company with that type.
+  </Step>
+</Steps>
 
-## Configure compliance requests and change approvals
+## Set compliance ticket defaults
 
-Use **Compliance** for the separate **Compliance Ticket Defaults** card. PSA delivery and an active selected PSA are prerequisites. Choose the provider's available routing fields and click **Save**. Halo can require category, impact and urgency as well as other ticket fields; review the controls actually offered for your provider.
+Tickets created from the Compliance page use their own defaults instead of the General ones.
 
-Use **Change Approvals** for the approval policy and approver settings offered to your account, then **Save** that panel. Changing policy is separate from approving an individual request. See [Change management](/user-guides/ticketing/change-management) before using that workflow.
+<Steps>
+  <Step title="Open Settings > Tickets > Compliance">
+    You need delivery set to **PSA Integration** with a PSA selected on the General tab. Otherwise the tab tells you to select one first.
+  </Step>
+  <Step title="Pick the routing values">
+    The **Compliance Ticket Defaults** card shows the same fields as **Ticket Defaults** for your PSA. A blank field falls back to the general defaults. ConnectWise and Autotask require a board or queue and a status. Halo requires a category and a status.
+  </Step>
+  <Step title="Click Save Compliance Defaults">
+    The button turns on once you change a value.
+  </Step>
+</Steps>
+
+## Set up change approvals
+
+<Steps>
+  <Step title="Open Settings > Tickets > Change Approvals">
+    The **Change Approvals** card opens.
+  </Step>
+  <Step title="Turn on Enable change approvals">
+    Technicians can then request approval from the ticket modal.
+  </Step>
+  <Step title="Choose who owns the decision">
+    Select **MSPortal owned** or **Autotask owned**. For Autotask, pick the **Autotask integration**. Tickets from other PSAs always use MSPortal approvals.
+  </Step>
+  <Step title="Pick the Approver company role">
+    Requests notify this company role.
+  </Step>
+  <Step title="Click Save">
+    A toast confirms the change. See [Change management](/user-guides/ticketing/change-management) for requesting and approving changes.
+  </Step>
+</Steps>
 
 ## Manage request templates
 
-**Templates** opens the template catalog. Use the [ticket-template guide](/user-guides/ticketing/how-to-create-a-ticket-template) for fields, conditions, routing, company access and embedded requests. A template's saved configuration and a user's permission to request it are separate checks.
+Open **Settings > Tickets > Templates** to see the template catalog. Click **New Template** to create one. The [ticket-template guide](/user-guides/ticketing/how-to-create-a-ticket-template) covers fields, conditions, routing, company access and embedded requests.
 
 ## Troubleshooting
 
-If controls are disabled, check settings permissions. If a PSA or lookup is absent, review the connection and synchronization state. If a user sees the wrong tickets, check their company, role, display group and location before changing broad visibility. If a user at a parent company sees only their own company's tickets, follow [Give a parent-company user access to child companies](/user-guides/settings/parent-company-access). If routing differs from General defaults, inspect the template and company override. Reopen the affected setting after a failed save before retrying.
+| Problem | What to do |
+|---|---|
+| Controls are disabled | You have read access only. Ask an admin for the write or manage Tickets settings permission. |
+| The board, status or type list is empty | Open the PSA under [Integrations](/user-guides/settings/integrations) and run a sync. For ConnectWise and Autotask, pick a board first. |
+| The **Compliance** tab asks you to select a PSA | On **General**, set **Delivery Method** to **PSA Integration** and pick a **PSA Integration**. |
+| **Save Defaults** shows an error | Fill the required fields. ConnectWise and Autotask need a board or queue and a status. Halo needs a category and a status. |
+| A user sees the wrong tickets | Check the user's company, role and display group. For location-based groups, check the user's assigned location. |
+| A parent-company user sees only their own company | Follow [Give a parent-company user access to child companies](/user-guides/settings/parent-company-access). |
+| Routing differs from the General defaults | The template or a company override on the **Companies** tab is supplying its own value. |
+| A change did not stick | Reopen the setting and look at the saved value, then try again. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Are delivery methods Email, Portal and Both?">
-    No. The available delivery methods are PSA Integration and Email (SMTP). Portal visibility is configured separately.
+  <Accordion title="What delivery methods can I choose?">
+    **PSA Integration** and **Email (SMTP)**. Portal visibility is controlled by display groups and roles.
   </Accordion>
-  <Accordion title="Do all ticket settings wait for a page Save?">
-    No. Delivery, PSA selection, New Ticket View and company cells save immediately; email fields save on blur. Default cards and display-group forms have their own Save controls.
+  <Accordion title="Which settings wait for a Save click?">
+    Delivery Method, PSA Integration, New Ticket View, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Change Approvals** uses **Save**. Display groups use **Create Group** or **Update Group**.
   </Accordion>
-  <Accordion title="Where are Allowed Statuses configured?">
-    Inside the Display Group form for the selected provider, alongside board restrictions and hidden ticket types.
+  <Accordion title="Where do I choose which statuses a role can use?">
+    In the display group, under **Allowed Ticket Statuses**, next to the board and ticket-type restrictions.
   </Accordion>
-  <Accordion title="Does All Tickets let a Company user see other companies?">
-    No. It operates within the companies the user can already access. A Company user sees only their own company unless they hold the Parent Admin Team Role for a parent company, which adds its child companies. See [Give a parent-company user access to child companies](/user-guides/settings/parent-company-access).
-  </Accordion>
-  <Accordion title="Does a category mapping create a PSA ticket type?">
-    No. It maps the portal category to an existing provider ticket type.
+  <Accordion title="Does All Tickets let a company user see other companies?">
+    No. A company user sees only their own company unless they hold the Parent Admin team role for a parent company, which adds its child companies. See [Give a parent-company user access to child companies](/user-guides/settings/parent-company-access).
   </Accordion>
   <Accordion title="Can company users see the hours worked on their tickets?">
-    Yes, when you allow it. Open the display group assigned to their role, select **Hours Worked** and click **Update Group**. They then see the ticket's worked hours and the hours on each time entry. Internal notes stay hidden.
+    Yes, when you allow it. Open the display group for their role, select **Hours Worked** and click **Update Group**. They then see the ticket's worked hours and the hours on each time entry. Internal notes stay hidden.
   </Accordion>
-  <Accordion title="Does hiding a field prevent access to its ticket?">
-    No. Field presentation and ticket visibility are separate controls.
+  <Accordion title="Does hiding a field stop a user from opening the ticket?">
+    No. Field visibility and ticket visibility are separate. Use **Ticket Visibility** to control which tickets a role can reach.
   </Accordion>
-  <Accordion title="Do ordinary defaults also configure every compliance ticket?">
-    Review the separate Compliance tab and save its defaults. Do not assume all request paths use identical values.
+  <Accordion title="Do the General defaults apply to compliance tickets?">
+    Only when a compliance field is blank. Set the **Compliance** tab to route those tickets differently.
   </Accordion>
-  <Accordion title="Does changing the new-ticket layout send a request?">
-    No. It changes presentation. A user must still complete and submit the request workflow.
+  <Accordion title="Does the New Ticket View setting submit a ticket?">
+    No. It changes how the new-ticket page looks. A user still completes and submits the request.
   </Accordion>
 </AccordionGroup>
 
@@ -113,3 +274,5 @@ If controls are disabled, check settings permissions. If a PSA or lookup is abse
 
 - [Ticketing](/user-guides/ticketing/index)
 - [Integrations](/user-guides/settings/integrations)
+- [Change management](/user-guides/ticketing/change-management)
+- [Create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template)

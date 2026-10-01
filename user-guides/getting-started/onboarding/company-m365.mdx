@@ -5,38 +5,79 @@ description: "Verify each selected company connection and its imported data."
 icon: "cloud"
 ---
 
-**Audience:** MSP staff with integration access and an authorized Microsoft tenant administrator for consent.
+Connect each rollout company to its own Microsoft 365 tenant so MSPortal can sync users, licenses, and Secure Score. This page is for MSP staff with integration access, plus someone who can approve consent in the client's Microsoft tenant.
 
-## Connect the right companies
+## Before you start
 
-1. Open the Microsoft 365 step in **Launch Center**, or the Microsoft 365 company connection area under **Settings > Integrations**.
-2. Identify the intended MSPortal company and the Microsoft tenant it should connect to. Check existing mappings before creating another connection.
-3. Follow the offered connection and administrator-consent workflow. Review the actual requested permissions and target tenant before authorizing it.
-4. Return to the connection list and inspect the saved connection status. A completed browser redirect is not sufficient evidence of a healthy connection.
-5. Review synchronization and the company's expected Microsoft 365 data. Import and user-access configuration are separate from granting consent.
-6. Return to Launch Center and inspect the company-specific findings.
+- You need permission to manage companies or integration company mappings.
+- A Microsoft 365 administrator for each client tenant must be available to approve the permissions, or you must have admin credentials for that tenant.
+- Your rollout companies must exist in MSPortal.
+- Allow pop-ups for MSPortal. Consent opens in a pop-up window.
 
-Do not use a short generic permissions list as the complete consent specification. Required permissions depend on the offered integration capabilities and the actual Microsoft consent screen.
+## Connect each company
+
+<Steps>
+  <Step title="Open the step">
+    In **Launch Center**, select **Connect Microsoft 365** in **Setup guide**. It shows the Microsoft 365 companies list. You can also go to **Settings > Integrations > Microsoft 365 > Companies**.
+  </Step>
+  <Step title="Find the company">
+    Use **Search companies...** or the filter to find the rollout company. Check that you are on the right company before you connect.
+  </Step>
+  <Step title="Click Connect">
+    Click **Connect** on the company's row. A pop-up opens the Microsoft sign-in page.
+  </Step>
+  <Step title="Sign in and approve">
+    Sign in with an administrator account from the client's Microsoft 365 tenant. Read the permissions on the Microsoft consent screen and the target tenant, then approve. Finish any acknowledgment MSPortal shows first. The pop-up closes and the list refreshes.
+  </Step>
+  <Step title="Check the connection">
+    Confirm the row shows **Connected** with the right Microsoft tenant. A pop-up that closed is not proof of a healthy connection.
+  </Step>
+  <Step title="Repeat for each company">
+    Work down your rollout companies.
+  </Step>
+</Steps>
+
+If the client's admin cannot sign in from your browser, use **Actions > Generate Link** on the row and send them the link. It works once and expires in 7 days. See [Connecting Companies to Microsoft 365](/user-guides/microsoft-365/connecting-companies) for links, reconnecting, and disconnecting.
+
+## Check the data
+
+<Steps>
+  <Step title="Look at the sync">
+    Check **Last synced** on the row. It covers users and groups. For licenses and Secure Score, open the Cloud page for that company.
+  </Step>
+  <Step title="Set up client users">
+    Importing users and assigning access is separate from consent. See [Prepare Company users](/user-guides/getting-started/onboarding/company-users).
+  </Step>
+  <Step title="Check Launch Center">
+    In **Launch Center**, open **Live verification** and check **A healthy Microsoft 365 connection is available**. It is blocking when Microsoft 365 is your data source or you added it as an integration.
+  </Step>
+</Steps>
 
 ## Match the rollout scope
 
-A pilot can focus on its selected company. For a wider rollout, the readiness check requires healthy Microsoft 365 connections for the rollout companies and any explicitly selected Microsoft 365 companies. Connecting one company does not complete every other company's requirement.
+The check needs a healthy connection for every rollout company and for any companies you selected for Microsoft 365. Connecting one company does not clear the others. For a pilot, it covers the pilot company. If a company should not be in this launch, change the plan with **Edit launch plan**. Do not connect an unrelated tenant just to clear a finding.
 
 ## Troubleshooting
 
-If consent succeeds but the connection remains unhealthy, check its result and intended tenant before repeating consent. If users are missing, review synchronization, company mapping and import eligibility. If a company should be outside this rollout, correct the plan's scope; do not connect an unrelated tenant simply to clear the finding.
+| Problem | What to do |
+| --- | --- |
+| The pop-up does not open | Allow pop-ups for MSPortal and click **Connect** again. |
+| The pop-up closes but the company is not connected | Consent may have been canceled or failed. Fix the reported problem and start again. |
+| Consent worked but the connection is unhealthy | Check the connection status and the tenant before you repeat consent. Use **Reconnect** if a token expired. |
+| Users are missing | Check the sync, the company mapping, and whether the users can be imported. |
+| A company shows more than once | Each connected tenant has its own row. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does one Microsoft 365 connection complete a wider rollout?">
-    No. Review healthy connection evidence for every required rollout or explicitly selected company.
+    No. Every required company needs its own healthy connection.
   </Accordion>
-  <Accordion title="Does consent automatically grant imported users portal access?">
-    No. Review user import, company assignment and access groups separately.
+  <Accordion title="Does consent give imported users portal access?">
+    No. Import users, assign a company, and choose an access group separately.
   </Accordion>
-  <Accordion title="Is the browser redirect proof of a healthy connection?">
-    No. Check the saved connection status and subsequent synchronization.
+  <Accordion title="Does the pop-up closing prove the connection works?">
+    No. Check that the row shows **Connected**, then check the sync.
   </Accordion>
 </AccordionGroup>
 

@@ -4,156 +4,462 @@ description: 'Connect Halo PSA, import native CSAT satisfaction ratings for dash
 icon: 'plug'
 ---
 
-Use this **MSP staff** workflow to connect Halo PSA and configure the data available to your portal. The wizard follows **Connect → Permissions → Sync → Configure → Import**. Company users do not administer this connection.
+This guide walks you through connecting your Halo PSA instance to MSPortal.ai using our streamlined setup wizard.
 
-MSPortal supports syncing **HaloPSA native CSAT responses** and presenting them in the **CSAT Dashboard**, custom dashboard widgets, report blocks and CSV exports. Enable **Import satisfaction ratings** in the Halo connection's **Sync** step; it is off by default. You can continue collecting feedback through Halo's own satisfaction survey.
+MSPortal can also import **HaloPSA native CSAT responses** into the **CSAT Dashboard**, custom dashboard widgets, report blocks and CSV exports. See [Import HaloPSA native CSAT for dashboards and reports](#import-halopsa-native-csat-for-dashboards-and-reports).
 
-## Before you start
+## Prerequisites
 
-You need integration-management permission, authorized provider credentials and access to the companies you intend to synchronize. Ticket configuration can additionally require Ticket Settings permission. Keep credentials in the connection form and your approved secret store.
+- Administrator access to your Halo PSA instance
+- Access to MSPortal.ai with integration management permissions
+- (Recommended) [Custom MSPortal role and API-only agent](/user-guides/integrations/halo-psa-custom-role-and-user) created in Halo PSA
 
-Create an API application in **Configuration > Integrations > Halo API > Applications**. Choose **Client ID and Secret (Services)** and an appropriate **Agent to Log in as**. Access depends on both the application permissions and that agent’s permissions. Use your instance URL without a trailing slash. Follow [Create a Halo PSA role and API agent](/user-guides/integrations/halo-psa-custom-role-and-user) for the exact role and application permissions.
+## Part 1: Configure Halo PSA
 
-## Connect the provider
+Before connecting to MSPortal.ai, you need to create an API application in Halo PSA.
 
-1. Open **Settings > Integrations**, find **Halo PSA**, and open setup. Use **Configure** for the existing connection.
-2. Enter **Halo URL**, **Client ID** and **Client Secret**.
-3. Select **Test Connection** when ready to connect. **For a new connection, a successful test also creates and saves the integration.** There is no separate Create Integration button in this PSA wizard.
-4. Review the result and continue to **Permissions**. An existing connection can initialize with a Connected indicator; that is not proof of a fresh test.
+<Steps>
+  <Step title="Log in to Halo PSA">
+    Navigate to your Halo PSA instance and log in with an administrator account.
+  </Step>
 
-<Frame caption="MSP example: the setup steps for an existing connection. The Connect checkmark does not represent a new test.">
-  <img src="/images/product/halo-setup-steps.png" alt="Halo setup steps with Permissions selected" width="1852" height="226" />
-</Frame>
+  <Step title="Create the MSPortal Role and Agent">
+    Create the **MSPortal** role and API-only agent first. Follow [Create Custom Halo PSA Role and API User](/user-guides/integrations/halo-psa-custom-role-and-user), which lists every role permission and the teams the agent needs.
+  </Step>
 
-## Check permissions
+  <Step title="Open Integrations">
+    Click **Configuration** in the navigation menu, then select **Integrations** > **API**.
+  </Step>
 
-The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. An optional permission that is not granted keeps its corresponding sync off.
+  <Step title="Create API Application">
+    1. Click **View Applications**
+    2. Create a new application named "MSPortal.ai"
+    3. Select **Client ID and Secret (Services)** as the authentication method
+    4. Save your **Client ID** and **Client Secret** - you'll need these in the wizard
+    5. Select your **MSPortal** API-only agent in **Agent to Log in as**
 
-Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. These checks exercise **read access**; they do not prove that ticket creation, comments, warranty updates or other writes will succeed.
+    <Warning>
+      Make sure to save your Client ID and Client Secret immediately. The secret cannot be retrieved after creation.
+    </Warning>
+  </Step>
+
+  <Step title="Configure Permissions">
+    Click **Permissions** and grant the application permissions listed in [Link the Agent to Your API Application](/user-guides/integrations/halo-psa-custom-role-and-user#link-the-agent-to-your-api-application). `read:customers` and `read:tickets` are required. The rest turn on optional features.
+  </Step>
+
+  <Step title="Configure CORS Whitelist">
+    1. Click **Security**
+    2. Add `app.msportal.ai` to the CORS whitelist
+    3. Click **Submit** to save
+  </Step>
+</Steps>
 
 ## Project management permissions
 
-Configure both the **MSPortal API application** and the **Agent to Log in as**. Under **Configuration > Integrations > Halo API > Applications**, open the application’s permissions. Then review the selected agent and its role under **Configuration > Teams & Agents**. Application access cannot override a restriction on that agent.
+Skip this section unless you will create or update Halo projects from MSPortal. Halo checks two things, the **MSPortal.ai** API application and the agent it logs in as. Application access cannot override a restriction on that agent.
 
-Halo projects use project records with child tickets and milestones. Project access alone does not cover every child-ticket, checklist or time-entry operation.
+<Steps>
+  <Step title="Grant project and ticket access on the application">
+    In Halo, go to **Configuration** > **Integrations** > **API** > **View Applications**, open **MSPortal.ai** and grant **Project Read**, **Project Modify**, **Ticket Read** and **Ticket Modify**.
+  </Step>
 
-| Area | Read access | Create/update access and purpose |
-| --- | --- | --- |
-| **Projects** | **Project Read** (`read:projects`) and agent access to the intended projects | **Project Modify** and agent permission to create/edit projects: create a PSA project, update its lifecycle status or mapped fields, and create/update its milestones (phases). |
-| **Tickets** | **Ticket Read** (`read:tickets`), including child project tickets and their details | **Ticket Modify** and agent permission to create/edit the intended ticket types: create project tickets and edit supported ticket details or mapped fields. |
-| **Actions / time recorded on tickets** | Read access to actions on the project and its child tickets | Agent access to add the relevant actions and record time, together with ticket write access: post project-ticket notes and time entries. Check action visibility, allowed outcomes and billing options on the selected agent. |
-| **Checklist / To-do items** | Read the child ticket and its checklist | Permission to add/update the ticket’s to-do items: add checklist items and change completion. Confirm this operation in your Halo version’s API permissions; project read access alone does not establish it. |
-| **Customers and agents** | **Customers Read** (`read:customers`), company/site/user access, and visibility of the relevant agents | Read access supplies company/contact choices and staff mappings; these project workflows do not require modifying customers or agents. |
-| **Ticket configuration and templates** | Read the intended ticket types, statuses, priorities and project templates | Read source templates when importing or refreshing a template. Creating work from a portal template uses the project/ticket write permissions above; editing the source Halo template is not required. |
+  <Step title="Check the agent's permissions">
+    Go to **Configuration** > **Teams & Agents**, open the MSPortal agent and its role, and confirm the access below. Halo projects are project records with child tickets and milestones, so project access alone does not cover child tickets, checklists or time.
 
-On the API application, grant **Project Read**, **Project Modify**, **Ticket Read** and **Ticket Modify**. The agent must also have module access and the corresponding create/edit/action permissions. The separate **Time entries** setup check requests `read:timesheets`; that is read access, not proof that adding time through a ticket action will succeed.
+    | Area | Read access | Create and update access |
+    |------|-------------|--------------------------|
+    | **Projects** | **Project Read** (`read:projects`) and agent access to the intended projects | **Project Modify** and agent permission to create and edit projects. Used to create a PSA project, update its status or mapped fields, and create or update its milestones. |
+    | **Tickets** | **Ticket Read** (`read:tickets`), including child project tickets | **Ticket Modify** and agent permission to create and edit the intended ticket types. Used to create project tickets and edit their details. |
+    | **Actions and time** | Read access to actions on the project and its child tickets | Agent access to add the relevant actions and record time. Used to post project ticket notes and time entries. Check action visibility, allowed outcomes and billing options on the agent. |
+    | **Checklist (to-do) items** | Read the child ticket and its checklist | Permission to add and update the ticket's to-do items. Used to add checklist items and change completion. |
+    | **Customers and agents** | **Customers Read** (`read:customers`) and visibility of the relevant agents | Not needed. Read access fills company, contact and staff choices. |
+    | **Ticket configuration and templates** | Read the ticket types, statuses, priorities and project templates you use | Not needed for the source template. Creating work from a portal template uses the project and ticket permissions above. |
+  </Step>
 
-### Agent scope and supported operations
+  <Step title="Widen the agent's scope">
+    Add the agent to every department and team the integration should cover. Allow the clients and ticket types it needs, including the project type and child ticket types. To cover all of them, turn on **Allow All Clients** and **Allow All Ticket Types**. Also check access to internal actions, project templates and the actions used for time entry.
+  </Step>
 
-Add the API agent to every intended department and team. Allow it to access the required clients and ticket types, including the project type and child-ticket types. Where the connection should cover all of them, review **Allow All Clients** and **Allow All Ticket Types**. Also check access to internal actions, project templates and the actions used for time entry. A valid token can still return incomplete data or reject writes when these restrictions exclude a record.
+  <Step title="Save and re-check">
+    Save the application and agent. In MSPortal, go to **Settings** > **Integrations** > **Halo PSA** > **Configure** > **Permissions** and click **Re-check**.
+  </Step>
 
-Permissions enable supported workflows; they do not add provider features. Halo project lifecycle changes, supported detail edits, notes/time and checklist addition/completion have separate controls. Project-ticket status changes from the Kanban board or the ticket details write back to Halo and need **Ticket Modify**. **Project-ticket owner and priority changes are not currently enabled for Halo in MSPortal.** Checklist progress-note editing and checklist deletion are not offered for Halo in this workflow.
+  <Step title="Test on a project">
+    A green **Projects** result only confirms MSPortal can read projects. On a test project, create the project, edit a detail, complete a checklist item and add a note with time. If applying a template partly succeeds, check the records it created before you retry.
+  </Step>
+</Steps>
 
-MSPortal-only projects, reusable portal templates and portal project registers use MSPortal permissions. Explicitly creating or updating PSA work requires Halo access. Do not grant blanket Delete or administrator access for these read/create/update workflows.
+<Note>
+Project ticket status changes from the Kanban board or ticket details write back to Halo and need **Ticket Modify**. Project ticket owner and priority changes, checklist progress note editing and checklist deletion are not available for Halo in MSPortal. Do not grant blanket Delete or administrator access for these workflows. MSPortal-only projects and templates use MSPortal permissions only.
+</Note>
 
-### Verify read and write access separately
+---
 
-Save both the application and agent changes, then return to **Settings > Integrations > Halo PSA > Configure > Permissions** and select **Re-check**. A green Projects result only confirms the project read check. Validate project creation, a supported detail edit, checklist completion, and a note/time action on a designated test project. If applying a template partly succeeds, inspect its results before retrying.
+## Part 2: MSPortal Setup Wizard
 
-## Select synchronization scope
+MSPortal.ai provides a guided setup wizard that walks you through connecting and configuring your Halo PSA integration in 5 easy steps.
 
-Select the intended teams and excluded ticket statuses. Halo also offers company/contact filters, opportunities, projects, invoices, product catalog, asset sync, change management and satisfaction ratings when their permissions are available. Asset status exclusions affect synchronization; inactive Halo assets are excluded and filtering does not delete existing portal devices.
+### Starting the Wizard
 
-Review filters before continuing. Synchronizing source records, linking them to companies and importing portal records are separate steps. Automatic company/contact import options can create portal records when matching source records arrive. Review any import preview and the selected categories carefully; do not rely on a confirmation appearing for every save.
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings** > **Integrations**.
+  </Step>
 
-Proceeding from Sync saves the selected scope and starts background synchronization. Options in later steps may remain incomplete while it runs. Check errors and the connection’s actual sync result before treating an empty list as the final dataset.
+  <Step title="Start Setup">
+    Find **Halo PSA** and click **Connect** (or **Configure** if previously connected) to launch the setup wizard.
+  </Step>
+</Steps>
 
-Warranty writeback is an optional **vendor write**. Enable it only when you intend resolved warranty data to update the connected PSA records.
+---
+
+### Step 1: Connect
+
+Enter your Halo PSA API credentials to establish the connection.
+
+<Steps>
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
+
+    | Field | Description |
+    |-------|-------------|
+    | **Halo URL** | Your Halo PSA instance URL without a trailing slash (e.g., `https://yourhalo.haloservicedesk.com`) |
+    | **Client ID** | The Client ID from your Halo API application |
+    | **Client Secret** | The Client Secret from your Halo API application |
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials. You'll see a green "Connected" status when successful.
+
+    For a new connection, a successful test also creates and saves the integration. There is no separate create button.
+
+    <Note>
+      If the connection fails, double-check your credentials and ensure the CORS whitelist includes `app.msportal.ai`.
+    </Note>
+  </Step>
+
+  <Step title="Proceed">
+    Once connected, click **Next** to continue to the permission check.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Permissions
+
+MSPortal checks what your Halo API application is allowed to read, and shows the result for each area of data.
+
+<Frame caption="The setup wizard steps, with Permissions selected.">
+  <img src="/images/product/halo-setup-steps.png" alt="Halo setup steps with Permissions selected" width="1852" height="226" />
+</Frame>
+
+<Steps>
+  <Step title="Review the results">
+    The check runs automatically when you reach this step. Each area of data is listed as granted, not permitted or could not verify.
+
+    Areas marked **Required** must be granted before you can continue: Companies, Contacts and staff, Tickets, and Teams and statuses (statuses, priorities and ticket types). Without these the integration cannot function.
+
+    Optional areas cover Assets, Opportunities, Product catalog, Invoices, Contracts, Projects, Time entries, Change management, and Satisfaction feedback.
+  </Step>
+
+  <Step title="Grant anything missing">
+    Any area that is not permitted shows the exact Halo permission to grant, for example **read:items** for the product catalog.
+
+    Open your MSPortal application under **Configuration > Integrations > API > Applications**, grant the permission (or the `all` scope), then come back and click **Re-check**. Tickets and statuses also depend on the API agent's team membership.
+
+    <Note>
+      Halo often refuses a scope-limited application at the token endpoint rather than per resource. If every area comes back unchecked with an authentication error, widen the application's permissions rather than chasing individual areas.
+    </Note>
+  </Step>
+
+  <Step title="Continue">
+    You can continue with optional areas ungranted. Those syncs stay switched off and their toggles are locked on the next step until you grant the permission and re-check.
+  </Step>
+</Steps>
+
+<Tip>
+  If a permission is removed later, MSPortal switches off the affected sync and notifies your integration admins rather than retrying against an endpoint it can no longer read.
+</Tip>
+
+---
+
+### Step 3: Sync
+
+Configure what data to sync from Halo PSA and set up automatic contact import.
+
+<Steps>
+  <Step title="Configure Data Sync Options">
+    Enable or disable the following sync options:
+
+    | Option | Description |
+    |--------|-------------|
+    | **Sync Users** | Sync user/contact data from Halo PSA |
+    | **Sync Companies** | Sync company/client data from Halo PSA |
+    | **Enable Ticket Sync** | Sync tickets from Halo PSA |
+    | **Enable Opportunity Sync** | Sync opportunities from Halo PSA |
+    | **Enable Project Sync** | Sync projects from Halo PSA. Use **Exclude Project Types** to skip projects of certain Halo ticket types. |
+    | **Enable Invoice Sync** | Sync invoices from Halo PSA |
+    | **Sync product catalog** | Import the product and service catalog for quoting and budgets |
+    | **Enable asset sync** | Sync assets on a recurring schedule. Use **Asset statuses to exclude** to skip statuses. Inactive Halo assets are always excluded, and existing MSPortal devices are not deleted. |
+    | **Enable change management** | Import Halo changes into the change calendar |
+    | **Import satisfaction ratings** | Import Halo satisfaction feedback. See [Import HaloPSA native CSAT](#import-halopsa-native-csat-for-dashboards-and-reports). |
+    | **Warranty writeback** | Write warranty data back to Halo assets when MSPortal resolves a device's warranty. Appears when **Enable asset sync** is on. |
+  </Step>
+
+  <Note>
+    A toggle appears locked when the permission check found that your API application cannot read that data. Grant the permission named beside it in Halo, then re-run the check on the Permissions step to unlock it.
+  </Note>
+
+  <Step title="Configure Contact Auto-Import">
+    If you want contacts to be automatically imported when companies are added:
+
+    1. Turn on **Enable Auto-Import** to automatically create user accounts for active contacts
+    2. Select a **Default Role for Imported Contacts** (e.g., Viewer)
+    3. Optionally, use **Halo Role Mapping** to map Halo roles and the Important Contact flag to other portal roles. When a contact matches more than one mapping, the mapping highest in the list wins.
+
+    <Tip>
+      Contacts that match no mapping get the default role. You can change individual user roles later in Settings > Users.
+    </Tip>
+  </Step>
+
+  <Step title="Configure Company Auto-Import">
+    Under **Auto-Import Company Types**, select the Halo client types to create in the portal automatically during sync. MSPortal asks you to confirm before it imports a new batch, because companies are a billed item.
+  </Step>
+
+  <Step title="Configure Ticket Sync Scope">
+    Define which tickets to sync:
+
+    | Setting | Description |
+    |---------|-------------|
+    | **Teams to Sync** | Select which Halo teams' tickets to sync (only tickets from selected teams will appear in MSPortal) |
+    | **Exclude Statuses** | Select ticket statuses to exclude from sync (e.g., Closed, Cancelled) |
+
+    <Info>
+      When you proceed to the next step, data sync will begin in the background. This may take a few minutes depending on the amount of data in your Halo PSA account.
+
+      Syncs are automatically deduplicated - if you navigate back and forth between steps, the same sync will not run multiple times within a 2-minute window.
+    </Info>
+  </Step>
+
+  <Step title="Proceed">
+    Click **Next** to continue to ticket and opportunity configuration.
+  </Step>
+</Steps>
+
+---
+
+### Step 4: Configure
+
+Set up ticket defaults, status mapping and opportunity defaults. These settings save automatically as you edit them. Wait for the saved indicator before you leave the step.
+
+#### Ticket Settings
+
+<Steps>
+  <Step title="Review Ticket Defaults">
+    **Ticket Defaults** sets the PSA values used for new tickets created in the portal. These are the same defaults as **Settings** > **Tickets**, and editing them requires the Ticket Settings permission.
+  </Step>
+
+  <Step title="Configure Status Settings">
+    | Setting | Description |
+    |---------|-------------|
+    | **Closed Statuses** | Select statuses that indicate a ticket is closed |
+    | **Client Comment Status** | Status to set when a client comments on a ticket (e.g., "Updated") |
+
+    Both lists stay empty until you select teams in the Sync step.
+  </Step>
+
+  <Step title="Configure Resolution Status Stepper">
+    The Resolution Status Stepper provides a visual indicator of ticket progress. Click each stage, then map your Halo statuses to it:
+
+    | Stage | Description |
+    |-------|-------------|
+    | **New** | Tickets that are newly created or not yet triaged |
+    | **Triaged** | Tickets that have been reviewed and prioritized |
+    | **Working** | Tickets actively being worked on |
+    | **Waiting** | Tickets waiting for customer response or approval |
+    | **Resolved** | Tickets that are completed or closed |
+
+    <Tip>
+      You can map multiple Halo statuses to each stage. The stepper will show the appropriate stage based on the ticket's current status. MSPortal warns you if a stage is still empty when you click **Next**.
+    </Tip>
+  </Step>
+
+  <Step title="Sync Actions">
+    Use these buttons to manage ticket sync:
+
+    | Action | Description |
+    |--------|-------------|
+    | **Quick Sync** | Trigger an immediate sync of ticket data |
+    | **Clear & Resync** | Run a full ticket resync that reads the last 365 days of tickets from Halo again (useful after major configuration changes) |
+
+    See [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) before you use **Clear & Resync**.
+  </Step>
+</Steps>
+
+#### Opportunity Settings
+
+<Steps>
+  <Step title="Configure Opportunity Defaults">
+    Set default values for opportunities created from MSPortal. Halo requires several fields on every opportunity, so configuring defaults here means the planner Create Opportunity action can post a complete opportunity to Halo without prompting for them every time.
+
+    | Setting | Description |
+    |---------|-------------|
+    | **Default Workflow** | The Halo workflow new opportunities are placed into |
+    | **Default Conversion Probability** | Starting probability percentage |
+    | **Default Categories** (Category 1 - 4) | Halo's four category fields, each picked from a dropdown populated from your Halo instance. Required if your Halo instance marks any category as mandatory for opportunities. |
+
+    <Tip>
+      The workflow and category pickers read directly from your Halo instance, so the values you see are the same ones a Halo agent would see in the native UI. Any new workflow or category you add in Halo appears here on the next sync.
+    </Tip>
+
+    <Note>
+      Opportunity sync can be enabled or disabled in the Sync step. These settings only apply when opportunity sync is enabled. When the planner posts a new opportunity, real Halo errors (missing Category 4, validation failures, etc.) surface in the planner UI instead of failing silently, so misconfigured defaults are easy to spot.
+    </Note>
+  </Step>
+
+  <Step title="Configure Invoice Display Settings">
+    If invoice sync is on, use **Hide Invoice Statuses** to hide closed, voided or other statuses from the Invoices page. All invoices still sync.
+  </Step>
+
+  <Step title="Proceed">
+    Click **Next** to continue to the import step.
+  </Step>
+</Steps>
+
+#### Auto-Import Opportunities (Optional)
+
+If you want Halo opportunities to auto-create planner items as new ones land in Halo, use the **Auto-import to Planner** section of the Opportunity Settings card. Three controls scope which opportunities flow through:
+
+| Setting | Description |
+|---------|-------------|
+| **Auto-import opportunities into the Planner** | Master toggle. When off, opportunities only come into the planner via the manual Import Opportunities dialog |
+| **Minimum opportunity value** | Skip opportunities below a value threshold (useful for filtering out noise from small stub deals) |
+| **Opportunity types to auto-import** | Multi-select list of Halo opportunity types. The picker is populated from the distinct `opp_type` values that have actually appeared in your Halo data, since Halo's `opptype` is free-text rather than a managed picklist. If none are selected, all types are eligible. |
+
+Once enabled, every Halo sync auto-creates planner items for new matching opportunities and keeps existing PSA-managed planner items in sync. Use **Linked planner item refresh** to choose which planner fields each sync updates. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities) in the Planner guide for the full sync behavior.
+
+---
+
+### Step 5: Import (Optional)
+
+Import users and companies from Halo PSA. This step is optional - you can skip it and import later from the respective settings pages. The step is organized into **Users**, **Companies**, and **Assets** tabs.
+
+<Tabs>
+  <Tab title="Users">
+    Import technicians and agents (your MSP staff) from Halo PSA to create user accounts.
+
+    1. Select users from the list to create accounts for
+    2. Choose a role for imported users
+
+    <Note>
+      Client contacts are not imported here. They can be managed via Company settings after companies are imported.
+    </Note>
+  </Tab>
+
+  <Tab title="Companies">
+    Import companies from Halo PSA to sync their data.
+
+    1. Select companies to import or link to existing MSPortal companies
+
+    <Tip>
+      Companies will sync automatically based on your sync settings. Use this tab if you want to import specific companies immediately.
+    </Tip>
+  </Tab>
+
+  <Tab title="Assets">
+    Import Halo assets as devices in MSPortal. Make sure **Enable asset sync** is on in the Sync step, then click **Open Asset Import** to map asset types to MSPortal device types and select the assets to import.
+  </Tab>
+</Tabs>
+
+---
+
+### Complete Setup
+
+Click **Complete Setup** to finish the wizard. MSPortal applies any pending company and user selections, then finishes setup. Imports and syncs keep running in the background.
+
+<Note>
+You can return to the setup wizard at any time by clicking **Configure** on the Halo integration. The wizard will resume with your current settings. Use **Save & Exit** to save your progress and leave the wizard part way through.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, you can manage your integration from **Settings** > **Integrations**:
+
+- **Configure**: Re-open the setup wizard to modify settings
+- **Resync**: Trigger a manual sync of data
+- **Sync PSA Data**: Refresh configuration data from Halo PSA
+- **Import Configurations**: Open the Halo asset import page. Map Halo asset types to MSPortal device types, enable auto-sync, and ignore categories you don't need. See [Import Devices](/user-guides/integrations/import-devices) for the full guide.
+
+To remove the integration, open the wizard and click **Delete Integration**. This deletes the integration and its settings in MSPortal. Delete the API application in Halo separately.
+
+### Additional Features
+
+Once your integration is configured, MSPortal.ai will sync data from Halo PSA. You can:
+
+- View synced tickets in the **Tickets** module
+- Access customer data in the **Companies** module
+- Create opportunities from the **Planner** module
+- Link projects to planner items
 
 ## Import HaloPSA native CSAT for dashboards and reports
 
-This imports satisfaction feedback already collected in Halo PSA. You do not need Simplesat or a new MSPortal survey to present those responses.
+This imports satisfaction feedback already collected in Halo PSA. You do not need Simplesat or a new MSPortal survey. The import is off by default.
 
-1. Open **Settings > Integrations > Halo PSA > Configure**.
-2. Give the Halo API application and its selected agent read access to feedback. In **Permissions**, check the feedback access result and use **Re-check** after resolving denied access.
-3. Open **Sync** and enable **Import satisfaction ratings**.
-4. Set **Rating scale** to match the survey configured in Halo: **1 to 3**, **1 to 5**, or **1 to 10**. The default is **1 to 5**. Halo sends the score without the scale, so choosing the wrong scale changes how satisfaction is calculated.
-5. Continue from Sync to save the selection, or use **Save & Exit**. Wait for a successful save and background import. Enabled Halo satisfaction imports are scheduled hourly; saving is not proof that all responses have arrived.
-6. Ensure the feedback's related tickets have synchronized and their companies are linked to portal companies. Responses whose ticket or company cannot yet be resolved will not appear in company-scoped CSAT results until a later successful sync can resolve them.
-7. Grant intended readers **Surveys > Read > CSAT** in their role. Dashboard and report authoring also require the corresponding permissions.
+<Steps>
+  <Step title="Grant feedback read access">
+    In Halo, give the **MSPortal.ai** API application the `read:feedback` permission (or the `all` scope).
+  </Step>
+
+  <Step title="Re-check permissions">
+    In MSPortal, open **Settings** > **Integrations** > **Halo PSA** > **Configure** > **Permissions**, click **Re-check** and confirm **Satisfaction feedback** is granted.
+  </Step>
+
+  <Step title="Turn on the import">
+    Open **Sync** and turn on **Import satisfaction ratings**.
+  </Step>
+
+  <Step title="Set the rating scale">
+    Set **Rating scale** to match the survey configured in Halo: **1 to 3**, **1 to 4**, **1 to 5** or **1 to 10**. The default is **1 to 5**. Halo sends the score without the scale, so the wrong scale changes every CSAT percentage. If your Halo survey rates its best response lowest, such as 1 for excellent, turn on **Lowest score is best**.
+  </Step>
+
+  <Step title="Save">
+    Click **Next**, or **Save & Exit**, to save the setting. Imports then run hourly.
+  </Step>
+
+  <Step title="Check company links">
+    Make sure the feedback's tickets have synced and their companies are linked to portal companies. A response whose ticket or company cannot be resolved yet will not appear in company-scoped CSAT results until a later sync resolves it.
+  </Step>
+
+  <Step title="Grant read access">
+    Give intended readers **Surveys** > **Read** > **CSAT** in their role. Building dashboards and reports also needs the matching permissions.
+  </Step>
+</Steps>
 
 ### Present the imported feedback
 
-- **CSAT Dashboard:** open **Surveys > CSAT Dashboard** to read scores, trends and available feedback, or export responses. Imported Halo feedback is grouped under **Halo PSA satisfaction**. See [Read and export support satisfaction feedback](/user-guides/surveys/read-csat-feedback).
-- **Custom dashboards:** add **CSAT Overview**, **CSAT Trend**, **CSAT by Company**, or **Recent CSAT Feedback** from the available widget library, then save the dashboard. See [Create and edit a dashboard](/user-guides/dashboards/create-and-edit-dashboard).
-- **Reports:** use the same CSAT blocks in the report builder, select the intended company and reporting period, and save. See [Reporting](/user-guides/reporting/index#native-psa-csat-in-reports).
+| Where | How |
+|-------|-----|
+| **CSAT Dashboard** | Open **Surveys** > **CSAT Dashboard** to read scores, trends and feedback, or export responses. Halo feedback is grouped under **Halo PSA satisfaction**. See [Read and export support satisfaction feedback](/user-guides/surveys/read-csat-feedback). |
+| **Custom dashboards** | Add **CSAT Overview**, **CSAT Trend**, **CSAT by Company** or **Recent CSAT Feedback** from the widget library, then save the dashboard. See [Create and edit a dashboard](/user-guides/dashboards/create-and-edit-dashboard). |
+| **Reports** | Use the same CSAT blocks in the report builder, select the company and reporting period, and save. See [Reporting](/user-guides/reporting/index#native-psa-csat-in-reports). |
 
-These CSAT views can include other connected feedback sources alongside Halo. Check company selection, dates and any available survey filter before interpreting a total as Halo-only. Technician statistics depend on the related ticket and technician mapping.
+These CSAT views can include other connected feedback sources alongside Halo. Check the company selection, dates and survey filter before you read a total as Halo-only. Technician statistics depend on the ticket's technician mapping.
 
 ### If Halo CSAT is missing
 
-An empty dashboard or missing widget does not mean HaloPSA native CSAT is unsupported. Check the saved import toggle, feedback read access, integration status and last import result, rating scale, synchronized tickets, company links, selected dates and the reader's CSAT permission. Merely connecting Halo does not turn on satisfaction imports. If the **Import satisfaction ratings** control itself is absent, contact MSPortal support to check the connection and feature availability.
-
-## Configure portal behavior
-
-Configure ticket status groups, closed statuses and the status used for client comments. Choose the relevant teams in Sync first. Review the Halo opportunity workflow and invoice settings when those datasets are enabled.
-
-Configuration forms save changes automatically after editing. Wait for the saved state; wizard navigation waits for pending saves and reports failures. Leaving the screen is not a substitute for checking a failed save. Ticket defaults additionally require Ticket Settings permission.
-
-**Quick Sync** requests ticket synchronization. **Clear & Resync** clears portal ticket data for this connection before reloading it. Use the latter only for an intended rebuild, and check the subsequent result; it is not a harmless refresh.
-
-## Import and finish
-
-The Import step offers **Users**, **Companies** and **Assets**. **Open Asset Import** opens the separate asset-import page. Review existing portal records before creating duplicates. Company links determine which client can see synchronized data.
-
-Apply the intended company and user selections and check the result. **Complete Setup** also attempts to apply pending company/user imports before completing the wizard. It can start background work, so setup completion is not proof that every import or sync succeeded. An import-page link only navigates to that workflow.
-
-Use **Save & Exit** to save wizard progress when pausing. Reopen the connection to continue and verify the saved state. Portal invitations and client permissions remain separate from discovering provider contacts.
-
-## Maintain the connection
-
-Reopen setup to inspect scope and errors. A successful retest of changed fields is not proof of credential rotation: this wizard has no separate update-credentials action. Confirm the supported replacement path before revoking working vendor credentials.
-
-**Delete Integration** opens a named confirmation. Confirm **Delete** only to remove the connection and its associated settings; cancel preserves it. Vendor-side credential revocation is separate.
+Connecting Halo does not turn on the import by itself. Check that **Import satisfaction ratings** is saved, **Satisfaction feedback** is granted, the rating scale is right, the tickets have synced, the companies are linked and the reader has the CSAT permission. If the **Import satisfaction ratings** toggle does not appear at all, contact MSPortal support.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Projects load, but creating or editing one fails | Review **Project Modify** on the application and the selected agent’s project access. |
-| A project loads, but its child ticket, checklist or note cannot be changed | Review ticket write/action/to-do access, ticket-type access and team/client restrictions on the API agent. |
-| Logging project time fails | Check permission to add the time-recording action, the agent mapping and billing options. A timesheet read check does not verify time creation. |
-| Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
-| A data option is unavailable | Permission result and whether this provider supports that option. |
-| Companies or tickets are missing | Saved provider filters, synchronization result and company links. |
-| New statuses are absent | Metadata synchronization, selected board/team/queue scope and latest load. |
-| Setup finished but records are absent | Pending imports, background errors and the correct company context. |
-
-## Frequently asked questions
-
-<AccordionGroup>
-  <Accordion title="Can I dashboard or report on HaloPSA native CSAT responses?">
-    Yes. Enable Import satisfaction ratings in the Halo integration's Sync step, grant feedback read access, and choose the correct rating scale. Imported responses are available in the CSAT Dashboard, custom dashboard CSAT widgets, report blocks and CSV exports, subject to company mapping and role access. You can keep using Halo's own survey; Simplesat is not required.
-  </Accordion>
-  <Accordion title="Does Test Connection only test credentials?">
-    For a new connection, a successful test also creates the integration. Enter credentials only when you intend to connect it.
-  </Accordion>
-  <Accordion title="Does a green permissions result verify ticket writes?">
-    No. The permission checks probe read access. Creating tickets, comments or other vendor changes needs the relevant write permission and a successful action.
-  </Accordion>
-  <Accordion title="Does Complete Setup mean all data is ready?">
-    No. Check the background sync result and verify company, user and device imports separately.
-  </Accordion>
-  <Accordion title="Will every discovered contact receive portal access?">
-    Discovery and import are separate. Review user matches, company links and the permissions assigned to portal users; invitation is a separate workflow.
-  </Accordion>
-  <Accordion title="Can I replace saved credentials by retesting the form?">
-    Do not treat a successful retest as proof that replacement credentials were saved. This wizard does not provide a separate credential-update action; confirm the supported update path before revoking the old credential.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Integration settings](/user-guides/settings/integrations)
-- [Company mapping](/user-guides/settings/integration-company-mapping)
-- [Ticket settings](/user-guides/settings/tickets)
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify your Halo URL, Client ID, and Client Secret are correct. Ensure `app.msportal.ai` is in the CORS whitelist. |
+| Tickets not syncing | Check that the correct teams are selected in Ticket Sync Scope, that ticket statuses aren't excluded, and that the API agent belongs to those teams. |
+| Contacts not importing | Verify **Enable Auto-Import** is on and a default role is selected in the Sync step. |
+| Permission errors | Review the API permissions in Halo PSA and ensure all required permissions are enabled. See [Create Custom Halo PSA Role and API User](/user-guides/integrations/halo-psa-custom-role-and-user). |
+| Projects load, but creating or editing one fails | Check **Project Modify** on the application and the agent's project access. |
+| A project loads, but its child ticket, checklist or note cannot be changed | Check ticket write, action and to-do access, ticket type access and team or client restrictions on the API agent. |
+| Logging project time fails | Check permission to add the time recording action, the agent mapping and billing options. The **Time entries** check only tests read access. |
+| Halo satisfaction feedback is missing from CSAT views | Check the saved **Import satisfaction ratings** toggle, `read:feedback`, the rating scale, company links and the reader's CSAT permission. |

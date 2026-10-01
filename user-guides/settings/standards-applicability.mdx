@@ -4,123 +4,155 @@ description: 'Use active computer inventory, device types, industry, company typ
 icon: 'filter'
 ---
 
-{/* Post-release follow-up: verify standards applicability in production, replace branch captures with production media, and remove the branch-preview notice. */}
+This page is for MSP staff who manage the Standards catalog. It shows how to set conditions on a standard so it applies only to the companies it fits. Applicability answers "should this client have this standard?" It does not change whether a tool is installed or whether a deployment is done.
 
-<Note>
-Branch preview for PR #1522. These inventory controls are not yet released. Screenshots show unsaved condition drafts in authenticated MSPortal Demo on the feature branch. Live inventory results and saved-rule behavior still require release verification.
-</Note>
+## Before you start
 
-**Audience:** MSP staff who manage the Standards catalog. Editing a standard's conditions requires
-Standards settings management; company field conditions also require
-custom-fields read access. Saving requires active billing.
-
-Applicability answers “should this client have this standard?” It does not change
-whether a tool is installed or whether a deployment has been completed.
-
-## Use inventory to choose applicable companies
-
-Company computer platforms come from active device inventory. There is no manual
-company-wide PC/Mac override. Configure the conditions on each standard instead.
-
-- **Company computer platforms has any of PCs** includes PC-only and mixed companies.
-- **Company computer platforms has any of Macs** includes Mac-only and mixed companies.
-- To require both kinds, add separate PC and Mac conditions with **all conditions match**.
-- **Company device types** checks whether the company has active devices of selected
-  types, such as workstations, servers or network devices.
-- **has none of** matches when none of the selected platforms or types are present,
-  including when the company has no active inventory.
-
-Computer platform conditions ignore Windows servers and inactive devices. A company
-with no active computers does not match **has any of PCs** or **has any of Macs**.
-
-<Frame caption="Branch preview: an unsaved computer-platform condition and its available values.">
-  <img src="/images/product/standards-inventory-platform-preview.png" alt="Authenticated branch editor showing Company computer platforms and the PC and Mac value choices." width="2880" height="1920" />
-</Frame>
-
-<Frame caption="Branch preview: choose a company device type from the inventory catalog.">
-  <img src="/images/product/standards-inventory-device-types-preview.png" alt="Authenticated branch editor showing the Company device types condition and its available values." width="2880" height="1920" />
-</Frame>
-
-Open **Settings > MSP Tools > Standards > Company Standards applicability** to
-inspect company facts. Platform and device-type summaries are read-only. Industry
-and editable company fields can still be changed with the corresponding permissions.
-Use the app's company selector and table filters to narrow the companies shown.
+- You need the permission to manage Standards settings. Your billing must be active to save.
+- To use company fields in a condition, you also need read access to custom fields.
+- To change a company's industry from the company table, you need write access to company settings. To change a company field there, you also need write access to custom fields.
+- Company computer platforms come from active device inventory. There is no manual PC or Mac setting for a company. Set the conditions on each standard instead.
 
 ## Add conditions to a standard
 
 <Steps>
   <Step title="Open the standard">
-    Open **Settings > MSP Tools > Standards**, expand the category, and select the
-    standard's name to open its editor. Find the **Standards applicability** row.
+    Go to **Settings > MSP Tools > Standards**, expand the category, and select the standard's name to open its editor. Find the **Standards applicability** row.
   </Step>
   <Step title="Add a condition">
-    Select **Add condition**. Choose what to test, a comparison such as **is any of**,
-    and the values. A new standard applies to every company until you add one.
+    Select **Add condition**. Choose the **Condition** to test, a **Comparison** such as **is any of**, and the **Value**. A new standard applies to every company until you add a condition. You can add up to 20 conditions.
   </Step>
   <Step title="Combine conditions">
-    With two or more conditions, choose whether the standard applies when
-    **all conditions match** or when **any condition matches**.
+    With two or more conditions, choose **all conditions match** or **any condition matches**.
+  </Step>
+  <Step title="Let it save">
+    There is no Save button. A complete rule saves a moment after your last change and shows **Conditions saved**. If a condition is incomplete, such as **is any of** with no values, finish it or remove it.
   </Step>
   <Step title="Check the matrix">
-    A complete rule saves on its own a moment after your last change; there is no
-    Save button. Return to Standards. Companies that don't match show the standard
-    as a locked N/A.
+    Open the [Standards matrix](/user-guides/msp-tools/read-standards-matrix). Companies that do not match show the standard as a locked N/A.
   </Step>
 </Steps>
 
-| Condition | Tests |
+| Condition | What it tests |
 | --- | --- |
-| **Company computer platforms** | Active PCs and Macs belonging to the company. Use **has any of** or **has none of**. |
-| **Company device types** | Active devices of selected types belonging to the company. Use **has any of** or **has none of**. |
+| **Company computer platforms** | Active PCs and Macs that belong to the company. Use **has any of** or **has none of**. |
+| **Company device types** | Active devices of the selected types that belong to the company. Use **has any of** or **has none of**. |
 | **Industry** | The company's industry. |
 | **Company type** | The company's PSA company type. |
 | **Standards tier** | The tier mapped to the company's type. |
-| **Company fields** | Any company custom field. Option fields use **is any of** or **is none of**. Text fields support **contains**, and number and date fields support greater, less, before and after comparisons. |
+| **Company fields** | Any company custom field. Option fields use **is any of** or **is none of**. Text fields support **contains**. Number fields support **is greater than** and **is less than**. Date fields support **is on**, **is after** and **is before**. |
 
-Existing saved platform and company-field rules remain available. Platform results
-now follow active inventory: companies with no active computers can become N/A
-where the earlier automatic fallback treated them as having PCs and Macs.
+## Target companies by their computers
 
-Rule-driven N/A cells cannot be edited and do not count as compliance gaps.
-Their previous deployment answers are retained. If a later rule change makes a
-standard applicable again, its saved answer becomes visible again.
+<Steps>
+  <Step title="Add a platform condition">
+    Add a condition and choose **Company computer platforms**.
+  </Step>
+  <Step title="Pick the platforms">
+    Choose **has any of** and select **PCs**, **Macs**, or both.
+  </Step>
+  <Step title="Require both, if needed">
+    To require both kinds of computer, add one PC condition and one Mac condition, and choose **all conditions match**.
+  </Step>
+</Steps>
 
-## Missing values
+<Frame caption="An unsaved computer-platform condition and its available values.">
+  <img src="/images/product/standards-inventory-platform-preview.png" alt="Authenticated editor showing Company computer platforms and the PC and Mac value choices." width="2880" height="1920" />
+</Frame>
 
-For metadata conditions such as Industry or company fields, a company with no value
-keeps the standard, so incomplete records
-cannot silently improve its compliance percentage. To target companies with no
-value, use **is empty** or **is not empty**. For example, **Industry is not empty**
-excludes companies whose industry was never set.
+- **has any of PCs** includes PC-only and mixed companies.
+- **has any of Macs** includes Mac-only and mixed companies.
+- Windows servers and inactive devices are ignored. A company with no active computers does not match **has any of PCs** or **has any of Macs**.
+- **has none of** matches when none of the selected platforms are present, including when the company has no active inventory.
 
-Inventory conditions use presence instead: an empty inventory fails **has any of**
-and satisfies **has none of**. A dash in a branch-preview summary does not establish
-that the company has no devices.
+Rules saved before this change still work. Platform results now follow active inventory, so a company with no active computers can become N/A where the old automatic fallback treated it as having PCs and Macs.
 
-Compliance checks use the same conditions, plus device conditions. See
-[Compliance Settings](/user-guides/settings/compliance#choosing-which-companies-and-devices-get-a-check).
+## Target companies by device types
 
-## Understand scoring and service plans
+<Steps>
+  <Step title="Add a device type condition">
+    Add a condition and choose **Company device types**.
+  </Step>
+  <Step title="Pick the types">
+    Choose **has any of** or **has none of**, then select types such as workstations, servers or network devices from the inventory catalog.
+  </Step>
+</Steps>
 
-Condition exclusions remove inapplicable checks from the
-Standards compliance calculation and the corresponding Client Health scoring.
-Client Health can reflect an earlier scoring run; compare scope and refresh time.
+<Frame caption="Choose a company device type from the inventory catalog.">
+  <img src="/images/product/standards-inventory-device-types-preview.png" alt="Authenticated editor showing the Company device types condition and its available values." width="2880" height="1920" />
+</Frame>
 
-Service-plan membership is a separate setting in each standard's editor. An empty
-plan selection means all plans. A standard outside a company's target plan is
-de-emphasized with an explanatory dot, but plan membership currently does not
-reduce the compliance denominator.
+## See company facts in one table
+
+<Steps>
+  <Step title="Open the table">
+    Go to **Settings > MSP Tools > Standards** and select the **Company Standards applicability** tab.
+  </Step>
+  <Step title="Narrow the list">
+    Use the company selector and the table filters to show the companies you want.
+  </Step>
+  <Step title="Review the columns">
+    Check each company's computer platforms, device types, industry, company type, tier, and company fields.
+  </Step>
+</Steps>
+
+Platform and device-type columns are read-only. You can edit **Industry** and company fields in the table when you have the permissions listed above.
+
+## Handle missing values
+
+For metadata conditions such as Industry or company fields, a company with no value keeps the standard. This stops incomplete records from quietly raising a compliance percentage.
+
+To target companies with no value, use **is empty** or **is not empty**. For example, **Industry is not empty** removes companies whose industry was never set.
+
+Inventory conditions work on presence instead. An empty inventory fails **has any of** and satisfies **has none of**.
+
+## Know what N/A and scoring do
+
+- A rule-driven N/A cell is locked. Changing a deployment status cannot override it.
+- N/A cells do not count as compliance gaps. They leave the Standards compliance calculation and the matching Client Health scoring.
+- The deployment answer saved earlier is kept. If a later rule change makes the standard apply again, the saved answer shows again.
+- Client Health can show an earlier scoring run. Compare the scope and the refresh time.
+
+Service plans are a separate setting. Each standard's editor has a **Service plans** field. An empty selection means **All plans**. In the matrix, a standard outside a company's plan is dimmed with a tooltip, but plan membership does not reduce the compliance denominator.
+
+Compliance checks use the same conditions, plus device conditions. See [Compliance Settings](/user-guides/settings/compliance#choosing-which-companies-and-devices-get-a-check).
 
 ## Troubleshooting
 
-| Symptom | Check |
+| Problem | What to do |
 | --- | --- |
-| The company is missing from the table | Check the app's company selector and your permitted company scope. |
-| A company field is missing | Check custom-fields read access. User fields cannot be used in conditions. |
-| A company with no value still has the standard | This is intentional. Complete the value, or use **is empty** or **is not empty**. |
-| A cell is locked N/A | Review the standard's **Standards applicability** conditions. Changing a deployment status cannot override them. |
-| The rule does not save | Finish or remove incomplete conditions, such as **is any of** with no values. The editor reminds you that the rule saves automatically once every condition is complete. |
-| A higher score appears without new deployments | Excluding a required check changes the number of applicable checks. Review the exclusions alongside the percentage. |
+| The **Standards applicability** row is missing | Check that you have the permission to manage Standards settings. |
+| A company is missing from the table | Check the company selector and your permitted company scope. |
+| A company field is missing from the condition list | Check that you have read access to custom fields. User fields cannot be used in conditions. |
+| A company with no value still has the standard | This is intended. Fill in the value, or use **is empty** or **is not empty**. |
+| A cell is locked N/A | Review the standard's **Standards applicability** conditions. A deployment status cannot override them. |
+| The rule does not save | Finish or remove incomplete conditions, such as **is any of** with no values. Your billing must also be active. |
+| A score went up without new deployments | Excluding a required check changes the number of applicable checks. Review the exclusions next to the percentage. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I set a company's platform to PC or Mac by hand?">
+    No. Platforms come from active device inventory. Add **Company computer platforms** conditions to each standard.
+  </Accordion>
+  <Accordion title="Why is a company with no computers marked N/A?">
+    A company with no active computers does not match **has any of PCs** or **has any of Macs**, so those standards become N/A.
+  </Accordion>
+  <Accordion title="Do I need to press Save?">
+    No. A complete rule saves on its own a moment after your last change.
+  </Accordion>
+  <Accordion title="Does N/A delete the deployment answer?">
+    No. The earlier answer is kept and shows again if the standard applies again.
+  </Accordion>
+  <Accordion title="How many conditions can one standard have?">
+    Up to 20.
+  </Accordion>
+  <Accordion title="Does a service plan make a standard N/A?">
+    No. A standard outside a company's plan is dimmed in the matrix but still counts in the compliance percentage.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
 
 <CardGroup cols={2}>
   <Card title="Manage the Standards catalog" icon="wrench" href="/user-guides/settings/standards">

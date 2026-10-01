@@ -1,67 +1,99 @@
 ---
 title: "Read Acronis EDR incidents"
-description: "Find endpoint detection and response incidents, inspect their evidence fields, and distinguish incident state from mitigation."
+description: "Find endpoint detection and response incidents, open their details, and tell incident state apart from mitigation."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Security read access and an active Acronis integration. The MSP manages access, integration setup, and company mapping.
+Use this page to find and read Acronis endpoint detection and response (EDR) incidents. It is for company users and MSP staff.
+
+## Before you start
+
+- You need Security read access.
+- Acronis must be connected and its endpoints mapped to companies. Without Acronis, the **EDR Incidents** tab does not appear. See [Enable the Acronis integration](/user-guides/integrations/enable-acronis-integration).
+- Huntress incident reports are on the separate **Huntress** tab. See [Read Huntress security items](/user-guides/security/read-huntress).
 
 ## Find an incident
 
-1. Open **Security > EDR Incidents** and confirm the company selection.
-2. Use **Host** to search for a host name or domain.
-3. Narrow by **Company**, **Severity** (High, Medium, or Low), or **State** (Not Started, Investigating, or Closed).
-4. Review **#**, **Host**, **Company**, **Severity**, **Category**, **State**, **Mitigation**, and **Detected**.
-5. Browse additional pages as needed. The list loads 20 incidents per server page.
-6. Select a row to open its detail panel. Use the row's **...** menu for [follow-up actions](/user-guides/security/follow-up-edr-incidents).
+<Steps>
+  <Step title="Open EDR Incidents">
+    Open **Security > EDR Incidents** and check the company selector.
+  </Step>
+  <Step title="Search by host">
+    Type in the **Host** column filter. It matches the host name or the host domain.
+  </Step>
+  <Step title="Filter the list">
+    Use **Company** to pick companies, **Severity** to pick High, Medium, or Low, and **State** to pick Not Started, Investigating, or Closed. Click a column header to sort by it.
+  </Step>
+  <Step title="Read the row">
+    Each row shows **#**, **Host**, **Company**, **Severity**, **Category**, **State**, **Mitigation**, and **Detected**. The table shows 20 incidents per page.
+  </Step>
+  <Step title="Open the details">
+    Click a row, away from its checkbox and its three-dot menu, to open the side panel.
+  </Step>
+</Steps>
 
-A Dashboard shortcut can arrive with a State filter already selected. Check the filters before interpreting an empty result. For ordering, use a supported field such as Detected, Host, Severity, State, or Mitigation. Company ordering is not currently supported reliably, even if a sort control appears.
-
-This page displays imported Acronis incidents. Huntress incident reports are in the separate [Huntress tab](/user-guides/security/read-huntress).
+A link from the Security Dashboard can open this list with **State** already set. Clear the filter to see every incident.
 
 ## Understand the fields
 
-**Severity** indicates the imported severity, while **Category** identifies the kind of detection. A missing value does not imply low risk.
-
-**State** tracks investigation progress: Not Started, Investigating, or Closed. **Mitigation** is a separate value. Do not treat Closed as proof that the threat was mitigated, or Mitigated as proof that the investigation is closed.
-
-The badges summarize mitigation as Auto Mitigated, Mitigated, or Not Mitigated. For an unfamiliar provider state, open the detail panel and read the full **Mitigation** text before deciding what happened. Badge wording alone can simplify a more specific provider state.
+- **Severity** is the severity Acronis reports. **Category** names the kind of detection.
+- **State** tracks the investigation: **Not Started**, **Investigating**, or **Closed**.
+- **Mitigation** is separate: **Auto Mitigated**, **Mitigated**, or **Not Mitigated**. A Closed incident can still be Not Mitigated, and a Mitigated incident can still be open.
+- A badge can simplify a more specific Acronis value. Open the details panel to read the full Mitigation text.
 
 ## Read incident details
 
-The side panel can show:
+<Steps>
+  <Step title="Open the side panel">
+    Click the incident row. The title reads **Incident #** followed by the incident number.
+  </Step>
+  <Step title="Read the badges and categories">
+    The top of the panel shows the State and Mitigation badges and the **Categories**.
+  </Step>
+  <Step title="Read Host">
+    **Host** lists **Host Name**, **Domain**, **IP Address**, **Agent Version**, and **Company**.
+  </Step>
+  <Step title="Read Incident Details">
+    **Incident Details** lists **Severity**, **Verdict**, **State**, **Mitigation**, **Detected**, **Created**, and **Updated**. Fields without a value are left out.
+  </Step>
+  <Step title="Open Acronis if you need more">
+    Click **Open in Acronis Console** to open the incident in Acronis in a new tab. This needs your own Acronis sign-in.
+  </Step>
+</Steps>
 
-- Incident number, severity, host, company, state, mitigation, verdict, and categories.
-- **Host** details: Host Name, Domain, IP Address, Agent Version, and Company.
-- **Incident Details**: Severity, Verdict, State, Mitigation, Detected, Created, and Updated.
-- **Open in Acronis Console**, when a provider link is supplied.
-- Technical identifiers that your MSP can use to match the record.
+The bottom of the panel lists **Internal ID**, **Acronis Incident ID**, and **Acronis Customer ID**, which your MSP can use to match the record.
 
-Absent fields may be omitted. Detected is the incident time; Created and Updated refer to the imported provider timestamps. Opening the panel uses the loaded row and does not start a new scan or fetch a new provider investigation.
+This page is read-only. You cannot change an incident state, start remediation, or export a CSV here. To follow up, see [Follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents).
 
-**Open in Acronis Console** opens a separate tab and can require your own authorized Acronis sign-in. Portal access does not automatically grant provider access. There is no local incident-state editor, remediation control, or configured CSV export in this reader.
+## Troubleshooting
 
-## Missing or unexpected results
-
-Check the selected company, active filters, provider mapping, and import status with your MSP. **Security integration unavailable** can indicate missing provider availability or permissions; it is not a clean-security result.
-
-A loading error can leave earlier rows visible. Wait for a successful load before taking action, and recheck the company and incident identity after changing scope. If an open panel still shows a previous selection, close it and reopen the intended row.
-
-Company users should ask for investigation through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket), then review and confirm the request. Include the incident number, host, company, severity, and date. For the optional row shortcuts, see [follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents).
+| Problem | What to do |
+| --- | --- |
+| The list is already filtered | Clear the **State** filter. A dashboard link can set it. |
+| **No EDR incidents found** | Clear all filters and check the company selector. Ask your MSP to confirm the Acronis sync and company mapping. |
+| **Security integration unavailable** | Acronis is not connected, or you lack Security read access. Ask your MSP admin. |
+| **Failed to load EDR incidents** | Reload the page. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
+| **Open in Acronis Console** is missing | Acronis did not supply a link for that incident. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Closed mean the incident is mitigated?">
-    No. State and mitigation are separate. Inspect both and confirm the provider's investigation result.
+    No. State and Mitigation are separate. Read both.
   </Accordion>
-  <Accordion title="Why is the list already filtered when I arrive?">
-    A Dashboard link can preselect a State. Review the active filters or clear them before searching more broadly.
+  <Accordion title="Does opening the Acronis link give me access to Acronis?">
+    No. You need your own Acronis access. Company users can ask their MSP to investigate.
   </Accordion>
   <Accordion title="Can I resolve an incident or start a scan here?">
-    No. This page is a reader with follow-up shortcuts and available Acronis links. Use the authorized provider workflow for remediation.
+    No. Use Acronis for remediation.
   </Accordion>
-  <Accordion title="Does opening the Acronis link grant access to its console?">
-    No. You need separately authorized provider access. Company users can ask their MSP to investigate instead.
+  <Accordion title="I am a company user. How do I ask for an investigation?">
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the incident number, host, company, severity, and date, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents)
+- [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Security](/user-guides/security/index)

@@ -1,63 +1,133 @@
 ---
 title: "Import and export data"
-description: "Use CSV templates, deliberate import modes and scoped exports."
+description: "Import records from CSV templates, export data to CSV or a ZIP, and review the history."
 icon: file-import
 ---
 
-**Audience:** MSP staff with Import and/or Export management access. Open **Settings > Import / Export**. Import and Export permissions are separate; an account may see only the tab it can use.
+Import / Export lets MSP staff load records from a CSV file and download MSPortal data as CSV. This page is for MSP staff.
 
-## Import a CSV
+## Before you start
 
-1. Select the intended data type. Current import options include companies, locations, devices, compliance checks/results, Planner items, goals and Company Roles.
-2. Download that type's CSV template and use its current columns. Preserve identifiers and required relationships according to that template.
-3. Prepare a small, reviewed file before a larger import. Select the CSV or drop it into the upload area.
-4. Choose the mode: create, update or both. Confirm the type and mode again before starting the import.
-5. Run the displayed import action and read the complete result. Check the resulting records before retrying rows or importing a larger file.
+- Open **Settings > Platform > Import / Export**. You need the **Import** permission to import and the **Export** permission to export. If you have only one, you see only that page. If you have both, you see **Import** and **Export** tabs.
+- Import a small test file first. An import can create or change records. It is not an all-or-nothing transaction and not a dry run.
 
-Selecting a file does not import it. The import action can create or update stored data; this is not a guaranteed dry run or an all-or-nothing transaction. Inspect failures and the resulting records before rerunning a file that may already have changed data.
+## Import a CSV file
 
-<Frame caption="Choose the data type, CSV file and import mode before running Import Data.">
+<Steps>
+  <Step title="Open Import">
+    Go to **Settings > Platform > Import / Export** and open the **Import** tab (**Import Data**).
+  </Step>
+  <Step title="Choose the data type">
+    Under **Select Data Type**, choose **Companies**, **Locations**, **Devices**, **Compliance Checks**, **Compliance Results**, **Planner Items**, **Goals** or **Company Roles**.
+  </Step>
+  <Step title="Download the template">
+    Under **Download Templates**, click **Download Template** for that type. Fill it in with the current columns. Keep any identifiers and required relationships the template shows.
+  </Step>
+  <Step title="Upload your file">
+    Under **Upload CSV File**, drag your file onto the area, or click **Browse Files**. Only CSV files are accepted. Choosing a file does not import it.
+  </Step>
+  <Step title="Choose the import mode">
+    Under **Import Options**, choose how to treat existing records.
+
+    | Mode | New records | Existing records |
+    |------|-------------|------------------|
+    | **Create and update records** | Created | Updated |
+    | **Create new records only** | Created | Skipped |
+    | **Update existing records** | Skipped | Updated |
+  </Step>
+  <Step title="Run the import">
+    Check the data type and mode again, then click **Import Data**. A toast says **Import successful** or **Import failed**.
+  </Step>
+  <Step title="Check the result">
+    Read the result and look at the records. Open **Import/Export History** to find the run. If rows failed, click **View Error**. Fix the file and import again only after you check which records already changed.
+  </Step>
+</Steps>
+
+<Frame caption="Choose the data type, CSV file and import mode before you click Import Data.">
   <img src="/images/product/csv-import-options.png" alt="Choose the data type, CSV file and import mode before running Import Data." width="1850" height="1410" />
 </Frame>
 
 ## Export one data type
 
-Choose the data type and company scope, then start the CSV export. The download is a snapshot of that export's supported fields. Company-scoped types use the selected company; tenant-level types do not.
+<Steps>
+  <Step title="Open Export">
+    Go to **Settings > Platform > Import / Export** and open the **Export** tab (**Export Data**).
+  </Step>
+  <Step title="Choose the data type">
+    Under **Select Data Type**, pick what to export. See the list below.
+  </Step>
+  <Step title="Choose the company">
+    Under **Export Options**, choose **All Companies** or one company.
+  </Step>
+  <Step title="Export">
+    Click **Export Data**. The CSV downloads as `{datatype}_export_{company}_{date}.csv`. A toast says **Export successful**.
+  </Step>
+</Steps>
 
-Compliance checks, Company Roles, custom fields and broadcasts are tenant-level exports and remain organization-wide even when you select one company. Their filenames use **all** for that reason. Check file contents and scope before sharing a download.
+Exports only cover data created and managed in MSPortal. PSA data such as tickets and invoices is not included.
 
-## Export All
+Compliance checks, Company Roles, custom field values and broadcasts are tenant-wide. The company choice does not apply to them, and their file names use `all`. Check the contents and scope before you share a file.
 
-**Export All** builds a ZIP of supported CSV exports. Some types can fail while others succeed: inspect the result and missing-type list instead of assuming a downloaded ZIP is complete. If every type fails, there is no successful combined export to rely on.
+Export types:
 
-Export-only data can include contacts, meetings and their content, budgets and products, survey responses, training, tool stack, goal updates, onboarding tasks and AI conversations. Not every exported type supports import. The ZIP is not a complete database backup or a one-click restoration package, and it does not promise to include all external PSA records or file attachments.
+| Can import and export | Export only |
+|-----------------------|-------------|
+| Companies, Locations, Devices, Compliance Checks, Compliance Results, Planner Items, Goals, Company Roles | Contacts & Users, Meetings, Meeting Action Items, Meeting Notes, Meeting Agenda Items, Budgets, Budget Products, Survey Responses, Training Records, Custom Field Values, Tool Stack, Goal Updates, Onboarding Tasks, Broadcasts, AI Assistant Conversations |
+
+Onboarding exports cover task data only. Stored client credentials and uploaded files are never included.
+
+## Export everything
+
+<Steps>
+  <Step title="Choose the company">
+    On the **Export** tab, choose **All Companies** or one company under **Export Options**. The choice applies to every type except the tenant-wide ones.
+  </Step>
+  <Step title="Click Export All (ZIP)">
+    Click **Export All (ZIP)**. Wait for it to finish. It can take a minute.
+  </Step>
+  <Step title="Check the result">
+    The file is named `msportal_export_{company}_{date}.zip`. If a toast says **Export completed with errors**, it lists the types that failed. Export those again on their own. If **All exports failed** appears, no file was made.
+  </Step>
+</Steps>
+
+The ZIP is a set of CSV exports. It is not a full backup, and it cannot restore your portal in one step.
 
 ## Troubleshooting
 
-If a CSV is rejected during selection, check that it is a CSV file recognized by the browser, rather than an Excel workbook renamed with a CSV extension. If relationships or updates fail, compare the current template and identifiers with the target records. If an export is incomplete, inspect the per-type result and available history, then retry only the missing export where appropriate.
+| Problem | What to do |
+|---------|-----------|
+| **Invalid file type** | Choose a real CSV file. An Excel file renamed to .csv will not work |
+| **Please select a CSV file to import** | Add a file before you click **Import Data** |
+| Rows failed or updates did not apply | Compare your file to the current template. Check the identifiers against the records. Open **View Error** in the history |
+| A tab is missing | You have only one of the Import or Export permissions |
+| **Access Denied** | You need the Import or Export permission. Ask an administrator |
+| An export is missing data | Check the history and the toast for failed types. Export those again |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does selecting a CSV import it immediately?">
-    No. Confirm the data type and mode, then run the import action.
+  <Accordion title="Does choosing a CSV import it?">
+    No. Pick the mode and click **Import Data**.
   </Accordion>
-  <Accordion title="Does the company filter constrain every export?">
-    No. Compliance checks, Company Roles, custom fields and broadcasts are tenant-level exports.
+  <Accordion title="Does the company choice limit every export?">
+    No. Compliance checks, Company Roles, custom field values and broadcasts are tenant-wide.
   </Accordion>
-  <Accordion title="Does a downloaded Export All ZIP prove every export succeeded?">
-    No. Inspect partial failures and missing data types.
+  <Accordion title="Does a downloaded ZIP mean everything exported?">
+    No. Read the toast for failed types.
   </Accordion>
-  <Accordion title="Can I restore the whole portal from Export All?">
-    No. It is a set of supported CSV exports, not a complete database backup or one-click restore.
+  <Accordion title="Can I restore the portal from Export All?">
+    No. It is a set of CSV files, not a backup.
   </Accordion>
-  <Accordion title="Can every exported type be imported?">
-    No. Some supported data types are export-only.
+  <Accordion title="Can I import every exported type?">
+    No. Several types are export-only.
+  </Accordion>
+  <Accordion title="Where can I download an earlier export again?">
+    In **Import/Export History**, click **Download** on the row.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
-- [import-companies](/user-guides/integrations/import-companies)
+- [Import Companies](/user-guides/integrations/import-companies)
 - [Import Devices](/user-guides/integrations/import-devices)
-- [companies](/user-guides/settings/companies)
+- [Companies Settings](/user-guides/settings/companies)

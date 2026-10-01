@@ -4,7 +4,7 @@ description: 'Define portal fields, save choices separately, and control their s
 icon: 'table-list'
 ---
 
-Use **Settings > Customization > Fields** to define extra information for portal records. Choose **Devices**, **Compliance**, **Goals**, **Budgets**, **Planner**, **Users**, or **Companies** before adding a field.
+Use custom fields to capture information the built-in fields do not cover, such as a contract renewal date on a company or an asset tag on a device. This page is for MSP staff. Open **Settings > Customization > Fields**. The page is titled **Field Definitions**, with a tab for each record type: **Devices**, **Compliance**, **Goals**, **Budgets**, **Planner**, **Users** and **Companies**.
 
 
 <Frame caption="A new Devices custom field starts as an unsaved row with separate save and cancel controls.">
@@ -14,9 +14,9 @@ Use **Settings > Customization > Fields** to define extra information for portal
 
 ## Before you start
 
-This is an **MSP staff** settings workflow. Your role needs access to Custom Fields settings; creating, editing, reordering, and deleting also require the corresponding action permissions. Company users ask their IT provider to change field definitions.
-
-Definitions belong to the shared portal catalog for their record type. Creating a definition does not fill in existing records, create a PSA custom field, or grant permission to read or edit a record. Configure PSA project fields separately in [Project Settings](/user-guides/settings/projects).
+- You need access to Custom Fields settings. Creating, editing, reordering and deleting each need the matching permission.
+- Company users cannot change field definitions. They ask their IT provider.
+- A new field starts empty on existing records. It does not create a field in your PSA. Set up PSA project fields in [Project Settings](/user-guides/settings/projects).
 
 ## Create a field
 
@@ -28,7 +28,7 @@ Definitions belong to the shared portal catalog for their record type. Creating 
     Enter a descriptive **Label**, choose its **Type**, and configure scope. Add opens an unsaved row; it does not create the field yet.
   </Step>
   <Step title="Save the row">
-    Select the green checkmark and wait for the success message. The red X cancels this unsaved row. Each field saves separately; there is no final page-wide Save for these definitions.
+    Select the green checkmark and wait for **Custom field created successfully**. The red X cancels this unsaved row. Each field saves on its own. There is no page-wide Save.
   </Step>
   <Step title="Add choices after saving a choice field">
     For Dropdown, Multi-Select, or Radio Buttons, first save the field as optional. Expand its saved row, select **Add Option**, enter the choice, then use that option's checkmark. Repeat for each choice. After options are saved, edit the field to enable **Required** if needed.
@@ -46,21 +46,21 @@ Definitions belong to the shared portal catalog for their record type. Creating 
 | **Multi-Select** | Several choices from your saved options |
 
 <Note>
-Choose the field type carefully when creating it. Do not rely on changing the Type selector on an existing field to convert its saved definition or values. For a different type, create a replacement field and review the records before retiring the old one.
+Choose the field type carefully when you create the field. Changing the **Type** on a saved field does not convert its stored values. For a different type, create a new field and move the values over before you delete the old one.
 </Note>
 
 <Note>
-The new-row form does not offer Hide from company users. If the field is internal, create it, edit the saved definition to hide it, and verify visibility before filling in sensitive values.
+The new-row form has no **Hide from company users** option. To make a field internal, create it, then edit the saved field and check **Hide from company users**. Do this before you enter sensitive values.
 </Note>
 
 ## Scope and Company visibility
 
 | Control | What it controls |
 | --- | --- |
-| **All Types** or a specific type | Where a definition applies. Type selection is available for Devices, Compliance, and Planner when types are available. Goals, Budgets, and Companies do not currently offer a type catalog here. |
-| **Both**, **Tenant Users**, **Company Users** | Which kind of user record receives a Users field. This is distinct from who may view it. |
-| **Hide from company users** | Makes the field internal. New definitions start with Company visibility enabled. After creation, edit the saved field to hide it before entering internal values. |
-| **Required** | Requests a value in supported record forms. A choice field needs saved options first. |
+| **All Types** or a specific type | Where the field applies. You can pick a type for Devices, Compliance and Planner fields when types exist. Goals, Budgets and Companies have no type list |
+| **Both**, **Tenant Users**, **Company Users** | Which kind of user gets a Users field. This is separate from who can see it |
+| **Hide from company users** | Makes the field internal (shown as **Internal only**). New fields are visible to company users until you edit them |
+| **Required** | Requires a value in record forms. A choice field needs at least one saved option first |
 
 For Compliance, also choose the fill location when creating the field:
 
@@ -71,27 +71,49 @@ The Compliance fill location is fixed after creation. Plan a replacement and pre
 
 ## Edit, reorder, or delete
 
-Open a saved field by its label or pencil. Change the label, required setting, scope, or Company visibility, then select the row checkmark. Use X to cancel that draft. Save or cancel before leaving the page.
-
-Drag a **field row** by its handle to reorder it. Reordering saves immediately. The current options editor does not offer option dragging.
-
-Expanded **Field Options** save independently: a checkmark saves an option edit, and an option's trash control removes it immediately without a separate confirmation. Closing the editor or canceling a field draft does not undo saved option changes.
+<Steps>
+  <Step title="Edit a field">
+    Click a saved field's label or its pencil. Change the label, required setting, scope or company visibility, then click the row's checkmark. The X cancels that edit. Save or cancel before you leave the page.
+  </Step>
+  <Step title="Reorder fields">
+    Drag a field row by its handle. The new order saves at once. Options inside a field cannot be reordered by dragging.
+  </Step>
+  <Step title="Edit options">
+    Expand a choice field to see **Field Options**. A checkmark saves an option edit. An option's trash icon removes it at once with no confirmation. Cancelling a field edit does not undo saved option changes.
+  </Step>
+  <Step title="Delete a field">
+    Click the field's trash icon. In **Delete Custom Field**, type the field's name to confirm. **Cancel** keeps it.
+  </Step>
+</Steps>
 
 <Warning>
-Deleting a field removes its stored values across records. The **Delete Custom Field** dialog requires the field name before confirmation. Cancel keeps the definition. Deleting a definition is different from clearing a value on one record.
+Deleting a field permanently removes its stored values on every record. To clear the value on one record, edit that record instead.
 </Warning>
 
 ## Check the result and recover from errors
 
-Open a representative record of the intended type and check the Custom Fields section. Save its value using that record's own save controls. To set one Companies field on many companies at once, see [Set a custom field on many companies](/user-guides/settings/companies#set-a-custom-field-on-many-companies) (branch preview). Verify the intended Company role separately when changing visibility; an MSP preview does not prove client access.
+Open a record of that type and look for the **Custom Fields** section. Enter a value and save the record with its own save controls. To set one Companies field on many companies at once, see [Set a custom field on many companies](/user-guides/settings/companies#set-a-custom-field-on-many-companies). To check what company users see, review the field as a company user.
 
-If a save or reorder reports an error, reopen the page and check stored fields and options before retrying. Reordering updates multiple rows, so an error is not proof that every row stayed unchanged. A new field with a conflicting name may need a distinct label.
+If a save or reorder shows an error, reopen the page and check the saved fields and options before you try again. A reorder updates several rows, so some may have changed.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Add Devices Field** (or another tab's button) is missing | You lack permission to create fields |
+| **Required** is disabled on a choice field | Save the field, expand it, and save at least one option. Then edit the field and check **Required** |
+| The field does not appear on a record | Check its type scope and, for Users, its user scope. Check that the record type matches |
+| Company users should not see a field | Edit the field and check **Hide from company users** |
+| **Failed to save custom field** appears | Check that the label is not empty and is not already used, then try again |
+| I need to change a Compliance field's fill location | It is fixed after creation. Create a new field and delete the old one |
+
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Add Field save immediately?">No. It opens a draft row. Use the green checkmark and wait for success to create the definition.</Accordion>
+  <Accordion title="Does Add Field save immediately?">No. It opens a draft row. Click the green checkmark to create the field.</Accordion>
   <Accordion title="Why can't I make a dropdown required?">Save the optional field first, expand it, and save at least one option. Then edit the definition to enable Required. If the warning remains after adding an option, reopen the page to reload the saved option count.</Accordion>
   <Accordion title="Does the field's X undo saved options?">No. Field edits and option edits save separately. X cancels only the current unsaved edit.</Accordion>
-  <Accordion title="Can I reorder the choices by dragging?">The current Field Options editor has add, edit, and delete controls but no drag control. The main field rows can be dragged and save their order immediately.</Accordion>
+  <Accordion title="Can I reorder the choices by dragging?">No. Options have add, edit and delete controls only. Field rows can be dragged and save their order at once.</Accordion>
   <Accordion title="Can Company users create their own field definitions?">No. This is MSP settings. Company users need their IT provider to configure definitions and access.</Accordion>
   <Accordion title="Is User scope the same as visibility?">No. User scope chooses which user records receive the field. Hide from company users controls whether Company users can see it.</Accordion>
   <Accordion title="Will deleting a field only remove it from this record?">No. Deleting the definition removes the field and its stored values across records. Clear an individual record's value instead when that is your intent.</Accordion>

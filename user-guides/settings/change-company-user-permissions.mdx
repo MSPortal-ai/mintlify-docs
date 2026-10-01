@@ -1,94 +1,103 @@
 ---
 title: 'Change a Company user’s permissions'
-description: 'MSP guide to assigning a permissions group to one Company user or a selected group of users.'
+description: 'MSP guide to assigning a permissions group to one Company user or to several selected Company users.'
 icon: 'user-shield'
 ---
 
-MSP staff manage Company user access in **Settings > Users & Roles > Company Users**. A user's **Permissions Group** assigns the Company role that controls what they can do in the portal.
+A Company user's **Permissions Group** decides what that person can do in the portal. This guide is for MSP staff who manage Company users. Company administrators ask their IT provider to change access. They cannot manage users or permission roles themselves.
 
-<Note>
-For MSP staff with permission to edit Company users. Company administrators request access changes from their IT provider; they do not manage their own users or permission roles through these settings.
-</Note>
+## Before you start
+
+- You need write access to Company users in **Users & Roles**. Without it, user names are not clickable and the **Update Permissions** action is missing.
+- The permissions group you want must already exist. Company users can only be assigned Company-scoped groups. To create one, see [Create and edit permission roles](/user-guides/getting-started/how-to-create-a-new-user-role).
+- **Team Roles** are a separate feature. They are not the Permissions Group in the Company user editor.
 
 ## Choose the kind of change
 
-| Your intention | What to change |
+| You want to | Do this |
 | --- | --- |
-| Give one user a different existing set of permissions | Change that user's **Permissions Group** |
-| Give several selected users the same existing permissions | Use **Update Permissions** on the selection |
-| Change what everyone assigned to a role can do | [Edit the permission role](/user-guides/getting-started/how-to-create-a-new-user-role) |
-| Create a different set for a subset of users | Create or duplicate a role, review it, then assign it to those users |
-
-**Team Roles** are separate organizational roles. They are not the permissions group you select in the Company user editor.
+| Give one user a different existing set of permissions | [Change one user](#change-one-user) |
+| Give several users the same existing permissions | [Update several users](#update-several-users) |
+| Change what everyone in a group can do | [Edit the permission role](/user-guides/getting-started/how-to-create-a-new-user-role) |
+| Make a different set for a few users | Create or duplicate a role, set its permissions, then assign it to those users |
 
 ## Change one user
 
 <Steps>
-  <Step title="Find the Company user">
-    Open **Settings > Users & Roles**, then select **Company Users**. Use the company scope and table filters to find the right person. Confirm the company and email as well as the name.
+  <Step title="Open Company Users">
+    Go to **Settings > Users & Roles** and open the **Company Users** tab. Use the company selector and the table filters to find the person. Check the company and email as well as the name.
   </Step>
-  <Step title="Open the editor">
-    Select the user's name, or use the row's **…** menu and edit action. The user's details open in a dialog.
+  <Step title="Open the user">
+    Click the user's name, or open the row's menu and click **Edit User**. The **Edit Company User** dialog opens.
   </Step>
-  <Step title="Select the permissions group">
-    In **Permissions**, choose the intended **Permissions Group**. The list contains the roles available for Company users. Changing the selection does not save yet.
+  <Step title="Choose the permissions group">
+    Under **Permissions**, open **Permissions Group** and pick the group. Nothing is saved yet.
   </Step>
-  <Step title="Save and verify">
-    Select **Save Changes** and wait for the result. Confirm the user's Permissions Group in the table. If other edited fields caused a save error, reopen the user and check what was saved before retrying.
+  <Step title="Save">
+    Click **Save Changes**. A toast says **User updated successfully**. The **Permissions Group** column in the table shows the new group.
   </Step>
 </Steps>
 
-The editor can also contain email, company, location, and custom fields. Review those separately if you intend to change them. A role assignment controls permissions; changing the person's company is a different operation.
+The dialog also holds email, company, location and custom fields. A change to the email updates the user's sign-in. Moving the user to another company is a separate change from the role. Review those fields before you save.
 
 ## Update several users
 
-1. Filter the Company Users table to the intended company and users.
-2. Select the users' checkboxes. Review the selected count and whether you selected specific rows or all matching results across pages.
-3. Open the selection's actions and select **Update Permissions**.
-4. In **Bulk Update Permissions**, choose the **Permissions Group** to apply to every selected user.
-5. Select **Save**, wait for the result, and verify the affected users.
+<Steps>
+  <Step title="Select the users">
+    On the **Company Users** tab, filter to the right company and users, then check each user's box. The selected count shows in the table. If you select every matching result across pages, the count covers all of them.
+  </Step>
+  <Step title="Open Update Permissions">
+    Open the **Actions** menu for the selection and click **Update Permissions**. The **Bulk Update Permissions** dialog opens.
+  </Step>
+  <Step title="Choose the permissions group">
+    Open **Permissions Group** and pick the group to apply to every selected user.
+  </Step>
+  <Step title="Save">
+    Click **Save**. A toast says **Updated permissions for N users**. Check the table to confirm.
+  </Step>
+</Steps>
 
 <Warning>
-**No permissions group** clears the selected users' role assignments. It does not mean “leave their current permissions unchanged.” The bulk dialog starts with this option, so choose the intended group before saving.
+The dialog starts on **No permissions group**. Saving it with that choice removes the role from every selected user. Pick the group you want before you click **Save**. A toast says **Removed permissions group from N users** when it clears them.
 </Warning>
-
-If the result reports that some changes were not permitted, check the users individually. A partial failure does not mean every user's previous group was preserved.
 
 ## Check the result
 
-Confirm the saved group, then have the Company user reopen the relevant portal area. If their session still shows old access, ask them to sign out and back in and try again.
+Confirm the group in the **Permissions Group** column. Then ask the Company user to reopen the area they use. If they still see old access, ask them to sign out and back in.
 
-A permissions group is only part of feature availability. The relevant company, enabled module, integration, record visibility, and action-specific requirements still apply. Granting a role does not create missing provider data or enable an integration.
+A permissions group is only part of what a user can reach. The company, enabled modules, integrations and record visibility also apply. A role does not create missing data or turn on an integration.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| User names are plain text, not links | You lack write access to Company users. Ask an administrator |
+| **No permissions groups available** or **No company-scoped permissions groups found** | Create a Company role in **Settings > Users & Roles > Roles** first |
+| The role I want is missing | Company users only get Company roles. MSP staff roles are a different type |
+| A message says you do not have permission to change the permissions group | Ask an administrator for user write access |
+| **Failed to update permissions** appears | Reopen the users and check their groups before you try again. Some may have changed |
+| A user has **No Permissions Group** in the table | Edit the user and pick a group |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Can a Company administrator change another user's permissions?">
-    Company user administration is performed by the MSP. The Company administrator should request the change from their IT provider.
+    No. The MSP manages Company users. The administrator asks their IT provider for the change.
   </Accordion>
-  <Accordion title="Will changing one user's Permissions Group change other users?">
-    Assigning a different existing group to one user changes that user's assignment. Editing the group's permission definition affects the users assigned to that role.
+  <Accordion title="Does changing one user's group change other users?">
+    No. Picking a different group for one user changes only that user. Editing the group's permissions changes everyone assigned to it.
   </Accordion>
   <Accordion title="Can I give one person extra access without changing the shared role?">
-    Create or duplicate an appropriate role, change its permissions, and assign it to that person. Check the role definition before assigning it.
+    Yes. Create or duplicate a role, add the permissions, and assign that role to the person.
   </Accordion>
-  <Accordion title="Are permission changes saved as soon as I choose a group?">
-    No. Use **Save Changes** for one user or **Save** in the bulk dialog. Cancel closes the dialog without submitting the selection.
+  <Accordion title="Do changes save as soon as I pick a group?">
+    No. Click **Save Changes** for one user or **Save** in the bulk dialog. **Cancel** closes the dialog without saving.
   </Accordion>
   <Accordion title="What does No permissions group do?">
-    Saving it clears the role assignment. It does not preserve the old group or delete the user record. Verify the resulting access rather than treating it as a general account-deactivation action.
+    It removes the user's role assignment. It does not delete the user.
   </Accordion>
-  <Accordion title="Why is the role I want missing?">
-    The Company user editor offers Company-assignable roles. An MSP staff role is a different role type. Ask an MSP administrator to review or create the appropriate Company role if needed.
-  </Accordion>
-  <Accordion title="Does granting a Company role give access to MSP settings?">
-    Company permission roles control the Company portal experience. They do not turn a Company user into MSP staff or grant tenant-wide settings access.
-  </Accordion>
-  <Accordion title="Can I use Update Permissions for every matching user across pages?">
-    The table supports selection across matching results. Check the selection count and scope before applying a bulk change; filtering the table alone does not apply a role.
-  </Accordion>
-  <Accordion title="I received a save error. Did nothing change?">
-    Do not assume that. Single-user edits can save several kinds of changes, and bulk updates can affect some users before reporting a problem. Reopen the affected records and verify their groups before retrying.
+  <Accordion title="Does a Company role give access to MSP settings?">
+    No. Company roles control the Company portal. They do not make a Company user MSP staff.
   </Accordion>
 </AccordionGroup>
 

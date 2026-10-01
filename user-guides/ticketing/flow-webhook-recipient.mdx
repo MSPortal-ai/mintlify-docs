@@ -1,101 +1,249 @@
 ---
 title: 'Flow Webhook Recipient'
-description: 'Route template submissions to an HTTPS workflow, choose PSA plus webhook or webhook-only delivery, and verify delivery attempts.'
+description: 'Send each ticket template submission as JSON to Power Automate, Logic Apps, n8n, Zapier, or any HTTPS endpoint, with or without a PSA ticket.'
 icon: 'webhook'
 ---
 
-A ticket template can send submitted answers as JSON to an HTTPS workflow you control. Configure the delivery mode explicitly: create a PSA ticket and notify the webhook, or use the webhook as the submission’s only destination.
+A ticket template can send a JSON copy of every submission to a webhook URL you control. Use it to start a Power Automate, Logic Apps, n8n, or Zapier workflow, or as the only destination for requests that should never create a PSA ticket, such as HR change requests or approvals.
 
-This is an MSP template-administration task requiring ticket-settings write or manage permission. The receiving workflow may perform its own actions as soon as it receives a request.
+This guide is for MSP staff whose role can write or manage ticket settings.
 
-## Configure and save
+## Before you start
+
+- You need an HTTPS endpoint that accepts `POST` requests with `Content-Type: application/json`. For Power Automate, create a flow with the **When a HTTP request is received** trigger.
+- The URL must be `https://` and point to a public host. MSPortal rejects localhost, private IP ranges (10.x, 192.168.x, 172.16-31.x), link-local, and carrier-grade NAT addresses.
+- The receiving workflow can act as soon as it gets a request, so use a test flow first.
+
+## Set up a webhook
 
 <Steps>
   <Step title="Open the template">
-    Go to **Settings > Tickets > Templates**, open the intended template and expand **Flow Recipient (JSON Webhook)**.
+    Go to **Settings > Tickets > Templates** and open the template.
   </Step>
-  <Step title="Enable delivery and choose its mode">
-    Enable the webhook and choose **Create PSA ticket + webhook** or **Webhook only**. Use the actual mode control; clearing individual PSA defaults is not a reliable substitute. Selecting webhook-only delivery also clears incompatible TimeZest scheduling configuration in the editor.
+
+  <Step title="Expand Flow Webhook (JSON)">
+    Scroll past **PSA Integration Settings** and click **Flow Webhook (JSON)** to expand it.
   </Step>
-  <Step title="Enter the destination">
-    Paste the public HTTPS endpoint and, if used by your receiver, a shared secret. Keep the destination URL and secret private. Local and private-host destinations are rejected.
+
+  <Step title="Turn on delivery">
+    Check **Send submissions to a Flow webhook**.
   </Step>
-  <Step title="Test deliberately">
-    **Send test event** sends a real HTTP request using synthetic submission values and the current editor configuration. It does not save the template, and the receiving flow can still perform real actions. Use a controlled receiver that handles test events safely.
+
+  <Step title="Choose a Delivery mode">
+    - **Create PSA ticket + webhook** creates the ticket as usual and also sends the JSON.
+    - **Webhook only** sends the JSON and skips PSA ticket creation.
+
+    Choosing **Webhook only** also clears any TimeZest appointment scheduling on the template, because no ticket exists to schedule against.
   </Step>
-  <Step title="Save and verify">
-    Save the template. Review the saved mode, URL and any affected scheduling settings. For an intended real submission, inspect the recent delivery history and the receiver’s run result.
+
+  <Step title="Paste the Webhook URL">
+    Paste your endpoint into **Webhook URL (https only)**. In Power Automate, copy it from the **When a HTTP request is received** trigger.
+  </Step>
+
+  <Step title="Add a shared secret (optional)">
+    Enter a random string in **Shared secret (optional)**. Every request then carries an `X-MSPortal-Signature` header your flow can verify. Leave it blank to skip signing. Do not put secrets in the URL.
+  </Step>
+
+  <Step title="Send a test event">
+    Click **Send test event**. MSPortal posts a `ticket.test` request using your template's field keys with sample values. A message such as "Test sent (HTTP 200). Check your Flow run history." confirms delivery. The test does not save the template, and your receiving flow can still take real actions.
+  </Step>
+
+  <Step title="Save the template">
+    Click **Save Template**. Real submissions use the saved configuration, not the unsaved editor values.
   </Step>
 </Steps>
 
-## Understand the outcomes
+## Test with a request inspector first
 
-| Situation | Outcome to verify |
+A free request inspector such as webhook.site shows exactly what MSPortal sends before you build any flow logic.
+
+<Steps>
+  <Step title="Get a unique URL">
+    Open [webhook.site](https://webhook.site/). It creates a unique URL for you. Copy it.
+  </Step>
+
+  <Step title="Paste it into MSPortal">
+    In **Flow Webhook (JSON)**, paste the URL into **Webhook URL (https only)** and check **Send submissions to a Flow webhook**.
+  </Step>
+
+  <Step title="Send a test event">
+    Click **Send test event**. The request appears in the inspector within a couple of seconds.
+  </Step>
+
+  <Step title="Inspect the payload">
+    Click the request to see the headers and JSON body. This is the shape your flow receives. Copy the body for the next section.
+  </Step>
+</Steps>
+
+<Tip>
+Save the template and submit a real request with the inspector URL still in place to see a production payload, including the PSA ticket number. Then swap in your real flow URL. Do not send sensitive production data to a public inspection service.
+</Tip>
+
+## Connect Power Automate
+
+<Steps>
+  <Step title="Create the flow">
+    In Power Automate, create an instant or automated cloud flow and choose the **When a HTTP request is received** trigger.
+  </Step>
+
+  <Step title="Save once to generate the URL">
+    Power Automate only issues the URL after the flow is saved with the trigger in place. Add a placeholder action, such as a **Compose** with a static value, and click **Save**.
+  </Step>
+
+  <Step title="Copy the HTTP POST URL">
+    Reopen the trigger and copy **HTTP POST URL**.
+  </Step>
+
+  <Step title="Paste it into MSPortal and test">
+    Paste the URL into **Webhook URL (https only)**, check **Send submissions to a Flow webhook**, and click **Send test event**.
+  </Step>
+
+  <Step title="Generate the schema">
+    In the trigger, click **Use sample payload to generate schema** and paste the JSON body you captured. Power Automate then offers `fields.username`, `ticket.number`, and the other properties as dynamic content.
+  </Step>
+
+  <Step title="Build the rest of the flow">
+    Add the actions you want, such as a SharePoint list item, a Teams message, or a database write.
+  </Step>
+</Steps>
+
+<Warning>
+The Power Automate trigger URL is itself a secret. If the flow provisions, deletes, or changes credentials, set a shared secret in MSPortal and verify `X-MSPortal-Signature` in the first step of the flow.
+</Warning>
+
+## Make a webhook-only template
+
+Use this for requests that live entirely outside the PSA.
+
+<Steps>
+  <Step title="Set the delivery mode">
+    In **Flow Webhook (JSON)**, check **Send submissions to a Flow webhook** and choose **Webhook only**. The **PSA Integration Settings** section is then disabled for the template.
+  </Step>
+
+  <Step title="Clear old PSA defaults (optional)">
+    If the template still holds a board, priority, or status, open **PSA Integration Settings** and click **Clear PSA defaults** so no stale routing remains.
+  </Step>
+
+  <Step title="Enter the URL and save">
+    Add the **Webhook URL (https only)**, then click **Save Template**. The **Flow Webhook (JSON)** header shows a **Webhook only** badge.
+  </Step>
+</Steps>
+
+Webhook-only templates still follow company visibility, role access, and required-field rules. A successful submission shows "Submission was sent to your configured Flow webhook. No PSA ticket was created." If the webhook fails, the requester sees "Flow webhook delivery failed", and there is no email fallback in this mode.
+
+## What happens on each submission
+
+| Situation | Result |
 | --- | --- |
-| PSA plus webhook; PSA ticket succeeds | Webhook delivery is separate. Its failure does not roll back the PSA ticket |
-| PSA plus webhook; PSA unavailable or creation fails | Inspect the submission result and configured fallback behavior; a webhook response is not proof of a PSA ticket |
-| Explicit webhook-only mode | MSPortal sends the submission to the webhook without creating a PSA ticket. A failed webhook returns a submission error |
-| Receiver returns HTTP success | The endpoint accepted the request. Its downstream workflow may still fail later |
+| **Create PSA ticket + webhook**, PSA ticket created | The ticket is created, then the webhook fires with the real ticket number. A webhook failure does not undo the ticket. |
+| **Create PSA ticket + webhook**, PSA creation fails | The webhook fires with the submission data and null PSA fields. If it succeeds, the requester sees that the PSA ticket failed but the submission went to the webhook. If it also fails, MSPortal falls back to email. |
+| **Webhook only** | The webhook fires and no PSA ticket is created. A failed webhook returns an error. |
+| No PSA integration connected | The webhook is the destination. If it fails, MSPortal falls back to email. |
+| Receiver returns HTTP success | The endpoint accepted the request. Its later steps can still fail. |
 
-Do not submit the same real request again solely because a webhook timed out. Check the PSA and receiving system first: either may already have performed work.
+The webhook waits up to 10 seconds for a response. Do not submit the same real request again just because a webhook timed out. Check the PSA and your receiving flow first, because either may already have acted.
 
-## Payload and event names
-
-Current real submissions use **`ticket.submitted`**; synthetic tests use **`ticket.test`**. The envelope includes:
-
-| Property | Contents |
-| --- | --- |
-| `event`, `timestamp`, `tenant_id` | Event type, timestamp and tenant context; tests use synthetic context |
-| `template` | Template ID, name and key |
-| `ticket` | Summary, description and available PSA ID, number, URL and routing fields |
-| `company` | Company ID, name and external ID when available |
-| `contact` | Submitter name, email, external ID and user type when available |
-| `fields` | Submitted answers keyed by the template’s field keys |
-
-PSA identifiers can be null. Branch on the actual available identifiers and submission outcome instead of treating an event name as proof that a ticket exists. Allow nullable and optional values in your receiver schema. Use a controlled test payload to configure its parser; real field types depend on the template.
-
-## Verify signatures
-
-When a shared secret is configured, requests include `X-MSPortal-Signature` with a `sha256=` prefix and an HMAC-SHA256 hex digest. Verify it using the same secret over the **raw request body bytes**, before parsing or reserializing JSON. Content type is `application/json`; `X-MSPortal-Event` identifies the event.
-
-A valid signature establishes that the sender knew the secret. It does not by itself prevent replay or establish that the downstream action has not already run. Design duplicate handling in the receiver for operations that must not repeat.
-
-## Inspect delivery history
-
-The saved template’s webhook section can show recent delivery attempts with a timestamp, success/failure, HTTP status, duration and error. Synthetic attempts carry a test badge. Inspect the receiving flow’s history too: MSPortal sees the HTTP result, not completion of every later workflow step.
-
-If a parent template contains embedded templates, review each template’s effective webhook configuration. Embedded submissions can produce their own delivery attempts; test the intended nesting before assuming one user submission means only one request.
-
-## Questions and troubleshooting
+## The JSON payload
 
 <AccordionGroup>
-  <Accordion title="Does Send test event save the webhook configuration?">
-    No. It sends an actual request using the editor’s current values. Save the template separately before expecting real submissions to use those values.
+  <Accordion title="Top-level shape">
+    ```json
+    {
+      "event": "ticket.submitted",
+      "timestamp": "2026-05-25T19:45:09.560Z",
+      "tenant_id": "...",
+      "template": { "id": "...", "name": "...", "key": "..." },
+      "ticket":   { "id": ..., "number": "...", "summary": "...", "description": "...",
+                    "external_url": "...", "board": "...", "status": "...", "priority": "..." },
+      "company":  { "id": "...", "name": "...", "external_id": "..." },
+      "contact":  { "name": "...", "email": "...", "external_id": "...", "user_type": "tenant" },
+      "fields":   { "<your_field_key>": ..., "<your_field_key>": ... }
+    }
+    ```
+
+    Real submissions use `"event": "ticket.submitted"` and your tenant ID. Test events use `"event": "ticket.test"` and the literal tenant ID `"test-tenant"`.
   </Accordion>
-  <Accordion title="Can the test event trigger real downstream actions?">
-    Yes. The receiver must distinguish ticket.test and handle it appropriately. Use a controlled test path rather than sending sensitive production data to a public inspection service.
+
+  <Accordion title="The fields object">
+    `fields` uses your template's own field keys. A template with fields `username`, `asset_tag`, and `reason` sends:
+
+    ```json
+    "fields": {
+      "username": "jdoe",
+      "asset_tag": "L-4421",
+      "reason": "Forgot password"
+    }
+    ```
+
+    Every field key in the template is present. Unanswered optional fields are `null`. Multi-select answers arrive as arrays, numbers as numbers, and checkboxes as booleans.
   </Accordion>
-  <Accordion title="How do I prevent this template from creating PSA tickets?">
-    Select the explicit Webhook only delivery mode and save. Do not rely on clearing individual PSA fields. Recheck any TimeZest scheduling configuration affected by the mode.
+
+  <Accordion title="When PSA fields are null">
+    On webhook-only submissions, or when PSA creation failed, `ticket.id`, `ticket.number`, `ticket.external_url`, `ticket.board`, `ticket.status`, and `ticket.priority` are `null`. `summary`, `description`, and `fields` are always filled. Branch on `ticket.number` in your flow to handle both cases.
   </Accordion>
-  <Accordion title="Does webhook-only failure fall back to email?">
-    The explicit webhook-only path returns a webhook delivery error. Do not promise email fallback for that mode; inspect the submission result and receiver before retrying.
+
+  <Accordion title="Headers">
+    | Header | Value |
+    |--------|-------|
+    | `Content-Type` | `application/json` |
+    | `User-Agent` | `MSPortal-FlowWebhook/1.0` |
+    | `X-MSPortal-Event` | `ticket.submitted` or `ticket.test` |
+    | `X-MSPortal-Tenant` | Your tenant ID, or `test-tenant` on test events |
+    | `X-MSPortal-Signature` | `sha256=` plus an HMAC-SHA256 hex digest, only when a shared secret is set |
   </Accordion>
-  <Accordion title="Why does my receiver expect ticket.created but receive something else?">
-    The current real event is ticket.submitted. Update the receiver’s event handling and schema deliberately, retaining compatibility with any older producers you still use.
+</AccordionGroup>
+
+## Verify the signature
+
+When a shared secret is set, compute `HMAC-SHA256(secret, raw request body)` as lowercase hex, add the `sha256=` prefix, and compare it to `X-MSPortal-Signature`. Use the raw body bytes before you parse or re-serialize the JSON.
+
+A valid signature shows the sender knew the secret. It does not stop a request from being replayed, so make your receiver safe to run twice for any step that must not repeat.
+
+## Check recent deliveries
+
+Open the saved template and expand **Flow Webhook (JSON)**. **Recent deliveries** lists each attempt with its time, HTTP status, duration, and any error. Test attempts carry a **Test** badge. MSPortal sees only the HTTP result, so also check your receiving flow's run history.
+
+## Embedded templates
+
+If a template contains an [embedded template](/user-guides/ticketing/how-to-create-a-ticket-template#embedded-templates), each template's own webhook fires on its own. The parent's webhook fires for the parent submission, and each embedded template's webhook fires for that embed's ticket. Test the nesting you plan to use. To stop an embed from firing a webhook, leave it unconfigured on the embedded template.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| "Add a webhook URL before testing" | Enter a URL first. |
+| Test returns HTTP 4xx or 5xx | The message shows the status and the first part of your endpoint's reply. Check authentication and your flow's schema. In Power Automate, save the flow once after adding the trigger, or the URL returns 404. |
+| "Webhook URL must point to a public host" | Use a public hostname. Private, loopback, and link-local addresses are blocked. |
+| "Webhook URL must use https://" | Change the URL to start with `https://`. |
+| The test arrived but real submissions do not | Confirm the template is active and that you clicked **Save Template** after enabling the webhook. Then submit from **Tickets > New Ticket** and check your flow's run history. |
+| Your flow expects `ticket.created` | The current real event is `ticket.submitted`. Update the receiver. |
+| HMAC check fails after **Parse JSON** | Parsing and re-serializing changes whitespace and key order. Hash the raw body exactly as received, with the same secret. |
+| You need to know if a PSA ticket exists | Check `ticket.number`. It is `null` when no PSA ticket was created. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Send test event save my settings?">
+    No. It sends a real request using the current editor values. Click **Save Template** before you expect real submissions to use them.
   </Accordion>
-  <Accordion title="Does HTTP 200 prove my provisioning flow completed?">
-    No. It proves the endpoint returned success. Inspect downstream steps and the final created or changed record in the receiving system.
+  <Accordion title="Can the test event trigger real actions?">
+    Yes. Your flow must recognize `ticket.test` and handle it safely. Use a controlled test path.
   </Accordion>
-  <Accordion title="Why does HMAC verification fail after Parse JSON?">
-    Parsing and reserializing can change whitespace or property order. Verify the digest over the raw bytes received, using the same shared secret.
+  <Accordion title="How do I stop a template from creating PSA tickets?">
+    Choose **Webhook only** and save. Clearing individual PSA fields is not enough on its own.
+  </Accordion>
+  <Accordion title="Does HTTP 200 prove my provisioning flow finished?">
+    No. It proves the endpoint accepted the request. Check the later steps and the final record in the receiving system.
   </Accordion>
   <Accordion title="Should I resubmit after a timeout?">
-    Check recent delivery history, the receiver and any PSA ticket first. A timeout does not prove no action occurred, and resubmission may duplicate work.
+    Check **Recent deliveries**, your flow, and the PSA first. A timeout does not prove nothing happened, and resubmitting can duplicate work.
+  </Accordion>
+  <Accordion title="Do branches use the parent's webhook?">
+    Yes. A company branch without its own webhook setting uses the parent template's.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template)
-- [Open a ticket with AI](/user-guides/ticketing/open-a-ticket-with-ai)
+- [Create a ticket with AI assistance](/user-guides/ticketing/open-a-ticket-with-ai)

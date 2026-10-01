@@ -4,107 +4,102 @@ description: 'Connect GitHub Copilot in VS Code or Copilot CLI to the MSPortal M
 icon: 'github'
 ---
 
-GitHub Copilot can use MSPortal's MCP tools to work with the tickets, devices, reports, compliance data, and other portal information your MSPortal account can access. The connection uses browser-based OAuth, so you do not need to create or store an API key.
-
-This guide covers **GitHub Copilot Chat in VS Code** and the standalone **GitHub Copilot CLI**.
+Use this guide to connect GitHub Copilot Chat in VS Code, or the GitHub Copilot CLI, to MSPortal's MCP tools. It is for MSP staff and API consumers. The connection uses browser OAuth, so you do not create or store an API key.
 
 <Warning>
-GitHub documents a remote OAuth limitation for Copilot cloud agent and code review. Use an OAuth-capable local client for this connection; confirm the current [GitHub cloud-agent restrictions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/configure-mcp-servers) before choosing that surface.
+GitHub Copilot's cloud coding agent and code review do not support remote MCP servers that use OAuth. Connect MSPortal through Copilot Chat in your local VS Code or through Copilot CLI.
 </Warning>
 
-## Prerequisites
+## Before you start
 
-- An MSPortal account that you can sign in to.
-- The **MCP Server** write permission in MSPortal. Your MSP administrator manages Company-user permissions. Setup access does not grant every portal tool.
-- Your MSPortal server URL from **Settings → MCP Server**.
-- For VS Code: a current version of VS Code with GitHub Copilot installed and signed in.
-- For Copilot CLI: GitHub Copilot CLI installed and signed in. Run `copilot login` if needed.
+- An MSPortal account you can sign in to.
+- The **MCP Server** write permission in MSPortal. If the setup cards are disabled, ask your MSP administrator for it.
+- Your **Server URL** from **Settings > MCP Server**.
+- For VS Code, a current VS Code with GitHub Copilot installed and signed in.
+- For Copilot CLI, GitHub Copilot CLI installed and signed in. Run `copilot login` if needed.
 
 ## Connect GitHub Copilot in VS Code
 
 <Steps>
   <Step title="Open the MSPortal MCP settings">
-    In MSPortal, go to **Settings → MCP Server** and select **GitHub Copilot (VS Code)**.
+    In MSPortal, go to **Settings > MCP Server**. Under **Connect your client**, click **GitHub Copilot (VS Code)**.
   </Step>
-
   <Step title="Add the server to VS Code">
-    Click **Add to GitHub Copilot (VS Code)** in the setup dialog, then allow VS Code to open the configuration.
+    Click **Add to GitHub Copilot (VS Code)** in the dialog and allow VS Code to open the configuration.
 
-    You can also open the VS Code Command Palette, run **MCP: Add Server**, choose **HTTP**, and paste your MSPortal server URL. Name the server `msportal`, then choose whether to install it globally or in the current workspace.
-
-    <Tip>
-    Choose the global option if you want MSPortal available in Copilot Chat across all of your VS Code workspaces.
-    </Tip>
+    You can also open the VS Code Command Palette, run **MCP: Add Server**, choose **HTTP**, and paste your Server URL. Name the server `msportal`, then choose whether to install it globally or in the current workspace. Choose global if you want MSPortal in every workspace.
   </Step>
-
   <Step title="Trust and authenticate the server">
-    Allow VS Code to start the server. When your browser opens, sign in to MSPortal, review the requested access, and click **Approve**.
+    Allow VS Code to start the server. When your browser opens, sign in to MSPortal, review the access you are asked for and click **Allow access**.
   </Step>
-
   <Step title="Enable the MSPortal tools">
-    Open GitHub Copilot Chat, select **Agent** mode, and click **Configure Tools** in the chat input. Confirm that the MSPortal tools you want to use are enabled.
+    Open GitHub Copilot Chat, select **Agent** mode, and click **Configure Tools** in the chat input. Make sure the MSPortal tools you want are enabled.
   </Step>
-
   <Step title="Test the connection">
-    Ask Copilot:
-
-    > List the MSPortal tools you can use.
-
-    Check the actual connected server and tool list. Then ask Copilot to call get_current_user and verify the expected tenant and company context. A generated list of tool names without a real connection is not a passing test.
+    Ask Copilot to call **get_current_user**. The answer should show your user, tenant and company. A list of tool names without a real tool call does not prove the connection works.
   </Step>
 </Steps>
 
-### Manual VS Code configuration
+### Configure VS Code by hand
 
-If you prefer to configure the server manually, run **MCP: Open User Configuration** from the VS Code Command Palette and add:
+If you prefer, run **MCP: Open User Configuration** from the Command Palette and add:
 
 ```json
 {
   "servers": {
     "msportal": {
       "type": "http",
-      "url": "<your-server-url>"
+      "url": "YOUR_SERVER_URL"
     }
   }
 }
 ```
 
-Save the file, then use the actions shown above the `msportal` entry to start and authenticate the server.
+Save the file. Then use the actions above the `msportal` entry to start and authenticate the server.
 
 ## Connect GitHub Copilot CLI
 
 <Steps>
-  <Step title="Copy your MSPortal server URL">
-    In MSPortal, go to **Settings → MCP Server** and copy the **Server URL**.
+  <Step title="Copy your Server URL">
+    In MSPortal, go to **Settings > MCP Server** and copy the **Server URL**.
   </Step>
-
   <Step title="Add the remote server">
-    Run the following command, replacing the placeholder with the URL you copied:
+    Run this command, with your URL in place of the placeholder:
 
     ```bash
-    copilot mcp add --transport http msportal <your-server-url>
+    copilot mcp add --transport http msportal YOUR_SERVER_URL
     ```
   </Step>
-
   <Step title="Authenticate with MSPortal">
-    Start Copilot CLI with `copilot`, open its `/mcp` management interface and follow the authentication prompt for `msportal`. Complete MSPortal browser sign-in and consent. Use your installed version’s MCP help if its authentication controls differ; GitHub sign-in and MSPortal authorization are separate.
-  </Step>
+    Start Copilot CLI with `copilot`, then enter:
 
+    ```text
+    /mcp auth msportal
+    ```
+
+    In the browser window that opens, sign in to MSPortal, review the access and click **Allow access**. Signing in to GitHub does not authorize MSPortal, so you need this separate step.
+  </Step>
   <Step title="Verify the connection">
-    Use `copilot mcp get msportal` to inspect configuration and tools, and `/mcp list` in an interactive session to inspect server status. Verify an actual get_current_user call before requesting client data. See the [official CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference).
+    In Copilot CLI, enter:
+
+    ```text
+    /mcp show msportal
+    ```
+
+    Check that the server is connected and lists its tools. Then ask Copilot to call **get_current_user** and check the user and tenant.
   </Step>
 </Steps>
 
-### Manual Copilot CLI configuration
+### Configure Copilot CLI by hand
 
-You can configure the same connection in `~/.copilot/mcp-config.json`:
+You can set up the same connection in `~/.copilot/mcp-config.json`:
 
 ```json
 {
   "mcpServers": {
     "msportal": {
       "type": "http",
-      "url": "<your-server-url>",
+      "url": "YOUR_SERVER_URL",
       "tools": ["*"]
     }
   }
@@ -112,79 +107,80 @@ You can configure the same connection in `~/.copilot/mcp-config.json`:
 ```
 
 <Note>
-VS Code and Copilot CLI use different configuration formats. VS Code uses a `servers` object in its `mcp.json`; Copilot CLI uses an `mcpServers` object in `~/.copilot/mcp-config.json`. Do not assume the CLI reads `.vscode/mcp.json` directly. Workspace `.mcp.json` and user configurations can have different precedence; inspect which entry your client actually loaded.
+VS Code and Copilot CLI use different formats. VS Code uses a `servers` object in its `mcp.json`. Copilot CLI uses an `mcpServers` object in `~/.copilot/mcp-config.json` and does not read `.vscode/mcp.json`.
 </Note>
 
-## Grouped tools and existing connections
+## Use the grouped tools
 
-The consolidated MSPortal catalog exposes up to **93 public tools** covering 260 existing operations. Copilot can discover tools such as `query_projects` and `manage_planner`, then choose the relevant action using the tool's schema. The available subset depends on your deployed server version and access.
+The MSPortal catalog groups operations into up to **93 public tools** that cover 260 existing operations. Copilot sees tools such as `query_projects` and `manage_planner` and picks the action from each tool's schema. What you see depends on the server version and your access.
 
-Existing calls using individual names, such as `list_projects`, continue to work with their original arguments. Pending confirmations retain their operation identity and expiry. Consolidation alone does not require a new server URL or broader OAuth access.
+Calls with the old single-operation names, such as `list_projects`, still work with their original arguments. Pending confirmations keep their operation and expiry. You do not need a new Server URL or more access.
 
-When adopting the grouped catalog, refresh the client's discovered tools and review **Configure Tools** or any explicit `tools` allowlist. Enable the new public names you need. The example `"tools": ["*"]` above is not tied to individual legacy names, but grants no extra server permissions. Custom clients that expect old names in `tools/list` need to update their discovery logic. See the [action-to-tool mapping](/user-guides/mcp-server/tools-reference).
+When you move to the grouped catalog, refresh Copilot's tool list. In VS Code, open **Configure Tools** and enable the new tool names. In Copilot CLI, check any explicit `tools` list. The `"tools": ["*"]` example above does not name old tools and grants no extra permissions. A custom client that needs the old names in `tools/list` must update its discovery logic. See the [tool reference](/user-guides/mcp-server/tools-reference).
 
-## Before requesting changes
+## Ask Copilot for changes safely
 
-Ask Copilot to start with read tools and the intended company. Review the tool calls and output before requesting writes. The client’s tool-approval prompt, MSPortal OAuth consent and a portal proposal confirmation are different steps.
+<Steps>
+  <Step title="Start with read tools">
+    Ask Copilot to use read tools for the company you name. Check the tool calls and what they returned.
+  </Step>
+  <Step title="Request a change">
+    Ask for the change. Most changes return a proposal first. Read it.
+  </Step>
+  <Step title="Approve, then check">
+    Approve only a proposal that matches your intent. Then open the record to check the result.
+  </Step>
+</Steps>
 
-Most mutations stage a proposal, but some tools run immediately. Marking notifications changes state; feedback submission sends an explicitly requested message. See [MCP action behavior](/user-guides/mcp-server/index#confirmation-before-changes). Do not assume a global client approval setting adds a missing server confirmation.
+Copilot's tool-approval prompt, MSPortal's access prompt and a proposal confirmation are three different steps. A client-wide approval setting does not replace the proposal. Some tools run at once. Marking notifications changes state, and feedback submission sends the message you asked for. See [Confirmation before changes](/user-guides/mcp-server/index#confirmation-before-changes).
 
-## Manage access
+## Review or remove the connection
 
-The access you approve is also limited by your MSPortal role, tenant, and company visibility. To review or remove the connection, return to **Settings → MCP Server** in MSPortal and use **Revoke** beside the connected Copilot client.
+<Steps>
+  <Step title="Open MCP Server settings">
+    In MSPortal, go to **Settings > MCP Server** and find **Connected clients**.
+  </Step>
+  <Step title="Revoke the Copilot connection">
+    Click **Revoke** beside the Copilot client and confirm.
+  </Step>
+</Steps>
 
-Revocation does not remove local configuration or erase previously returned data. Existing access tokens can remain valid until expiry, up to about 15 minutes; ask your MSP administrator about MCP permission removal if subsequent requests must be blocked through the role check.
+The access you approve is limited by your MSPortal role, tenant and company visibility. Revoking does not delete your local Copilot configuration or take back data already returned. An issued access token can work for up to about 15 minutes. Ask your MSP administrator to remove your MCP permission if requests must stop sooner.
 
 ## Troubleshooting
 
-<AccordionGroup>
-  <Accordion title="The browser sign-in did not open">
-    In VS Code, run **MCP: List Servers**, select **msportal**, and choose the authentication action. In Copilot CLI, open `/mcp` and follow the installed version’s authentication controls.
-  </Accordion>
-
-  <Accordion title="MSPortal does not appear in Copilot">
-    In VS Code, run **MCP: List Servers** and confirm `msportal` is started. In Copilot CLI, inspect `/mcp list` and `copilot mcp get msportal`. Remember that VS Code and Copilot CLI use separate configuration files.
-  </Accordion>
-
-  <Accordion title="Copilot cannot see an MSPortal tool">
-    Look up the operation's public tool name in the MCP Tools Reference. In VS Code, open **Configure Tools** in Copilot Chat and confirm that grouped tool is enabled. Update any explicit legacy-name allowlist when adopting the grouped catalog, then check your MCP consent and MSPortal role permissions.
-  </Accordion>
-
-  <Accordion title="Your organization blocks the MCP server">
-    GitHub and VS Code organization policies can restrict which MCP servers are allowed. Ask your GitHub or VS Code administrator to allow the MSPortal server URL.
-  </Accordion>
-
-  <Accordion title="The connection stopped working">
-    Re-authenticate the server. If that does not resolve the issue, open **Settings → MCP Server** in MSPortal, revoke the Copilot connection, and connect it again.
-  </Accordion>
-</AccordionGroup>
+| Problem | What to do |
+| --- | --- |
+| The browser sign-in did not open | In VS Code, run **MCP: List Servers**, select **msportal** and choose the authentication action. In Copilot CLI, run `/mcp auth msportal`. |
+| MSPortal does not appear in Copilot | In VS Code, run **MCP: List Servers** and check that `msportal` is started. In Copilot CLI, run `/mcp show msportal`. The two clients use separate configuration files. |
+| Copilot cannot see a tool | Find its grouped tool name in the [tool reference](/user-guides/mcp-server/tools-reference). In VS Code, check **Configure Tools**. Update any list of old tool names, then check your approved access and your MSPortal role. |
+| Your organization blocks the server | GitHub and VS Code policies can limit which MCP servers are allowed. Ask your administrator to allow the MSPortal Server URL. |
+| The connection stopped working | Authenticate again. If that fails, revoke the Copilot connection in **Settings > MCP Server** and connect again. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does signing in to GitHub also authorize MSPortal?">
-    No. Complete the MSPortal browser sign-in and consent separately for the server connection.
+    No. Sign in to MSPortal and approve access separately for the server connection.
   </Accordion>
-  <Accordion title="Are VS Code and Copilot CLI configurations interchangeable?">
-    No. Their configuration formats and loading precedence differ. Inspect the server actually loaded by each client instead of copying the other format unchanged.
+  <Accordion title="Can VS Code and Copilot CLI share one configuration?">
+    No. The formats and file locations differ. Do not copy one into the other.
   </Accordion>
-  <Accordion title="Does an enabled tool bypass Company scope?">
-    No. MSPortal still applies OAuth access, role permissions, company scope and tool-specific restrictions.
+  <Accordion title="Does enabling a tool bypass company scope?">
+    No. MSPortal still applies your OAuth access, role permissions, company scope and tool limits.
   </Accordion>
-  <Accordion title="Does Revoke delete my local MCP configuration?">
-    No. It revokes the MSPortal grant and refresh sessions. Remove or disable the local entry separately if you no longer want it configured.
+  <Accordion title="Does Revoke delete my local MCP setup?">
+    No. It revokes the MSPortal grant and refresh sessions. Remove the local entry yourself if you do not want it.
   </Accordion>
-  <Accordion title="Does an assistant listing tools prove the connection works?">
-    No. Inspect server status and require a real get_current_user tool call with the expected identity before requesting company records.
+  <Accordion title="Does Copilot listing tools prove the connection works?">
+    No. Check the server status and ask Copilot to call **get_current_user** with the right user and tenant before you ask for company data.
   </Accordion>
-  <Accordion title="Does a client approval prompt replace the portal confirmation?">
-    No. They serve different purposes. Review staged proposals and immediate-action behavior in the MCP Server guide before authorizing work.
+  <Accordion title="Does Copilot's approval prompt replace the proposal confirmation?">
+    No. They are separate. Review the proposal before you approve it.
   </Accordion>
 </AccordionGroup>
 
-## Related resources
+## Related guides
 
-- [MCP Server overview](/user-guides/mcp-server/index) — understand access, consent, permissions, and connection management.
-- [MCP Tools Reference](/user-guides/mcp-server/tools-reference) — see every tool available through the MSPortal MCP server.
-- [Add and manage MCP servers in VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers) — official VS Code instructions.
-- [Add MCP servers to GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) — official GitHub instructions.
+- [MCP Server](/user-guides/mcp-server/index)
+- [MCP Tools Reference](/user-guides/mcp-server/tools-reference)

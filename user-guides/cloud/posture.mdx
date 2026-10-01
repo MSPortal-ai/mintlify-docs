@@ -1,84 +1,125 @@
 ---
 title: 'Read cloud security posture'
-description: 'Open Company or portfolio posture, distinguish Microsoft and Google scores, and find the right detail view.'
+description: 'Open company or portfolio posture, tell Microsoft and Google scores apart, and find the right detail view.'
 icon: 'shield-check'
 ---
 
-Open **Cloud > Posture** to read the latest stored Microsoft 365 and Google Workspace posture information available for your company. The page summarizes synchronized evidence; it is not a live security audit or a guarantee that an environment is secure.
+Use **Cloud > Posture** to read the latest stored security posture for Microsoft 365 and Google Workspace. This page is for MSP staff and company users. The scores come from the last sync. They are not a live security audit.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. Company users ask their MSP to change access, provider settings or security configuration.
+## Before you start
 
-## Open your company's posture
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- Microsoft 365 or Google Workspace must be connected for the company in **Settings > Integrations**.
+- For Google Workspace, **Daily security posture** must be turned on under **Sync settings** for the Google Workspace connection. Google posture is calculated once a day.
+- Company users see only their own company.
 
-1. Open **Cloud**, then **Posture**.
-2. Confirm the company selected in the top bar. If you can select companies, choose the company you want to review.
-3. With one company selected, read its available details directly: Google calculated checks, Microsoft Secure Score, or both. There is no separate one-row overview table.
-4. With Global View or multiple companies selected, use the overview table. Open a Google row for its checks dialog; open a Microsoft row or its score for the company's Secure Score page.
-5. Check the provider and snapshot date before interpreting a score. Ask your MSP about missing or old information.
+## Read one company's posture
 
-A company can have one latest row for each provider. A connected company without a stored snapshot can be absent. Selecting a company with no available snapshot shows an empty-state message.
+<Steps>
+  <Step title="Open Cloud > Posture">
+    Click **Cloud** in the sidebar. The **Posture** tab opens first when you have Cloud read access.
+  </Step>
+  <Step title="Pick one company">
+    Use the company selector in the top bar and choose a company. The page shows that company's posture directly. There is no company table.
+  </Step>
+  <Step title="Read the Google Workspace card">
+    If the company uses Google Workspace, a card shows the company name, the snapshot date, the score, and the six calculated checks. See [Understand Google posture checks](/user-guides/cloud/google-posture-checks).
+  </Step>
+  <Step title="Read the Microsoft Secure Score">
+    If the company uses Microsoft 365, the Microsoft Secure Score page appears below. Use the **Secure Score** and **Current Posture** buttons to switch views.
+  </Step>
+</Steps>
 
-## Read the overview
+If the company has no stored posture, the page reads **No cloud posture snapshot has been recorded for this company yet.**
 
-| Field | Meaning |
+## Read the portfolio overview
+
+<Steps>
+  <Step title="Pick several companies">
+    Use the company selector in the top bar. Choose **Global View** or **Assigned Companies**. The overview table appears.
+  </Step>
+  <Step title="Read the score">
+    The **Secure score** column shows a percentage bar for each company and provider. Microsoft rows use Microsoft Secure Score. Google rows use the MSPortal calculation.
+  </Step>
+  <Step title="Open a row">
+    Click a Microsoft 365 row, or its score bar, to open that company's Secure Score. Click a Google Workspace row to open its checks in a dialog.
+  </Step>
+  <Step title="Check the snapshot date">
+    Read **Snapshot date** before you compare scores. To see when the data last synced, show **Last synced** with **Columns > Save Changes**.
+  </Step>
+</Steps>
+
+The table shows the latest snapshot for each company and provider, 20 rows per page. A company that uses both providers has two rows.
+
+| Column | What it shows |
 | --- | --- |
-| **Company** | Company associated with the snapshot. |
-| **Provider** | Microsoft 365 or Google Workspace. The column can disappear when the loaded results contain only one provider. |
-| **Secure score** | Rounded percentage from the stored points. Microsoft rows use Microsoft Secure Score; Google rows use the MSPortal calculation. |
-| **Snapshot date** | Date of the stored snapshot. It does not prove every underlying signal was collected on that date. |
-| **Checks** | Number of stored Google checks, or Microsoft controls for a Microsoft row. |
-| **Last synced** | Hidden by default; show it through **Columns**, then **Save Changes**. This is the main snapshot's timestamp. |
+| **Company** | The company. Hidden when one company is selected. |
+| **Provider** | Microsoft 365 or Google Workspace. Shown only when both appear in the results. |
+| **Secure score** | The score as a rounded percentage. |
+| **MFA**, **Domains**, and **Devices** | Percentages from Current Posture. Shown only when your MSP has the CIPP integration and the page has values. Click a percentage to open that company's Current Posture. |
+| **Snapshot date** | The date of the stored snapshot. |
+| **Checks** | The number of calculated checks for Google Workspace, or **Microsoft controls** for Microsoft 365. |
+| **Last synced** | Hidden by default. When the snapshot last synced. |
 
-The current table has no separate Score source column. The Google detail identifies its source as **MSPortal**. Microsoft details are on **Secure Score**. Always identify the provider before comparing percentages.
+## Switch between posture views
 
-## Choose a Microsoft view
+When Microsoft 365 is connected, buttons above the table switch views.
 
-When Microsoft 365 is connected, the available navigation can include:
-
-- **Overview**: the multi-company snapshot table; omitted for one selected company.
-- **Secure Score**: Microsoft controls and score detail.
-- **Current Posture**: additional Microsoft posture information when the required CIPP integration and feature are available.
-
-<Frame caption="This MSP example has Overview and Secure Score. Current Posture appears only when its required integration and feature are available.">
-  <img src="/images/product/cloud-posture-view-controls.png" alt="Cloud Posture Overview and Secure Score navigation." width="404" height="72" />
+<Frame caption="Overview and Secure Score are always available. Current Posture appears only with the CIPP integration.">
+  <img src="/images/product/cloud-posture-view-controls.png" alt="Cloud Posture Overview and Secure Score buttons." width="404" height="72" />
 </Frame>
 
-You do not need to select Microsoft in a Provider filter before opening Secure Score from the portfolio navigation. A Google-only entry can omit Microsoft view links.
+| Button | What it opens |
+| --- | --- |
+| **Overview** | The portfolio table. Hidden when one company is selected. |
+| **Secure Score** | Microsoft controls and score detail. See [Microsoft Secure Score](/user-guides/microsoft-365/index). |
+| **Current Posture** | Microsoft posture from CIPP, for one company. Needs the CIPP integration. See [Microsoft 365 posture](/user-guides/microsoft-365/posture). |
 
-Some Microsoft overview rows also show **MFA**, **Domains** and **Devices** percentages from Current Posture data. These columns require the integration and available values on the loaded page. Click a populated percentage to open that company's Current Posture. They are separate measures, not components added to Microsoft Secure Score. A dash or omitted column does not establish a pass. The overview's Last synced field is not a separate freshness timestamp for each of these measures.
+## Ask for help with a finding
 
-## Follow up on a finding
+<Steps>
+  <Step title="Company users: open a ticket">
+    [Open a ticket](/user-guides/ticketing/open-a-ticket) with the company, the provider, the snapshot date, the check or control, and your concern.
+  </Step>
+  <Step title="MSP staff: confirm in the provider">
+    Check the evidence in Microsoft 365 or Google Workspace, then plan the change. The new score appears after the next daily sync.
+  </Step>
+</Steps>
 
-Company users should [start with the Home AI Assistant](/user-guides/ticketing/open-a-ticket) to request help. Include the company, provider, snapshot date, check or control, and the concern. MSP staff verify the provider evidence and plan changes in the appropriate workflow.
+This page cannot change security settings, run a sync, export a file, or show past days.
 
-The overview and Google checks have no security-setting edit, run-now, CSV export or history selector. Microsoft detail and Current Posture are separate workflows; opening a row does not itself fix a finding.
+## Troubleshooting
 
-## FAQs
+| Problem | What to do |
+| --- | --- |
+| The **Posture** tab is missing | Your role does not have Cloud read access. |
+| A company has no row | The company has no stored snapshot yet. For Google Workspace, ask MSP staff to turn on **Daily security posture** under **Sync settings** on the Google Workspace connection. |
+| You see **No daily cloud posture snapshots match these filters.** | Click **Clear Filters** and check the company selector. |
+| **Current Posture** is missing | It needs the CIPP integration. Ask your MSP. |
+| **MFA**, **Domains**, and **Devices** are missing | They need the CIPP integration and values on the current page. A missing column is not a passing result. |
+| The snapshot date is old | Google usage reports can be late and delay a new snapshot. Ask your MSP to check the integration. |
+| You see **You do not have access to this Cloud data.** | Your role lacks Cloud read access. |
+
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why do I see details instead of a company table?">
-    Exactly one company is selected. Posture shows that company's available Google checks and Microsoft Secure Score directly. Broader company scope uses the overview table.
+    You selected exactly one company. With more than one company, the overview table appears.
   </Accordion>
-  <Accordion title="Do Microsoft and Google use the same score calculation?">
-    No. Microsoft rows use Microsoft Secure Score; Google rows use MSPortal's six-check calculation. Similar percentages are not equivalent evidence.
+  <Accordion title="Do Microsoft and Google use the same score?">
+    No. Microsoft uses Microsoft Secure Score. Google uses an MSPortal calculation with six checks and 100 points. Do not compare the two percentages directly.
   </Accordion>
   <Accordion title="Where did the Score source column go?">
-    The current overview combines the percentage under Secure score. Use Provider and the detail view to identify its source; Google's detail shows MSPortal.
+    The overview has one **Secure score** column. Use **Provider** to tell the source. The Google detail shows **MSPortal** as its score source.
   </Accordion>
-  <Accordion title="Why is Current Posture missing?">
-    It is a Microsoft view requiring the CIPP feature and integration. It is not part of the Google checks screen. Ask your MSP about availability.
-  </Accordion>
-  <Accordion title="Why are MFA, Domains or Devices columns missing?">
-    They require the relevant integration and populated data on the loaded page. Missing values are not a clean security result.
-  </Accordion>
-  <Accordion title="Can I see every day's Google score in this overview?">
-    No. It shows the latest stored snapshot per company and provider and has no date-history selector. Older snapshot storage does not make history browsing available here.
+  <Accordion title="Can I see past days?">
+    No. The page shows the latest snapshot for each company and provider.
   </Accordion>
   <Accordion title="Does a new Snapshot date mean every input is current?">
-    No. Google reporting signals can lag behind the sync date, and other providers have their own collection schedules. Check the evidence with your MSP.
+    No. Google usage reports run about three days behind. Directory data is read at sync time.
   </Accordion>
-  <Accordion title="Can a Company user fix a security setting from the overview?">
-    No. Start with the Home AI Assistant to request MSP help, including the provider, date and finding. This reader does not change provider security settings.
+  <Accordion title="Can I fix a setting from this page?">
+    No. Ask your MSP.
   </Accordion>
 </AccordionGroup>
 
@@ -87,4 +128,4 @@ The overview and Google checks have no security-setting edit, run-now, CSV expor
 - [Find and filter posture snapshots](/user-guides/cloud/find-posture)
 - [Understand Google posture checks](/user-guides/cloud/google-posture-checks)
 - [Microsoft Secure Score](/user-guides/microsoft-365/index)
-- [Microsoft Current Posture](/user-guides/microsoft-365/posture)
+- [Microsoft 365 posture](/user-guides/microsoft-365/posture)

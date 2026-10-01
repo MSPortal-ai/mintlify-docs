@@ -1,101 +1,119 @@
 ---
 title: 'Add and edit device records'
-description: 'Create a manual inventory record, update supported device fields, and verify what was saved.'
+description: 'Add a manual device, update its details, and delete a record you no longer need.'
 icon: 'laptop-medical'
 ---
 
-Use the **Devices** inventory to record equipment and maintain supported inventory fields. Adding a manual record does not install an agent, discover hardware, or connect the device to an RMM service.
+Use the **Devices** inventory to record equipment and keep its details current. This guide is for people with manage access to Devices. Adding a record does not install an agent, find hardware, or connect the device to an RMM.
 
-<Note>
-For users granted the relevant device permissions. **Add Device** requires creation access; the current detail panel's **Edit** tab requires device-management access. MSP staff manage Company permission assignments. Editing also depends on the device's source and your portal's available editing access.
-</Note>
+## Before you start
+
+- You need manage access to Devices. Without it, the **Add Device** button is disabled and the **Edit** tab does not appear. Your MSP sets this.
+- Adding, editing, and deleting also need an active MSPortal subscription.
+- Search the inventory first. A connected tool may have already imported the device.
 
 ## Add a manual device
 
 <Steps>
   <Step title="Check for an existing record">
-    Search the inventory by name or serial number first. A connected tool may already have imported the device.
+    In **Devices**, filter by **Name** or **Serial Number**.
   </Step>
-  <Step title="Open Add Device">
-    In **Devices**, select **Add Device**. Enter the **Name**.
+  <Step title="Click Add Device">
+    The button is at the top right of the page. A panel opens.
   </Step>
-  <Step title="Confirm the company">
-    Review **Company** in the form, even when you opened it from a company-filtered list. Choose the intended company and, when appropriate, one of its **Location** options.
+  <Step title="Enter the Name">
+    **Name** is required.
   </Step>
-  <Step title="Enter known information">
-    Choose the device type and manufacturer where available. Add the operating system, IP/MAC address, serial number, and warranty dates you know. Leave unknown values empty instead of guessing.
+  <Step title="Choose the Company">
+    **Company** is required. Check it even when you opened the form from a filtered list. Then choose a **Location** for that company if it fits.
   </Step>
-  <Step title="Save and verify">
-    Select **Add Device** in the form footer. Check for a success or error message, then locate the record in the intended company's inventory and reopen it to verify the values.
+  <Step title="Fill in what you know">
+    Choose **Device Type** and **Manufacturer**. Add **OS**, **IP Address**, **MAC Address**, **Serial Number**, **Warranty Start**, and **Warranty End**. Leave unknown fields empty.
+  </Step>
+  <Step title="Check Status and Auto Apply Groups">
+    **Status** is a text field. **Auto Apply Groups** is a switch. Use them the way your MSP uses them. They do not change the physical device.
+  </Step>
+  <Step title="Click Add Device in the footer">
+    A message confirms "Device created successfully." Find the record in the company's inventory and open it to check the values. Click **Cancel** to close the panel without saving.
   </Step>
 </Steps>
 
-The form also exposes **Status** and **Auto Apply Groups**. Confirm your provider's intended inventory conventions before changing those options. These fields do not configure the physical device by themselves.
+## Edit a device
 
-To leave without submitting, select **Cancel** or close the panel. Review the values again if you reopen a form; do not assume every closed form resets its entries.
+<Steps>
+  <Step title="Open the device">
+    Click the device **Name**. You can also open the row menu and choose **Edit**.
+  </Step>
+  <Step title="Click the Edit tab">
+    Wait for the current values and custom fields to load.
+  </Step>
+  <Step title="Change the fields">
+    Update what you need. When you move a device, change **Company** and **Location** together. Fill in any custom fields your MSP marked as required.
+  </Step>
+  <Step title="Click Update Device">
+    Nothing saves until you click it. Watch for a success or error message, then reopen the device to check the saved values.
+  </Step>
+</Steps>
 
-## Edit a manual device
-
-1. Select the device name to open its details.
-2. Choose **Edit** and wait for the current values and custom fields to load.
-3. Update the relevant fields. Confirm the company and location together when moving a record.
-4. Enter any required custom-field values.
-5. Select **Update Device**.
-6. Review messages, reopen the device, and confirm the intended fields were saved.
-
-Typing into the Edit tab does not autosave. Its **Cancel** button returns to **Overview**; it does not reliably clear the draft fields in the same open panel. Close and reopen the device to check its stored values.
-
-<Warning>
-A closed panel alone does not prove the update succeeded. Check error messages and the reopened record. Device fields and custom fields can save separately, so verify both after an error before retrying.
-</Warning>
-
-<Frame caption="The Edit tab after saving and reopening a temporary example device. Blank fields have no recorded value.">
-  <img src="/images/product/device-manual-updated.png" alt="Manual device Edit tab showing the verified saved serial number, company, and Update Device button" width="1200" height="1920" />
+<Frame caption="The Edit tab after saving and reopening an example device. Blank fields have no recorded value.">
+  <img src="/images/product/device-manual-updated.png" alt="Manual device Edit tab showing the saved serial number, company, and Update Device button" width="1200" height="1920" />
 </Frame>
 
-## Editing devices from integrations
+**Cancel** discards your changes and returns to **Overview**. If you close the panel with unsaved changes, MSPortal asks "Discard your unsaved changes to this device?"
 
-An imported device can display fields that are controlled by its source. Available input fields do not guarantee that the source supports saving every change from this panel.
+Device fields and custom fields save separately. If an error appears, reopen the device and check both before you try again.
 
-- Meraki records show several synchronized fields as locked.
-- Some source types reject inventory editing from this workflow.
-- A source may support only part of an update, such as a name change.
-- A later synchronization can replace source-controlled values.
+## Edit a device that came from an integration
 
-For a source-controlled correction, ask the MSP to review the connected tool and the supported import/update workflow. Do not assume **Update Device** changes the physical computer or writes every field back to the external RMM/PSA.
+Synced devices take their details from the connected tool.
 
-## Remove an inventory record
+- Meraki devices show some fields as read-only ("Some fields synced from Meraki"). You can still change warranty dates, company, location, and custom fields.
+- A field the connected tool controls can be replaced at the next sync.
+- **Update Device** changes the portal record. It does not change the physical computer or write the change back to your RMM or PSA.
 
-With device-management permission, open the record's row **… > Delete**, check the device named in the confirmation, and select **Delete** only when it is the intended record. Verify the resulting inventory afterward.
+For a correction in a source-controlled field, ask your MSP to fix it in the connected tool or its import settings.
 
-Deletion removes the portal inventory record; it does not wipe the computer or uninstall a remote-management agent. Integrated-device import handling can also change, so the MSP should review the relevant source if the device later reappears or needs importing again. The inventory does not offer an undo button for a completed deletion.
+## Delete a device record
+
+<Steps>
+  <Step title="Open the row menu">
+    Click the actions button at the end of the device's row.
+  </Step>
+  <Step title="Choose Delete">
+    This needs manage access to Devices.
+  </Step>
+  <Step title="Confirm">
+    Check the name in the **Delete Device** dialog, then click **Delete**.
+  </Step>
+</Steps>
+
+To delete several devices, check their rows and choose **Delete Selected** from the **Actions** menu. The dialog says a device synced from an integration is not imported again on the next sync, and that this cannot be undone.
+
+Deleting removes the portal record only. It does not wipe the computer or remove an agent.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Add Device** is disabled | You need manage access to Devices. Ask your MSP. |
+| No **Edit** tab | The same permission applies. Without it you see **Read-only mode**. |
+| The change did not appear | Check for an error message, reopen the device, and look at both device fields and custom fields. |
+| A synced field changed back | The connected tool controls it. Ask your MSP to correct it there. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Add Device install monitoring or antivirus software?">
-    No. It creates an inventory record. The MSP configures agents and integrations through the appropriate tools.
+  <Accordion title="Does Add Device install monitoring or antivirus?">
+    No. It only creates an inventory record. Your MSP sets up agents and integrations elsewhere.
   </Accordion>
-  <Accordion title="Why must I check Company when the list is already filtered?">
-    The form has its own company selection. Confirm it explicitly so the record is created in the intended company.
+  <Accordion title="Why do I have to check Company when the list is already filtered?">
+    The form has its own company field. Check it so the record lands in the right company.
   </Accordion>
-  <Accordion title="Why can I add a device but cannot see Edit?">
-    Creation and the current panel's editing control have different permission requirements. Ask the MSP to review your intended access.
-  </Accordion>
-  <Accordion title="Does changing a field save immediately?">
-    No. Use **Add Device** for a new record or **Update Device** for the Edit tab. Verify the stored values afterward.
-  </Accordion>
-  <Accordion title="Does Cancel in Edit discard all my typed changes?">
-    It returns to Overview. Draft values can remain when you return to Edit in the same panel. Close and reopen the record to review stored values.
-  </Accordion>
-  <Accordion title="Why did the panel close but my change did not appear?">
-    Review any error message and reopen the record. The source may not support the change, or part of the save may have failed. A closed panel is not sufficient proof of success.
-  </Accordion>
-  <Accordion title="Can I change every field on a synchronized device?">
-    No. Some fields are locked, and some providers reject or support only part of an update. The MSP should review the source-controlled record and verify the result after synchronization.
+  <Accordion title="Does a field save as soon as I type?">
+    No. Click **Add Device** for a new record or **Update Device** on the Edit tab.
   </Accordion>
   <Accordion title="Does Delete erase the physical device?">
-    No. It removes the portal inventory record. Device wiping, agent removal, and external system administration are separate operations.
+    No. It removes the portal record. Wiping a device or removing an agent is done in your RMM.
   </Accordion>
 </AccordionGroup>
 
@@ -103,4 +121,4 @@ Deletion removes the portal inventory record; it does not wipe the computer or u
 
 - [Find and export devices](/user-guides/devices/find-devices)
 - [Understand device details](/user-guides/devices/understand-device-details)
-- [Change a Company user's permissions — MSP](/user-guides/settings/change-company-user-permissions)
+- [Change a company user's permissions](/user-guides/settings/change-company-user-permissions)

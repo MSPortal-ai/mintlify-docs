@@ -6,12 +6,26 @@ description: How often MSPortal.ai refreshes data from each connected integratio
 MSPortal.ai keeps your data current by syncing automatically from every connected integration on a regular schedule. Higher-volume data that changes often (like tickets) refreshes frequently, while reference data that rarely changes (like product catalogs) refreshes once a day. Syncs are deliberately staggered throughout the day to keep the platform fast and responsive.
 
 <Info>
-All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may be adjusted over time as we tune performance. These are configured scheduling cadences, not freshness guarantees or completion deadlines. Enabled datasets, queueing, provider limits and failures affect actual completion.
+All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may change as we tune performance. A run can start later than its interval because of queueing, provider limits, turned-off datasets or errors.
 </Info>
 
 ## Need data updated right now?
 
-Open **Settings > Integrations** and use the supported sync action for the provider and dataset you need. Labels and scope differ: **Resync**, **Sync now**, **Quick Sync** and reference-data synchronization are not interchangeable. A request queues work; check the resulting timestamp and error before using the data. **Clear & Resync** is a destructive portal-data rebuild, not the default way to get a recent update.
+<Steps>
+  <Step title="Open Integrations">
+    Go to **Settings > Integrations** and find the integration you need.
+  </Step>
+  <Step title="Request a sync">
+    Use the sync action for the data you need. The integration card has a **Resync** icon, and some setup pages offer **Sync now** or **Quick Sync**. These refresh different sets of data, so read the action before you use it.
+  </Step>
+  <Step title="Check the result">
+    A request queues background work. Check the last synced time and any error before you rely on the data.
+  </Step>
+</Steps>
+
+<Warning>
+**Clear & Resync** removes the portal's data for that integration and rebuilds it. Do not use it to get a recent update. See [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations).
+</Warning>
 
 ## Microsoft 365
 
@@ -108,8 +122,6 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
 </AccordionGroup>
 
 ## RMM integrations
-
-<Note>Branch preview: software inventory runs daily for ConnectWise Asio and Datto RMM. These software schedules ship with the Devices software update.</Note>
 
 <AccordionGroup>
   <Accordion title="ConnectWise Asio software inventory">
@@ -298,33 +310,46 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
 
 ## I made a change in my source system and it's not showing up
 
-Identify the dataset and correct connection first. Check enabled scope, company mapping, the latest successful dataset timestamp and any error. A successful ticket sync does not refresh every reference list or financial dataset. After a manual request, wait for its result; refreshing the browser does not force the provider to synchronize.
+<Steps>
+  <Step title="Find the data area">
+    Note which data is stale (tickets, users, a reference list) and which integration it comes from.
+  </Step>
+  <Step title="Check scope and mapping">
+    Confirm that data area is turned on for the integration and the record's company is mapped.
+  </Step>
+  <Step title="Compare the schedule">
+    Find the data area in the tables above. A ticket sync does not refresh reference lists or financial data, which run on their own schedules.
+  </Step>
+  <Step title="Request a sync">
+    Use the sync action from **Need data updated right now?**, then check the last synced time and any error. Refreshing your browser does not start a provider sync.
+  </Step>
+</Steps>
 
 
-## Questions and troubleshooting
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Is the scheduled interval a guaranteed maximum delay?">
-    No. It describes when work is eligible or requested. Queueing, provider limits, disabled datasets and errors can delay completion. Use successful dataset timestamps as evidence of freshness.
+  <Accordion title="Is the interval a guaranteed maximum delay?">
+    No. It is how often the work is scheduled. Queueing, provider limits, turned-off datasets and errors can delay it. Use the last successful sync time to judge freshness.
   </Accordion>
-  <Accordion title="Will the card’s Resync update every dataset?">
-    Provider actions differ. Read the action and provider guide to confirm whether it refreshes tickets, reference data or a broader dataset set.
+  <Accordion title="Does the card's Resync update every dataset?">
+    No. What each sync action covers differs by integration. See the integration's guide.
   </Accordion>
   <Accordion title="Why did a new ticket status not appear after Quick Sync?">
-    Quick Sync can refresh tickets while statuses and routing options come from a separate reference-data synchronization. Check the relevant metadata sync and saved provider scope.
+    Quick Sync refreshes tickets. Statuses and routing options come from a separate reference-data sync that runs daily.
   </Accordion>
-  <Accordion title="Does refreshing the browser request a provider sync?">
-    No. It reloads portal data. Use a supported synchronization action when you intend background provider work.
+  <Accordion title="Does refreshing the browser request a sync?">
+    No. It only reloads what MSPortal already has.
   </Accordion>
-  <Accordion title="Should I use Clear and Resync for every stale record?">
-    No. That action removes portal data before rebuilding it. First check scope, mapping and errors and try the appropriate normal sync.
+  <Accordion title="Should I use Clear & Resync for stale records?">
+    No. It removes portal data before it rebuilds it. Check scope, mapping and errors first, then use a normal sync.
   </Accordion>
-  <Accordion title="What should I report when a requested sync remains stale?">
-    Provide the provider, dataset, affected company, last successful timestamp and visible error. Do not include client secrets or assume a queued request completed.
+  <Accordion title="What should I send to support if a sync stays stale?">
+    Send the integration, data area, affected company, last successful sync time and any visible error. Never include API secrets.
   </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
 - [Integrations FAQ](/user-guides/integrations/faq) - Troubleshooting common sync issues
 - [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations) - How to perform a full data resync

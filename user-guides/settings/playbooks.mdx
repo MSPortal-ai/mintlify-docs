@@ -4,72 +4,144 @@ description: "Browse standard playbooks and import checks into your tenant libra
 icon: book
 ---
 
-**Audience:** MSP staff with Playbooks settings read access. Importing requires **Manage Playbooks settings** permission and active billing. Company users do not administer this library.
+Use this page to browse the standard playbook library and import a playbook's checks into your tenant. It is for MSP staff.
 
-Open **Settings > Compliance > Playbooks**. Choose **Best Practices** for operational and technology reviews, or **Security Frameworks** for framework-specific content. Use **Search all playbooks** to search names and descriptions. The catalog shown in your account determines available products, versions and check counts.
+## Before you start
 
-<Frame caption="MSP example: the released library entry cards. Catalog counts can change.">
-  <img src="/images/product/playbooks-library-paths.png" alt="MSP example: the released library entry cards. Catalog counts can change." width="1856" height="506" />
-</Frame>
+- You need the `read_settings_playbooks` permission to browse the library.
+- You need the `manage_settings_playbooks` permission and an active billing account to import. Without it, the **Add** buttons and checkboxes are disabled or hidden.
+- Company users do not see this library.
+- Your tenant needs at least one status list. The import dialog asks for one for every playbook. Device playbooks can also use your device types.
 
-## Review before importing
+## Find a playbook
 
-Open a playbook's title, or the eye control for a CIS variant, to inspect its details and check list. This is a read-only catalog view. **Cancel** closes it.
+<Steps>
+  <Step title="Open Settings > Compliance > Playbooks">
+    The page shows two cards, **Best Practices** and **Security Frameworks**.
 
-The details footer's **Copy** button immediately copies the playbook using the default import path. It does not open the status-list/device-type review dialog. If you need to choose those values, close details and use the card's **Add** action instead.
+    <Frame caption="The Playbooks home page with the Best Practices and Security Frameworks cards.">
+      <img src="/images/product/playbooks-library-paths.png" alt="The Playbooks home page with the Best Practices and Security Frameworks cards" width="1856" height="506" />
+    </Frame>
+  </Step>
+  <Step title="Choose a path">
+    Click **Best Practices** for broad operational and technology reviews. Click **Security Frameworks** for **CIS Benchmarks**, **CAN/DGSI 104** and **NIS2**.
+  </Step>
+  <Step title="Or search everything">
+    Type in **Search all playbooks...** on the home page. The results list every matching playbook as a card. Click the clear button in the search box to go back to the two cards.
+  </Step>
+  <Step title="Go back">
+    Use the back arrow in the page header to return to the previous level.
+  </Step>
+</Steps>
 
-## Add one or several playbooks
+## Review a playbook before importing
 
-1. Click **Add** on the intended card, or select several playbook checkboxes and use **Add to Tenant** in the page header.
-2. In **Add Playbooks to Tenant**, review every selected playbook and its **Folder** destination.
-3. Choose a **Status list** for each playbook. An existing default can be preselected; verify that its answer choices fit the checks.
-4. For a Device playbook, review **Device types**. Suggested types are preselected when matching types exist. Remove unwanted types or use **Clear** before importing.
-5. Inspect any already-imported warning, then click **Add to Tenant** to perform the import. **Cancel** closes the pending dialog without importing.
-6. Open **Settings > Compliance > Checks** at the displayed folder and review the new checks. Open **Groups** to inspect the imported group and its membership.
+<Steps>
+  <Step title="Open the details">
+    Click the playbook's name on its card. On a CIS Benchmarks card, click the eye button next to the **L1**, **L2** or **Full** row instead.
+  </Step>
+  <Step title="Read the checks">
+    The details window is read-only. It shows the playbook's name, description, category, version and check list.
+  </Step>
+  <Step title="Close it">
+    Click **Cancel**.
+  </Step>
+</Steps>
 
-Selected device types receive the imported group association. That choice is more than a filter for the dialog; verify it before submitting. Company assessment/run assignment remains a separate workflow.
+<Note>
+The **Copy** button in the details window imports the playbook right away. It uses no status list, no device types and no review dialog. To choose those values, click **Cancel** and use **Add** on the card.
+</Note>
 
-## Understand the result
+## Import one or several playbooks
 
-Import creates a tenant check group and copies its checks into the indicated folder, using the chosen status list. It does not change endpoint security settings, complete assessments or prove a company compliant.
+<Steps>
+  <Step title="Pick the playbooks">
+    Click **Add** on one card. To import several at once, tick the checkbox on each card, then click **Add to Tenant** in the page header. The header button shows the count, such as **Add to Tenant (3)**.
+  </Step>
+  <Step title="Check the folder">
+    In **Add Playbooks to Tenant**, find **Folder:** under each playbook. This is where the checks land in Compliance.
+  </Step>
+  <Step title="Choose a status list">
+    Pick a **Status list** for each playbook. Your default status list is preselected when you have one. Check that its answer choices fit the playbook's checks.
+  </Step>
+  <Step title="Set device types (Device playbooks only)">
+    In **Device types**, review the preselected types tagged **Suggested**. Remove a type with the x on its tag, or click **Clear** to remove all of them. Selected device types receive the imported check group automatically.
+  </Step>
+  <Step title="Watch for the duplicate warning">
+    A playbook you already imported shows the warning **Already in your tenant. Importing again creates a second copy of this check group.** Click **Cancel** and clear that playbook's checkbox if you do not want a second copy.
+  </Step>
+  <Step title="Import">
+    Click **Add to Tenant**. A message names the folder that holds the new checks. Click **Cancel** instead to close the dialog without importing.
+  </Step>
+  <Step title="Check the result">
+    Open **Settings > Compliance > Checks** and look in the folder the message named. Open **Settings > Compliance > Groups** to see the new group.
+  </Step>
+</Steps>
 
-An **Imported** badge is informational. Importing again can create another group and another set of checks; it is not an update-in-place button. Before retrying after a failure, inspect the destination. In a multi-playbook operation, earlier playbooks may already have imported before a later one failed.
+## What an import does
 
-## Maintain imported content
+- It creates one check group named after the playbook.
+- It copies the playbook's checks into the folder shown in the dialog, using the status list you chose.
+- It links the group to the device types you selected.
+- It does not change settings on any endpoint, start an assessment or assign checks to a company.
 
-Edit the tenant copies in [Compliance settings](/user-guides/settings/compliance). Review their guidance, applicability, status list and group assignments before adding them to a run. The standard library is not a tenant editor with a universal active/archived toggle. Importing a newer catalog version should not be treated as silently updating earlier copies.
+The **Imported** badge on a card shows you already imported that playbook once. Importing again makes another group and another set of checks. Nothing updates in place.
 
-Use [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks) for product/version and profile selection. Use the [Compliance guide](/user-guides/compliance/index) to assess the resulting checks.
+## Edit imported checks
+
+<Steps>
+  <Step title="Open Settings > Compliance > Checks">
+    Find the imported checks in the folder named in the import message.
+  </Step>
+  <Step title="Edit the checks">
+    Change guidance, status list or other details. See [Compliance settings](/user-guides/settings/compliance).
+  </Step>
+  <Step title="Review the group">
+    Open **Groups** to check the group and its checks before adding it to a run.
+  </Step>
+</Steps>
+
+Importing a newer catalog version does not update your earlier copies.
+
+For CIS profiles, see [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks). For NIS2, see [Adding NIS2 playbooks](/user-guides/compliance/adding-nis2-playbooks). To assess the checks, see the [Compliance guide](/user-guides/compliance/index).
 
 ## Troubleshooting
 
-If Add is disabled, check Playbooks management permission and billing. If the dialog cannot proceed, select a status list for every playbook. If device types are missing, wait for the list to load and review available types; do not assume an empty selector automatically means all devices. If you cannot find imported checks, use the destination folder and group before repeating import.
+| Problem | What to do |
+| --- | --- |
+| **Add** is greyed out and no checkboxes appear | Ask an admin for the `manage_settings_playbooks` permission. |
+| **Add to Tenant** in the dialog is disabled | Pick a **Status list** for every playbook. Wait for the lists to load. |
+| The import fails with a billing error | Your tenant needs an active billing account to import. |
+| You cannot find the imported checks | Look in the folder named in the success message under **Settings > Compliance > Checks**. Check **Groups** before importing again. |
+| A bulk import failed partway through | Earlier playbooks in the list may already be imported. Check **Checks** and **Groups** before you retry. |
+| The Playbooks tab is missing | Ask an admin for the `read_settings_playbooks` permission. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Add immediately import the playbook?">
-    The card Add opens the mapping dialog. Import occurs when Add to Tenant is submitted in that dialog.
+  <Accordion title="Does Add import the playbook right away?">
+    No. **Add** on a card opens **Add Playbooks to Tenant**. The import happens when you click **Add to Tenant** in that dialog.
   </Accordion>
-  <Accordion title="Is Copy in details another way to open the mapping dialog?">
-    No. Copy immediately performs the default copy operation; use the card Add action to review status lists and device types first.
+  <Accordion title="What does Copy in the details window do?">
+    It imports the playbook immediately, with no status list and no device types. Use **Add** on the card to choose them.
   </Accordion>
   <Accordion title="Does importing apply a playbook to one company?">
-    It imports checks and a group into the tenant library. Company assessments and run assignments are separate.
+    No. It adds checks and a group to your tenant library. Company assessments and run assignments are separate.
   </Accordion>
-  <Accordion title="Does Imported prevent duplicate copies?">
-    No. It is informational; importing again can create another group and set of checks.
+  <Accordion title="Does the Imported badge stop me from importing again?">
+    No. Importing again creates a second group and a second set of checks.
   </Accordion>
-  <Accordion title="Do device-type selections only filter the preview?">
-    No. Selected device types receive the imported group association.
+  <Accordion title="Do the device type choices only filter the list?">
+    No. Each selected device type receives the imported group.
   </Accordion>
-  <Accordion title="Can a failed bulk import have partially succeeded?">
-    Yes. Inspect the destination groups and checks before retrying; earlier playbooks may already be imported.
+  <Accordion title="Can I import several playbooks at once?">
+    Yes. Tick each card's checkbox and click **Add to Tenant** in the page header. Each playbook gets its own status list and folder.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Compliance settings](/user-guides/settings/compliance)
-- [Playbook settings](/user-guides/settings/playbooks)
+- [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks)
+- [Adding NIS2 playbooks](/user-guides/compliance/adding-nis2-playbooks)
 - [Compliance assessments](/user-guides/compliance/index)

@@ -5,40 +5,69 @@ description: "Map the selected device source and verify actual inventory for eac
 icon: "server"
 ---
 
-**Audience:** MSP staff with integration-management access. Complete the selected RMM connection and company/site mapping first. The launch device workspace can also use Addigy when selected without a primary RMM.
+Bring devices from your RMM into the portal's inventory for each rollout company. This page is for MSP staff with integration-management access.
 
-## Review and import
+## Before you start
 
-1. Open the device step in **Launch Center**, or the provider's import area in **Settings > Integrations**.
-2. Check the provider instance and synchronization status. Review staged devices and the source company/site.
-3. Confirm company mappings before importing. A similar company name is not sufficient evidence that the records belong together.
-4. Review device-type mappings and ignored categories. Use the displayed import controls for the intended records and wait for the result.
-5. Open the actual **Devices** inventory for the target company and confirm imported records and their source.
-6. Return to Launch Center and inspect the device finding for each rollout company.
+- Finish the [RMM connection](/user-guides/getting-started/onboarding/rmm-setup) and map your sites or companies first. Devices from unmapped sites do not appear.
+- Check that at least one device sync finished. The first sync can take a while for a large account.
+- Importing only the pilot companies first keeps the first pass simple.
+- You can also use Addigy for this step when you chose it without a primary RMM.
 
-Mapping changes and imports can persist independently. In supported mapping screens, **Map with AI** saves generated device-type mappings immediately; inspect the result before importing. Do not treat it as a draft preview.
+## Import devices
+
+<Steps>
+  <Step title="Open the device page">
+    In **Launch Center**, select **Client devices** in **Setup guide**, then click **Open Device Import**. You can also open **Settings > Integrations**, click your integration, and open its **Devices** tab. ConnectWise Manage calls it **Configurations**, and Halo PSA and Syncro call it **Assets**.
+  </Step>
+  <Step title="Map the device types">
+    In the **Device Type Mappings** table, click **Quick Match** to map provider types to your device types by name. Click **Map with AI** for types name matching missed, and **Quick Create** for any type that still has no match. Or choose a type yourself in the **Maps To** dropdown. **Map with AI** saves right away, so review the result before you import.
+  </Step>
+  <Step title="Ignore what you do not track">
+    Check **Ignore** on categories you do not want, such as printers or sensors. Ignored types are hidden from pending imports.
+  </Step>
+  <Step title="Import">
+    Click **Import All Mapped** to import every unimported device of a mapped type. Or click **Import All** on one type row. Or tick devices in **Staged Devices** and click **Import Selected**. Wait for the result.
+  </Step>
+  <Step title="Turn on auto-sync (optional)">
+    Check **Auto-Sync** on a mapped type to import new devices of that type on every sync. Check the mapping first, because those devices are imported without review.
+  </Step>
+  <Step title="Check the inventory">
+    Open **Devices** in the sidebar, choose the company in the company selector, and confirm the imported devices and their source.
+  </Step>
+  <Step title="Check Launch Center">
+    In **Launch Center**, open **Live verification** and check **Devices imported for the rollout audience**.
+  </Step>
+</Steps>
+
+See [Import Devices](/user-guides/integrations/import-devices) for every control on the device page.
 
 ## What counts as ready
 
-The check looks for actual devices belonging to every rollout company and matching the selected primary RMM or applicable Addigy source. Pending staging rows, an unrelated manually entered device or a healthy integration alone do not prove that requirement is met.
+The check looks for real devices in the Devices inventory for every rollout company, from the RMM you selected, or from Addigy when you added it. These do not count: staged rows, a device you added by hand, or a healthy connection alone. It is a blocking check when your plan includes client data and a device integration. One imported device does not cover every company.
 
-Review ignored categories when a device count appears lower than expected. Excluded records may deliberately remain outside the import. Import only the intended pilot scope before expanding the rollout.
+If a device count looks low, check which categories you ignored. Excluded records stay out of the import on purpose.
 
 ## Troubleshooting
 
-If the staged list is empty, check synchronization and provider scope. If devices exist in staging but not inventory, check mapping, ignored types and the import result. If inventory exists but readiness still fails, check the selected provider and company rather than importing duplicates.
+| Problem | What to do |
+| --- | --- |
+| The staged list is empty | Check the sync status, the API user's scope, and that the sites are mapped. |
+| Devices are staged but not in inventory | Check the type mapping, ignored types, and the import result. |
+| Inventory exists but the check fails | Check that the devices belong to the selected RMM and to every rollout company. Do not import duplicates. |
+| A type cannot be imported | It needs a **Maps To** device type first. Ignored types cannot be imported. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Do staged devices count as imported inventory?">
-    No. Verify actual Devices records for the selected source and rollout company.
+    No. Check the real **Devices** records for the company.
   </Accordion>
   <Accordion title="Does one imported device satisfy a wider rollout?">
-    No. The check requires matching device evidence for every rollout company.
+    No. Each rollout company needs matching devices.
   </Accordion>
   <Accordion title="Is Map with AI a draft preview?">
-    No. Supported device-type mapping screens save its generated mappings immediately.
+    No. It saves the mappings it creates right away.
   </Accordion>
 </AccordionGroup>
 

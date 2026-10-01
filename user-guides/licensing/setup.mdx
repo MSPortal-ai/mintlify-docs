@@ -1,67 +1,94 @@
 ---
 title: 'Set Up Pax8 for Subscriptions and Storefront'
-description: 'Connect Pax8, verify mapped subscriptions, and continue to catalog and approval setup.'
+description: 'Connect Pax8, map companies, import subscriptions, and continue to catalog and approval setup.'
 icon: 'plug'
 ---
 
-This is an **MSP staff** setup task. Connect Pax8 to import distributor data, then configure what clients may see or request. Connecting a distributor does not automatically grant purchasing access.
+Use this guide to connect Pax8 so your subscriptions, products, and Azure usage appear in the Storefront. This page is for MSP staff. The full wizard guide is [Configure Pax8 Integration](/user-guides/integrations/enable-pax8-integration).
+
+## Before you start
+
+- You need an active Pax8 partner account and access to integration management in MSPortal.
+- You need your Pax8 sign-in and any MFA device, because Pax8 connects through OAuth.
+- Create the MSPortal companies you want to map first.
+- Connecting Pax8 does not let clients buy anything. Set up the catalog and self-service rules afterward.
 
 ## Connect Pax8
 
-Use the current [Configure Pax8 Integration](/user-guides/integrations/enable-pax8-integration) guide for the full setup sequence and reconnect/removal instructions. You need integration management access and authority to approve Pax8 OAuth.
+<Steps>
+  <Step title="Open Settings > Integrations">
+    Click **Settings** in the sidebar, then **Integrations**. Find **Pax8** and open its setup.
+  </Step>
+  <Step title="Connect">
+    Click **Connect to Pax8**, sign in to Pax8, and approve the request. You return to MSPortal when it finishes.
 
-1. Open **Settings > Integrations**, select the intended Pax8 connection and complete **Connect to Pax8**.
-2. On **Sync Settings**, decide whether to enable **Pax8 Invoices**. The switch saves immediately and enabling it requests invoice synchronization.
-3. On **Map Companies**, review Quick Match suggestions or select companies manually. **Import Selected** or **Next** saves pending mappings. Creating a new company and unlinking an existing mapping have separate immediate effects.
-4. On **Complete**, request **Sync Subscriptions** when needed, then inspect the imported subscriptions in **Storefront**. A started sync is not a completed import.
+    <Frame caption="The Connect step starts the Pax8 sign-in. Nothing is authorized until you approve it in Pax8.">
+      <img src="/images/product/pax8-oauth-connect.png" alt="Pax8 connection card with the Connect to Pax8 button." width="1024" height="380" />
+    </Frame>
+  </Step>
+  <Step title="Choose sync settings">
+    On **Sync Settings**, decide whether to turn on **Pax8 Invoices**. The switch saves right away. Turning it on starts an invoice sync into the Invoices page.
+  </Step>
+  <Step title="Map Pax8 companies">
+    On **Map Companies**, review the **Quick Match** suggestions or pick each MSPortal company by hand. Save the mappings with **Import Selected** or **Next**. Only mapped companies get subscriptions.
+  </Step>
+  <Step title="Sync subscriptions">
+    On **Complete**, click **Sync Subscriptions**. A message reads **Sync started**. Click **View Storefront** to open the Storefront.
+  </Step>
+</Steps>
 
-<Frame caption="MSP Pax8 setup entry; authorization has not been submitted.">
-  <img src="/images/product/pax8-oauth-connect.png" alt="Pax8 connection card with Connect to Pax8 action." width="1024" height="380" />
-</Frame>
+## Check the result
 
-## Verify the result and configure access
+<Steps>
+  <Step title="Open Storefront > Subscriptions">
+    Click **Storefront** in the sidebar. The subscriptions for your mapped companies appear after the sync finishes. A started sync is not a finished import.
+  </Step>
+  <Step title="Map any new companies">
+    If you add companies in Pax8 later, open the Pax8 setup again and map them.
+  </Step>
+  <Step title="Set the catalog and self-service rules">
+    Go to **Settings > Storefront**. See [Licensing](/user-guides/licensing/index).
+  </Step>
+</Steps>
 
-Check the intended provider account, saved company mappings and each company's available subscription data. Map newly discovered companies as needed. Provider data and background completion determine what appears.
-
-Use [Storefront](/user-guides/storefront/index) for the buying and subscription workflow, and [Licensing](/user-guides/licensing/index) for the related approval, catalog and self-service settings. Configure those rules deliberately before offering client purchasing.
-
-For Microsoft 365, Google Workspace or Adobe license counts and assignments, open **Cloud > Licenses**. The former `/licensing` inventory route opens Cloud Licenses; distributor setup is a separate task.
+For Microsoft 365, Google Workspace, or Adobe license counts and assignments, open **Cloud > Licenses**. See [Read cloud license usage](/user-guides/cloud/licenses).
 
 ## Troubleshooting
 
-| Symptom | What to check |
+| Problem | What to do |
 | --- | --- |
-| OAuth does not complete | Pax8 account authority, sign-in/MFA/consent and return to the correct connection. |
-| No companies or subscriptions | Discovery outcome, saved company mappings and the specific subscription sync result. |
-| Invoices are absent | The optional invoice-sync setting, source invoices and completed background sync. |
-| Clients cannot purchase | Company access, catalog visibility and approval/self-service rules; OAuth alone does not enable purchasing. |
-| Data remains stale | Connection and sync errors; use the provider setup guide before requesting another sync or reconnect. |
+| The Pax8 sign-in does not finish | Check that your Pax8 account has admin access and that pop-ups are allowed. Try again. |
+| No companies appear | Wait for the first sync, then reopen the setup. |
+| No subscriptions appear | Check that the Pax8 company is mapped to an MSPortal company, then run **Sync Subscriptions** again. |
+| Products are missing from the catalog | Open **Settings > Integrations**, open Pax8, and click **Sync product catalog**. |
+| Invoices are missing | Check that **Pax8 Invoices** is on and wait for the sync to finish. |
+| Data looks old | Pax8 data syncs once a day. Run **Sync Subscriptions** or **Sync product catalog** to refresh sooner. |
+| Pax8 stops syncing and asks you to reconnect | Open **Settings > Integrations**, open Pax8, and use **Reconnect**. |
+| Clients cannot buy | Connecting is not enough. Set catalog visibility and self-service rules in **Settings > Storefront**. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Is Pax8 setup still a three-step licensing wizard?">
-    The current provider sequence includes Connect, Sync Settings, Map Companies and Complete. Follow Configure Pax8 Integration for the current controls.
+  <Accordion title="Is setup a three-step wizard?">
+    No. The steps are **Connect**, **Sync Settings**, **Map Companies**, and **Complete**.
   </Accordion>
-  <Accordion title="Does Quick Match save company mappings?">
-    No. Review pending proposals, then save with Import Selected or Next. Creating a new MSPortal company does not itself save its pending provider link.
+  <Accordion title="Does Quick Match save my mappings?">
+    No. It only suggests matches. Save them with **Import Selected** or **Next**.
   </Accordion>
-  <Accordion title="Do I need a final Save for the Pax8 Invoices switch?">
-    No. It saves immediately. Enabling it requests invoice sync, whose outcome must be checked separately.
+  <Accordion title="Do I need to save the Pax8 Invoices switch?">
+    No. It saves right away.
   </Accordion>
-  <Accordion title="Does completing setup let every client purchase licenses?">
-    No. Configure role/company access, catalog visibility, approvals and self-service rules separately.
+  <Accordion title="Where do I set approvals and self-service?">
+    In **Settings > Storefront**. See [Licensing](/user-guides/licensing/index).
   </Accordion>
-  <Accordion title="Where do I find Microsoft 365 license assignments?">
-    Open Cloud > Licenses and use the cloud license guide. Pax8 setup and Storefront subscription purchasing are separate workflows.
-  </Accordion>
-  <Accordion title="Does removing Pax8 in MSPortal cancel its subscriptions?">
-    No. It removes the MSPortal connection and associated synchronized data. Subscription cancellation is a separate provider operation.
+  <Accordion title="Does deleting Pax8 in MSPortal cancel the subscriptions?">
+    No. It removes the MSPortal connection and the synced data. Subscriptions stay in Pax8.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Configure Pax8 Integration](/user-guides/integrations/enable-pax8-integration)
+- [Licensing](/user-guides/licensing/index)
 - [Storefront](/user-guides/storefront/index)
 - [Read cloud license usage](/user-guides/cloud/licenses)

@@ -1,87 +1,262 @@
 ---
-title: "Configure Cove Data Protection"
-description: "Connect Cove Data Protection, review company mappings and verify synchronization separately from setup."
-icon: "database"
+title: 'Configure Cove Backup Integration'
+description: 'Connect your Cove (N-able Backup) instance to MSPortal.ai to sync backup data and devices'
+icon: 'database'
 ---
 
-**Audience:** MSP staff with integration-management access and authorized credentials for the intended provider account. Open **Settings > Integrations**, find **Cove Data Protection**, and open its setup or configuration. If several connections exist, select the intended instance.
+This guide walks you through connecting your Cove (N-able Backup) instance to MSPortal.ai using our streamlined setup wizard.
 
-## Prepare the provider account
+## Prerequisites
 
-In Cove, open **Management > Users > API Users**, choose **Add API user**, select the appropriate customer account, enter a requested login name and select an appropriate role. Choose **Save and continue** and securely save the token; it is displayed only once. See [N-able’s API user instructions](https://documentation.n-able.com/covedataprotection/USERGUIDE/QSG/Content/service-management/console-new/user-management/add-user.htm).
+- Active Cove (N-able Backup) account with administrative access
+- MSPortal.ai account with integration management permissions
 
-Use an API user with access to the partners and backup information you need. A console sign-in account and an API user are different. Do not assume an account created under one client can see all sibling clients.
+## Part 1: Configure Cove
 
-## Connect
+Before connecting to MSPortal.ai, you need to create an API user in Cove with the appropriate permissions.
+
+### Create API User
+
+<Steps>
+  <Step title="Access User Management">
+    Log into your Cove (N-able Backup) management console and navigate to **Users** in the main menu.
+  </Step>
+
+  <Step title="Navigate to API Users">
+    Click on **API Users** to access the API user management section.
+  </Step>
+
+  <Step title="Add New API User">
+    Click **Add API Users** to begin creating your API user.
+  </Step>
+
+  <Step title="Select Customer">
+    In the customer selection dropdown, select your **top-level reseller name** (the account at the very top of the Customer hierarchy), not an individual client. This is the account that the API user will be associated with, and it gives the API user visibility into all of your sub-customers.
+  </Step>
+
+  <Step title="Configure User Details">
+    Configure the following settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **Login Name** | `MSPortal` (or any descriptive name) |
+    | **Role** | `Supporter` |
+
+    <Tip>
+      The Supporter role provides the necessary read permissions for MSPortal to sync your backup data without granting excessive access.
+    </Tip>
+  </Step>
+
+  <Step title="Save and Copy Token">
+    Click **Save** to create the API user. The system will generate an API token.
+
+    <Warning>
+      **Copy the API token immediately!** You will not be able to retrieve it again after leaving this page. Store it securely for use in MSPortal.ai.
+    </Warning>
+  </Step>
+</Steps>
+
+### Required Information
+
+Before proceeding to MSPortal, ensure you have the following:
+
+| Information | Description |
+|-------------|-------------|
+| **Partner Name** | Your **top-level reseller name** exactly as shown in the Cove management console (see below) |
+| **API User Name** | The login name you created (e.g., `MSPortal`) |
+| **API Token** | The token generated when creating the API user |
+
+#### Finding your Partner Name
+
+The Partner Name is your **top-level reseller account**, found at the top of the **Customer** dropdown in the Cove management console. It is the parent account that your individual clients are nested under, not one of those clients.
+
+In the example below, the Partner Name is `MSPortal.ai` (the top-level reseller). `Acme Corp` is a sub-customer nested beneath it and would **not** be used as the Partner Name.
 
 <Frame>
-  <img src="/images/product/cove-connection-fields.png" alt="Blank Cove API Token field and its explanation in MSPortal setup." width="892" height="172" />
+  <img src="/images/Cove/Cove Company.png" alt="Cove management console Customer dropdown showing the top-level reseller name above its nested sub-customers" />
 </Frame>
 
-The screenshot shows a blank MSP setup field, with no saved credential.
+<Warning>
+  Enter the **top-level reseller name**, not an individual client name. Using a sub-customer name is the most common cause of a failed connection test.
+</Warning>
 
-The wizard has **Connect** and **Map** steps.
+---
 
-| Field | What to enter |
-| --- | --- |
-| **Partner Name** | Your reseller/customer account name for the API user. For the full customer hierarchy, use the top-level reseller account, not an individual client. |
-| **API User Name** | The API user’s requested login name. |
-| **API Token** | The token generated for that API user. |
+## Part 2: MSPortal Setup Wizard
 
-1. Enter the credentials for the intended provider account.
-2. Choose **Test Connection** and resolve any reported error.
-3. For a new connection, choose **Create Integration** after the test succeeds.
-4. Continue to **Map** once the integration has been created.
+MSPortal.ai provides a guided setup wizard that walks you through connecting and configuring your Cove integration in 2 easy steps.
 
-Changing a new connection’s fields requires another test. Testing is separate from saving. For an existing connection, use **Retest Connection** when you need a current check; the saved verified state on opening the page is not a newly completed test.
+### Starting the Wizard
 
-On **Map**, use **Sync** to request the partner list if it is empty or stale. Creating the connection does not itself prove that partner or backup data has been imported.
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings** > **Integrations**.
+  </Step>
 
-## Map partners to companies
+  <Step title="Start Setup">
+    Find the **Cove Data Protection** row and click **Connect** (or **Configure** if it is already connected) to launch the setup wizard.
+  </Step>
+</Steps>
 
-1. Review the synchronized partner list. Use **Sync** if expected records are missing or stale, then wait for the result and refresh the list.
-2. Choose the correct MSPortal company for each intended partner, or use **Quick Match** and review the proposals.
-3. If a company does not exist, use the creation option carefully. Confirming creation creates the MSPortal company immediately; closing the wizard will not remove it.
-4. Review pending mappings and save them using the mapping screen’s save action or **Complete Setup**.
-5. Reopen the configuration and verify the saved company links. Check the destination company’s backup information after synchronization finishes.
+---
 
-Choosing a company stages a link. Removing an already saved link persists immediately; clearing a pending suggestion only clears the draft. **Complete Setup** saves pending mappings and requests background data synchronization. Its success message does not certify that the background job completed or that every backup is healthy.
+### Step 1: Connect
 
-Map the actual organization, not just a similar name. Mapping associates provider data with an MSPortal company; it does not create a provider customer or run a backup job.
+Enter your Cove API credentials to establish the connection.
 
-## Troubleshoot missing data
+<Steps>
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
 
-- **Connection test fails:** check the account scope and exact credentials. Confirm Partner Name matches the account under which the API user was created.
-- **Expected partner is absent:** confirm the API account can access it, request a list sync and inspect the result. Repeated company creation will not fix provider visibility.
-- **Data appears under the wrong company:** review the saved mapping for the correct connection before changing it.
-- **Setup finished but data is absent:** verify a saved company link and successful background sync. Allow the current job to finish before repeatedly requesting another.
-- **Credential replacement:** the existing Connect form’s retest is not a credential-update save action. Arrange the supported replacement with your administrator or MSPortal support before disabling the working credential.
+    | Field | Description |
+    |-------|-------------|
+    | **Partner Name** | Your **top-level reseller name** exactly as shown at the top of the Customer hierarchy in the Cove management console (e.g., `MSPortal.ai`), not an individual client |
+    | **API User Name** | The login name of your API user (e.g., `MSPortal`) |
+    | **API Token** | The token you copied when creating the API user |
 
-## Frequently asked questions
+    <Frame>
+      <img src="/images/product/cove-connection-fields.png" alt="Blank Cove API Token field and its explanation in MSPortal setup." width="892" height="172" />
+    </Frame>
 
-<AccordionGroup>
-  <Accordion title="Does Test Connection save the integration?">
-    No. For a new connection, wait for a successful test, then choose Create Integration. That action saves the connection; synchronization is separate.
-  </Accordion>
-  <Accordion title="Does Connection verified mean a new check just ran?">
-    An existing integration can open with its saved verified state. Use Retest Connection when you need a current connection check, then inspect the result.
-  </Accordion>
-  <Accordion title="Can I rotate the saved secret by typing a replacement and retesting?">
-    Do not treat a successful retest as a saved credential change. The existing connection’s Connect step does not offer a credential-update save action. Ask your MSPortal administrator or support for the supported replacement process before revoking the working credential.
-  </Accordion>
-  <Accordion title="Will Quick Match create companies or save every proposed match?">
-    Quick Match proposes links for review. Creating a missing company is a separate action that creates the company immediately; its provider link can still be pending. Review and save only the intended mappings.
-  </Accordion>
-  <Accordion title="Why is backup data still missing after Complete Setup?">
-    Completion saves pending mappings and requests background synchronization. Check the correct connection, saved company mappings, provider access and sync result. A setup-success message is not evidence that backup data has finished loading.
-  </Accordion>
-  <Accordion title="Is removing a saved company mapping only a draft?">
-    No. Removing a saved link persists immediately. Clearing an unsaved suggestion only removes that pending suggestion. Verify the company and provider record before unlinking.
-  </Accordion>
-</AccordionGroup>
+    <Note>
+      The Partner Name is your top-level reseller account, not one of your individual clients. The API User Name is the login name you created, not an email address.
+    </Note>
+  </Step>
 
-## Related guides
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials. You'll see a **Connection successful!** message and a green banner when the test passes.
 
-- [Integration directory](/user-guides/integrations/index)
-- [Import and link companies](/user-guides/integrations/import-companies)
-- [Integration troubleshooting](/user-guides/integrations/faq)
+    If the connection fails:
+    - Verify your Partner Name is your **top-level reseller name** (not an individual client) and matches exactly as shown in Cove
+    - Check that your API User Name is correct (the login name, not email)
+    - Ensure the API token is copied correctly without extra spaces
+    - Verify the API user has the Supporter role
+  </Step>
+
+  <Step title="Create Integration">
+    Once the connection test passes, click **Create Integration** to save your credentials.
+
+    <Note>
+      **Test Connection** does not save anything. If you change a field after testing, test again before you click **Create Integration**.
+    </Note>
+  </Step>
+
+  <Step title="Continue to Mapping">
+    Click **Next** to move to the Map step.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Map Partners
+
+Map Cove partners (clients/customers) to your MSPortal companies. This determines which backup data syncs to which company.
+
+<Steps>
+  <Step title="Sync Partners">
+    Partners do not load until you request them. Click **Sync Partners** (or **Sync** above the list) to fetch partners from your Cove account. The initial sync may take a few minutes depending on your account size.
+  </Step>
+
+  <Step title="Use Quick Match">
+    Click **Quick Match** to automatically match Cove partners to MSPortal companies based on name similarity. This saves time when you have many partners with matching names.
+
+    <Tip>
+      Quick Match uses intelligent name matching to find likely matches. Review the results and make manual adjustments as needed.
+    </Tip>
+  </Step>
+
+  <Step title="Manual Mapping">
+    For partners that weren't automatically matched or need adjustment:
+
+    1. Find the partner in the list
+    2. Click the **Select company...** dropdown in the **Mapped** column
+    3. Search for and select the correct MSPortal company
+
+    If the company does not exist yet, click the **+** button next to the dropdown to create it and map the partner in one go. MSPortal creates the company right away, so check for an existing match first to avoid duplicates.
+
+    To remove a mapping, click the **X** button next to the company badge. Removing a saved mapping takes effect immediately.
+  </Step>
+
+  <Step title="Save Your Mappings">
+    New matches show as **Pending** until you save them. Click **Import Selected** to save pending mappings. **Complete Setup** also saves any pending mappings before it closes the wizard.
+  </Step>
+
+  <Step title="Filter Partners">
+    Click the summary cards above the list to filter the view:
+    - **Total Items** - Show all synced partners
+    - **Mapped** - Show only partners linked to companies
+    - **Unmapped** - Show partners that still need mapping
+  </Step>
+
+  <Step title="Complete Setup">
+    Once you've mapped the partners you need, click **Complete Setup** to finish the wizard and return to **Settings** > **Integrations**.
+
+    <Info>
+      Only backup data from mapped partners syncs to MSPortal. You can return to add more mappings at any time.
+    </Info>
+  </Step>
+</Steps>
+
+---
+
+## Managing Your Integration
+
+After setup, you can manage your integration from **Settings** > **Integrations**:
+
+| Action | Description |
+|--------|-------------|
+| **Configure** | Re-open the setup wizard to retest the connection or add more partner mappings |
+| **Resync** | Trigger a manual sync of data from Cove |
+| **Rename** / **Disconnect** | In the row's **...** menu. Rename labels the connection; Disconnect removes it |
+| **Delete** | In the setup wizard footer. Removes the integration and its stored credentials |
+
+Cove supports more than one connection, so you can add a second Cove account as its own row.
+
+### Checking Your Credentials
+
+After the integration is created, the **Partner Name** and **API User Name** fields are locked. To check the stored token, click **Configure**, then click **Retest Connection** on the Connect step.
+
+<Warning>
+  **Retest Connection** does not save a new token. To move the integration to a new API user, contact support@msportal.ai before you delete the old API user in Cove.
+</Warning>
+
+---
+
+## Synchronization Process
+
+### Initial Sync
+- Partner data syncs when you first click **Sync Partners** on the Map step, or at the next scheduled partner sync
+- Backup data syncs separately and may take a few minutes
+- Only backup data from mapped partners syncs to MSPortal
+
+### Ongoing Sync
+
+| Data Type | Sync Frequency |
+|-----------|----------------|
+| Partners | Every 4 hours |
+| Devices | Every 30 minutes (at :10 and :40) |
+| Backup statistics | Every 30 minutes (at :15 and :45) |
+
+- Partner mappings persist until you change them
+- New partners appear after the next partner sync, or right away if you click **Sync** on the Map step
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify Partner Name (your top-level reseller name, not a client), API User Name, and Token are correct |
+| No partners appear | Click **Sync Partners** on the Map step to fetch data from Cove |
+| Backup data not showing | Ensure the partner is mapped to a company first |
+| Quick Match didn't work | Use manual mapping for partners with different names in Cove vs MSPortal |
+| Token expired/invalid | Create a new API user in Cove, then contact support@msportal.ai to move the integration to it |
+
+---
+
+## Important Notes
+
+- **Token Security**: Store your API token securely. If compromised, delete the API user in Cove and create a new one
+- **Partner Mapping**: Only backup data from mapped partners will sync to MSPortal
+- **Role Permissions**: The Supporter role provides read-only access, which is sufficient for MSPortal integration
+- **Sync Timing**: Initial synchronization may take several minutes depending on your account size
