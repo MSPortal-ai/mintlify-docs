@@ -4,7 +4,17 @@ description: 'Build reusable, structured forms that clients complete inside thei
 icon: 'clipboard-list'
 ---
 
+<Note>
+Branch preview: these instructions describe the unified Projects experience. Availability depends on your portal's rollout and permissions. Portals using the earlier experience still show the separate Onboarding settings and company workspace.
+</Note>
+
 **Audience:** MSP staff managing onboarding configuration. Clients completing assigned forms should use [Complete onboarding tasks and forms](/user-guides/client-onboarding/complete-tasks-and-forms).
+
+## Unified Projects navigation
+
+For the unified experience, open **Projects** and select the **Onboarding projects** quick filter to find a portal's linked project. Under **Overview**, the staff-only **MSP Dashboard** view provides the onboarding overview and operational metrics; **Project Plan > Tasks** contains the delivery and onboarding work, **Files & Forms > Documents** brings project files and client uploads together, and **Client Portal** contains **Pages**, **Activity**, **Key dates**, and **Portal settings**. Access and sharing still follow your permissions.
+
+Reusable settings now live in **Settings > Projects**: **Templates** includes templates, checklists, and forms, and **Client Portals** holds portals, client roles, pages, and PSA defaults. Existing company and settings onboarding links redirect when the unified experience is available; references to the earlier Onboarding workspace below apply to portals still using that experience.
 
 ## Before you begin
 
@@ -16,6 +26,22 @@ Onboarding Forms are reusable, structured data-collection definitions you build 
 Forms are the structured successor to linking a Survey on a task. When a form task has a form attached, clients fill out the form; if no form is attached, the task falls back to the older inline survey experience.
 </Note>
 
+## Fill forms from a project
+
+Forms can be used on regular projects without creating an onboarding portal. Open a project's **Files & Forms > Forms** area, choose an active form, fill its fields, and choose **Save progress** or **Submit**. The **Responses** table shows the saved entry; use **Edit** to correct a permitted response while its form is active.
+
+Staff with **Share forms with clients** permission can select a form and switch on **Share this form with clients**. Clients with project access and form permissions can then fill it in. Clients see only shared forms and their own responses. Internal staff responses stay private, including responses saved before sharing was enabled. Turn the sharing switch off to revoke access; an archived shared form remains available to staff for unsharing.
+
+**View forms and permitted responses** allows reading. **Submit and edit form responses** allows saving. A single-entry form keeps separate staff and individual-client responses; a repeatable form accepts additional entries. Staff can also review linked-portal responses when they hold onboarding read access.
+
+After the archived-response update is rolled out, **View** opens permitted saved project responses to archived forms as read-only. Editing, new entries, **Save progress**, and **Submit** remain unavailable while the form is archived. The same project access, form sharing, and response ownership rules still apply.
+
+Onboarding portal tasks keep their existing form workflow. Project response saves do not send data to Hudu or IT Glue automatically.
+
+A form's repeat-entry setting determines whether multiple entries are allowed. After saving, check the responses table before submitting again. When you switch forms or leave with unsaved answers, review the unsaved-changes prompt before discarding them. These entries are separate from creating or updating Hudu or IT Glue assets.
+
+See [Project Forms](/user-guides/projects/forms) for draft status, sharing, response links, and resuming an entry.
+
 ## Why Use Forms
 
 - **Collect structured data** — typed fields instead of free text, so answers are consistent across clients
@@ -25,11 +51,11 @@ Forms are the structured successor to linking a Survey on a task. When a form ta
 
 ## Building a Form
 
-Forms are managed in **Settings > Onboarding > Forms**, a workspace with a list of forms on the left and the selected form's details on the right.
+Forms are managed in **Settings > Projects > Templates > Forms**, a workspace with a list of forms on the left and the selected form's details on the right.
 
 <Steps>
   <Step title="Open the Forms tab">
-    Go to **Settings > Onboarding** and click the **Forms** tab.
+    Go to **Settings > Projects > Templates > Forms**.
   </Step>
   <Step title="Create a form">
     Click **New Form**. A draft form named "New Form" is immediately saved and selected; closing the workspace does not undo its creation.
@@ -82,6 +108,7 @@ Each field has a **Type** that controls how clients answer it:
 | **Location** | Select a location from the portal company |
 | **Device** | Select devices from the portal company |
 | **Contact** | Select a contact from the portal company |
+| **Content Block** | Read-only formatted text, such as instructions, terms, or a policy. Clients read it and answer nothing, unless you require acknowledgment |
 
 Location, Device, and Contact choices come from company data. Do not enter their options manually. If a picker is empty, check the company and available records.
 
@@ -94,6 +121,15 @@ Each field supports:
 - **Placeholder** — example text inside the input
 - **Help Text** — guidance shown under the field
 - **Options** — for select fields, one option per line or comma-separated
+
+A **Content Block** field swaps these settings for its own:
+
+- **Heading (optional)** is shown above the block. Leave it blank for a block with no heading.
+- **Content** is written in the rich-text editor, with bold, italics, colors, alignment, lists, and links. The client sees it as formatted, read-only text.
+- **Require Acknowledgment** adds a checkbox under the block. The client must tick it before the form can be saved.
+- **Acknowledgment Text** sets the checkbox label. It appears only when acknowledgment is required. Leave it blank to use "I have read and agree".
+
+Content blocks store no answer unless acknowledgment is required, and they can't be mapped to Hudu or IT Glue fields. Switching an existing field to a Content Block removes its mappings.
 Field keys are generated from labels. Give fields clear, distinct labels, and check existing submissions before changing the structure of a shared form.
 
 <Tip>
@@ -145,6 +181,7 @@ See [Onboarding Templates](/user-guides/client-onboarding/templates) for task co
 When a client opens a form task in their portal, the form renders inline with all its fields laid out by type — dropdowns for selects, toggles for Yes/No, date pickers, and so on. Required fields are marked.
 
 - Clients fill out the fields and click **Save Form**
+- Content blocks appear as formatted text across the full width of the form. When a block requires acknowledgment, **Save Form** stays unavailable until the client ticks its checkbox, and the entry records the acknowledgment as **Yes**
 - Wait for the save result; a previously displayed **Saved** badge can remain while the client edits, so changed values need another **Save Form**
 - If the form allows repeat entries, submitted entries appear as chips (Entry 1, Entry 2, …) and a **One More** button lets clients add another
 
@@ -154,6 +191,9 @@ When a client opens a form task in their portal, the form renders inline with al
 |------------|------------|
 | `read_settings_onboarding` | View forms |
 | `write_settings_onboarding` | Create, edit, and map forms |
+| `read_projects_forms` | View project forms and permitted responses |
+| `write_projects_forms` | Submit and edit project responses |
+| `write_projects_form_assignments` | Staff can share or unshare forms with project clients |
 
 ## Related Resources
 

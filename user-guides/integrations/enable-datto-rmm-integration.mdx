@@ -4,7 +4,7 @@ description: 'Connect Datto RMM, map sites to companies, and import device inven
 icon: 'plug'
 ---
 
-Connect **Datto RMM** to bring its sites and device inventory into MSPortal. The setup flow is **Connect → Map → Import**.
+Connect **Datto RMM** to bring its sites and device inventory into MSPortal. The setup flow is **Connect → Sync → Map → Import**.
 
 ## Before you start
 
@@ -17,7 +17,7 @@ Enable API access for your Datto account, then generate credentials for an autho
 1. Open **Settings > Integrations**, find **Datto RMM**, and choose its connection/setup action. Use **Configure** on the existing connection when managing an established setup.
 2. Enter the connection fields below.
 3. Choose **Test Connection** and resolve any reported error.
-4. After a successful test, choose **Create Integration**. This saves the connection and starts discovery. A successful test alone does not create it.
+4. After a successful test, choose **Create Integration**. This saves the connection. Continue through **Sync** to choose data categories and start discovery. A successful test alone does not create it.
 
 | Field | What to enter |
 | --- | --- |
@@ -30,6 +30,14 @@ Regenerating Datto keys invalidates the previous pair. Coordinate replacement wi
 <img src="/images/product/datto-setup-connection.png" alt="Datto RMM setup in MSPortal with blank credential inputs" width="1024" height="1152" />
 
 MSP example: a new connection before credentials are entered. The embedded app hint uses older vendor navigation; follow the linked Datto instructions above for current API-key setup.
+
+## Choose what to sync
+
+<Note>Branch preview: this setup flow includes a dedicated **Sync** step.</Note>
+
+After connecting, open **Sync** and choose the data to import: **Companies (Datto sites), Devices, and Software**. Only categories supported by this provider appear. Continue with **Next** to save your choices before discovery and mapping. Existing connections keep their current behavior until you change a choice.
+
+Disabling a category stops future synchronization for that category. Turning **Software** off removes that integration's software inventory; turning it back on starts a new inventory sync. Device and company mapping still determine which records can appear in the portal.
 
 ## Map sites to companies
 
@@ -92,3 +100,7 @@ The wizard’s **Delete** action opens a **Delete Integration** confirmation. Re
 - [Import Devices](/user-guides/integrations/import-devices)
 - [Devices](/user-guides/devices/index)
 - [Integration settings](/user-guides/settings/integrations)
+
+<Frame caption="Branch preview: choose the Datto RMM data to sync.">
+  <img src="/images/product/pr1601-datto-sync-desktop.png" alt="Datto RMM Sync step with companies, devices and software choices" width="1440" height="960" />
+</Frame>
