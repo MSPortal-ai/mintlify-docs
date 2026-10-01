@@ -4,15 +4,63 @@ description: 'Configure client access, health statuses, display fields, Kanban, 
 icon: 'gear'
 ---
 
-Open **Settings > Projects** to configure the Projects area. The page has five tabs: **Client project access**, **Display Configuration**, **Kanban Board Settings**, **Status Mapping**, and **Custom Fields**.
+<Note>
+Branch preview: these instructions describe the unified Projects experience. Availability depends on your portal's rollout and permissions. Portals using the earlier experience still show the separate Onboarding settings and company workspace.
+</Note>
+
+Open **Settings > Projects** to configure the Projects area. The unified page has three top-level tabs:
+
+| Tab | Sections |
+| --- | --- |
+| **Project Settings** | **Display Configuration**, **Client project access**, **Task types**, **Kanban Board Settings**, **Status Mapping**, **Custom Fields**, **Project Types**, and **Upcoming projects** when available |
+| **Templates** | **Templates**, **Checklists**, and **Forms** |
+| **Client Portals** | **Portals**, **Client roles**, **Pages**, and **PSA projects** when a supported PSA is active |
+
+The default destination is **Project Settings > Display Configuration**. Your role controls the sections available to you. Existing saved links continue to select their destination.
 
 ## Before you start
 
-You need project-settings read access to view this page and write access to change it. PSA-specific selectors depend on the integrations and definitions available in your tenant.
+Project configuration requires project-settings read access to view and write access to change. The shared Templates and Forms libraries accept the relevant project-settings or onboarding-settings permission; Client Portals and checklist administration retain their onboarding-settings requirements. PSA-specific selectors depend on the integrations and definitions available in your tenant.
 
 <Warning>
-The first four tabs share the header **Save** button. **Custom Fields** changes are saved immediately; the header Save button does not apply to that tab.
+**Client project access**, **Display Configuration**, **Kanban Board Settings**, and **Status Mapping** share the header **Save** button. Project types, templates, forms, client portal sections, and custom fields use their own save behavior.
 </Warning>
+
+## Task types and individual task controls
+
+<Note>Branch preview: the filterable Task types table requires the completed Projects update. The instructions below describe the intended post-rollout workflow.</Note>
+
+Open **Project Settings > Task types** to filter synced types by **Task Name**, **Board**, **Internal only**, or **Include in scheduling**. Each switch saves immediately; it does not use the header Save button. Type defaults apply to existing and future tasks of that type, while individual overrides are preserved.
+
+**Internal only** hides a task from company users throughout MSPortal. **Include in scheduling** controls whether it appears in schedules, Gantt, and planning timelines. Turn a switch back to reverse the setting. Excluded tasks retain their saved dependency links, which remain inactive until scheduling is enabled again. These controls do not change the source PSA record.
+
+For an individual task, open its **Visibility and scheduling** controls from the project task view. Changes save immediately. **Use type default** removes an individual override so the current type default applies. If no synced task types appear, individual task controls remain available.
+
+## Project Types
+
+Create an MSPortal type with **New project type**, enter its name, choose **Onboarding**, and select **Create**. Native types can be renamed through **Project type actions > Edit**. PSA types appear from your synced project data.
+
+The **Onboarding** switch saves immediately. It marks the type for the onboarding workflow; selecting that type in a template exposes client portal, pages, dates, and invitation settings. A template with no type keeps the onboarding default. Plain project types expose ticket defaults and the project actions register without portal-only configuration.
+
+Use **Archive** to remove a type from new template choices. Change the table's **Status** filter to find archived types and use **Restore**. Existing records retain their saved type.
+
+## Templates and checklists
+
+Open **Templates > Templates** for the shared project/onboarding template library. Choose **New Template**, set the project type, and create the template before adding its structure. Metadata uses **Save Changes**; phases, items, and named actions save through their individual editors. See [Project Templates](/user-guides/projects/templates) and [Onboarding Templates](/user-guides/client-onboarding/templates).
+
+**Templates > Checklists** holds reusable checklist definitions. Checklist library access still depends on onboarding-settings permissions.
+
+## Forms
+
+Open **Templates > Forms** to maintain reusable form definitions. Both staff and clients can fill forms from a project's **Forms** tab, including ordinary projects without an onboarding portal. See [Project Forms](/user-guides/projects/forms) for Save progress, Submit, sharing, and response links. Staff explicitly share each form before clients can access it. After the archived-response update is rolled out, existing permitted responses to archived forms open with **View** and cannot be edited or resubmitted. Archiving does not change client sharing or response ownership. Onboarding clients can also continue filling forms attached to portal tasks. See [Forms](/user-guides/client-onboarding/forms).
+
+In the role editor, Projects includes separate **View forms and permitted responses**, **Submit and edit form responses**, and **Share forms with clients** permissions. Sharing is a staff operation. Give client roles view and submit permissions as needed; project/company access still applies. General project write access does not automatically grant these granular controls after a role is edited.
+
+Each person can also use **Customize view** in a project to arrange destinations within each section. Personal navigation preferences do not change the access rules configured here.
+
+## Client Portals
+
+This tab requires onboarding-settings access and groups **Portals**, **Client roles**, **Pages**, and, when a supported integration is available, **PSA projects**. Each section keeps its own controls and save behavior. These are reusable settings and the portal directory; manage an individual portal from **Overview > Dashboard > MSP Dashboard** and **Overview > Client Portal** in its linked project.
 
 ## Client project access
 
@@ -51,7 +99,18 @@ Use this to exclude statuses that should not participate in portfolio health. It
 
 Use **Section Visibility** for detail-page sections and **Field Visibility** for cards and the project list. The sample card preview updates as you change the display options.
 
-<img src="/images/product/projects-settings-display.png" alt="Display Configuration showing project section visibility controls" width="1900" height="1680" />
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Branch preview: project configuration, reusable templates, and client portal settings have separate top-level tabs.">
+      <img src="/images/product/projects-settings-display-desktop-preview.png" alt="Project Settings with Project Settings, Templates, and Client Portals groups above Display Configuration" width="2880" height="1920" />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="Branch preview: the configuration sections wrap beneath the main settings tabs.">
+      <img src="/images/product/projects-settings-display-mobile-preview.png" alt="Project Settings on a phone with grouped navigation, wrapped section controls, and Teams chat setting" width="780" height="1688" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 Section controls include Timeline, Progress, Hours, Financials, Details, PSA Phases, Project Tickets, Time Entries, and Project Summary. Field controls include project/company names, status, progress, dates, hours, revenue, summary, project lead, variances, timeline comparison, and Last Changed.
 
@@ -63,6 +122,16 @@ Section controls include Timeline, Progress, Hours, Financials, Details, PSA Pha
 Select **Save** after reviewing your selections. Display controls do not grant access to projects or replace role permissions.
 
 <img src="/images/product/projects-settings-fields.png" alt="Project field visibility checkboxes alongside the complete built-in card preview" width="1756" height="850" />
+
+### Chat with the project manager in Teams
+
+<Note>
+Branch preview: this setting is part of the upcoming Projects update. Saving the setting is awaiting rollout verification; the [contact guide](/user-guides/projects/manage-project-contacts#chat-with-the-project-manager-in-teams) shows the local icon preview.
+</Note>
+
+**Chat with project manager in Teams** is off by default. Enable it under **Display Configuration**, then select **Save** to make a small Teams icon available beside **Project Lead** in a project's **Overview > Dashboard > Client Dashboard > Contacts**. Turn the switch off and save to hide it again.
+
+The shortcut uses the project manager's existing email address, which must match their Teams sign-in address. It stays hidden when no valid address is available. Clients still need access to the project, and Teams must permit them to chat with the manager.
 
 ## Kanban Board Settings
 
@@ -133,7 +202,7 @@ Changes on Custom Fields are saved immediately. Configure role access before sho
 
 ## Save, leave, or reset
 
-The header **Save** applies changes across the first four tabs. Switching between them lets you continue editing the same unsaved configuration. If you navigate away with unsaved changes, review the app's prompt.
+The header **Save** applies changes across Client project access, Display Configuration, Kanban Board Settings, and Status Mapping. Switching between them lets you continue editing the same unsaved configuration. If you navigate away with unsaved changes, review the app's prompt.
 
 **Reset** replaces those form values with product defaults locally. Review the result and select **Save** to apply it. Reset does not immediately change the saved configuration and does not undo separately saved Custom Fields changes.
 
@@ -155,6 +224,6 @@ The header **Save** applies changes across the first four tabs. Switching betwee
   <Card title="Integrations" icon="plug" href="/user-guides/integrations/index">Configure your PSA connection.</Card>
 </CardGroup>
 
-## Native project templates
+## Shared project templates
 
-Use **Templates** to build reusable phases, tickets, decisions, and action items. Save a template, then use **Projects > New project** and select **MSPortal only** to create native delivery work. See [Project Templates](/user-guides/projects/templates) and [Native Projects](/user-guides/projects/native-projects). Template changes have their own save action; they do not use the display-settings Save button.
+Use **Templates** to build reusable phases, tasks, decisions, and action items, with optional client onboarding configuration selected by project type. Save a template, then use **Projects > New project** and select **MSPortal only** to create native delivery work. See [Project Templates](/user-guides/projects/templates) and [Native Projects](/user-guides/projects/native-projects). Template changes have their own save action; they do not use the display-settings Save button.
