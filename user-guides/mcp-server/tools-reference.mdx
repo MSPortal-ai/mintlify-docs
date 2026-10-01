@@ -155,6 +155,22 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 | `list_company_audit` | `query_readiness` | Read | `read_settings_companies`, `read_dashboards` | Superseded by list_company_readiness. List company audit metrics; its auditScore and missingItems are now computed from the tenant's Account Readiness requirements. Supports filtering by company, assigned company role (for example vCIO), or assigned team member. |
 | `list_company_readiness` | `query_readiness` | Read | `read_client_readiness` | List Account Readiness state per company: an honest 0-100 score plus every open check with its area, owner and the in-app page that fixes it. Use bulk_update_readiness to propose changes for human review. Confirmations require the approving person to review each company. |
 
+## Personal task lists
+
+**Module scopes:** `mcp.read`, `mcp.write`
+
+These MSP staff-only actions use the existing MCP read or write grants and require no task-specific role permission. Use the schemas returned by your connection for the available actions and parameters.
+
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `list_my_tasks` | `query_tasks` | Read | **MSP staff only.** MCP access | Read your own tasks with `scope: "mine"`, or tasks shared on your assigned companies with `scope: "my_companies"`. Returns up to 100 tasks in list order; completed tasks are excluded unless requested. Check the result's truncation indicator. |
+| `create_tasks` | `manage_tasks` | Write (confirm) | **MSP staff only.** MCP access | Stage up to 100 new tasks on your own list, optionally with a company tag and source link. A company tag shares the task with colleagues assigned to that company; omit it to keep the task private. |
+| `update_task` | `manage_tasks` | Write (confirm) | **MSP staff only.** MCP access | Stage changes to one editable task's title, description, status, priority, due date or company tag. Use this action to reopen a completed task by changing its status. |
+| `complete_tasks` | `manage_tasks` | Write (confirm) | **MSP staff only.** MCP access | Stage completing up to 100 editable tasks in one atomic batch. Resolve task IDs with `list_my_tasks` before proposing the change. |
+| `delete_tasks` | `manage_tasks` | Write (confirm) | **MSP staff only.** MCP access | Stage permanent deletion of up to 100 editable tasks. Deletion cannot be undone; use `complete_tasks` when the work is finished. |
+
+Ownership, company sharing and tenant boundaries are enforced when a change is committed. Private tasks can also be read by authorized task-list auditors in the portal. Scratch notes are not exposed by these tools. See [Tasks and notes](/user-guides/tasks/index) for the portal workflow.
+
 ## Planner
 
 **Module scopes:** `planner.read`, `planner.write`
@@ -569,18 +585,3 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 - [MCP Server setup and access](/user-guides/mcp-server/index)
 - [Connect GitHub Copilot](/user-guides/mcp-server/github-copilot)
 - [AI Assistant](/user-guides/ai-assistant/index)
-
-
-## Personal task lists — branch preview
-
-The private-task-list branch adds the following staff-only operations. Availability depends on the deployed catalog; use the schemas returned by your connection. Task tools use the existing `mcp.read` and `mcp.write` grants.
-
-| Operation | Purpose | Access |
-| --- | --- | --- |
-| `list_my_tasks` | Read your own tasks or your assigned companies' tasks | Read |
-| `create_tasks` | Propose up to 100 new tasks, optionally with a company and source link | Write; confirmation required |
-| `update_task` | Propose an edit to an editable task | Write; confirmation required |
-| `complete_tasks` | Complete a selected batch atomically | Write; confirmation required |
-| `delete_tasks` | Propose deletion of a selected batch | Write; confirmation required |
-
-Ownership, company sharing and tenant boundaries are enforced when a change is committed. Private tasks can also be read by authorized task-list auditors in the portal. Scratch notes are not exposed by these tools. See [Tasks and notes](/user-guides/tasks/index) for the portal workflow.
