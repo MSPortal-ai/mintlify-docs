@@ -7,14 +7,14 @@ icon: 'box-open'
 The **Software** tab under **Devices** lists the software installed on your clients' devices. It groups each product across devices and flags installs that have reached end of life, reach it soon, or are behind the latest update.
 
 <Note>
-For MSP staff with access to Devices. Company users do not see the Software tab. The tab appears when the Software inventory feature is turned on for your portal.
+Branch preview for the Devices software update. For MSP staff with access to Devices. Company users do not see the Software tab. The tab appears when the Software inventory feature is turned on for your portal.
 </Note>
 
 ## Before you start
 
 - Connect **ConnectWise Asio** or **Datto RMM** and import devices. Software is collected only for imported devices.
-- Software syncs once a day. A newly connected RMM shows software after its first daily sync.
-- Each RMM integration has a **Sync software inventory** switch, on by default. See [Turn software sync on or off](#turn-software-sync-on-or-off).
+- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported, and ongoing inventory syncs run daily.
+- See [Choose what the integration syncs](#choose-what-the-integration-syncs) to enable or disable inventory collection.
 
 ## Review software across your clients
 
@@ -23,43 +23,52 @@ For MSP staff with access to Devices. Company users do not see the Software tab.
     Select **Devices > Software**. The company selector applies, so choose the companies you want to review.
   </Step>
   <Step title="Read the summary">
-    The summary shows **Tracked products**, **Installs**, **Needs attention**, **Devices with inventory**, and **Last synced**. **Needs attention** breaks down into end of life, ending soon, and outdated installs.
+    The summary shows **Tracked products**, **Installs**, **Needs attention**, and **Devices with inventory**. **Needs attention** breaks down into end of life, ending soon, and outdated installs.
   </Step>
   <Step title="Focus on what needs attention">
-    Select **Needs attention** in the summary, or choose **Needs attention** in the **Status** filter. Use the **Product** filter to search by name or publisher.
+    Select **Needs attention** in the summary, or choose **Needs attention** in the **Status** filter. Use the **Product** filter to search by name or publisher. Every data column supports sorting and filtering: numeric columns accept ranges and **Next end of life** accepts a date range. Filters apply to the full matching inventory, including rows on later pages.
   </Step>
   <Step title="Choose which products to show">
     **Applications** is the default view. **Include system components** adds runtimes and vendor utilities that have no lifecycle data, such as Visual C++ redistributables. **Ignored** lists products you have ignored.
   </Step>
 </Steps>
 
-<Frame caption="Devices > Software for MSPortal Demo, with the Needs attention breakdown above the products table.">
-  <img src="/images/product/devices-software-list.png" alt="Software tab with tracked products, installs, needs attention and last synced, above a table of products with status badges" width="2880" height="1920" />
+<Frame caption="Branch preview: select products for bulk classification on Devices > Software.">
+  <img src="/images/product/pr1601-software-bulk-desktop.png" alt="Selected software products with bulk actions and sortable, filterable columns" width="1440" height="960" />
 </Frame>
 
 ## What each status means
 
 | Status | Meaning |
 | --- | --- |
-| **End of life** | The installed release passed its end-of-life date more than 30 days ago and no longer receives security updates. |
+| **End of life** | The release is end of life. Releases with a published end-of-life date are flagged after a 30-day grace period. |
 | **Ending soon** | The installed release reaches end of life within 90 days. Shown for releases with long support periods, such as Microsoft Office, .NET, Java and SQL Server. |
 | **Outdated** | The install is below the target version you set, or below the latest update published for its release. |
-| **Current** | No end-of-life date has passed and the install is not behind a known update. |
-| **Unknown** | The RMM reported no version for this install. |
+| **Current** | No lifecycle or version rule marks this install as needing attention. |
+| **Unknown** | The RMM reported no usable version for this install. |
 
-End-of-life dates and latest versions come from [endoflife.date](https://endoflife.date), refreshed daily. Products without lifecycle data are **Current** unless you set a target version.
+End-of-life dates and latest versions come from [endoflife.date](https://endoflife.date), refreshed daily. Products with a reported version but no lifecycle data are **Current** unless you set a target version. **Current** means no known issue was found; it does not establish that the vendor supports the installed release.
 
 ## Investigate a product
 
 Select a product to open its details. The sheet shows the lifecycle source, each installed version with its status and end-of-life date, and the devices that have the product.
 
 - Select a version to list only the devices running it. Select it again to clear the filter.
-- **Needs attention only** is on by default. Turn it off to see every device with the product.
+- The **Status** filter defaults to **Needs attention only**. Clear it to see every device with the product.
+- The compact device table supports sorting and filtering by device, company, version, and status. It displays 25 rows per page.
 - Select a device to open its details.
 
-<Frame caption="The product sheet for Google Chrome, showing the installed version, its end-of-life date, and the affected device.">
-  <img src="/images/product/devices-software-product-sheet.png" alt="Product sheet with lifecycle source link, key app and ignore actions, target version field, versions list and devices list" width="2880" height="1920" />
+<Frame caption="Branch preview: the product sheet with a compact table of affected devices.">
+  <img src="/images/product/pr1601-software-sheet-desktop.png" alt="Software product sheet with version details and a compact, filterable devices table" width="1440" height="960" />
 </Frame>
+
+### Update several products
+
+1. Select the intended products using their checkboxes. Selection applies to the current page, with up to 200 products per page.
+2. Open **Actions (selected count)** and choose **Mark as key app**, **Remove key app**, **Ignore**, or **Restore**.
+3. Review the result. Ignored products move to **Ignored**, where you can select and restore them. Changing company scope, filters, sorting, or pages clears selection.
+
+Bulk actions require permission to edit devices. They change the portal's software classification; they do not uninstall applications or change installed versions.
 
 ### Mark key apps, ignore products, and set a target version
 
@@ -75,25 +84,30 @@ MSP staff who can edit devices can change these settings in the product sheet. E
 
 Open a device from **Devices** and select its **Software** tab. The list shows each product with its version, status and end-of-life date, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
 
-<Frame caption="The Software tab in a device's details.">
-  <img src="/images/product/devices-software-device-tab.png" alt="Device details open on the Software tab, listing products with versions, status badges and end-of-life dates" width="2880" height="1920" />
+<Frame caption="Branch preview: device software with the resync action beside the close button.">
+  <img src="/images/product/pr1601-device-software-desktop.png" alt="Device details on the Software tab with resync beside the close button" width="1440" height="960" />
 </Frame>
 
-## Turn software sync on or off
+## Choose what the integration syncs
 
 <Steps>
   <Step title="Open the integration">
-    Go to **Settings > Integrations**, open your ConnectWise Asio or Datto RMM integration, and continue to the **Import** step.
+    Go to **Settings > Integrations**, open your ConnectWise Asio or Datto RMM integration, and continue to the **Sync** step.
   </Step>
-  <Step title="Change the switch">
-    Turn **Sync software inventory** off or on. The change saves immediately.
+  <Step title="Select supported categories">
+    Asio offers **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, and **Software**. Datto RMM offers **Companies (Datto sites)**, **Devices**, and **Software**.
+  </Step>
+  <Step title="Save your choices">
+    Select **Next** to save the choices and continue to company mapping and imports. Existing connections retain their current behavior until you save different choices.
   </Step>
 </Steps>
 
-Turning the switch off removes that integration's software data from MSPortal. Turning it on starts a software sync; results appear when it finishes.
+Turning **Software** off removes that integration's software inventory from MSPortal. Turning it on starts collection for imported devices; new connections collect software after their device import finishes. Disabling other categories stops their future synchronization.
 
-<Frame caption="The Sync software inventory switch on the ConnectWise Asio setup screen.">
-  <img src="/images/product/devices-software-sync-switch.png" alt="ConnectWise Asio setup Import step with the Sync software inventory switch turned on" width="2880" height="1920" />
+Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration) or [Datto RMM setup](/user-guides/integrations/enable-datto-rmm-integration) for credentials, mapping, and import details.
+
+<Frame caption="Branch preview: choose what ConnectWise Asio syncs.">
+  <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio setup Sync step with six supported data categories" width="1440" height="960" />
 </Frame>
 
 ## Troubleshooting
@@ -101,9 +115,9 @@ Turning the switch off removes that integration's software data from MSPortal. T
 | Situation | What to check |
 | --- | --- |
 | No **Software** tab | The Software inventory feature is not turned on for your portal, or you are signed in as a company user. |
-| The tab shows no products | Whether ConnectWise Asio or Datto RMM is connected, devices are imported, and the first daily sync has finished. |
-| A device has no software | Whether it is imported from a supported RMM and whether that integration's **Sync software inventory** switch is on. |
-| A product shows **Unknown** | The RMM reported no version for that install. |
+| The tab shows no products | Whether ConnectWise Asio or Datto RMM is connected, devices are imported, and an inventory sync has finished. |
+| A device has no software | Whether it is imported from a supported RMM and whether **Software** is selected and saved in that integration's **Sync** step. |
+| A product shows **Unknown** | The RMM reported no usable version for that install. |
 | An auto-updating app shows **Outdated** | A target version is set above the installed version. Clear or change the target. |
 
 ## Frequently asked questions
