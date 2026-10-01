@@ -1,46 +1,89 @@
 ---
 title: 'Bundling Automation Matches'
-description: 'Group matching records by company and period, preview Planner bundles, and understand digest delivery and refresh behavior.'
+description: 'Group matching records by company and period so one rule creates one ticket, Planner item or digest per group instead of one per record.'
 icon: 'layer-group'
 ---
 
-Bundling groups matching records so an automation can create company-level work or a digest instead of repeating the same action for every record. Use the options shown in your rule editor; available periods depend on whether the entity has a suitable date field.
+Bundling turns a rule that would act once per matching record into a rule that acts once per group. Forty devices with expiring warranties at one company become one ticket, one Planner item or one email that lists all forty. This page is for MSP staff who build automation rules.
 
-## Configure a bundle
+## Before you start
 
-1. Open **Settings > Automation** and create or edit a rule.
-2. Choose **Date Threshold** or **Scheduled**, set the company scope and conditions, then enable **Combine matching records**.
-3. Choose company-only grouping, or a day, week, month or quarter period when available. For a scheduled rule with period grouping, choose its date field.
-4. Configure the actions and templates. Review recipient choices separately from record scope.
-5. Use **Run Test** and any available bundle preview to inspect the sample, dates, company groups and Planner outcome.
-6. Check the Active setting, save, and inspect execution logs after the intended run.
+- You need the **Automation Rules** write or manage permission to create or edit rules. Without it, you cannot create rules, and existing rules open in **View Only Mode**.
+- Bundling is available on rules with a **Date Threshold** or **Scheduled** trigger. The checkbox does not appear for other triggers.
+- Pick the actions first if you can. Bundling changes what **Open Ticket**, **Add to Planner**, **Send Email**, **Send Survey** and **In-App Alert** do (see the table below).
 
-Company grouping keeps different clients separate. Period grouping uses the selected record date: devices expiring in April and May can form different groups even if the rule runs on the same day.
+## Turn on bundling for a rule
 
-## What happens to each action
+<Steps>
+  <Step title="Open the rule">
+    Go to **Settings > Platform > Automation Rules**. Click **Add Rule** for a new rule, or open the row menu (**...**) on an existing rule and choose **Edit**.
+  </Step>
+  <Step title="Choose the entity and trigger">
+    Under **Trigger Configuration**, pick the **Entity** and a **Trigger** (**Date Threshold** or **Scheduled**). Fill in the trigger settings. For **Date Threshold**, choose the **Date Field**, **Days**, **Direction** and **Mode**.
+  </Step>
+  <Step title="Check Combine matching records">
+    Below the trigger settings, check **Combine matching records**. A **Bundle period** list appears.
+  </Step>
+  <Step title="Choose the bundle period">
+    Pick one of these options.
+
+    | Option | One group per |
+    | --- | --- |
+    | **Per company** | Company |
+    | **Per company and day** | Company and day of the record date |
+    | **Per company and week** | Company and week of the record date |
+    | **By month** | Company and month of the record date |
+    | **By quarter** | Company and quarter of the record date |
+
+    The day, week, month and quarter options only appear when the entity has a date field. A **Date Threshold** rule starts on **By month**. A **Scheduled** rule starts on **Per company**.
+  </Step>
+  <Step title="Choose the date field (Scheduled rules only)">
+    On a **Scheduled** rule with a period other than **Per company**, a **Date Field** list appears. Choose the date that decides which period each record falls into. A **Date Threshold** rule uses its own **Date Field** automatically.
+  </Step>
+  <Step title="Add the actions">
+    Under **Actions**, click **Add** and choose the actions. In the text boxes, use the bundle variables described below. Click **Template Variables** to see them and click one to insert it.
+  </Step>
+  <Step title="Test the rule">
+    At the bottom of the **Setup** step, click **Run Test** in the **Test Rule** section to see the matching records. If the rule has an **Add to Planner** action, click **Preview bundles** to see the Planner items the rule would create, with their company group, period and due dates.
+  </Step>
+  <Step title="Save">
+    Click **Next**, choose whether to turn on **Enable this rule**, then click **Create Rule** (or **Save Changes** on an existing rule). New rules start inactive.
+  </Step>
+  <Step title="Check the first run">
+    Open **Execution Log** from the Automation Rules page and look at the run. Confirm the number of tickets, Planner items or emails matches the number of groups you expected.
+  </Step>
+</Steps>
+
+Company grouping keeps clients separate. Period grouping uses the record date. Devices expiring in April and devices expiring in May at the same company form two groups, even if the rule runs on one day.
+
+## What bundling does to each action
 
 | Action | Bundled behavior |
 | --- | --- |
-| Open Ticket | Creates work for a company group using the configured PSA routing |
-| Add to Planner | Creates or updates linked bundle work; supported refreshable rules can keep the same Planner item current |
-| Send Email, Send Survey, In-App Alert | Delivery is partitioned by recipient; a recipient’s digest contains the records they are permitted to receive |
-| AI Transform | Uses bundle context for downstream bundled actions |
-| Update Field, Set Relative Date | Still updates each matched record individually |
+| **Open Ticket** | Creates one ticket per group, using the PSA settings in the action |
+| **Add to Planner** | Creates one Planner item per group. The rule can keep that item current on later runs (see below) |
+| **Send Email**, **Send Survey**, **In-App Alert** | Sends one message per recipient. Each recipient's message lists only the records that recipient is allowed to see, so counts can differ between recipients |
+| **AI Transform** | Runs with the group as its context for the actions after it |
+| **Update Field**, **Set Relative Date**, **Add team members**, **Remove team members** | Still run once for each matched record |
 
-A bundled rule is not necessarily one email to everyone or one action total. Companies, periods, recipient sets and action types all affect the result.
+One bundled rule does not always mean one action in total. Companies, periods, recipients and action types each add to the count.
 
 ## Write templates for a group
 
-| Variable | Meaning |
+Use these variables in titles, descriptions, subjects and bodies.
+
+| Variable | What it shows |
 | --- | --- |
-| `{{entity_count}}` | Number of records in the relevant bundle |
-| `{{entity_list}}` | Rendered list of its records and relevant dates |
-| `{{group_period}}` | The group’s period label |
+| `{{entity_count}}` | Number of records in the group |
+| `{{entity_list}}` | One line per record with its name and date, for example the device name followed by `expires 2026-04-05` |
+| `{{group_period}}` | The period label, for example `April 2026` or `Q2 2026`. It is blank when the period is **Per company** |
+
+Single-record variables such as `{{entity.serial_number}}` do not describe a group. `{{entity.company_name}}` still works.
 
 Example title:
 
 ```text
-Warranty review: {{entity_count}} devices — {{group_period}}
+Warranty review: {{entity_count}} devices expiring {{group_period}}
 ```
 
 Example body:
@@ -51,43 +94,59 @@ Review the following devices for renewal or replacement:
 {{entity_list}}
 ```
 
-Use bundle variables for group summaries. Inspect the preview instead of assuming a single-record field, such as one serial number, represents the whole group. For recipient digests, counts and lists can differ between recipients.
-
 ## Planner dates and refreshes
 
-The Planner action can offer a description, Planner Type, due offset, future-date restriction and past-due handling. Check the preview’s calculated dates: a bundled Planner date can be derived from the record date and trigger/action offsets, rather than simply the day the rule runs.
+The **Add to Planner** action offers **Task Title**, **Description**, **Planner Type**, **Business Value** and **Due Offset (days)**. It also has two switches for bundles.
 
-A refreshable Planner bundle can update an existing linked item’s generated title, description, dates, type and other managed details. Do not treat those generated fields as permanent manual notes. Complete successful refreshes can archive stale linked bundles; a failed or incomplete result does not prove cleanup finished.
+- **Only create future-dated items** skips a Planner item when its calculated due date is today or earlier.
+- **Use current period for past dates** puts the item in the current period when its due date has passed. Turning one switch on turns the other off.
+
+For a bundled Planner item, the due date comes from the record date plus the trigger offset plus **Due Offset (days)**. It is not the day the rule runs. Click **Preview bundles** to see the calculated dates.
+
+A rule keeps its Planner items current when every action in it can be bundled and one of them is **Add to Planner**. On each run, the rule updates the existing item for a group instead of creating a new one. It can replace the generated title, description, dates and Planner type, so do not put your own notes in those fields. When a run finishes without failures and matched every record, the rule archives Planner items for groups that no longer match.
+
+Imported rule sets use this behavior. **Quarterly warranty planning** keeps one Planner item per company and warranty-expiry quarter. See [Example rules](/user-guides/settings/automation/examples).
 
 ## Failures and retries
 
-Inspect action-level execution results and the created Planner/PSA records. Some actions can succeed before another fails. A failed bundle can remain eligible for retry, while action receipts and linked Planner items affect what repeats. Do not assume a failed run rolled back earlier sends or that a new run guarantees no duplicates.
+If a group fails, for example because your PSA is briefly unavailable, the rule does not mark that group's records as processed. The next run matches them again and retries only the failed groups. Groups that succeeded are left alone.
 
-The test and bundle preview may be sampled. A large match count does not mean every record is visible in the preview. If a refresh reports incomplete matching, resolve that issue before relying on its generated forecast.
+A run can fail partway through. Earlier actions may already have sent emails or opened tickets. Check the results in **Execution Log** before you run the rule again.
 
-## Questions and troubleshooting
+A bundled rule reads up to 5,000 matching records per run. If more records match, a rule that keeps Planner items current stops with an error instead of syncing partial groups. Narrow the rule with **Scope** or **Conditions** and run it again.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Combine matching records** is missing | Change the **Trigger** to **Date Threshold** or **Scheduled**. Other triggers cannot bundle |
+| The **By month** and **By quarter** options are missing | The entity has no date field to group by. Choose **Per company** |
+| **Preview bundles** is missing | Add an **Add to Planner** action. The button only shows for rules with one |
+| A Scheduled rule will not save with a period | Choose the **Date Field** that appears next to **Bundle period** |
+| The preview shows fewer records than **Run Test** | The preview uses a sample of the matches. The message at the top of the dialog says how many records it used |
+| A Planner item disappeared from the active list | A completed refresh archives items for groups that no longer match. Check archived Planner items, the rule's **Scope** and its **Conditions** |
+| Two recipients got different lists | Digests contain only the records each recipient is allowed to see |
+
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Can I bundle a Scheduled rule?">
-    Yes, when the editor offers Bundle matches for that rule. Choose company-only grouping or a supported period and date field. Bundling is no longer limited to Date Threshold rules.
+    Yes. Check **Combine matching records**, then choose **Per company** or a period and its **Date Field**.
   </Accordion>
   <Accordion title="Are only tickets and Planner items bundled?">
-    No. Email, surveys, alerts and AI transforms can also use bundle context. Field and relative-date updates still run for each matched record.
-  </Accordion>
-  <Accordion title="Will everyone receive the same device list?">
-    Not necessarily. Digest delivery is partitioned by recipient and permitted records. Review the intended recipients and do not use a portfolio count as the expected count for every email.
+    No. Emails, surveys and in-app alerts are also bundled, per recipient. Field and date updates still run once per record.
   </Accordion>
   <Accordion title="Will each run create a new Planner item?">
-    A supported refreshable rule can update its existing linked bundle item. Review the preview and actual linked outcome instead of assuming every run creates a new item.
+    No, when the rule keeps its Planner items current. The rule updates the existing item for each group. Click **Preview bundles** to see what it will do.
   </Accordion>
-  <Accordion title="Can I manually rewrite an automation-managed Planner description?">
-    A later bundle refresh can replace generated details. Keep durable manual context outside fields the rule manages, or change the rule’s template to alter its generated wording.
-  </Accordion>
-  <Accordion title="Why did a bundle disappear from the active Planner list?">
-    A complete successful refresh can archive linked bundles that are no longer current. Check archived items, rule scope, date grouping and execution results before recreating work.
+  <Accordion title="Can I edit a Planner description that a rule created?">
+    You can, but the next refresh can replace it. Keep your own notes elsewhere, or change the rule's **Description** template.
   </Accordion>
   <Accordion title="Does a failed bundle mean nothing happened?">
-    No. Earlier actions may have succeeded. Inspect their results and external records before retrying, especially where a run sends messages or opens tickets.
+    No. Earlier actions in the run may have succeeded. Open the run in **Execution Log** to see which actions finished.
+  </Accordion>
+  <Accordion title="Can I group by location or device type?">
+    No. Groups are always by company, and optionally by day, week, month or quarter of a date field.
   </Accordion>
 </AccordionGroup>
 

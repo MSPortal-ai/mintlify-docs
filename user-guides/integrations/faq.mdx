@@ -1,65 +1,160 @@
 ---
 title: "Integration troubleshooting"
-description: "Diagnose missing data without confusing connection, synchronization, mapping and access."
+description: "Find out why integration data is missing or stale: check the connection, sync, mapping and who can see it."
 icon: "plug"
 ---
 
-**Audience:** MSP staff managing integrations. Company users should report missing data to their MSP with the affected feature and company.
+This page is for MSP staff who manage integrations. Company users who notice missing data should tell their MSP which feature and company are affected.
 
-## Check the four stages
+## Before you start
 
-1. **Connection:** confirm the correct provider instance and its current status. Credentials, permissions, region and feature availability can affect it.
-2. **Synchronization:** inspect the relevant data area's enabled state, latest job result and expected source scope. A connected badge does not prove every sync succeeded.
-3. **Mapping/import:** confirm provider companies/sites are linked correctly and required records were imported. Staged data may not yet be portal inventory.
-4. **Visibility:** check selected company, role and the record's own visibility rules. An administrator seeing a record does not prove Company users can access it.
+- You can open **Settings > Integrations** and manage integrations.
+- You know which provider, data area (tickets, users, devices) and company are affected.
 
-Keep these stages separate when investigating. Reconnecting a provider is not a general cure for a missing company link or client permission.
+## Find the problem stage
 
-## Missing tickets
+Missing data usually fails at one of four stages. Check them in this order.
 
-Review the provider's supported board, queue, type and status filters and the selected company mapping. Verify the ticket-reading permission in the setup wizard where its permission check is offered. Do not apply a ConnectWise board instruction to a different PSA automatically.
+| Stage | What to check |
+| --- | --- |
+| Connection | The integration shows **Active** on **Settings > Integrations**. A disconnected or errored status usually means expired or revoked credentials. |
+| Synchronization | The data area is turned on and its last sync succeeded. See [Sync Schedules](/user-guides/integrations/sync-schedules). |
+| Mapping and import | The provider's companies are linked to the right MSPortal companies, and staged records were imported. |
+| Visibility | The selected company, the user's role and the record's own visibility rules allow the user to see it. |
 
-Where the permission check reports **Could not verify**, investigate availability and retry the check. This is not the same evidence as a denied permission. After correcting permissions, review the sync toggles and current job result rather than assuming every previously disabled area resumed.
+Reconnecting a provider does not fix a wrong company link or a client permission, so find the failing stage first.
 
-## Source changes have not appeared
+## Fix missing tickets
 
-Different entities run on different schedules. Webhooks, scheduled jobs and manual refreshes are separate paths; a webhook connection does not promise instant updates for every data type. Review [Sync Schedules](/user-guides/integrations/sync-schedules) and the current result for the affected area.
+<Steps>
+  <Step title="Import companies first">
+    Tickets link to companies, so your companies must be imported before tickets sync. Go to **Settings > Companies** to check, and see [Import Companies](/user-guides/integrations/import-companies).
+  </Step>
+  <Step title="Select what to sync">
+    Open your PSA integration and review its ticket settings. Select the boards or queues to sync.
 
-Use a supported manual sync when needed, then inspect completion. A queued request is not immediate data delivery. Repeatedly pressing Resync can add work without fixing a provider error or missing permission.
+    - **ConnectWise**: select **Service Boards**.
+    - **Autotask**: select **Queues**.
+    - **Halo PSA**: select **Ticket Types**.
+  </Step>
+  <Step title="Check the integration status">
+    Confirm the integration shows **Active** on **Settings > Integrations**. If it is disconnected or in error, reconnect it with fresh credentials.
+  </Step>
+  <Step title="Run the permission check">
+    Open the integration's setup, go to the **Permissions** step and select **Re-check**. If tickets show as unavailable, the API user in your PSA cannot read tickets and resyncing will not help. Grant the permission the step names, select **Re-check**, then resync.
+  </Step>
+</Steps>
 
-## Duplicates or wrong links
+## Fix a sync that is off or a locked toggle
 
-Review existing companies and users before importing new records. Quick Match creates proposals that need review; similar names can belong to different organizations. Creating a company and saving its integration link are separate operations. Removing a saved link can persist immediately.
+MSPortal only runs a sync when your PSA API user is allowed to read that data. When a permission is missing, the matching toggle on the **Sync** step is locked and the sync stays off.
 
-If automatic imports change a user's role, inspect contact-type mappings first, followed by company and integration defaults. Explicit mapping rules can affect existing users.
+<Steps>
+  <Step title="Open the Permissions step">
+    Go to **Settings > Integrations**, open your PSA integration and go to **Permissions**. Each data area is listed as granted or unavailable, and each unavailable one names the setting to change.
+  </Step>
+  <Step title="Grant the permission in your PSA">
+    Make the change where your PSA keeps it.
+
+    - **ConnectWise**: a security role category under **System > Security Roles**, for example *Procurement > Product Catalog (Inquire Level: All)*.
+    - **Autotask**: a security level setting under **Admin > Resources/Users > Security Levels**.
+    - **Halo PSA**: an API application permission under **Configuration > Integrations > Halo PSA API > View Applications**.
+    - **Syncro**: a token permission under **Admin > API Tokens**.
+  </Step>
+  <Step title="Re-check and turn the sync on">
+    Return to **Permissions** and select **Re-check**. When the area shows as granted, the toggle unlocks and you can turn the sync on. Turning on a sync you once had off is a separate step, so review the sync toggles after you fix permissions.
+  </Step>
+</Steps>
+
+If a permission is revoked after setup, MSPortal turns the affected sync off and notifies your integration admins instead of failing the same call every night. Grant the permission again and re-check.
+
+<Note>
+An area can show **Could not verify**. That means the PSA was slow or unreachable, not that the permission is missing. Nothing is turned off. Select **Re-check** to try again.
+</Note>
+
+## Get a change from your source system
+
+<Steps>
+  <Step title="Check the schedule">
+    Different data syncs on different schedules. Find your data area in [Sync Schedules](/user-guides/integrations/sync-schedules). Tickets sync every few minutes, and reference data syncs daily.
+  </Step>
+  <Step title="Request a sync">
+    On **Settings > Integrations**, select the **Resync** icon on the integration card, or use the sync action on its setup page.
+  </Step>
+  <Step title="Check the result">
+    Wait for the sync to finish, then check the last synced time and any error. A queued request is not delivered data, and pressing **Resync** repeatedly does not fix a missing permission or a provider error.
+  </Step>
+</Steps>
+
+Autotask webhooks, when enabled, bring ticket updates in near real time. Webhooks do not cover every data type.
+
+## Fix duplicates or wrong links
+
+<Steps>
+  <Step title="Look before you import">
+    Check existing companies and users before you import new ones. **Quick Match** only proposes links, and similar names can belong to different organizations.
+  </Step>
+  <Step title="Save the link on purpose">
+    Creating a company and saving its integration link are separate actions. Removing a saved link takes effect right away.
+  </Step>
+  <Step title="Check role rules">
+    If automatic user imports change someone's role, check the contact-type mappings first, then the company and integration defaults.
+  </Step>
+</Steps>
+
+## Fix a disconnected integration
+
+<Steps>
+  <Step title="Check the credentials">
+    API keys or secrets may have expired or been rotated in your PSA.
+  </Step>
+  <Step title="Run the permission check">
+    Open the **Permissions** step. It tests each data area and names anything the API user cannot read.
+  </Step>
+  <Step title="Look for rate limits">
+    Some providers limit API calls and may block requests for a while.
+  </Step>
+  <Step title="Reconnect">
+    Reconnect the integration with fresh credentials.
+  </Step>
+</Steps>
 
 ## Get a useful support diagnosis
 
-Record the provider, intended connection, data area, company scope, observed error and last action. Include an example record reference when appropriate. Do not include API secrets or tokens. Avoid clearing data, disconnecting or testing writes on customer records simply to gather evidence.
+Send the provider, the connection, the data area, the company, the error you see and your last action. Add an example record if you can. Never include API secrets or tokens. Do not clear data, disconnect or test writes on customer records just to gather evidence.
 
+## Troubleshooting
 
-## FAQs
+| Problem | What to do |
+| --- | --- |
+| Data is missing but the integration is connected | Check mapping and visibility. A connected badge does not mean every sync succeeded. |
+| **Could not verify** on a permission | Select **Re-check**. It is not a denial. |
+| A sync toggle is locked | Grant the missing permission in your PSA, then select **Re-check**. |
+| A company's data is wrong | Fix the company link, not the connection. |
+
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why is data missing even though the integration is connected?">
-    Connection, synchronization, company mapping/import and role visibility are separate stages; inspect each for the affected data area.
+    Connection, sync, mapping and visibility are separate. Check each stage for the affected data area.
   </Accordion>
-  <Accordion title="Does Could not verify mean the API permission is denied?">
-    No. Treat it as unknown verification evidence and investigate availability before changing access.
+  <Accordion title="Does Could not verify mean the permission is denied?">
+    No. It means MSPortal could not check, usually because the PSA was slow. Select **Re-check** before you change any access.
   </Accordion>
   <Accordion title="Does Resync make the data available immediately?">
-    No. It can queue background work; check completion and the expected records.
+    No. It queues background work. Check the last synced time and the records.
   </Accordion>
   <Accordion title="Will reconnecting fix a wrong company mapping?">
-    Do not assume it will. Review and correct the intended link and its dependent records.
+    No. Correct the company link itself.
   </Accordion>
   <Accordion title="Should I include an API secret in a support request?">
-    No. Provide provider, connection reference, data area, scope and error without credentials.
+    No. Send the provider, connection, data area, company and error without credentials.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
+- [Sync Schedules](/user-guides/integrations/sync-schedules)
 - [Import companies](/user-guides/integrations/import-companies)
 - [Import users](/user-guides/integrations/import-users)
 - [Import devices](/user-guides/integrations/import-devices)

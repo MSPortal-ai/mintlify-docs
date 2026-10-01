@@ -1,62 +1,157 @@
 ---
-title: "Refresh or rebuild PSA ticket synchronization"
-description: "Distinguish a queued refresh from a provider-specific full resync."
+title: Clear and Resync Integrations
+description: Run a Quick Sync or a full Clear & Resync of PSA tickets in MSPortal
 icon: "plug"
 ---
 
-**Audience:** MSP staff authorized to manage the selected integration. Use the provider's ticket configuration and **Sync Actions** where offered. These actions operate on stored integration data and background jobs; they are not browser refresh buttons.
+This guide explains how to resynchronize data between MSPortal and your PSA system when you need to refresh ticket data or resolve synchronization issues.
 
-## Start with the cause
+## Overview
 
-Before resyncing, check the selected connection, API permissions, enabled sync areas, company links and ticket scope. A missing permission or excluded queue will not be repaired by repeatedly importing the same data. Wait for pending configuration saves before triggering a job.
+The Clear and Resync feature allows you to:
+- Perform a quick synchronization of recent changes
+- Complete a full data refresh by clearing and reimporting all tickets
+- Resolve synchronization conflicts or data inconsistencies
+- Apply configuration changes that require a full resync
 
-## Quick Sync
+## When to Use Clear and Resync
 
-Select **Quick Sync** for the provider's normal ticket refresh when needed. The click starts a background workflow. A toast, released button or newly updated timestamp can indicate that the job was requested; verify the actual job result and expected ticket data before calling it complete.
+### Quick Sync
+Use Quick Sync when:
+- Testing new configuration changes
+- Updating recently modified tickets
+- Resolving minor sync delays
+- Refreshing data after brief connection issues
 
-Quick Sync is not a full backup or a guarantee to reconcile every note, time entry, company and reference table. Those data areas can have separate synchronization behavior.
+### Clear & Resync
+Use Clear & Resync when:
+- Initial integration setup is complete
+- Major configuration changes have been made
+- Data inconsistencies need to be resolved
+- Switching between PSA systems
+- Recovering from extended sync failures
 
-## Clear & Resync differs by provider
+## Prerequisites
 
-| Provider path | Behavior to account for |
-| --- | --- |
-| ConnectWise and Autotask ticket settings | Request deletion of that selected integration's synchronized ticket records and reset its ticket cursor before the full ticket sync. This is not a deletion of every tenant record or a deletion of tickets in the PSA. |
-| Halo ticket settings | Request a forced ticket synchronization. Do not assume the same clear-and-delete behavior as ConnectWise or Autotask merely because the button has the same label. |
-| Other providers | Follow the controls and maintenance workflow actually offered for that provider. A universal Clear & Resync sequence does not apply. |
+- PSA integration must be configured and enabled
+- You must have permission to manage integrations
+- Ensure no critical ticket updates are in progress
+- Back up any local ticket data if needed
 
-The current ticket controls can trigger the action directly without a second confirmation. Review the integration and intended scope **before clicking**. Do not press it just to inspect a confirmation dialog.
+## Steps to Resync
 
-After a clear starts, provider errors can leave data absent or partially repopulated. Do not describe a full resync as risk-free, instantaneous or a substitute for preserving unsynchronized work. It is not required routine monthly maintenance and is not the default step after initial setup.
+### 1. Navigate to Integration Settings
 
-## Verify the result
+Go to [https://app.msportal.ai/settings/integrations](https://app.msportal.ai/settings/integrations)
 
-1. Inspect the connection and relevant synchronization result after the background work runs.
-2. Check expected tickets for the intended company and configured scope.
-3. Check related notes or time entries separately where the workflow depends on them.
-4. Review the intended Company role's visibility without changing a real customer ticket merely to test writeback.
+![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/34208b96-e8a0-41b7-9a44-7d101fd5d6be/ascreenshot.jpeg?tl_px=130,121&br_px=1850,1083&force_format=jpeg&q=100&width=1120.0)
 
-If the result is unclear, preserve the error and inspect current data before retrying. Do not disconnect/reconnect or clear another integration as a generic recovery step. Contact support with provider, connection reference, data area and the observed error, keeping credentials out of the message.
+### 2. Access Ticket Settings
 
+Click **Configure** on your PSA integration to open its setup wizard. Then click the **Configure** step in the wizard's step bar. The **Ticket Settings** card is at the top of that step.
 
-## FAQs
+![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/34208b96-e8a0-41b7-9a44-7d101fd5d6be/ascreenshot.jpeg?tl_px=260,173&br_px=1980,1134&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=665,277)
 
-<AccordionGroup>
-  <Accordion title="Does a sync toast prove the background import completed?">
-    No. Verify the actual synchronization result and expected records; a timestamp may record the request.
-  </Accordion>
-  <Accordion title="Will Clear & Resync always ask me to confirm?">
-    No. Current ticket controls can trigger it directly; review the target before clicking.
-  </Accordion>
-  <Accordion title="Does Halo Clear & Resync use the same deletion behavior as ConnectWise?">
-    No. The Halo path requests a forced sync; ConnectWise and Autotask clear selected integration ticket records and reset the ticket cursor.
-  </Accordion>
-  <Accordion title="Should I schedule periodic Clear & Resync as routine maintenance?">
-    No. Investigate the cause and use the appropriate provider workflow; clearing is not routine maintenance.
-  </Accordion>
-</AccordionGroup>
+### 3. Locate Sync Actions
 
-## Related guides
+Scroll down to the **Sync Actions** section, below the Resolution Status Stepper. Here you'll find two synchronization options:
 
-- [Integrations](/user-guides/settings/integrations)
-- [Faq](/user-guides/integrations/faq)
-- [Connectwise resync psa settings](/user-guides/integrations/connectwise-resync-psa-settings)
+![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/8de8e81e-c430-4df4-83c9-57c2590efb4e/ascreenshot.jpeg?tl_px=260,179&br_px=1980,1140&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=662,276)
+
+### 4. Choose Sync Method
+
+#### Option A: Quick Sync
+- Click the **Quick Sync** button
+- Synchronizes only recent changes
+- Preserves existing data
+
+#### Option B: Clear & Resync
+- Click the **Clear & Resync** button
+- What happens next depends on your PSA:
+
+| PSA | What Clear & Resync does |
+|-----|--------------------------|
+| ConnectWise Manage and Autotask PSA | Deletes this integration's synced tickets from MSPortal, then reimports all tickets from the PSA |
+| Halo PSA | Runs a full ticket resync that reads the last 365 days of tickets from Halo again |
+
+> **Warning:** Clear & Resync starts as soon as you click it. There is no confirmation dialog. On ConnectWise and Autotask it deletes all local ticket data for the integration and reimports everything from your PSA. Any unsynchronized local changes will be lost. Tickets in the PSA itself are never deleted.
+
+### 5. Wait for Completion
+
+![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-09-04/ae262903-5a40-4d3d-9f75-879286501b65/ascreenshot.jpeg?tl_px=260,243&br_px=1980,1205&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=545,394)
+
+While the sync runs, the button shows a spinner, and a toast confirms the sync has been triggered. The sync continues in the background; refresh the Tickets page after a few minutes to see the reimported data.
+
+## What Gets Synchronized
+
+### Ticket Data
+- Ticket details (title, description, status)
+- Priority and categories
+- Assigned technicians
+- Company and contact associations
+- Custom fields (if configured)
+- Ticket notes
+
+### Related Data
+Quick Sync and Clear & Resync only cover tickets. Companies, contacts and time entries sync on their own schedules. To refresh boards, statuses, priorities and types, use **Sync PSA Data** on the integration instead. See [ConnectWise PSA Settings Resync](/user-guides/integrations/connectwise-resync-psa-settings).
+
+## Post-Sync Verification
+
+After synchronization completes:
+
+1. **Check Ticket Count:** Verify the expected number of tickets appears
+2. **Review Recent Tickets:** Confirm latest tickets are present
+3. **Test Updates:** Make a small change to a test ticket to verify two-way sync
+4. **Check Mappings:** Ensure status and priority mappings are correct
+5. **Verify Permissions:** Confirm users can access appropriate tickets
+
+## Troubleshooting
+
+### Sync Takes Too Long
+- Check your internet connection
+- Verify PSA system is responsive
+- Consider using Quick Sync for testing
+- Contact support if sync exceeds 30 minutes
+
+### Missing Tickets After Sync
+- Verify board, queue or team selection in the wizard's **Sync** step
+- Check excluded status configurations
+- Ensure date range settings are correct
+- Review PSA permissions
+
+### Sync Fails to Complete
+- Check PSA API credentials
+- Verify integration is enabled
+- Review error logs for specific issues
+- Try Quick Sync before Clear & Resync
+
+### Data Inconsistencies
+- Perform a Clear & Resync
+- Check field mapping configurations
+- Verify time zone settings match
+- Review custom field mappings
+
+## Best Practices
+
+- **Schedule Full Syncs:** Perform during off-hours to minimize disruption
+- **Test First:** Use Quick Sync to test configuration changes
+- **Document Changes:** Note what prompted the resync for future reference
+- **Monitor First Sync:** Stay available during initial synchronization
+- **Regular Maintenance:** Schedule periodic full syncs (monthly/quarterly)
+
+## Performance Considerations
+
+### Quick Sync Performance
+- Minimal system impact
+- Can be run during business hours
+
+### Clear & Resync Performance
+- Duration depends on ticket volume
+- Best performed during maintenance windows
+
+## Related Articles
+
+- [Enable ConnectWise Integration](/user-guides/integrations/enable-connectwise-integration)
+- [Enable Autotask Integration](/user-guides/integrations/enable-autotask-integration)
+- [Enable Halo Integration](/user-guides/integrations/enable-halo-integration)
+- [ConnectWise PSA Settings Resync](/user-guides/integrations/connectwise-resync-psa-settings)

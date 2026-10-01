@@ -5,7 +5,13 @@ description: "Fix a client admin at a holding or parent company who only sees th
 icon: "sitemap"
 ---
 
-**Audience:** MSP staff with Companies settings write access. Company users ask their IT provider to make this change.
+Use this page when a client admin at a parent or holding company can see only their own company's tickets and data. It is for MSP staff. Company users ask their IT provider to make this change.
+
+## Before you start
+
+- You need write access to Companies settings (`write_settings_companies`) and to Company Users (`write_settings_company_users`).
+- The user must be a Company user of the parent company.
+- The child companies must already be linked to the parent company.
 
 ## Symptom
 
@@ -28,7 +34,7 @@ Assigning the role on the parent company does two things:
 - MSPortal adds the same role for that user on every child company.
 - The user gets a company selector listing their own company, each child company and **Global View**.
 
-## Fix
+## Give the user access to the child companies
 
 <Steps>
   <Step title="Confirm the user's company">
@@ -52,28 +58,35 @@ Assigning the role on the parent company does two things:
 Impersonation opens on the user's own company. Choose **Global View** in the company selector to see every company at once, or pick a single child company to check it alone.
 </Note>
 
-## Child companies added later
+## Add a child company later
 
-When you link a new child with **Set Parent Company** in **Settings > Companies**, MSPortal adds every existing Parent Admin to that child automatically.
-
-After linking a child any other way, such as a PSA import, open the child's **Team** tab and confirm the Parent Admin role lists the user. If it does not, add the user to the role on that child's **Team** tab and select **Save Changes**.
+<Steps>
+  <Step title="Link the child">
+    In **Settings > Companies**, select the child company, then choose **Actions > Set Parent Company** and pick the parent. MSPortal adds every existing Parent Admin to that child automatically.
+  </Step>
+  <Step title="Check linked-another-way children">
+    If you linked the child another way, such as a PSA import, open the child's **Team** tab. If the Parent Admin role does not list the user, add the user to the role and select **Save Changes**.
+  </Step>
+</Steps>
 
 <Warning>
 The parent company's row menu also offers **Sync Roles to Children**. This action replaces every Team Role assignment on each child company with the parent company's assignments. Assignments that exist only on a child, such as a different account manager, are removed. To fix a single missing child, add the user on that child's **Team** tab instead.
 </Warning>
 
-## If the user still sees too few tickets
+## Troubleshooting
+
+### The user still sees too few tickets
 
 Once the user holds the Parent Admin role and the selector is on **Global View**, any remaining gap comes from ticket rules or sync.
 
-| Check | Where |
+| Problem | What to do |
 | --- | --- |
-| The display group for the user's Permissions Group uses **All Tickets**, not **Same Location Only** or **Own Tickets Only** | **Settings > Tickets > Display Groups**, for the PSA provider |
-| Board or queue restrictions and **Allowed Ticket Statuses** include the missing tickets | The same display group |
-| Each child company is imported and linked to its PSA company | [Integration Company Mapping](/user-guides/settings/integration-company-mapping) |
-| The ticket list's own filters, such as status, are not hiding tickets | The ticket list |
+| The display group uses **Same Location Only** or **Own Tickets Only** | In **Settings > Tickets > Display Groups**, open the display group for the user's Permissions Group and choose **All Tickets**. |
+| Board, queue or **Allowed Ticket Statuses** limits hide the tickets | Open the same display group and widen those limits. |
+| A child company's tickets are missing | Confirm the child company is imported and linked to its PSA company. See [Integration Company Mapping](/user-guides/settings/integration-company-mapping). |
+| The ticket list shows fewer tickets than expected | Clear the status and other filters on the ticket list. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="The user has an admin Permissions Group. Why can't they see child companies?">

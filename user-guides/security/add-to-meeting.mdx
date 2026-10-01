@@ -4,47 +4,77 @@ description: "Bring same-company events or vulnerabilities into an upcoming meet
 icon: shield-halved
 ---
 
-**Audience:** Users with Security read access and permission to add Calendar agenda items. The menu's visibility does not by itself grant Calendar write access; your MSP manages your permissions.
+Use this page to add Cork compliance events, vulnerabilities, or endpoints to the agenda of an upcoming meeting. It is for MSP staff who prepare meetings. EDR incidents use a [separate flow](/user-guides/security/follow-up-edr-incidents).
 
-## Choose the findings and meeting
+## Before you start
 
-1. Open **Security > Compliance** or **Security > Vulnerabilities**.
-2. Select same-company rows from the loaded results.
-3. Open the bulk-actions menu and choose **Add to Meeting**.
-4. Review **Items to add** and the company shown in the dialog.
-5. Use **Select Meeting** to choose an available upcoming meeting.
-6. Review the **Current Agenda**, then select **Add to Agenda**.
-7. Wait for success and verify the items in the meeting agenda.
+- You need Security read access and Calendar write access (one of the manage or write permissions for meetings or the calendar). Your MSP manages roles.
+- The meeting must already exist and start in the future. This flow does not create meetings.
+- The findings must belong to one company.
 
-This creates an agenda entry for each selected finding. It does not create a new meeting, resolve an event, or remediate a vulnerability. Opening the dialog and selecting a meeting do not save agenda items; **Add to Agenda** performs the write.
+## Add findings to a meeting
 
-The same meeting workflow is available for same-company Cork records in [Security Endpoints](/user-guides/security/find-endpoints). Verify the Source before using it: the current endpoint shortcut uses Cork links for every selected row, so do not rely on it for Acronis or mixed-provider selections. [EDR incidents](/user-guides/security/follow-up-edr-incidents) use a separate text-agenda workflow.
+<Steps>
+  <Step title="Open the findings">
+    Open **Security > Compliance**, **Security > Vulnerabilities**, or **Security > Endpoints**.
+  </Step>
+  <Step title="Select rows from one company">
+    Check the box beside each finding you want to discuss. If the selection mixes companies, MSPortal shows **Please select items from the same company**.
+  </Step>
+  <Step title="Choose Add to Meeting">
+    Open **Actions (N)** in the page header and choose **Add to Meeting**.
+  </Step>
+  <Step title="Check the items">
+    In the **Add to Meeting Agenda** dialog, review **Items to add** and the company name beside the title.
+  </Step>
+  <Step title="Select the meeting">
+    Open **Select Meeting** and pick an upcoming meeting. The list is sorted by start time.
+  </Step>
+  <Step title="Review the agenda">
+    Read **Current Agenda** to see what is already on the meeting. It shows **No items in agenda yet** when the agenda is empty.
+  </Step>
+  <Step title="Save">
+    Click **Add to Agenda**. MSPortal shows **Added to meeting agenda** and clears your selection.
+  </Step>
+</Steps>
 
-## If a meeting or finding is missing
+Each selected finding becomes one agenda entry. Adding a finding does not resolve it or change anything in Cork.
 
-The selector loads up to 50 upcoming meetings, ordered by start time, for the selected company. Past meetings and meetings from other companies are not offered by this picker. Ask the MSP or meeting organizer to check access, company assignment, and the meeting's start time.
+On **Security > Endpoints**, every selected row is added as a Cork endpoint entry, including Acronis rows. Use this action for Cork endpoints.
 
-Only source items shown in the dialog will be added. If the selection includes records from other pages, verify the item list rather than relying on the header's selection count. Correct unmapped company records before linking them to a meeting.
+## Troubleshooting
 
-Recheck the selected meeting and company each time you open the dialog. After an error, inspect the actual agenda before retrying so you do not unintentionally add duplicates. A failed agenda preview is not proof that the meeting has no existing items.
-
-## Company and MSP follow-up
-
-Company users can ask their MSP to include the finding in a review meeting. For a new support request, use the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) and confirm the request when prompted. MSP staff can also [create linked Planner work](/user-guides/security/add-to-planner) when the finding needs tracked action beyond the meeting.
+| Problem | What to do |
+| --- | --- |
+| **Add to Meeting** is not in the Actions menu | Select at least one row first. The menu appears in the page header only when rows are selected. |
+| **No upcoming meetings found** for the company | Create a meeting for that company in Calendar first. Past meetings are not offered. |
+| **Please select a company first** | Pick a company in the company selector, or select rows that carry a company. |
+| **Failed to add items to meeting** | Check **Current Agenda** on the meeting before you retry, so you do not add the same finding twice. Ask your MSP to confirm you have Calendar write access. |
+| A finding shows no company | The record is not mapped to a company. Ask your MSP to fix the company mapping, then select it again. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why can I not choose a past meeting?">
-    This picker lists upcoming meetings only, up to 50 in the selected company scope.
+    The list only offers meetings whose start time is in the future.
   </Accordion>
-  <Accordion title="Does Add to Meeting immediately save the findings?">
-    It opens the dialog. Select a meeting and use Add to Agenda to save the entries.
+  <Accordion title="Does Add to Meeting save the findings right away?">
+    No. Opening the dialog and picking a meeting save nothing. **Add to Agenda** saves the entries.
   </Accordion>
   <Accordion title="Can I combine findings from different companies?">
-    Use one company at a time. Check both the source items and destination meeting before saving.
+    No. Select one company at a time.
   </Accordion>
-  <Accordion title="Does adding an agenda item notify support or fix the issue?">
-    It adds a meeting agenda entry. It does not submit a support ticket or change the provider finding.
+  <Accordion title="Does adding an agenda item open a ticket or fix the issue?">
+    No. It adds an entry to the meeting agenda only.
+  </Accordion>
+  <Accordion title="I am a company user. How do I get a finding reviewed?">
+    Ask your MSP to include it in a review meeting, or describe it to the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) and confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Add security findings to Planner](/user-guides/security/add-to-planner)
+- [Read Cork security compliance events](/user-guides/security/read-cork-events)
+- [Find and read Cork vulnerabilities](/user-guides/security/read-vulnerabilities)
+- [Follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents)

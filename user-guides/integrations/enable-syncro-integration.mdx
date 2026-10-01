@@ -1,92 +1,367 @@
 ---
 title: 'Configure Syncro Integration'
-description: 'Connect Syncro, choose data scope and import the intended companies and users'
+description: 'Connect your Syncro instance to MSPortal.ai using the step-by-step setup wizard'
 icon: 'plug'
 ---
 
-Use this **MSP staff** workflow to connect Syncro and configure the data available to your portal. The wizard follows **Connect → Permissions → Sync → Import**. Company users do not administer this connection.
+This guide walks you through connecting your Syncro instance to MSPortal.ai using our streamlined setup wizard.
 
-## Before you start
+## Prerequisites
 
-You need integration-management permission, authorized provider credentials and access to the companies you intend to synchronize. Ticket configuration can additionally require Ticket Settings permission. Keep credentials in the connection form and your approved secret store.
+- Active Syncro account with administrative access
+- MSPortal.ai account with integration management permissions
 
-Have your Syncro administrator create an API token for this integration with access to the required customer, contact, ticket and asset data. Use the account subdomain, not a pasted ticket URL. Grant write capabilities only for portal actions you intend to support, such as creating or updating tickets; a read-only token is not sufficient for those actions.
+## Part 1: Configure Syncro
 
-## Connect the provider
+Before connecting to MSPortal.ai, you need to create an API token in Syncro with specific permissions.
 
-1. Open **Settings > Integrations**, find **Syncro**, and open setup. Use **Configure** for the existing connection.
-2. Enter **Subdomain** and **API Key**.
-3. Select **Test Connection** when ready to connect. **For a new connection, a successful test also creates and saves the integration.** There is no separate Create Integration button in this PSA wizard.
-4. Review the result and continue to **Permissions**. An existing connection can initialize with a Connected indicator; that is not proof of a fresh test.
+### Create API Token
 
-<Frame caption="MSP example: the setup steps for an existing connection. The Connect checkmark does not represent a new test.">
-  <img src="/images/product/syncro-setup-steps.png" alt="Syncro setup steps with Permissions selected" width="1852" height="130" />
-</Frame>
+<Steps>
+  <Step title="Access Syncro Administration">
+    Log into your Syncro account and access the administration portal.
+  </Step>
 
-## Check permissions
+  <Step title="Navigate to API Tokens">
+    Scroll to the bottom of the administration portal to locate the **API Tokens** section.
+  </Step>
 
-The permission screen checks vendor endpoints and reports required access, optional access and unavailable or unverified results. Required denied access prevents the supported progression. An optional permission that is not granted keeps its corresponding sync off.
+  <Step title="Create New Token">
+    Click **New Token** to begin creating your API token.
+  </Step>
 
-Read the reported failure before changing the API role. A timeout, unavailable endpoint or unverified check is not automatically proof of a missing permission. Retry after resolving the actual problem. These checks exercise **read access**; they do not prove that ticket creation, comments, warranty updates or other writes will succeed.
+  <Step title="Configure Token Settings">
+    1. **Name**: Enter a descriptive name (e.g., "MSPortal Integration")
+    2. **Expiration**: Set the expiration date to at least one year in the future
+    3. **Permissions**: Select **Custom Permissions** and enable all permissions listed below
 
-## Select synchronization scope
+    <Warning>
+      Save your API token immediately after creation. You cannot retrieve it again once you leave this page.
+    </Warning>
+  </Step>
+</Steps>
 
-Choose the available company, user/contact and ticket synchronization options. The Syncro wizard does not offer opportunity, project, invoice or product-catalog synchronization switches. Device imports have their own page.
+### Required Permissions
 
-Review filters before continuing. Synchronizing source records, linking them to companies and importing portal records are separate steps. Automatic company/contact import options can create portal records when matching source records arrive. Review any import preview and the selected categories carefully; do not rely on a confirmation appearing for every save.
-
-Proceeding from Sync saves the selected scope and starts background synchronization. Options in later steps may remain incomplete while it runs. Check errors and the connection’s actual sync result before treating an empty list as the final dataset.
-
-## Continue to imports
-
-Syncro goes directly from Sync to Import. It has no separate Configure step in this wizard; do not look for the board/queue and opportunity configuration used by the other PSAs.
-
-## Import and finish
-
-The Import step offers **Users**, **Companies** and **Devices**. **Open Device Import** opens Syncro device staging. Review existing portal records before creating duplicates. Company links determine which client can see synchronized data.
-
-Apply the intended company and user selections and check the result. **Complete Setup** also attempts to apply pending company/user imports before completing the wizard. It can start background work, so setup completion is not proof that every import or sync succeeded. An import-page link only navigates to that workflow.
-
-Use **Save & Exit** to save wizard progress when pausing. Reopen the connection to continue and verify the saved state. Portal invitations and client permissions remain separate from discovering provider contacts.
-
-## Maintain the connection
-
-Reopen setup to inspect scope and errors. A successful retest of changed fields is not proof of credential rotation: this wizard has no separate update-credentials action. Confirm the supported replacement path before revoking working vendor credentials.
-
-**Delete Integration** opens a named confirmation. Confirm **Delete** only to remove the connection and its associated settings; cancel preserves it. Vendor-side credential revocation is separate.
-
-## Troubleshooting
-
-| Symptom | What to check |
-| --- | --- |
-| Connection fails | Correct provider fields, credential validity, account/API endpoint and error text. |
-| A data option is unavailable | Permission result and whether this provider supports that option. |
-| Companies or tickets are missing | Saved provider filters, synchronization result and company links. |
-| New statuses are absent | Metadata synchronization, selected board/team/queue scope and latest load. |
-| Setup finished but records are absent | Pending imports, background errors and the correct company context. |
-
-## Frequently asked questions
+Select the following permissions for the API token:
 
 <AccordionGroup>
-  <Accordion title="Does Test Connection only test credentials?">
-    For a new connection, a successful test also creates the integration. Enter credentials only when you intend to connect it.
+  <Accordion title="Asset Management">
+    - Assets - View Details
+    - Assets - List/Search
+    - Assets - Edit
+    - Assets - Create
   </Accordion>
-  <Accordion title="Does a green permissions result verify ticket writes?">
-    No. The permission checks probe read access. Creating tickets, comments or other vendor changes needs the relevant write permission and a successful action.
+
+  <Accordion title="Customer Management">
+    - Customers - List/Search
+    - Customers - View Detail
+    - Customers - View Total Invoiced
+    - Contacts - List/Search
+    - Contacts - Import
+    - Users - List
   </Accordion>
-  <Accordion title="Does Complete Setup mean all data is ready?">
-    No. Check the background sync result and verify company, user and device imports separately.
+
+  <Accordion title="Tickets & Support">
+    - Tickets - List/Search
+    - Tickets - View Details
+    - Tickets - View 'Their Ticket' Details (assigned to them)
+    - Tickets - Create
+    - Tickets - Edit
+    - Tickets - Settings
+    - Tickets - Use Ticket Charges
+    - Ticket Comments - New
+    - Ticket Canned Responses - Manage
+    - Ticket Custom Fields - Manage
+    - Ticket SLA - Edit
+    - Ticket Worksheets - Manage
+    - Ticket Timers - Overview
   </Accordion>
-  <Accordion title="Will every discovered contact receive portal access?">
-    Discovery and import are separate. Review user matches, company links and the permissions assigned to portal users; invitation is a separate workflow.
+
+  <Accordion title="Financial">
+    - Invoices - List/Search
+    - Invoices - View Details
+    - Estimates - List/Search
+    - Estimates - View Details
+    - Estimates - Create
+    - Estimates - Edit
+    - Payments - View List
+    - Recurring Invoices - List
   </Accordion>
-  <Accordion title="Can I replace saved credentials by retesting the form?">
-    Do not treat a successful retest as proof that replacement credentials were saved. This wizard does not provide a separate credential-update action; confirm the supported update path before revoking the old credential.
+
+  <Accordion title="Other Operations">
+    - Appointments - View All (see-own never restricted)
+    - Contracts - List/Search
+    - Products - List/Search
+    - Pending Orders - View All
+    - Vendors - List
+    - Warranties - List
+    - Warranties - View Details
+    - Documentation - Allow Usage
+    - Timelogs - Manage
+    - RMM Alerts - List
   </Accordion>
 </AccordionGroup>
 
-## Related guides
+<Note>
+The write permissions (Create, Edit, New, Manage) let MSPortal create and update tickets and other records in Syncro. A read-only token can sync data but cannot perform those actions.
+</Note>
 
-- [Integration settings](/user-guides/settings/integrations)
-- [Company mapping](/user-guides/settings/integration-company-mapping)
-- [Ticket settings](/user-guides/settings/tickets)
+---
+
+## Part 2: MSPortal Setup Wizard
+
+MSPortal.ai provides a guided setup wizard that walks you through connecting and configuring your Syncro integration in 4 easy steps: **Connect**, **Permissions**, **Sync** and **Import**.
+
+### Starting the Wizard
+
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings** > **Integrations**.
+  </Step>
+
+  <Step title="Start Setup">
+    Find **Syncro** and click **Connect** (or **Configure** if previously connected) to launch the setup wizard.
+  </Step>
+</Steps>
+
+---
+
+### Step 1: Connect
+
+Enter your Syncro API credentials to establish the connection.
+
+<Steps>
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
+
+    | Field | Description | Example |
+    |-------|-------------|---------|
+    | **Syncro Subdomain** | Your Syncro subdomain (from yourcompany.syncromsp.com) | `yourcompany` |
+    | **API Key** | The API token you created in Syncro | `your-api-token` |
+
+    <Note>
+      Enter only the subdomain portion. For example, if your Syncro URL is `acme.syncromsp.com`, enter just `acme`.
+    </Note>
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials. You'll see a green "Connected" status when successful.
+
+    <Warning>
+      For a new connection, a successful test also creates and saves the integration. There is no separate Create Integration button in this wizard, so enter credentials only when you intend to connect.
+    </Warning>
+
+    If the connection fails:
+    - Verify your subdomain is correct (just the subdomain, not the full URL)
+    - Check that your API key is copied correctly
+    - Ensure the API token has all required permissions
+    - Verify the API token hasn't expired
+  </Step>
+
+  <Step title="Proceed">
+    Once connected, click **Next** to continue to the permission check.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Permissions
+
+MSPortal checks what your Syncro API token is allowed to read, and shows the result for each area of data.
+
+<Steps>
+  <Step title="Review the results">
+    The check runs automatically when you reach this step. Each area of data is listed with its result, such as **Granted**, **Not permitted** or **Could not verify**.
+
+    <Frame caption="The Syncro setup steps with Permissions selected.">
+      <img src="/images/product/syncro-setup-steps.png" alt="Syncro setup steps with Permissions selected" width="1852" height="130" />
+    </Frame>
+
+    Areas marked **Required** must be granted before you can continue:
+
+    | Area | Syncro token permission |
+    |------|-------------------------|
+    | Companies | Customers - List/Search |
+    | Contacts and staff | Contacts - List/Search and Users - List |
+    | Tickets | Tickets - List/Search |
+    | Ticket statuses and settings | Tickets - Settings |
+
+    **Assets** (Assets - List/Search) is optional.
+  </Step>
+
+  <Step title="Grant anything missing">
+    Any area that is not permitted shows the exact token permission to enable, for example **Assets - List/Search**.
+
+    Edit the MSPortal token under **Admin > API Tokens**, enable the permission, then come back and click **Re-check**.
+
+    <Note>
+      Syncro returns the same error for an out-of-scope token as it does for an invalid one. If everything comes back unavailable, confirm the token itself is still valid before adjusting individual permissions. A **Could not verify** result usually means Syncro was slow or unavailable, so click **Re-check** before changing permissions.
+    </Note>
+  </Step>
+
+  <Step title="Continue">
+    You can continue with optional areas ungranted. Those syncs stay switched off and their toggles are locked on the next step until you grant the permission and re-check.
+
+    <Note>
+      The check tests read access only. It does not prove that ticket creation, comments or other writes will succeed. Those need the write permissions from Part 1.
+    </Note>
+  </Step>
+</Steps>
+
+<Tip>
+  If a permission is removed later, MSPortal switches off the affected sync and notifies your integration admins rather than retrying against an endpoint it can no longer read.
+</Tip>
+
+---
+
+### Step 3: Sync
+
+Configure what data to sync from Syncro and set up automatic contact import.
+
+<Steps>
+  <Step title="Configure Data Sync Options">
+    Enable or disable the following sync options:
+
+    | Option | Description |
+    |--------|-------------|
+    | **Sync Users** | Sync user/contact data from Syncro |
+    | **Sync Companies** | Sync customer data from Syncro |
+    | **Enable Ticket Sync** | Sync tickets from Syncro |
+
+    <Note>
+      Syncro does not support opportunity sync. Use the Planner module in MSPortal to manage sales opportunities separately. The Syncro wizard also has no project, invoice or product catalog sync, and no Configure step for boards or queues.
+    </Note>
+  </Step>
+
+  <Step title="Configure Contact Auto-Import">
+    If you want contacts to be automatically imported when companies are added:
+
+    1. Enable **Auto-Import** to automatically create user accounts for active contacts
+    2. Select a **Default Role for Imported Contacts** (e.g., Viewer)
+
+    <Tip>
+      All auto-imported contacts will be assigned the selected role. You can change individual user roles later in Settings > Users.
+    </Tip>
+
+    <Note>
+      A toggle appears locked when the permission check found that your API token cannot read that data. Enable the permission named beside it in Syncro, then re-run the check on the Permissions step to unlock it.
+    </Note>
+
+    <Info>
+      When you proceed to the next step, your choices are saved and data sync begins in the background. This may take a few minutes depending on the amount of data in your Syncro account.
+
+      Syncs are automatically deduplicated - if you navigate back and forth between steps, the same sync will not run multiple times within a 2-minute window.
+    </Info>
+  </Step>
+
+  <Step title="Proceed">
+    Click **Next** to continue to the import step.
+  </Step>
+</Steps>
+
+---
+
+### Step 4: Import (Optional)
+
+Import users, companies, and devices from Syncro. This step is optional - you can skip it and import later from the respective settings pages. The step is organized into **Users**, **Companies**, and **Devices** tabs.
+
+<Tabs>
+  <Tab title="Users">
+    Import users from Syncro to create user accounts.
+
+    1. Select users from the list to create accounts for
+    2. Choose a role for imported users
+
+    <Note>
+      Client contacts are not imported here. They can be managed via Company settings after companies are imported.
+    </Note>
+  </Tab>
+
+  <Tab title="Companies">
+    Import customers from Syncro to sync their data.
+
+    1. Select companies to import or link to existing MSPortal companies
+
+    <Tip>
+      Companies will sync automatically based on your sync settings. Use this tab if you want to import specific companies immediately. Review existing MSPortal companies first to avoid duplicates.
+    </Tip>
+  </Tab>
+
+  <Tab title="Devices">
+    Once your Syncro integration is connected, you can import devices/assets.
+
+    1. Click **Open Device Import** to open the full device import page
+    2. Map Syncro asset types to MSPortal device types and select devices to import
+    3. If the **Manufacturer Mappings** card appears, map each Syncro manufacturer ID to a known manufacturer, or click **Map with AI**
+
+    <Note>
+      You can also import devices later from the integration settings.
+    </Note>
+  </Tab>
+</Tabs>
+
+---
+
+### Complete Setup
+
+Click **Complete Setup** to finish the wizard. Any pending company and user selections on the Import step are applied first. Your Syncro integration is now configured!
+
+<Note>
+You can return to the setup wizard at any time by clicking **Configure** on the Syncro integration row. The wizard will resume with your current settings. To pause partway through, click **Save & Exit**.
+</Note>
+
+<Note>
+Completing setup can start background work. Check the sync results before treating an empty list as final.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, you can manage your integration from **Settings** > **Integrations**:
+
+- **Configure**: Re-open the setup wizard to modify settings
+- **Resync**: Trigger a manual sync of data
+- **Sync PSA Data**: Refresh configuration data from Syncro
+- **Import Devices**: Import devices/assets from Syncro. The device import page lets you map Syncro asset types to MSPortal device types, enable auto-sync, and ignore categories you don't need. See [Import Devices](/user-guides/integrations/import-devices) for the full guide.
+- **Delete**: Available inside the Configure wizard. It opens a **Delete Syncro Integration?** confirmation and removes the connection and its settings. It does not revoke the API token in Syncro.
+
+<Note>
+On an existing connection, retesting the Connect step does not save new credentials. The Syncro wizard has no credential update action. Contact support@msportal.ai before revoking a working token.
+</Note>
+
+---
+
+## Synchronization Process
+
+### Initial Sync
+- Customer data will begin synchronizing within approximately 1 minute
+- Tickets and users will sync alongside customer data
+- Devices and additional settings will sync after customers have been imported
+
+### Manual Sync
+To force an immediate synchronization of specific data types, use the refresh button in the integration settings.
+
+---
+
+## Important Notes
+
+- **Token Security**: Store your API token securely. If compromised, immediately revoke it in Syncro and generate a new one
+- **Sync Timing**: Initial synchronization may take several minutes depending on data volume
+- **Dependencies**: Devices and certain settings require customer data to be imported first
+- **No Opportunities**: Syncro does not support opportunities. Use MSPortal's Planner module for sales tracking
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify your subdomain (no full URL) and API key are correct |
+| Token expired | Generate a new token in Syncro and contact support@msportal.ai to update the integration |
+| Permissions error | Ensure all required permissions are enabled on the API token, then click **Re-check** on the Permissions step |
+| A sync toggle is locked | Grant the permission shown beside it in Syncro, then click **Re-check** on the Permissions step |
+| Tickets not syncing | Verify **Enable Ticket Sync** is turned on in the Sync step |
+| Contacts not importing | Verify Auto-Import is enabled and a default role is selected in the Sync step |
+| Devices not appearing | Ensure customers have been imported first, then trigger device import |

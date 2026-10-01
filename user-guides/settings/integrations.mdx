@@ -4,237 +4,293 @@ description: Connect PSA systems and third-party services to MSPortal.ai
 icon: plug
 ---
 
-Use **Settings > Integrations** to review **Connected Services**, connect a provider from **Add Integration**, and open its setup or mapping workspace.
+Use **Settings > Integrations** to connect your PSA, RMM, backup, security, documentation, and other tools to MSPortal. The page lists your connections under **Connected Services** and your available tools under **Add integration**. It is for MSP staff.
 
 ## Before you start
 
-This is an **MSP staff** workflow. Your role needs integration-settings access; changing connections requires write access and Disconnect requires management access. A role with company-mapping access may see mapping/status controls without credential configuration access. Company users ask their IT provider to manage connections.
+- You need to be MSP staff. Company users ask their IT provider to manage connections.
+- Your role needs integration settings access. With read access you can see connections. Resync, import, and **Rename** need write access. **Connect**, **Configure**, and **Disconnect** need manage access.
+- A role that has only **Integration Company Mapping** access can open the page and the **Map companies** button, but sees connection status only.
+- Have the credentials or admin consent for the tool ready. Each tool's own guide in the [Integrations guides](/user-guides/integrations/index) lists what it needs.
+- Some tools are not enabled for every tenant. A tool can also be marked **Coming Soon** or **Beta**.
 
-Prepare the credentials or provider consent described in the provider's own guide. A catalog entry is not evidence that every feature is enabled for your tenant. Provider, feature, permission, and account limitations still apply.
-
-## Accessing Integrations Settings
-
-1. Click **Settings** in the sidebar
-2. Select the **Integrations** icon from the settings navigation
-
-## Integrations Overview
-
-The catalog covers PSA, device management, security, backup, documentation, cloud, training, quoting, and other services. Use the visible catalog and [provider guides](/user-guides/integrations/index) for available setup instructions; supported data and writeback differ by provider.
-
-## Connecting an Integration
+## Open Integrations settings
 
 <Steps>
-  <Step title="Find the provider">
-    Search or filter the integration catalog, then use its setup/connect action. For an existing connection, use that connection's Configure action.
+  <Step title="Open Settings">
+    Click **Settings** in the sidebar.
   </Step>
-  <Step title="Follow the provider's setup">
-    Complete the displayed credential, consent, permission, and configuration steps. Microsoft 365 and Google Workspace open Company setup pages; Teams has its own setup workspace. Do not expect every provider to have the same Test or Enable Sync buttons.
-  </Step>
-  <Step title="Review scope before saving">
-    Check the selected connection, companies, record types, role defaults, and any automatic-import choices. Complete the wizard's displayed save or finish action. Some mapping controls save immediately and are independent of wizard navigation.
-  </Step>
-  <Step title="Check actual data">
-    Return to Connected Services and inspect its status and last sync. Open the corresponding company/device/import workspace and verify the intended records. A queued sync or connected badge alone is not proof of a complete import.
+  <Step title="Click Integrations">
+    The page opens with a search box, a **Category** filter, and a **Status** filter at the top. Below them is the **Connected Services** table, then the **Add integration** catalog.
   </Step>
 </Steps>
 
-## Managing Multiple Connections to a Provider
+The **Connected Services** table has the columns **Integration**, **Category**, **Status**, **Last Sync**, and **Actions**. Click a row (or its **Show details** arrow) to see health and sync details.
 
-Some providers support more than one connection in the same tenant, for example separate Datto RMM accounts or a UniFi console per client. When a provider has multiple connections, the Connected Services list groups them under a single provider entry so you can manage them together.
+Use the **Category** filter to narrow the page to tools such as PSA, RMM, Backup, Security, Documentation, or Cloud. Use the **Status** filter to show **Connected**, **Stopped**, **Error**, or **Disconnected** rows. Click **Clear filters** to reset both.
 
-### The Provider Group
+## Connect an integration
 
-The provider entry shows the provider name with a connection count (for example, "3 connections"). Click the row or the chevron to expand or collapse the list of connections underneath it.
+<Steps>
+  <Step title="Find the tool">
+    Scroll to **Add integration**. Search for the tool or use the **Category** filter.
+  </Step>
+  <Step title="Click Connect">
+    Click **Connect** on the tool's card. For a tool you already connected that allows more than one connection, the button reads **Connect another**.
+  </Step>
+  <Step title="Follow the setup steps">
+    Enter the credentials, give consent, and choose options as the setup page asks. Microsoft 365 and Google Workspace open Company setup pages. Teams has its own setup page. Not every tool has the same steps or buttons.
+  </Step>
+  <Step title="Check the scope before you finish">
+    Review the companies, record types, role defaults, and automatic-import choices. Click **Next** through the steps and **Complete Setup** on the last one. Some mapping controls save as soon as you change them, before you finish the wizard.
+  </Step>
+  <Step title="Check the result">
+    Go back to **Connected Services**. Check the **Status** and **Last Sync** columns. Then open the matching company, device, or import page and confirm the records you expect are there.
+  </Step>
+</Steps>
 
-Each connection keeps its own row with:
+## Run a PSA permission check
 
-- Its name (the nickname you gave it, or a name derived from its configuration)
-- Its own status badge and last sync time
-- Its own actions: resync, import devices, and configure
-- A **...** menu with **Rename** and **Disconnect** for that one connection
+ConnectWise, Autotask, Halo PSA, and Syncro setup includes a **Permissions** step. It tests what your API user can read in your PSA before any sync is turned on.
 
-The provider entry itself offers actions that apply across the whole provider:
+<Steps>
+  <Step title="Open the Permissions step">
+    Connect the PSA first. The **Permissions** step runs after the connection step. If the PSA shows no results yet, click **Re-check**.
+  </Step>
+  <Step title="Read the results">
+    Each area, such as **Companies**, **Tickets**, **Invoices**, or **Product catalog**, shows **Granted**, **Not permitted**, **Not available**, **Could not verify**, or **Granted, but no data returned**. Missing permissions list the exact permission to grant in your PSA.
+  </Step>
+  <Step title="Fix what is missing, then re-check">
+    Grant the permission in your PSA, then click **Re-check**. Repeat until the **Required** permissions are granted.
+  </Step>
+</Steps>
+
+| Area | What it means |
+| --- | --- |
+| **Required** | Companies, contacts and staff, tickets, and ticket reference data. You cannot complete setup until these pass. |
+| **Optional** | Everything else. You can finish setup without them. The matching sync toggle stays locked, with the permission it needs, until the permission is granted. |
+| Later changes | MSPortal re-checks permissions automatically. If your PSA stops allowing a sync later, MSPortal turns that sync off and notifies you. |
+| **Could not verify** | The PSA was slow or unreachable. Nothing is switched off because of it. Click **Re-check** to try again. |
+
+## Rename a connection
+
+<Steps>
+  <Step title="Open the actions menu">
+    In **Connected Services**, click the **...** button in the **Actions** column of the connection.
+  </Step>
+  <Step title="Click Rename">
+    The **Rename integration** dialog opens.
+  </Step>
+  <Step title="Enter a nickname">
+    Type a name in **Nickname**, such as the office or client the connection is for. Save it. Clear the field to go back to the default name.
+  </Step>
+</Steps>
+
+## Disconnect a connection
+
+<Steps>
+  <Step title="Open the actions menu">
+    In **Connected Services**, click the **...** button in the **Actions** column of the connection.
+  </Step>
+  <Step title="Click Disconnect">
+    A confirmation named **Disconnect** with the connection name opens. Read the name to be sure it is the right one.
+  </Step>
+  <Step title="Confirm">
+    Confirm to remove the connection and its stored credentials. Synced data for that connection may be removed. This cannot be undone. Cancel closes the dialog and changes nothing.
+  </Step>
+</Steps>
+
+## Resume a stopped integration
+
+MSPortal stops automatic syncing after repeated connection errors. The row shows **Stopped** (or **Error**) in the **Status** column.
+
+<Steps>
+  <Step title="Open the details">
+    Click the row in **Connected Services** to see the health details and the last error.
+  </Step>
+  <Step title="Fix the cause">
+    Correct the problem the last error describes, such as expired credentials. You can reconnect with current credentials from the setup page.
+  </Step>
+  <Step title="Click Reactivate integration">
+    Syncing resumes shortly after.
+  </Step>
+</Steps>
+
+| Status | Meaning |
+| --- | --- |
+| **Connected** | A connection is present. Check **Last Sync** and the imported records to confirm they are current. |
+| **Syncing** | A sync is running now. |
+| **Stopped** | Automatic syncing was paused, usually after repeated errors. |
+| **Error** | The connection has a problem that needs attention. |
+| **Disconnected** | No connection exists yet. Click **Setup** or **Connect**. |
+
+## Manage a tool with several connections
+
+Some tools allow more than one connection in the same tenant, such as separate Datto RMM accounts or a UniFi console per client. With two or more connections, **Connected Services** groups them under one row that shows a count such as "3 connections".
+
+<Steps>
+  <Step title="Expand the group">
+    Click the row or its arrow to show each connection.
+  </Step>
+  <Step title="Work on one connection">
+    Each connection has its own **Status**, **Last Sync**, and actions, including **Resync**, **Import Devices**, and **Configure**. Its **...** menu has **Rename** and **Disconnect** for that connection only.
+  </Step>
+  <Step title="Use the group actions">
+    The group row has actions for the whole tool, listed below.
+  </Step>
+</Steps>
 
 | Action | What it does |
-|--------|--------------|
-| **Add connection** | Starts the setup wizard for another connection to the same provider |
-| **Manage companies** (or sites, organizations, tenants, depending on the provider) | Opens the unified company mapping grid filtered to that provider |
-| **Manage devices** | Opens the provider-level device type mapping workspace (device sync providers only) |
+| --- | --- |
+| **Add connection** | Starts setup for another connection to the same tool. |
+| **Manage companies** (or **clients**, **customers**, **domains**, **environments**, **organizations**, **policies**, **sites**, **tenants**, depending on the tool) | Opens the company mapping grid for that tool only. |
+| **Manage devices** | Opens the device type mappings for that tool. Shown for tools that sync devices. |
 
-<Tip>
-You can also add another connection from the **Add Integration** catalog at the bottom of the page. Providers that support multiple connections show a **Connect another** button once the first connection exists.
-</Tip>
+You can also add a connection from **Add integration**. Tools that allow several connections show **Connect another** once the first connection exists.
 
-## Provider-Level Device Type Mappings
+## Map companies
 
-Supported device providers expose a shared mapping workspace through **Manage devices** when available. Instead of mapping the same external device types on every connection separately, you set the mapping once and it applies to every current connection of that provider.
+Use **Map companies** in the Integrations page header to link your MSPortal companies to their records in every connected tool. See [Integration Company Mapping](/user-guides/settings/integration-company-mapping) for the steps.
 
-To open it, click **Manage devices** on the provider's row in Connected Services.
+## Map device types for every connection at once
 
-### Workspace Overview
+Some device-sync tools share one device type mapping across all their connections. You set the mapping once, and it applies to every current connection of that tool.
 
-Three summary tiles sit at the top:
-
-| Tile | What it shows |
-|------|---------------|
-| **Connections** | How many connections to this provider are included |
-| **Staged devices** | Total devices discovered across all connections, waiting on mappings and import |
-| **Types needing attention** | External types that are unmapped, or mapped differently between connections |
-
-### Mapping Device Types Across Connections
-
-The **Device type mappings** table lists every external device type discovered across your connections:
+<Steps>
+  <Step title="Open Manage devices">
+    In **Connected Services**, find the tool's group row and click **Manage devices**.
+  </Step>
+  <Step title="Check the summary">
+    Three tiles show **Connections**, **Staged devices**, and **Types needing attention**.
+  </Step>
+  <Step title="Pick a device type">
+    In the **Device type mappings** table, open **Maps to** on a row and choose an MSPortal device type. The mapping saves right away to every connection of that tool, and a message tells you how many connections it updated. Choose **None** to remove the mapping from every connection.
+  </Step>
+  <Step title="Turn on Auto-sync if you want it">
+    Tick **Auto-sync** on a mapped row so new devices of that type import on future syncs. A type must be mapped first. The setting applies to every connection.
+  </Step>
+</Steps>
 
 | Column | Meaning |
-|--------|---------|
-| **External type** | The device type name as the provider reports it |
-| **Devices** | How many staged devices carry that type, across all connections |
-| **Connections** | Coverage, shown as "2 of 3": how many connections have discovered this type |
-| **Maps to** | The MSPortal device type this external type becomes |
-| **Auto-sync** | Whether devices of this type keep importing automatically |
+| --- | --- |
+| **External type** | The device type name as the tool reports it. |
+| **Devices** | How many staged devices have that type, across all connections. |
+| **Connections** | Coverage such as "2 of 3": how many connections found this type. |
+| **Maps to** | The MSPortal device type it becomes. |
+| **Auto-sync** | Whether devices of this type keep importing automatically. |
 
-Pick a device type in the **Maps to** column and the mapping saves immediately to every active connection of the provider. A confirmation tells you how many connections were updated. Choosing **None** removes the mapping from every connection.
+If connections disagree about a type, the row shows **Mixed mappings** and the **Auto-sync** checkbox looks partly filled. Picking a type at the tool level makes every connection match your choice.
 
-<Note>
-If connections currently disagree about a type, the row shows **Mixed mappings** and the auto-sync checkbox appears indeterminate. Selecting a device type at the provider level aligns all connections to your choice.
-</Note>
-
-### Auto-Sync per Type
-
-Each mapped type has an **Auto-sync** checkbox. When enabled, newly discovered devices of that type import automatically on future syncs, with no manual import needed. Auto-sync requires the type to be mapped first, and toggling it here applies the setting to every connection.
-
-### Overriding a Single Connection
-
-Sometimes one connection needs a different mapping than the rest. The **Connection details** card at the bottom of the workspace lists each connection with its status and staged device count.
+### Override one connection
 
 <Steps>
   <Step title="Open the connection">
-    Click **Open devices** on the connection you want to adjust. This opens that connection's own device import page.
+    In the **Connection details** card at the bottom of the workspace, click **Open devices** on the connection.
   </Step>
   <Step title="Change the mapping">
-    Update the **Maps to** value or auto-sync setting for the type on that connection only.
+    Change **Maps to** or the auto-sync setting for that type on this connection only.
   </Step>
   <Step title="Check coverage">
-    Back in the provider workspace, the overridden type now shows **Mixed mappings**. Setting a type at the provider level later replaces the override on every connection.
+    Back in the tool workspace, the type shows **Mixed mappings**. Setting that type at the tool level later replaces the override on every connection.
   </Step>
 </Steps>
 
-### Map with AI
-
-Where offered on a connection's device page, **Map with AI** requests matches for eligible unmapped external types and saves accepted mappings. It is not an unsaved preview. Review the resulting mappings and correct them before starting an import or relying on automatic imports. An AI match is not proof that the selected device type is correct. Ambiguous or unmatched types still need review.
-
-## PSA Integrations
-
-### What syncs and when
-
-PSA integrations can supply company, contact, staff, ticket, and other supported records. Read support does not imply writeback support: actions such as creating a ticket or changing a PSA field have their own provider and permission requirements.
-
-Sync settings and schedules differ by provider and record type. Use the selected provider's configuration and last-sync information; there is no universal 5/15/30-minute setting or blanket bidirectional user synchronization guarantee.
-
-**Resync** queues work for the selected connection. A PSA resync action can request a broader reread. Wait for completion and inspect actual records before repeating either action. Imports, permission checks, webhook provisioning, and provider consent are deliberate operations, not harmless page refreshes.
-
-### Permission Checks
-
-For supported PSA setup, review the provider guide and displayed checks. ConnectWise, Autotask, Halo PSA and Syncro setup includes a **Permissions** step that tests what your API user is actually allowed to read before any sync is switched on. Each area of data (companies, tickets, invoices, product catalog, and so on) is reported as granted or unavailable, and anything unavailable shows the exact permission to grant in your PSA.
-
-| Behaviour | What it means |
-|-----------|---------------|
-| **Required areas** | Companies, contacts and staff, tickets, and ticket reference data. Setup cannot be completed without them |
-| **Optional areas** | Everything else. You can finish setup without them; the matching sync toggle stays locked until the permission is granted |
-| **Ongoing enforcement** | If a permission is revoked later, the affected sync is switched off and your integration admins are notified rather than the sync failing nightly |
-| **Could not verify** | The PSA was slow or unreachable during the check. Nothing is switched off on that basis; re-check to try again |
-
-Re-run the check from the **Permissions** step where offered. Verify the current result before enabling affected sync areas.
-
-### Per-Company Auto-Import Role Override
-
-When PSA contacts are auto-imported, they are assigned a portal role from a fallback chain. You can override that role per company without touching the integration-wide default.
-
-**Role selection order for supported PSA contact imports:**
-
-1. A matching **contact-type rule**, including configured Primary Contact or Important Contact rules. When several rules match, their configured order determines priority; older configurations without an order can use role-permission priority.
-2. The company's **Default Import Role**, when no contact-type rule matches.
-3. The integration's default import role, when neither more specific setting applies.
-
-Without an applicable role, automatic import can skip the contact. A company default does not override a matching contact-type rule.
-
-To set the per-company override:
+### Map unmapped types with AI
 
 <Steps>
-  <Step title="Open Company Settings">
-    Go to **Settings → Companies**, find the company you want to override, and open the actions menu on its row.
+  <Step title="Open a connection's devices page">
+    Click **Open devices** on the connection. The page needs unmapped external types for the button to show.
   </Step>
-  <Step title="Open Company Defaults">
-    Click **Manage Defaults** to open the Company Defaults manager.
+  <Step title="Click Map with AI">
+    It matches your unmapped types to your device types. Only confident matches are filled in. Ambiguous types stay unmapped. The matches save as soon as they are made, and a message tells you how many types were matched. You need manage access for integrations.
   </Step>
-  <Step title="Pick a Default Import Role">
-    Find the **Default Import Role** dropdown. The label below it shows which provider's default the company is currently inheriting (e.g. "Inheriting from ConnectWise: Standard User"). Pick a different role to override that for this one company.
-  </Step>
-  <Step title="Save">
-    Click **Save**. New automatic imports use this fallback when no contact-type rule matches.
+  <Step title="Review the mappings">
+    Check each match in the table and change any you disagree with before you import devices or rely on auto-sync.
   </Step>
 </Steps>
 
-<Note>
-Company and integration defaults do not themselves replace existing users' roles. Explicit contact-type mappings can update linked users during supported recurring PSA syncs. Review those rules before assuming a manual role change will remain in place.
-</Note>
+## Sync and resync a PSA
 
-### Unified Company Mapping
+PSA tools can supply companies, contacts, staff, tickets, and other records. Which records sync, and how often, depends on the tool and on the options you chose in its setup. There is no single sync interval for all tools. Check the tool's own guide and its **Last Sync** column.
 
-Use **Map companies** in the Integrations header to open company rows and available integration-source columns. Microsoft 365 has a separate per-company connection column. Use it to link, unlink, and quick-match companies across every connected tool from one grid. See the [Integration Company Mapping](/user-guides/settings/integration-company-mapping) guide for the full workflow.
+Click **Resync** on a connection to queue a sync for it. Wait for it to finish and check the records before you click it again. A PSA row also has **Sync PSA Data**, which refreshes PSA settings such as priorities, boards, statuses, and types.
 
-## Integration Status
+## Set a default import role for one company
 
-Each integration shows:
+When PSA contacts are imported automatically, MSPortal gives each one a portal role. You can set a different fallback role for one company without changing the integration-wide default.
 
-| Status | Meaning |
-|--------|---------|
-| **Connected** | A connection is present; inspect last sync and the actual imported records for freshness. |
-| **Disconnected** | No current connected instance for this entry; open setup to inspect it. |
-| **Error** | Connection issue requiring attention |
-| **Syncing** | Currently synchronizing data |
+The role is picked in this order.
 
-## Rename or disconnect one connection
+1. A matching contact-type rule from the integration setup, including Primary Contact and Important Contact rules. If several rules match, their configured order decides.
+2. The company's **Default Import Role**, when no contact-type rule matches.
+3. The integration's default import role, when neither of the above applies.
 
-Open the connection row's **...** menu. **Rename** opens a draft nickname; **Save** persists it, while Cancel leaves it unchanged. Clearing the nickname restores the derived connection label.
+If no role applies, the automatic import skips the contact.
 
-**Disconnect** opens a confirmation for that connection. Check its name before confirming. Disconnect removes the connection and its integration-owned data/credentials; it is not a pause or a way to repair a stale sync. Provider-specific cleanup can have external effects. Export or preserve anything you need through the appropriate product workflow first. Cancel closes the confirmation without disconnecting.
+<Steps>
+  <Step title="Open the company">
+    Go to **Settings > Companies** and click the company.
+  </Step>
+  <Step title="Open the Defaults tab">
+    Click **Defaults** at the top of the company page, then the **Import** tab.
+  </Step>
+  <Step title="Pick a Default Import Role">
+    Open **Default Import Role**. **Use integration default** keeps the integration's role, and the text below the field shows which role and tool the company currently inherits. Choose a role to override it for this company.
+  </Step>
+  <Step title="Save">
+    Click **Save Defaults**. Future automatic imports use this role when no contact-type rule matches.
+  </Step>
+</Steps>
+
+Company and integration defaults do not change the role of users who already exist. A contact-type rule can update the role of an already linked user during a later PSA sync, so check those rules before you change a user's role by hand.
 
 ## Troubleshooting
 
-### Connection Issues
-
-1. Verify API credentials are correct
-2. Run the **Permissions** step in the setup wizard to confirm required permissions are granted
-3. Ensure your PSA subscription includes API access
-4. Review firewall/network settings
-
-### Sync Problems
-
-1. Check the sync logs for errors
-2. Verify field mappings are correct
-3. Look for duplicate records
-4. Contact support if issues persist
-
-<Note>
-For detailed setup instructions for each integration, see the [Integrations Guide](/user-guides/integrations/index).
-</Note>
+| Problem | What to do |
+| --- | --- |
+| A connection will not save | Check the credentials and the tool's required permissions. For a PSA, run the **Permissions** step and click **Re-check**. Confirm your PSA plan includes API access, and that no firewall blocks MSPortal. |
+| The row says **Connected** but records are old or missing | Check **Last Sync**, click **Resync**, and open the tool's mapping and import pages. Company links, device type mappings, and import settings are separate. |
+| The row says **Stopped** | Open the details, fix the last error, and click **Reactivate integration**. |
+| A sync toggle is locked | The tool has not granted the permission shown next to it. Grant it in the tool and re-check. |
+| You do not see **Connect** or **Configure** | You need manage access for integration settings. |
+| You do not see **Rename** | You need write access for integration settings. |
+| You do not see **Disconnect** | You need manage access for integration settings. |
+| A documentation tool will not connect | Only one documentation tool can be connected at a time. Disconnect the other one first. |
+| A tool says **Coming Soon** | It is not available in your account yet. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Connected mean every record is current?">No. Inspect the last sync, permissions, mappings, and the actual imported records. A connected or queued status is not an import-completion check.</Accordion>
-  <Accordion title="Does every integration have the same setup wizard?">No. Use the provider's displayed steps and guide. Cloud Company setup and Teams have dedicated workspaces.</Accordion>
-  <Accordion title="Can I connect the same provider twice?">Only when supported. Look for Add connection or Connect another, and use distinct nicknames to identify each instance.</Accordion>
-  <Accordion title="Does Manage devices change just one connection?">Provider-level mappings save across that provider's connections. Open a specific connection's devices page when you need a narrower change; a later provider-level save can replace that override.</Accordion>
-  <Accordion title="Is auto-sync the same as mapping a company?">No. Company links, device-type mappings, import selection, and automatic-import settings are separate prerequisites. Review each relevant workspace.</Accordion>
-  <Accordion title="Can I close setup to undo a company mapping?">No. Mapping controls can persist immediately. Recheck the saved link; leaving the wizard is not rollback.</Accordion>
-  <Accordion title="Will changing the contact import role update existing users?">Company and integration defaults are fallbacks for automatic imports. Explicit contact-type rules can update linked users during supported PSA syncs; check those rules before changing a user manually.</Accordion>
-  <Accordion title="Does Disconnect pause synchronization?">No. It removes the selected connection and integration-owned data/credentials. Review the confirmation and provider-specific consequences.</Accordion>
+  <Accordion title="Does Connected mean every record is current?">
+    No. Check **Last Sync**, the permissions, the mappings, and the records themselves.
+  </Accordion>
+  <Accordion title="Does every integration use the same setup steps?">
+    No. Follow the steps on the tool's own setup page and in its guide. Cloud Company setup and Teams have their own pages.
+  </Accordion>
+  <Accordion title="Can I connect the same tool twice?">
+    Only some tools allow it. Look for **Add connection** or **Connect another**, and give each connection its own nickname.
+  </Accordion>
+  <Accordion title="Does Manage devices change only one connection?">
+    No. It saves to every connection of that tool. To change one connection, click **Open devices** on it. A later change at the tool level replaces that override.
+  </Accordion>
+  <Accordion title="Is auto-sync the same as mapping a company?">
+    No. Company links, device type mappings, import choices, and auto-sync are separate steps.
+  </Accordion>
+  <Accordion title="Can I leave setup to undo a company mapping?">
+    No. Mapping changes can save as soon as you make them. Leaving the wizard does not undo them.
+  </Accordion>
+  <Accordion title="Will changing the default import role update existing users?">
+    No. Company and integration defaults only apply to new automatic imports. A contact-type rule can update a linked user during a PSA sync.
+  </Accordion>
+  <Accordion title="Does Disconnect pause syncing?">
+    No. It removes the connection and its stored credentials, and synced data may be removed. To stop and restart syncing, use the **Stopped** and **Reactivate integration** flow instead.
+  </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
+- [Integration Company Mapping](/user-guides/settings/integration-company-mapping)
+- [Integrations guides](/user-guides/integrations/index)
 - [Enable ConnectWise](/user-guides/integrations/enable-connectwise-integration)
 - [Enable Autotask](/user-guides/integrations/enable-autotask-integration)
 - [Enable Halo PSA](/user-guides/integrations/enable-halo-integration)

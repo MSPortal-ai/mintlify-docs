@@ -1,75 +1,108 @@
 ---
 title: "Configure compliance scoring"
-description: "Adjust tenant compliance weights and grade thresholds, with explicit save and reset behavior."
+description: "Adjust compliance scoring weights and grade thresholds, then save or reset them."
 icon: "sliders"
 ---
 
-**Audience:** MSP staff with Compliance settings access. Saving or resetting requires Compliance settings manage access. These settings apply to the tenant, not just the company selected in the top bar.
+Compliance Scoring controls how much each check counts toward a company's compliance score and what percentage earns each letter grade. This page is for MSP staff. The settings apply to the whole tenant, not only the company selected in the top bar. This is separate from [Client Health scoring](/user-guides/settings/scoring) and from the fixed likelihood and impact matrix in the [risk register](/user-guides/compliance/risk-management).
 
-Open **Settings > Compliance > Scoring**. This is **Compliance Scoring**, separate from [Client Health scoring](/user-guides/settings/scoring) under MSP Tools and from the fixed likelihood × impact matrix used by the [risk register](/user-guides/compliance/risk-management).
+## Before you start
 
-## Review and change weights
+- You need Compliance settings access to open the page. Saving and resetting need manage access.
+- Write down the current values before you change them. Reset restores defaults and cannot be undone.
 
-1. Record the current values before changing the model.
-2. Review **Scope Weights** for Company, Location and Device checks, **Priority Weights** for High, Medium and Low, and the **Criticality Multiplier**.
-3. Edit the intended values. Scope weights accept 0–10; priority weights and criticality multiplier accept 0–5. Use numeric values and the offered increments.
-4. Review **Grade Thresholds** for A, B, C and D, each between 1 and 100. Keep A higher than B, B higher than C and C higher than D so the grades remain meaningful. Scores below D receive F.
-5. Review **Grade Preview**. It shows example percentages graded using the draft thresholds; it is not a live client assessment.
-6. Select **Save Changes** in the header. Wait for the result and reopen Scoring to verify the stored values.
+## Change the weights and grades
 
-<Frame caption="Scope weight controls in Compliance Scoring. Field changes require Save Changes in the page header.">
+<Steps>
+  <Step title="Open Scoring">
+    Go to **Settings > Operations > Compliance** and click **Scoring**. The page is titled **Compliance Scoring**.
+  </Step>
+  <Step title="Set the scope weights">
+    Under **Scope Weights**, set **Company Scope Weight**, **Location Scope Weight** and **Device Scope Weight**. Each accepts 0 to 10 in steps of 0.1.
+  </Step>
+  <Step title="Set the priority weights">
+    Under **Priority Weights**, set **High Priority Weight**, **Medium Priority Weight** and **Low Priority Weight**. Each accepts 0 to 5 in steps of 0.1.
+  </Step>
+  <Step title="Set the criticality multiplier">
+    Under **Criticality Multiplier**, enter a value from 0 to 5. The page shows the formula, `check_weight = scope_weight x (1 + criticality x multiplier) x priority_weight`. A value of 0 ignores criticality.
+  </Step>
+  <Step title="Set the grade thresholds">
+    Under **Grade Thresholds**, set **Grade A Threshold (%)**, **Grade B Threshold (%)**, **Grade C Threshold (%)** and **Grade D Threshold (%)**. Each is a whole number from 1 to 100. Keep A above B, B above C and C above D. A score below the D threshold gets an F.
+  </Step>
+  <Step title="Check the Grade Preview">
+    **Grade Preview** shows sample percentages graded with your draft thresholds. It is not a live company score.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes** in the page header. A toast says **Scoring configuration saved successfully**. The button stays disabled until you change something.
+  </Step>
+</Steps>
+
+<Frame caption="Scope weight controls in Compliance Scoring. Changes need Save Changes in the page header.">
   <img src="/images/product/compliance-scoring-scope-weights.png" alt="Company, Location and Device scope weights with default hints of 3, 2 and 1." width="904" height="860" />
 </Frame>
 
-The displayed weighting formula combines scope, criticality and priority. Setting the criticality multiplier to zero removes criticality's extra contribution; it does not mark a check passed. Configuration changes do not edit answers, evidence, source integrations or risk-register likelihood and impact.
+A zero criticality multiplier removes criticality from the weight. It does not mark a check as passed. Scoring changes do not edit check answers, evidence, integrations or risk likelihood and impact.
 
-## Defaults and reset
+## Reset to defaults
+
+<Steps>
+  <Step title="Click Reset to Defaults">
+    Click **Reset to Defaults** in the page header. The **Reset Scoring Configuration?** dialog opens.
+  </Step>
+  <Step title="Confirm">
+    Click **Reset**. The defaults are saved at once. A toast says **Scoring configuration reset to defaults**. You do not need to click **Save Changes**.
+  </Step>
+</Steps>
 
 | Setting | Default |
-|---|---|
-| Company / Location / Device scope | 3 / 2 / 1 |
-| High / Medium / Low priority | 1.2 / 1 / 0.8 |
+|---------|---------|
+| Company, Location, Device scope weight | 3, 2, 1 |
+| High, Medium, Low priority weight | 1.2, 1, 0.8 |
 | Criticality multiplier | 1 |
-| A / B / C / D minimum percentage | 90 / 80 / 70 / 60 |
+| A, B, C, D thresholds | 90, 80, 70, 60 |
 
-**Reset to Defaults** opens a confirmation. Confirming **Reset** immediately restores the saved tenant defaults. It does not merely stage values for a later Save Changes, and it does not restore your last custom configuration.
+Reset does not restore your last custom settings. To go back to a custom model, enter the values you wrote down and save.
 
-To discard an unsaved edit while preserving the previous saved configuration, leave and reopen the page or return the fields to their previous values. Do not use Reset to Defaults as Cancel. To recover a custom model after a reset, re-enter the recorded values and save.
+To throw away an unsaved edit, change the fields back or leave the page and open it again. Do not use **Reset to Defaults** for that.
 
-## Check the outcome
+## Check the result
 
-Reopen Scoring after Save or Reset, then review the relevant compliance scores. Do not treat the example Grade Preview as proof that every report, cached score or historical publication has recalculated. Saving configuration is not a compliance certification or a repair of failed checks.
+Open Scoring again after a save or reset and confirm the values. Then look at the compliance scores that matter to you. Saving does not certify compliance or fix failed checks.
 
-If saving fails, verify permissions and numeric limits and reopen the saved values before retrying. Save Changes is disabled when there are no draft changes or an operation is running. Visible editable controls do not themselves grant permission to persist them.
+## Troubleshooting
+
+| Problem | What to do |
+|---------|-----------|
+| **Save Changes** is disabled | There are no unsaved changes, or a save or reset is running |
+| **Failed to save scoring configuration** | Check that each number is inside its range, then try again. Reopen the page to see the stored values |
+| **Save Changes** or **Reset** does not work | You need manage access to Compliance settings |
+| A number will not accept my value | Scope weights go to 10. Priority weights and the multiplier go to 5. Thresholds are 1 to 100 |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is Compliance Scoring the Client Health model?">
+    No. Client Health has its own settings page and model.
+  </Accordion>
+  <Accordion title="Does editing a number save it?">
+    No. Click **Save Changes**.
+  </Accordion>
+  <Accordion title="Can I use Reset to Defaults to cancel an edit?">
+    No. Reset saves the defaults at once. To discard an edit, leave the page and open it again.
+  </Accordion>
+  <Accordion title="Can I reset scoring for one company?">
+    No. Scoring is tenant-wide.
+  </Accordion>
+  <Accordion title="What does Grade Preview show?">
+    How your draft thresholds grade fixed sample percentages. It does not show live scores.
+  </Accordion>
+  <Accordion title="Can I change risk severity bands here?">
+    No. Risk scoring uses a separate fixed matrix. See [Configure risk tracking and categories](/user-guides/settings/compliance-risk).
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
 - [Compliance Settings](/user-guides/settings/compliance)
 - [Risk Management](/user-guides/compliance/risk-management)
 - [Client Health Score Configuration](/user-guides/settings/scoring)
-
-## FAQs
-
-<AccordionGroup>
-  <Accordion title="Is Compliance Scoring the Client Health model?">
-    No. Compliance Scoring configures compliance weights and grades. Client Health has a separate settings page and model.
-  </Accordion>
-  <Accordion title="Does editing a number immediately save it?">
-    No. Select Save Changes to persist the draft.
-  </Accordion>
-  <Accordion title="Is Reset to Defaults a way to cancel an edit?">
-    No. Confirming Reset immediately restores saved tenant defaults. Leave and reopen to discard an unsaved edit instead.
-  </Accordion>
-  <Accordion title="Can I reset just the selected company?">
-    No. The scoring configuration is tenant-wide.
-  </Accordion>
-  <Accordion title="What does the Grade Preview prove?">
-    It shows how draft thresholds grade fixed example percentages. It does not verify live company scores or recalculated reports.
-  </Accordion>
-  <Accordion title="Does setting criticality to zero pass a check?">
-    No. A zero multiplier removes the criticality contribution to weighting; it does not change the check answer.
-  </Accordion>
-  <Accordion title="Can I change risk severity bands here?">
-    No. Risk likelihood and impact use a separate fixed matrix.
-  </Accordion>
-</AccordionGroup>

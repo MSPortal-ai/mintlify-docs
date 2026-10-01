@@ -48,7 +48,7 @@ Change management gives you a controlled path for risky work: a technician reque
   </Step>
 
   <Step title="Choose the approver company role">
-    Select the **Approver company role**. When a change is requested on a ticket, eligible users assigned to that company role at that client are resolved as recipients when the request is created.
+    Select the **Approver company role**. When a change is requested on a ticket, the users assigned to that company role at that client become the approvers for that request. They are recorded when the request is created.
   </Step>
 
   <Step title="Select the Autotask integration">
@@ -61,7 +61,7 @@ Change management gives you a controlled path for risky work: a technician reque
 </Steps>
 
 <Warning>
-Assign eligible approvers before requesting a change. Without them, the request cannot follow the intended approval workflow. Assign users to the role first, under **Settings > Users & Roles**.
+Assign users to the approver role at each client before anyone requests a change, under **Settings > Users & Roles**. If nobody holds the role at that client, the request fails with "No users are assigned to the configured approver role for this company." Saving without a role while approvals are on is also rejected.
 </Warning>
 
 ---
@@ -128,7 +128,7 @@ Approvers see the pending request on the ticket, and get an in-app notification 
 </Steps>
 
 <Info>
-Only users recorded as approvers for that pending request can approve or reject. Everyone else sees the request but has no decision buttons, even administrators.
+Only the users recorded as approvers for that pending request can approve or reject. Everyone else sees the request but has no decision buttons, even administrators.
 </Info>
 
 ---
@@ -230,38 +230,41 @@ Change management uses three different kinds of access. They are separate on pur
 
 ### Calendar visibility
 
-Appointments and changes have their own visibility scope, set per role.
+Appointments and changes have their own visibility choice, set per role.
 
 <Steps>
   <Step title="Open the role">
     Go to **Settings > Users & Roles**, open the **Roles** tab, and edit the role.
   </Step>
-  <Step title="Open Calendar visibility">
-    Find the **Calendar** resource row and click the chevron next to its **Read** checkbox. The **Calendar visibility** popover opens: "Choose which appointment and change records this role can view."
+  <Step title="Expand Calendar">
+    On the **Calendar** resource row, expand the detailed permissions. Under the **Read** permission you see **Appointments**, **Changes**, and **Service calls**.
   </Step>
-  <Step title="Set a scope for each layer">
-    Choose a scope for **Appointments** and, separately, for **Changes**. Selecting any scope automatically grants Read on Calendar.
+  <Step title="Pick a scope for each layer">
+    Choose one option for **Appointments** and, separately, one for **Changes**. Leave a group with nothing selected to hide that layer.
+  </Step>
+  <Step title="Save the role">
+    Save the role. Users with that role see the change on their next page load.
   </Step>
 </Steps>
 
-| Scope | What the role sees |
-|-------|--------------------|
-| **Disabled** | Nothing from that layer. The toggle does not even appear in the calendar header. |
-| **Mine** | Only records the user is involved in: assigned technician, meeting participant, change requester, approver, or the person who decided it. |
-| **Site** | Records involving anyone at the user's own site. |
-| **All** | Everything within the companies the user is already scoped to. |
+| Option | What the role sees |
+|--------|--------------------|
+| None selected | Nothing from that layer. |
+| **Mine only** | Only records the user is involved in, such as an assigned technician, meeting participant, change requester, or approver. |
+| **My site** | Records involving anyone at the user's own site. |
+| **All appointments** / **All changes** | Everything within the companies the user is already scoped to. |
 
-- The scopes are exclusive. A role has one scope for appointments and one for changes, never two of either.
-- **Site** behaves as **Mine** for a user with no site set on their profile, so nobody sees more than intended by accident.
-- **Manage** on Calendar means **All** on both layers. The dropdowns lock and the popover reads "Manage access includes All appointments and changes."
-- Company scoping still applies on top. **All** means all changes at the companies the user can already see, not every company in the tenant.
+- A role has one option for appointments and one for changes, never two of either.
+- Users with no site on their profile get **Mine only** behavior from **My site**.
+- **Manage** on Calendar includes **All appointments** and **All changes**.
+- Company scoping still applies. "All" means all changes at the companies the user can already see.
 
 <Note>
-Change visibility starts deliberately narrow. Existing roles with calendar access received **Appointments: All**, but only roles with **Manage** on Calendar received **Changes: All**. If your technicians cannot see the Changes layer, this is why: give their role a change scope.
+Existing roles with calendar access were given **All appointments**, but only roles with **Manage** on Calendar were given **All changes**. If technicians cannot see the Changes layer, give their role a **Changes** option.
 </Note>
 
 <Tip>
-A common shape is technicians on **Changes: Site** and **Appointments: Mine**, dispatchers and service managers on **All** for both, and client-facing roles with the change layer disabled.
+A common setup is technicians on **Changes: My site** and **Appointments: Mine only**, dispatchers and service managers on **All** for both, and client-facing roles with changes left unselected.
 </Tip>
 
 ### Requesting and running changes
@@ -288,13 +291,13 @@ Changes and appointments created in your PSA are pulled into the same calendar, 
 
 | PSA | Changes layer | Appointments layer | Cadence |
 |-----|---------------|--------------------|---------|
-| **Autotask** | Ticket change request approvals | Service calls | Every 10 minutes |
-| **ConnectWise** | Tickets flagged as a request for change | Schedule entries | Every 10 minutes |
-| **Halo PSA** | Change calendar records | Appointments | Every 10 minutes |
+| **Autotask** | Ticket change request approvals | Service calls | Changes every 10 minutes, service calls every 30 minutes |
+| **ConnectWise** | Tickets flagged as a request for change | Schedule entries | Every 30 minutes |
+| **Halo PSA** | Change calendar records | Appointments | Every 30 minutes |
 
 Imported records carry their title, window, company, site, status, risk, assigned technicians, the linked ticket, and a deep link back to the PSA.
 
-The first sync back-fills a year of history. After that, syncs are incremental across a rolling window running a year back and about eighteen months ahead. Records deleted in the PSA drop off the MSPortal calendar once a full snapshot confirms they are gone.
+The first sync back-fills history: a year for Autotask and Halo, and 30 days for ConnectWise, which also looks a year ahead. After that, syncs are incremental. Records deleted in the PSA drop off the MSPortal calendar once a full snapshot confirms they are gone.
 
 Push-back to the PSA is Autotask-only, and only for approvals: requesting an approval creates the Autotask change request approval, and approving or rejecting updates it. Freeze windows, scheduling, and the start and complete actions are never written to a PSA.
 
@@ -312,15 +315,15 @@ A provider's changes and appointments only appear when that integration is conne
   </Accordion>
 
   <Accordion title="A change request has no approvers">
-    Nobody is assigned to the approver company role at that client. Assign at least one user to the role, then request the change again. Check the role chosen in **Settings > Tickets > Change Approvals** matches the one you assign users to.
+    The request fails if nobody holds the approver company role at that client. Assign at least one user to the role, then request the change again. Check the role chosen in **Settings > Tickets > Change Approvals** matches the one you assign users to.
   </Accordion>
 
   <Accordion title="I can see the request but there are no Approve or Reject buttons">
-    Only users assigned to the approver company role for that client can decide a request. Being an administrator does not make you an approver.
+    Only the approvers recorded on that request can decide it. They are the users who held the approver company role at that client when the request was created. Being an administrator does not make you an approver.
   </Accordion>
 
   <Accordion title="The Changes layer is missing from the calendar">
-    Your role has no change visibility scope. Add **Changes: Mine**, **Changes: Site**, or **Changes: All** to the role, or grant Manage on Calendar.
+    Your role has no **Changes** option. Add **Mine only**, **My site**, or **All changes** under the Calendar permissions, or grant Manage on Calendar.
   </Accordion>
 
   <Accordion title="An approved change is not on the calendar">
@@ -357,46 +360,35 @@ A provider's changes and appointments only appear when that integration is conne
 
 ---
 
-## Related Resources
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does saving approval settings approve existing requests?">
+    No. Settings apply to future requests. Open each pending request to see its approvers and decision.
+  </Accordion>
+  <Accordion title="Does approval mean the change is done?">
+    No. An approved change with a window becomes **Scheduled**, and without one it stays **Approved**. **Start change** and **Complete change** are separate steps.
+  </Accordion>
+  <Accordion title="Do freeze windows block emergency scheduling?">
+    No. They raise a warning. Review the overlap before you request or run the change.
+  </Accordion>
+  <Accordion title='Does "No scheduling conflicts detected." mean the window is safe?'>
+    It means no overlap was found in the changes and freeze windows you can see. Check the client's own calendar and dependencies too.
+  </Accordion>
+  <Accordion title="Can I run a PSA-owned change from MSPortal?">
+    No. Provider-owned changes are read-only. Manage them in the PSA.
+  </Accordion>
+  <Accordion title="Does changing the approver role update pending requests?">
+    No. Approvers are recorded when a request is created. Pending requests keep their original approvers.
+  </Accordion>
+  <Accordion title="What if an Autotask-owned decision fails?">
+    Read the error and check the approval state in Autotask before you try again.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
 
 - [Tickets](/user-guides/ticketing/index) - Working with tickets
 - [Calendar](/user-guides/calendar/index) - The calendar module
 - [Users & Roles](/user-guides/settings/users-roles) - Roles, permissions, and company assignments
 - [Ticket Settings](/user-guides/settings/tickets) - Other ticket configuration
-
-## Need Help?
-
-For assistance with change management, contact support@msportal.ai.
-
-## Questions and troubleshooting
-
-<AccordionGroup>
-  <Accordion title="Does saving approval settings approve existing requests?">
-    No. It configures future request handling. Open each pending request to inspect its recorded approvers and decision state.
-  </Accordion>
-  <Accordion title="Can an administrator approve without being a recipient?">
-    Broad administration access is not an approval vote. The decision action requires the user to be a recorded approver for that pending request.
-  </Accordion>
-  <Accordion title="Does approval mean the change has been completed?">
-    No. With a window it becomes Scheduled; without one it remains Approved. Start change and Complete change are separate lifecycle actions for supported portal-managed requests.
-  </Accordion>
-  <Accordion title="Do freeze windows block emergency scheduling?">
-    They raise conflict warnings rather than preventing scheduling. Review the overlap and your operating process before requesting or running the change.
-  </Accordion>
-  <Accordion title="Does No scheduling conflicts detected guarantee the window is safe?">
-    No. It reflects the records and scope available to the check. Review the client’s operations and data freshness; it is not proof that every external calendar or dependency was checked.
-  </Accordion>
-  <Accordion title="Can I run a provider-owned change from the portal?">
-    Provider-owned changes are read-only in this workflow. Open the source PSA to manage them; portal-owned lifecycle controls do not apply to every imported change.
-  </Accordion>
-  <Accordion title="Does changing the approver role add voters to an existing request?">
-    Approvers are recorded when the request is created. Inspect the pending request rather than assuming later company-role edits rewrite its recipients.
-  </Accordion>
-  <Accordion title="What should I do if an Autotask-owned decision fails?">
-    Read the error and verify the source approval state before retrying. The provider update and portal result are both relevant; do not treat a clicked Approve button as confirmed success.
-  </Accordion>
-</AccordionGroup>
-
-## Continue reading
-
-- [User guides](/user-guides/getting-started/index)

@@ -66,11 +66,11 @@ Set up the app's branding and tabs in MSPortal.
   </Step>
 
   <Step title="Set the Accent Color">
-    Pick the hex color Teams uses for app accents. It defaults to your brand's primary color from **Settings > Branding**.
+    Pick the hex color Teams uses for app accents. It defaults to your brand's primary color from **Settings > Tenant > Branding**.
   </Step>
 
   <Step title="Set a Vanity Domain (Optional)">
-    Optionally enter a custom domain (for example `portal.yourmsp.com`) to use for open-in-browser links. The domain must already be active and verified for your account under **Settings > Domains**; DNS alone is not sufficient. Leave it blank to use the standard MSPortal address.
+    Optionally enter a custom domain (for example `portal.yourmsp.com`) to use for open-in-browser links. The domain must already be verified and active for your account under **Settings > Tenant > Domains**, and it must point at MSPortal through DNS. Leave it blank to use the standard MSPortal address.
 
     <Info>
       Tabs inside Teams always load from the standard MSPortal address so Microsoft sign-in works; the vanity domain only affects links that open in the browser.
@@ -78,7 +78,7 @@ Set up the app's branding and tabs in MSPortal.
   </Step>
 
   <Step title="Save">
-    Click **Save** or **Save changes** and wait for success. Tab toggles, reordering and **Reset to defaults** edit the form until you save. Downloading uses the saved configuration.
+    Click **Save changes** and wait for the **Teams app saved** message. Tab toggles, reordering and **Reset to defaults** change the form only until you save. The download uses the saved configuration.
   </Step>
 </Steps>
 
@@ -94,7 +94,7 @@ MSPortal generates a Teams app package (a zip file) from your configuration. You
   </Step>
 
   <Step title="Upload the App in Microsoft Teams">
-    In Microsoft Teams, open **Apps > Manage your apps > Upload an app**, then choose the custom-app upload option available to you. Labels and availability depend on your organization’s policy. See [Microsoft’s upload instructions](https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/deploy-and-publish/apps-upload).
+    In Microsoft Teams, open **Apps > Manage your apps > Upload a custom app > Upload for me or my teams**.
   </Step>
 
   <Step title="Pick the Downloaded Zip">
@@ -119,9 +119,9 @@ You can offer any of the following MSPortal views as tabs in your Teams app:
 | Tab | Description | Enabled by Default |
 |-----|-------------|--------------------|
 | **Home** | Dashboard, alerts, and recent activity | Yes |
-| **Tickets** | Service tickets the signed-in user can access | Yes |
+| **Tickets** | Open service tickets across all clients | Yes |
 | **Training** | End-user security training and assigned courses | Yes |
-| **Devices** | Managed endpoints the signed-in user can access | No |
+| **Devices** | Managed endpoints across every client | No |
 | **Calendar** | Scheduled meetings, projects, and onsite visits | No |
 | **Projects** | Active client projects and milestones | No |
 | **Planner** | Roadmap of upcoming MSP work | No |
@@ -129,7 +129,7 @@ You can offer any of the following MSPortal views as tabs in your Teams app:
 | **Compliance** | Frameworks, controls, and audit posture | No |
 | **Surveys** | CSAT, NPS, and onboarding surveys | No |
 
-Inside Teams, users sign in with their Microsoft account and see live MSPortal data with your permission model applied.
+Inside Teams, users sign in with their Microsoft account and see live MSPortal data. Each user sees only what their MSPortal permissions and company scope allow.
 
 ---
 
@@ -189,26 +189,26 @@ After publishing your Teams app:
 </CardGroup>
 
 
-## Questions and troubleshooting
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why does the download omit my latest tab edits?">
-    The package reads saved settings. Save successfully before downloading, even when the download button was already enabled from an earlier setup.
+  <Accordion title="Why does the download miss my latest tab edits?">
+    The package is built from saved settings. Select **Save changes** and wait for it to succeed before you download.
   </Accordion>
-  <Accordion title="Does Reset to defaults immediately change the installed app?">
-    No. It resets the tab editor. Save, download a new package and distribute the update through Teams to change installed tab configuration.
+  <Accordion title="Does Reset to defaults change the installed app?">
+    No. It resets the tab editor only. Save, download a new package and upload it in Teams to change installed tabs.
   </Accordion>
-  <Accordion title="Does adding a tab grant access to its data?">
-    No. The signed-in user still needs the corresponding MSPortal access and company scope. Test with the intended client account before distributing the app.
+  <Accordion title="Does adding a tab give clients access to its data?">
+    No. Each signed-in user still needs the matching MSPortal access and company scope. Test with a client account before you distribute the app.
   </Accordion>
   <Accordion title="Why is my vanity domain rejected even though DNS resolves?">
-    Verify it under Settings > Domains for this MSPortal account. It must be active and verified; a hostname belonging to another account or MSPortal’s shared host cannot be claimed here.
+    The domain must be verified and active for your account under **Settings > Tenant > Domains**. You cannot use a domain that belongs to another account or MSPortal's own host.
   </Accordion>
-  <Accordion title="Does Save deploy the package to all clients?">
-    No. Save updates MSPortal configuration and advances the package version. Download and distribute the updated package through each organization’s Teams process.
+  <Accordion title="Does Save deploy the app to all clients?">
+    No. Saving updates the configuration and raises the package version. Download the package and distribute it through each organization's Teams process.
   </Accordion>
-  <Accordion title="What should I verify before wider rollout?">
-    Install the saved package for a test user, sign in, check the enabled tabs and their company scope, and verify browser links. Custom-app policies may require an administrator to approve distribution.
+  <Accordion title="What should I check before rolling it out?">
+    Install the saved package for a test user, sign in, and check the enabled tabs, their data and the browser links. A Teams administrator may need to approve distribution.
   </Accordion>
 </AccordionGroup>
 

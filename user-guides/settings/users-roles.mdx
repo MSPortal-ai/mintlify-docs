@@ -4,101 +4,233 @@ description: 'Find MSP staff, Company users, permission roles, and organizationa
 icon: 'users'
 ---
 
-MSP staff use **Settings > Users & Roles** to manage portal users and their access. The available tabs and actions depend on your administrative permissions.
+Use **Settings > Users & Roles** to invite MSP staff, change their access, compare permission roles and manage team roles. This page is for MSP staff. Company users ask their IT provider to change their access.
 
-<Note>
-Company user administration is performed by the MSP. Company administrators request user or permission changes from their IT provider. A Company role does not grant access to MSP settings.
-</Note>
+## Before you start
+
+- The tabs you see depend on your permissions. You need read access to **Users**, **Roles** or **Company Users** settings for the matching tab to appear.
+- Inviting, editing and bulk-changing users needs **write** access to Users settings. Deleting users needs **manage** access.
+- Create the role a person will hold before you invite them. Every staff user needs a role.
+- Company administrators cannot manage users themselves. A Company role does not grant access to MSP settings.
 
 ## Choose a tab
 
 | Tab | What it contains |
 | --- | --- |
-| **Users** | MSP staff user records and their assigned Tenant Roles |
-| **Company Users** | Company user records and their assigned Permissions Groups |
-| **Roles** | Tenant and Company permission-role definitions. The **Permission Matrix** sub-tab shows every role side by side |
+| **Users** | MSP staff user records and their Tenant Roles |
+| **Company Users** | Company user records and their Permissions Groups |
+| **Roles** | Tenant and Company permission roles. The **Role List** and **Permission Matrix** sub-tabs show them one at a time or side by side |
 | **Team Roles** | Organizational team responsibilities and related team configuration |
+| **Access Rules** | Rules that stop service accounts from signing in. Only the Primary Admin sees this tab |
 
-**Company Roles** within the Roles tab are permission sets. **Team Roles** describe staff responsibilities and supply the **Assignee Role** choices for MSP-owned tasks in onboarding templates. If a template offers only one MSP role, add and save the missing roles in [Team Roles](https://app.msportal.ai/settings/users?tab=team_roles), then reopen the template. Onboarding contacts, client-owned task assignees, and email recipients instead use **Settings > Projects > Client Portals > Client roles**.
+Company roles are permission sets. Team Roles describe staff responsibilities and supply the **Assignee Role** choices for MSP-owned tasks in onboarding templates. Onboarding contacts, client-owned task assignees and email recipients use **Settings > Projects > Client Portals > Client roles** instead.
 
-## Manage Team Roles
+## Invite an MSP staff user
 
-Open **Team Roles** to create or edit a responsibility such as a service manager or onboarding lead. Read access to either **Company Users** or **Companies** settings opens the tab. Write access to either setting allows you to add and edit role definitions; Manage access to either allows you to delete them.
+<Steps>
+  <Step title="Open Settings > Users & Roles > Users">
+    The table lists each staff user with their role, integration, status, calendar sync setting and last login.
+    <Frame>
+      <img src="/images/settings/settings-users-roles-list.png" alt="Users tab listing staff with Role, Status and Last login, with Import and Invite User buttons" />
+    </Frame>
+  </Step>
+  <Step title="Click Invite User">
+    The **Invite User** dialog opens.
+  </Step>
+  <Step title="Enter the person's details">
+    Fill in **Email** and **Full Name**. **Phone Number (optional)** is optional.
+  </Step>
+  <Step title="Select a Role">
+    Choose a tenant role. If the list is empty, create a role first on the **Roles** tab.
+  </Step>
+  <Step title="Choose how they sign in">
+    Leave **SSO user** unticked to email an invitation. Tick **SSO user (user will sign in with Microsoft 365 or Google)** to create the account directly. For SSO users, you can also tick **Send welcome email with login instructions**.
+  </Step>
+  <Step title="Fill in any custom fields">
+    Complete the required custom fields at the bottom of the dialog, if your organization has them.
+  </Step>
+  <Step title="Click Send Invitation">
+    For an SSO user, the button reads **Create User**. A toast confirms the invitation.
+  </Step>
+</Steps>
 
-Global staff assignments, PSA mappings, and the client teams menu still require the corresponding Company Users settings permissions.
+To bring staff in from a connected tool, click **Import**, choose **Import from** your integration, and select the users to link or create.
 
-<Frame caption="Team Roles in MSPortal Demo.">
-  <img src="/images/settings/team-role-permissions-desktop.png" alt="Team Roles settings showing role definitions and edit controls" width="1280" height="853" />
-</Frame>
+## Edit a staff user
 
-If a role cannot be saved, one message explains the failure. Correct the form or ask your MSP administrator to check your access, then retry.
+<Steps>
+  <Step title="Open Settings > Users & Roles > Users">
+    Find the person in the table.
+  </Step>
+  <Step title="Open the row menu and choose Edit">
+    The **Edit User** dialog opens.
+  </Step>
+  <Step title="Change the details">
+    You can change **Full Name**, **Email Address**, **Phone Number (optional)**, **Avatar URL**, **Role** and **Account Status** (**Active**, **Disabled**, **Pending** or **Imported**). You cannot change your own role or status.
+  </Step>
+  <Step title="Click Save Changes">
+    A toast confirms the update. Role changes apply the next time the user signs in.
+  </Step>
+</Steps>
 
-<Frame caption="A readable role validation message on a phone.">
-  <img src="/images/settings/team-role-error-mobile.png" alt="Team Role edit form with one message asking the user to fix validation errors" width="390" height="844" />
-</Frame>
+The row menu also offers **Change Role**, **Disable User** or **Enable User**, **Send Invitation** (for pending and imported users) and **Delete**.
+
+## Change many staff users at once
+
+<Steps>
+  <Step title="Tick the checkbox on each user">
+    The header checkbox selects the current page. You can also select every user that matches your filters.
+  </Step>
+  <Step title="Open Actions">
+    The **Actions (N)** menu appears once you select a user.
+  </Step>
+  <Step title="Choose an action">
+    Options include **Change Role**, **Enable Selected**, **Disable Selected**, **Send Invitation Email** and **Delete Selected**. **Add teams and companies** appears if you also have write access to Company Users settings. **Enable Calendar Sync** and **Disable Calendar Sync** appear when calendar sync is set to individual approval.
+  </Step>
+  <Step title="Review the confirmation">
+    The dialog lists the users it will change. Confirm to apply. If an error reports partial completion, check the affected users before you retry.
+  </Step>
+</Steps>
+
+Disabling a user signs them out. Deleting a user removes their sign-in account and cannot be undone. You cannot delete or disable your own account.
+
+## Give staff access to specific companies
+
+When **Restrict users to assigned companies only** is on in [Tenant settings](/user-guides/settings/tenant), staff see only the companies they are assigned to.
+
+<Steps>
+  <Step title="Open Settings > Users & Roles > Users">
+    Tick the staff users to assign.
+  </Step>
+  <Step title="Choose Actions > Add teams and companies">
+    Pick the **Team roles** and the **Companies**. Existing assignments are kept and duplicates are skipped. A batch can include up to 10,000 users, 100 companies and 50 team roles.
+  </Step>
+  <Step title="Click Add assignments">
+    A toast reports how many assignments were added.
+  </Step>
+</Steps>
+
+To assign the same staff across many companies and keep company-specific exceptions, see [Global Team Roles](/user-guides/settings/global-team-roles).
+
+## Create a role
+
+Open **Settings > Users & Roles > Roles** and click **Add Role**. The [role guide](/user-guides/getting-started/how-to-create-a-new-user-role) walks through each field, permission level, the calendar visibility options and presets.
+
+### Duplicating a Role
+
+Duplicate a role when an existing one is close to what you need.
+
+<Steps>
+  <Step title="Open Settings > Users & Roles > Roles">
+    On the **Role List** sub-tab, find the role to copy.
+    <Frame>
+      <img src="/images/settings/settings-users-roles-tab.png" alt="Roles list with a row menu on each role and the Add Role button" />
+    </Frame>
+  </Step>
+  <Step title="Open the row menu and choose Duplicate">
+    A new role named **Copy of** and the original name is created immediately.
+  </Step>
+  <Step title="Edit the copy">
+    Click the new role to rename it and adjust its permissions, then click **Update Role**.
+  </Step>
+</Steps>
+
+The copy keeps the description, permissions, role options such as bypass company restrictions and update emails, and, for Company roles, the ticket display group. It does not copy user assignments, so nobody holds the new role until you assign it. You need **manage** access to the role type to see **Duplicate**.
 
 ## Compare every role
 
-The **Permission Matrix** sub-tab on the **Roles** tab shows every role at once, so you can see exactly what each role can reach without opening each one. Each row is a permission and each column is a role. The column header shows how many active users hold the role.
+The **Permission Matrix** shows every role at once, so you can see what each role can reach without opening each one. Each row is a permission and each column is a role. The column header shows how many active users hold the role.
 
-<Frame caption="Permission Matrix for Tenant roles in MSPortal Demo.">
-  <img src="/images/settings/settings-roles-permission-matrix.png" alt="Permission Matrix sub-tab of the Roles tab, with a row per permission and a column per role, each cell showing None, Read, Write, or Manage" width="2880" height="1920" />
-</Frame>
-
-1. Open **Settings > Users & Roles > Roles**, then select **Permission Matrix**.
-2. Choose **Tenant roles** or **Company roles**.
-3. Read each cell as the role's access level. **Manage** includes Write and Read, and **Write** includes Read.
-4. Select the arrow beside a permission such as **Projects** to see its detailed options, like which project views a role can open.
-
-A **Custom** tag means the role's detailed options differ from the defaults for its level. Expand the row to see them.
-
-Use the column filters to narrow the matrix. For example, filter a role's column to **Manage** to list everything that role fully controls, or filter **Section** to **Settings**. Use **Columns** to hide roles you are not comparing.
+<Steps>
+  <Step title="Open Settings > Users & Roles > Roles">
+    Select the **Permission Matrix** sub-tab.
+    <Frame>
+      <img src="/images/settings/settings-roles-permission-matrix.png" alt="Permission Matrix sub-tab of the Roles tab, with a row per permission and a column per role, each cell showing None, Read, Write, or Manage" width="2880" height="1920" />
+    </Frame>
+  </Step>
+  <Step title="Choose Tenant roles or Company roles">
+    The matrix shows one role type at a time.
+  </Step>
+  <Step title="Read each cell">
+    **Manage** includes Write and Read, and **Write** includes Read.
+  </Step>
+  <Step title="Expand a permission">
+    Click the arrow beside a permission such as **Projects** to see its detailed options, like which project views a role can open. A **Custom** tag means the detailed options differ from the defaults for that level.
+  </Step>
+  <Step title="Filter the matrix">
+    Use the column filters to narrow it. For example, filter a role's column to **Manage** to list everything it fully controls, or filter **Section** to **Settings**. Use **Columns** to hide roles you are not comparing.
+  </Step>
+</Steps>
 
 ### Change access from the matrix
 
-If you can edit roles, each cell is a control:
+You can edit if you have write access to roles for Tenant roles, or write access to Company users for Company roles. Otherwise the matrix is read-only.
 
-1. Change the level in a cell, or tick a detailed option in an expanded row. Edited cells are outlined.
-2. Repeat for any other roles. Nothing is saved yet.
-3. Select **Save changes** to save every edited role, or **Discard** to drop the edits.
-
-<Frame caption="An unsaved change to one role, outlined, with Save changes and Discard in the toolbar.">
-  <img src="/images/settings/settings-roles-permission-matrix-unsaved.png" alt="Permission Matrix with one edited cell outlined and the toolbar showing Unsaved changes to 1 role, Discard, and Save changes" width="2880" height="1920" />
-</Frame>
+<Steps>
+  <Step title="Change a cell">
+    Change the level in a cell, or tick a detailed option in an expanded row. Edited cells are outlined.
+  </Step>
+  <Step title="Edit other roles if needed">
+    Nothing is saved yet.
+    <Frame>
+      <img src="/images/settings/settings-roles-permission-matrix-unsaved.png" alt="Permission Matrix with one edited cell outlined and the toolbar showing Unsaved changes to 1 role, Discard, and Save changes" width="2880" height="1920" />
+    </Frame>
+  </Step>
+  <Step title="Click Save changes">
+    This saves every edited role. Click **Discard** to drop the edits.
+  </Step>
+</Steps>
 
 Saving a role changes access for every user who holds it. Options that **Manage** grants stay locked until you lower the level. To rename a role, set it as the default, or change Company role settings such as quote visibility, use the **Role List** sub-tab.
 
-## Global team roles and membership automation
+## Manage Team Roles
 
-The [Global Team Roles guide](/user-guides/settings/global-team-roles) previews assigning the same staff across companies, preserving company-specific exceptions, and automating additions or removals. This feature is a branch preview and is separate from permission-role administration.
+Team Roles describe responsibilities such as service manager or onboarding lead. They do not grant permissions. Read access to **Company Users** or **Companies** settings opens the tab. Write access to either lets you add and edit roles. Manage access to either lets you delete them.
 
-## Change access
+<Steps>
+  <Step title="Open Settings > Users & Roles > Team Roles">
+    The tab lists your role definitions.
+    <Frame>
+      <img src="/images/settings/team-role-permissions-desktop.png" alt="Team Roles settings showing role definitions and edit controls" width="1280" height="853" />
+    </Frame>
+  </Step>
+  <Step title="Add or edit a role">
+    Click **Add Role** to create a role, or edit an existing one, then save it.
+  </Step>
+  <Step title="Fix any save error">
+    If a role cannot be saved, one message explains why. Correct the form, or ask your MSP administrator to check your access, then save again.
+    <Frame>
+      <img src="/images/settings/team-role-error-mobile.png" alt="Team Role edit form with one message asking the user to fix validation errors" width="390" height="844" />
+    </Frame>
+  </Step>
+</Steps>
+
+Global staff assignments, PSA mappings and the client teams menu still need the matching Company Users settings permissions.
+
+If an onboarding template offers only one MSP role in **Assignee Role**, add and save the missing roles in [Team Roles](https://app.msportal.ai/settings/users?tab=team_roles), then reopen the template.
+
+## Change a user's access
 
 - [Change a Company user's permissions](/user-guides/settings/change-company-user-permissions): assign a different Permissions Group to one user or a selected set of users.
-- [Create and edit permission roles](/user-guides/getting-started/how-to-create-a-new-user-role): define what the role permits, duplicate a starting role, or import a preset.
+- [Create and edit permission roles](/user-guides/getting-started/how-to-create-a-new-user-role): define what a role permits, duplicate a starting role, or import a preset.
 - [Understand your own access](/user-guides/account/understand-your-access): view your role and access information in your personal settings.
+- [Global Team Roles](/user-guides/settings/global-team-roles): assign the same staff across companies and automate additions or removals. This is a branch preview.
 
-Changing one user's role assignment and editing the role itself have different effects. A role edit affects the shared permission definition for users assigned to that role. Use a separate role when only a subset needs different access.
+Changing one user's role and editing the role itself have different effects. A role edit changes the shared definition for everyone who holds it. Create a separate role when only some users need different access.
 
-## Work with user lists
+## Troubleshooting
 
-Choose the correct user type before looking up a person. Confirm their name, email, and company, where applicable. Table filters and the current company scope affect which Company users appear.
-
-Selection actions operate on the selected users. Review the count and whether the selection includes matching results across multiple pages before applying a bulk action. An error can report partial completion; verify the affected records before retrying.
-
-Invitation emails, user role assignments, permission-role definitions, and account removal are separate operations. A role change does not send an invitation or create missing company data. Clearing a Permissions Group does not delete the user record.
-
-## Check feature availability
-
-Permissions determine allowed actions, while other settings determine what data or features are available. When a user cannot do something, check:
-
-1. Their user type and saved role assignment.
-2. The permissions in that role, including the specific action they need.
-3. Their company scope and any record-specific visibility.
-4. Whether the module and required provider integration are configured.
-5. Any restriction shown by the workflow itself.
-
-If a saved change is not reflected in an existing user session, have the user sign out and back in before testing again. Do not infer access solely from a role's name or a visible menu item.
+| Problem | What to do |
+| --- | --- |
+| A user cannot reach a feature | Check their user type and role. Open the role and confirm it grants the specific action. Then check company scope and whether the module and its integration are set up. |
+| A role change did not take effect | Ask the user to sign out and back in, then test again. |
+| You cannot see a tab | User, role and Company-user administration have separate permissions. Ask your MSP administrator for the access you need. |
+| **Invite User** reports "No tenant-specific roles available" | Create a tenant role on the **Roles** tab, then invite the user. |
+| **Invite User** reports a duplicate email | A user with that email is already registered. Find them in the table instead. |
+| **Invite User** reports an email rate limit | Wait a few minutes and try again. |
+| A cell in the Permission Matrix is read-only | You do not have write access to that role type. Tenant roles need write access to roles. Company roles need write access to Company users. |
+| A bulk action finished only partly | Check the affected users in the table before you retry. |
+| A Company user is missing from a list | Check the company selector and table filters. A disabled user shows only when you filter **Status** to **Disabled**. |
 
 ## Frequently asked questions
 
@@ -109,17 +241,20 @@ If a saved change is not reflected in an existing user session, have the user si
   <Accordion title="Where do I change the permissions inside a Company permissions group?">
     In **Roles > Company Roles**. To assign an existing group to a particular user, edit the user's **Permissions Group** in Company Users.
   </Accordion>
-  <Accordion title="Why is a cell read-only in the Permission Matrix?">
-    Viewing roles and editing them are separate permissions. Tenant roles need write access to roles, and Company roles need write access to Company users.
-  </Accordion>
-  <Accordion title="Why can I see one settings tab but not another?">
-    User, role, and Company-user administration have separate permissions. Ask the MSP administrator to review the administrative access needed for your task.
-  </Accordion>
   <Accordion title="Does Company Admin mean the customer can manage users?">
     No. The MSP manages Company users and permissions. The role name describes a Company permission set, not MSP administrator status.
   </Accordion>
   <Accordion title="Does an Administrator role make an account Primary Admin?">
-    No. The Primary Admin account flag is separate from the role's name and permission definition.
+    No. The Primary Admin flag is separate from the role's name and permissions. Only the Primary Admin can change it, in **Edit User**.
+  </Accordion>
+  <Accordion title="Can I use a Team Role instead of a permission role?">
+    No. Team Roles describe responsibilities and grant no permissions. Use Tenant or Company roles to define portal access.
+  </Accordion>
+  <Accordion title="Does clearing a Permissions Group delete the user?">
+    No. Invitations, role assignments, role definitions and account removal are separate actions. A role change does not send an invitation or create missing company data.
+  </Accordion>
+  <Accordion title="Does duplicating a role give its permissions to anyone?">
+    No. The copy has no users until you assign it.
   </Accordion>
   <Accordion title="Why was a Company user disabled automatically?">
     MSPortal disables a Company user when the connected systems show they have left:
@@ -128,9 +263,6 @@ If a saved change is not reflected in an existing user session, have the user si
     - **PSA:** their contact is marked inactive in ConnectWise, Autotask, or Halo PSA, and they have no other active contact.
 
     A disabled user loses portal access and is signed out. They no longer appear in user dropdowns such as a ticket form's employee field. Company Users hides them unless you filter **Status** to **Disabled**. If sign-in is unblocked in Microsoft 365, the next sync restores a user disabled by the Microsoft 365 rule.
-  </Accordion>
-  <Accordion title="Can I use a Team Role instead of a permission role?">
-    No. Team responsibilities and permission-role assignments serve different purposes. Use Tenant or Company permission roles to define portal access.
   </Accordion>
 </AccordionGroup>
 

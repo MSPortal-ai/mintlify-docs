@@ -1,12 +1,39 @@
 ---
 title: 'Understand Client Health scoring and evidence'
-description: 'Explain each dimension, source window, coverage requirement and provider boundary behind the default health model.'
+description: 'How Client Health scores each dimension, what evidence it needs and which integrations feed it.'
 icon: 'scale-balanced'
 ---
 
-**Audience:** MSP staff reviewing Client Health. Company users ask their MSP to explain an assessment. Open **MSP Tools > Client Health**, then a company to inspect its scores, observations, coverage and **Last computed** date.
+This guide explains how Client Health builds a score: the eight dimensions, the evidence each one needs and which integrations feed it. It is for MSP staff. Company users should ask their MSP to explain an assessment.
 
-A health score describes the evidence available to the published scorecard. It is not a live availability monitor, a financial forecast or a guarantee about a client relationship. Use [Read a company's health details](/user-guides/msp-tools/read-client-health-details) for the page controls and [Scoring settings](/user-guides/settings/scoring) to change which metrics contribute.
+A health score describes the evidence in the published scorecard. It is not a live availability monitor or a financial forecast.
+
+## Before you start
+
+- You need Client Health read access (`read_customer_success`).
+- To change which metrics count, you need access to [Scoring settings](/user-guides/settings/scoring) under **Settings > MSP Tools > Scoring**.
+
+## Check why a company got its score
+
+<Steps>
+  <Step title="Open the company">
+    Open **MSP Tools > Client Health** and click the company.
+  </Step>
+  <Step title="Check Last computed">
+    Read the **Last computed** date in the page header.
+  </Step>
+  <Step title="Read Dimension Breakdown">
+    For each dimension, compare the score, the applied weight, the evidence coverage and the observed metrics with the rules below.
+  </Step>
+  <Step title="Read Top Negative Drivers">
+    These show which dimensions cost the most points.
+  </Step>
+  <Step title="Fix the source if evidence is missing">
+    Reconnect the integration or fix the company mapping, wait for the sync, then click **Refresh Scores**. See [Refresh Client Health scores](/user-guides/msp-tools/refresh-client-health).
+  </Step>
+</Steps>
+
+For the page controls, see [Read a company's health details](/user-guides/msp-tools/read-client-health-details).
 
 ## How the overall score is formed
 
@@ -39,7 +66,7 @@ For an illustrative configuration with only these three dimensions enabled:
 
 Coverage is 29.5 ÷ 36, approximately 81.94%. The weighted score is (80 × 6.5 + 100 × 13 + 60 × 10) ÷ 29.5, approximately 82.03. This is a worked example, not a screenshot of customer results.
 
-Calculated risk uses the score before the table rounds it to a whole number: **Thriving** at 80 or above, **Healthy** at 60 to below 80, **At Risk** at 40 to below 60, and **Critical** below 40. A rounded display close to a boundary can therefore appear inconsistent with its band. A [manual risk flag](/user-guides/msp-tools/manage-client-risk-flags) replaces the effective label without changing the score.
+Calculated risk uses the score before the table rounds it to a whole number: **Thriving** at 80 or above, **Healthy** at 60 to below 80, **At Risk** at 40 to below 60, and **Critical** below 40. A rounded number close to a band edge can sit in the other band. A [manual risk flag](/user-guides/msp-tools/manage-client-risk-flags) replaces the effective label without changing the score.
 
 ## Service Quality
 
@@ -61,13 +88,13 @@ The score is 100 multiplied by one minus the triggered risk weight divided by ob
 | --- | ---: | --- |
 | Meeting recency | 40% | Latest past meeting: within 90 days = 100, 120 days = 60, 180 days = 40, older = 20 |
 | Recent NPS | 20% | Latest response within 365 days: 9+ = 100, 7+ = 80, 5+ = 60, 3+ = 40, below 3 = 20 |
-| Recent CSAT | 25% | Mean normalized satisfaction score from mapped CSAT responses in the trailing 90 days, on a 0–100 scale |
+| Recent CSAT | 25% | Mean normalized satisfaction score from mapped CSAT responses in the trailing 90 days, on a 0 to 100 scale |
 | CSAT response rate | 15% | Response-count ratio mapped to the bands below |
 
 Native and imported CSAT responses can contribute; CES campaigns and responses without a mapped company or normalized score do not. If the tenant has no qualifying CSAT response in the trailing 90 days, both CSAT metrics are unavailable and carry no weight. No meeting or recent NPS response means missing evidence for that metric, not a favorable default.
 
 <Note>
-The current deployed response-rate calculation divides CSAT responses from the trailing 90 days by tickets closed in the last 13 complete weeks. These windows differ. Treat the result as an approximate response indicator rather than an exact percentage of closed tickets that received a response.
+The current deployed response-rate calculation divides CSAT responses from the trailing 90 days by tickets closed in the last 13 complete weeks. These windows differ. Read the result as an approximate response indicator, not an exact share of closed tickets that got a response.
 </Note>
 
 Response rate is capped at 100% for display. At least 25% earns 100 points; at least 15% earns 80; at least 8% earns 60; a smaller positive response ratio earns 40. With no responses, at least five closed tickets earns 20; fewer than five is insufficient evidence. With no closed tickets, the rate is unavailable. These rules apply only when the tenant has qualifying CSAT activity.
@@ -84,7 +111,7 @@ Financial uses profitability measures from the **three complete calendar months 
 | Overdue invoices | 30% | Overdue count divided by still-open invoice count; this is a count ratio, not overdue balance divided by revenue |
 | Payment speed | 20% | Average nonnegative days from invoice date to paid date for paid invoices in the trailing year |
 
-The endpoint model can use devices, users or the greater of those counts. Effective hourly rate needs positive revenue and support hours; seat price needs positive revenue and endpoint count. An absent denominator is not evidence of zero performance.
+The endpoint model can use devices, users or the greater of those counts. Effective hourly rate needs positive revenue and support hours; seat price needs positive revenue and endpoint count. A missing denominator gives no sample, not a zero.
 
 Seat price earns 100 at or above target, then 80/60/40 at 90%/80%/70% of target, otherwise 20. When no target is available, fixed amount bands of 200/150/100/75 earn 100/80/60/40, otherwise 20. Review [Financial Reporting settings](/user-guides/settings/financial-reporting) to understand the configured target and endpoint model; these settings are separate from metric inclusion.
 
@@ -99,11 +126,11 @@ Sales gives equal default shares to activity recency and decided win rate. Its s
 
 PSA opportunity outcomes take precedence for a company with PSA opportunity records. Quoter outcomes are a fallback when no PSA opportunity record is available for that company; an insufficient PSA decided sample does not automatically switch to Quoter.
 
-**Quotes module support and Sales scoring support are separate.** The Quotes module supports Salesbuildr, QuoteWerks and Quoter. This scoring calculation directly reads PSA opportunities and Quoter quotes; it does not directly read Salesbuildr or QuoteWerks quote records. A quote appearing in [Quotes](/user-guides/quotes/index) therefore does not prove it contributes to Client Health. Company mapping, outcome classification and source freshness still matter.
+**Quotes module support and Sales scoring support are separate.** The Quotes module supports Salesbuildr, QuoteWerks and Quoter. This scoring calculation directly reads PSA opportunities and Quoter quotes; it does not read Salesbuildr or QuoteWerks quote records. A Salesbuildr or QuoteWerks quote in [Quotes](/user-guides/quotes/index) therefore does not feed Client Health. Company mapping, outcome classification and source freshness still matter for the sources that do.
 
 ## Projects
 
-This dimension uses synced PSA project records and a project source synced within 14 days. It does not score every native project simply because it appears in the Projects workspace.
+This dimension uses synced PSA project records and a project source synced within 14 days. Projects created only in the Projects workspace are not scored.
 
 | Metric | Default share | Scoring basis |
 | --- | ---: | --- |
@@ -123,7 +150,7 @@ Standards scores deployed required checks as a percentage of applicable checks:
 - A normal check marked N/A or Declined is excluded. A one-of group is excluded only when every option is explicitly N/A or Declined; an unassigned option keeps the group applicable.
 - An excluded company or a catalog without qualifying checks is not applicable. If all qualifying checks are excluded for that company, there is no score sample.
 
-The current Standards list at the bottom of a Client Health detail counts deployed items across its displayed list. It does not use this required/group calculation and may also reflect changes made after the scorecard was published. See [Read the Standards matrix](/user-guides/msp-tools/read-standards-matrix).
+The Standards list at the bottom of a Client Health detail page counts deployed items across every listed item. It does not use this required and group calculation, and it shows current records, which can be newer than the scorecard. See [Read the Standards matrix](/user-guides/msp-tools/read-standards-matrix).
 
 ## Environment
 
@@ -133,14 +160,14 @@ Server classification uses a server type or server operating-system name. A serv
 
 Patch evidence currently comes from mapped, non-ignored **Datto RMM**, **ConnectWise Asio** and **Syncro** records. Recognized fully-patched/current states count as patched. Errors, required reboots, pending or missing patches count as unpatched. Unknown states are omitted from both numerator and denominator. The score is patched records divided by records with a recognized patched/unpatched state. It is not a percentage of every device shown in the portal.
 
-Device count is context, not a health bonus. User activity is not an Environment scoring input.
+Device count is context and earns no points. User activity does not feed Environment.
 
 ## Operational
 
 | Metric | Default share | Scoring basis |
 | --- | ---: | --- |
 | Planner timeliness | 40% | Overdue, unfinished, non-archived items divided by all non-archived Planner items with due dates |
-| Goal progress | 35% | Mean available goal progress, clamped to 0–100; a goal whose status is named Completed contributes 100 |
+| Goal progress | 35% | Mean available goal progress, clamped to 0 to 100; a goal whose status is named Completed contributes 100 |
 | Compliance timeliness | 25% | Past-due assignments without a completion timestamp divided by all assignments with due dates |
 
 For Planner and compliance, zero overdue earns 100; overdue shares up to 10%/25%/50% earn 80/60/40; higher shares earn 20. The percentage shown as the observed metric is the **overdue rate**, not the resulting health points: a smaller observed percentage can mean a better score.
@@ -149,99 +176,73 @@ Completed and Cancelled Planner items with due dates remain in the denominator b
 
 ## Read changes over time
 
-Previously published scorecards keep their results. The chart separates model-revision segments, but switching metric inclusion within the same model does **not** guarantee a new visible segment. A score change can reflect new evidence, changed inclusion or a different data sample, as well as changed performance. Review the settings and dimension coverage before attributing a trend to an intervention.
+Previously published scorecards keep their results. The chart separates model-revision segments, but switching metric inclusion within the same model does **not** guarantee a new visible segment. A score change can come from new evidence, changed metric inclusion or a different data sample, as well as changed performance. Check the settings and dimension coverage before you credit a change to your work.
 
-The portfolio stale warning uses a missing data-through timestamp or one older than 36 hours. The 14-day source requirements above are separate metric eligibility gates, so a stale warning does not necessarily mean every dimension is unavailable. [Refresh Client Health](/user-guides/msp-tools/refresh-client-health) explains source sync and publication.
+The portfolio stale warning uses a missing data-through timestamp or one older than 36 hours. The 14-day source requirements above are separate metric eligibility gates, so a stale warning does not mean every dimension is unavailable. [Refresh Client Health](/user-guides/msp-tools/refresh-client-health) explains source sync and publication.
 
-## FAQs
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A company shows **Limited data** | The company has fewer than three scored dimensions or under 40% coverage. Open it and check which dimensions lack evidence. |
+| A dimension shows **N/A** | It has no sample, too small a sample, a source synced more than 14 days ago, or it does not apply. Check the integration and company mapping. |
+| Sales has no score although quotes exist | Only PSA opportunities and Quoter quotes feed Sales. Salesbuildr and QuoteWerks quotes do not. |
+| Patch coverage is empty | Only Datto RMM, ConnectWise Asio and Syncro patch records feed it. |
+| The Standards list differs from Standards Compliance | The list counts every listed item. The score counts required checks and one-of groups. |
+
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where can I see why a company received its health score?">
-    Open MSP Tools > Client Health, select the company, and review Dimension Breakdown, coverage, applied weights, Top Negative Drivers and Last computed.
-  </Accordion>
-  <Accordion title="Is the overall health score a simple average of all dimensions?">
-    No. Enabled, applicable dimensions use base weights adjusted by evidence coverage, then normalized into applied weights.
-  </Accordion>
-  <Accordion title="Why does an available dimension have no influence on the overall score?">
-    An excluded dimension can retain observed values for context while its applied weight is zero.
+  <Accordion title="Is the overall score a simple average of the dimensions?">
+    No. Each enabled dimension's base weight is multiplied by its evidence coverage, then normalized into the applied weights.
   </Accordion>
   <Accordion title="What does Limited data mean?">
-    The default model requires at least three scored dimensions and 40% overall coverage. Limited data means that evidence requirement is not met, not a score of zero.
+    The default model needs at least three scored dimensions and 40% overall coverage. Limited data means that bar is not met. It is not a score of zero.
   </Accordion>
-  <Accordion title="Why can a displayed score of 80 still be Healthy?">
-    The display rounds scores, while calculated risk uses the score before whole-number rounding. A value just below 80 remains Healthy.
+  <Accordion title="Why can a displayed 80 still be Healthy?">
+    The display rounds the score. The risk level uses the score before rounding, so 79.6 shows as 80 and stays Healthy.
   </Accordion>
-  <Accordion title="Does a manual risk flag alter the score calculation?">
-    No. It overrides the effective risk label without changing numerical scores or evidence.
+  <Accordion title="Does a manual risk flag change the score?">
+    No. It replaces the displayed risk label only.
   </Accordion>
   <Accordion title="How much history does Service Quality need?">
-    Eight complete weeks, split into two four-week periods, a current ticket source and enough observed enabled risk weight.
+    Eight complete weeks, split into two four-week periods, and a ticket source synced within 14 days.
   </Accordion>
-  <Accordion title="Do high-priority growth warnings directly subtract health points?">
-    Not in the current Service Quality model. They can appear as warning evidence separately from the five scored metrics.
+  <Accordion title="Do high-priority growth warnings subtract points?">
+    No. They show as warnings next to the five scored metrics.
   </Accordion>
-  <Accordion title="Does no closed-ticket history count as good resolution performance?">
-    No. Resolution trend needs closed tickets in both comparison periods; missing observations are not healthy defaults.
+  <Accordion title="Which surveys count toward CSAT?">
+    Mapped native or imported CSAT responses that have a normalized score. CES campaigns and unmapped responses are left out.
   </Accordion>
-  <Accordion title="Which surveys count toward Client Health CSAT?">
-    Mapped native or imported CSAT responses with normalized scores. CES campaigns and unmapped responses are excluded.
+  <Accordion title="Which months feed the Financial metrics?">
+    The three complete calendar months before the evaluation month. It is not a rolling 90 days.
   </Accordion>
-  <Accordion title="Does Client Health CSAT response rate use exactly the same window for responses and closed tickets?">
-    No. The current deployed calculation uses 90 days of responses divided by tickets closed over 13 complete weeks. Treat it as an approximate response indicator.
+  <Accordion title="Which endpoint count do the Financial metrics use?">
+    The endpoint model in [Financial Reporting settings](/user-guides/settings/financial-reporting) uses devices, users or the greater of the two.
   </Accordion>
-  <Accordion title="Do companies with no CSAT responses always get a low score?">
-    No. The tenant must have qualifying CSAT activity, and at least five closed tickets with no responses are needed for the silent-company band. Fewer closed tickets gives insufficient evidence.
+  <Accordion title="Will Quoter fill in when the PSA win-rate sample is too small?">
+    No. When a company has PSA opportunity records, PSA outcomes win even with fewer than three decided outcomes.
   </Accordion>
-  <Accordion title="Which period feeds Client Health profitability metrics?">
-    The three complete calendar months before the evaluation month, not a rolling 90-day interval.
+  <Accordion title="Does a project on hold leave every Projects metric?">
+    No. It leaves active schedule health but can still count for effort adherence.
   </Accordion>
-  <Accordion title="Does no overdue invoice balance automatically produce perfect Financial health?">
-    No. Overdue invoice health uses counts of open and overdue invoices, and no open invoices means no sample. Other Financial metrics are separate.
-  </Accordion>
-  <Accordion title="Which endpoint count is used for Client Health financial metrics?">
-    The configured endpoint model uses devices, users or the greater of those counts. Review Financial Reporting settings.
-  </Accordion>
-  <Accordion title="Do Salesbuildr and QuoteWerks quotes directly feed the Sales health score?">
-    Not directly in the current calculation. Quotes supports Salesbuildr, QuoteWerks and Quoter, while Sales scoring reads PSA opportunities and Quoter quotes.
-  </Accordion>
-  <Accordion title="Will Quoter replace an insufficient PSA win-rate sample?">
-    No. When the company has PSA opportunity records, PSA outcomes take precedence even if there are fewer than three decided outcomes.
-  </Accordion>
-  <Accordion title="How many decided sales outcomes are needed for a win-rate score?">
-    At least three won or lost outcomes in the trailing year, with current source data.
-  </Accordion>
-  <Accordion title="Do all native projects count toward Client Health Projects?">
-    No. The current dimension reads synced PSA project records. Workspace visibility alone does not prove inclusion.
-  </Accordion>
-  <Accordion title="Does putting a project on hold remove it from every Projects metric?">
-    No. On-hold projects are excluded from active schedule health but can still qualify for effort adherence.
-  </Accordion>
-  <Accordion title="Does a missing required Standards assignment disappear from the score?">
-    No. It counts as Not Started. A one-of group is satisfied by any deployed option and stays applicable if an option is unassigned.
-  </Accordion>
-  <Accordion title="Why does the Standards list percentage differ from the health dimension?">
-    The detail list counts deployed displayed items, while scoring uses required checks and one-of groups from the published scorecard.
-  </Accordion>
-  <Accordion title="Which providers supply Client Health patch coverage?">
-    The current calculation uses mapped, non-ignored Datto RMM, ConnectWise Asio and Syncro records with recognized patch states.
+  <Accordion title="Does a missing Standards assignment drop out of the score?">
+    No. It counts as Not Started.
   </Accordion>
   <Accordion title="Do unknown patch states count as unpatched?">
-    No. Unknown states are excluded from the recognized-state denominator. Errors, pending patches and required reboots count as unpatched.
+    No. They are left out. Errors, pending patches and required reboots count as unpatched.
   </Accordion>
-  <Accordion title="Does a missing last-seen timestamp automatically make a server offline?">
-    No. An observed server counts offline if explicitly offline or if its available last-seen timestamp is older than seven days.
+  <Accordion title="Does a missing last-seen time make a server offline?">
+    No. A server counts as offline when its status says offline or its last-seen time is older than seven days.
   </Accordion>
-  <Accordion title="Why is a lower Planner overdue percentage associated with a better score?">
-    The displayed observation is an overdue rate; the health points reward fewer overdue items.
+  <Accordion title="Why does a lower Planner overdue percentage give a better score?">
+    The percentage shown is the overdue rate. Fewer overdue items earn more points.
   </Accordion>
-  <Accordion title="Do completed Planner items disappear from the timeliness denominator?">
-    No. Completed and Cancelled items with due dates remain in the denominator, while archived items are excluded.
+  <Accordion title="Does changing a metric switch break the trend line?">
+    Not always. Breaks follow scoring model changes, not every inclusion change.
   </Accordion>
-  <Accordion title="Does a scoring switch change always create a break in the trend chart?">
-    No. Segment breaks follow model revisions. Metric inclusion changes within the same model need not create a visible break.
-  </Accordion>
-  <Accordion title="Does the 36-hour stale warning mean all source data failed its scoring gate?">
-    No. The stale warning and metric eligibility gates are separate; several source-based dimensions use a 14-day freshness gate.
+  <Accordion title="Does the 36-hour stale warning mean the data failed scoring?">
+    No. The warning and the 14-day source checks are separate.
   </Accordion>
 </AccordionGroup>
 

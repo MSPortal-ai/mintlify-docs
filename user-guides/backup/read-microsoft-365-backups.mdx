@@ -1,57 +1,93 @@
 ---
 title: "Read Microsoft 365 backups"
-description: "Find Exchange, OneDrive, SharePoint, and Teams backup records from Cove and Acronis."
+description: "Find Exchange, OneDrive, SharePoint and Teams backup records from Cove and Acronis."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access. This guide covers the Cove and Acronis resource tables. For the other providers, see [Kaseya and Spanning health](/user-guides/backup/read-saas-backup-health).
+Backup > Microsoft 365 lists the Exchange, OneDrive, SharePoint and Teams resources your backup providers protect. This guide covers the Cove and Acronis tables. MSP staff and company users with Backup read access can use it. For the other providers, see [Kaseya and Spanning health](/user-guides/backup/read-saas-backup-health). NinjaOne SaaS Backup is covered in [Read backup details](/user-guides/backup/read-backup-details).
+
+## Before you start
+
+- You have Backup read access.
+- Cove or Acronis has Microsoft 365 backup turned on and reports data for your selected company. The **Microsoft 365** tab is hidden until it does.
+- The company selector shows the company you want.
 
 ## Open a workload
 
-1. Open **Backup > Microsoft 365**.
-2. Choose **Cove** or **Acronis** if a provider selector appears. With only one available provider, the selector is omitted.
-3. Select **Exchange**, **OneDrive**, **SharePoint**, or **Teams** using the workload cards.
-4. Review the selected workload's table. Use its available filters and pagination to narrow the loaded records.
-5. For Acronis, select a resource row to review available activity.
-
-The workload cards show resource counts labeled as backups. They are not a count of all recovery points or proof that every listed service completed successfully.
+<Steps>
+  <Step title="Open Microsoft 365">
+    Go to **Backup > Microsoft 365**.
+  </Step>
+  <Step title="Choose a provider">
+    If a provider selector appears, choose **Cove** or **Acronis**. With one provider, there is no selector. Company users see numbered services such as **Managed Microsoft 365 Backup 1** instead of vendor names.
+  </Step>
+  <Step title="Choose a workload">
+    Select **Exchange**, **OneDrive**, **SharePoint** or **Teams** in the summary strip. Each shows a count labeled backups.
+  </Step>
+  <Step title="Review the table">
+    Read the rows and use the filters and pager. The pager offers 25, 50 or 100 rows.
+  </Step>
+  <Step title="Open a resource">
+    Select a row to open its panel. See [Read backup details](/user-guides/backup/read-backup-details).
+  </Step>
+</Steps>
 
 | Workload | Resource to look for |
 | --- | --- |
-| **Exchange** | A user's mailbox. |
-| **OneDrive** | A user's personal file backup. |
-| **SharePoint** | A site or site collection. |
-| **Teams** | A team. |
+| **Exchange** | A user's mailbox |
+| **OneDrive** | A user's personal file backup |
+| **SharePoint** | A site or site collection |
+| **Teams** | A team |
+
+The line above the table shows the workload, its resource count and, when the provider reports them, its seats and storage.
 
 ## Read the results
 
-Review the resource's **Company**, **Status**, and **Last Backup**. **Unknown**, **Never**, or a missing date requires investigation; it is not a successful backup result.
+| Column | Meaning |
+| --- | --- |
+| **User**, **Site** or **Team** | The resource name, with its email when it differs. |
+| **Company** | The mapped company. |
+| **Status** | The last result. Cove rows also show a small daily status bar. |
+| **Last Backup** | How long ago the last backup ran. **Never** or a dash needs investigation. It is not a success. |
+| **Backups** | Acronis only. An imported activity count, not the number of messages or files. |
+| **Protected data** | Cove only. Data selected for backup in the latest session. |
+| **Used storage** | Cove only, hidden by default. Shown as an **Account total** across all workloads. |
 
-**Items** and **Protected Size** appear only when the loaded data supplies nonzero values. They may be absent for a provider or workload. For Acronis, Items comes from its imported activity count; it should not be interpreted as the number of mailbox messages or files. Summary seats and storage can come from provider usage totals rather than the visible resource rows.
+Use the column toggle to show hidden columns. You can filter by name, company, status, last backup date and item count.
 
-For Acronis, [activity details](/user-guides/backup/read-backup-details) can show the operation, result, policy, duration, and a limited result summary. The current row-opening panel is Acronis-specific. Do not use an empty panel opened from a Cove row as evidence that Cove has never backed up that resource.
+## Loaded limits
 
-## Understand the loaded scope
+- Acronis lists resources with activity in the last 90 days. Older inactive resources can be absent.
+- MSPortal loads up to 500 Cove records in total and up to 500 Acronis records per resource kind. Filters and paging do not fetch beyond that.
+- The Acronis workload count can be larger than the rows you can browse, because it uses the provider's total.
 
-Acronis lists resources with activity within the current 90-day window. Older inactive resources can be absent. The page loads up to 500 records per Acronis resource kind; SharePoint can include both sites and site collections. Its workload card can report a larger total than the rows available in the table.
+Treat these tables as a report, not a complete inventory. If records are missing, check the provider, workload, company selection and filters, then ask your MSP to compare with the provider and check the sync.
 
-Cove loads up to 500 Microsoft 365 records in total. Table filters and local pagination do not fetch records beyond these limits. Neither the visible rows nor Cove's loaded count should be treated as an unlimited inventory.
+## Troubleshooting
 
-If records are missing, check provider, workload, company selection, and filters. Ask the MSP to compare with the provider and check synchronization. A read problem can result in empty or incomplete results. An active connection alone does not guarantee that the Microsoft 365 tab is available.
+| Problem | What to do |
+| --- | --- |
+| The **Microsoft 365** tab is missing | Cove or Acronis has no Microsoft 365 data for these companies, or Microsoft 365 backup is off. Ask your MSP. |
+| A workload shows **No ... Backup Data** | That provider reports none for the workload. Ask your MSP to check the provider. |
+| An Acronis resource is missing | It may have had no activity in 90 days, or the 500-record cap hid it. |
+| Counts look larger than the table | The count uses the provider's total. The table is capped. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why does the Acronis card show more backups than I can browse?">
-    The card can use the provider's total count while the table loads a limited number of records per resource kind. Local pagination does not remove that limit.
+  <Accordion title="Does Backups count recovery points?">
+    No. It counts resources, and for Acronis it can use the provider's total.
   </Accordion>
-  <Accordion title="Where are older Acronis resources?">
-    The resource list uses a 90-day activity window. Ask your MSP to check the provider when a resource falls outside that window.
-  </Accordion>
-  <Accordion title="Does Items mean every file or email in the backup?">
-    No. Acronis uses an imported activity count for that column. The panel can show selected result details, but neither view is a full backup-content browser.
+  <Accordion title="Does Backups mean every file or email is in the backup?">
+    No. Acronis shows an imported activity count, not a content list.
   </Accordion>
   <Accordion title="Can I download a mailbox backup or restore a file here?">
-    This page reports backup information. Ask your MSP for restore or backup-download assistance through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket).
+    No. Ask your MSP through the Home AI Assistant, as described in [Open a ticket](/user-guides/ticketing/open-a-ticket).
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read Kaseya and Spanning backup health](/user-guides/backup/read-saas-backup-health)
+- [Read backup details](/user-guides/backup/read-backup-details)
+- [Read the Backup Dashboard](/user-guides/backup/read-dashboard)

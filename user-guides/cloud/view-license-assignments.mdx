@@ -1,76 +1,108 @@
 ---
 title: 'View license assignments and combinations'
-description: 'Find synchronized Microsoft and Google license holders and compare assignments by domain, office, or license combination.'
+description: 'Find who holds a Microsoft or Google license and compare assignments by domain, office, or license combination.'
 icon: 'users'
 ---
 
-Use **Cloud > Licenses** to review who holds a Microsoft 365 or Google Workspace license. These views read synchronized assignments; they do not add or remove licenses.
+Use **Cloud > Licenses** to see who holds a Microsoft 365 or Google Workspace license, and to compare assignments by email domain, office, or license combination. This page is for MSP staff and company users. The views are read only.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. The same permission covers Google Workspace assignment data. Adobe inventory access alone does not include these views.
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). Storefront read access alone shows the **Licenses** view and nothing else.
+- The views cover Microsoft 365 and Google Workspace. They do not show Adobe.
+- The data is synced. It does not add or remove licenses.
 
 ## See who holds a license
 
-1. Select **one company** in the top bar, or narrow the **Company** column to one company before opening the row.
-2. In the **Licenses** view, find the Microsoft or Google license and click its row.
-3. Review the company's license name, counts, and **Assigned users** panel.
-4. Review **Name**, **Email**, and **Status**. Use the pagination controls for more than 100 users.
-5. Close the panel when finished. Ask your MSP to investigate or change an assignment.
+<Steps>
+  <Step title="Pick one company">
+    Use the company selector in the top bar to pick one company.
+  </Step>
+  <Step title="Open Cloud > Licenses">
+    Click **Cloud** in the sidebar, then click the **Licenses** tab. Keep the **Licenses** view selected.
+  </Step>
+  <Step title="Click the license row">
+    Click a Microsoft 365 or Google Workspace row.
+  </Step>
+  <Step title="Read the Assigned users list">
+    A panel opens with the counts and the **Assigned users** list. It shows **Name**, **Email**, and **Status**, 100 users per page.
+  </Step>
+  <Step title="Close the panel">
+    Close the panel when you are done.
+  </Step>
+</Steps>
 
 <Note>
-When several companies are selected, the user list can include the same SKU's holders across that selected scope even though the panel heading and counts describe the clicked row's company. Select one company before opening it for a company-specific review.
+If several companies are selected, the user list covers all selected companies for that license, while the heading describes the row you clicked. Pick one company first for a company review.
 </Note>
 
-Adobe rows do not open this panel. Google capacity is shown as a dash; that does not mean there are no purchased seats. User details also depend on synchronized directory records, so investigate a discrepancy instead of assuming an empty panel proves zero assignments.
+Adobe rows do not open this panel. Google shows a dash for purchased and available counts because Google does not report them. An empty panel does not prove nobody holds the license, so ask your MSP to check the sync if the count looks wrong.
 
 ## Compare assignments
 
-<Frame caption="The secondary view buttons are beneath the license summary.">
-  <img src="/images/product/cloud-license-office-combination-views.png" alt="Cloud license view controls for By office and By combination." width="508" height="70" />
-</Frame>
+<Steps>
+  <Step title="Pick the company and provider">
+    Set the company selector in the top bar. If a **Provider** filter is shown, set it too.
+  </Step>
+  <Step title="Choose a view">
+    Click **By domain**, **By office**, or **By combination** next to **Licenses** above the table.
 
-Choose the relevant company and provider in **Licenses**, then choose a breakdown:
+    <Frame caption="The By office and By combination buttons sit next to the Licenses and By domain buttons.">
+      <img src="/images/product/cloud-license-office-combination-views.png" alt="Cloud license view controls for By office and By combination." width="508" height="70" />
+    </Frame>
+  </Step>
+  <Step title="Filter the table">
+    Use the filters under the column headings. You can sort the columns and use **Columns** to show or hide them.
+  </Step>
+  <Step title="Open a combination">
+    On **By combination**, click a row to open **Users with this combination**. It lists **Name**, **Email**, and **Company**, 100 users per page.
+  </Step>
+</Steps>
 
 | View | What it groups | How to use it |
 | --- | --- | --- |
-| **By domain** | Assigned users by email domain, provider, and license. | Compare license holders across email domains. Assignments without a usable email domain are omitted. |
-| **By office** | Assigned users by synchronized office location, provider, and license. | Compare locations. **(No Office)** means the synchronized location is missing or blank. |
-| **By combination** | Users with the same set of license SKUs within a provider. | Click a combination to open **Users with this combination**, including Name, Email, and Company. |
+| **By domain** | Assigned users by email domain and license. | Compare license holders across email domains. Users without an email domain are left out. |
+| **By office** | Assigned users by office and license. | Compare locations. **(No Office)** means the office is missing or blank. |
+| **By combination** | Users who hold the same set of licenses. | Spot people who have an unusual set of licenses. |
 
-Use each breakdown table's column filters, sorting, **Columns**, and pagination to inspect its results. Domain and office rows are summaries; the clickable drill-down is on **By combination**. The combination dialog shows up to 100 users per page.
+A combination is a set of licenses. It is not a Microsoft 365 or Google group. Directory groups are on the **Groups** tab.
 
-These are Microsoft/Google assignment views. They do not show Adobe subscriptions or purchased-seat totals. A combination is a license set, not a Microsoft or Google directory group; use the separate **Groups** header tab for directory groups.
+## What changes the breakdowns
 
-## Understand the scope of a breakdown
+- The company selector, the **Provider** filter, and **Hide free & trial** change the breakdowns.
+- **Hide large allocations**, **Only unused seats**, and the **License**, **Product**, and **Status** filters do not.
+- **Hide free & trial** changes which licenses count toward a combination. Turning it off can split one combination into several.
+- With several companies selected, matching domains, offices, and combinations are added together across those companies.
+- The counts are numbers of users. They are not purchased seats.
 
-Company selection, provider selection, and **Hide free & trial** affect the breakdown dataset. The license list's **Hide large allocations**, **Only unused seats**, License text, Product, and Status filters do not narrow these assignment views. Apply the filters offered by the breakdown table itself.
+## Troubleshooting
 
-**Hide free & trial** changes which SKUs participate in each combination. Two people can share a visible combination even if their hidden free/trial assignments differ. Turning the switch off can split that combination into several rows.
+| Problem | What to do |
+| --- | --- |
+| **By domain**, **By office**, and **By combination** are missing | You have Storefront read access only. Ask your MSP for Cloud read access. |
+| An Adobe row does not open | Adobe has no assigned users panel. |
+| The panel lists more users than the row's count | Several companies are selected. Pick one company. |
+| You see **No license assignments with an email domain in scope.** | No assigned users in scope have an email domain. Check the company selector and **Hide free & trial**. |
+| You see **No license combinations in scope.** | Check the company selector, the **Provider** filter, and **Hide free & trial**. |
+| A combination changed after you turned off **Hide free & trial** | Free and trial licenses now count toward the set, so it split. |
 
-When multiple companies are in scope, matching domains, office names, or license combinations can be aggregated across those companies. Select one company when preparing its review. Use the breakdown table's counts; the top inventory summary describes licenses, not that breakdown's filtered people.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Where can I see which users have a specific license?">
-    Open Cloud > Licenses, select one company, and click a Microsoft or Google license row. Review Assigned users. Adobe rows do not have this drill-down.
-  </Accordion>
-  <Accordion title="Why are there more users in the panel than the license row reports?">
-    With multiple companies selected, the user list can span the selected companies for that SKU while the heading and counts describe one row. Narrow to one company first. Synchronization or missing directory details can also affect comparisons.
+    Select one company, open **Cloud > Licenses**, and click a Microsoft 365 or Google Workspace row.
   </Accordion>
   <Accordion title="Does By combination show Microsoft 365 groups?">
-    No. It groups people by their set of assigned license SKUs. Directory groups are on the separate Groups header tab.
-  </Accordion>
-  <Accordion title="Why did combinations change when I showed free and trial licenses?">
-    The combination is built from the licenses included by that switch. Showing previously hidden SKUs can split one visible combination into several different sets.
-  </Accordion>
-  <Accordion title="Why do list filters not give the same counts in By office or By domain?">
-    Breakdowns follow company, provider, and Hide free & trial settings, plus their own table filters. They do not inherit the list's other switches or License, Product, and Status filters. Their counts describe assignments, not purchased capacity.
+    No. It groups people by their set of licenses.
   </Accordion>
   <Accordion title="What does (No Office) mean?">
-    The synchronized user's office location is missing or blank. It is not an indication that the person works remotely. Ask your MSP to check the directory information if needed.
+    The user's office is missing or blank in the directory. It does not mean the person works remotely.
   </Accordion>
-  <Accordion title="Can I assign or remove licenses from these panels?">
-    No. The panels are for reviewing synchronized holders and combinations. Ask your MSP to make assignment changes.
+  <Accordion title="Can I assign or remove licenses from these views?">
+    No. Make license changes in Microsoft 365 or Google Workspace, or ask your MSP.
+  </Accordion>
+  <Accordion title="Why do the counts here differ from the Licenses view?">
+    These views count users by domain, office, or combination. The **Licenses** view counts assignments and purchased seats, and applies its own switches.
   </Accordion>
 </AccordionGroup>
 
@@ -78,4 +110,4 @@ When multiple companies are in scope, matching domains, office names, or license
 
 - [Read cloud license usage](/user-guides/cloud/licenses)
 - [Find, filter, and export licenses](/user-guides/cloud/filter-licenses)
-- [Cloud users](/user-guides/cloud/users)
+- [Read cloud user accounts](/user-guides/cloud/users)

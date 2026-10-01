@@ -1,73 +1,91 @@
 ---
 title: "Read Huntress security items"
-description: "Find escalations, incident reports, and remediation records, understand their summaries, and open the provider record when available."
+description: "Find Huntress escalations, incident reports, and remediations, read the summary cards, and open the record in Huntress."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Security read access and an active Huntress integration. The MSP manages company mapping and permissions. Access to the portal does not automatically grant access to Huntress itself.
+Use this page to review Huntress security items for your companies. It is for company users and MSP staff.
+
+## Before you start
+
+- You need Security read access.
+- Huntress must be connected and its organizations mapped to companies. Unmapped organizations are left out. Without Huntress, the **Huntress** tab does not appear. See [Enable the Huntress integration](/user-guides/integrations/enable-huntress-integration).
+- Opening a record in Huntress needs your own Huntress sign-in.
 
 ## Find a security item
 
-1. Open **Security > Huntress** and confirm your company selection.
-2. In **Huntress security items**, use **Search Huntress** to find a title, company, organization, or text in the imported description.
-3. Choose **All items**, **Escalations**, **Incidents**, or **Remediations** to narrow the type.
-4. Review **Item**, **Status**, **Severity**, **Company**, and **Detected**. Browse additional pages when available; each page contains up to 25 items.
-5. Use **Open in Huntress** in the **Open** column when a link is supplied. It opens the provider record in a new tab and may require a separate authorized sign-in.
+<Steps>
+  <Step title="Open Huntress">
+    Open **Security > Huntress** and check the company selector.
+  </Step>
+  <Step title="Read the summary cards">
+    The cards at the top cover your selected companies. See the table below.
+  </Step>
+  <Step title="Filter the items">
+    Use the column filters on the **Huntress security items** table. **Item** searches by title. **Type** picks **Escalation**, **Incident**, or **Remediation**. **Status** and **Severity** take text. **Company** searches companies. Filtering returns you to page 1.
+  </Step>
+  <Step title="Read a row">
+    Each row shows **Item** (with its category and organization underneath), **Type**, **Status**, **Severity**, **Company**, and **Detected**. Choose 25, 50, or 100 rows per page at the bottom of the table.
+  </Step>
+  <Step title="Open the record in Huntress">
+    Click the link icon in the **Open** column (**Open in Huntress**). It opens in a new tab. A dash means Huntress supplied no link.
+  </Step>
+</Steps>
 
-Search and type changes return to page 1. Search applies across matching imported records, not just the visible page. A result can match description text that is not displayed in the row. The list is ordered by the displayed date, newest first.
+You can also use the column menu to show or hide columns. You cannot approve a remediation or close an escalation here.
 
-The table has no local detail editor, column sorting, status/severity filter, CSV export, or remediation approval control. A dash under Open means no provider URL was supplied. The absence of a link does not mean the finding is resolved.
+## Read the summary cards
 
-<img src="/images/product/security-huntress-item-types.png" alt="Huntress filter options: All items, Escalations, Incidents, and Remediations" width="356" height="270" />
+The cards follow your company selection. They do not change when you filter the table.
 
-This image shows the generic filter in an MSP Demo session. Available records depend on your access and company mapping.
-
-## Understand the summaries
-
-The summary cards use the selected company scope. Searching or changing the item type narrows the table without changing the cards.
-
-| Summary | How to read it |
+| Card | What it counts |
 | --- | --- |
-| **Protected agents** | Imported agent count, with an active count underneath. This is not proof of current protection on every device. |
-| **Open escalations** | Escalations not marked closed, resolved, complete, or completed, with total escalations underneath. |
+| **Protected agents** | Agents imported from Huntress, with the **active** count underneath. |
+| **Open escalations** | Escalations not marked closed, resolved, complete, or completed, with the total underneath. |
 | **Open incidents** | Incident reports not marked closed, resolved, complete, or completed, with the total underneath. |
-| **Pending remediations** | Remediation records not marked closed, resolved, complete, completed, or approved, with the total underneath. |
-| **SAT learners** | Imported security awareness learner count and SAT account count; not a training completion rate. |
+| **Pending remediations** | Remediations not marked closed, resolved, complete, completed, or approved, with the total underneath. |
+| **SAT learners** | Security awareness learners, with the number of SAT accounts underneath. It is not a completion rate. |
 
-The active-agent count can include an agent with a callback within the last 30 days, as well as explicit active/online status. **Active** does not guarantee that a device is online now. An **Approved** remediation is excluded from the pending count; approval alone does not establish that the remediation finished.
+An agent counts as active when its status is active, online, healthy, or installed, when it is flagged online, or when it called back within the last 30 days. Active does not mean online right now. An item with no status counts as open or pending.
 
-A missing status can still contribute to an open or pending count. Inspect the provider record before interpreting unfamiliar or absent statuses.
+## Read the dates and related records
 
-## Read dates and related records
+**Detected** means different things by type. For an escalation it is the occurrence time. For an incident report it is the report time. Either can fall back to the created date. For a remediation it can be the last sync date. It is not always the time of the original incident.
 
-**Detected** is a shared column with different meanings by item type. For escalations it uses the occurrence time when supplied; incident reports use their report generation time when supplied. Both can fall back to an imported creation date. A remediation can show its last sync date. Do not treat every Detected value as the original security incident time.
+One escalation can involve several organizations. In a multi-company view it can show several company names.
 
-Escalations can involve multiple mapped organizations. In a portfolio view, one escalation can show several company names. Remediation links can open the parent incident report. Missing severity on a remediation is not a low-risk rating.
+## Troubleshooting
 
-## If results are missing or unexpected
-
-- Clear Search Huntress and choose All items. Confirm the company selection.
-- After switching company from a later page, reset the search or type to return to page 1. A later page can be empty even when the new company has records, and pagination can disappear with an empty result.
-- Ask the MSP to verify Huntress organization mapping and imports. Unmapped organizations are excluded from these results.
-- Do not use **No Huntress security items found** or zero summary cards as proof of safety. A loading failure can look like an empty result or zero counts, and a previous result can remain visible during a later failure.
-
-Company users should request investigation through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the item title, company, type, status, and displayed date, then review and confirm the request.
-
-MSP staff should investigate through their authorized Huntress workflow and verify the imported result later. Reading this page does not acknowledge an escalation, approve a remediation, resolve an incident, or run a new scan. The Cork Planner and meeting shortcuts are not Huntress row actions.
+| Problem | What to do |
+| --- | --- |
+| **No Huntress security items found** | Clear every filter and check the company selector. Then ask your MSP to check Huntress organization mapping and the integration sync. |
+| Zero counts on every card | The integration may not be synced, or the organizations are unmapped. Zero counts do not prove you are safe. |
+| The table is empty after a company switch | Change a filter to return to page 1. |
+| **Security integration unavailable** | Huntress is not connected, or you lack Security read access. Ask your MSP admin. |
+| **Open in Huntress** shows a sign-in page | You need your own Huntress access. Company users can ask their MSP to investigate. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why do the cards stay the same when I search?">
-    The cards summarize the selected company scope. Search and type filters apply to the item table only.
+  <Accordion title="Why do the cards stay the same when I filter the table?">
+    The cards summarize your selected companies. Table filters only narrow the rows.
   </Accordion>
   <Accordion title="Does Active mean the device is online right now?">
-    No. The count can include a recent callback within 30 days. Confirm the current provider state when it matters.
+    No. An agent also counts as active when it called back in the last 30 days.
   </Accordion>
   <Accordion title="Can I approve or run a remediation here?">
-    No. This page displays imported records and available external links. Use the authorized provider workflow.
+    No. Use Huntress.
   </Accordion>
-  <Accordion title="Why can a company switch leave an empty page?">
-    The previous page number can remain selected. Change or clear the search/type filter to return to page 1, then check mapping and import health if records remain missing.
+  <Accordion title="Are Planner and meeting actions available on Huntress items?">
+    No. Those actions exist for Cork findings and EDR incidents only.
+  </Accordion>
+  <Accordion title="I am a company user. How do I ask about an item?">
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the item title, company, type, status, and date, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Read Acronis EDR incidents](/user-guides/security/read-edr-incidents)
+- [Security](/user-guides/security/index)

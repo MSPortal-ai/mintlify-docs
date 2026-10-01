@@ -4,24 +4,9 @@ description: 'Use evidence-aware health scores, risk levels, and trends to ident
 icon: 'heart-pulse'
 ---
 
-Client Health gives your team a consistent way to review every client relationship. It combines service, engagement, financial, sales, project, standards, environment, and operational evidence into a health score from 0 to 100.
+Client Health gives your MSP team one place to review every client relationship. It combines service, engagement, financial, sales, project, standards, environment and operational evidence into a health score from 0 to 100. It is for MSP staff.
 
-Unlike a simple checklist, Client Health does not treat missing data as healthy or unhealthy. A score appears only when MSPortal has enough current evidence to support it.
-
-<CardGroup cols={2}>
-  <Card title="Evidence-aware scoring" icon="magnifying-glass-chart">
-    Missing, stale, or insufficient data is shown as unavailable instead of being replaced with a synthetic score.
-  </Card>
-  <Card title="Portfolio risk view" icon="shield-heart">
-    Filter companies by Thriving, Healthy, At Risk, or Critical and use Spotlight to focus your next review.
-  </Card>
-  <Card title="Explainable results" icon="scale-balanced">
-    Open a company to see observed metrics, evidence coverage, applied weights, and the dimensions creating the largest score loss.
-  </Card>
-  <Card title="Comparable history" icon="chart-line">
-    Published generations feed the dashboard, detail view, export, and 180-day trend so the same score is used everywhere.
-  </Card>
-</CardGroup>
+Client Health does not treat missing data as healthy or unhealthy. A score appears only when MSPortal has enough current evidence for it.
 
 ## Task guides
 
@@ -43,16 +28,12 @@ Unlike a simple checklist, Client Health does not treat missing data as healthy 
   </Card>
 </CardGroup>
 
-## Prerequisites
+## Before you start
 
-| Requirement | Detail |
-|-------------|--------|
-| **User type** | Client Health is an internal MSP view and is not available to company portal users. |
-| **Permission** | Your role needs `read_customer_success`. |
-| **Data sources** | Connected PSA, RMM, survey, project, standards, planner, goal, and compliance data can contribute evidence. You do not need every source, but broader coverage produces a more complete score. |
-| **First published scorecard** | A new tenant or newly enabled environment needs one completed score refresh before the dashboard is available. |
-
-Users with `write_customer_success` can also set or remove manual risk flags. Scoring configuration requires `read_settings_client_health` or `manage_settings_client_health`.
+- Client Health is an MSP view. Company portal users cannot open it.
+- Your role needs `read_customer_success`. Setting or removing a manual risk flag needs `write_customer_success`. Changing scoring settings needs `read_settings_client_health` or `manage_settings_client_health`.
+- Connected PSA, RMM, survey, project, Standards, Planner, goal and compliance data can all add evidence. You do not need every source, but more coverage gives a fuller score.
+- A new tenant needs one completed score refresh before the dashboard appears.
 
 ## Open and refresh Client Health
 
@@ -61,10 +42,10 @@ Users with `write_customer_success` can also set or remove manual risk flags. Sc
     Open **MSP Tools > Client Health** in the sidebar.
   </Step>
   <Step title="Choose the company scope">
-    Use the global Company selector to review all accessible companies, an assigned group, or a single company. Summary totals, Spotlight, table results and exports follow this company scope. Risk and Limited data filters then narrow the table/export, while summary and Spotlight remain scoped to companies.
+    Use the company selector at the top of the app to review Global View, an assigned group or one company. The summary, Spotlight, table and export all follow this scope.
   </Step>
   <Step title="Refresh when needed">
-    Scores refresh automatically each day at **2:00 AM UTC**. To request a new tenant-wide scorecard, click **Refresh Scores** in the portfolio header and wait for the completion message. Selecting one company does not limit this refresh to that company.
+    Scores refresh on their own every day at **2:00 AM UTC**. To request a new scorecard now, click **Refresh Scores** in the page header and wait for the **Refreshed N companies** message. The refresh covers your whole tenant, even when one company is selected. See [Refresh Client Health scores](/user-guides/msp-tools/refresh-client-health).
   </Step>
 </Steps>
 
@@ -76,47 +57,29 @@ While a refresh is running, MSPortal keeps the last complete scorecard visible. 
 
 ### Portfolio summary
 
-The summary area shows:
+The cards at the top show these numbers for your company scope.
 
-- **Needs Attention**: companies rated **At Risk** or **Critical**
-- **Avg Data Coverage**: the average share of health dimensions that have data
-- **Limited data**: companies without enough evidence for a numeric score, out of all companies in scope
-- **Avg Health Score** across companies with a numeric score, and how many companies that is
-- **Risk Levels**: the count for **Thriving**, **Healthy**, **At Risk**, and **Critical**, with a bar showing the mix of scored companies
+- **Needs Attention**: companies rated **At Risk** or **Critical**.
+- **Avg Data Coverage**: the average share of health dimensions that have data.
+- **Limited data**: companies without enough evidence for a score, out of all companies in scope.
+- **Avg Health Score**: the average across companies that have a score, with the count of those companies.
+- **Risk Levels**: the count for **Thriving**, **Healthy**, **At Risk** and **Critical**, with a bar showing the mix.
 
-Click **Needs Attention**, **Limited data** or a risk-level count to filter the company table. Click it again to clear that filter.
+Click **Needs Attention**, **Limited data** or a risk level to filter the table. Click it again to clear the filter. See [Find companies in Client Health](/user-guides/msp-tools/find-client-health) for filters, Spotlight and export.
 
-### Spotlight
+### Spotlight and the company table
 
-Spotlight highlights two groups across the full selected scope:
+- **Spotlight** has two lists of up to five companies. **Needs Attention** shows the lowest scores. **Most Improved** shows the biggest gains since the previous published scorecard of the same scoring model.
+- The table shows each company's score, risk level and dimension scores. Click **Columns** to add **Trend** and **Flag Reason**. A risk level marked **Manual** was set by a person.
+- Click a row to open the company. Click **Export CSV** to download up to 10,000 matching rows.
 
-- **Needs Attention** shows the companies with the most urgent current results, among companies with available numeric scores. Use the Limited data filter separately.
-- **Most Improved** shows the strongest improvements compared with the previous published scorecard from the same model history.
-
-<Info>
-Client Health starts a clean history for the evidence-aware scorecard. Earlier legacy scores are not mixed into the trend or Most Improved comparison.
-</Info>
-
-### Company table
-
-The table includes the company name, overall score, effective risk level, and available dimension scores. Use it to:
-
-- Search or filter by company
-- Filter by one or more risk levels
-- Sort by supported score and dimension columns
-- Show or hide columns
-- Open a company detail page by clicking its row
-- Export matching companies across pages, capped at 10,000 rows per request
-
-The table respects both the global Company selector and table filters. A dimension column can be unavailable when the selected scope has no score for it or the dimension is disabled. If the dimension is unavailable for one company, that company shows **N/A**.
-
-The optional **Trend** and **Flag Reason** columns can be enabled from the column visibility menu. A manually selected risk level is labeled **Manual** so it is not confused with the calculated result.
+A dimension column is missing when no company in scope has a score for it or the dimension is off in scoring settings. A company with no score for a dimension shows **N/A**.
 
 ## Understand scores and data states
 
-### Portfolio weights
+### Dimension weights
 
-The default model uses these base weights:
+The default model uses these base weights.
 
 | Dimension | Base weight |
 |-----------|------------:|
@@ -129,150 +92,142 @@ The default model uses these base weights:
 | Environment | 10% |
 | Operational | 10% |
 
-Only enabled, applicable dimensions can contribute. When some evidence is unavailable, MSPortal uses the observed evidence and reduces that dimension's influence based on its coverage. Missing evidence does not automatically earn a neutral or positive result.
+Only enabled dimensions that apply to the company count. When some evidence is missing, MSPortal scores what it can see and lowers that dimension's influence in line with its coverage. Missing evidence never earns a neutral or positive result.
 
-### Numeric score requirements
+### When a company gets a score
 
-The default model shows a numeric health score only when both conditions are met:
+The default model shows a numeric score only when both of these are true.
 
-- At least **3 dimensions** have a score
-- Overall evidence coverage is at least **40%**
+- At least **3 dimensions** have a score.
+- Overall evidence coverage is at least **40%**.
 
-If either condition is not met, the company shows **Limited data** and does not receive a calculated risk level.
+Otherwise the company shows **Limited data** and has no calculated risk level.
 
 <Warning>
-**Limited data is not a low score.** It means MSPortal cannot support a numeric result with the available evidence. Review the company's dimension coverage and connected data sources before drawing a conclusion.
+**Limited data is not a low score.** MSPortal cannot support a number with the evidence it has. Check the company's dimension coverage and connected data sources before you draw a conclusion.
 </Warning>
 
 ### Risk levels
 
-| Health score | Calculated risk level |
+| Health score | Risk level |
 |-------------:|-----------------------|
-| 80–100 | Thriving |
+| 80 to 100 | Thriving |
 | 60 to below 80 | Healthy |
 | 40 to below 60 | At Risk |
 | 0 to below 40 | Critical |
 
-A manual risk flag can replace the displayed risk level, but it never changes the calculated health score or its dimension contributions.
+A manual risk flag replaces the displayed risk level. It never changes the score.
 
-### What N/A and coverage mean
+### What N/A means
 
-MSPortal evaluates each metric as observed, no samples, insufficient sample, source unavailable, not applicable, or excluded (switched off in scoring settings). In the interface, unavailable metrics and dimensions are represented by **N/A** or omitted when there is nothing useful to show.
-
-A real zero can affect the score only when MSPortal has an observed denominator that proves the result was zero. For example, zero overdue items out of a real set of due items is evidence; having no due items is not the same thing.
+Each metric is observed, has no samples, has too small a sample, has an unavailable source, does not apply, or is excluded in scoring settings. The page shows **N/A** or leaves out what cannot be shown. A real zero counts only when MSPortal can see the set it came from. Zero overdue items out of a real list of due items is a zero. Having no due items is no sample.
 
 ## Review a company
 
-Click any company row to open the detail page.
+<Steps>
+  <Step title="Open the company">
+    Click a company row in the table, or a company in **Spotlight**.
+  </Step>
+  <Step title="Read the summary cards">
+    **Health Score**, **Risk Level** and, when a required Standards catalog applies, **Standards Compliance**.
+  </Step>
+  <Step title="Read Dimension Breakdown">
+    Each dimension shows its score, applied weight, evidence coverage and the metrics MSPortal observed.
+  </Step>
+  <Step title="Read Top Negative Drivers">
+    This lists the dimensions that cost the most points. The points are score impact, not money.
+  </Step>
+  <Step title="Check Health Score Trend">
+    Click **Show Dimensions** to add a line per dimension. The line breaks where the scoring model changed.
+  </Step>
+</Steps>
 
-### Summary cards
-
-The page can show:
-
-- **Health Score** with the weighted dimension breakdown
-- **Risk Level**, including the calculated level when a manual flag is active
-- **Standards Compliance** when a required standards catalog applies
-
-The overall score card is omitted when no numeric score exists; the Risk Level card can show N/A.
-
-### Dimension Breakdown
-
-Each available dimension shows:
-
-- Its score and applied weight
-- Evidence coverage and observed metric count
-- Only the metrics MSPortal actually observed
-- Values formatted with their correct unit, such as percent, days, currency, or hours per endpoint
-
-A dimension whose metrics are all excluded in scoring settings can still appear when it has evidence, but it is labeled **Excluded from health score** and does not affect the overall result. Individually excluded metrics carry no scoring weight. Available values may remain listed for context; missing values are not guaranteed to appear.
-
-### Health Score Trend
-
-The 180-day chart uses published scorecards. Click **Show Dimensions** to add the individual dimension lines.
-
-When the scoring model changes, the chart breaks the line at the model boundary instead of implying that unlike scores are directly comparable. New evidence-aware history begins with the first published scorecard; it is not reconstructed from legacy data. Metric inclusion changes within the same model do not necessarily create a chart break, so compare settings and evidence coverage as well as the line.
-
-### Top Negative Drivers
-
-Top Negative Drivers lists the dimensions responsible for the largest health-score loss. The displayed impacts are rounded score-point contributions. They are not monetary losses or proof of a cause, and can appear even when the company lacks enough dimensions for an overall numeric score.
+See [Read a company's health details](/user-guides/msp-tools/read-client-health-details) for each part of the page.
 
 ## Set a manual risk flag
 
-Use a manual flag when relationship context is not yet represented in the available data—for example, an executive escalation, a known renewal concern, or a positive strategic change.
+Use a flag when something about the relationship is not in the data, such as an executive escalation or a renewal concern. You need `write_customer_success`.
 
 <Steps>
   <Step title="Open the company">
     From Client Health, click the company row.
   </Step>
   <Step title="Open the flag dialog">
-    Click **Flag Risk**. If a flag already exists, click **Edit Flag**.
+    In the risk panel, click **Flag Risk**. If a flag exists, click **Edit Flag**.
   </Step>
   <Step title="Select a risk level">
-    Choose **Critical**, **At Risk**, **Healthy**, or **Thriving**. The dialog shows the calculated comparison when available.
+    Choose **Critical**, **At Risk**, **Healthy** or **Thriving**. The dialog shows the calculated level for comparison.
   </Step>
   <Step title="Record the reason">
-    Enter a concise reason explaining why the relationship carries more or less risk than the score suggests, then click **Save Flag**.
+    Enter a short reason, then click **Save Flag**. A toast reads **Risk flag saved**.
   </Step>
 </Steps>
 
-Review the reason through Edit Flag, the Flag Reason table column or the risk tooltip where available. Stored audit metadata is not a complete event-history viewer on this page. To return to the calculated risk level, edit the flag and click **Remove Flag**.
+To go back to the calculated risk level, click **Edit Flag**, then **Remove Flag**. See [Manage manual risk flags](/user-guides/msp-tools/manage-client-risk-flags).
 
-## How each dimension is calculated
+## What each dimension measures
 
-Use [Understand Client Health scoring and evidence](/user-guides/msp-tools/understand-health-scoring) for the complete metric rules, source windows, provider coverage and worked weighting example.
+[Understand Client Health scoring and evidence](/user-guides/msp-tools/understand-health-scoring) has the full rules.
 
-| Dimension | Evidence to review |
+| Dimension | Evidence |
 | --- | --- |
-| Service Quality | Eight complete ticket weeks, demand, resolution and backlog observations |
-| Engagement | Past meetings, recent NPS and qualifying CSAT responses |
-| Financial | Configured endpoint model, three complete months of profitability data, open and paid invoices |
-| Sales | PSA opportunities and Quoter quotes; Quotes module provider support is broader than this scoring input |
-| Projects | Synced PSA project dates and measured hours |
-| Standards | Required checks and one-of groups, rather than a raw displayed-item count |
-| Environment | Observed servers and recognized patch records from supported scoring sources |
-| Operational | Planner due dates, goal progress and compliance completion evidence |
+| Service Quality | Eight complete ticket weeks: demand, resolution time and backlog |
+| Engagement | Past meetings, recent NPS and CSAT responses |
+| Financial | Three complete months of profitability data, the endpoint model, and open and paid invoices |
+| Sales | PSA opportunities and Quoter quotes |
+| Projects | Synced PSA project dates and hours |
+| Standards | Required checks and one-of groups |
+| Environment | Server availability and patch records from supported sources |
+| Operational | Planner due dates, goal progress and compliance completion |
 
-Missing samples do not earn healthy defaults. Source freshness, metric exclusions and evidence coverage affect which observations can contribute.
+## Choose which metrics count
 
-## Configure included metrics
+<Steps>
+  <Step title="Open Scoring settings">
+    Go to **Settings > MSP Tools > Scoring**.
+  </Step>
+  <Step title="Switch metrics on or off">
+    Each dimension lists its metrics with a switch. An excluded metric carries no weight, and its share moves to the other metrics in that dimension after the next published refresh.
+  </Step>
+  <Step title="Refresh the scores">
+    Click **Refresh Scores** on the Client Health page to publish the change now.
+  </Step>
+</Steps>
 
-Go to **Settings > MSP Tools > Scoring** to choose which metrics count toward Client Health. Each dimension lists its metrics with a switch; excluded metrics carry no weight, and their share is redistributed across the remaining metrics in the dimension after the next published refresh. A dimension with every metric excluded is left out of the overall score.
-
-See [Health Score Configuration](/user-guides/settings/scoring) for permission and configuration details.
+A dimension with every metric excluded leaves the overall score. See [Health Score Configuration](/user-guides/settings/scoring).
 
 ## Troubleshooting
 
+| Problem | What to do |
+| --- | --- |
+| **No published Customer Success generation is available yet** | No complete scorecard exists. Click **Refresh Scores** and wait for the message. On a new tenant, the first automatic refresh runs at 2:00 AM UTC. If it stays after a refresh, contact MSPortal support. |
+| A company shows **Limited data** | Open it and check dimension coverage. A score needs three scored dimensions and 40% coverage. Check that integrations are connected, company mappings are right and data has synced. |
+| A dimension shows **N/A** | It has no samples, too few samples, a stale source or does not apply. N/A is not zero. |
+| A banner says the scorecard is stale | The source data is more than 36 hours old. Check integration sync health, then click **Refresh Scores**. |
+| The risk level does not match the score | Look for **Manual**. A manual flag replaces the displayed level. Open the company to see the calculated level and the reason. |
+| The trend line has a gap | The scoring model changed. Scores on each side are not comparable. |
+
+## Frequently asked questions
+
 <AccordionGroup>
-  <Accordion title="No published Customer Success generation is available yet">
-    This appears when no complete scorecard has been published for your tenant. Click **Refresh Scores** and wait for the completion message. On a new deployment or newly enabled tenant, the first automatic refresh runs at 2:00 AM UTC. If the message remains after a completed refresh, contact MSPortal support.
+  <Accordion title="Can company users see Client Health?">
+    No. It is an MSP view.
   </Accordion>
-  <Accordion title="A company shows Limited data">
-    Open the company and review its dimension coverage. A numeric score requires at least three scored dimensions and 40% overall coverage. Confirm that the relevant integrations are connected, company mappings are correct, and source data has synced recently.
+  <Accordion title="Does Refresh Scores only refresh the selected company?">
+    No. It refreshes your whole tenant.
   </Accordion>
-  <Accordion title="A dimension shows N/A">
-    The dimension may have no samples, an insufficient sample, an unavailable or stale source, or may not apply to the company. N/A is intentionally different from zero. Check the source integration, company mapping, and the dimension-specific prerequisites above.
+  <Accordion title="Does a manual flag change the health score?">
+    No. It changes the displayed risk level only.
   </Accordion>
-  <Accordion title="The published scorecard is stale">
-    The warning appears when the published scorecard has no data-through timestamp or that timestamp is more than 36 hours old. Review integration sync health, allow the source to update, and then click **Refresh Scores**.
+  <Accordion title="Should I treat N/A as good or bad?">
+    Neither. It is a question about data. Check the source integration and company mapping.
   </Accordion>
-  <Accordion title="The risk level does not match the score band">
-    Look for the **Manual** label. A manual risk flag replaces the displayed risk level without changing the score. Hover over the risk level or open the company to see the calculated level and flag reason.
-  </Accordion>
-  <Accordion title="A trend line has a gap">
-    A gap marks a scoring-model revision. MSPortal separates the segments because scores from different model versions should not be treated as one continuous trend.
+  <Accordion title="Can I compare trend points across a gap?">
+    No. Compare only within one scoring model segment.
   </Accordion>
 </AccordionGroup>
 
-## Best practices
-
-- Review **Critical**, **At Risk**, and **Limited data** companies every week.
-- Use **Top Negative Drivers** to choose the first area to investigate; confirm the observed metrics before taking action.
-- Treat N/A as a data question, not a positive or negative outcome.
-- Record a specific reason whenever you add a manual risk flag and remove it when the calculated result should take over again.
-- Refresh after repairing an integration or company mapping so the next published scorecard can use the corrected evidence.
-- Use the trend to evaluate interventions only within the same model segment.
-
-## Related resources
+## Related guides
 
 <CardGroup cols={2}>
   <Card title="Health Score Configuration" icon="sliders" href="/user-guides/settings/scoring">

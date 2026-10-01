@@ -4,75 +4,118 @@ description: 'Maintain tenant-wide ticket-widget exclusions, save changes and ve
 icon: 'filter'
 ---
 
-**Audience:** MSP staff with permission to write or manage Dashboard Settings. Company readers should use [Understand dashboard exclusions](/user-guides/dashboards/understand-dashboard-exclusions).
+Open **Settings > Dashboards > Exclusions** to manage **Widget Data Exclusions**. The settings apply to every user, including Company users. The company selector does not limit them. This guide is for MSP staff. Company readers should use [Understand dashboard exclusions](/user-guides/dashboards/understand-dashboard-exclusions).
 
-Open **Settings > Dashboards > Exclusions** to manage **Widget Data Exclusions**. The settings apply tenant-wide to all users, including Company users. The company selector does not limit where saved exclusions apply.
+## Before you start
+
+- You need Dashboards access under Settings with **Write** or **Manage** to change exclusions. With **Read** only, the page shows the values and the message **You don't have permission to modify exclusions.**
+- Exclusions hide values from supported widgets. They do not delete tickets, change your PSA or replace user permissions.
+- They do not affect external dashboards.
 
 ## Choose the right exclusion
 
-| Control | Intended effect |
+| Control | Effect |
 | --- | --- |
-| **Excluded Submitters** | Omit exact submitter labels from supported submitter charts, such as Top Ticket Submitters. |
-| **Excluded Ticket Types** | Omit exact ticket-type labels from supported type breakdowns. This is not a blanket filter on every ticket total. |
-| **Exclude Recurring Tickets** | Omit recognized recurring-template instances from supported ticket widgets and their dashboard drilldowns. Current recognition covers the supported Autotask recurring-ticket format. |
-
-These controls do not remove tickets, modify the PSA or replace user permissions. They do not filter external dashboards. Verify each affected widget or report rather than assuming every reporting surface uses the same settings.
+| **Exclude Recurring Tickets** | Hides tickets created in bulk from PSA recurring ticket templates in supported ticket widgets and their drilldowns. Detection covers the Autotask recurring ticket number format. |
+| **Excluded Submitters** | Hides exact submitter names from submitter widgets such as Top Ticket Submitters. |
+| **Excluded Ticket Types** | Hides exact ticket type names from type breakdown widgets. It is not a filter on every ticket total. |
 
 ## Add a submitter or ticket type
 
 <Steps>
-  <Step title="Open the matching category">
-    Select **Add** under **Excluded Submitters** or **Excluded Ticket Types**. Choose the category that corresponds to the chart you want to change.
+  <Step title="Open the Exclusions tab">
+    Go to **Settings > Dashboards** and click **Exclusions**.
   </Step>
-  <Step title="Find the exact value">
-    Enter at least three characters in **Search values...**. Wait for the results, then select the intended value. Narrow the search if necessary; it returns a limited set of suggestions.
+  <Step title="Click Add">
+    Click **Add** under **Excluded Submitters** or **Excluded Ticket Types**. A search box opens.
   </Step>
-  <Step title="Use a custom value when needed">
-    If the label is not in the suggestions, enter the exact label in **Custom value...** and select **Add**, or use the offered **Add as custom** option. Match spelling, capitalization and spacing. A custom entry adds an exclusion value; it does not create a ticket, submitter or ticket type.
+  <Step title="Search for the value">
+    Type at least three characters in **Search values...** and wait for the results. Click the value to add it. The search shows up to 50 matches, so narrow it if you do not see yours.
   </Step>
-  <Step title="Save and verify">
-    Check the selected badges and recurring-ticket switch, then select **Save Exclusions**. Wait for success. Reopen the page to confirm the saved settings and review the affected dashboard using matching company and date scope.
+  <Step title="Or add a custom value">
+    If the value is not listed, type it in **Custom value...** and click **Add**, or click **Add "your text" as custom**. Match the spelling, capitalization and spacing exactly.
+  </Step>
+  <Step title="Click Save Exclusions">
+    The new badge is only a draft until you click **Save Exclusions**. Wait for **Exclusions saved. Dashboard widgets will now filter out excluded values.**
+  </Step>
+  <Step title="Check a dashboard">
+    Open an affected dashboard with the company and dates you care about and check the chart.
   </Step>
 </Steps>
 
 <img src="/images/product/dashboard-exclusion-search.png" alt="Exclusion search popover with the three-character search instruction and custom-value input." width="640" height="660" />
 
-The image shows the MSP search and custom-value controls before a value is entered.
-
-<Note>Adding a badge, removing one, or toggling recurring tickets changes the draft only. Select **Save Exclusions** to persist those changes. Switching dashboard-settings tabs can retain an unsaved draft; leaving the page is not a save operation.</Note>
-
 ## Change or remove an exclusion
 
-Select the X on the unwanted badge. To correct a label, remove the old value and add the exact replacement. To include recognized recurring tickets again, turn off **Exclude Recurring Tickets**. Select **Save Exclusions** afterward.
+<Steps>
+  <Step title="Remove a badge">
+    Click the **X** on the badge. To fix a typo, remove the old value and add the correct one.
+  </Step>
+  <Step title="Include recurring tickets again">
+    Turn off **Exclude Recurring Tickets**.
+  </Step>
+  <Step title="Click Save Exclusions">
+    Nothing changes for readers until you save.
+  </Step>
+</Steps>
 
-Turning off this switch does not override a Company user’s separate ticket-visibility rules. A role that hides recurring tickets may still do so. Company access changes are managed separately by the MSP.
+Turning the recurring switch off does not override a Company role that hides recurring tickets in its own ticket view. Those roles keep their own setting.
 
-## Reset and saved values
+## Discard unsaved changes
 
-**Reset** discards the current draft and restores the values originally loaded by that page. It does not save an undo to the database or clear all exclusions permanently.
+**Reset** appears once you have unsaved changes. It puts the page back to the last saved values. It does not clear saved exclusions. To remove a saved exclusion, remove it and click **Save Exclusions**. **Save Exclusions** is disabled until you change something.
 
-<Warning>After saving once, then making another edit, Reset can display the page’s older starting values while the newer saved values remain stored. Reopen the page to read the actual saved settings before making another change. To undo a saved exclusion, explicitly remove or correct it and select Save Exclusions.</Warning>
-
-A disabled **Save Exclusions** button means the page has no tracked draft changes, or a save is in progress. It is not proof that the displayed values match the latest database state after using Reset in the situation above.
+Switching to another tab in Dashboard settings keeps your unsaved draft while the page stays open. Leaving the page does not save it.
 
 ## Matching and chart scope
 
-Use the exact displayed submitter or type label. Exclusion values are exact, case-sensitive matches; a partial name or wildcard does not exclude every similar label. Search suggestions can match a partial query, but the selected exclusion remains a complete value. For example, excluding **Unknown** does not mean every label containing “unknown” is excluded.
-
-Submitter exclusions affect submitter breakdowns, and type exclusions affect type breakdowns. Other ticket totals may still include those records. The recurring-ticket switch has broader support among ticket widgets and their drilldowns, but it does not promise recognition of all providers or every record described as recurring.
-
-The page currently exposes submitters, ticket types and the recurring switch. It does not offer company, contact, technician or subtype exclusion editors. Use the relevant view filters and configuration when you need a different scope.
+- Matches are exact and case-sensitive. A partial name or wildcard does not work. Excluding **Unknown** does not exclude **Unknown User**.
+- A submitter is matched against the ticket's contact name, or its reported-by name when there is no contact.
+- Submitter exclusions affect submitter charts. Type exclusions affect type charts. Other ticket totals still count those tickets.
+- The page has no company, contact, technician or subtype exclusions.
 
 ## Troubleshooting
 
-| Symptom | What to check |
+| Problem | What to do |
 | --- | --- |
-| Save Exclusions is disabled | Make an intended draft change and wait for any current save. If Reset was used after a save, reopen first. |
-| No search suggestions | Enter at least three characters and narrow the query. A missing suggestion is not proof that the source record does not exist. |
-| Custom exclusion has no visible effect | Check exact spelling/case, the applicable widget, company scope, dates and whether any records match. |
-| Widget total differs from Tickets | Compare the metric’s date definition, role access, company scope and applicable exclusions. Not all widgets share the same exclusion categories. |
-| Recurring tickets remain | Verify the provider’s recognized format and the widget’s support. This is not a universal recurring-work detector. |
-| Controls are unavailable | Ask an MSP administrator to review Dashboard Settings write/manage permissions. |
+| **Save Exclusions** is disabled | Make a change. It is also disabled while a save is running. |
+| No search results | Type at least three characters. Try a different part of the name, or add it as a custom value. |
+| A custom exclusion has no visible effect | Check the exact spelling and case, the widget, the company, the dates and whether any tickets match. |
+| A widget total differs from the Tickets list | Compare the dates, role access, company and exclusions. Widgets do not all use the same exclusions. |
+| Recurring tickets still show | Detection covers only the Autotask recurring ticket format, and only supported widgets use it. |
+| The controls are read-only | Ask an MSP admin to grant **Write** or **Manage** for Dashboards under Settings. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Are exclusions limited to the selected company?">
+    No. They apply tenant-wide to supported widgets for all users.
+  </Accordion>
+  <Accordion title="Does Add save the exclusion?">
+    No. It adds a badge to the draft. Click **Save Exclusions**.
+  </Accordion>
+  <Accordion title="Can I add a value that is not in the search results?">
+    Yes. Type it as a custom value, click **Add**, then **Save Exclusions**.
+  </Accordion>
+  <Accordion title="Does Reset undo a saved change?">
+    No. It restores the last saved values and discards your unsaved edits.
+  </Accordion>
+  <Accordion title="Do submitter and type exclusions change every ticket total?">
+    No. They apply to submitter and type charts only.
+  </Accordion>
+  <Accordion title="Does Exclude Recurring Tickets stop recurring tickets in Autotask?">
+    No. It filters supported dashboard data. Schedules stay in your PSA.
+  </Accordion>
+  <Accordion title="Can I set exclusions per dashboard or per user?">
+    No. They are tenant-wide.
+  </Accordion>
+  <Accordion title="Can exclusions replace ticket permissions?">
+    No. They are display filters, not access rules.
+  </Accordion>
+  <Accordion title="Do exclusions change an external dashboard?">
+    No. The external service has its own filtering.
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
@@ -80,68 +123,3 @@ The page currently exposes submitters, ticket types and the recurring switch. It
 - [Read and filter a dashboard](/user-guides/dashboards/read-a-dashboard)
 - [Inspect dashboard tickets](/user-guides/dashboards/inspect-dashboard-tickets)
 - [Manage dashboard settings](/user-guides/dashboards/manage-dashboard-settings)
-
-## Frequently asked questions
-
-<AccordionGroup>
-  <Accordion title="Where do I configure dashboard widget exclusions?">
-    Use Settings > Dashboards > Exclusions with Dashboard Settings write or manage permission.
-  </Accordion>
-  <Accordion title="Are exclusions limited to the selected company?">
-    No. They are tenant-wide and apply to supported widgets for all users, including Company users. The company selector does not narrow the saved setting.
-  </Accordion>
-  <Accordion title="Does selecting Add save the exclusion?">
-    No. Add changes the draft badge list. Select Save Exclusions to persist the setting.
-  </Accordion>
-  <Accordion title="How many characters do I need to search?">
-    Enter at least three characters in Search values. Wait for suggestions and narrow the query when needed.
-  </Accordion>
-  <Accordion title="Can I add a label that is not in the search results?">
-    Yes. Enter the exact label as a custom value and select Add, then Save Exclusions. A custom value does not create a source record.
-  </Accordion>
-  <Accordion title="Do exclusion values match partial names or wildcards?">
-    No. They are exact, case-sensitive value matches. Search can find partial text, but the saved exclusion is the selected complete label.
-  </Accordion>
-  <Accordion title="How do I remove an exclusion?">
-    Select the badge’s X and then Save Exclusions. Removing the draft badge alone does not change the stored settings.
-  </Accordion>
-  <Accordion title="How do I include recurring tickets again?">
-    Turn off Exclude Recurring Tickets and save. Separate user-role visibility can still hide recurring records; the switch does not grant access.
-  </Accordion>
-  <Accordion title="Does Reset undo a saved change?">
-    No. It restores the page’s initially loaded draft values and does not save a database undo. Reopen the page to check stored values.
-  </Accordion>
-  <Accordion title="Why did Reset show old values after I saved?">
-    Reset can return to the page’s original values even after a successful save. The newer saved settings remain stored. Reopen the page before editing again.
-  </Accordion>
-  <Accordion title="Does a disabled Save button prove the displayed settings are current?">
-    No. It can indicate no tracked draft changes or a save in progress. After Reset following a save, reopen the page to confirm the stored values.
-  </Accordion>
-  <Accordion title="Does switching settings tabs save my draft?">
-    No. Tabs can retain an unsaved draft while the page remains open. Use Save Exclusions explicitly.
-  </Accordion>
-  <Accordion title="Do submitter and type exclusions change every ticket total?">
-    No. They apply to supported submitter and type breakdowns respectively. Other totals can still include those tickets.
-  </Accordion>
-  <Accordion title="Does the recurring switch support every PSA?">
-    Do not assume universal support. Current detection covers the supported Autotask recurring-ticket format; verify the provider, records and widget.
-  </Accordion>
-  <Accordion title="Does this stop recurring ticket generation in Autotask?">
-    No. It filters supported dashboard data. Recurring-ticket creation schedules remain managed in the PSA.
-  </Accordion>
-  <Accordion title="Can I configure exclusions per dashboard or per user here?">
-    No. This page manages tenant-wide widget exclusions. Use applicable dashboard view controls and user permissions for other needs.
-  </Accordion>
-  <Accordion title="Where are company, technician and subtype exclusion controls?">
-    They are not exposed by this page. The current controls are submitters, ticket types and Exclude Recurring Tickets.
-  </Accordion>
-  <Accordion title="Can exclusions replace ticket security permissions?">
-    No. These are presentation filters, not access-control rules. Configure user permissions separately.
-  </Accordion>
-  <Accordion title="Why did my custom exclusion not change a chart?">
-    Check the exact spelling and capitalization, whether data matches, and whether that widget uses the category. Also compare company and dates.
-  </Accordion>
-  <Accordion title="Do exclusions change an external dashboard?">
-    No. The external service has its own filtering and access behavior.
-  </Accordion>
-</AccordionGroup>

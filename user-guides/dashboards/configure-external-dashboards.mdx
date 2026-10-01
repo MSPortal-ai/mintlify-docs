@@ -4,129 +4,170 @@ description: 'Add external dashboard links, set Company role access and manage e
 icon: 'chart-mixed'
 ---
 
-**Audience:** MSP staff with permission to manage dashboard settings. Company users should use [Open an external dashboard](/user-guides/dashboards/open-external-dashboard).
+Use **Settings > Dashboards > External Dashboards** to add links to dashboards in other services and decide who sees them. This guide is for MSP staff. Company users should read [Open an external dashboard](/user-guides/dashboards/open-external-dashboard).
 
-Open **Settings > Dashboards > External Dashboards**. This is the shared external-dashboard catalog. Adding a link does not connect an API integration or grant an account in the external service.
+## Before you start
 
-## Create a dashboard link
+- Open **Settings > Dashboards**. You need Dashboards access under Settings. **Add External Item** and **Check All Policies** are enabled for **Write** or **Manage**.
+- Adding a link does not connect an API integration or create an account in the external service. Users still sign in to that service themselves.
+- Each Company needs its own URL before its users can open the dashboard. See [Assign company URLs](/user-guides/dashboards/assign-external-dashboard-company-urls).
+- The default URL must start with `https://`.
+
+## Add an external dashboard
 
 <Steps>
-  <Step title="Add the item">
-    Wait for the external-dashboard table to load, then select **Add External Item**. Enter a clear name and an **HTTPS** default URL. Add a description that helps users identify the dashboard.
+  <Step title="Open the tab">
+    Go to **Settings > Dashboards** and click **External Dashboards**. Wait for the table to load.
   </Step>
-  <Step title="Choose presentation and access">
-    Set **Display Order** if needed; lower values appear earlier. The optional icon accepts PNG or JPEG images. Choose the eligible **Company Roles**, or leave all unchecked for no additional Company-role restriction. This does not replace company assignment or module access.
+  <Step title="Click Add External Item">
+    The **Add External Item** dialog opens.
   </Step>
-  <Step title="Create and verify">
-    Select **Create**. Reopen the item to verify the saved URL and role selections. New items start active. For Company access, use the row’s **Company URLs** action to assign a URL to each intended company.
+  <Step title="Enter the basics">
+    Type a **Name** and an optional **Description**. Enter the **URL** with `https://`. This default URL is only used by MSP staff.
+  </Step>
+  <Step title="Add an icon (optional)">
+    Click **Upload Icon** and choose a PNG or JPEG image. 32x32 pixels or larger works well. The icon uploads as soon as you pick the file. Click **Remove** to clear it.
+  </Step>
+  <Step title="Set the order">
+    Enter a **Display Order** number. Lower numbers appear first.
+  </Step>
+  <Step title="Choose Company Roles">
+    Under **Company Roles (Access Control)**, tick the Company roles that may open it. Leave every box clear to allow all Company roles. These choices limit Company users only. MSP staff are not limited by them.
+  </Step>
+  <Step title="Click Create">
+    The item is created as active. Reopen it from the table to check the saved URL and roles.
+  </Step>
+  <Step title="Assign company URLs">
+    Open the row's **... > Company URLs** and add a URL for each Company that should see it.
   </Step>
 </Steps>
 
-<Note>Company-role selections restrict Company users, not MSP staff. They do not assign roles to users. User permissions remain managed by the MSP.</Note>
+The table shows **Name**, **URL**, **Roles**, **Frame Policy** and **Status**. **Roles** reads **All roles** when none are chosen. Badges mark **Default** and **Sidebar**.
 
-## Edit an existing item
+## Edit an item
 
-Open its row **… > Edit**, change the fields, and select **Update**. The edit dialog also provides **Active**, **Pin to Sidebar** and an optional sidebar label. An inactive item is unavailable in the normal dashboard reader.
+<Steps>
+  <Step title="Open the dialog">
+    Click the item's name, or open **... > Edit** on its row.
+  </Step>
+  <Step title="Change the fields">
+    Editing also shows **Active**, **Pin to Sidebar** and, when pinned, a **Sidebar Label** of up to 30 characters. An inactive item is hidden from the dashboard list.
+  </Step>
+  <Step title="Click Update">
+    Changes are saved only when you click **Update**.
+  </Step>
+</Steps>
 
-The default URL is for MSP global viewing. [Company URLs](/user-guides/dashboards/assign-external-dashboard-company-urls) are saved separately. After changing a URL, recheck its destination and embedding behavior; an old policy status is not proof that the new page works.
+After you change a URL, run **Check Frame Policy** again from the row menu. The old result does not apply to the new URL. Company URLs are saved separately in the Company URLs dialog.
 
-Icon uploads occur when a file is selected. Canceling the dialog does not undo that upload. Use an appropriate small icon and verify the saved result after updating it.
+An icon uploads when you choose it, so **Cancel** does not undo an upload.
 
 ## Row actions
 
 <img src="/images/product/external-dashboard-row-menu.png" alt="External dashboard actions for editing, company URLs, frame policy, defaults, sidebar pinning and deletion." width="408" height="486" />
 
-The image shows MSP administration controls.
+Open **...** on a row. These actions apply as soon as you use them.
 
 | Action | Effect |
 | --- | --- |
-| **Edit** | Change the item; select Update to save form changes. |
-| **Company URLs** | Add, edit or remove company assignments, each saved immediately. |
-| **Check Frame Policy** | Request a background embedding check for this item’s default URL. Reopen the table later to inspect the result. |
-| **Force Allow Embedding** | Confirm an override of the portal’s embedding check. It cannot override restrictions enforced by the external website or browser. |
-| **Remove Force Allow** | Remove the override and return to the stored automated policy result. |
-| **Set as Default** | Replace the tenant’s current internal or external dashboard default. It does not grant access. |
-| **Remove Default** | Clear this default without selecting another. |
-| **Pin to Sidebar / Unpin from Sidebar** | Add or remove the shared sidebar shortcut. Access rules still apply. |
-| **Delete** | Open a confirmation dialog. Confirm only when you intend to remove the portal item and its company assignments. |
+| **Edit** | Opens the dialog. Use **Update** to save. |
+| **Company URLs** | Opens the Company-Specific URLs dialog. |
+| **Check Frame Policy** | Starts a background check of the default URL. The table updates shortly after. |
+| **Force Allow Embedding** | After you confirm, embeds the dashboard even if the check says it is blocked. Use it when the checker cannot reach the URL, for example an IP-restricted dashboard. The external site can still refuse. |
+| **Remove Force Allow** | Goes back to the saved check result. |
+| **Set as Default** | Shown on active items that are not the default. Replaces the current internal or external default for the whole tenant. |
+| **Remove Default** | Clears the default without choosing another. |
+| **Pin to Sidebar** / **Unpin from Sidebar** | Adds or removes the shortcut in the main navigation. Pins are limited to 8 across internal and external dashboards. |
+| **Delete** | Opens **Delete External Item**. Click **Delete** to remove the item and its company assignments. This cannot be undone. |
 
-The URL link in the table opens the external destination. It is different from opening the dashboard reader inside MSPortal.
+Clicking the URL in the table opens the external site in a new tab.
 
-## Embedding checks
+## Check embedding
 
-**Check Frame Policy** checks the default URL, not every company-specific URL. **Check All Policies** queues checks for active items that have not been checked; it is not a guaranteed fresh recheck of every existing result. Use the individual action when reviewing a changed URL.
+Each external dashboard is shown inside MSPortal in a frame. Some sites refuse to be framed.
 
-- **Not checked:** no saved embedding decision.
-- **Allowed:** the stored automated check permits an embedding attempt. It does not prove that every company URL loads, authentication succeeds or the service’s data is correct.
-- **Blocked:** use a separate tab, or investigate the external service’s supported embedding configuration.
-- **Force Allow:** the portal attempts embedding despite its automatic result. The external website can still reject it.
+<Steps>
+  <Step title="Run the check">
+    Open **... > Check Frame Policy** on the row. To check every active item that has no result yet, click **Check All Policies** at the top of the page.
+  </Step>
+  <Step title="Read Frame Policy">
+    The column shows **Not checked**, **Allowed**, **Blocked** or **Force allowed**.
+  </Step>
+  <Step title="Test the real link">
+    Open the dashboard as the intended user, with their company, and confirm it loads.
+  </Step>
+</Steps>
 
-Test the actual intended company URL as well as the default. A provider can apply different policies or authentication to different pages.
+| Status | Meaning |
+| --- | --- |
+| **Not checked** | No result yet. Readers see a notice and an **Open in New Tab** button. |
+| **Allowed** | No blocking header was found on the default URL. It does not prove sign-in works or that a company URL loads. |
+| **Blocked** | The site forbids framing. Readers see why and an **Open in New Tab** button. |
+| **Force allowed** | MSPortal tries to embed it regardless of the check. |
 
-## Bulk changes
+**Check All Policies** only checks active items with no result yet. Use the row action to recheck one item. The check covers the default URL, not company URLs.
 
-Select only the intended rows, then use the bulk controls. **Enable** and **Disable** change availability. **Edit Permissions** replaces the selected items’ Company-role assignments; it does not merge the new selection with their previous roles. Selecting no roles removes the explicit role restriction. Verify each affected item afterward.
+## Change several items
 
-Bulk **Delete** asks for browser confirmation. Single-row Delete uses an in-app confirmation dialog. Deletion removes the MSPortal configuration, not the external service or its account. Disabling is useful when you want to retain the configuration for later.
+<Steps>
+  <Step title="Select rows">
+    Tick the checkbox on each item you want to change.
+  </Step>
+  <Step title="Open Actions">
+    Click **Actions (n)** at the top of the page.
+  </Step>
+  <Step title="Choose an action">
+    **Edit Permissions** opens a dialog with **Assign Roles (optional)**. Click **Update Permissions** to replace the selected items' roles. **Enable** and **Disable** change availability. **Delete** asks you to confirm and shows the count.
+  </Step>
+</Steps>
+
+Edit Permissions replaces existing roles. It does not add to them. Leave every box clear to allow all roles. Deleting removes the item in MSPortal only, not the dashboard in the external service. To keep the setup for later, disable the item instead.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The **Add External Item** button is disabled | Ask an admin to give your role **Write** or **Manage** for Dashboards under Settings. |
+| The URL is rejected | It must be a full `https://` address. |
+| Frame Policy says **Blocked** | The site forbids framing. Readers get an **Open in New Tab** button. If the checker cannot reach the site, use **Force Allow Embedding**. |
+| A Company cannot see the dashboard | Check the item is **Active**, the Company has a URL, and the user's Company role is allowed. |
+| **Set as Default** is missing | The item is inactive or already the default. |
+| The icon looks wrong | Upload a small PNG or JPEG and check the saved result in the table. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does creating an external dashboard set up an API integration?">
+    No. It creates a link or embedded view. Set up API integrations separately.
+  </Accordion>
+  <Accordion title="Which URL format is accepted?">
+    A full `https://` URL, for the default and for each Company.
+  </Accordion>
+  <Accordion title="What does leaving Company Roles empty mean?">
+    All Company roles can open it. The item still needs to be active and the Company needs its own URL.
+  </Accordion>
+  <Accordion title="Do Company Roles limit MSP staff?">
+    No. They limit Company users only.
+  </Accordion>
+  <Accordion title="Does Check All Policies recheck everything?">
+    No. It checks active items that have no result yet.
+  </Accordion>
+  <Accordion title="Does Allowed prove the dashboard works?">
+    No. It means no blocking header was found on the default URL. Sign-in and company URLs still need a test.
+  </Accordion>
+  <Accordion title="Does Set as Default affect internal dashboards?">
+    Yes. It clears any other default, internal or external, for the tenant.
+  </Accordion>
+  <Accordion title="Does deleting an item delete the dashboard in the other service?">
+    No. It removes the link and company assignments in MSPortal.
+  </Accordion>
+  <Accordion title="What is the difference between Active and pinned?">
+    **Active** controls availability. A pin only adds a navigation shortcut and grants no access.
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
 - [Assign company URLs](/user-guides/dashboards/assign-external-dashboard-company-urls)
 - [Open an external dashboard](/user-guides/dashboards/open-external-dashboard)
 - [Manage internal dashboard settings](/user-guides/dashboards/manage-dashboard-settings)
-
-## Frequently asked questions
-
-<AccordionGroup>
-  <Accordion title="Where can an MSP add an external dashboard?">
-    Use Settings > Dashboards > External Dashboards > Add External Item.
-  </Accordion>
-  <Accordion title="Does creating an external dashboard configure an API integration?">
-    No. It creates a portal link or embedded view. Configure API integrations separately when needed.
-  </Accordion>
-  <Accordion title="Which URL format is accepted?">
-    Use a valid HTTPS URL for the default and company-specific destinations.
-  </Accordion>
-  <Accordion title="What does selecting no Company Roles mean?">
-    No additional Company-role restriction. The item still needs active status, applicable access and company URL assignments for Company use.
-  </Accordion>
-  <Accordion title="Do Company Roles restrict MSP staff?">
-    The external dashboard’s Company-role selections gate Company users; they do not assign or restrict MSP staff roles.
-  </Accordion>
-  <Accordion title="Why should I reopen the item after saving?">
-    Verify the actual saved URL, role choices and availability before relying on the configuration or sharing it with users.
-  </Accordion>
-  <Accordion title="Can a Company Admin configure these settings?">
-    These are MSP administration tasks. Company users should ask their MSP to change dashboard configuration or user permissions.
-  </Accordion>
-  <Accordion title="Does Check All Policies recheck every dashboard?">
-    It queues active items that have not been checked. Use the individual Check Frame Policy action when a saved result needs review.
-  </Accordion>
-  <Accordion title="Are company-specific URLs included in the frame check?">
-    No. The check uses the item’s default URL. Verify each intended company destination separately.
-  </Accordion>
-  <Accordion title="Does Allowed prove the external dashboard works?">
-    No. It permits an embedding attempt based on the saved check. Authentication, actual content and company-specific URLs still require verification.
-  </Accordion>
-  <Accordion title="What does Force Allow Embedding change?">
-    It overrides the portal’s automated embedding decision after confirmation. It cannot bypass the external website’s browser policy or sign-in requirements.
-  </Accordion>
-  <Accordion title="Are row actions saved by a later page Save?">
-    No. Defaults, pinning and policy actions take effect through their own actions. Edit form changes require Update; company URL changes save individually.
-  </Accordion>
-  <Accordion title="Does setting an external default affect internal defaults?">
-    Yes. Set as Default replaces the tenant’s existing internal or external dashboard default. It is not just a personal preference.
-  </Accordion>
-  <Accordion title="Does bulk Edit Permissions add to existing roles?">
-    No. It replaces the selected items’ Company-role assignments. Review the selection and each saved result.
-  </Accordion>
-  <Accordion title="Does deleting the portal item delete the provider dashboard?">
-    No. It removes the MSPortal item and its company assignments, not the external service’s account or dashboard.
-  </Accordion>
-  <Accordion title="Does canceling an icon edit undo the upload?">
-    No. Choosing an icon uploads it immediately, before Create or Update. Cancel is not an upload rollback.
-  </Accordion>
-  <Accordion title="What is the difference between Active and pinned?">
-    Active controls availability. Pinning adds a navigation shortcut and does not grant access or make an inactive item usable.
-  </Accordion>
-</AccordionGroup>

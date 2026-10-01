@@ -1,106 +1,498 @@
 ---
 title: 'Configure Datto RMM Integration'
-description: 'Connect Datto RMM, map sites to companies, and import device inventory'
+description: 'Connect your Datto RMM instance to MSPortal.ai to sync sites, devices, and software'
 icon: 'plug'
 ---
 
-Connect **Datto RMM** to bring its sites and device inventory into MSPortal. The setup flow is **Connect → Sync → Map → Import**.
+This guide walks you through connecting your Datto RMM instance to MSPortal.ai using our streamlined 3-step setup wizard: **Connect**, **Map** and **Import**.
 
-## Before you start
+## Overview
 
-This is an **MSP staff** task. You need access to **Settings > Integrations**, permission to manage integrations, authorized vendor credentials, and companies to receive the imported records. Company users do not configure this connection.
+The Datto RMM integration syncs your sites, devices, and installed software into MSPortal, allowing you to:
 
-Enable API access for your Datto account, then generate credentials for an authorized user and save that user. Record the API URL so you can choose the matching platform. Follow [Datto’s API access instructions](https://rmm.datto.com/help/en/Content/2SETUP/APIv2.htm); the API security and component levels control what that user can access.
+- Import and manage devices from Datto RMM
+- Map Datto sites to your MSPortal companies
+- Keep device inventory synchronized automatically
+- Track installed software on your Datto devices
+- View Datto devices in reports and compliance tracking
 
-## Connect the provider
+## Prerequisites
 
-1. Open **Settings > Integrations**, find **Datto RMM**, and choose its connection/setup action. Use **Configure** on the existing connection when managing an established setup.
-2. Enter the connection fields below.
-3. Choose **Test Connection** and resolve any reported error.
-4. After a successful test, choose **Create Integration**. This saves the connection. Continue through **Sync** to choose data categories and start discovery. A successful test alone does not create it.
+Before you begin, ensure you have:
 
-| Field | What to enter |
-| --- | --- |
-| **Platform** | Select Pinotage, Merlot, Concord, Vidal, Zinfandel, or Syrah to match your Datto API URL. |
-| **API Key** | The API key generated for your authorized Datto user. |
-| **Secret Key** | The matching API Secret Key; the form also calls it Private Key. |
+- Active Datto RMM account with administrative access
+- MSPortal.ai account with integration management permissions
+- Companies already set up in MSPortal (from your PSA integration or manually created)
 
-Regenerating Datto keys invalidates the previous pair. Coordinate replacement with any other connection using those credentials.
+<Note>
+The Datto RMM integration maps sites to existing companies in MSPortal. Import your companies from your PSA integration first, or create them manually before setting up Datto RMM.
+</Note>
 
-<img src="/images/product/datto-setup-connection.png" alt="Datto RMM setup in MSPortal with blank credential inputs" width="1024" height="1152" />
+---
 
-MSP example: a new connection before credentials are entered. The embedded app hint uses older vendor navigation; follow the linked Datto instructions above for current API-key setup.
+## Part 1: Generate API Credentials in Datto RMM
 
-## Choose what to sync
+Before connecting to MSPortal, you need to enable API access and generate API keys for a Datto RMM user.
 
-<Note>Branch preview: this setup flow includes a dedicated **Sync** step.</Note>
+<Steps>
+  <Step title="Enable API Access">
+    Log into your Datto RMM portal and go to **Setup > Global Settings > Access Control**. Turn on **Enable API Access** and save.
+  </Step>
 
-After connecting, open **Sync** and choose the data to import: **Companies (Datto sites), Devices, and Software**. Only categories supported by this provider appear. Continue with **Next** to save your choices before discovery and mapping. Existing connections keep their current behavior until you change a choice.
+  <Step title="Open the API User">
+    Go to **Setup > Users** and open the user MSPortal will connect as. We recommend a dedicated user for MSPortal.
+  </Step>
 
-Disabling a category stops future synchronization for that category. Turning **Software** off removes that integration's software inventory; turning it back on starts a new inventory sync. Device and company mapping still determine which records can appear in the portal.
+  <Step title="Generate API Keys">
+    In the user's **API Keys** section, click **Generate API Keys**, then **Save** the user. The keys do not work until the user is saved.
 
-## Map sites to companies
+    <Warning>
+      Copy the **API URL**, **API Key** and **API Secret Key** immediately after generating them. The Secret Key cannot be retrieved once you leave the page. Regenerating keys invalidates the previous pair.
+    </Warning>
+  </Step>
 
-1. Continue to **Map** after discovery has returned the provider’s sites.
-2. Select an existing company for each intended record, or use **Quick Match** and review each suggested company.
-3. Review the pending links, then choose **Import Selected** to apply the selected imports and pending links. Check the selected records as well as the pending-link count before submitting. The wizard’s **Next** also attempts to save pending mappings before continuing. Check that the rows show saved links before proceeding.
-4. Remove a pending suggestion to discard that draft. Removing an already saved link takes effect immediately.
+  <Step title="Note Your Platform">
+    Identify which Datto RMM platform your account uses. The platform name is the first part of the API URL you copied:
 
-Creating a company from the mapping screen creates the company immediately; its new mapping still needs to be saved. Check for an existing company first to avoid duplicates. Moving forward from mapping can start synchronization using the saved links.
+    | Platform | API URL |
+    |----------|---------|
+    | Pinotage | `https://pinotage-api.centrastage.net` |
+    | Merlot | `https://merlot-api.centrastage.net` |
+    | Concord | `https://concord-api.centrastage.net` |
+    | Vidal | `https://vidal-api.centrastage.net` |
+    | Zinfandel | `https://zinfandel-api.centrastage.net` |
+    | Syrah | `https://syrah-api.centrastage.net` |
+  </Step>
+</Steps>
 
-## Import devices
+---
 
-The **Import** step is an entry point. Select **Open Device Import** to open the actual device staging and type-mapping page.
+## Part 2: MSPortal Setup Wizard
 
-Review the company and device type before importing. Map provider categories to MSPortal device types, then import the intended records. Where offered, **Auto-Sync** enables future imports for the mapped category and **Ignore** excludes a category. These are saved configuration choices, not temporary list filters.
+MSPortal provides a guided 3-step wizard to connect and configure your Datto RMM integration.
 
-Follow [Import Devices](/user-guides/integrations/import-devices) for selection, type mappings and result handling. Check the import result and resulting Devices records. **Complete Setup** finishes the wizard; its success message does not prove every background sync or device import has completed.
+### Starting the Wizard
 
-## Manage an existing connection
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal, go to **Settings > Integrations**.
+  </Step>
 
-To rotate credentials, reopen the existing connection, enter the replacement API Key and Secret Key, test them, then choose **Update API Key**. The Platform selector stays locked for an existing connection. Retesting alone does not save replacements.
+  <Step title="Start Setup">
+    Find **Datto RMM** and click **Connect** to launch the setup wizard. For an existing connection, click **Configure**.
+  </Step>
+</Steps>
 
-Reopen the specific connection to review mappings and imports. An existing **Connection verified** state is not evidence that a fresh retest just ran. Inspect recent sync status and errors when diagnosing stale inventory.
+---
 
-The wizard’s **Delete** action opens a **Delete Integration** confirmation. Read it before proceeding: deletion is not a refresh or a temporary pause. It does not revoke vendor credentials on the vendor’s behalf.
+### Step 1: Connect
+
+Enter your Datto RMM API credentials to establish the connection.
+
+<Steps>
+  <Step title="Select Your Platform">
+    Choose your Datto RMM platform from the **Platform** dropdown:
+    - Pinotage
+    - Merlot
+    - Concord
+    - Vidal
+    - Zinfandel
+    - Syrah
+
+    <Tip>
+    If you're unsure which platform you're on, check the API URL from Part 1 or contact Datto support.
+    </Tip>
+
+    <img src="/images/product/datto-setup-connection.png" alt="Datto RMM setup in MSPortal with blank credential inputs" width="1024" height="1152" />
+  </Step>
+
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
+
+    | Field | Description |
+    |-------|-------------|
+    | **API Key** | The API key generated in Datto RMM |
+    | **Secret Key** | The secret key (also called "Private Key" in Datto) |
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials. You'll see a green "Connection tested successfully" message when successful.
+
+    If the connection fails:
+    - Verify your API Key and Secret Key are copied correctly
+    - Confirm you selected the correct platform
+    - Check that your API key hasn't expired or been regenerated
+    - Ensure API access is enabled for your Datto account and the user was saved after generating keys
+  </Step>
+
+  <Step title="Create Integration">
+    Once the connection test passes, click **Create Integration** to save your credentials and proceed. A successful test alone does not save the connection.
+  </Step>
+</Steps>
+
+---
+
+### Choose What to Sync (Branch Preview)
+
+<Note>Branch preview: this setup flow includes a dedicated **Sync** step between Connect and Map. It is not yet available in every tenant.</Note>
+
+<Steps>
+  <Step title="Open the Sync step">
+    After connecting, open **Sync**. The **Choose what to sync** card lists the data categories this provider supports: **Companies** (Datto sites), **Devices**, and **Software**.
+
+    <Frame caption="Branch preview: choose the Datto RMM data to sync.">
+      <img src="/images/product/pr1601-datto-sync-desktop.png" alt="Datto RMM Sync step with companies, devices and software choices" width="1440" height="960" />
+    </Frame>
+  </Step>
+
+  <Step title="Turn categories on or off">
+    Use the switch beside each category. Existing connections keep their current behavior until you change a choice.
+
+    - Turning a category off stops future synchronization for that category. Other disabled categories keep their existing data.
+    - Turning **Software** off removes this integration's installed software data. Turning it back on starts a new inventory sync.
+    - Devices and software still use your saved site mappings to decide which records appear.
+  </Step>
+
+  <Step title="Save your choices">
+    Click **Next** to save your choices and continue to mapping.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Map Sites
+
+Map your Datto RMM sites to MSPortal companies. Only devices from mapped sites will be available for import.
+
+<Steps>
+  <Step title="Wait for Initial Sync">
+    After creating the integration, MSPortal begins syncing your sites from Datto RMM. This may take a few minutes depending on the number of sites.
+
+    <Info>
+    If you see "No Sites Found", wait a few minutes and click **Check for Sites**. The initial sync may take a few minutes to complete.
+    </Info>
+  </Step>
+
+  <Step title="Review Site List">
+    The mapping table displays all sites from Datto RMM with:
+    - **Name**: The name of the site in Datto RMM
+    - **Devices**: Number of devices at that site
+    - **Mapped**: The MSPortal company the site is linked to
+    - **Status**: **Pending** for a link that is not saved yet, **Saved** for a saved link
+
+    The **Total Items**, **Mapped** and **Unmapped** tiles above the table show your progress. Click a tile to filter the list to those sites.
+  </Step>
+
+  <Step title="Use Quick Match (Recommended)">
+    Click **Quick Match** to find companies with similar names. A **Quick Match Results** dialog lists each suggested match with its confidence score.
+
+    - Matches at 70% confidence or higher are selected by default. Move the slider to select more or fewer matches.
+    - Check or uncheck individual matches, then click **Apply Matches**.
+    - Applied matches appear as **Pending** in the table. They are not saved yet.
+  </Step>
+
+  <Step title="Manually Map Remaining Sites">
+    For sites that weren't matched:
+
+    1. Find the site in the list
+    2. Click the company dropdown in the **Mapped** column
+    3. Search for and select the correct MSPortal company
+    4. The row shows **Pending** until you save it
+
+    To link several sites to the same company, check their rows, choose the company in the selection bar above the table, and click **Assign**.
+
+    <Tip>
+    If a company does not exist yet, click the **+** button in the row (or **Create new company** above the table) to create it. Check for an existing company first to avoid duplicates.
+    </Tip>
+  </Step>
+
+  <Step title="Save Your Mappings">
+    Click **Import Selected** to save the pending links. The button shows how many changes are waiting. Clicking **Next** also saves pending links before moving on.
+  </Step>
+
+  <Step title="Unmap Sites (Optional)">
+    To remove a saved mapping, click the **X** button next to the mapped company name. Removing a saved link takes effect immediately. Removing a pending link only discards the draft.
+  </Step>
+</Steps>
+
+<Warning>
+You must map at least one site before proceeding to device import. Devices from unmapped sites will not appear in the import staging area.
+</Warning>
+
+---
+
+### Step 3: Import Devices
+
+After mapping sites, import devices from Datto RMM into your MSPortal asset inventory.
+
+<Steps>
+  <Step title="Open Device Import">
+    Click **Open Device Import** to access the full device import interface. This opens a dedicated page for managing device imports.
+  </Step>
+
+  <Step title="Complete Setup">
+    Click **Complete Setup** to finish the wizard. You can always return to the device import page later. Completing setup does not mean every background sync or import has finished.
+  </Step>
+</Steps>
+
+---
+
+## Part 3: Device Import
+
+The device import page lets you configure device type mappings and selectively import devices.
+
+### Device Type Mappings
+
+Before importing devices, map Datto device types to your MSPortal device types.
+
+<Steps>
+  <Step title="Review Discovered Types">
+    The Device Type Mappings table shows all device types found in your Datto RMM:
+
+    | Column | Description |
+    |--------|-------------|
+    | **Datto Category** | The device category (e.g., Desktop, Laptop, Server) |
+    | **Datto Type** | The specific device type |
+    | **Device Count** | Number of devices of this type |
+    | **Maps To** | The MSPortal device type to map to |
+    | **Auto-Sync** | Enable automatic import for this type |
+    | **Ignore** | Exclude this entire category from pending imports |
+    | **Actions** | Import all devices of this type |
+  </Step>
+
+  <Step title="Use Quick Match or Quick Create">
+    - **Quick Match**: Automatically maps Datto types to existing MSPortal device types with similar names
+    - **Quick Create**: Creates new MSPortal device types for any Datto types that don't have a match
+  </Step>
+
+  <Step title="Map Device Types">
+    For each Datto device type:
+
+    1. Click the "Maps To" dropdown
+    2. Select the corresponding MSPortal device type
+    3. The mapping is saved automatically
+  </Step>
+
+  <Step title="Enable Auto-Sync (Optional)">
+    Turn on **Auto-Sync** for device types you want automatically imported. New devices of these types will be imported without manual intervention after each device sync. Click **Enable All Auto-Sync** to turn it on for every mapped type.
+
+    <Note>
+    Auto-sync requires a device type mapping. You must select a "Maps To" value before enabling auto-sync.
+    </Note>
+  </Step>
+
+  <Step title="Ignore a Category (Optional)">
+    Check the **Ignore** checkbox for device types you never want to import (e.g., printers, UPS devices, or sensors). Ignored categories:
+
+    - Are visually dimmed in the mappings table
+    - Have their mapping, auto-sync, and import controls disabled
+    - All unimported devices of that type are hidden from the staged devices list and pending import counts
+    - New devices synced from Datto RMM of an ignored type are automatically ignored
+
+    Uncheck the Ignore checkbox at any time to restore the category and its devices.
+  </Step>
+
+  <Step title="Import by Type">
+    Click **Import All** on a row to import all unimported devices of that type at once. Click **Import All Mapped** to import every mapped type in one step.
+  </Step>
+</Steps>
+
+### Staged Devices
+
+The Staged Devices table shows devices ready for import from mapped sites.
+
+<Steps>
+  <Step title="Trigger a Sync">
+    Click **Sync Now** in the page header to fetch the latest devices from Datto RMM.
+
+    <Info>
+    The initial sync may take an hour or two to complete. Subsequent syncs are faster.
+    </Info>
+  </Step>
+
+  <Step title="Review Staged Devices">
+    The table displays:
+    - **Name**: Hostname of the device
+    - **Category** and **Type**: Datto device classification
+    - **Site**: Which Datto site the device belongs to
+    - **Company**: The mapped MSPortal company
+    - **Manufacturer**, **Model** and **OS**: Hardware and operating system details
+    - **Status**: Whether the device has been imported
+  </Step>
+
+  <Step title="Filter Devices">
+    Toggle **Show unimported only** to hide devices that have already been imported.
+  </Step>
+
+  <Step title="Select and Import">
+    1. Check the boxes next to devices you want to import
+    2. Click **Import Selected** to import the selected devices
+    3. Imported devices will be created in your MSPortal asset inventory
+
+    To hide devices you never want to import, select them and click **Ignore Selected**.
+  </Step>
+</Steps>
+
+<Tip>
+For bulk imports, use the device type mapping's "Import All" button instead of selecting individual devices.
+</Tip>
+
+---
+
+## What Gets Synced
+
+| Data Type | Sync Direction | Description |
+|-----------|----------------|-------------|
+| Sites | Datto → MSPortal | Site information for mapping to companies |
+| Devices | Datto → MSPortal | All managed devices from mapped sites |
+| Device Types | Datto → MSPortal | Device categories and types for mapping |
+| Device Details | Datto → MSPortal | Hostname, manufacturer, model, OS |
+| Software | Datto → MSPortal | Installed software inventory for devices |
+
+## Sync Schedule
+
+| Sync Type | Schedule | Details |
+|-----------|----------|---------|
+| Site Sync | Every 2 hours (at :05) | Refreshes the list of Datto sites |
+| Device Sync | Every 2 hours (at :10) | Syncs devices from mapped sites, then auto-imports types with Auto-Sync on |
+| Device Enrichment | Hourly (at :30) | Fills in extra details for devices that are missing them |
+| Software Sync | Daily at 4:30 AM UTC | Refreshes installed software inventory |
+
+You can trigger a manual sync at any time with **Sync Now** on the device import page or **Resync** on the Integrations page.
+
+---
+
+## Managing Your Integration
+
+After setup, manage your integration from **Settings > Integrations**:
+
+- **Configure**: Re-open the setup wizard to modify settings or re-map sites
+- **Import Devices**: Access the device import page directly
+- **Resync**: Trigger a fresh sync of sites, devices, and software
+- **Delete**: Available inside the Configure wizard. It opens a **Delete Datto RMM Integration?** confirmation and permanently removes the integration and its settings. It does not revoke the API keys in Datto RMM.
+
+### Re-running the Wizard
+
+You can return to any step of the setup wizard at any time:
+
+1. Go to **Settings > Integrations**
+2. Click **Configure** on the Datto RMM connection
+3. Navigate between steps using the step indicators or Back/Next buttons
+
+### Rotating API Credentials
+
+<Steps>
+  <Step title="Open the Connect step">
+    Go to **Settings > Integrations**, click **Configure** on the Datto RMM connection, and open **Connect**. The **Platform** field is locked for an existing connection.
+  </Step>
+  <Step title="Enter the new keys">
+    Enter the replacement **API Key** and **Secret Key**.
+  </Step>
+  <Step title="Test the new keys">
+    Click **Retest Connection** and wait for the success message.
+  </Step>
+  <Step title="Save the new keys">
+    Click **Update API Key**. Retesting alone does not save replacement keys.
+  </Step>
+</Steps>
+
+---
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Connection test fails | Credential type, vendor access, host/region, expired or revoked credentials, and the reported error. |
-| Map is empty | Discovery status and the vendor account’s access to the intended records. Avoid repeatedly creating connections. |
-| A mapping disappeared | Check whether it was pending or saved. Reopen the connection to verify the saved state. |
-| Devices are missing | Saved company mappings, completed device sync, type mappings, Ignore settings and the import result. |
-| Inventory is old | Last successful provider sync, any paused state, and connection errors. A scheduled time does not guarantee a successful run. |
-
-## Frequently asked questions
-
 <AccordionGroup>
-  <Accordion title="Does Test Connection save the integration?">
-    No. For a new connection, complete the successful test and then choose **Create Integration**. Existing-connection retesting is also distinct from any credential-update action.
+  <Accordion title="Connection test fails">
+    **Causes:**
+    - Incorrect API Key or Secret Key
+    - Wrong platform selected
+    - Expired or regenerated API credentials
+    - API access not enabled, or the user was not saved after generating keys
+
+    **Solutions:**
+    1. Verify your API Key and Secret Key are copied exactly (no extra spaces)
+    2. Confirm you selected the platform that matches your API URL
+    3. Generate new API keys for the user under **Setup > Users** if needed, and save the user
+    4. Ensure **Enable API Access** is on under **Setup > Global Settings > Access Control**
   </Accordion>
-  <Accordion title="Does Quick Match immediately save every suggested link?">
-    No. Review and apply the intended suggestions, then save the pending mappings. Removing a saved link is an immediate change.
+
+  <Accordion title="No sites appear in mapping step">
+    **Causes:**
+    - Initial sync still in progress
+    - API user lacks access to the sites
+
+    **Solutions:**
+    1. Wait a few minutes for the initial sync to complete
+    2. Click **Check for Sites**, or **Resync** on the Integrations page
+    3. Verify the API user can see the sites in Datto RMM
   </Accordion>
-  <Accordion title="Does Complete Setup mean all devices are imported?">
-    No. Device discovery, saved mappings and inventory imports have separate results. Open the device import page and check the resulting inventory.
+
+  <Accordion title="A mapping disappeared">
+    **Cause:** The link was still **Pending** when you left the page. Pending links are drafts until you save them.
+
+    **Solution:** Re-select the company and click **Import Selected** (or **Next**). Check that the row shows **Saved**.
   </Accordion>
-  <Accordion title="Can a Company user configure this provider?">
-    No. Provider setup is an MSP settings task. Company access to resulting data depends on portal permissions and company scope.
+
+  <Accordion title="No devices in staging area">
+    **Causes:**
+    - No sites have been mapped to companies
+    - Device sync still in progress
+    - Sites don't have any devices
+
+    **Solutions:**
+    1. Map at least one site to a company in the Map step and save it
+    2. Wait for the device sync to complete (can take 1-2 hours initially)
+    3. Click **Sync Now** to trigger a fresh sync
   </Accordion>
-  <Accordion title="Is Datto RMM the same as a Datto backup connection?">
-    No. This guide covers RMM sites, device inventory and software. Configure the relevant backup provider separately for backup workloads.
+
+  <Accordion title="Import fails for some devices">
+    **Causes:**
+    - Device type not mapped
+    - Company mapping was removed
+
+    **Solutions:**
+    1. Ensure all device types have a "Maps To" value configured
+    2. Verify the site is still mapped to a company
+    3. Check for error messages in the import results
+  </Accordion>
+
+  <Accordion title="Auto-sync not importing new devices">
+    **Causes:**
+    - Auto-sync not enabled for the device type
+    - Device type not mapped
+    - Site not mapped to a company
+
+    **Solutions:**
+    1. Enable Auto-Sync for the device type
+    2. Ensure the device type has a "Maps To" mapping configured
+    3. Verify the device's site is mapped to a company
   </Accordion>
 </AccordionGroup>
 
-## Related guides
+---
 
-- [Integration company mapping](/user-guides/settings/integration-company-mapping)
-- [Import Devices](/user-guides/integrations/import-devices)
-- [Devices](/user-guides/devices/index)
-- [Integration settings](/user-guides/settings/integrations)
+## Best Practices
 
-<Frame caption="Branch preview: choose the Datto RMM data to sync.">
-  <img src="/images/product/pr1601-datto-sync-desktop.png" alt="Datto RMM Sync step with companies, devices and software choices" width="1440" height="960" />
-</Frame>
+<CardGroup cols={2}>
+  <Card title="Map Sites First" icon="sitemap">
+    Always map your Datto sites to companies before trying to import devices. Unmapped site devices won't appear in staging.
+  </Card>
+  <Card title="Use Quick Match" icon="wand-magic-sparkles">
+    Start with Quick Match for site mapping, then manually adjust any incorrect matches. It saves significant time.
+  </Card>
+  <Card title="Enable Auto-Sync" icon="rotate">
+    For device types you always want imported (like workstations), enable Auto-Sync to reduce manual work.
+  </Card>
+  <Card title="Ignore Unwanted Types" icon="eye-slash">
+    Use the Ignore checkbox to permanently hide device types you never manage (printers, sensors, etc.). This keeps your pending import counts clean and accurate.
+  </Card>
+</CardGroup>
+
+---
+
+## Related Resources
+
+- [Import Companies](/user-guides/integrations/import-companies) - General company import guide
+- [Import Devices](/user-guides/integrations/import-devices) - Device type mappings, auto-sync, and category ignore
+- [Devices Module](/user-guides/devices/index) - Managing devices in MSPortal
+- [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) - Troubleshooting sync issues
+- [ConnectWise Asio Integration](/user-guides/integrations/enable-connectwise-asio-integration) - Similar RMM integration guide

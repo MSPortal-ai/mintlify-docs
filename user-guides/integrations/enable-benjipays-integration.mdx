@@ -1,99 +1,149 @@
 ---
-title: "Configure BenjiPays Integration"
-description: "Configure the invoice payment link, preview sample values, and save or disconnect it."
-icon: "plug"
+title: 'Configure Benji Pays Integration'
+description: 'Drop a branded Pay Now button onto every unpaid invoice using your Benji Pays payment link'
+icon: 'credit-card'
 ---
 
-BenjiPays setup adds a payment link to eligible unpaid invoice rows. MSPortal substitutes the invoice number and amount due into your template; payment happens on the destination website.
+The Benji Pays integration adds a **Pay Now** button next to every unpaid invoice on the Invoices page. Click it, and your client lands on a pre-filled Benji Pays checkout for that specific invoice and balance, no typing required.
 
-This guide is for **MSP staff with access to Integrations settings**. Changing or disconnecting the template requires integration management permission. Company users can use available invoice payment links, but do not administer this setup.
+Unlike PSA, RMM, and backup connectors, Benji Pays has no API and no credentials. The entire integration is a single payment-link template that MSPortal stores once and re-uses for every invoice. We swap `[INVOICENUMBER]` and `[AMOUNTDUE]` into your link at render time.
 
-## Prepare the payment link
+## Prerequisites
 
-Obtain your merchant’s link through **Settings > Custom Payment Links** in Benji Pays, following its [custom payment link guide](https://support.benjipays.com/support/solutions/articles/150000181442-custom-payment-links-for-any-psa-or-erp-crm). Keep the merchant URL and any issued link parameters. Use MSPortal’s exact, case-sensitive placeholders for the invoice and amount values:
+- Active Benji Pays merchant account
+- A Benji Pays shop with an issued custom payment link
+- MSPortal user with the **Manage Integrations** permission
+- At least one PSA integration (ConnectWise, Autotask, or Halo PSA) syncing invoices, otherwise there are no invoices to render Pay Now buttons on
 
-- `[INVOICENUMBER]`
-- `[AMOUNTDUE]`
+## Part 1: Get Your Payment Link from Benji Pays
 
-The URL must use `https://` and a `benjipays.com` or `benjipays.io` address, including their subdomains. Other systems’ placeholder names must be replaced with the two MSPortal placeholders above.
+The link MSPortal needs lives in your Benji Pays account. You're looking for the **Custom Payment Link** format, the one with the `[INVOICENUMBER]` and `[AMOUNTDUE]` tokens embedded.
 
-You also need invoice data available in MSPortal and the corresponding invoice/accounting data available to your BenjiPays merchant. This setup has no API credential form or invoice synchronization step.
+<Steps>
+  <Step title="Open Benji Pays">
+    Log into your Benji Pays account.
+  </Step>
 
-## Configure and save
+  <Step title="Open the Payment Links page">
+    Navigate to the **Payment Links** page for your shop / integration.
+  </Step>
 
-1. Open **Settings > Integrations**, find **BenjiPays**, and open its setup.
-2. Paste the URL into **Payment link template**.
-3. Optionally change **Button label**, up to 40 characters. The default is **Pay Now**.
-4. Inspect **Live preview**. It uses sample invoice **INV-1024** and amount **499.00**, even before saving.
-5. Choose **Save & enable** for initial setup, or **Save changes** when editing. Wait for the save result, then reopen Invoices to check the available payment buttons.
+  <Step title="Copy the Custom Payment Link">
+    Scroll to the very bottom of the page. The Custom Payment Link will look like this:
 
-<Warning>
-The preview button opens the actual configured external URL with sample values. It is not a payment sandbox or a validation-only control. Inspect the generated URL first; do not submit a payment as a documentation or setup check.
-</Warning>
+    ```
+    https://yourshop.benjipays.com/portal/pay/?shortCode=!XYZ-&invoiceNumber=[INVOICENUMBER]&transactionAmount=[AMOUNTDUE]
+    ```
 
-Editing fields changes the draft and preview. It does not persist the configuration until Save succeeds. **Cancel** leaves the form without saving that draft.
+    Copy the link exactly as Benji Pays displays it, including both `[INVOICENUMBER]` and `[AMOUNTDUE]` placeholders. The placeholders are case-sensitive. Do not replace the placeholders, MSPortal needs them to substitute the live invoice values per row.
 
-<img src="/images/product/benjipays-setup-controls.png" alt="Unsaved BenjiPays form showing the built-in example template and required invoice and amount tokens." width="1404" height="260" />
+    <Warning>
+      If you remove the placeholders or rewrite them (for example to `{invoice}` or `[INVOICE_NUMBER]`), MSPortal will reject the link on save. Both literal tokens are required.
+    </Warning>
+  </Step>
+</Steps>
 
-MSP example: this is the built-in placeholder, not a saved merchant payment link.
+## Part 2: Configure Benji Pays in MSPortal
 
-## Understand invoice buttons
+<Steps>
+  <Step title="Open Integrations settings">
+    In MSPortal, go to **Settings** > **Integrations**. Use the **Payments** filter or scroll to find **BenjiPays**.
+  </Step>
 
-The same saved template and label apply across the tenant. Invoice access still depends on the user’s permissions and company scope.
+  <Step title="Open the Benji Pays setup page">
+    Click **Connect** on the BenjiPays row. The setup page opens.
+  </Step>
 
-Voided or cancelled invoices do not receive a button. Otherwise, a positive available balance makes an invoice eligible. When no balance is available, the portal falls back to a positive invoice total unless the invoice is closed. The link uses the invoice number, with an external identifier as a fallback, and formats the amount to two decimal places.
+  <Step title="Paste the payment link template">
+    In the **Payment link template** field, paste the URL you copied from Benji Pays.
 
-The button opens the destination in a new tab. Opening it does not mark an invoice paid. Amounts reflect the invoice data currently available in MSPortal and can lag payment activity. Check the invoice/accounting synchronization when a balance looks stale.
+    <img src="/images/product/benjipays-setup-controls.png" alt="BenjiPays setup page with the Payment link template field and the required [INVOICENUMBER] and [AMOUNTDUE] tokens" width="1404" height="260" />
 
-BenjiPays merchant rules also matter. Its optional [amount-matching rule](https://support.benjipays.com/support/solutions/articles/150000185669-require-transaction-amount-on-pay-now-invoice-links-to-match-the-invoice-s-total) checks against the invoice total. MSPortal supplies the outstanding amount when available, so review compatibility for partially paid invoices rather than assuming every generated link will be accepted.
+    MSPortal checks the URL validity and both placeholders inline as you type, and enforces the remaining rules when you save:
 
-## Change or disconnect
+    | Issue | Checked | Fix |
+    |-------|---------|-----|
+    | Not a valid URL, or not an http(s) URL | Inline, as you type | Re-copy the link from Benji Pays |
+    | Missing `[INVOICENUMBER]` placeholder | Inline, as you type | Re-add the literal token, brackets and all |
+    | Missing `[AMOUNTDUE]` placeholder | Inline, as you type | Re-add the literal token, brackets and all |
+    | Not an `https://` URL | On save | Benji Pays links must use https |
+    | Host is not benjipays.com or benjipays.io (or a subdomain of either) | On save | Pasted the wrong link, this is rejected to prevent phishing |
+  </Step>
 
-Reopen setup, edit the template or label, and choose **Save changes**. The **Active** badge represents a saved configuration, not a successful checkout test.
+  <Step title="(Optional) Customize the button label">
+    The **Button label** field controls the text on the button. The default is **Pay Now**. You can rename it to anything up to 40 characters, for example "Pay Online" or "Settle Invoice".
+  </Step>
 
-Choose **Disconnect**, then confirm, to remove the MSPortal payment-link configuration. Reopen Invoices to verify the buttons disappear. This does not cancel the BenjiPays merchant account, remove invoices, or reverse payments.
+  <Step title="Check the live preview">
+    The **Live preview** panel renders the button with your current label, then shows the URL it would generate for a sample invoice (invoice `INV-1024`, amount `499.00`).
+
+    Click the preview button to open the generated link in a new tab. This is the same URL your clients will hit, just with sample values. Use it to confirm Benji Pays accepts the link before going live.
+
+    <Warning>
+      The preview opens your real Benji Pays checkout, not a sandbox. Check the page loads, but do not submit a payment.
+    </Warning>
+  </Step>
+
+  <Step title="Save & enable">
+    Click **Save & enable** at the bottom of the page. BenjiPays now shows as **Connected** in **Settings > Integrations**, and Pay Now buttons appear on the Invoices page immediately.
+  </Step>
+</Steps>
+
+## How Pay Now Buttons Render
+
+Once enabled, every unpaid invoice on the **Invoices** page gets a Pay Now button in its row.
+
+- The button only appears when the invoice has a balance greater than zero. Voided, cancelled, or fully paid invoices don't get a button. If your PSA reports no balance for an invoice, MSPortal uses the invoice total instead, unless the invoice is closed.
+- Clicking the button opens your Benji Pays checkout in a new tab with the invoice number and balance pre-filled. The amount is sent as a plain number with two decimal places, such as `499.00`.
+- Clicking the button does not mark the invoice paid in MSPortal. The paid status updates after your PSA's next invoice sync.
+- The button uses the label you configured, the same way for every client
+
+<Info>
+  Balance comes from your PSA's invoice sync. If your PSA reports the wrong balance (for example because a payment hasn't posted yet), the Pay Now button will use that stale figure. Refresh your PSA's invoice sync if amounts look wrong.
+</Info>
+
+## Editing or Disconnecting
+
+To change your template or label after enabling:
+
+1. Go to **Settings** > **Integrations**
+2. Click **Configure** on the BenjiPays row
+3. Edit any field, then click **Save changes**
+
+To disconnect Benji Pays entirely:
+
+1. Open the Benji Pays setup page
+2. Click **Disconnect** in the bottom-left corner
+3. Click **Disconnect** in the **Disconnect BenjiPays?** dialog, or click **Keep BenjiPays** to cancel
+
+Disconnecting immediately removes Pay Now buttons from every invoice. Your Benji Pays account is not touched, only the MSPortal-side link is forgotten. You can reconnect at any time by pasting the link again.
 
 ## Troubleshooting
 
-- **Save is disabled:** check the URL, both exact placeholders, label length, and your management access.
-- **The preview works but Save fails:** the server additionally requires HTTPS and an allowed BenjiPays hostname. A clickable draft preview is not proof of accepted configuration.
-- **No invoice button:** check invoice access, saved configuration, available invoice data, balance/status and whether the payment column is visible.
-- **Wrong invoice or amount:** compare the source invoice number and current balance with the merchant/accounting records. Do not repeatedly submit a payment.
-- **Destination rejects the link:** check the merchant URL, invoice availability and merchant payment-link rules with the provider.
+| Issue | Solution |
+|-------|----------|
+| "Payment link must include the [INVOICENUMBER] placeholder" | The URL you pasted doesn't contain the literal text `[INVOICENUMBER]`. Re-copy from Benji Pays, the placeholder is required. |
+| "Payment link must include the [AMOUNTDUE] placeholder" | Same as above, but for `[AMOUNTDUE]`. |
+| "Payment link must point to a benjipays.com or benjipays.io address" | The URL points somewhere else (a typo, a redirect, or the wrong link). Re-copy the Custom Payment Link from Benji Pays. |
+| "Payment link must use https://" | Benji Pays issues https URLs only. If you have an http link, contact Benji Pays support. |
+| Pay Now buttons not showing on the Invoices page | Confirm BenjiPays shows as **Connected** in Settings > Integrations. Confirm the invoice has a balance greater than zero and is not voided. Refresh the Invoices page. |
+| Pay Now opens to the wrong amount | Your PSA's invoice balance is stale. Trigger an invoice sync from your PSA integration. |
+| Pay Now opens to "Invoice not found" on Benji Pays | The invoice number in your PSA doesn't exist as a transaction in Benji Pays yet. Create the corresponding transaction in Benji Pays first. |
 
-See [Pay an invoice](/user-guides/invoices/pay-an-invoice) for the client workflow.
+## Permissions
 
-## Frequently asked questions
+| Action | Permission Required |
+|--------|---------------------|
+| View BenjiPays setup page | `read_settings_integrations` (Integrations settings access) |
+| Save, change, or disconnect BenjiPays | `manage_settings_integrations` |
+| See Pay Now buttons on Invoices | `read_invoices` |
 
-<AccordionGroup>
-  <Accordion title="Who can configure BenjiPays?">
-    MSP staff with Integrations settings access can open setup; saving and disconnecting require integration management permission. Company invoice access does not grant setup access.
-  </Accordion>
-  <Accordion title="Does BenjiPays setup synchronize invoices?">
-    No. It saves a tenant-wide payment-link template; invoice data comes from the portal’s invoice sources.
-  </Accordion>
-  <Accordion title="Which placeholders are required?">
-    Use the exact case-sensitive [INVOICENUMBER] and [AMOUNTDUE] placeholders in an HTTPS BenjiPays URL.
-  </Accordion>
-  <Accordion title="Is Live preview a sandbox?">
-    No. It opens the configured external destination with sample values, even for an unsaved draft.
-  </Accordion>
-  <Accordion title="Does the Active badge prove payments work?">
-    No. It indicates saved configuration. Invoice availability, current balances and merchant rules still determine whether checkout works.
-  </Accordion>
-  <Accordion title="Does clicking Pay Now mark an invoice paid?">
-    No. It opens the payment website. Payment and subsequent invoice updates are separate.
-  </Accordion>
-  <Accordion title="Can I set a different merchant link per company here?">
-    No. This setup saves one tenant-wide template and button label.
-  </Accordion>
-  <Accordion title="What does Disconnect remove?">
-    It removes the portal payment-link configuration. It does not cancel the merchant account or reverse payments.
-  </Accordion>
-</AccordionGroup>
+Anyone who can view invoices can read the saved payment link, because the link renders as the Pay Now button on the Invoices page. Users without `manage_settings_integrations` see the setup page as read-only.
 
-## Related guides
+## Related Resources
 
-- [Integrations settings](/user-guides/settings/integrations)
-- [Company Mapping](/user-guides/settings/integration-company-mapping)
-- [Integration directory](/user-guides/integrations/index)
+- [Invoices](/user-guides/invoices/index) - Where the Pay Now buttons render
+- [Pay an Invoice](/user-guides/invoices/pay-an-invoice) - How clients use the Pay Now button
+- [ConnectWise Integration](/user-guides/integrations/enable-connectwise-integration) - Source of invoice data
+- [Autotask Integration](/user-guides/integrations/enable-autotask-integration) - Source of invoice data
+- [Halo PSA Integration](/user-guides/integrations/enable-halo-integration) - Source of invoice data

@@ -1,93 +1,124 @@
 ---
 title: 'Configure Spanning Backup Integration'
-description: 'Connect Spanning Backup and map Microsoft 365 backup reporting to companies'
-icon: 'plug'
+description: 'Connect Spanning UniView to map Microsoft 365 tenants and monitor backup health'
+icon: 'cloud-arrow-up'
 ---
 
-Connect **Spanning Backup** to report Microsoft 365 backup inventory and health. The wizard uses **Connect → Configure Sync → Map Tenants → Status**.
+Connect Spanning Backup through UniView to discover Microsoft 365 tenants, synchronize protected users, and report backup health in MSPortal.ai.
 
-## Before you start
+<Note>
+Spanning Backup is currently a pilot integration. If the integration is not available in **Settings > Integrations**, contact support@msportal.ai.
+</Note>
 
-This is an **MSP staff** task requiring integration-management permission and authorized vendor credentials. This provider is available only when enabled for your MSP tenant. If its setup page is unavailable, check availability with your MSPortal administrator. Company users do not configure this connection.
+## Prerequisites
 
-Use a **UniView Client ID** and **UniView Client Secret** with access to your Spanning Microsoft 365 tenants. Obtain these from UniView API Access. One connection can discover multiple accessible tenants; it is not a one-credential-per-client form.
+- Access to the Spanning UniView portal
+- A UniView API client ID and client secret
+- MSPortal.ai integration management permission
+- MSPortal companies to map to the discovered Microsoft 365 tenants
 
-## Connect and save credentials
+## Connect Spanning Backup
 
-1. Open **Settings > Integrations**, find **Spanning Backup**, and open its setup action. For an established connection, choose **Configure** on that connection.
-2. Enter the credential pair and select **Test Connection**.
-3. Review the result. A successful API response can still return no accessible tenants; confirm the account has the intended scope.
-4. Select **Create Integration** to save a new connection. On an existing connection, use **Save credentials** after testing changed values.
+<Steps>
+  <Step title="Create UniView credentials">
+    In UniView, open **API Access**, create a client for MSPortal, and copy its client ID and client secret.
+  </Step>
+  <Step title="Open the setup page">
+    In MSPortal, go to **Settings > Integrations**, find the **Spanning Backup** row, and click **Connect** (or **Configure** if it is already connected). The wizard has four steps: **Connect**, **Configure Sync**, **Map Tenants**, and **Status**.
+  </Step>
+  <Step title="Test the connection">
+    Enter the **UniView Client ID** and **UniView Client Secret**, then click **Test Connection**. MSPortal confirms how many Microsoft 365 tenants the client can access, for example "UniView accepted these credentials and returned 12 Microsoft 365 tenants."
 
-The test and save are separate. Changing a field invalidates the prior test result. An existing saved connection indicator does not mean a new live test just ran.
+    <Frame>
+      <img src="/images/product/spanning-setup-connection.png" alt="Spanning connection form with blank credential fields and test and save controls" width="1344" height="920" />
+    </Frame>
+  </Step>
+  <Step title="Save the credentials">
+    Click **Create Integration** after the connection test succeeds. The credentials are stored securely in Vault, and the first tenant discovery starts automatically.
 
-<Frame caption="MSP example: connection form before credentials are submitted.">
-  <img src="/images/product/spanning-setup-connection.png" alt="Spanning connection form with blank credential fields and test and save controls" width="1344" height="920" />
-</Frame>
+    <Note>
+      **Test Connection** does not save anything. If you change a field after testing, test again before you click **Create Integration**.
+    </Note>
+  </Step>
+  <Step title="Continue">
+    Click **Next** to move to **Configure Sync**.
+  </Step>
+</Steps>
 
-## Choose the data to synchronize
+One UniView connection discovers every Spanning Microsoft 365 tenant the API client can access. You do not need a separate connection per client.
 
-**Microsoft 365 tenants** are always discovered. Choose **Protected user inventory** and **Backup health and history**, then select **Save sync settings**. The user inventory includes standard and archived users returned by UniView.
+## Configure Synchronization
 
-Creating a connection, saving replacement credentials or saving sync settings can request background synchronization. Check its result rather than treating the save as proof that all data is ready.
+Microsoft 365 tenant discovery is always enabled because it is required for company mapping. In the **Configure Sync** step, choose whether MSPortal also synchronizes:
 
-Changing the switches is a draft until **Save sync settings** succeeds. Save this step before navigating onward; the mapping save is a separate operation.
+- Protected and archived user inventory
+- Seven-day backup health for Exchange, OneDrive, SharePoint, and Teams
 
-## Map tenants to companies
+Click **Save sync settings**, then click **Next**. The switches are not saved until you click **Save sync settings**.
 
-1. Open **Map Tenants** and review the discovered names and domains.
-2. Choose the existing MSPortal company for each intended row. **Quick Match** provides suggestions to review; it does not establish that the company is correct.
-3. Check both selected imports and pending links, then use **Import Selected** to apply them. The wizard also attempts to save pending mappings before leaving the mapping step.
-4. Verify the saved company association before relying on company-scoped reporting.
+## Map Tenants
 
-Removing a saved link takes effect immediately. Creating a company on the mapping screen creates it immediately, while its link is pending until saved. Reuse existing companies where appropriate. Leaving the mapping step can start a detailed background sync.
+<Steps>
+  <Step title="Review discovered tenants">
+    The mapping table shows each Microsoft 365 tenant returned by UniView, including its primary domain, protected-user count, and backup status. Discovery normally completes in less than a minute. If no tenants appear, click **Sync Tenants** (or **Sync** above the list).
+  </Step>
+  <Step title="Match tenants to companies">
+    Click **Quick Match** to suggest company mappings by name, or use the **Select company...** dropdown to choose the correct MSPortal company manually. If the company does not exist yet, click the **+** button next to the dropdown to create it.
+  </Step>
+  <Step title="Save the mappings">
+    New matches show as **Pending** until you save them. Click **Import Selected** to save them, then click **Next**. **Next** also saves any pending mappings and starts a detailed sync for the mapped tenants.
 
-## Read status and backup health
+    Removing a saved mapping takes effect immediately.
+  </Step>
+</Steps>
 
-In **Status**, review mapped tenants, protected seats or users, services backed up, workload summaries and the last-sync value. If **Backup data is still preparing** appears, check the mapping and first detailed sync before interpreting missing data as healthy.
+## Review Status
 
-Use **View backup health** to continue to the Backup module, or **Manage mappings** to return to company mapping. **Complete Setup** exits the wizard; it is not a guarantee that all workloads have finished synchronizing.
+The **Status** step shows mapped tenants, protected users, backed-up services, workload summaries, the latest synchronization time, and any current sync error. Mapped tenants synchronize automatically every hour.
 
-Backup health records the rolling seven-day workload status supplied by UniView for Exchange, OneDrive, SharePoint and Teams. A captured trend is not a guarantee of complete historical restore-point coverage. Use Spanning for restore operations and provider-level investigation.
+Use **View backup health** to open the Spanning Microsoft 365 backup view after the first detailed synchronization completes, or **Manage mappings** to adjust company mappings later. Click **Complete Setup** to close the wizard.
 
-## Maintain or disconnect
+## Managing Your Integration
 
-Reopen the specific connection to review status or replace credentials. Test the changed values and use **Save credentials**. Do not regenerate vendor credentials simply to retry a page load.
+After setup, manage the integration from **Settings > Integrations**:
 
-To remove the connection, use its delete/disconnect control, read the named confirmation and proceed only when you intend to remove the stored connection and associated synchronized data. Removing MSPortal’s connection does not revoke the vendor credential itself.
+| Action | Description |
+|--------|-------------|
+| **Configure** | Re-open the wizard to replace credentials, change sync settings, or adjust tenant mappings |
+| **Resync** | Trigger a fresh sync of all mapped tenants |
+| **Rename** / **Disconnect** | In the row's **...** menu |
+| **Disconnect** | Also in the wizard footer. Removes the connection, synchronized Spanning data, and the stored Vault credentials. This cannot be undone |
+
+### Replacing Your UniView Credentials
+
+<Steps>
+  <Step title="Open the Connect step">
+    Click **Configure** on the Spanning Backup row. The wizard opens on **Connect**.
+  </Step>
+  <Step title="Enter and test the new credentials">
+    Enter the new **UniView Client ID** and **UniView Client Secret**, then click **Test Connection**.
+  </Step>
+  <Step title="Save the credentials">
+    Click **Save credentials**. MSPortal stores the new values and starts a fresh sync.
+  </Step>
+</Steps>
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Connection test fails | Correct provider credential type, matching pair, vendor access and reported error. |
-| No tenants appear | The credential’s accessible customer scope and discovery result. |
-| Backup data is still preparing | Saved company links, enabled datasets, first detailed sync and any recorded error. |
-| A workload is missing | Provider support, enabled data options and current source coverage. |
-| A change did not persist | Use Save credentials or Save sync settings for the corresponding form; mapping has its own submission. |
+| Issue | Solution |
+|-------|----------|
+| UniView rejects the credentials | Confirm the API client is active and copy both values from the same UniView client. |
+| No tenants appear | Confirm the API client can access the expected Microsoft 365 tenants and allow the initial discovery to complete. |
+| Backup health remains pending | Map at least one tenant and enable **Backup health and history**, then allow the first detailed sync to finish. |
+| Data appears under the wrong company | Reopen the **Map Tenants** step and correct the tenant-to-company mapping. |
 
-## Frequently asked questions
+## Related Resources
 
-<AccordionGroup>
-  <Accordion title="Does Test Connection save the credentials?">
-    No. Use **Create Integration** for a new connection or **Save credentials** for a tested replacement.
-  </Accordion>
-  <Accordion title="Does changing a sync switch save immediately?">
-    No. Select **Save sync settings** before leaving that form.
-  </Accordion>
-  <Accordion title="Are Quick Match suggestions already saved?">
-    No. Review the companies and apply the pending links. A saved unlink is an immediate change.
-  </Accordion>
-  <Accordion title="Can I restore a backup from this setup wizard?">
-    No. This wizard configures reporting. Perform recovery in the backup provider.
-  </Accordion>
-  <Accordion title="Does missing backup data mean everything is healthy?">
-    No. Check mapping, source coverage and sync errors before drawing a conclusion. Backup health records the rolling seven-day workload status supplied by UniView for Exchange, OneDrive, SharePoint and Teams. A captured trend is not a guarantee of complete historical restore-point coverage. Use Spanning for restore operations and provider-level investigation.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Backup health](/user-guides/backup/read-microsoft-365-backups)
-- [SaaS backup reporting](/user-guides/backup/read-saas-backup-health)
-- [Company mapping](/user-guides/settings/integration-company-mapping)
+<CardGroup cols={2}>
+  <Card title="Backup" icon="cloud-arrow-up" href="/user-guides/backup/index">
+    Review backup health in MSPortal
+  </Card>
+  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+    Manage all MSPortal integrations
+  </Card>
+</CardGroup>

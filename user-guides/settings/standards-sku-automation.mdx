@@ -4,116 +4,154 @@ description: 'Link billed services and agreement types to Standards, review the 
 icon: 'tags'
 ---
 
-**Audience:** MSP staff managing Standards or financial-reporting settings.
-The catalog supports synchronized ConnectWise, Autotask, and Halo billing.
+Use this page to link what your PSA bills to your Standards, so a company that is billed for the right product shows the standard as Deployed without anyone updating it by hand. It is for MSP staff who manage Standards or financial-reporting settings. It works with synchronized ConnectWise, Autotask and Halo billing.
 
-Billing evidence can mark an unanswered standard as deployed. It establishes
-that a matching service or agreement type was billed; it does not verify an
-agent installation or protection on every device.
+Billing is evidence that a matching service or agreement type was billed. It does not confirm that software is installed on every device.
 
 ## Before you start
 
-- Create the standard and any deployment options in Standards settings.
-- Ensure your PSA billing has synchronized. The default evaluation uses the last
-  three completed calendar months; current-month-only charges are not included.
-- Review device-platform and company-field applicability. Automatic billing
-  answers must still respect those rules.
-- Viewing the catalog requires financial-reporting settings read or Standards
-  settings read access. Revenue classification edits require financial-reporting
-  settings management. Mapping edits in this financial grid require financial-reporting settings
-  management; edits in a standard’s own editor require Standards settings management. Re-checking billing requires Standards settings management or
-  Planner write access. Write operations require active billing.
+- Create the standard, and any deployment options you want billing to select, in [Manage the Standards catalog](/user-guides/settings/standards) and [Standards tiers](/user-guides/settings/standards-tiers).
+- Sync your PSA billing. Matching uses the last three completed calendar months. Charges that exist only in the current month are not counted.
+- Check each standard's applicability rules (device platform and company fields). Billing only answers a standard for companies it applies to. Inactive companies and companies excluded from Standards are skipped.
+- On the **SKU Mapping** tab, you need Financial Reporting settings **Manage** permission to change revenue categories or standard links. In a standard's own editor, you need Standards settings **Manage** permission.
+- **Re-check billing** needs Standards settings **Manage** permission or Planner **Write** permission.
+- Saving needs an account in good billing standing.
 
-## Link a billed key to Standards
+## Link a billed product to Standards
 
 <Steps>
   <Step title="Open SKU Mapping">
-    Open **Settings > MSP Tools > Financial Reporting** and select **SKU Mapping**.
-    Review the SKU label, provider, revenue category, and Standards links. Use **Columns** to show **Clients billed** and **Monthly revenue** when needed; existing saved column preferences are retained. This is
-    a shared settings catalog for your MSP, rather than a company-filtered matrix.
+    Go to **Settings > MSP Tools > Financial Reporting** and click the **SKU Mapping** tab. The grid lists the products, services and agreement types your PSA bills, one row each. It is shared by your whole MSP and does not follow the company selector.
+    <Frame caption="The SKU Mapping grid. Default columns are Product / SKU, PSA, Revenue category and Standards proven.">
+      <img src="/images/product/sku-mapping-fixed.png" alt="SKU Mapping" width="2880" height="1920" />
+    </Frame>
   </Step>
-  <Step title="Choose the revenue category and Standards">
-    Set the row's revenue category when needed, then select the standards it
-    proves. These choices save from the row; wait for confirmation before
-    navigating away. Revenue classification and Standards links are independent.
+  <Step title="Find the row">
+    Type in the filter under **Product / SKU** to search. Click **Columns** to show **Clients billed** and **Monthly revenue** if they help you pick the right row.
+  </Step>
+  <Step title="Choose the standards it proves">
+    In the **Standards proven** column, open the **Add standards** dropdown, tick the standards this product proves, and close the list. A **Standards updated** message confirms the save.
+  </Step>
+  <Step title="Set the revenue category if needed">
+    Optionally pick **Managed recurring**, **Other recurring**, **Non-recurring** or **Unmapped** in the **Revenue category** column. The revenue category and the standard links are separate. Changing one does not change the other.
   </Step>
   <Step title="Re-check billing">
-    Select **Re-check billing** and wait for the results. This updates automatic
-    Standards answers in your permitted company scope, including other configured
-    mappings. It is not just a preview of the selected row.
+    Click **Re-check billing** and wait for the message, for example "2 standards answered from billing, 0 cleared". This updates the automatic answers for every standard that has links, not only the row you just edited.
   </Step>
-  <Step title="Review the resulting deployment">
-    Open **MSP Tools > Standards** and select a matching company. Review the
-    automatic-answer indicator and hover explanation naming the billing evidence.
+  <Step title="Review the result">
+    Open **MSP Tools > Standards** and find a company that is billed for the product. A standard answered by billing shows the tooltip **Answered from billing**, followed by the product names.
+    <Frame caption="Matching billing answers Managed Endpoint Protection for Big Design.">
+      <img src="/images/product/standards-billing-answer.png" alt="Big Design automatically receives Managed protection from matching billed products." width="3840" height="2160" />
+    </Frame>
   </Step>
 </Steps>
 
+## Link many products at once
 
-<Frame caption="Default columns prioritize editable revenue and Standards controls.">
-  <img src="/images/product/sku-mapping-fixed.png" alt="SKU Mapping" width="2880" height="1920" />
-</Frame>
+<Steps>
+  <Step title="Select rows">
+    Tick the checkboxes beside the products you want to change.
+  </Step>
+  <Step title="Open bulk actions">
+    Open the **Actions** menu above the grid. It shows the number of selected rows, for example **Actions (3)**.
+  </Step>
+  <Step title="Choose an action">
+    Pick a revenue category under **Set revenue category**, or pick **Add standards…** or **Remove standards…**, choose the standards, and apply. Adding leaves standards that are already linked as they are.
+  </Step>
+</Steps>
 
-<Frame caption="Matching billing answers Managed Endpoint Protection for Big Design.">
-  <img src="/images/product/standards-billing-answer.png" alt="Big Design automatically receives Managed protection from matching billed products." width="3840" height="2160" />
-</Frame>
+## Require alternatives or several products
 
-The supported keys are **services** and **contract types**. A service identifies
-the billed offering; a contract type can represent a bundled agreement.
+Use a standard's own editor when billing must match more than one product, or when a product should select a deployment option.
 
-## Require alternatives or multiple services
+<Steps>
+  <Step title="Open the standard">
+    Go to **Settings > MSP Tools > Standards**, open the category and click the standard's row.
+  </Step>
+  <Step title="Link the first group">
+    In the **Answered by billing** row, click **Link a product**. Under **Billed for any of**, pick the products. A company billed for any one of them satisfies the group (A or B).
+  </Step>
+  <Step title="Pick a deployment option">
+    Optionally choose a deployment option in the dropdown beside the products. It reads **Any deployment option** until you choose one. When billing matches options on different tiers, the highest tier wins.
+  </Step>
+  <Step title="Add another required group">
+    Click **Add required group**. The new group is labeled **And also billed for any of**. A company must match every group, so (A or B) and (C or D).
+    <Frame caption="Alternatives within a group. Every required group must match.">
+      <img src="/images/product/standards-billing-groups.png" alt="Two required billing groups configured with Basic protection and Managed protection options." width="3840" height="3200" />
+    </Frame>
+  </Step>
+  <Step title="Remove a group if needed">
+    Click the trash icon (**Remove group**) at the end of the group's row.
+  </Step>
+</Steps>
 
-Expand a standard's editor in **Settings > MSP Tools > Standards** to configure
-its SKU groups and optional deployment choices.
+Each change saves right away and shows **Billing links updated**. A product that was linked but has not been billed recently is listed with **(not billed recently)** so you can still see and remove it.
 
-- Within one group, any matching SKU satisfies that group: **A or B**.
-- With multiple groups, every group needs a match: **(A or B) and (C or D)**.
-- A matching group can imply a deployment option. When several matched options
-  apply, the highest tier wins.
+Adding a standard from the SKU Mapping grid puts it in the first group. If the standard already has groups or options, they are kept.
 
+## How manual decisions are kept
 
-<Frame caption="Alternatives within a group; every required group must match.">
-  <img src="/images/product/standards-billing-groups.png" alt="Two required billing groups configured with Basic protection and Managed protection options." width="3840" height="3200" />
-</Frame>
+Billing answers only a cell that is **Not Started**, or a cell it answered itself earlier. It sets the status to **Deployed** and, if the group names an option, selects that option. If the billing evidence goes away, the cell goes back to **Not Started**.
 
-The flat SKU Mapping picker adds new Standards links to the default alternatives
-group. Keeping a standard selected while changing other links preserves its
-existing group and deployment-option configuration.
+A decision that someone recorded, such as **Declined**, **In Progress** or **Deployed**, stays as it is on every later check. If you edit a cell that billing answered, the cell becomes a manual decision. A cell you leave at Not Started can be answered by billing, so Not Started is not an opt-out.
 
-## Keep manual decisions authoritative
-
-Automatic evaluation can answer an unanswered **Not Started** cell or revise an
-answer it previously generated. If matching evidence disappears, its automatic
-answer returns to Not Started.
-
-A recorded manual decision such as **Declined**, **In Progress**, or **Deployed**
-is preserved on later evaluations. Manually editing an automatic answer transfers
-that answer to manual control. Leaving a cell Not Started makes it eligible for
-automation; it is not an opt-out setting.
-
-
-<Frame caption="A manual Declined decision remains authoritative.">
+<Frame caption="A manual Declined decision stays in place after billing is checked again.">
   <img src="/images/product/standards-manual-answer.png" alt="Blue Light retains its manually Declined answer after billing is evaluated again." width="3840" height="2160" />
 </Frame>
 
-An onboarding-controlled unanswered cell remains owned by its onboarding task.
-Review the task link rather than expecting billing to take over that cell.
+A cell that a Client Onboarding task controls is left to that task. Open the task to change it.
 
 ## Troubleshooting
 
-| Symptom | Check |
+| Problem | What to do |
 | --- | --- |
-| No SKU rows | Confirm supported PSA billing has synchronized and falls within completed months in the lookback window. |
-| A saved mapping is shown without recent billing | Retained mappings can remain visible after their billing falls outside the window. |
-| A company is not auto-answered | Check applicability, all required groups, billing dates, and existing manual or onboarding ownership. |
-| An automatic answer disappears | Re-check whether its mapped billing evidence still exists in the lookback window. |
-| Re-check billing is unavailable | Financial classification access alone does not grant permission to update Standards answers. |
-| The revenue category changed but the Standards link did not | These are independent settings; update the relevant control. |
+| No rows in **SKU Mapping** | Sync a ConnectWise, Autotask or Halo integration, then reload. The grid says "No billed products found" until billing exists. |
+| **Clients billed** and **Monthly revenue** show 0 | Those columns count the last three completed months only. Older billing still lists the row. |
+| A company is not answered automatically | Check that the standard applies to the company, that the company was billed for every required group in the last three completed months, and that the cell is not already decided manually or by onboarding. Then click **Re-check billing**. |
+| An automatic answer went back to Not Started | The matching billing is no longer in the window, or a link was removed. Check the billing and the links. |
+| **Re-check billing** gives an error | You need Standards settings Manage permission or Planner Write permission. Financial Reporting access alone is not enough. |
+| The revenue category changed but the standard link did not | They are separate settings. Change the other column too. |
+| Changes will not save and a billing message appears | The account is read-only because of a billing issue. Update the payment information, then try again. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Which PSAs does this work with?">
+    ConnectWise, Autotask and Halo.
+  </Accordion>
+  <Accordion title="Does billing prove the software is installed?">
+    No. It shows that a matching service or agreement type was billed.
+  </Accordion>
+  <Accordion title="How far back does matching look?">
+    The last three completed calendar months. The current month is not counted.
+  </Accordion>
+  <Accordion title="Will billing overwrite a status I set by hand?">
+    No. Billing only answers Not Started cells and cells it answered itself.
+  </Accordion>
+  <Accordion title="Does Re-check billing only update the row I edited?">
+    No. It updates the automatic answers for all standards that have billing links.
+  </Accordion>
+  <Accordion title="What is the difference between a service and an agreement type?">
+    A service is a billed product or line item. An agreement type is the kind of agreement the charge was billed under, which helps when your PSA bills a bundle rather than its parts.
+  </Accordion>
+  <Accordion title="How do I require two products together?">
+    Put them in separate required groups in the standard's editor. A company must match every group.
+  </Accordion>
+  <Accordion title="Can billing pick the deployment option?">
+    Yes. Choose an option for the group in the standard's editor. If several matched options apply, the highest tier is selected.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
 
 <CardGroup cols={2}>
   <Card title="Deployment tiers and options" icon="layer-group" href="/user-guides/settings/standards-tiers">
-    Set up the choices that billing can imply.
+    Set up the choices that billing can select.
   </Card>
   <Card title="Update a deployment" icon="check" href="/user-guides/msp-tools/update-standard-deployments">
     Record a manual decision for a company.
+  </Card>
+  <Card title="Manage the Standards catalog" icon="wrench" href="/user-guides/settings/standards">
+    Create the standards billing will answer.
   </Card>
 </CardGroup>

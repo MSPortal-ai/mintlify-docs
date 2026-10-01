@@ -1,91 +1,125 @@
 ---
 title: 'Configure N-able N-central Integration'
-description: 'Connect N-able N-central, map customers to companies, and import device inventory'
-icon: 'plug'
+description: 'Connect N-central to sync customers and import managed devices into MSPortal.ai'
+icon: 'server'
 ---
 
-Connect **N-able N-central** to bring its customers and device inventory into MSPortal. The setup flow is **Connect → Map → Import**.
+Connect N-able N-central to MSPortal.ai to synchronize customers, map them to MSPortal companies, and import managed devices. The setup wizard has three steps: **Connect**, **Map** and **Import**.
 
-## Before you start
+<Note>
+N-central setup is available only for MSP tenants where it has been enabled. If **N-able N-central** does not appear in **Settings > Integrations**, contact support@msportal.ai.
+</Note>
 
-This is an **MSP staff** task. You need access to **Settings > Integrations**, permission to manage integrations, authorized vendor credentials, and companies to receive the imported records. Company users do not configure this connection.
+## Prerequisites
 
-Create or use an API user with access to the intended customers. In N-central, open **Administration > User Management > Users**, select that user, then **API Access > Generate JSON Web Token**. Follow the current [N-able token instructions](https://developer.n-able.com/n-central/reference/authenticate) for API-user requirements.
+- An N-central account with permission to create an API-only user and generate an API token
+- The HTTPS URL for your N-central server
+- MSPortal.ai integration management permission
+- Companies in MSPortal to map to N-central customers
 
-## Connect the provider
+## Create an N-central API Token
 
-1. Open **Settings > Integrations**, find **N-able N-central**, and choose its connection/setup action. Use **Configure** on the existing connection when managing an established setup.
-2. Enter the connection fields below.
-3. Choose **Test Connection** and resolve any reported error.
-4. After a successful test, choose **Create Integration**. This saves the connection and starts discovery. A successful test alone does not create it.
+<Steps>
+  <Step title="Create an API-only user">
+    In N-central, create a dedicated API-only user for MSPortal. Disable MFA for this API user and use a non-expiring password so scheduled synchronization can continue. Give the user access to the customers you want to sync.
+  </Step>
+  <Step title="Open API Access">
+    Go to **Administration > User Management > Users**, open the API user, and select **API Access**.
+  </Step>
+  <Step title="Generate the token">
+    Click **Generate JSON Web Token** and copy the token. Store it securely until you enter it in MSPortal.
+  </Step>
+</Steps>
 
-| Field | What to enter |
-| --- | --- |
-| **Server URL** | The HTTPS root address of your N-central server. |
-| **API Token (JWT)** | The User-API token generated for the authorized N-central user. |
+## Connect N-central in MSPortal
 
-N-central availability is controlled for your MSP tenant. If it is absent from the integrations catalog, ask your MSPortal administrator about availability. An unavailable setup page is not evidence of invalid vendor credentials.
+<Steps>
+  <Step title="Open the setup page">
+    In MSPortal, go to **Settings > Integrations**, find **N-able N-central**, and click **Connect**. For an existing connection, click **Configure**.
+  </Step>
+  <Step title="Enter the connection details">
+    Enter your **Server URL**, such as `https://ncentral.example.com`, and the **API Token (JWT)** generated in N-central.
+  </Step>
+  <Step title="Test the connection">
+    Click **Test Connection**. Resolve any authentication or server URL error before continuing.
+  </Step>
+  <Step title="Create the integration">
+    After the test succeeds, click **Create Integration**. MSPortal stores the token securely and starts customer discovery. A successful test alone does not save the connection.
+  </Step>
+</Steps>
 
-<Note>N-central setup is available only for enabled MSP tenants. The field names above describe that setup; contact your administrator if the page is unavailable.</Note>
+## Map Customers and Import Devices
 
-## Map customers to companies
+<Steps>
+  <Step title="Wait for customers to load">
+    In the **Map** step, MSPortal shows your N-central customers once discovery finishes. This usually takes less than a minute. If the list is still empty, click **Check for Customers** or **Sync Customers**.
+  </Step>
+  <Step title="Map N-central customers">
+    Link each N-central customer to the company it belongs to in MSPortal. Click **Quick Match** to suggest mappings by name, review the suggested matches and their confidence scores, then click **Apply Matches**. You can also pick a company from the dropdown in each row.
+  </Step>
+  <Step title="Save the mappings">
+    New links show as **Pending**. Click **Import Selected** to save them, or click **Next**, which also saves pending links. Removing a saved link with the **X** button takes effect immediately.
+  </Step>
+  <Step title="Open device import">
+    In the **Import** step, click **Open Device Import**.
+  </Step>
+  <Step title="Review device types">
+    Map the N-central device categories to your MSPortal device types. Use **Quick Match**, **Map with AI** or **Quick Create** to speed this up. Turn on **Auto-Sync** for types you always want imported, and check **Ignore** for types you never want.
+  </Step>
+  <Step title="Import devices">
+    Select the devices you want to import and click **Import Selected**, or click **Import All** on a device type row. Only devices belonging to mapped customers can be associated with the correct MSPortal company.
+  </Step>
+  <Step title="Complete setup">
+    Return to the wizard and click **Complete Setup**. Completing setup does not mean every background sync or import has finished.
+  </Step>
+</Steps>
 
-1. Continue to **Map** after discovery has returned the provider’s customers.
-2. Select an existing company for each intended record, or use **Quick Match** and review each suggested company.
-3. Review the pending links, then choose **Import Selected** to apply the selected imports and pending links. Check the selected records as well as the pending-link count before submitting. The wizard’s **Next** also attempts to save pending mappings before continuing. Check that the rows show saved links before proceeding.
-4. Remove a pending suggestion to discard that draft. Removing an already saved link takes effect immediately.
+## Sync Schedule
 
-Creating a company from the mapping screen creates the company immediately; its new mapping still needs to be saved. Check for an existing company first to avoid duplicates. Moving forward from mapping can start synchronization using the saved links.
+| Sync Type | Schedule | Details |
+|-----------|----------|---------|
+| Customer Sync | Daily at 2:20 AM UTC | Refreshes the list of N-central customers |
+| Device Sync | Daily at 3:35 AM UTC | Syncs devices from mapped customers, then auto-imports types with Auto-Sync on |
+| Auto-Import Catch-Up | Daily at 2:55 AM UTC | Imports any auto-sync devices that were missed |
 
-## Import devices
+You can trigger a manual sync at any time with **Sync Now** on the device import page.
 
-The **Import** step is an entry point. Select **Open Device Import** to open the actual device staging and type-mapping page.
+## Managing the Connection
 
-Review the company and device type before importing. Map provider categories to MSPortal device types, then import the intended records. Where offered, **Auto-Sync** enables future imports for the mapped category and **Ignore** excludes a category. These are saved configuration choices, not temporary list filters.
+<Steps>
+  <Step title="Open the Connect step">
+    Go to **Settings > Integrations**, click **Configure** on the N-central connection, and open **Connect**.
+  </Step>
+  <Step title="Enter the current or replacement values">
+    Update the **Server URL** if needed, and enter the current or replacement token in **API Token (JWT)**.
+  </Step>
+  <Step title="Retest the connection">
+    Click **Retest Connection** and wait for the success message.
+  </Step>
+  <Step title="Save changes">
+    Click **Update API Key** to save the new server URL or token. Retesting alone does not save replacements.
+  </Step>
+</Steps>
 
-Follow [Import Devices](/user-guides/integrations/import-devices) for selection, type mappings and result handling. Check the import result and resulting Devices records. **Complete Setup** finishes the wizard; its success message does not prove every background sync or device import has completed.
-
-## Manage an existing connection
-
-Reopen the existing connection to change Server URL or API Token. Test the revised values, then choose **Update API Key** to save them; that label also applies to this JWT-based connection. Retesting alone does not save a replacement.
-
-Reopen the specific connection to review mappings and imports. An existing **Connection verified** state is not evidence that a fresh retest just ran. Inspect recent sync status and errors when diagnosing stale inventory.
-
-The wizard’s **Delete** action opens a **Delete Integration** confirmation. Read it before proceeding: deletion is not a refresh or a temporary pause. It does not revoke vendor credentials on the vendor’s behalf.
+Return to the import step at any time to review newly discovered devices or adjust device type mappings. The wizard's **Delete** button opens a **Delete N-able N-central Integration?** confirmation. Deleting removes the integration from MSPortal and does not revoke the token in N-central.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Connection test fails | Credential type, vendor access, host/region, expired or revoked credentials, and the reported error. |
-| Map is empty | Discovery status and the vendor account’s access to the intended records. Avoid repeatedly creating connections. |
-| A mapping disappeared | Check whether it was pending or saved. Reopen the connection to verify the saved state. |
-| Devices are missing | Saved company mappings, completed device sync, type mappings, Ignore settings and the import result. |
-| Inventory is old | Last successful provider sync, any paused state, and connection errors. A scheduled time does not guarantee a successful run. |
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Confirm the server URL uses HTTPS and points to the root of your N-central server. Then generate a new JSON Web Token for the API user. |
+| Authentication stops working | Confirm the API user is still active, MFA remains disabled for that API-only account, and its password has not expired. |
+| Customers are missing | Allow the initial customer synchronization to finish, then click **Check for Customers** in the mapping step. Confirm the API user can see those customers in N-central. |
+| A mapping disappeared | The link was still **Pending**. Re-select the company and click **Import Selected**. |
+| Devices cannot be imported | Map the device's N-central customer to an MSPortal company first, and save the mapping. |
 
-## Frequently asked questions
+## Related Resources
 
-<AccordionGroup>
-  <Accordion title="Does Test Connection save the integration?">
-    No. For a new connection, complete the successful test and then choose **Create Integration**. Existing-connection retesting is also distinct from any credential-update action.
-  </Accordion>
-  <Accordion title="Does Quick Match immediately save every suggested link?">
-    No. Review and apply the intended suggestions, then save the pending mappings. Removing a saved link is an immediate change.
-  </Accordion>
-  <Accordion title="Does Complete Setup mean all devices are imported?">
-    No. Device discovery, saved mappings and inventory imports have separate results. Open the device import page and check the resulting inventory.
-  </Accordion>
-  <Accordion title="Can a Company user configure this provider?">
-    No. Provider setup is an MSP settings task. Company access to resulting data depends on portal permissions and company scope.
-  </Accordion>
-  <Accordion title="Why are customers visible but devices missing?">
-    Customer discovery, company mapping, device synchronization and inventory import are separate stages. Check the saved customer mapping and device sync result before importing.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Integration company mapping](/user-guides/settings/integration-company-mapping)
-- [Import Devices](/user-guides/integrations/import-devices)
-- [Devices](/user-guides/devices/index)
-- [Integration settings](/user-guides/settings/integrations)
+<CardGroup cols={2}>
+  <Card title="Import Devices" icon="desktop" href="/user-guides/integrations/import-devices">
+    Review the shared device import workflow
+  </Card>
+  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+    Manage all MSPortal integrations
+  </Card>
+</CardGroup>

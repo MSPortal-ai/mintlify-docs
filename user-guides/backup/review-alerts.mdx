@@ -1,50 +1,89 @@
 ---
 title: "Review backup alerts"
-description: "Read Acronis alert severity, status, affected resources, and reporting limits."
+description: "Read and filter Acronis, Datto Backup and Slide Backup alerts."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access and Acronis alert data in their permitted company scope.
+Backup > Alerts lists alerts that your backup providers report. MSP staff and company users with Backup read access can use it.
+
+## Before you start
+
+- You have Backup read access.
+- Acronis, Datto Backup or Slide Backup is connected and has reported alerts for your companies. The **Alerts** tab is hidden until it has.
 
 ## Review an alert
 
-1. Open **Backup > Alerts**, or follow **View Alerts** from Dashboard when available.
-2. Confirm the company selection.
-3. Read **Severity**, **Title**, **Resource**, **Company**, **Status**, and **Created**.
-4. Use pagination to inspect additional alert pages.
-5. Report an unexpected or unresolved alert to the person responsible for the backup provider.
+<Steps>
+  <Step title="Open Alerts">
+    Go to **Backup > Alerts**, or select **Active alerts** on the dashboard.
+  </Step>
+  <Step title="Check the company">
+    Confirm the company selector at the top. It is the only company filter on this page.
+  </Step>
+  <Step title="Read the alert">
+    Read **Severity**, **Title**, **Resource**, **Company**, **Status** and **Created**. MSP staff also see **Provider** when more than one provider has alerts. Under the title, a line gives the description or the threshold that was breached, for example "Threshold: 48 hours".
+  </Step>
+  <Step title="Page through results">
+    The list shows 25 alerts per page.
+  </Step>
+  <Step title="Report what needs attention">
+    Report an unexpected or unresolved alert to the person who manages the backup provider.
+  </Step>
+</Steps>
 
-This table currently contains Acronis alerts. The Alerts tab appears only when eligible alert records are available; its absence does not establish that every connected provider is healthy.
+**Created** shows when the provider raised the alert, relative to now. **Status** is **Active** or **Resolved**. A resolved alert does not prove the latest backup succeeded, so check the resource too.
 
-The Title cell can show a shortened description. Created is the imported provider alert's creation time displayed relative to now. Status is the reported provider value. A resolved alert remains different from proof that the latest backup succeeded; check the underlying resource as well.
+Datto Backup and Slide Backup alerts have no severity, so **Severity** shows a dash, and they are always active. A Severity or **Resolved** filter therefore hides them.
 
-## Filter carefully
+## Filter the list
 
-The table loads 25 alerts per server page. Its table filters operate on the currently loaded page. They do not search every alert on other pages. Use the main company selector to narrow the company scope, then inspect further pages as needed.
+Filters search the whole result, not only the page you are on.
 
-If the page shows **Failed to Load Alerts**, retry later or ask the MSP to check the integration. **No Backup Alerts** means there are no displayed records in the current result; it is not a health statement about Cove, NinjaOne, Kaseya, or Spanning.
+<Steps>
+  <Step title="Open a column filter">
+    Use the filter on **Severity**, **Status**, **Title** or **Provider**.
+  </Step>
+  <Step title="Choose a value">
+    **Severity** offers Critical, Error, Warning and Information. **Status** offers Active and Resolved. **Title** searches alert titles and descriptions. **Provider** takes one provider at a time.
+  </Step>
+  <Step title="Clear the filter">
+    Remove the filter to see the full list again.
+  </Step>
+</Steps>
 
-## Company users: ask for investigation
+## Ask your MSP to investigate (company users)
 
-Start with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the alert title, provider, company, resource, severity, status, and creation time. Review and confirm the request when prompted. Reading an alert does not automatically create a ticket.
+Start with the Home AI Assistant, as described in [Open a ticket](/user-guides/ticketing/open-a-ticket). Include the alert title, company, resource, severity, status and creation time. Review the request and confirm it when prompted. Reading an alert does not create a ticket.
 
-## MSP staff: follow up with the provider
+## Follow up with the provider (MSP staff)
 
-Review the affected resource and imported activity. Use the authorized Acronis workflow for investigation and any changes. This table has no acknowledge, resolve, delete, or CSV-export control; changing the provider's alert is separate from viewing it in MSPortal.
+Review the affected resource and its details under **Backup > Devices**. Then use the provider's own tools to investigate or change anything. This table has no acknowledge, resolve, delete or CSV export control.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Failed to Load Alerts** | Try again later, or ask your MSP to check the integration. |
+| **No Backup Alerts** | No provider alerts exist for the current scope. It does not mean every provider is healthy. |
+| No **Alerts** tab | No eligible alerts exist for the selected companies. |
+| A Datto Backup or Slide Backup alert vanished after filtering | A Severity filter or a **Resolved** status excludes them. Clear the filter. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why can a search miss an alert on another page?">
-    Table filters apply to the current loaded page. Use company scope and inspect the other pages before concluding an alert is absent.
-  </Accordion>
   <Accordion title="Does Alerts include every backup provider?">
-    The current table reads Acronis alerts. Review other providers through their available backup reports and provider workflows.
+    No. It reads Acronis, Datto Backup and Slide Backup alerts. Check other providers through their reports.
   </Accordion>
   <Accordion title="Can I resolve or acknowledge an alert here?">
-    The Backup Alerts table is a reader. Authorized MSP staff perform those actions in the appropriate provider workflow.
+    No. Authorized MSP staff do that in the provider's own tools.
   </Accordion>
   <Accordion title="Does Resolved prove my backups are current?">
-    No. Review the latest relevant backup result and timestamp separately.
+    No. Check the latest backup result and date separately.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read the Backup Dashboard](/user-guides/backup/read-dashboard)
+- [Find device backups](/user-guides/backup/find-device-backups)
+- [Backup overview](/user-guides/backup/index)

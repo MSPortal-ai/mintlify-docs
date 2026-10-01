@@ -1,147 +1,186 @@
 ---
 title: 'Create and preview a ticket template'
-description: 'Build an inactive draft, add questions, preview the form, and save its template and access settings.'
+description: 'Build a draft template, add questions, preview the form, and save it with its access settings.'
 icon: 'file-lines'
 ---
 
-Create a ticket template to define the questions, defaults, and access rules for a repeatable support request. The **Home AI Assistant** can use available templates to prepare tickets; Company users can also choose them manually from **Tickets > New Ticket**.
+A ticket template defines the questions, defaults, and access rules for a repeatable support request. The Home AI Assistant uses available templates to prepare tickets, and users can also choose them on **Tickets > New Ticket**. This guide is for MSP staff. Company users submit requests and cannot create templates.
 
-**Audience:** MSP staff with **write_settings_tickets** or **manage_settings_tickets** permission. Company users submit requests; their MSP creates templates and manages access.
+## Before you start
 
-## Start an inactive draft
+- Your role needs permission to write or manage ticket settings (**Settings > Tickets**).
+- Connect your PSA integration if you want PSA defaults such as board, priority, and status.
 
-1. Open **Settings > Tickets > Templates** and select **New Template**.
-2. In **Template Details**, enter a unique **Template Name** and choose a **Category**, or keep **No Category**.
-3. Write a **Description** explaining when the request should be used.
-4. Turn off **Template is active and available for use** while designing.
+## Start a draft template
 
-<Note>
-New templates start with the active switch on. Turn it off before saving a draft you do not want offered to users. Switching it off changes the draft; use **Save Template** to persist the state.
-</Note>
+<Steps>
+  <Step title="Open New Template">
+    Go to **Settings > Tickets > Templates** and click **New Template**.
+  </Step>
 
-The new template can inherit PSA defaults from Ticket Settings. Check those settings before making a template available for real requests. Creating a template does not create a support ticket.
+  <Step title="Name the template">
+    Under **Template Details**, enter a unique **Template Name**. Choose a **Category**, or keep **No Category**.
+  </Step>
+
+  <Step title="Describe when to use it">
+    Write a **Description** that explains when to use this request.
+  </Step>
+
+  <Step title="Turn off the active switch while you draft">
+    New templates start active. Turn off **Template is active and available for use** if you do not want users to see the draft yet. You keep the setting by clicking **Save Template**.
+  </Step>
+</Steps>
+
+The new template can inherit PSA defaults from your ticket settings. Check them before you make the template available. Creating a template does not create a ticket.
 
 ## Help the Home assistant choose this request
 
-Use **AI Description** to explain what the template is for and when the assistant should select it. For example, distinguish a new employee setup from a change to an existing employee's access. State useful selection criteria in plain language.
+Use **AI Description** to say what the template is for and when the assistant should pick it. For example, tell a new employee setup apart from a change to an existing employee's access.
 
-You can write this description yourself. **Generate** becomes available after you enter a name and add fields; it proposes a description from the current template. Review and edit the result before saving. AI Description helps template selection; it is not a submitted request, a permission rule, or a guarantee the assistant will choose that template every time.
+<Steps>
+  <Step title="Write or generate the text">
+    Type the description yourself, or click **Generate**. **Generate** works after you enter a name and add at least one field. It writes a summary from the template's fields.
+  </Step>
+
+  <Step title="Review and edit">
+    Read the result and edit it so it states clear selection criteria. Then save the template.
+  </Step>
+</Steps>
 
 ## Add a section and a question
 
 <Steps>
   <Step title="Add a section">
-    Under **Sections & Fields**, select **Add Section**. A new section starts with a numbered title. Select the section title to edit it, then click away to finish editing the title in the draft.
+    Under **Sections & Fields**, click **Add Section**. The new section gets a numbered title. Click the title to rename it.
   </Step>
+
   <Step title="Add a field">
-    Use **Add Field** in the section. The field editor opens with a new optional **Text** field. Enter a clear label, such as **Request summary**.
+    Click **Add field** in the section. The field editor opens with a new optional **Text** field. Enter a clear **Field Label**, such as "Request summary".
   </Step>
-  <Step title="Choose the input and requirement">
-    Keep **Text** for a short answer or choose the appropriate field type. Set the requirement to **Optional**, **Required**, or **Conditional**. Conditional requirements need a completed condition; do not leave the trigger unfinished.
+
+  <Step title="Choose the type and requirement">
+    Keep **Text** for a short answer, or pick another **Type**. Set **Required** to **Optional**, **Required**, or **Conditional**. A conditional field needs a finished rule. See [Show or require a field conditionally](/user-guides/ticketing/how-to-create-a-ticket-template#show-or-require-a-field-conditionally).
   </Step>
+
   <Step title="Add guidance">
-    Use **Placeholder** for an example and **Help Text** for instructions. A placeholder is not a saved answer. Leave the generated field key unless you need a deliberate change before its first save; keys must be unique within the template and are read-only after saving.
+    Use **Placeholder** for an example and **Help Text** for instructions. A placeholder is not a saved answer. Leave the generated **Field Key** alone unless you have a reason to change it. Keys must be unique in the template and cannot be edited after the first save.
   </Step>
+
   <Step title="Review the section">
-    Collapse or expand the section and field editors as needed. Adding, editing, removing, or reordering sections and fields changes the draft. Save Template is the persistence step.
+    Collapse or expand sections and fields as you work. Adding, editing, removing, and reordering all change the draft. Nothing is kept until you click **Save Template**.
   </Step>
 </Steps>
 
-Keep the first version small enough to test. Choice fields, conditional logic, linked data, embedded templates, and provider-specific routing need additional configuration; see the [template configuration reference](/user-guides/ticketing/how-to-create-a-ticket-template).
+Keep the first version small enough to test. For choice fields, conditional logic, embedded templates, and PSA routing, see [How to create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template).
 
-<img src="/images/product/ticket-template-header-actions.png" alt="Cancel, Preview, and Save Template controls in the MSP ticket-template editor" width="676" height="74" />
+<img src="/images/product/ticket-template-header-actions.png" alt="Cancel, Preview, and Save Template controls in the ticket-template editor" width="676" height="74" />
 
 ## Preview the form
 
-Select **Preview** in the page header. Enter example values and check section navigation, labels, instructions, and required or conditional questions. **Reset** clears the preview answers when shown. Click the shaded area outside the preview panel to return to editing.
+<Steps>
+  <Step title="Open Preview">
+    Click **Preview** in the page header. The **Form Preview** panel opens on the right.
+  </Step>
 
-Preview uses the current draft, so you can inspect changes before saving. It does not submit a ticket or prove that a Company user can access the template. Linked-data pickers can depend on the selected company and your MSP permissions. Preview also does not test PSA creation, webhooks, embedded ticket creation, or scheduling.
+  <Step title="Try the form">
+    Enter sample answers. Check section navigation, labels, instructions, and required and conditional questions.
+  </Step>
 
-## Review routing and access before activation
+  <Step title="Reset or close">
+    Click **Reset** to clear your sample answers. Click **Close**, or click outside the panel, to return to editing.
+  </Step>
+</Steps>
 
-- **PSA Integration Settings:** review the available board or queue, status, priority, and classification defaults for your connected provider. An invalid status for the selected board can block saving. **Use client's PSA defaults** is separate from manually choosing template defaults.
-- **Company Visibility:** check existing company overrides and the **New Companies** default. The default can make future companies eligible even when some current companies are disabled.
-- **Role Access:** review which roles can use the parent template. Branches inherit the parent's role restrictions. This does not give a user permission to create tickets.
-- **Subject Configuration:** review a default or locked subject if configured.
+Preview uses the current draft, so you can check changes before you save. It does not create a ticket. It does not test PSA creation, webhooks, embedded tickets, or scheduling. Linked-data pickers depend on your own permissions, so Preview also does not show exactly what a client sees.
 
-Company Visibility and Role Access changes made inside this editor are saved with **Save Template**. Other settings dialogs and the template list can have different save behavior; do not assume every control waits for this button.
+## Review routing and access
+
+Before you activate the template, open these sections of the editor.
+
+| Section | What to check |
+| --- | --- |
+| **PSA Integration Settings** | The board or queue, status, priority, and type defaults for your PSA. A status that is not active on the chosen board blocks saving. **Use Client's PSA Defaults** takes board, priority, and status from the company instead. |
+| **Subject Configuration** | A default **Subject Template**, and **Lock subject (users cannot modify it)** if you want it fixed. |
+| **Company Visibility** | The per-company switches and the **New Companies** default. When it is **Enabled**, companies added later get the template. |
+| **Role Access** | Which company roles can use the template. With none selected, every role can. Branches inherit the parent's roles. |
+
+Company Visibility and Role Access changes made in the editor are saved when you click **Save Template**. Company Access, Role Access, and Company Gating dialogs in the Templates list save as you change them.
 
 <Warning>
-Do not use an all-off role list to disable a template. The role control treats no restrictions as open to all roles and can return to that state when the last selected role is removed. Keep the template inactive when it should not be offered.
+Do not turn every role off to hide a template. With no roles selected, every role can use it. Turn off **Template is active and available for use** instead.
 </Warning>
 
-## Save, reopen, and activate
+## Save and activate
 
-1. Select **Save Template** and wait for the result.
-2. If asked about new-company visibility, review whether future companies should receive the template. **Cancel** returns to editing; **Save Anyway** accepts that visibility configuration.
-3. On success, the editor returns to Templates. Reopen the template and verify its name, active state, fields, defaults, and access settings.
-4. When ready for use, turn on **Template is active and available for use**, review access, and select **Save Template** again.
-5. Verify availability for the intended Company and role, then verify a real request through the approved testing workflow for your organization.
+<Steps>
+  <Step title="Save the draft">
+    Click **Save Template** and wait for "Template created successfully". The editor returns to the Templates list.
+  </Step>
 
-Saving the template and its editor Company/role settings is one save operation. A validation error leaves the draft available for correction. Fix the named problem, then save again. Common problems include a duplicate name or key, an invalid PSA status, unfinished conditional rules, or an embedded field without a valid template.
+  <Step title="Answer the new-company prompt if it appears">
+    If some existing companies are off while **New Companies** is on, a "New companies will receive this template" prompt appears. Click **Save Anyway** to accept it, or **Cancel** to go back and change the setting.
+  </Step>
+
+  <Step title="Reopen and verify">
+    Open the template again. Check the name, active state, fields, defaults, and access.
+  </Step>
+
+  <Step title="Activate">
+    When it is ready, turn on **Template is active and available for use** and click **Save Template** again. You can also use **Set Active** in the Templates list.
+  </Step>
+
+  <Step title="Check availability">
+    Open **Tickets > New Ticket** for the intended company and confirm the template appears.
+  </Step>
+</Steps>
+
+If saving fails, the message names the problem and your draft stays open. Common causes are a missing or duplicate name, a duplicate field key, an invalid PSA status, a conditional field without a trigger, or an embedded field with no template.
 
 ## Cancel a draft
 
-Select **Cancel** in the header. If you have unsaved changes, choose **Cancel** in the confirmation to keep editing, or **Leave Without Saving** to discard the unsaved draft and return to Templates. Previously saved configuration remains in place. Preview answers are separate from the saved template definition.
+Click **Cancel** in the header. If you have unsaved changes, a confirmation asks whether to discard them. Click **Discard** to leave without saving, or **Keep editing** to stay. Your last saved version is unchanged.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Generate** is disabled | Enter a template name and add at least one field. |
+| Save fails with a name or key error | Rename the template or field so it is unique. |
+| Save fails with a status error | Pick a default status that is active on the selected board. |
+| Save fails on a conditional field | Choose the trigger field and value, or remove the condition. |
+| The template does not appear on New Ticket | Check that it is active and turned on for the company, role, and any gating. See [Understand your available request templates](/msp-guides/ticketing/understand-request-templates). |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where does an MSP create a ticket template?">
-    Open Settings > Tickets > Templates and select New Template. You need write_settings_tickets or manage_settings_tickets permission.
+  <Accordion title="Where do I create a ticket template?">
+    Go to **Settings > Tickets > Templates** and click **New Template**.
   </Accordion>
-  <Accordion title="Can Company users create ticket templates?">
-    No. The MSP creates templates and manages permissions. Company users start on the Home AI Assistant or use Tickets > New Ticket to submit an available request.
-  </Accordion>
-  <Accordion title="Is a new ticket template inactive by default?">
-    No. The new editor starts with the active switch on. Turn it off and save if you want an inactive draft.
+  <Accordion title="Is a new template inactive by default?">
+    No. New templates start active. Turn the switch off and save if you want an inactive draft.
   </Accordion>
   <Accordion title="Does adding a field save the template?">
-    No. Field and section edits change the draft. Use Save Template and wait for success.
+    No. Field and section edits change the draft. Click **Save Template**.
   </Accordion>
   <Accordion title="What is AI Description used for?">
-    It explains what the template is for and when the Home assistant should select it. Write it manually or review a generated suggestion, then save. It does not grant access or submit a request.
+    It tells the Home assistant what the template is for and when to pick it. It does not grant access or create a ticket.
   </Accordion>
-  <Accordion title="Why is Generate disabled for AI Description?">
-    Enter a template name and add at least one field first. Review generated text before saving it.
-  </Accordion>
-  <Accordion title="Does Preview create a support ticket?">
-    No. Preview lets you try the current draft form. It does not submit a ticket or verify PSA, webhook, embedded-ticket, or scheduling delivery.
-  </Accordion>
-  <Accordion title="Does Preview prove a Company user can use the template?">
-    No. MSP preview uses your context and permissions. Verify the intended Company and role separately after reviewing access settings.
-  </Accordion>
-  <Accordion title="Does Reset erase my template fields?">
-    Reset in Form Preview clears preview answers. It does not remove the template definition or replace Save Template.
+  <Accordion title="Does Preview create a ticket?">
+    No. It only shows the form.
   </Accordion>
   <Accordion title="Is placeholder text a default answer?">
-    No. A placeholder is an example shown in an empty input. Configure a default value separately if that field type supports it.
+    No. A placeholder is an example in an empty box. Use **Default Value** for a pre-filled answer.
   </Accordion>
-  <Accordion title="Why can I no longer edit a field key?">
-    Saved field keys are read-only in the editor. Use a unique generated key before the first save; label and help-text edits are separate.
+  <Accordion title="Why can't I edit a field key?">
+    Keys are locked after the first save. Change the label or help text instead.
   </Accordion>
-  <Accordion title="Do Company Visibility changes in this editor save immediately?">
-    No. The editor saves its Company Visibility and Role Access draft together with Save Template. Other list or settings dialogs can use different persistence behavior.
-  </Accordion>
-  <Accordion title="What does the new-company visibility warning mean?">
-    Some existing companies are disabled while the New Companies default is enabled. Future companies can receive the template. Review the configuration before choosing Save Anyway.
-  </Accordion>
-  <Accordion title="Can I disable a template by turning every role off?">
-    Do not use that approach. No role restrictions means open access, and the control can return to all roles when the last role is removed. Keep the template inactive instead.
-  </Accordion>
-  <Accordion title="Does activating the switch make the unsaved draft available?">
-    The editor switch is part of the draft. Use Save Template to persist activation, then verify the intended Company and role can access it.
-  </Accordion>
-  <Accordion title="What happens when I cancel with unsaved changes?">
-    The confirmation lets you keep editing with Cancel or discard the draft with Leave Without Saving. Previously saved configuration remains.
-  </Accordion>
-  <Accordion title="Why can Save Template reject my draft?">
-    Check the displayed validation problem: required name, duplicate name or field key, invalid PSA status, unfinished condition, or an invalid embedded-template reference. Correct the affected fields and save again.
+  <Accordion title="What does the new-company warning mean?">
+    Some existing companies are off while **New Companies** is on, so companies you add later will get the template automatically.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
-- [How to create a ticket template: configuration reference](/user-guides/ticketing/how-to-create-a-ticket-template)
-- [Understand request templates](/user-guides/ticketing/understand-request-templates)
-- [How to open a ticket](/user-guides/ticketing/open-a-ticket)
+- [How to create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template)
+- [Understand request templates](/msp-guides/ticketing/understand-request-templates)
+- [How to open a ticket](/msp-guides/ticketing/open-a-ticket)

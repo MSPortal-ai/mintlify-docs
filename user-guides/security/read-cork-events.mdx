@@ -1,67 +1,107 @@
 ---
 title: "Read Cork security compliance events"
-description: "Filter provider events, inspect affected entities and evidence, and distinguish risk from resolution."
+description: "Filter Cork events, open the affected entity and evidence, and tell risk apart from resolution."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Security read access and an active, mapped Cork integration.
+Use this page to find and read Cork security compliance events. It is for company users and MSP staff. This is the **Compliance** tab inside Security, not the separate [Compliance assessment module](/user-guides/compliance/index).
+
+## Before you start
+
+- You need Security read access.
+- Cork must be connected and its companies mapped. Without Cork, the **Compliance** tab does not appear. See [Enable the Cork integration](/user-guides/integrations/enable-cork-integration).
 
 ## Find an event
 
-1. Open **Security > Compliance**. This is the Security tab, not the separate Compliance assessment module.
-2. Confirm the company selection.
-3. Use **Event Type**, **Company**, **Status**, **Resolved**, or **Created** filters to narrow the results.
-4. Review additional pages as needed. The table loads 20 events per server page.
-5. Select the linked **Event Type** text to open the event's side panel.
+<Steps>
+  <Step title="Open Compliance">
+    Open **Security > Compliance** and check the company selector.
+  </Step>
+  <Step title="Filter the list">
+    Use the column filters. **Event Type** picks one event type. **Entity** searches the affected entity. **Company** picks companies. **Status** offers **At Risk** and **Not At Risk**. **Resolved** offers **Resolved** and **Unresolved**. **Created** takes a date range.
 
-The **Status** filter offers At Risk and Not At Risk. A Not At Risk result is displayed as **OK** in the row. The separate **Resolved** filter offers Resolved and Unresolved; unresolved rows display **Open**.
+    <img src="/images/product/security-event-risk-filter.png" alt="Security Compliance Status filter with All, At Risk, and Not At Risk options" width="318" height="204" />
+  </Step>
+  <Step title="Sort and page">
+    Click a column header to sort. The table shows 20 events per page.
+  </Step>
+  <Step title="Open an event">
+    Click the **Event Type** link in a row to open the side panel.
+  </Step>
+</Steps>
 
-<img src="/images/product/security-event-risk-filter.png" alt="Security Compliance Status filter with All, At Risk, and Not At Risk options" width="318" height="204" />
+A link from the Security Dashboard can open this list already filtered to **At Risk** or **Resolved**. Clear the filter to see every event.
 
-This image shows the generic filter in an MSP Demo session. Your available records and actions depend on your access.
+## Read the table
 
-## Read the event
-
-| Field | Meaning |
+| Column | Meaning |
 | --- | --- |
-| **Event Type** | The provider's finding category or description. |
-| **Entity** | The affected device, mailbox, address, or domain when available. |
-| **Company** | The mapped portal company; a dash can indicate missing mapping. |
-| **Status** | Cork's At Risk or OK indication. |
-| **Resolved** | Whether the provider event is marked Resolved or remains Open. |
+| **Event Type** | The kind of Cork finding. |
+| **Entity** | The affected device, mailbox, or domain, when Cork supplies one. A dash means none. |
+| **Company** | The mapped company. A dash means the record is not mapped. |
+| **Status** | **At Risk**, or **OK** for Not At Risk events. |
+| **Resolved** | **Resolved**, or **Open** while unresolved. |
 | **Created** | When Cork recorded the event. |
 
-Risk, resolution, and silencing are separate. **OK** does not necessarily mean Resolved. **Silenced** does not mean the underlying issue was fixed.
+Risk and resolution are separate. **OK** does not mean **Resolved**, and **Silenced** does not mean the issue was fixed.
 
-In the side panel, check the entity and company, status badges, Created and Resolved dates when supplied, and **Cure Period** when available. Evidence can contain a reason and provider metadata. **No evidence details available** means this panel has no supplied evidence to display; it does not prove the finding is false.
+## Read the event panel
 
-This reader does not provide a resolve or silence action. Authorized staff investigate and update the provider workflow separately.
+<Steps>
+  <Step title="Check the header">
+    The title is the event type. The line below shows the entity and company.
+  </Step>
+  <Step title="Read the badges">
+    Badges show **At Risk** or **OK**, plus **Resolved** and **Silenced** when they apply.
+  </Step>
+  <Step title="Read the dates">
+    **Created** and **Resolved** show the times Cork supplied. **Cure Period** shows the allowed time in hours, when Cork supplies it.
+  </Step>
+  <Step title="Read the evidence">
+    **Evidence** lists the reason and details Cork supplied. **No evidence details available** means Cork sent none for this event.
+  </Step>
+</Steps>
 
-## Search and scope limits
-
-The **Entity** text filter is applied after a page of events has loaded. It cannot reliably search the entire event history and can hide pagination by reducing the displayed count. To find an older event, clear Entity, narrow by company, type, status, or date, and inspect the resulting pages.
-
-Keep the main company selection and Company column filter aligned. If a selected company has no mapping, ask the MSP to verify it before starting follow-up work. A loading failure can leave an empty or earlier result on screen; confirm that the refresh completed before relying on the table.
+The panel has no resolve or silence action. Handle the finding in Cork, and the result appears here after the next sync.
 
 ## Follow up
 
-Company users should start a support request with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the event type, entity, company, and displayed date, then review and confirm the request.
+Select rows from one company, then open **Actions (N)** in the page header.
 
-Permitted staff can select same-company rows and [add them to Planner](/user-guides/security/add-to-planner) or [a meeting agenda](/user-guides/security/add-to-meeting). These actions create follow-up work; they do not change the Cork event's status.
+- **Add to Planner** creates one Planner item. See [Add security findings to Planner](/user-guides/security/add-to-planner).
+- **Add to Meeting** adds the events to a meeting agenda. See [Add Cork findings to a meeting agenda](/user-guides/security/add-to-meeting).
+
+These actions do not change the Cork event.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| An older event does not show when you type in **Entity** | **Entity** filters only the page of results already loaded, so it can miss events on other pages. Clear **Entity** and narrow with **Company**, **Event Type**, **Status**, or **Created**. |
+| The list is empty | Clear every filter, including any set by a dashboard link, and check the company selector. |
+| **No compliance events found** for a company you expect to have data | Ask your MSP to check the Cork sync and company mapping. |
+| A row shows a dash under **Company** | The record is not mapped to a company. Ask your MSP to fix the mapping. |
+| **Security integration unavailable** | Cork is not connected, or you lack Security read access. Ask your MSP admin. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why does Not At Risk show as OK in the table?">
-    Those are the filter and display labels for the same risk value. Resolution is shown separately as Open or Resolved.
+    The filter says **Not At Risk** and the row badge says **OK**. They are the same value. Resolution is shown separately as **Open** or **Resolved**.
   </Accordion>
   <Accordion title="Does Silenced mean resolved?">
-    No. Silencing and resolution are separate provider flags.
+    No. They are separate flags in Cork.
   </Accordion>
-  <Accordion title="Why can Entity search miss an older event?">
-    It filters the loaded server page. Clear Entity and use the other scope/date filters before browsing additional pages.
+  <Accordion title="Can I change an event or download a CSV here?">
+    No. The table has no resolve, silence, or export action. It does offer Add to Planner and Add to Meeting.
   </Accordion>
-  <Accordion title="Can I change the event or download a CSV here?">
-    The current event table is a reader with Planner and meeting follow-up actions. It has no event resolve/silence control or configured CSV export.
+  <Accordion title="I am a company user. How do I ask about an event?">
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the event type, entity, company, and date, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Find and read Cork vulnerabilities](/user-guides/security/read-vulnerabilities)
+- [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Security](/user-guides/security/index)

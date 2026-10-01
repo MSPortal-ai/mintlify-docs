@@ -5,43 +5,81 @@ description: "Review imported contacts, company assignments and client access."
 icon: "users"
 ---
 
-**Audience:** MSP staff with Company-user settings access. Open **Settings > Users & Roles > Company Users**, or the client-user step in Launch Center.
+Get the client contacts for your pilot companies into the portal with the right company and access group. This page is for MSP staff with Company-user settings access.
 
-## Prepare the pilot users
+## Before you start
 
-1. Review existing users before importing again. Confirm their company, email, active state and access group.
-2. For provider records, follow the integration's user-import workflow and confirm company mappings first. A synchronized contact in staging is not necessarily a portal user.
-3. Assign the intended Company access group. Review provider contact-type rules, company defaults and integration defaults where synchronization manages roles.
-4. Verify the saved user record and intended access. Keep invitations and other communications as separate deliberate actions.
-5. Repeat for each company in the rollout, then review Launch Center's client-user finding.
+- You need write access to Company users in **Settings > Users & Roles**.
+- Your rollout companies must exist and be mapped to your PSA first. See [Import companies](/user-guides/integrations/import-companies).
+- A Company access group must exist for the users. See [Company access groups](/user-guides/getting-started/onboarding/company-permission-groups).
+- Importing a user does not send an invitation.
 
-Use the detailed [Users & Roles settings](/user-guides/settings/users-roles) and [user import guide](/user-guides/integrations/import-users) for supported actions. Do not assume every provider offers the same Import from M365 or Import from PSA button in the user table.
+## Review and add Company users
 
-<Frame caption="Filter Company users by name, email and account type before reviewing individual records.">
+<Steps>
+  <Step title="Open Company Users">
+    In **Launch Center**, select **Client users** in **Setup guide**. It opens **Users & Roles** on the **Company Users** tab. You can also go to **Settings > Users & Roles** and open **Company Users**.
+  </Step>
+  <Step title="Review who is already there">
+    Use the company selector and the table filters to look at the users for one company. Check each person's company, email, and **Permissions Group** before you import again.
+  </Step>
+  <Step title="Import contacts from a provider">
+    Click **Import**. The **Bulk Import Company Users** dialog lists your connected providers. Choose **Import users from** your PSA or Microsoft 365, then pick the contacts and the access group, and confirm. Bulk import creates users across all companies in your organization, so check your company mappings first. Follow [Import Users](/user-guides/integrations/import-users#import-company-users) for each field.
+  </Step>
+  <Step title="Or add one user by hand">
+    Go to **Settings > Companies**, open the company, and open its **Users** tab. Click **Add User**, fill in the person's details, choose a **Permissions Group**, and save.
+  </Step>
+  <Step title="Check the saved user">
+    Click the user's name. In **Edit Company User**, confirm the company, email, status, and **Permissions Group**.
+  </Step>
+  <Step title="Repeat for each rollout company">
+    Do the same for every company in your plan.
+  </Step>
+</Steps>
+
+<Frame caption="Filter Company users by name, email and account type before you review individual records.">
   <img src="/images/product/company-user-review-filters.png" alt="Filter Company users by name, email and account type before reviewing individual records." width="1220" height="124" />
 </Frame>
 
-## What counts as ready
+## Send invitations when you are ready
 
-The launch check requires an active Company user with a company assignment and an access role for every rollout company. A staged contact, inactive record or unassigned user does not satisfy it. A passing check still does not prove that the person can complete every intended task or has received an invitation.
+<Steps>
+  <Step title="Select the users">
+    On **Company Users**, tick the users you want to invite.
+  </Step>
+  <Step title="Send the email">
+    Open **Actions** and click **Send Welcome Email**, or open a user's row menu. Confirm in the dialog. This sends a real email, so do it only when the pilot is ready.
+  </Step>
+</Steps>
 
-Access Groups control permissions. Team Roles assign responsibilities and account teams. Assigning a team responsibility does not replace the user's access group.
+## Check launch readiness
+
+In **Launch Center**, open **Live verification**. **Active client users are mapped to a company and role** needs at least one active Company user with a company and an access role for every rollout company. A staged contact, an inactive user, or an unassigned user does not count. One user does not cover every company.
 
 ## Troubleshooting
 
-If a user's role changes after synchronization, inspect explicit contact-type rules before overriding it again. If the user belongs to the wrong company, correct the source mapping and assess the affected records before importing more. If the user cannot sign in, inspect identity and access status separately from the integration connection.
+| Problem | What to do |
+| --- | --- |
+| A user's role changed after a sync | Check the provider's contact-type rules and the company and integration defaults. Do not override the same field repeatedly. |
+| A user is in the wrong company | Fix the source company mapping first, then check the affected records before you import more. |
+| A user cannot sign in | Check their status and access separately from the integration. Check that an invitation was sent. |
+| An imported contact is missing | Staged provider contacts are not portal users. Import them from **Company Users**. |
+| The readiness check fails for one company | Open **Company Users**, filter to that company, and check that someone is active with an access group. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does a staged provider contact count as a ready Company user?">
-    No. The check needs an active portal Company user with company and access-role assignments.
+    No. The check needs an active portal Company user with a company and an access role.
   </Accordion>
   <Accordion title="Does one active user cover all rollout companies?">
-    No. Every rollout company needs its own qualifying user evidence.
+    No. Every rollout company needs its own user.
   </Accordion>
-  <Accordion title="Does importing a contact prove an invitation was sent?">
-    No. Verify user creation and access separately from invitations and communications.
+  <Accordion title="Does importing a contact send an invitation?">
+    No. Send invitations separately.
+  </Accordion>
+  <Accordion title="Do Team Roles replace the access group?">
+    No. The access group controls permissions. Team Roles assign MSP staff to a company.
   </Accordion>
 </AccordionGroup>
 
@@ -49,4 +87,4 @@ If a user's role changes after synchronization, inspect explicit contact-type ru
 
 - [Users & Roles](/user-guides/settings/users-roles)
 - [Import users](/user-guides/integrations/import-users)
-- [Change a Company user’s permissions](/user-guides/settings/change-company-user-permissions)
+- [Change a Company user's permissions](/user-guides/settings/change-company-user-permissions)

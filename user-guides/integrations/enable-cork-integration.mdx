@@ -1,89 +1,374 @@
 ---
-title: "Configure Cork Integration"
-description: "Connect Cork, save client mappings, and review background security imports."
-icon: "plug"
+title: 'Configure Cork Integration'
+description: 'Connect your Cork security platform to MSPortal.ai to sync compliance events, vulnerabilities, and endpoints'
+icon: 'shield-halved'
 ---
 
-Connect Cork to bring its compliance events, endpoints, inboxes and vulnerabilities into MSPortal. Setup belongs to **MSP staff with Integrations settings and management access**. Company users see only the security information their permissions and company scope allow.
+This guide walks you through connecting your Cork security platform to MSPortal.ai using our streamlined setup wizard.
 
-## Connect Cork
+## Overview
 
-1. Obtain the API key for the Cork account you intend to connect. Keep it out of shared documents and screenshots.
-2. Open **Settings > Integrations**, find **Cork**, and open setup.
-3. On **Connect**, enter the **API Key** and choose **Test Connection**.
-4. After a successful test, choose **Create Integration**. Testing alone does not create the connection.
-5. After creation succeeds, choose **Next** for **Map**. Creation requests a client sync in the background; saving the connection does not establish that clients have finished importing.
+Cork is a security and compliance platform that helps MSPs monitor their clients' security posture. By integrating Cork with MSPortal.ai, you can:
 
-<img src="/images/product/cork-setup-controls.png" alt="Blank Cork API-key form with separate Test Connection and Create Integration controls." width="1024" height="788" />
+- View compliance events, vulnerabilities, and endpoints in a centralized dashboard
+- Track security metrics across all your managed clients
+- Add security findings to the Planner for remediation tracking
+- Include security data in client reports
 
-## Map clients
+## Prerequisites
 
-Wait for Cork clients to load. Use the mapping view’s sync action if clients have not appeared, then allow time for the background result.
+- Active Cork account with API access
+- MSPortal.ai account with integration management permissions
+- Cork API key with read access
 
-Choose an existing MSPortal company for a Cork client, or use **Quick Match** and review the selected suggestions. Manual matches and applied suggestions remain pending until **Import Selected** or the wizard’s **Next** applies them.
+## Part 1: Generate Cork API Key
 
-Cork mapping also supports creating companies. Search existing companies first to avoid duplicates. A per-row company creation saves the new company immediately; its Cork link still needs to be applied. Bulk import can create companies for selected unlinked clients as well as save pending links. Review all selected and pending changes before importing; table filters do not discard pending work.
+Before connecting to MSPortal.ai, you need to create an API key in Cork.
 
-Removing a saved company link is immediate. Clearing an unsaved suggestion only removes that pending choice. After applying links, review the saved company names before proceeding. Leaving Map with **Next** requests downstream security synchronization for the mapped clients.
+<Steps>
+  <Step title="Log into Cork">
+    Access your Cork dashboard at [app.corkinc.com](https://app.corkinc.com) or your Cork instance URL.
+  </Step>
 
-For the shared controls and partial-result checks, see [Company Mapping](/user-guides/settings/integration-company-mapping).
+  <Step title="Navigate to API Settings">
+    Go to **Settings > API Keys** in the Cork dashboard.
+  </Step>
 
-## Review Import
+  <Step title="Create API Key">
+    Click **Create API Key** or **Add New Key**.
 
-The final **Import** step shows counts for **Compliance Events**, **Endpoints**, **Inboxes** and **Vulnerabilities**, with last-sync information when available. These are connection-level indicators; a nonzero count does not prove every mapped client or data feed is current.
+    Configure the following:
 
-**Sync All Data** resets sync tracking and requests background imports for the four security datasets. It is an operational action, not a page refresh. Use the Map step’s client sync to update the client list. Allow time for results and check the affected data views; the sync-start message does not prove completion.
+    | Field | Recommended Value |
+    |-------|-------------------|
+    | **Name** | `MSPortal Integration` |
+    | **Permissions** | Read-only access |
 
-**Complete Setup** attempts to apply any registered pending mapping changes and exits setup. It does not wait for every security import to complete, and is not evidence of a clean security assessment.
+    <Tip>
+      A read-only API key is sufficient for MSPortal to sync your data. This follows the principle of least privilege.
+    </Tip>
+  </Step>
 
-## Existing connections and credentials
+  <Step title="Copy API Key">
+    After creating the key, copy it immediately.
 
-Reopen setup to review mapping and import status. On Connect, the existing **Connection Verified** state can reflect the saved connection; it is not a new provider test.
+    <Warning>
+      **Store the API key securely!** You may not be able to view it again after leaving this page. If you lose the key, you'll need to create a new one.
+    </Warning>
+  </Step>
+</Steps>
 
-**Retest Connection** checks the saved key when the field is blank or masked, or checks a replacement you enter. This Cork wizard does not provide a credential-update save action. Do not assume that entering and successfully testing a new key rotates the saved credential. Contact support for a supported rotation path before revoking the key in use.
+---
 
-**Delete** opens a confirmation for removing the MSPortal integration. Review dependent security data and mappings before confirming. This is separate from closing your Cork account or resolving security findings in Cork.
+## Part 2: MSPortal Setup Wizard
 
-## Use the imported information
+MSPortal.ai provides a guided 3-step wizard to connect and configure your Cork integration.
 
-Open [Security](/user-guides/security/index) for the available reader views. Cork supplies [compliance events](/user-guides/security/read-cork-events), [vulnerabilities](/user-guides/security/read-vulnerabilities) and endpoint information. This is distinct from configuring MSPortal’s Compliance assessments and check schedules.
+### Starting the Wizard
+
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings > Integrations**.
+  </Step>
+
+  <Step title="Find Cork">
+    Locate the **Cork** card under **Add integration**.
+  </Step>
+
+  <Step title="Start Setup">
+    Click **Connect** on its row to launch the setup wizard. If Cork is already connected, click **Configure** on its row under **Connected Services** instead.
+  </Step>
+</Steps>
+
+---
+
+### Step 1: Connect
+
+Enter your Cork API key to establish the connection.
+
+<Steps>
+  <Step title="Enter API Key">
+    Paste your Cork API key into the **API Key** field.
+
+    <Note>
+      Your API key is stored securely using Supabase Vault encryption. It is never exposed in logs or API responses.
+    </Note>
+  </Step>
+
+  <Step title="Test Connection">
+    Click **Test Connection** to verify your credentials.
+
+    When the test passes, the button changes to **Connected** and a green "Connection tested successfully" message appears.
+
+    ![Cork Connect step with the API Key field, Test Connection, and Create Integration buttons](/images/product/cork-setup-controls.png)
+
+    If the connection fails:
+    - Verify you copied the full API key without extra spaces
+    - Ensure the API key has not been revoked or expired
+    - Check that your Cork account has API access enabled
+  </Step>
+
+  <Step title="Create Integration">
+    Once the connection test passes, click **Create Integration** to save your credentials and proceed. A successful test on its own does not create the integration.
+
+    MSPortal starts a client sync in the background as soon as the integration is created. Click **Next** to go to the Map step.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Map Clients
+
+Map Cork clients (organizations) to your MSPortal companies. This determines which data syncs to which company.
+
+<Steps>
+  <Step title="Sync Clients">
+    If no clients appear, click **Sync Clients** to fetch clients from your Cork account. Once the list has loaded, the same action is the **Sync** button above the list.
+
+    <Info>
+      The initial sync runs in the background. Check back after a few minutes if clients don't appear immediately.
+    </Info>
+  </Step>
+
+  <Step title="Use Quick Match">
+    Click **Quick Match** to automatically match Cork clients to MSPortal companies based on name similarity.
+
+    Use the confidence slider to auto-select matches, review the suggestions, and check or uncheck individual matches. Then click **Apply Matches**. Applied matches show as **Pending** until you save them.
+
+    <Tip>
+      Quick Match saves time when you have many clients with similar names in both systems.
+    </Tip>
+  </Step>
+
+  <Step title="Manual Mapping">
+    For clients that weren't automatically matched:
+
+    1. Find the client in the list
+    2. Click the **Select company** dropdown in the "Mapped To" column
+    3. Search for and select the correct MSPortal company
+
+    To remove a mapping, click the **X** button next to the company badge. Removing a saved mapping takes effect immediately.
+  </Step>
+
+  <Step title="Create New Companies">
+    If a Cork client doesn't have a corresponding MSPortal company:
+
+    - Click the **+** button next to the client to create a new company
+    - Or click **Create new company** above the list to open **Bulk Create Companies** and create companies for several unmapped clients at once
+
+    New companies are automatically mapped to their Cork clients.
+
+    <Note>
+      Search for an existing company first to avoid duplicates. MSPortal creates the new company right away, but its Cork mapping stays **Pending** until you save it.
+    </Note>
+  </Step>
+
+  <Step title="Save Your Mappings">
+    Click **Import Selected** to save pending mappings. Filtering the list does not discard pending changes.
+  </Step>
+
+  <Step title="Filter Clients">
+    Click the summary cards above the list to filter the view:
+    - **Total Items** - Show all synced clients
+    - **Mapped** - Show only clients linked to companies
+    - **Unmapped** - Show clients that still need mapping
+  </Step>
+
+  <Step title="Proceed">
+    Once you've mapped at least one client, click **Next** to continue. **Next** also saves any mappings that are still pending and starts a security data sync for the mapped clients.
+
+    <Warning>
+      You must map at least one client before proceeding. Only data from mapped clients will be synced to MSPortal.
+    </Warning>
+  </Step>
+</Steps>
+
+---
+
+### Step 3: Import
+
+Review the data that will sync from Cork and initiate the first sync.
+
+<Steps>
+  <Step title="Review Data Types">
+    The Import step shows what data types will be synced:
+
+    | Data Type | Description |
+    |-----------|-------------|
+    | **Compliance Events** | Security compliance events and alerts |
+    | **Endpoints** | Device information (name, OS, IP addresses) |
+    | **Inboxes** | Email inbox information |
+    | **Vulnerabilities** | Software vulnerabilities with CVE and CVSS data |
+  </Step>
+
+  <Step title="Start Initial Sync">
+    Click **Sync All Data** to trigger the initial data sync. This requests a fresh import of compliance events, endpoints, inboxes, and vulnerabilities. It does not refresh the client list; use **Sync** on the Map step for that.
+
+    The sync runs in the background. Depending on your data volume, the initial sync may take several minutes.
+  </Step>
+
+  <Step title="Review Sync Stats">
+    The page displays counts for each data type as they sync:
+
+    - Compliance Events
+    - Endpoints
+    - Inboxes
+    - Vulnerabilities
+
+    The "Last synced" timestamp shows when data was last updated.
+  </Step>
+
+  <Step title="Complete Setup">
+    Click **Complete Setup** to finish the wizard and return to the Integrations page. Background imports keep running after you leave.
+  </Step>
+</Steps>
+
+---
+
+## What Gets Synced
+
+Cork integration syncs the following data types to MSPortal:
+
+### Compliance Events
+
+Security compliance findings from Cork, including:
+- Event type and description
+- Affected entity (device, inbox, or domain)
+- At-risk status
+- Resolution status
+- Creation date
+
+### Endpoints
+
+Device and endpoint information:
+- Device name and hostname
+- Operating system type and version
+- IP addresses
+- Last seen timestamp
+
+### Inboxes
+
+Email inbox data:
+- Inbox identifier
+- Associated user
+- Domain information
+
+### Vulnerabilities
+
+Software vulnerability data:
+- CVE identifier
+- Affected software product and version
+- Vendor information
+- CVSS score (severity rating 0.0-10.0)
+- EPSS score (exploitation probability)
+- Cork priority (Critical, Accelerated, Routine)
+- Known exploited status
+
+---
+
+## Synchronization Schedule
+
+After initial setup, data syncs automatically:
+
+| Data Type | Sync Frequency |
+|-----------|----------------|
+| Clients | Hourly (at :05) |
+| Compliance Events | Every 2 hours (at :15) |
+| Endpoints | Hourly (at :20) |
+| Inboxes | Every 2 hours (at :45) |
+| Vulnerabilities | Every 6 hours (at :30) |
+
+<Note>
+You can trigger a manual sync at any time by returning to the Cork integration settings and clicking **Sync All Data**.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, manage your integration from **Settings > Integrations**:
+
+| Action | Description |
+|--------|-------------|
+| **Configure** | Re-open the wizard to modify settings or add more client mappings |
+| **Resync** | Trigger a full data refresh |
+| **Delete** | Remove the integration (available in wizard footer) |
+
+### Checking or Replacing Your API Key
+
+On an existing Cork integration, the Connect step shows **Retest Connection**. Leave the **API Key** field blank to retest the saved key, or enter a different key to test it.
+
+<Warning>
+  The Cork wizard does not save a replacement key. Testing a new key does not store it. To rotate the key, contact support@msportal.ai before you revoke the old key in Cork.
+</Warning>
+
+### Adding More Client Mappings
+
+As you onboard new clients in Cork:
+
+<Steps>
+  <Step title="Open Integration Settings">
+    Go to **Settings > Integrations** and click **Configure** on the Cork card.
+  </Step>
+  <Step title="Navigate to Map Step">
+    Click **Map** in the wizard stepper.
+  </Step>
+  <Step title="Sync New Clients">
+    Click **Sync** to fetch any new clients from Cork.
+  </Step>
+  <Step title="Map New Clients">
+    Use Quick Match or manual mapping to connect new clients to companies, then click **Import Selected**.
+  </Step>
+</Steps>
+
+---
 
 ## Troubleshooting
 
-- **Connection test fails:** check the intended Cork account and API key. A passed test does not prove all later dataset requests will succeed.
-- **Client missing:** inspect the client sync result before creating a duplicate portal company.
-- **Company has no findings:** verify its saved mapping and dataset freshness. Empty results do not prove the company is secure.
-- **Sync started but counts are unchanged:** allow time for background processing and inspect the eventual outcome. Avoid repeatedly restarting a full sync.
-- **Newly typed key works but imports still fail:** retesting is not credential rotation in this wizard.
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify your API key is correct and hasn't expired |
+| No clients appear | Click "Sync" and wait a few minutes for background sync to complete |
+| Data not syncing | Ensure clients are mapped to companies; only mapped client data syncs |
+| Missing vulnerabilities | Confirm the client is mapped. Vulnerabilities sync every 6 hours, so run **Sync All Data** for an immediate refresh |
+| Stale data | Use "Sync All Data" to trigger a manual refresh |
+| A new key tests fine but imports still fail | Testing does not save a new key. Contact support@msportal.ai to rotate it |
 
-## Frequently asked questions
+---
 
-<AccordionGroup>
-  <Accordion title="Does Test Connection create Cork?">
-    No. After testing succeeds, choose Create Integration, then Next to map clients.
-  </Accordion>
-  <Accordion title="When do Cork company mappings save?">
-    Import Selected or Next applies pending mappings. Saved-link removal is immediate; per-row company creation saves the company before its pending link is applied.
-  </Accordion>
-  <Accordion title="Does Quick Match guarantee the correct company?">
-    No. Review its suggestions and the full pending selection before applying changes.
-  </Accordion>
-  <Accordion title="Does Sync All Data refresh the page only?">
-    No. It resets sync tracking and requests background imports for compliance events, endpoints, inboxes and vulnerabilities.
-  </Accordion>
-  <Accordion title="Does Complete Setup mean all security data finished syncing?">
-    No. Check the resulting datasets and freshness separately.
-  </Accordion>
-  <Accordion title="Can I rotate the Cork key by retesting a replacement?">
-    No. The current wizard tests the entered key but provides no credential-update save action. Use a supported rotation path before revoking the saved key.
-  </Accordion>
-  <Accordion title="Do zero Cork findings prove a company is secure?">
-    No. Check company mapping, access, provider coverage and successful data synchronization first.
-  </Accordion>
-</AccordionGroup>
+## Security & Privacy
 
-## Related guides
+- **API Key Storage**: Your Cork API key is encrypted using Supabase Vault and never exposed in logs or responses
+- **Data Isolation**: All synced data is tenant-isolated and only visible to your organization
+- **Read-Only Access**: MSPortal only requires read access to Cork data; it never modifies your Cork configuration
 
-- [Integrations settings](/user-guides/settings/integrations)
-- [Company Mapping](/user-guides/settings/integration-company-mapping)
-- [Integration directory](/user-guides/integrations/index)
+---
+
+## Next Steps
+
+After setting up the Cork integration:
+
+<CardGroup cols={2}>
+  <Card title="View Security Data" icon="shield-halved" href="/user-guides/security/index">
+    Explore compliance events, vulnerabilities, and endpoints
+  </Card>
+  <Card title="Read Cork Events" icon="list-check" href="/user-guides/security/read-cork-events">
+    Review Cork compliance events per company
+  </Card>
+  <Card title="Read Vulnerabilities" icon="bug" href="/user-guides/security/read-vulnerabilities">
+    Review vulnerabilities with CVE, CVSS, and priority
+  </Card>
+  <Card title="Add to Planner" icon="calendar-plus" href="/user-guides/security/add-to-planner">
+    Convert findings into actionable work items
+  </Card>
+  <Card title="Build Reports" icon="chart-bar" href="/user-guides/reporting/index">
+    Include security metrics in client reports
+  </Card>
+  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
+    Explore additional integration options
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+For assistance with the Cork integration, contact support@msportal.ai.

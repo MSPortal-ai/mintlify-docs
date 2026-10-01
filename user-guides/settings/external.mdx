@@ -1,62 +1,127 @@
 ---
 title: External Resources Settings
-description: Find the current external-dashboard settings and configure links, Company URLs, and access
+description: Add external dashboards and links, give each company its own URL and control who can open them
 icon: link
 ---
 
-Manage external resources in **Settings > Dashboards > External Dashboards**. The older External Resources settings address opens this tab. Existing links and embedded reports use the same external-dashboard catalog.
+External resources are links to other web tools, such as IT Glue, a vendor portal or a knowledge base. MSPortal can show them inside the portal or open them in a new tab. This page is for MSP staff. Manage them in **Settings > Operations > Dashboards** on the **External Dashboards** tab. The older External Resources address opens that tab.
 
 ## Before you start
 
-This is an **MSP staff** configuration task. You need dashboard-settings access and the relevant write or management permission. Company users open resources made available by their IT provider; they do not administer this catalog.
-
-An external resource can open a dashboard, knowledge base, training service, or another HTTPS page. Its name describes the destination; there is no category selector for Documentation, Tools, or Vendor on the current form.
-
-## Choose the right task
+- You need Dashboards settings access. Adding, editing and checking resources needs write or manage access.
+- The destination must be an HTTPS URL.
+- Company users open resources their IT provider makes available. They do not manage this list.
+- A resource has no category. Use a clear name and description instead.
 
 <CardGroup cols={2}>
-  <Card title="Configure external dashboards" icon="gear" href="/user-guides/dashboards/configure-external-dashboards">Create or edit a resource, choose Company roles, manage its active state, and review sidebar and embedding controls.</Card>
-  <Card title="Assign Company URLs" icon="building" href="/user-guides/dashboards/assign-external-dashboard-company-urls">Give each company its own destination and understand immediate saves and CSV behavior.</Card>
-  <Card title="Open an external dashboard" icon="arrow-up-right-from-square" href="/user-guides/dashboards/open-external-dashboard">Understand company scope, external sign-in, and Open in New Tab.</Card>
-  <Card title="Dashboard settings" icon="table-columns" href="/user-guides/dashboards/manage-dashboard-settings">Configure internal dashboards separately from external resources.</Card>
+  <Card title="Configure external dashboards" icon="gear" href="/user-guides/dashboards/configure-external-dashboards">Create or edit a resource, choose company roles and review sidebar and embedding controls.</Card>
+  <Card title="Assign Company URLs" icon="building" href="/user-guides/dashboards/assign-external-dashboard-company-urls">Give each company its own destination and import or export them with CSV.</Card>
+  <Card title="Open an external dashboard" icon="arrow-up-right-from-square" href="/user-guides/dashboards/open-external-dashboard">Company scope, external sign-in and Open in New Tab.</Card>
+  <Card title="Dashboard settings" icon="table-columns" href="/user-guides/dashboards/manage-dashboard-settings">Configure internal dashboards separately.</Card>
 </CardGroup>
 
-## Add and review a resource
+## Add an external resource
 
 <Steps>
   <Step title="Open External Dashboards">
-    Go to **Settings > Dashboards**, select **External Dashboards**, and wait for the table to load.
+    Go to **Settings > Operations > Dashboards** and click **External Dashboards**. Wait for the table to load. It shows **Name**, **URL**, **Roles**, **Frame Policy**, **Status** and **Actions**.
   </Step>
-  <Step title="Create the catalog entry">
-    Select **Add**. Enter a name and default HTTPS URL; review the optional description, display order, icon, and Company roles. Select **Create** to save, or Cancel to leave the unsaved form.
+  <Step title="Click Add External Item">
+    Click **Add External Item** in the page header. The **Add External Item** dialog opens.
   </Step>
-  <Step title="Assign the Company destinations">
-    Use the row menu's **Company URLs** action when a company should have access. In a company context, an assigned Company URL is required; the default URL is not a fallback for a missing assignment.
+  <Step title="Fill in the form">
+    Enter a **Name** and a **URL** that starts with `https://`. Optionally add a **Description**, an **Icon** (PNG or JPEG), a **Display Order** and **Company Roles (Access Control)**. Leave the roles empty to allow all roles, or pick roles to limit access. The URL here is used by MSP staff only.
   </Step>
-  <Step title="Verify the intended reader">
-    Open the resource in the intended company scope and check the applicable role. Confirm the destination itself works with that reader's external-service account.
+  <Step title="Choose navigation options">
+    Turn **Active** on to make the resource available. Turn **Pin to Sidebar** on to show it in the main sidebar, and set a short **Sidebar Label** if the name is long.
+  </Step>
+  <Step title="Create">
+    Click **Create**. A toast says **External item created successfully**. **Cancel** closes the form without saving. An icon uploads as soon as you choose it, even if you cancel the form.
   </Step>
 </Steps>
 
-Company role selections restrict Company readers. An empty role list does not mean staff-only: it imposes no explicit Company-role restriction. Assignments and other access checks still apply. Portal access does not grant access at the destination service.
+## Give companies access with Company URLs
 
-## Save boundaries
+Companies see a resource only when it has a URL assigned to them. They always open their own URL, never the default one.
 
-| Action | When it takes effect |
+<Steps>
+  <Step title="Open Company URLs">
+    On the **External Dashboards** table, open the row's menu and click **Company URLs**. The **Company-Specific URLs** dialog opens.
+  </Step>
+  <Step title="Add a URL">
+    Under **Add Manually**, pick a **Company**, enter its **URL** and click **Add Company URL**. A toast says **Company URL saved**. To add many at once, use **Import from CSV**.
+  </Step>
+  <Step title="Review and close">
+    The **Assigned URLs** list shows what is saved. **Export CSV** downloads the current list or all companies. Click **Close**.
+  </Step>
+</Steps>
+
+Each add, edit and remove saves on its own. Closing the dialog does not undo them.
+
+## Check embedding
+
+Some sites refuse to appear inside another page. Test this before you pin a resource.
+
+<Steps>
+  <Step title="Start the check">
+    Open the row's menu and click **Check Frame Policy**. To test every resource, click **Check All Policies** in the page header. The toast says **Policy check started**.
+  </Step>
+  <Step title="Read the result">
+    The **Frame Policy** column shows **Allowed**, **Blocked** or **Not checked**. The result applies to the default URL. It does not prove every Company URL works.
+  </Step>
+  <Step title="If it is blocked">
+    Users can open the resource with **Open in New Tab**. If the automatic check cannot reach the URL, for example because the site limits access by IP address, use **Force Allow Embedding** from the row menu and confirm. The resource is then embedded even when the check says blocked. This cannot get around the provider's own browser security or sign-in rules.
+  </Step>
+</Steps>
+
+## Manage resources
+
+| Action | Where | Result |
+| --- | --- | --- |
+| Edit | Row menu **Edit** | Opens the form. Click **Update** to save |
+| Default | **Set as Default** or **Remove Default** | Makes it the default dashboard, or removes that |
+| Sidebar | **Pin to Sidebar** or **Unpin from Sidebar** | Shows or hides it in the main navigation at once |
+| Turn on or off | Select rows, then **Enable** or **Disable** | Changes **Status** for the selected resources |
+| Change roles for many | Select rows, then **Edit Permissions** | Replaces the roles on every selected resource |
+| Delete | Row menu **Delete**, or select rows and **Delete** | Removes it for every user after you confirm. This cannot be undone |
+
+Leaving the roles empty means no company-role limit. It does not make a resource MSP-only. Portal access also does not give a user access inside the external service.
+
+## Troubleshooting
+
+| Problem | What to do |
 | --- | --- |
-| Catalog creation or edit | **Create** or **Update** saves the form. |
-| Add, edit, or remove a Company URL | Saves separately in Company URLs. Closing the dialog is not rollback. |
-| Enable/disable, default, or sidebar pin actions | Separate actions that affect the shared catalog/navigation. |
-| Icon upload | Uploads before the catalog form is submitted; do not treat Cancel as upload cleanup. |
-| Delete | Requires the displayed confirmation; review the exact selected resource or bulk selection. |
+| **Add External Item** or **Check All Policies** is disabled | You need write or manage access to Dashboards settings |
+| The form will not save | The **Name** and **URL** are required, and the URL must start with `https://` |
+| A company cannot see a resource | Add a **Company URL** for that company, and check the resource's roles and **Status** |
+| The resource shows **Blocked** | Use **Open in New Tab**, or **Force Allow Embedding** if the check could not reach the site |
+| The icon upload failed | Upload a PNG or JPEG image |
 
-Use **Check Frame Policy** to request an embedding check. A result applies to the checked default destination; it does not prove every Company URL works. **Force Allow Embedding** cannot override a provider's browser security restrictions or sign-in requirements. When embedding is unavailable, use **Open in New Tab**.
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where did External Resources settings go?">Open Settings > Dashboards > External Dashboards. The old settings address redirects to that tab.</Accordion>
-  <Accordion title="Where is the category selector?">The current external-dashboard form has no Documentation, Tools, or Vendor category selector. Use a clear resource name and description.</Accordion>
-  <Accordion title="Will the default URL give every company access?">No. In a company context, the resource needs an assigned Company URL. An absent assignment does not fall back to the default.</Accordion>
-  <Accordion title="Does leaving roles empty make the resource internal?">No. It removes the explicit Company-role restriction. Review assignments and roles before making a resource available.</Accordion>
-  <Accordion title="Does closing Company URLs discard my changes?">No. Saved additions, edits, and removals take effect separately. Close does not undo them.</Accordion>
-  <Accordion title="Can Force Allow bypass the provider's security policy?">No. Browser restrictions and external authentication still apply. Use Open in New Tab when embedding does not work.</Accordion>
+  <Accordion title="Where did External Resources settings go?">
+    They are now on **Settings > Operations > Dashboards**, on the **External Dashboards** tab. The old address redirects there.
+  </Accordion>
+  <Accordion title="Where is the category selector?">
+    There is none. Use a clear name and description.
+  </Accordion>
+  <Accordion title="Does the default URL give every company access?">
+    No. A company needs its own Company URL. The default is not a fallback.
+  </Accordion>
+  <Accordion title="Does leaving roles empty make a resource internal?">
+    No. It means all roles can open it. Pick roles to limit access.
+  </Accordion>
+  <Accordion title="Does closing Company URLs discard my changes?">
+    No. Each change saves as you make it.
+  </Accordion>
+  <Accordion title="Can Force Allow Embedding bypass a provider's security?">
+    No. Browser limits and the provider's sign-in still apply. Use **Open in New Tab** if embedding does not work.
+  </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Configure external dashboards](/user-guides/dashboards/configure-external-dashboards)
+- [Assign Company URLs](/user-guides/dashboards/assign-external-dashboard-company-urls)
+- [Open an external dashboard](/user-guides/dashboards/open-external-dashboard)

@@ -4,78 +4,121 @@ description: 'Use Compliance Menu History to find completed instances, compare t
 icon: 'clock-rotate-left'
 ---
 
-**Audience:** Company users and MSP staff with access to the relevant Compliance records. Your MSP controls Company access and shared assessments.
+Use this page to look back at completed compliance checks across all runs. It is for company users and MSP staff.
+
+## Before you start
+
+- You need Compliance read access. Your MSP controls which assessments are shared with company users.
+- This page shows only completed assessments. It is separate from the **History** tab inside a check, which lists earlier completed instances of that one check for the company.
+- The page loads the 100 most recently updated completed assessments. See [the history limit](#account-for-the-history-limit).
 
 ## Open Check History
 
-1. Open **Compliance**.
-2. Select **Compliance Menu > History**.
-3. Check the selected company or aggregate view.
-4. Filter the table by the available Company, Check, Entity, Run, Status, Completed By, Notes, or Date fields.
-5. Select a check title to open its details.
-
-This page lists completed assessment instances across runs. It is separate from the **History** tab inside a check, which compares other completed instances of that particular check for the company.
+<Steps>
+  <Step title="Open Compliance">
+    Click **Compliance** in the sidebar.
+  </Step>
+  <Step title="Open the History page">
+    Click **Compliance Menu** in the page header and choose **History**. The page is titled **Check History**.
+  </Step>
+  <Step title="Check the company scope">
+    Look at the company selector. The table follows the company you select.
+  </Step>
+  <Step title="Filter the table">
+    Use the column filters on **Company**, **Check**, **Entity**, **Run**, **Status**, **Completed By**, **Notes**, and **Date**.
+  </Step>
+  <Step title="Open an instance">
+    Click a row to open the check as a read-only historical record.
+  </Step>
+</Steps>
 
 ## Understand the columns
 
 | Column | Meaning |
 | --- | --- |
-| **Company** | Company associated with the assessment. |
-| **Check** | Requirement assessed; a flag or paperclip can indicate additional context or files. |
-| **Entity** | The assessed company, location, or device. |
-| **Run** | Assessment run containing the instance. |
-| **Status** | Recorded status label. Completed assessments can have unsuccessful results. |
-| **Completed By** | Completing user when recorded; the display can fall back to the last updating user. |
-| **Notes** | Available note preview. Permitted MSP writers can also see internal notes. |
-| **Date** | Last-updated timestamp for the assessment, not necessarily its completion date. |
+| **Company** | The company the assessment belongs to. |
+| **Check** | The requirement assessed. **Flagged** appears under the title when the check is flagged, and a paperclip with a file count appears when files are attached. |
+| **Entity** | The assessed company, location, or device, labeled **(Company)**, **(Location)**, or **(Device)**. |
+| **Run** | The assessment run that holds the instance. |
+| **Status** | The recorded status label. A completed assessment can still have an unsuccessful status. |
+| **Completed By** | The user who completed it. If none is recorded, MSPortal shows the last user who updated it. |
+| **Notes** | A preview of the **Public:** note. MSP staff with write access also see the **Private:** note. |
+| **Date** | The last-updated time, not always the completion time. |
 
-Hover a note preview when available to read more, or open the assessment for context. A paperclip indicates a file count; it does not include the file contents in the table.
+A paperclip shows the number of attached files. It does not show their contents.
 
 ## Account for the history limit
 
-This page initially loads **up to 100 completed assessments**, ordered by most recently updated. Table filters, sorting, company selection, and local pagination operate on those loaded records; they do not automatically retrieve every older assessment.
+The page loads **up to 100 completed assessments**, newest update first. Filters, sorting, company selection, and paging work only on those loaded records. They do not fetch older assessments.
 
-A company can therefore show few or no rows even when older history exists outside the loaded set. If you cannot find an older instance, open the relevant check’s [History panel](/user-guides/compliance/read-evidence-and-history#review-earlier-completed-assessments), or ask your MSP to locate it. Do not use this page’s row count as a lifetime total.
+A company can show few or no rows even when older history exists. To find an older instance, open the check from **Compliance > Tree** or **List** and use its **History** tab, as described in [Read compliance guidance, evidence, and history](/user-guides/compliance/read-evidence-and-history#review-earlier-completed-assessments). You can also ask your MSP.
 
 ## Read a completed instance
 
-The detail dialog opened from this page is marked as a historical record and disables assessment field and note editing. Review the run, target, status, public findings, and available evidence. Close it to return to the list.
+<Steps>
+  <Step title="Open the row">
+    Click the row. The check opens with a **Historical Record** notice: **You are viewing a completed instance of this check. All fields are read-only.**
+  </Step>
+  <Step title="Review the record">
+    Read the run, target, status, public notes, and any uploads.
+  </Step>
+  <Step title="Close the record">
+    Click **Close** to return to the list.
+  </Step>
+</Steps>
 
-This is a recorded completed instance, not a reconstruction of every change over time. Do not infer that a past result still describes the current environment. Review the latest assessment separately.
+A completed instance is a snapshot. It does not describe the environment today. Open the latest assessment for the current result.
 
 ## Export the loaded history
 
-1. Check the current company scope and table filters.
-2. Select **Export CSV** in the table toolbar.
-3. Open the downloaded file and verify its date range and records.
+<Steps>
+  <Step title="Set the filters">
+    Choose the company and table filters you want.
+  </Step>
+  <Step title="Export">
+    Click **Export CSV** in the table toolbar. The file is named `compliance-history`.
+  </Step>
+  <Step title="Check the file">
+    Open the CSV and check its dates and rows.
+  </Step>
+</Steps>
 
-The CSV includes the filtered records from the loaded history set, across its local table pages. It does not fetch assessments beyond the initial 100-record limit. It contains company, check, entity, run, status, completing or updating user, last-updated date, priority, flag, public notes, and file count. The History exporter adds private notes only for the permitted internal writer view.
+The CSV holds the filtered records from the loaded set, across all table pages, and never more than the 100 loaded assessments. It always has the same columns: Company, Check, Entity, Run, Status, Completed By, Date, Priority, Flagged, Public Notes, Files Attached, and Private Notes for users who may see them. Notes are plain text. Download attached files from the assessment.
 
-The export uses a fixed field set rather than the table’s visible columns. Notes become plain text. Attached files must be downloaded separately from the assessment.
+## Troubleshooting
 
-## Troubleshoot an empty page
-
-Check filters, company scope, and the 100-record limit first. A load failure can also produce an empty table. Reload and ask your MSP to investigate if an expected completed instance is missing. An empty table is not proof that no assessments have been completed.
+| Problem | What to do |
+| --- | --- |
+| **No check history found matching your filters** | Clear the column filters and check the company selector. Remember that only the latest 100 completed assessments load. |
+| An older assessment is missing | It is outside the 100 loaded. Use the check's **History** tab, or ask your MSP. |
+| The table is empty after a load error | Reload the page. If it keeps failing, ask your MSP to investigate. An empty table does not prove nothing was completed. |
+| I cannot edit the record | Historical records are read-only. Open the current assessment to make changes. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Check History show every assessment ever completed?">
-    No. The initial result is limited to the 100 most recently updated completed instances. Local filters and pagination do not fetch older records.
+    No. It shows the 100 most recently updated completed assessments.
   </Accordion>
-  <Accordion title="Why is an older company assessment missing after I select the company?">
-    Company filtering is applied to the loaded result set. The older assessment can be outside that set. Check the relevant assessment’s History panel or ask your MSP.
+  <Accordion title="Why is an older company assessment missing after I pick the company?">
+    The company filter works on the loaded records. The older assessment can be outside them.
   </Accordion>
   <Accordion title="Is Date the date the check was completed?">
-    This table displays and filters the last-updated timestamp. It is not necessarily the completion timestamp.
+    No. It is the last-updated time.
   </Accordion>
-  <Accordion title="Does Completed By always identify the person who completed it?">
-    When a completing user is unavailable, the display can fall back to the last updating user. Verify the underlying record before using the display as audit evidence.
+  <Accordion title="Does Completed By always name the person who completed it?">
+    Not always. When no completing user is recorded, it shows the last user who updated the record.
   </Accordion>
   <Accordion title="Does the CSV contain all older history?">
-    No. It exports filtered records from the loaded set, limited by the initial 100 records. It does not perform an all-history download.
+    No. It exports the filtered records from the 100 loaded.
   </Accordion>
   <Accordion title="Is this the same as the History tab inside a check?">
-    No. This page lists completed instances across checks and runs. The check’s History panel compares completed instances of the same check for the company.
+    No. This page lists completed instances across checks and runs. The check's tab lists completed instances of that check for the company.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read compliance guidance, evidence, and history](/user-guides/compliance/read-evidence-and-history)
+- [Find compliance checks and understand results](/user-guides/compliance/find-and-read-checks)
+- [Export the compliance check list](/user-guides/compliance/export-checks)

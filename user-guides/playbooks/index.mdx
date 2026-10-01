@@ -1,66 +1,85 @@
 ---
 title: "Use playbooks to prepare compliance reviews"
-description: "Choose reusable check content, import it, then configure an assessment."
+description: "Pick a playbook, import its checks into your tenant, then set up the assessment for your clients."
 icon: book
 ---
 
-**Audience:** MSP staff preparing compliance reviews. Company users read the assessments shared by their IT provider; they do not import the MSP's playbook catalog.
+A playbook is a ready-made set of compliance checks. This guide shows MSP staff how to go from choosing a playbook to running an assessment. Company users see the finished assessments their IT provider shares. They do not import playbooks.
 
-A playbook is reusable source content for compliance checks. Import it into the tenant library, review the copied checks, then configure the relevant company or device assessment. Import is not a completed security review or a configuration change to a provider.
+## Before you start
 
-## Choose a starting point
+- You need `read_settings_playbooks` to browse and `manage_settings_playbooks` plus an active billing account to import.
+- Your tenant needs at least one status list. The import asks you to choose one.
+- Importing copies checks into your tenant. It does not change any endpoint, start an assessment or assign checks to a company.
 
-Open **Settings > Compliance > Playbooks**. **Best Practices** groups operational and technology reviews. **Security Frameworks** includes the available CIS benchmark catalog and framework families such as NIS2. Search by name or description when you already know what you need.
+## From playbook to assessment
 
-<Frame caption="MSP example: the released library entry cards. Catalog counts can change.">
-  <img src="/images/product/playbooks-library-paths.png" alt="MSP example: the released library entry cards. Catalog counts can change." width="1856" height="506" />
-</Frame>
+<Steps>
+  <Step title="Open the Playbooks library">
+    Go to **Settings > Compliance > Playbooks**. Click **Best Practices** for broad operational and technology reviews, or **Security Frameworks** for **CIS Benchmarks**, **CAN/DGSI 104** and **NIS2**. Or type in **Search all playbooks...**.
 
-Review the actual card name, version and check count. The page does not guarantee a fixed list of frameworks, every vendor's latest release or the same number of checks in every playbook.
+    <Frame caption="The Playbooks home page with the Best Practices and Security Frameworks cards.">
+      <img src="/images/product/playbooks-library-paths.png" alt="The Playbooks home page with the Best Practices and Security Frameworks cards" width="1856" height="506" />
+    </Frame>
+  </Step>
+  <Step title="Read the checks">
+    Click the playbook's name to open its details. The window is read-only. Click **Cancel** to close it. Check the card's version and check count.
+  </Step>
+  <Step title="Import the playbook">
+    Click **Add** on the card. In **Add Playbooks to Tenant**, check the folder, choose a **Status list**, review the **Device types** if shown, then click **Add to Tenant**. A card marked **Imported** was imported before, and importing again makes a second copy. See [Playbook settings](/user-guides/settings/playbooks) for every dialog option.
+  </Step>
+  <Step title="Tune the imported checks">
+    Open **Settings > Compliance > Checks** and find the folder named in the import message. Edit the guidance and which companies and devices each check applies to. See [Compliance settings](/user-guides/settings/compliance).
+  </Step>
+  <Step title="Put the group in a run template">
+    Open **Settings > Compliance > Runs**. Create a template, or open one, then add the imported group on its **Groups** tab.
+  </Step>
+  <Step title="Run the assessment">
+    Run the template against the companies you choose, collect evidence and review the results in [Compliance](/user-guides/compliance/index).
+  </Step>
+</Steps>
 
-## Move from a playbook to an assessment
+A playbook standardizes the questions you ask every client. It does not supply evidence or certify a client. Check the product version and the client's scope before you assign a benchmark.
 
-1. Open the playbook details to read its check list. Close the preview when finished.
-2. Use **Add** to review the destination folder, status list and any device-type suggestions.
-3. Submit **Add to Tenant** only after reviewing those choices. The [settings guide](/user-guides/settings/playbooks) explains the distinct immediate Copy action and duplicate-import behavior.
-4. Inspect the imported group and checks under **Settings > Compliance**. Tailor guidance and applicability to the intended review.
-5. Add the relevant group or checks to the appropriate run/template and company scope using [Compliance settings](/user-guides/settings/compliance).
-6. Perform the assessment, record evidence and review the results in [Compliance](/user-guides/compliance/index).
+## Keep imported content current
 
-A playbook can help standardize questions across clients. It does not supply missing evidence, decide every exception or certify the client. Check the applicable product version and client scope before assigning a benchmark.
+Importing a newer catalog version does not update your earlier copies. Note which version you imported and review what changed before you import again. The **Imported** badge only shows that a playbook was imported once. If you are unsure what an earlier import did, check **Settings > Compliance > Groups** before you import again.
 
-## Keep copied content current
-
-Track which catalog version you imported and review later changes before creating another copy. The **Imported** badge helps identify prior imports, but a missing badge is not sufficient reason to repeat an uncertain operation. Inspect the tenant library if a previous import's result is unclear.
-
-Use [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks) when selecting CIS product families and L1/L2 variants. Keep benchmark profiles distinct from CIS Controls Implementation Groups. Use [Adding NIS2 playbooks](/user-guides/compliance/adding-nis2-playbooks) for clients subject to the EU NIS2 directive.
+For CIS product families and L1 or L2 profiles, see [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks). CIS benchmark profiles are different from CIS Controls Implementation Groups. For clients under the EU NIS2 directive, see [Adding NIS2 playbooks](/user-guides/compliance/adding-nis2-playbooks).
 
 ## Troubleshooting
 
-If you can browse but cannot import, ask an MSP administrator to check the relevant management permission and billing. If a check group exists but a company has no assessment, review run/company assignment. If results appear incomplete, inspect actual assessment status and evidence rather than treating the imported check count as completed work.
+| Problem | What to do |
+| --- | --- |
+| **Add** is disabled | Ask an administrator for `manage_settings_playbooks` and check that billing is active. |
+| The Playbooks tab is missing | Ask an administrator for `read_settings_playbooks`. |
+| The imported group exists but a company has no assessment | Add the group to a run template and run it against that company. |
+| You cannot find the imported checks | Look in the folder the import message named, under **Settings > Compliance > Checks**. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Is a playbook a completed assessment?">
-    No. It supplies check content. Assign the review, perform the assessment and record evidence separately.
+  <Accordion title="Is a playbook a finished assessment?">
+    No. It is check content. You still run the assessment and record evidence.
   </Accordion>
-  <Accordion title="Can Company users import playbooks?">
-    This is an MSP settings workflow. Company users read the assessments shared by their IT provider.
+  <Accordion title="Can company users import playbooks?">
+    No. Importing is an MSP settings task.
   </Accordion>
-  <Accordion title="Does importing change endpoint configurations?">
-    No. Import adds tenant check content and associated groups; provider remediation is a separate workflow.
+  <Accordion title="Does importing change endpoint settings?">
+    No. It adds checks and a group to your tenant. Fixing a client's configuration is separate work.
   </Accordion>
-  <Accordion title="Are every framework and latest benchmark always available?">
-    Use the actual catalog shown in your account, including its product names and versions.
+  <Accordion title="Are all frameworks and the latest benchmarks always available?">
+    Use the catalog your account shows, with its names, versions and check counts.
   </Accordion>
-  <Accordion title="Does an imported group automatically give every company a completed review?">
-    No. Verify the intended company/run assignment and actual assessment results.
+  <Accordion title="Does an imported group give every company a review?">
+    No. Add it to a run template and run it for the companies you choose.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
-- [Compliance settings](/user-guides/settings/compliance)
 - [Playbook settings](/user-guides/settings/playbooks)
-- [Compliance assessments](/user-guides/compliance/index)
+- [Compliance settings](/user-guides/settings/compliance)
+- [Compliance](/user-guides/compliance/index)
+- [Adding CIS Benchmarks](/user-guides/compliance/adding-cis-benchmarks)
+- [Adding NIS2 playbooks](/user-guides/compliance/adding-nis2-playbooks)

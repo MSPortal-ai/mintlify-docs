@@ -4,304 +4,322 @@ description: Configure organization-wide settings, custom domains, and branding
 icon: building-columns
 ---
 
-Tenant Settings controls organization-wide configuration including company details, custom domains, branding, and security options. Access depends on your tenant-settings permissions; individual actions can require additional management access.
+Tenant Settings controls your organization's details, locations, AI features, custom domains and branding. This page is for MSP staff who manage those settings.
 
-## Accessing Tenant Settings
+## Before you start
 
-1. Click **Settings** in the sidebar
-2. Select **Tenant** from the settings navigation
+- You need Tenant settings access. Read access lets you view the page. Changing fields, switches, branding and domains needs manage access. The header **Save Settings** button needs write access. **Delete Tenant** shows only to users with manage access.
+- A custom domain needs access to your DNS provider.
 
-Tenant Settings is organized into three tabs: **Details**, **AI**, and **Branding**.
+## Open Tenant Settings
 
-## Save behavior
+<Steps>
+  <Step title="Open Settings > Administration > Tenant">
+    The page has three tabs: **Details**, **AI** and **Branding**.
+  </Step>
+</Steps>
 
-Use the header **Save Settings** for the main form, including Details, AI and custom-domain login-method choices. Wait for the saved result before leaving. Header **Reset** restores the form's saved baseline; it is not a saved undo of earlier changes.
+## Save your changes
 
-Logo uploads, **Save color**, location changes, custom-domain actions and **Save sign-in page** are separate persisted operations. Inspect the result of the action you used; the header cannot discard an upload or domain change that already succeeded.
+The header has **Reset** and **Save Settings** buttons. **Save Settings** stays disabled until you change something.
 
-## Tenant Details
+- **Save Settings** saves the main form. That covers **Details**, the **AI** tab, the custom domain login methods and the AI Home blocks.
+- **Reset** returns the form to its last saved values. It does not undo uploads, **Save color**, location changes, domain changes or **Save sign-in page**. Those save on their own.
+- If you leave the page with unsaved changes, MSPortal asks you to choose **Discard changes** or **Keep editing**.
 
-Basic organization information:
+## Update tenant details
 
-| Field | Description |
-|-------|-------------|
-| **Company Name** | Your organization's display name |
-| **Billing Email** | Email for billing notifications |
-| **Primary Admin** | Main administrator contact |
+<Steps>
+  <Step title="Open the Details tab">
+    The **Tenant Details** card holds the basic organization fields.
+  </Step>
+  <Step title="Edit the fields">
+    | Field | What it is |
+    |-------|------------|
+    | **Company Name** | Your organization's display name. Required. |
+    | **Billing Email** | Where billing notifications go. |
+    | **Primary Admin** | The main administrator contact. Pick a current staff user from the list. |
+    | **Restrict users to assigned companies only** | When checked, users only see companies they are assigned to. Assign companies in [Users & Roles](/user-guides/settings/users-roles). Roles with **Bypass company restrictions** still see every company. |
+  </Step>
+  <Step title="Click Save Settings">
+    A confirmation appears and the card shows when it was last updated.
+  </Step>
+</Steps>
 
-## Locations and preferences
+## Manage locations and preferences
 
-Review **Locations** on Details. Create or edit a location in its own dialog, save it there and check the resulting record. Setting a primary location and deleting a location use their own actions; check the target location and any confirmation. These changes are separate from the header form save.
+<Steps>
+  <Step title="Find the Locations & Preferences card on the Details tab">
+    It lists your locations. Each one shows its name, its address, and a **Primary** badge on the primary location.
+  </Step>
+  <Step title="Click Add Location">
+    Enter a **Location Name** (required), the **Address**, and an optional **AI Context**. The AI assistant uses the name and context to answer location questions. Click **Add**.
+  </Step>
+  <Step title="Edit, delete or set a primary location">
+    Open the location's actions menu and choose **Set as primary**, **Edit location** or **Delete location**. Deleting the primary location promotes another location. Each of these saves right away. You do not need **Save Settings**.
+  </Step>
+  <Step title="Set the preferences">
+    Choose a **Timezone**, a **Default Currency** and a **Default Language**. Leave **Default Currency** on **Use country default** to derive it from the country. Users and companies can override the language, and companies can override the currency. Click **Save Settings**.
+  </Step>
+</Steps>
 
-Review the timezone, language/locale and currency preferences offered in Details. Save form changes with **Save Settings**. The data-residency card reports stored-data and application-serving regions; it does not move the tenant's data or offer a region-change control.
+The **Data residency & hosting** card shows your data region, database region and application region. It is read-only. It does not move your data.
 
-## Tenant Security Settings
+## Configure AI features
 
-### Restrict to Assigned Companies
+<Steps>
+  <Step title="Open the AI tab and stay on General">
+    **General** has the AI switches. The other sections are **Context**, **Home page** and **Assistant panel**.
+  </Step>
+  <Step title="Set Enable all AI-powered features">
+    Check it to allow AI for your whole organization. Uncheck it and no users, automations or background jobs can generate AI content.
+  </Step>
+  <Step title="Set Enable AI features for client users">
+    Uncheck it so company users get the non-AI experience while your team keeps AI. This switch is disabled while the master switch is off, because turning the master switch off disables AI for everyone.
+  </Step>
+  <Step title="Set AI-Powered Home Page (Global)">
+    Check **Enable AI assistant on the home page for chat-based navigation and queries**. When unchecked, every company sees the classic home page. When checked, you can switch individual companies in **Settings > Companies**. This box is also disabled while the master switch is off.
+  </Step>
+  <Step title="Click Save Settings">
+    All three switches are on by default.
+  </Step>
+</Steps>
 
-When enabled:
-- Users only see data for companies they're explicitly assigned to
-- Improves data isolation between teams
-- Requires company assignments in user management
+### Add AI context
 
-<Note>
-Roles with **Bypass Company Restrictions** enabled will still have access to all companies.
-</Note>
-
-## AI Settings
-
-The **AI** tab controls AI-powered features for your organization. Two independent switches let you decide who gets AI: everyone, only your internal team, or no one.
-
-### AI Features (Master Switch)
-
-The **Enable all AI-powered features** switch turns AI on or off for your entire organization. When disabled, users cannot generate new AI content.
-
-Review the affected AI controls and workflows after saving. This switch is not a record-deletion operation or evidence that every already-running background task has stopped.
-
-### Client-facing AI
-
-The **Enable AI features for client users** switch controls whether your client (company) users get AI-powered features. When disabled, client users see a non-AI experience while your internal team can continue using AI.
-
-<Note>
-Both switches are enabled by default. The client-facing switch is only available while the master switch is on: turning off the master switch disables AI for everyone, including client users.
-</Note>
-
-After changing either switch, click **Save Settings** to apply.
-
-The **General** section also contains the **AI-Powered Home Page** global toggle. The **Context** section lets you provide business context and contact information the AI assistant can use.
+<Steps>
+  <Step title="Open AI > Context">
+    Fill in what the AI assistant can share and use: the portal name (**What do you call the Portal?**), **AI advisor name**, **Support Email**, **Support Phone**, **Sales Phone**, **Emergency Phone**, **Business Hours**, **Website URL** and **General Notes**.
+  </Step>
+  <Step title="Click Save Settings">
+    **General Notes** holds up to 3,500 characters.
+  </Step>
+</Steps>
 
 ### Customize the AI Home welcome screen
 
-Use **Settings > Tenant > AI > Home page** to set the background, greeting, and quick-action blocks shown on AI Home. You need permission to manage Tenant Settings to edit these controls. To see the result on **Home**, AI features and **AI-Powered Home Page** must be enabled for the viewer. For a company user, AI Home must also be enabled for that company.
-
 <Steps>
-  <Step title="Open Home page settings">
-    Go to **Settings > Tenant**, select **AI**, then select **Home page** inside the AI card. The right-hand preview shows sample welcome text and blocks as you edit.
+  <Step title="Open Settings > Tenant > AI > Home page">
+    You need manage access to edit these controls. The preview on the right shows sample welcome text and blocks as you edit.
   </Step>
   <Step title="Upload a background image">
-    Under **Background image**, click **Upload image** and choose a JPG (or JPEG), PNG, or WebP file no larger than 3 MB. Wait for the upload confirmation and check the image preview. A large landscape image, such as 1920 × 1080 pixels, is a useful starting point; that size is a recommendation, not an upload requirement. The image fills the welcome area and crops around the center on narrower screens. A light or dark overlay keeps the greeting readable, so choose a simple image without important text near its edges.
+    Under **Background image**, click **Upload image** and choose a JPG, PNG or WebP file no larger than 3 MB. Wait for the upload confirmation and check the preview. The image applies after you save in the last step. A large landscape image such as 1920 × 1080 pixels is a good start. The image fills the welcome area and crops around the center on narrow screens, and MSPortal adds an overlay to keep the text readable.
   </Step>
   <Step title="Personalize the welcome text">
-    In **Phrasing**, edit **Greeting label**, **Headline**, **Subheadline**, and **Text entry placeholder**. You can include `{greeting}`, `{name}`, `{tenantName}`, or `{portalName}`. For example, use `{greeting}` for the label, `{name}` for the headline, and `How can we help today?` for the subheadline. Empty fields use the standard welcome text.
+    Under **Phrasing**, edit **Greeting label**, **Headline**, **Subheadline** and **Text entry placeholder**. You can use `{greeting}`, `{name}`, `{tenantName}` and `{portalName}`. For example, use `{greeting}` for the label and `{name}` for the headline. Empty fields use the standard welcome text.
   </Step>
-  <Step title="Set the shortcut blocks">
-    Under **Blocks under the text entry**, click **Add block**. Give each block a **Label**, choose an **Icon**, and optionally add a **Description**. Enter the **Prompt sent to AI** that should start when someone selects the block. For example, label a block `Open a support ticket` and set its prompt to `I want to open a support request`. You can add up to four blocks; custom blocks replace the default quick actions.
+  <Step title="Add shortcut blocks">
+    Under **Blocks under the text entry**, click **Add block**. Give each block a **Label**, an **Icon**, an optional **Description** and a **Prompt sent to AI**. The prompt runs when someone selects the block. For example, label a block `Open a support ticket` with the prompt `I want to open a support request`. You can add up to four blocks. Custom blocks replace the default quick actions.
   </Step>
   <Step title="Save and check Home">
-    Review the sample preview, then click **Save Settings** in the page header. The **Save** button on a block also saves the tenant settings form. Open **Home** with an account for which AI Home is enabled, and check the background and text on both desktop and phone widths. The sample preview is illustrative; the live greeting uses the viewer's name and time of day.
+    Click **Save Settings** in the header. The **Save** button on a block saves the same form. Then open **Home** with an account that has AI Home enabled, on a desktop and a phone, and check the background and text. The preview is only a sample. The live greeting uses the viewer's name and the time of day. For a company user, AI Home must also be enabled for that company.
+
+    <Frame caption="Example AI Home settings with a background, personalized welcome, and shortcut blocks.">
+      <img src="/images/product/tenant-ai-home-customization.png" alt="AI Home settings showing an uploaded background image, personalized welcome phrasing, shortcut blocks, and sample preview." width="1280" height="1173" />
+    </Frame>
   </Step>
 </Steps>
 
-<Frame caption="Example AI Home settings with a background, personalized welcome, and shortcut blocks.">
-  <img src="/images/product/tenant-ai-home-customization.png" alt="AI Home settings showing an uploaded background image, personalized welcome phrasing, shortcut blocks, and sample preview." width="1280" height="1173" />
-</Frame>
+To remove the image, click **Remove image**, then **Save Settings**. To restore the standard phrasing and quick actions, click **Reset to default**, then **Save Settings**.
 
-To remove the image, click **Remove image**, then **Save Settings**. To restore the standard phrasing and quick actions, click **Reset to default**, then **Save Settings**. Check the live **Home** page after saving; the preview uses example content and only shows two blocks at once.
-
-## Custom Domains
-
-Configure custom domains to access MSPortal with your own branding. Custom domains are managed in the **Domains** card on the **Branding** tab.
-
-### Adding a Custom Domain
+### Customize the Assistant panel
 
 <Steps>
-  <Step title="Enter Domain">
-    Type your custom domain (e.g., `portal.yourcompany.com`)
+  <Step title="Open AI > Assistant panel">
+    This section sets the starter questions people see when they open the assistant from any page.
   </Step>
-  <Step title="Copy CNAME Target">
-    Copy the provided CNAME target value
+  <Step title="Add or edit starter questions">
+    Click **Add question** and enter a **Label**, an **Icon** and a **Prompt sent to the assistant**. You can add up to six. Remove them all to open the panel with only the prompt box. **Reset to default** restores the standard questions.
   </Step>
-  <Step title="Update DNS">
-    Add a CNAME record with your DNS provider pointing to the target
-  </Step>
-  <Step title="Verify Domain">
-    Click **Re-check** to verify DNS propagation
-  </Step>
-  <Step title="Set Primary">
-    Optionally mark as primary domain
+  <Step title="Click Save Settings">
+    The panel's **Preview** updates as you edit.
   </Step>
 </Steps>
 
-Domain creation and **Set Primary** save independently of the header form. **Re-check** retrieves and can update verification status. Inspect the returned state before sharing the domain; waiting or returning to the page is not proof that DNS is active.
+## Add a custom domain
 
-### Domain Status
+Custom domains live in the **Domains** section of the **Branding** tab.
+
+<Steps>
+  <Step title="Open Branding > Domains">
+    The **Project CNAME target** is shown at the top with a **Copy** button.
+  </Step>
+  <Step title="Enter the domain">
+    Type it into **Domain**, for example `portal.yourcompany.com`. Check **Primary** if this should be the primary domain.
+  </Step>
+  <Step title="Click Add">
+    The **DNS setup** dialog opens when DNS records are needed. It shows the **Routing record**, which is a CNAME for subdomains and an A record for apex (root) domains. It also shows **Verification records** (TXT) that you must add.
+  </Step>
+  <Step title="Add the records at your DNS provider">
+    Copy each record with its copy button. DNS changes can take up to 24 hours, and often finish sooner.
+  </Step>
+  <Step title="Click Re-check on the domain's row">
+    When DNS is ready the domain becomes **Active** and SSL is set up automatically. If it is still waiting, a message says the domain is still verifying. Click **DNS setup** on the row to see the records again.
+  </Step>
+  <Step title="Set the primary domain">
+    Click **Set primary** on the row you want. Domains save on their own. You do not need **Save Settings**.
+  </Step>
+</Steps>
 
 | Status | Meaning |
 |--------|---------|
-| **Active** | Domain is verified and working |
-| **Pending** | Waiting for DNS verification |
-| **Error** | DNS configuration issue |
+| **Active** | The domain is verified and working. |
+| **Pending DNS** | Waiting for the DNS records. A **TXT record required** note shows under it. |
+| **Error** | The DNS setup has a problem. Check the records and click **Re-check**. |
 
-### Sign-In Methods for Custom Domains
+To remove a domain, click **Remove** on its row and confirm. This detaches the domain and deletes its record.
 
-Choose which sign-in options appear on the sign-in page of your custom domains. The **Custom domain login methods** section sits below the domain list in the **Domains** card, with a checkbox for each method:
+### Choose sign-in methods for custom domains
 
-- **Sign in with Microsoft**
-- **Sign in with Google**
-- **Send Magic Link** (email sign-in link)
+<Steps>
+  <Step title="Scroll to Custom domain login methods">
+    It sits below the domain list in the **Domains** section.
+  </Step>
+  <Step title="Check or uncheck the methods">
+    The methods are **Sign in with Microsoft**, **Sign in with Google** and **Send Magic Link**. At least one must stay on, so the last checked method is locked. These choices affect your custom domains only. MSPortal domains keep every method.
+  </Step>
+  <Step title="Click Save Settings">
+    This one saves with the header button.
+  </Step>
+</Steps>
 
-Uncheck a method to remove it from the sign-in page of your custom domains, so the page shows only the options your organization actually uses. Click **Save Settings** at the top of the page to apply your changes.
+## Set your brand color
 
-<Note>
-At least one sign-in method must remain enabled, so the last enabled method cannot be turned off. These choices only affect your custom domains: MSPortal domains keep all sign-in methods available.
-</Note>
-
-## Enhanced Branding
-
-Customize your organization's branding:
-
-<Frame caption="Current Tenant Branding controls with separate Save color and built-in light/dark previews.">
+<Frame caption="Branding colors with separate Save color and built-in light and dark previews.">
   <img src="/images/product/tenant-branding-colors.png" alt="Tenant branding color controls and light/dark sample previews." width="1800" height="1240" />
 </Frame>
 
-### Brand Color
-
-Set your primary brand color, used for buttons, links, sidebar highlights, and other branded UI across the app.
-
 <Steps>
-  <Step title="Open the Colors Section">
-    In the Branding card, open the **Colors** section.
+  <Step title="Open Branding > Colors">
+    The brand color drives buttons, links, sidebar highlights, focus rings, chart primary color and status badges that use the brand scale.
   </Step>
-  <Step title="Pick Your Color">
-    Use the color picker or type a hex code into the input. Short hex values such as `#0e9` and full six-digit hex such as `#7c3aed` are both accepted.
+  <Step title="Pick your color">
+    Use the swatch picker or type a hex code. Three-digit values such as `#0e9` and six-digit values such as `#7c3aed` both work.
   </Step>
-  <Step title="Preview in Light and Dark Mode">
-    Preview cards show how buttons, sidebar items, badges, and links will look in both light and dark themes. The dark-mode variant is generated automatically from your chosen color.
+  <Step title="Check the previews">
+    The previews show buttons, sidebar items, badges and links in light and dark mode. MSPortal creates the dark variant from your color.
   </Step>
-  <Step title="Save">
-    Click **Save color** and wait for confirmation. Review the resulting light and dark previews and reload a portal page to check the saved brand.
+  <Step title="Click Save color">
+    Wait for the **Brand color saved** message, then reload a portal page to check it. **Save color** is a separate save from **Save Settings**.
   </Step>
 </Steps>
 
-<Note>
-The **Reset** button restores the default MSPortal teal color. You will be prompted to confirm before reverting.
-</Note>
+Click **Reset** next to **Save color** to go back to the default MSPortal color. You confirm first, and it is saved right away. **Reset** is disabled until you have saved a custom color.
 
-**Where the brand color appears:**
+Your brand color also applies to the public [client onboarding portal](/user-guides/client-onboarding/client-portal). No extra setup is needed.
 
-- Primary buttons and call-to-action buttons
-- Links and link hover states
-- Sidebar active item highlights
-- Focus rings and selection highlights
-- Chart primary color
-- Status badges that use the brand scale
-
-### Client Onboarding Portal Branding
-
-Your brand color automatically applies to the public [client onboarding portal](/user-guides/client-onboarding/client-portal) as well. When a client opens their onboarding link, the portal uses your tenant's colors and logo so it feels like part of your brand, not a generic page. No separate configuration is needed.
-
-### Logo Options
-
-| Logo Type | Size | Used For |
-|-----------|------|----------|
-| **Primary Logo (Light)** | 140×32px | Expanded sidebar (light mode) |
-| **Small Icon (Light)** | 32×32px | Collapsed sidebar (light mode) |
-| **Primary Logo (Dark)** | 140×32px | Expanded sidebar (dark mode) |
-| **Small Icon (Dark)** | 32×32px | Collapsed sidebar (dark mode) |
-| **Favicon** | 32×32px | Browser tab icon |
-| **Reporting Logo** | Varies | PDF reports and exports |
-
-### Custom Sign-In Page
-
-Use the **Sign-In Page** section to customize the first page clients see when they visit one of your custom domains. These settings do not change the sign-in page on MSPortal-owned domains.
-
-#### Prerequisites
-
-- An active [custom domain](#custom-domains)
-- Access to manage Tenant Settings or Launch Center settings
-- A primary light logo uploaded under **Branding > Light** if you want your logo on the sign-in card
+## Upload logos and a favicon
 
 <Steps>
-  <Step title="Open Sign-In Page settings">
-    Go to **Settings > Tenant > Branding**, then select **Sign-In Page** in the Branding card.
+  <Step title="Open the Branding tab and choose Light Mode or Dark Mode">
+    Each tab has two upload areas. **Primary Logo (Light)** and **Primary Logo (Dark)** show in the expanded sidebar. **Small Icon (Light)** and **Small Icon (Dark)** show in the collapsed sidebar.
   </Step>
-  <Step title="Set the logo size">
-    Move the **Logo size** slider until the logo fits the sign-in card. The preview updates as you make changes.
+  <Step title="Click Upload and choose a file">
+    Use a PNG, JPEG or SVG file up to 1.5 MB. Recommended sizes are 140 × 32 px for primary logos and 32 × 32 px for small icons. Upload separate light and dark versions for the best result.
   </Step>
-  <Step title="Choose a background">
-    Select **Default**, **Solid color**, **Gradient**, or **Image**.
+  <Step title="Position the image and click Save & Apply">
+    The crop dialog lets you zoom, rotate and position the image. Closing it without **Save & Apply** does not save anything. A success message confirms the upload.
+  </Step>
+  <Step title="Upload a favicon on the Favicon tab">
+    Use a PNG or ICO file under 256 KB. 32 × 32 px is recommended. It shows in browser tabs when people use your custom domain. Favicons have no crop step.
+  </Step>
+  <Step title="Upload a reporting logo on the Reports & Certs tab">
+    This logo appears on generated reports, documents and training certificates. It can be any size or aspect ratio. A high-quality PNG with a transparent background works best.
+  </Step>
+</Steps>
 
-    For an image, upload a PNG, JPG, or WEBP file up to 3 MB. See [Background image requirements](#background-image-requirements) below for recommended dimensions and tips for choosing an image. Use **Photo darkening** to keep the sign-in card readable over a bright image.
+Use **Reset to Default** at the top right of the branding tabs to clear all logos, icons, the favicon and the reporting logo. You confirm first. The **Live Preview** under the tabs shows the logos in the desktop and mobile layouts.
+
+## Custom sign-in page
+
+This changes the sign-in page on your custom domains only. It does not change MSPortal-owned domains.
+
+Before you start, make sure you have:
+- An active [custom domain](#add-a-custom-domain).
+- Manage access to Tenant Settings or Launch Center settings.
+- A **Primary Logo (Light)** uploaded, if you want your logo on the sign-in card.
+
+<Steps>
+  <Step title="Open Settings > Tenant > Branding > Sign-in Page">
+    The preview updates as you change settings.
+  </Step>
+  <Step title="Set the Logo size">
+    Move the slider until the logo fits the card.
+  </Step>
+  <Step title="Choose a Background">
+    Pick **Default**, **Solid color**, **Gradient** or **Image**. A solid color needs a hex value such as `#0f766e`. A gradient has a **Gradient start** and **Gradient end**.
+
+    For an image, click **Upload image** and choose a PNG, JPG or WEBP file up to 3 MB. A landscape photo of 1920 × 1080 pixels or larger works best. The image crops at the edges, and the card covers the center. Avoid text or key details in it. Use **Photo darkening** to keep the card readable over a bright image.
   </Step>
   <Step title="Choose the card style">
-    Enable **Frosted glass card** to make the card slightly transparent with a blur effect. The glass effect appears when you use a custom color, gradient, or image background.
+    Turn on **Frosted glass card** for a slightly transparent card with a blur. The effect shows with a color, gradient or image background, not the default background.
   </Step>
   <Step title="Write the welcome message">
-    Enter a **Welcome title** and **Welcome subtitle**. Leave either field blank to use the standard MSPortal sign-in copy. Review any help instructions as public-facing text; do not include private support details or credentials.
+    Enter a **Welcome title** and **Welcome subtitle**. Leave a field blank to use the standard text. Add **Help instructions** (up to 500 characters) for support details that show below the sign-in options. Everyone who visits the sign-in page can read these, so leave out credentials and private details.
   </Step>
-  <Step title="Preview and save">
-    Uploading a background prepares a draft asset; use **Save sign-in page** to apply the draft configuration. Review the preview, then click **Save sign-in page**. Open the custom domain in a signed-out or private browser window to verify the complete sign-in experience.
+  <Step title="Click Save sign-in page">
+    Uploading a background only prepares a draft. The page does not change until you save. Then open your custom domain in a private browser window, on a desktop and a phone, to check it.
   </Step>
 </Steps>
 
-<Note>
-The custom-domain sign-in page also uses your primary logo, favicon, tenant color palette, and the sign-in methods selected under **Branding > Domains**.
-</Note>
+To clear the background, card style, logo size and welcome text, click **Reset to default** and confirm. Your logos, favicon, brand colors and domains stay as they are.
 
-To remove the custom background, card style, logo size, and welcome copy, click **Reset to default** and confirm. Your uploaded tenant logo, favicon, brand colors, and custom domain remain unchanged.
+The sign-in page also uses your primary logo, favicon, brand colors and the sign-in methods you chose for custom domains.
 
-#### Background image requirements
+## Delete the tenant
 
-When adding your own sign-in background, use these specifications:
+Only users with manage access see the **Danger Zone** card at the bottom of the **Details** tab.
 
-| Setting | Requirement or recommendation |
-|---------|-------------------------------|
-| File format | PNG, JPG (including JPEG), or WEBP |
-| File size | 3 MB or smaller |
-| Recommended dimensions | 1920 × 1080 pixels or larger, in landscape orientation |
+<Steps>
+  <Step title="Click Delete Tenant">
+    A **Delete Tenant** confirmation opens. It warns that all users are signed out right away and that all data is permanently deleted and cannot be recovered.
+  </Step>
+  <Step title="Type the tenant name and confirm">
+    You must type the tenant name to enable the confirm button. After deletion you are signed out.
+  </Step>
+</Steps>
 
-The dimensions are a recommendation, not a minimum upload requirement. If your image is larger than 3 MB, compress it or export a smaller copy before uploading.
+## Troubleshooting
 
-Your image fills the page behind the centered sign-in card. It stays centered and crops at the edges to fit the screen, so phones may show much less of the image's sides than a desktop does.
+| Problem | What to do |
+| --- | --- |
+| **Save Settings** is disabled. | You have not changed anything, a save is running, or you do not have write access to Tenant settings. |
+| Fields and switches are greyed out. | Changing them needs manage access to Tenant settings. Ask an administrator. |
+| The **Enable AI features for client users** or **AI-Powered Home Page** box is disabled. | Turn on **Enable all AI-powered features** first. |
+| I uploaded an AI Home or sign-in background but nothing changed. | Uploads are drafts. Click **Save Settings** for AI Home, or **Save sign-in page** for the sign-in page. |
+| A logo will not upload. | Use PNG, JPEG or SVG up to 1.5 MB. Favicons must be PNG or ICO under 256 KB. |
+| A home or sign-in background will not upload. | Use JPG, PNG or WebP (WEBP for sign-in) at 3 MB or smaller. |
+| The domain stays **Pending DNS**. | Add the routing record and the TXT verification records at your DNS provider, wait for DNS to propagate, then click **Re-check**. Click **DNS setup** to see the records. |
+| The sign-in page changes do not show. | Open an active custom domain, not an MSPortal-owned address, in a private window and reload. |
+| The logo is missing on the sign-in card. | Upload a **Primary Logo (Light)** on the **Light Mode** tab. |
+| Frosted glass looks solid. | Pick a custom color, gradient or image background. |
+| A sign-in option is missing on the custom domain. | Check **Custom domain login methods** in the **Domains** section and save. |
 
-- Choose an image with a simple background so the sign-in card is easy to read.
-- Avoid text or important details in the image: the card covers the center, and the edges may be cropped. Use your separately uploaded tenant logo for branding on the card.
-- Adjust **Photo darkening** if the background is too bright.
-- After clicking **Save sign-in page**, check your custom domain in a signed-out or private browser window on both a desktop and a phone.
-
-#### Sign-In Page Troubleshooting
-
-| Issue | Resolution |
-|-------|------------|
-| Changes do not appear | Confirm you opened an active custom domain, not an MSPortal-owned address, and reload the signed-out page |
-| The logo is missing | Upload a **Primary Logo (Light)** under **Branding > Light** |
-| Frosted glass looks solid | Select a custom color, gradient, or image background; the glass effect is not applied to the default background |
-| An image will not upload | Use PNG, JPG, or WEBP and keep the file at or below 3 MB |
-| A sign-in option is missing | Review **Custom domain login methods** under **Branding > Domains** |
-
-### Upload and crop
-
-Use the format and size limits shown by the selected upload control. For logos, confirm the crop and wait for the upload result; closing the cropper is not a save. Favicon and reporting-logo uploads have their own behavior. Review light and dark variants separately.
-
-## Best Practices
-
-- **Complete all branding** - Upload all logo variants for consistent appearance
-- **Test custom domains** - Verify domains work before sharing with users
-- **Document settings** - Record configuration for disaster recovery
-- **Review periodically** - Update branding when company details change
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does header Reset undo saved uploads or domain changes?">
-    No. Header Reset restores the main form baseline; dedicated uploads and domain actions persist separately.
+  <Accordion title="Does Reset undo saved uploads or domain changes?">
+    No. The header **Reset** returns the main form to its last saved values. Uploads, **Save color**, locations, domain actions and **Save sign-in page** save on their own.
   </Accordion>
-  <Accordion title="Does uploading a sign-in background apply the sign-in design?">
-    No. The upload prepares a draft asset; apply the configuration with Save sign-in page.
+  <Accordion title="Can I move my data to another region?">
+    No. The **Data residency & hosting** card only reports where your data and portal run.
   </Accordion>
-  <Accordion title="Can I move tenant data using the residency card?">
-    No. The card is informational and has no data-region change control.
+  <Accordion title="Where do I save the custom domain login methods?">
+    Use the header **Save Settings**. At least one method must stay on.
   </Accordion>
-  <Accordion title="Where do I save custom-domain login methods?">
-    Use the header Save Settings, keeping at least one sign-in method enabled.
+  <Accordion title="Is the brand color Reset the same as the header Reset?">
+    No. The color **Reset** asks you to confirm and saves the default color right away. The header **Reset** only concerns the main form.
   </Accordion>
-  <Accordion title="Is brand-color Reset the same as header Reset?">
-    No. The color control confirms and saves a return to the default palette; header Reset concerns the main form.
+  <Accordion title="What turns off when I disable AI features?">
+    Users, automations and background jobs can no longer generate AI content. Existing records are not deleted.
+  </Accordion>
+  <Accordion title="Do the sign-in page settings change the MSPortal sign-in page?">
+    No. They apply to your custom domains only.
   </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
-- [Billing Settings](/user-guides/settings/billing) - Subscription management
-- [Users & Roles](/user-guides/settings/users-roles) - User permissions
-- [Settings Overview](/user-guides/settings/index) - All settings options
+- [Billing Settings](/user-guides/settings/billing)
+- [Users & Roles](/user-guides/settings/users-roles)
+- [Settings overview](/user-guides/settings/index)

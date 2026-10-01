@@ -4,34 +4,33 @@ description: 'Assign MSP staff across companies and automate company-team member
 icon: 'users'
 ---
 
-<Note>
-Branch preview for the 2026-09-25 release. These controls are not yet generally available. Screenshots show the unreleased branch UI.
-</Note>
-
-Use a **Global team role** when the same MSP staff should serve every company—for example, a shared service manager or escalation team. Use **Add team members** and **Remove team members** automation actions when membership should change in response to a record or event.
+Use a **Global team role** when the same MSP staff should serve every company, such as a shared service manager or escalation team. Use the **Add team members** and **Remove team members** automation actions when membership should change in response to a record or event. This page is for MSP staff.
 
 Team roles describe responsibilities. They do not replace the Tenant or Company permission roles managed under **Settings > Users & Roles > Roles**.
 
 ## Before you start
 
-- Open **Settings > Users & Roles > Team Roles** as MSP staff.
-- Create the team role and assign its initial staff using your existing company-team controls.
-- Team Role definitions accept read, write, or manage access to either Company Users or Companies settings for viewing, editing, or deleting respectively. Global staff selectors require read Company Users settings; changing global assignments requires write Company Users settings and an active billing state.
-- Saving an automation with a membership action requires write access to both Automation settings and Company Users settings. This workflow selects MSP staff, not customer contacts or Company users.
+- Create the team role first and assign its initial staff on a company's **Team** tab. See [Account teams and Team Roles](/user-guides/getting-started/onboarding/company-roles).
+- Viewing the Global team roles card needs read access to Company Users settings. Changing global assignments needs write access to Company Users settings, and your billing must be active.
+- Saving an automation that has a membership action needs write access to both Automation settings and Company Users settings.
+- These controls select MSP staff, not customer contacts or Company users.
 
-<img src="/images/product/global-team-roles-entry-branch-preview.png" alt="Branch preview: Global team roles card and Configure button in Team Roles settings" width="2250" height="180" />
+<img src="/images/product/global-team-roles-entry-branch-preview.png" alt="Global team roles card and Configure button in Team Roles settings" width="2250" height="180" />
 
 ## Make a team role global
 
 <Steps>
   <Step title="Open the global settings">
-    In **Team Roles**, find **Global team roles** and select **Configure**.
+    Go to **Settings > Users & Roles** and click **Team Roles**. Find **Global team roles** at the top and click **Configure**.
   </Step>
   <Step title="Review the existing members">
     Enabling Global collects the staff already assigned to this role at any company. That combined roster will serve every company, subject to existing company-specific exclusions.
   </Step>
   <Step title="Enable the role">
-    Turn on the switch for the role. Each switch saves immediately; there is no separate Save button. Wait for **Global team role updated** before leaving the dialog.
+    Turn on the switch for the role. Each switch saves at once. There is no Save button. Wait for **Global team role updated** before you close the dialog.
+  </Step>
+  <Step title="Remove someone from a Global role (optional)">
+    Open the role's **Global members** list and click the remove button next to a person. Confirm the prompt. Their inherited assignments are removed from every company. Direct company assignments stay.
   </Step>
 </Steps>
 
@@ -51,47 +50,75 @@ Turning Global off removes inherited assignments. Original company assignments a
 
 ## Automate membership changes
 
-Open **Settings > Automation > New Rule** and configure the trigger, scope and conditions. In **Actions**, choose:
+<Steps>
+  <Step title="Start a rule">
+    Go to **Settings > Platform > Automation Rules** and click **Add Rule**. Set the trigger, scope and conditions. See [Rule Wizard Walkthrough](/user-guides/settings/automation/wizard).
+  </Step>
+  <Step title="Add the action">
+    In **Actions**, click **Add** and choose **Add team members** or **Remove team members**.
+  </Step>
+  <Step title="Choose the role and staff">
+    Pick a team role under **Select a team role**. Pick people under **Select staff members**. For removal you can instead check **Remove everyone in this team role**.
+  </Step>
+  <Step title="Test and save">
+    Click **Run Test**, click **Next**, then click **Create Rule**. Save it inactive first if you are still preparing the rollout.
+  </Step>
+</Steps>
+
+The actions work like this.
 
 | Action | Configuration | Result |
 | --- | --- | --- |
 | **Add team members** | Select a team role and one or more staff members | Adds those people to the matched company's role and clears their exclusions there. Global roles can propagate those additions across companies. |
 | **Remove team members** | Select a team role and specific staff, or select **Remove everyone in this team role** | Removes those members from the matched company's role and records company-specific exclusions. |
 
-<img src="/images/product/team-membership-action-menu-branch-preview.png" alt="Branch preview: Add team members and Remove team members at the top of the automation action menu" width="478" height="855" />
+<img src="/images/product/team-membership-action-menu-branch-preview.png" alt="Add team members and Remove team members at the top of the automation action menu" width="478" height="855" />
 
 The company comes from the triggering record. For a Company rule it is the matched company itself; for other records it is their associated company. Records without an associated company are skipped without a membership change. You cannot configure a different target company inside the action.
 
-<img src="/images/product/team-membership-remove-action-branch-preview.png" alt="Branch preview: Remove team members action with the team role selector and Remove everyone in this team role checked" width="1170" height="650" />
+<img src="/images/product/team-membership-remove-action-branch-preview.png" alt="Remove team members action with the team role selector and Remove everyone in this team role checked" width="1170" height="650" />
 
 **Remove everyone in this team role** resolves the role's membership when the action executes. It does not save a snapshot of today's roster or delete the role itself. New people added to the role later are not permanently blocked by a previous removal run.
 
-Membership actions do not support an approval hold. Review **Specific Companies**, conditions and the rule's Active setting before enabling them. **Run Test** previews matching records; it does not change memberships or prove that an eventual write will succeed.
+Membership actions have no approval hold. Check the rule's scope, conditions and **Enable this rule** setting before you turn it on. **Run Test** lists matching records. It does not change any membership.
 
 ### Example: finish an onboarding handoff
 
-1. Create a company-specific **Onboarding** team role and assign the staff handling the handoff.
-2. Create a rule using an **Onboarding Event** and choose the completion event appropriate to your workflow.
-3. Limit the rule to the intended companies and add any necessary conditions.
-4. Add **Remove team members**, select **Onboarding**, and select **Remove everyone in this team role**.
-5. Review the rule, save it inactive while preparing the rollout, then enable it when ready.
+<Steps>
+  <Step title="Create the team role">
+    Create a company-specific **Onboarding** team role and assign the staff handling the handoff.
+  </Step>
+  <Step title="Create the rule">
+    Add a rule with the **Onboarding** entity and the **Onboarding Event** trigger. Choose the completion event that fits your workflow.
+  </Step>
+  <Step title="Limit the scope">
+    Set **Scope** to **Specific Companies** and pick the intended companies. Add conditions if needed.
+  </Step>
+  <Step title="Add the action">
+    Add **Remove team members**, select **Onboarding** and check **Remove everyone in this team role**.
+  </Step>
+  <Step title="Save inactive, then enable">
+    Save the rule with **Enable this rule** off. Turn it on from the rules list when you are ready.
+  </Step>
+</Steps>
 
-Only the event's associated company loses those assignments. An event without a company is skipped. Review automation logs and the company's team after execution.
+Only the event's company loses those assignments. An event with no company is skipped. After it runs, check **Execution Log** and the company's team.
 
 ## Where the changes appear
 
-Global membership uses the same company-team assignments as existing team views and role-member recipient selection. These actions change membership in MSPortal; they do not change a person's permission-role definition, delete accounts, or write team changes back to your PSA.
+Global membership uses the same company team assignments as the team views and the **Role Members** recipient option in automations. These actions change membership in MSPortal only. They do not change a permission role, delete accounts or write team changes back to your PSA.
 
 ## Troubleshooting
 
 | Symptom | What to check |
 | --- | --- |
-| Roles or staff fail to load | Company Users settings permissions and whether this feature's database release is available. |
-| No roles appear | Create a staff team role first. Parent-company-specific roles are not offered as Global roles. |
-| A member does not inherit into one company | They may have a company-specific exclusion. Explicitly add them back there. |
-| Staff appeared at more companies than expected | Check whether the selected role is Global. |
-| A membership action reports no change | Check the company association, existing membership, selected role and execution result. A repeated add or remove can legitimately change zero rows. |
-| A selector choice can no longer be saved or executed | The selected staff member, company or role may have been removed or changed. Reopen the rule and review its selections. |
+| Roles or staff fail to load | Check your Company Users settings permissions, then reload |
+| No roles appear | Create a staff team role first. Parent-company roles are not offered as Global roles |
+| A member does not inherit into one company | They may have a company-specific exception. Add them back on that company's **Team** tab |
+| Staff appeared at more companies than expected | Check whether the role is Global |
+| A membership action reports no change | Check that the record has a company, the person's current membership and the selected role. Repeating an add or remove can change nothing |
+| A selected person or role no longer works | It may have been removed or changed. Reopen the rule and pick it again |
+| The switch is disabled | You need write access to Company Users settings |
 
 ## Related guides
 

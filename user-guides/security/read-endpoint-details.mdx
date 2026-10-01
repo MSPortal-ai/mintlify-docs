@@ -1,60 +1,85 @@
 ---
 title: "Read security endpoint details"
-description: "Inspect a device's imported identity, provider information, protection status, and available backup details."
+description: "Open an endpoint's side panel to see its identity, source, protection status, and backup details."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with access to Security Endpoints. Available fields depend on the source and imported data.
+Use this page to read the details of one endpoint from Cork or Acronis. It is for company users and MSP staff.
+
+## Before you start
+
+- You need Security read access and an active Cork or Acronis integration.
+- Find the device first. See [Find security endpoints](/user-guides/security/find-endpoints).
+- The panel shows the row already loaded in the table. It does not scan the device or refresh data from the provider.
 
 ## Open the detail panel
 
-1. Open **Security > Endpoints** and [find the device](/user-guides/security/find-endpoints).
-2. Select its row, avoiding the selection checkbox.
-3. Confirm the device name, company, and source at the top of the side panel.
-4. Read the sections below and scroll for additional details.
-5. Close the panel when finished. Opening or closing it does not change the endpoint.
+<Steps>
+  <Step title="Open Endpoints">
+    Open **Security > Endpoints** and find the device.
+  </Step>
+  <Step title="Click the row">
+    Click the row away from its checkbox. A panel opens on the right.
+  </Step>
+  <Step title="Confirm the device">
+    Check the device name, company, and source at the top. Badges beside them show **Online** or **Offline**, the protection status, and the source.
+  </Step>
+  <Step title="Read the sections">
+    Scroll through the sections described below. Close the panel when you finish. Closing it changes nothing.
+  </Step>
+</Steps>
 
-Missing values are often omitted completely. The panel shows the imported row already loaded in the table; opening it does not initiate a new provider scan or prove the record is current.
+Fields without a value are left out of the panel. Which fields appear depends on the source.
 
-## General and provider information
+## Read the General section
 
-**General** can show Device Name, Hostname, Company, OS, OS Version, Architecture, IP Addresses, Source, and Last Seen. Not every provider supplies every field.
+**General** can show **Device Name**, **Hostname**, **Company**, **OS**, **OS Version**, **Architecture**, **IP Addresses**, **Source**, and **Last Seen**.
 
-For **Cork** records, **Integration** shows the integration source, integration identifier, and external device ID when supplied. **Identifiers** contains technical record identifiers that your MSP can use to match records. There is no need to enter those identifiers to use the reader.
+## Read an Acronis record
 
-For **Acronis** records:
+- **Acronis Agent** can show **Agent Version**, **Protection Status**, **Auto Update** (Enabled or Disabled), and **Registered**. These are reported values. You cannot change them here.
+- Online and Protected are separate. A device can be online and unprotected.
+- For Acronis records, **OS Version** shows the agent version in the form **Agent v** followed by the version, and **Last Seen** shows the registration date. Use **Status** in the list for the connection state.
+- **Backup** shows **Last Backup Status**, **Last Backup Time**, and **Backup Size**. This section appears only when Acronis supplies a backup status or a backup size above zero.
 
-- The status badges distinguish Online/Offline from Protection Status. A device can be online without being protected.
-- **Acronis Agent** can show Agent Version, Protection Status, Auto Update, and Registered.
-- **Auto Update** is a reported setting, not a switch you can change here.
-- The current **OS Version** field can contain the Acronis agent version. Do not use it as proof of the installed operating-system version.
-- **Last Seen** currently repeats registration date. Use the separate online state and authorized provider checks to investigate recent connectivity.
+## Read a Cork record
 
-## Available backup information
+**Integration** can show **Integration Source**, **Integration Identifier**, and **External Device ID**. Cork records do not have an Online status or Acronis agent details.
 
-An Acronis **Backup** section can show Last Backup Status, Last Backup Time, and Backup Size. It appears only when the imported row includes a backup status or nonzero size. A missing section, omitted zero size, or absent date does not prove no backup exists.
+## Identifiers
 
-These are imported summary values. The panel has no restore, backup-now, protection-change, or agent-update action. For more backup context, see [device backups](/user-guides/backup/find-device-backups) and [backup activity and details](/user-guides/backup/read-backup-details).
+**Identifiers** lists **Internal ID**, **Integration ID**, and **External ID**. Your MSP can use them to match the record in the provider. You do not need to enter them anywhere.
 
-## Request help
+The panel has no restore, backup now, protection, or update action. For backup history, see [Find device backups](/user-guides/backup/find-device-backups) and [Read backup activity and details](/user-guides/backup/read-backup-details).
 
-Start a Company support request through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the device, company, source, field label, and displayed value. Review and confirm the request rather than assuming that viewing the panel created a ticket.
+## Troubleshooting
 
-MSP staff should match the provider record and confirm freshness before making a change in the authorized management system. Reading this panel does not update the provider or the separate Devices inventory.
+| Problem | What to do |
+| --- | --- |
+| The panel does not open | Click the row text, not the checkbox. |
+| A field is missing | The provider did not supply it. Missing fields are left out. |
+| No **Backup** section | Acronis sent no backup status or size for this device. It does not prove there is no backup. |
+| Data looks old | The panel shows the last synced data. Ask your MSP to check the integration sync. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Can I change protection or Auto Update here?">
-    No. These are read-only imported values. Ask the MSP to use the appropriate provider workflow.
+    No. These are read-only. Your MSP uses the provider to change them.
   </Accordion>
-  <Accordion title="Why is a detail field missing?">
-    Missing values are omitted, and providers supply different fields. Absence is not a successful security or backup result.
+  <Accordion title="Is OS Version the real operating-system version for Acronis?">
+    No. For Acronis it shows the agent version. Check Acronis for the operating-system version.
   </Accordion>
-  <Accordion title="Is Acronis OS Version necessarily the operating-system version?">
-    No. The current mapping can display the agent version there. Check the provider's actual operating-system details.
+  <Accordion title="Does opening the panel refresh the data?">
+    No. It shows the row already loaded in the table.
   </Accordion>
-  <Accordion title="Does opening the panel refresh data from the provider?">
-    No. It displays the row loaded by the table. Confirm the import and provider state when freshness matters.
+  <Accordion title="I am a company user. How do I ask about a device?">
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the device, company, source, and the value you are asking about, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Find security endpoints](/user-guides/security/find-endpoints)
+- [Find devices](/user-guides/devices/find-devices)
+- [Security](/user-guides/security/index)

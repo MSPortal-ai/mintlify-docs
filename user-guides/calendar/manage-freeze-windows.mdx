@@ -1,118 +1,149 @@
 ---
 title: 'Create and manage Calendar freeze windows'
-description: 'Configure tenant, company or site change-freeze periods, recurrence and activation, then verify their Calendar overlays.'
+description: 'Set tenant, company or site change-freeze periods, repeat them, switch them on or off, and check them in the Calendar.'
 icon: 'snowflake'
 ---
 
-**Audience:** MSP administrators with Calendar settings access and Calendar management permission. Company users can [understand freeze windows and report conflicts](/user-guides/calendar/understand-change-freezes).
+Use this page to mark periods when changes are restricted, such as month-end or a client's busy season. It is for MSP administrators. Company users can [understand freeze windows and report conflicts](/user-guides/calendar/understand-change-freezes).
 
-Open **Settings > Calendar > Freeze Windows**. A freeze warns about restricted change periods; it does not automatically cancel meetings, move provider events or enforce every booking restriction.
+A freeze window warns people about restricted periods. It does not cancel meetings, move provider events or block every booking.
+
+## Before you start
+
+- You need Calendar settings access and permission to manage Calendar settings (Manage access to Calendar).
+- Tenant-wide windows can only be created or edited from **Global View**. Set the company selector at the top of the app to Global View first.
+- A Specific site window needs an existing site (location) on the company. This editor does not create sites.
 
 ## Choose the scope
 
-Check the company selector at the top of the app before opening the editor.
-
 | Scope | Use it for |
 | --- | --- |
-| **Tenant-wide** | A period shared across your MSP tenant. Use Global View to create or edit it. |
-| **Company-wide** | A period for the selected Company in the editor. |
-| **Specific site** | A period for one existing Site belonging to the selected Company. |
+| **Tenant-wide** | A period that applies to your whole MSP. Needs Global View. |
+| **Company-wide** | A period for one company. |
+| **Specific site** | A period for one site of one company. |
 
-<Frame caption="MSP example: the three freeze scopes. Tenant-wide is available from Global View.">
+<Frame caption="The three freeze scopes. Tenant-wide is available from Global View.">
   <img src="/images/product/calendar-freeze-scope-menu.png" alt="Freeze Scope menu showing Tenant-wide, Company-wide and Specific site" width="612" height="204" />
 </Frame>
 
-In a scoped company view, tenant-wide windows can still appear but their edit/delete controls are disabled. New windows default to Company-wide; a single selected company is preselected. Use a company within your current permitted scope. Selecting a company in the editor does not grant access to it.
+In Global View a new window starts as **Tenant-wide**. In a company view it starts as **Company-wide** with that company selected. In a company view, tenant-wide windows still show in the list, but their edit and delete buttons are disabled.
 
 ## Create a freeze window
 
 <Steps>
-  <Step title="Open the editor">Select **Add freeze window**.</Step>
-  <Step title="Name the restriction">
-    Enter a clear **Name**, from 2 to 160 characters. Add **Description** if useful, up to 2,000 characters. Explain the work or period the restriction applies to.
+  <Step title="Open Settings > Operations > Calendar">
+    Select the **Freeze Windows** tab.
   </Step>
-  <Step title="Select its scope">
-    Choose **Scope**. Company-wide requires a **Company**. Specific site requires both **Company** and **Site**; select the company first. Changing the company clears the previous site selection.
+  <Step title="Click Add freeze window">
+    The **Add freeze window** dialog opens.
   </Step>
-  <Step title="Set dates and recurrence">
-    Enter **Starts at** and **Ends at**. End must be after Start. Choose **Recurrence** and, for a repeating window, optionally set **Repeat until** to a date on or after the first occurrence.
+  <Step title="Name the window">
+    Enter a **Name** of 2 to 160 characters. Add a **Description** if you like, up to 2,000 characters.
   </Step>
-  <Step title="Decide whether it is active">
-    **Active** is on for a new window. Turn it off to prepare a definition without showing its occurrences in Calendar.
+  <Step title="Choose the scope">
+    Open **Scope** and pick **Tenant-wide**, **Company-wide** or **Specific site**. Company-wide needs a **Company**. Specific site needs a **Company** and then a **Site**. Changing the company clears the site.
   </Step>
-  <Step title="Save the window">
-    Select **Save** inside the dialog and wait for **Freeze window saved**. This saves the definition immediately; there is no additional header Save for the Freeze Windows tab. **Cancel** discards the unsaved dialog.
+  <Step title="Set the dates">
+    Enter **Starts at** and **Ends at**. The end must be after the start.
+  </Step>
+  <Step title="Choose the recurrence">
+    Open **Recurrence** and pick **One time**, **Daily**, **Weekly**, **Monthly** or **Annual**. For a repeating window you can set **Repeat until**.
+  </Step>
+  <Step title="Check Active">
+    **Active** is on for a new window. Turn it off to save a window without showing it in the Calendar.
+  </Step>
+  <Step title="Click Save">
+    Wait for **Freeze window saved**. The **Save** button stays disabled until the name, dates and scope fields are valid. **Cancel** closes the dialog without saving. This tab has no page-header Save.
   </Step>
 </Steps>
 
-## Configure repeating windows
+## How repeating windows work
 
-The start date anchors recurrence and the Start/End fields define each occurrence's time range.
+The start date anchors the repeat, and **Starts at** and **Ends at** define each occurrence.
 
 | Recurrence | Schedule |
 | --- | --- |
-| **One time** | One occurrence at the entered dates/times. |
+| **One time** | One occurrence at the dates you entered. |
 | **Daily** | Every day from the start date. |
 | **Weekly** | Every seven days, on the start date's weekday. |
-| **Monthly** | The start date's day of the month, using the month's last day when that day is unavailable. |
-| **Annual** | The same month/day each year, using the month's last day when needed. |
+| **Monthly** | The start date's day each month. In a shorter month it uses the last day. |
+| **Annual** | The same month and day each year. It uses the month's last day when needed. |
 
-**Repeat until** includes occurrences whose start date falls on that date. It does not cut an occurrence short at midnight. Leave it blank when you do not want an explicit end date, but verify the dates you actually need in Calendar; the displayed/generated range is not an unlimited future schedule.
+**Repeat until** includes occurrences that start on that date. It does not cut an occurrence short. Leaving it blank repeats without an end date, but occurrences are only generated for a window of roughly the next 18 months. Open the Calendar to confirm the dates you need.
 
-When converting a repeating window to **One time**, clear **Repeat until** before changing the recurrence. An old cutoff can remain stored even when its field is hidden. A cutoff before the start date can leave no visible occurrence.
+To turn a repeating window into **One time**, clear **Repeat until** first. A hidden old cutoff can stay saved and leave no visible occurrence.
 
 ## Check time zones
 
-The editor uses your browser's local date/time and saves the browser time zone with the window. There is no separate Time zone selector in this dialog. The settings list displays the saved range using the window's saved time zone, while Calendar can display another viewing zone.
+The dialog uses your browser's time zone and saves it with the window. There is no time zone picker. The list shows each window in its saved zone, while the Calendar shows your viewing zone. When you edit a window from a different zone, check the dates before you click **Save**. Saving applies your current browser zone.
 
-When editing a window from another time zone, review the dates and clock values carefully before saving. Saving uses the current browser zone, which can change the recurrence's local-time interpretation. Check occurrences around daylight-saving changes when relevant.
+## Edit, switch off or delete a window
 
-## Edit, deactivate or delete
+<Steps>
+  <Step title="Edit">
+    Click the pencil on the window, change the fields and click **Save**. **Cancel** keeps the saved version. Editing a repeating window changes every occurrence. You cannot edit one occurrence on its own.
+  </Step>
+  <Step title="Switch off">
+    Edit the window, turn **Active** off and click **Save**. The window stays in the list with an **Inactive** badge, and its Calendar occurrences are removed. Turn **Active** back on and save to bring them back.
+  </Step>
+  <Step title="Delete">
+    Click the trash can. The prompt **Delete freeze window "name"?** asks you to confirm. Confirm to delete the window and its occurrences, or cancel to keep it.
+  </Step>
+</Steps>
 
-- **Edit:** select the pencil icon on the saved window, change the fields and select the dialog **Save**. **Cancel** preserves the saved version.
-- **Deactivate:** edit the window, turn **Active** off, then **Save**. The definition remains in settings with an Inactive badge; its generated Calendar occurrences are removed. Turning Active back on and saving generates its applicable occurrences again.
-- **Delete:** select the trash icon and review **Delete freeze window "[name]"?** in the browser confirmation. Cancel to keep it, or confirm to remove the definition and its generated occurrences.
+Deleting a freeze does not delete the meetings, changes or provider appointments that overlapped it.
 
-Editing a repeating window updates the definition and its occurrences. This is not an editor for just one occurrence. Do not delete a whole recurring window when you only intend to change unrelated scheduled work.
+## Check the result in the Calendar
 
-## Verify the result in Calendar
-
-1. Open **Calendar** with the appropriate company scope and date range.
-2. Enable **Changes** in the layers menu.
-3. Also enable **Calendar Blocks** for the freeze overlay in Day, Week or Month grids.
-4. Check the named period and its start/end times. Check actual overlapping changes separately.
-
-A freeze warning does not prove that a provider event was rescheduled or that an exception was approved. Deleting a freeze does not delete the meetings, changes or provider appointments that overlapped it.
+<Steps>
+  <Step title="Open Calendar">
+    Go to **Calendar** and set the company selector and date range you need.
+  </Step>
+  <Step title="Turn on Changes">
+    Open the layers menu and tick **Changes**. You need access to view changes, otherwise this layer is missing.
+  </Step>
+  <Step title="Turn on Calendar Blocks">
+    Tick **Calendar Blocks** in the same menu. Freeze windows draw as blocks in the Day, Week and Month views.
+  </Step>
+  <Step title="Read the block">
+    Check the freeze name and its start and end. A change or appointment that overlaps a freeze shows a snowflake icon, and its details panel says **This event overlaps a freeze window.**
+  </Step>
+</Steps>
 
 ## Troubleshooting
 
-- **Save is disabled:** provide a name of at least two characters, valid Start/End dates, and the required Company/Site selections.
-- **I can open settings but cannot load or manage freezes:** freeze management requires more than settings-page visibility. Ask an MSP administrator to review your role.
-- **A tenant-wide window is read-only:** switch to Global View if you have permission to manage tenant-wide settings.
-- **No sites are available:** select the correct company first. The picker uses existing company locations; this editor does not create sites.
-- **Saved but not visible in Calendar:** check Active, scope, date range, Repeat until, Changes and Calendar Blocks. Confirm that the recurrence includes the date you are viewing. If the overlay remains missing, verify the saved restriction before scheduling work; do not interpret an empty grid as permission to proceed.
+| Problem | What to do |
+| --- | --- |
+| **Save** is disabled | Give the window a name of at least 2 characters, valid dates with the end after the start, and the Company or Site that the scope needs. |
+| I can open settings but cannot manage freezes | Viewing settings and managing freezes are separate permissions. Ask an administrator to check your role. |
+| A tenant-wide window is read-only | Switch to Global View. You need permission to manage tenant-wide settings. |
+| The **Site** list is empty | Pick the **Company** first. The list shows that company's existing locations. |
+| A saved window is not in the Calendar | Check **Active**, the scope, the date range and **Repeat until**. Turn on **Changes** and **Calendar Blocks**. An empty grid does not mean it is safe to schedule work. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where can an MSP create a change freeze?">Open Settings, Calendar, Freeze Windows and select Add freeze window. Save inside the dialog.</Accordion>
-  <Accordion title="What scopes can a freeze window use?">Choose Tenant-wide, Company-wide or Specific site. Tenant-wide management requires Global View; site scope requires an existing site belonging to the selected company.</Accordion>
-  <Accordion title="Why can I see a tenant-wide freeze but not edit it?">Tenant-wide windows can remain visible in a scoped company view. Switch to Global View with appropriate permission to edit or delete them.</Accordion>
-  <Accordion title="Does the Company picker create a new company or site?">No. Select existing records. For Specific site, select Company first and then one of its existing locations.</Accordion>
-  <Accordion title="Does changing Company keep the old Site selection?">No. Changing Company clears the selected Site so you can choose a location belonging to the new company.</Accordion>
-  <Accordion title="Does a freeze automatically prevent every booking?">No. It provides restricted-period and conflict information. Follow your scheduling and approval process; do not assume every meeting or provider event is blocked.</Accordion>
-  <Accordion title="Do freeze changes need the page header Save?">No. Save inside the freeze dialog. General Settings and Post-Meeting use their own header Save controls.</Accordion>
-  <Accordion title="Can I prepare a freeze without making it active?">Yes. Turn Active off before saving. The definition remains in settings without active Calendar occurrences.</Accordion>
-  <Accordion title="Which recurrence options are available for freezes?">Choose One time, Daily, Weekly, Monthly or Annual. The entered start date anchors the recurrence.</Accordion>
-  <Accordion title="What happens to a monthly freeze starting on the 31st?">It uses the month's last day when that month does not have the anchor day. Verify the relevant occurrences in Calendar.</Accordion>
-  <Accordion title="Is Repeat until inclusive?">It includes eligible occurrences starting on that date. It does not truncate an occurrence that ends later.</Accordion>
-  <Accordion title="Why did a repeating freeze disappear after editing its dates?">Check Active, scope and the selected date range. Also check Repeat until: an old cutoff before the new start can leave no occurrence, even if you later switch to One time.</Accordion>
-  <Accordion title="Which time zone does the freeze editor use?">It uses the current browser's local time zone and saves that zone with the window. The Calendar viewing zone can differ. Review carefully when editing from another zone.</Accordion>
-  <Accordion title="How do I temporarily disable a freeze?">Edit it, turn Active off and select the dialog Save. The saved definition remains while its generated occurrences are removed.</Accordion>
-  <Accordion title="Can I cancel deleting a freeze window?">Yes. Cancel the browser confirmation after selecting Delete. The definition remains unchanged.</Accordion>
-  <Accordion title="Does deleting a freeze delete overlapping meetings or provider events?">No. It removes the freeze definition and its generated occurrences. Overlapping work remains a separate record.</Accordion>
-  <Accordion title="Does editing a recurring freeze change only one occurrence?">No. It edits the shared window definition and rebuilds its occurrences. The settings editor does not offer an individual-occurrence exception.</Accordion>
-  <Accordion title="Why is my active freeze missing from the Week calendar?">Check the scope and date range, then enable both Changes and Calendar Blocks. Also verify the recurrence dates and Repeat until.</Accordion>
+  <Accordion title="Does a freeze stop meetings from being booked?">
+    No. It shows restricted periods and flags overlaps. Follow your own scheduling and approval process.
+  </Accordion>
+  <Accordion title="Why can I see a tenant-wide freeze but not edit it?">
+    Tenant-wide windows stay visible in a company view. Switch to Global View with the right permission to edit or delete them.
+  </Accordion>
+  <Accordion title="Does changing Company keep the old Site?">
+    No. The Site is cleared so you can pick a site of the new company.
+  </Accordion>
+  <Accordion title="Can I prepare a freeze without turning it on?">
+    Yes. Turn **Active** off before you save.
+  </Accordion>
+  <Accordion title="What does a monthly freeze starting on the 31st do?">
+    It runs on the last day of any shorter month.
+  </Accordion>
+  <Accordion title="Why did my repeating freeze disappear after I edited its dates?">
+    Check **Active**, the scope and **Repeat until**. An old cutoff before the new start date leaves no occurrences.
+  </Accordion>
+  <Accordion title="Does deleting a freeze delete overlapping meetings?">
+    No. It removes the freeze and its occurrences only.
+  </Accordion>
 </AccordionGroup>
 
 ## Related guides

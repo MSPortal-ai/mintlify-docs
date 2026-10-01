@@ -4,14 +4,12 @@ description: 'Compare an approved budget with synchronized customer invoice spen
 icon: 'chart-line'
 ---
 
-**Audience:** Company users and MSP staff with budget and invoice read access. Your MSP manages permissions.
+The **Actuals** tab compares a locked budget with customer invoice spend from supported PSA integrations. Use it to see whether the company is over or under budget, see which costs matched each line, and find invoice events that still need review. This guide is for company users and MSP staff who can view both budgets and invoices.
 
-The **Actuals** tab compares a locked budget with customer invoice spend from supported PSA integrations. Use it to see whether the company is over or under budget, understand which costs matched each line, and identify invoice events that still need review.
-
-## Prerequisites
+## Before you start
 
 - An **Approved** or **Archived** budget
-- Permission to view the budget and invoices
+- Permission to view the budget and invoices (your MSP admin sets this in your role)
 - A connected ConnectWise Manage, Autotask PSA, or HaloPSA integration with invoice sync enabled
 - The PSA company mapped to the same MSPortal company as the budget
 
@@ -19,26 +17,26 @@ The **Actuals** tab compares a locked budget with customer invoice spend from su
 If you can view the budget but do not have invoice access, the **Actuals** tab is hidden. Users with read-only budget access can review reconciliation results but cannot resolve exceptions.
 </Note>
 
-## Getting Started
+## Open Actuals
 
 <Steps>
   <Step title="Open the budget">
-    Go to **Budgets**, open the budget's **Actions** menu, and select **View**.
+    Click **Budgets**, click **...** on the budget's row, then click **View**.
   </Step>
   <Step title="Select Actuals">
-    Select the **Actuals** tab beside **Overview** and **Monthly Breakdown**.
+    Click the **Actuals** tab beside **Overview** and **Monthly Breakdown**.
   </Step>
   <Step title="Confirm the baseline">
-    Review the locked budget status, reconciliation period, currency, and **Customer invoiced spend** basis shown at the top.
+    At the top, check the locked budget status, the reconciliation period, the currency, and the **Customer invoiced spend** basis.
   </Step>
-  <Step title="Review the summary">
-    Start with the four summary cards, then use **Line outcomes**, matched evidence, and **Unmatched exceptions** to explain the result.
+  <Step title="Read the summary">
+    Start with the four cards under **Budget and actual summary**. Then use **Line outcomes**, matched evidence and **Unmatched exceptions** to explain the result.
   </Step>
 </Steps>
 
 ## What Counts as Actual Spend
 
-Actuals use tax-exclusive amounts that the MSP invoiced to the customer. Billed project work, licences, services, and labour can contribute. Internal cost of goods sold, payroll, unbilled time, vendor bills, purchase commitments, and contract totals that have not been invoiced do not. Contract and project information can help match an invoice; they do not add spend on their own.
+Actuals use tax-exclusive amounts that the MSP invoiced to the customer. Billed project work, licenses, services, and labor can contribute. Internal cost of goods sold, payroll, unbilled time, vendor bills, purchase commitments, and contract totals that have not been invoiced do not. Contract and project information can help match an invoice; they do not add spend on their own.
 
 | Provider | Eligible invoice data |
 |----------|-----------------------|
@@ -56,7 +54,7 @@ The locked period is January 1 through December 31 of the budget's fiscal year. 
 
 The **Source coverage** section shows which PSA providers and source grains contributed to the comparison. **Invoice line** means detailed billing rows were available; **Invoice total** can be a full invoice amount or the remainder not represented by its lines. Different-currency and unknown-currency events remain visible for review but are excluded from monetary totals, including Unallocated.
 
-## Understand the Summary
+## Understand the summary
 
 | Card | Meaning |
 |------|---------|
@@ -71,7 +69,7 @@ The note under **Actual spend** shows how much spend is allocated to lines and h
 The total **Actual spend** includes eligible company invoice spend even when it is unmatched or unrelated to this budget's projects. References control allocation, not the overall total. For a project-only budget, use **Line outcomes** to assess project performance: the overall variance still compares against company-wide invoice spend for the period.
 </Warning>
 
-## Review Line Outcomes
+## Review line outcomes
 
 Each locked budget line shows its reference, category, approved amount, matched actual, variance, and outcome.
 
@@ -92,11 +90,11 @@ Use the **Reference** or **Budget line** text filter, **Category**, numeric amou
 
 Matched evidence, Unmatched exceptions and Manual allocations use separate pagination, initially 25 rows with 10, 25 or 50 available. Use their **Columns** controls to show or hide fields. These three paginated tables currently have no table filtering or sorting. None of these tables offers a dedicated CSV export.
 
-### Review Matching Evidence
+### Review matching evidence
 
 <Steps>
   <Step title="Open a line's evidence">
-    In **Line outcomes**, click the **Review** button showing the event count for a line with matched spend.
+    In **Line outcomes**, click **Review N events** (for example **Review 3 events**) on a line with matched spend.
   </Step>
   <Step title="Confirm the source">
     Review the provider, invoice number, date, description, source amount, and matched amount.
@@ -109,35 +107,35 @@ Matched evidence, Unmatched exceptions and Manual allocations use separate pagin
   </Step>
 </Steps>
 
-## How Matching Works
+## How matching works
 
 MSPortal evaluates automatic methods in priority order:
 
-1. **Budget reference** — an exact line reference found in PSA invoice, PO, project, contract, or related details
-2. **Linked project** — the invoice event is associated with a PSA project captured through the budget line's linked Planner item
-3. **Linked product** — the synchronized invoice item points to the product captured on the budget line
-4. **Product identity** — the invoice-line SKU or product name matches the captured product identity
+1. **Budget reference** - an exact line reference found in PSA invoice, PO, project, contract, or related details
+2. **Linked project** - the invoice event is associated with a PSA project captured through the budget line's linked Planner item
+3. **Linked product** - the synchronized invoice item points to the product captured on the budget line
+4. **Product identity** - the invoice-line SKU or product name matches the captured product identity
 
 If the highest-priority matching method identifies multiple lines, the event becomes an exception; MSPortal does not try a lower-priority method to break the tie. An explicit reference that is unknown, belongs to a different budget, or identifies an ineligible line also prevents project or product fallback. Multiple distinct references need manual review.
 
 One source event is counted once within a budget. **Manual allocation** is a user override, not another automatic method: it takes control of the event and suppresses automatic matching, including when you split the event across several lines.
 
-## Common Tasks
+## Common tasks
 
-### Investigate an Over-Budget Result
+### Investigate an over-budget result
 
 1. Confirm the total **Actual spend** and overall variance
 2. Sort **Line outcomes** by variance to find the largest negative values
-3. Click the **Review** button on those lines to inspect the supporting invoices
+3. Click **Review N events** on those lines to inspect the supporting invoices
 4. Review **Unallocated** and the exception queue for spend not yet assigned to a line
 
-### Check Whether Invoice Sync Is Current
+### Check whether invoice sync is current
 
 Use **Source coverage** to compare the provider's **Latest event** date with the most recent eligible invoice you expect in the locked period. This is an invoice date, not the last sync time. If an expected invoice is missing, review the PSA integration and invoice sync before changing reconciliation decisions.
 
-### Improve Future Automatic Matches
+### Improve future automatic matches
 
-Copy the line's short reference and add it to the PSA project, PO, invoice reference, or custom field that flows through to billing. For recurring services and licences, keep synchronized product links and SKUs consistent.
+Copy the line's short reference and add it to the PSA project, PO, invoice reference, or custom field that flows through to billing. For recurring services and licenses, keep synchronized product links and SKUs consistent.
 
 ## Troubleshooting
 
@@ -155,7 +153,7 @@ Copy the line's short reference and add it to the PSA project, PO, invoice refer
 | A source uses an inferred currency | MSPortal used the company or tenant currency because the invoice did not provide one; verify that configuration before relying on the result |
 | Actuals cannot be loaded | Use **Try again**. If the error persists, ask the MSP to investigate; do not treat the error as zero spend or duplicate and approve another budget to clear it |
 
-## Best Practices
+## Best practices
 
 - Review Source coverage before interpreting the totals
 - Resolve exceptions regularly so line outcomes explain the overall spend
@@ -164,11 +162,11 @@ Copy the line's short reference and add it to the PSA project, PO, invoice refer
 - Keep company mappings, product identities, and invoice currencies accurate in the PSA
 - Preserve archived budgets as historical baselines
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Where do I compare a budget with invoice spending?">
-    Open Budgets, choose the budget row’s View action and select Actuals. The budget must be Approved or Archived, and you need both budget and invoice access.
+    Click **Budgets**, click **...** then **View** on the budget's row, and click **Actuals**. The budget must be Approved or Archived, and you need both budget and invoice access.
   </Accordion>
   <Accordion title="Why does Actuals Budgeted differ from the Overview Total?">
     Actuals uses the locked annualized scheduled amounts, including saved monthly overrides, and excludes rejected lines. Overview sums quantity times unit price once for every line, including rejected lines.
@@ -195,14 +193,14 @@ Copy the line's short reference and add it to the PSA project, PO, invoice refer
     Line outcomes supports column filters and sorting. The paginated matched-evidence, Unmatched exceptions and Manual allocations tables currently provide paging and Columns controls without table search or sorting.
   </Accordion>
   <Accordion title="How do I see invoices behind a line’s matched amount?">
-    In Line outcomes, use the Review button showing the event count. Read the invoice, provider, date, source amount, matched amount and match method in the evidence dialog. A line without events has no Review action.
+    In Line outcomes, click **Review N events**. Read the invoice, provider, date, source amount, matched amount and match method in the evidence dialog. A line with no events has no review button.
   </Accordion>
   <Accordion title="What should I do when Actuals are temporarily unavailable?">
     Use Try again. If the error persists, keep the existing approved budget and ask the MSP to investigate. Overview and Monthly Breakdown remain separate views; an Actuals error is not zero spend and is not a reason to approve a duplicate.
   </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
 - [Approve and lock a budget](/user-guides/budgets/approving-and-locking-budgets)
 - [Resolve actuals exceptions](/user-guides/budgets/resolving-actuals-exceptions)

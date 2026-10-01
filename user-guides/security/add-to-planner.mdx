@@ -1,57 +1,136 @@
 ---
 title: "Add security findings to Planner"
-description: "Prepare one Planner item for related Cork findings and verify its saved links and sharing."
+description: "Turn Cork compliance events, vulnerabilities, and endpoints into one tracked Planner item with links back to the findings."
 icon: shield-halved
 ---
 
-**Audience:** MSP staff and other users explicitly permitted to create Planner work from Security. Security read access alone is insufficient. Company users should ask their MSP when the action is unavailable.
+Use this page to turn Cork findings into Planner work you can assign, date, and track. It is for MSP staff. Company users should ask their MSP when the action is not available.
 
-## Prepare a same-company selection
+## Before you start
 
-1. Open **Security > Compliance** or **Security > Vulnerabilities**. A similar shortcut is available for supported Cork endpoint rows.
-2. Select the company, then check the rows you want to group.
-3. Select **Add to Planner** from the page's bulk-actions menu.
-4. Verify the source items and company in the draft before saving.
+- You need Security read access and Planner write access. **Add to Planner** only appears for roles with Planner write or manage access, and linking the findings needs Planner write access plus Security read access.
+- Cork must be connected and the findings mapped to a company.
+- All selected findings must belong to the same company.
 
-All selected items must belong to the same company. Work from the visible loaded page and verify the draft's actual source list; a selection count alone does not prove that records from other pages are included. For an unmapped record, ask the MSP to correct mapping before relying on the shortcut.
+## Create a Planner item from findings
 
-Several findings create **one** Planner item with source links. This is not one Planner item per row, and it does not remove or resolve the original findings.
+<Steps>
+  <Step title="Open the findings">
+    Open **Security > Compliance** for compliance events, **Security > Vulnerabilities** for software vulnerabilities, or **Security > Endpoints** for devices.
+  </Step>
+  <Step title="Select the rows">
+    Check the box beside each finding you want to track. You can select several rows to create a single Planner item that tracks all of them.
+  </Step>
+  <Step title="Choose Add to Planner">
+    Open **Actions (N)** in the page header and choose **Add to Planner**.
+  </Step>
+  <Step title="Review the draft">
+    The Planner item dialog opens with a title, **Description**, **Business Value**, **Due Date**, and **Private Notes** already filled in. The status starts as Not Started, and the due date starts as today. Change **Type**, **Status**, **Due Date**, **Est. Hours**, **Est. Cost**, or the notes as needed.
+  </Step>
+  <Step title="Save">
+    Click **Save**. MSPortal shows **Cork items added to planner.**
+  </Step>
+  <Step title="Check the result in Planner">
+    Open **Planner**, open the new item, and find **Relationships**. The findings appear under **Cork Compliance Events**, **Cork Vulnerabilities**, or **Cork Endpoints**.
+  </Step>
+</Steps>
 
-## Review and save
-
-The draft contains a title, summary description, and technical details in Private Notes. An At Risk event gives the draft High business value. Critical or Accelerated vulnerabilities also give High business value; other findings normally start at Medium. These defaults can be reviewed before saving.
-
-Choose the required item type and review the title, description, status, business value, due date, estimates, and notes. The initial due date is today, so replace it when another date is appropriate. Select **Save**, wait for the result, then open the new item in Planner and verify its source links and saved values.
-
-Opening the draft does not save it. Saving the Planner item and attaching the Cork links are separate steps. If an error occurs, check Planner before retrying: an item may already exist with only some links attached.
+Opening the dialog does not save anything. Several findings become one Planner item, not one item per row. The original findings stay as they are.
 
 <Warning>
-The current Cork shortcut does not reliably carry every option in the shared Planner form into the saved item. In particular, do not rely on **Hide from Company users** in this shortcut to keep the resulting item private. Avoid confidential titles, descriptions, or public notes here. Verify sharing through the main Planner workflow before adding information that requires restricted visibility.
+This shortcut saves only Company, Type, Status, Business Value, Due Date, Est. Hours, Est. Cost, Description, Notes, and Private Notes. It does not save **Assignee**, **Hide from company users**, start or end dates, probability, other relationships, or custom fields. Do not put confidential details in the title, description, or public notes. Open the saved item in Planner and set those fields there.
 </Warning>
 
-Other advanced values, including assignment, start/end dates, cost details, and custom fields, require verification in the saved Planner item. The draft can expose more controls than this shortcut currently persists. Do not assume that closing the dialog proves every value and link was saved.
+## What the draft contains
 
-## Access and troubleshooting
+### Compliance events
 
-The menu can appear with Planner write or manage access, but attaching Cork links requires the specific Planner write permission as well as Security read access. If a permitted-looking action fails, ask the MSP to check the role rather than repeatedly creating duplicates.
+| Cork field | Planner field |
+| --- | --- |
+| Event type | Title (single event) and Private Notes |
+| Entity | Private Notes |
+| Status (At Risk or OK) | Private Notes. Any At Risk event sets Business Value to **High**. |
+| Resolved | Private Notes, when the event is resolved |
+| Created | Private Notes |
 
-Creating or completing Planner work does not patch software, resolve a Cork event, or synchronize results back to Cork. Use the provider's authorized remediation process and verify the imported result later.
+### Vulnerabilities
 
-For Company support requests, start with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). For discussion at an existing meeting, use [Add to Meeting](/user-guides/security/add-to-meeting).
+| Cork field | Planner field |
+| --- | --- |
+| CVE | Title (single vulnerability) and Private Notes |
+| Software and version | Description and Private Notes |
+| Vendor | Private Notes |
+| CVSS score | Private Notes |
+| Priority | Private Notes. Critical or Accelerated sets Business Value to **High**. |
+| Known exploited | Highlighted in Private Notes |
+
+### Endpoints
+
+| Cork field | Planner field |
+| --- | --- |
+| Device name | Title (single endpoint) |
+| Hostname | Private Notes |
+| OS and OS version | Private Notes |
+| IP addresses | Private Notes |
+| Last seen | Private Notes |
+
+### Business Value
+
+| Condition | Business Value |
+| --- | --- |
+| Any Critical or Accelerated vulnerability | High |
+| Any At Risk compliance event | High |
+| Everything else, including all endpoints | Medium |
+
+You can change Business Value before you save.
+
+### One finding or several
+
+- One finding: the title is the CVE, event type, or device name, and the description covers that finding.
+- Several findings: the title reads like **Cork Vulnerabilities (5 items)**, **Cork Compliance Events (3 items)**, or **Cork Endpoints (2 items)**. Each finding is listed in Private Notes with a divider.
+
+Private Notes are for MSP staff and are hidden from company users. Put anything you want clients to read in **Notes**.
+
+## Tips for grouping
+
+- Group vulnerabilities for the same software product.
+- Group compliance events that affect the same device.
+- Group findings that one action can fix.
+- Start with Known Exploited and Critical vulnerabilities, then At Risk compliance events.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Add to Planner** is missing from the Actions menu | Your role lacks Planner write or manage access. Ask your MSP admin. |
+| **Please select items from the same company** | Clear your selection and pick rows from one company. |
+| **Please select a company first** | Pick a company in the company selector. |
+| **Could not save planner item.** | The item may already exist without its links, because the item is saved first and the findings are linked second. Open Planner and fix that item instead of creating another. Linking needs Planner write access and Security read access, so ask your MSP admin to check your role. |
+| You selected Acronis endpoint rows | The shortcut links every endpoint row as a Cork endpoint. Use it for Cork endpoints only. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Do several selected findings create several Planner items?">
-    They create one grouped Planner item with links to the selected findings.
+    No. They create one Planner item with links to every selected finding.
   </Accordion>
-  <Accordion title="Does opening the draft create an item?">
-    No. Save begins creation. If saving later fails while links are attached, check Planner before retrying.
+  <Accordion title="Does completing the Planner item fix the finding in Cork?">
+    No. Planner tracks your work. Patching and resolving the finding happen in the provider, and the result shows up here after the next sync.
   </Accordion>
-  <Accordion title="Can I rely on Hide from Company users in this shortcut?">
-    No. The current shortcut does not reliably persist that option. Verify visibility through the main Planner workflow before adding restricted information.
+  <Accordion title="Can I rely on Hide from company users here?">
+    No. This shortcut does not save that setting. Set it in the saved Planner item.
   </Accordion>
-  <Accordion title="Why did a save error still leave an item in Planner?">
-    Item creation and source linking happen separately. Review the existing item and its links before trying again.
+  <Accordion title="Where do I see the linked findings later?">
+    Open the item in **Planner** and look under **Relationships**.
+  </Accordion>
+  <Accordion title="I am a company user. How do I ask for help with a finding?">
+    Describe it to the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) and confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Security](/user-guides/security/index)
+- [Add Cork findings to a meeting agenda](/user-guides/security/add-to-meeting)
+- [Planner](/user-guides/planner/index)
+- [Enable the Cork integration](/user-guides/integrations/enable-cork-integration)

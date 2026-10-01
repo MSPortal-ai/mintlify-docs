@@ -1,78 +1,88 @@
 ---
 title: 'Configure Adobe Enterprise Integration'
-description: 'Connect Adobe VIP Marketplace customers and licensing subscriptions'
-icon: 'plug'
+description: 'Connect Adobe VIP Marketplace to sync customers and license subscriptions'
+icon: 'file-pdf'
 ---
 
-Connect **Adobe Enterprise** using Adobe VIP Marketplace OAuth credentials to synchronize supported customers and subscriptions. This is not a generic Adobe personal-account or Creative Cloud user login.
+Connect Adobe Enterprise to synchronize Adobe VIP Marketplace customers and license subscriptions into MSPortal.ai with read-only API access.
 
-## Before you start
+<Note>
+Adobe Enterprise is currently in **Beta** and available to selected tenants. If you don't see Adobe Enterprise in **Settings > Integrations**, contact support@msportal.ai. This integration uses VIP Marketplace OAuth credentials, not an Adobe personal or Creative Cloud login.
+</Note>
 
-This is an **MSP staff** task requiring integration-management permission and authorized vendor credentials. This provider is available only when enabled for your MSP tenant. If its setup page is unavailable, check availability with your MSPortal administrator. Company users do not configure this connection.
+## Prerequisites
 
-Prepare a **Client ID / API key** and **Client Secret** from an Adobe Developer Console project with **Commerce Partner API** access. Follow the [Adobe VIP Marketplace credential instructions](https://developer.adobe.com/vipmp/docs/authentication/oauth-credentials).
+- An Adobe Developer Console project with Commerce Partner API access
+- The project's client ID (API key) and client secret
+- MSPortal.ai integration management permission
+- MSPortal companies to map to Adobe customers
 
-## Connect Adobe
+## Connect Adobe Enterprise
 
-1. Open **Settings > Integrations**, find **Adobe Enterprise**, and open setup.
-2. Enter **Client ID / API key** and **Client Secret**.
-3. Use **Test Connection** to check the credentials and inspect any error.
-4. Choose **Connect** to store the new connection. Testing and saving are separate actions; the save does not depend on first clicking the test button.
+<Steps>
+  <Step title="Create OAuth credentials">
+    In Adobe Developer Console, create or open a project with VIP Marketplace Commerce Partner API access. Copy the project's **Client ID / API key** and **Client secret**.
+  </Step>
+  <Step title="Open the setup page">
+    In MSPortal, go to **Settings > Integrations**, find **Adobe Enterprise**, and click **Connect**.
+  </Step>
+  <Step title="Enter the credentials">
+    Enter the **Client ID / API key** and **Client Secret**.
 
-<Frame caption="MSP example: connection form before credentials are submitted.">
-  <img src="/images/product/adobe-enterprise-setup-connection.png" alt="Adobe Enterprise connection form with blank credential fields and test and save controls" width="1152" height="836" />
-</Frame>
+    <Frame>
+      <img src="/images/product/adobe-enterprise-setup-connection.png" alt="Adobe Enterprise Connect step with Client ID / API key and Client Secret fields" width="1152" height="836" />
+    </Frame>
+  </Step>
+  <Step title="Test the connection">
+    Click **Test Connection**. MSPortal verifies that Adobe accepts the OAuth credentials.
+  </Step>
+  <Step title="Connect">
+    Click **Connect** to store the credentials securely in Vault. MSPortal starts pulling your Adobe customers and subscriptions right away so the next step has customers to map.
+  </Step>
+</Steps>
 
-For an existing connection, enter the replacement values and choose **Update**. Blank unchanged fields preserve stored credentials. If an older connection has no Client Secret, supply it before continuing. Testing an existing connection can use its stored values without displaying them.
+## Map Adobe Customers
 
-## Map customers to companies
+<Steps>
+  <Step title="Review discovered customers">
+    Click **Next** to continue to the **Map companies** step after customer discovery completes.
+  </Step>
+  <Step title="Match customers to companies">
+    Click **Quick Match** to suggest mappings by name, or select the correct MSPortal company manually. Use **Create new company** to add a missing MSPortal company from the mapping workflow.
+  </Step>
+  <Step title="Save the mappings">
+    Click **Import Selected** to save your pending mappings, or click **Next**, which saves them before moving on. Saved mappings associate Adobe subscriptions with the correct MSPortal companies.
+  </Step>
+</Steps>
 
-The wizard continues through **Map companies** and **Finish**. Review the returned Adobe customers and choose the intended MSPortal companies. Review **Quick Match** suggestions before applying them.
+## Start the First Sync
 
-Company selections remain pending until submitted. Check the selected imports and pending links before choosing **Import Selected**; wizard navigation also attempts to save pending mappings. Creating a new company is immediate; removing an already saved link is immediate. Do not confuse either with discarding a draft suggestion.
+In the **Finish** step, click **Sync All Data**. The synchronization runs in the background and imports the Adobe customer and subscription data available to the connected VIP Marketplace account.
 
-## Synchronize and review licenses
+After data is available, use the [Cloud licenses](/user-guides/cloud/licenses) view to review Adobe subscriptions for mapped companies. This integration only reads data. It does not purchase seats, place orders, or assign licenses in Adobe.
 
-On **Finish**, use **Sync All Data** when you intend to request a fresh sync. Wait for the actual result and check the connection’s latest customer/subscription sync status. A **Sync started** message only acknowledges the request.
+## Managing the Connection
 
-Review the resulting company-scoped licensing information after synchronization and mapping complete. This setup imports customer/subscription reporting; it does not itself purchase seats, place orders or assign applications to end users. Storefront purchasing, where separately supported and enabled, is a different workflow.
-
-## Disconnect
-
-Use the connection’s delete/disconnect control and read the named confirmation. Removing the connection also removes associated synchronized Adobe data and company mappings. It does not revoke the Adobe Developer Console credentials.
+- Click **Manage** on your Adobe Enterprise connection to replace the client ID or client secret. Enter only the values you want to change, then click **Update**. A blank field keeps its stored value. If an older connection has no client secret saved, enter it before you continue.
+- Run a manual refresh from the integration entry when you need current Adobe data immediately.
+- To remove the integration, click **Delete** in the wizard footer and confirm in the **Delete Adobe Enterprise Integration?** dialog. This deletes its Vault credentials, synchronized Adobe data, and company mappings from MSPortal. It does not change data in Adobe or revoke the Developer Console credentials.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Test fails | Correct Commerce Partner API project, credential pair and provider error. |
-| Old connection cannot continue | Supply its missing Client Secret; a previously saved API key alone is insufficient. |
-| No customers or subscriptions | Provider access, completed discovery, saved company links and the latest sync result. |
-| Credential update did not persist | Use **Update**; testing alone is not a save. |
-| Licenses are shown for the wrong company | Recheck the saved Adobe customer mapping before relying on the report. |
+| Issue | Solution |
+|-------|----------|
+| OAuth test fails | Confirm the client ID and client secret belong to the same Adobe Developer Console project and that Commerce Partner API access is enabled. |
+| Connection cannot continue | An older connection may be missing its client secret. Enter the client secret on the Connect step and click **Update**. |
+| No customers appear for mapping | Confirm the Adobe project has access to the expected VIP Marketplace account, then allow customer discovery to finish. |
+| Subscriptions are assigned to the wrong company | Correct the Adobe customer mapping and run the synchronization again. |
 
-## Frequently asked questions
+## Related Resources
 
-<AccordionGroup>
-  <Accordion title="Can I connect using an Adobe personal account password?">
-    No. This integration uses VIP Marketplace OAuth credentials from a project with Commerce Partner API access.
-  </Accordion>
-  <Accordion title="Does Test Connection save credentials?">
-    No. Use **Connect** or **Update** for persistence.
-  </Accordion>
-  <Accordion title="Does connecting Adobe purchase licenses?">
-    No. This setup connects customer/subscription synchronization. Purchasing is a separate supported workflow.
-  </Accordion>
-  <Accordion title="Does Sync started mean all subscriptions are available?">
-    No. Check the completed sync result and saved company mappings.
-  </Accordion>
-  <Accordion title="What happens when I disconnect?">
-    The MSPortal connection, stored credentials, synchronized Adobe data and mappings are removed. Vendor-side credential revocation is separate.
-  </Accordion>
-</AccordionGroup>
-
-## Related guides
-
-- [Licenses](/user-guides/microsoft-365/licenses)
-- [Company mapping](/user-guides/settings/integration-company-mapping)
-- [Storefront](/user-guides/storefront/index)
+<CardGroup cols={2}>
+  <Card title="Licensing" icon="key" href="/user-guides/licensing/index">
+    Review licensing data in MSPortal
+  </Card>
+  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+    Manage all MSPortal integrations
+  </Card>
+</CardGroup>

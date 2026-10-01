@@ -1,114 +1,113 @@
 ---
 title: 'Find a Device by Its Approximate IP Location'
-description: 'Use a device’s reported external IP address to view its approximate location and open it on a map'
+description: 'Use a device’s reported external IP address to see its approximate location and open it on a map.'
 icon: 'location-dot'
 ---
 
-MSPortal can estimate where a device connects to the internet by looking up the external IP address reported by its integration. This is useful for confirming that a device appears to be at an expected office or identifying a connection that deserves further investigation.
+MSPortal can estimate where a device connects to the internet by looking up the external IP address its integration reported. Use it to confirm a device appears to be at an expected office, or to spot a connection that needs a closer look. This guide is for company users and MSP staff who can open the device.
 
 <Warning>
-IP location is an estimate of the internet exit point. It is not the device's GPS position, street address, or proof of where a person is located.
+IP location is an estimate of the internet exit point. It is not the device's GPS position, street address, or proof of where a person is.
 </Warning>
 
-<Frame caption="MSP device example with no public IP available; no lookup submitted.">
-  <img src="/images/product/device-missing-public-ip.png" alt="Device IP location section explaining that no external IP has been reported." width="1118" height="180" />
-</Frame>
+## Before you start
 
-## Prerequisites
-
-Before looking up a device location, ensure that:
-
-- You can access the **Devices** module and the device's company
-- The device was synced from an integration that reports an external IP address
-- The IP location service is available in your MSPortal environment
-- Your portal has active billing for new lookups
-
-You do not need to enter a geolocation API key as a portal user. The lookup service is configured centrally for your MSPortal environment.
+- You can open **Devices** and the device's company.
+- The device came from an integration that reports an external IP address.
+- The IP location service is available in your MSPortal environment.
+- Your portal has active billing for new lookups.
+- You do not enter a geolocation API key. The service is set up centrally.
 
 ## Find an approximate location
 
 <Steps>
   <Step title="Open Devices">
-    Select **Devices** from the sidebar.
+    Click **Devices** in the sidebar.
   </Step>
-  <Step title="Open the device details">
-    Select the device you want to investigate, then open its **Overview** tab.
+  <Step title="Open the device">
+    Click the device **Name**. The panel opens on **Overview**.
   </Step>
-  <Step title="Review the external IP">
-    Find the **IP location** section. Review **External IP** and **IP observed** to confirm which address will be checked and when the integration last reported it.
+  <Step title="Check the external IP">
+    Find the **IP location** section. Read **External IP** and **IP observed** to see which address will be checked and when the integration last reported it.
+
+    <Frame caption="A device with no external IP reported. No lookup was run.">
+      <img src="/images/product/device-missing-public-ip.png" alt="Device IP location section explaining that no external IP has been reported." width="1118" height="180" />
+    </Frame>
   </Step>
-  <Step title="Run the lookup">
-    Select **Find approximate location**. MSPortal displays the available city, region, country, and accuracy radius. Some fields may be unavailable. If a cached result is already shown, you can open the map immediately.
+  <Step title="Click Find approximate location">
+    MSPortal shows the city, region, country, and **Accuracy** it finds. Some fields can be missing. If a saved result is already shown, you can open the map right away.
   </Step>
-  <Step title="Open the map">
-    Select **Open map** to view this device's approximate coordinates in a new OpenStreetMap tab. This opens a single location, not a grouped map of your device fleet.
+  <Step title="Click Open map">
+    This opens one approximate point in a new OpenStreetMap tab. It does not show all your devices together.
   </Step>
 </Steps>
 
 <Tip>
-Compare **IP observed** with **Last checked**. The first tells you when the integration reported the address; the second tells you when that address was geolocated.
+Compare **IP observed** with **Last checked**. The first is when the integration reported the address. The second is when that address was last looked up.
 </Tip>
 
 ## Check a location again
 
-MSPortal reuses recent results to avoid unnecessary external lookups. If you have permission to manage devices, **Check again** requests a fresh lookup, subject to a short cooldown that prevents repeated requests for the same IP.
-
-Users without device-management permission can also select **Check again**, but their check reuses the cached result until it becomes eligible for refresh. It does not force a new provider lookup.
-
-If another lookup is already running for the same IP, wait briefly and select **Check again** to retrieve its result.
+<Steps>
+  <Step title="Click Check again">
+    MSPortal reuses recent results to avoid extra lookups. If you can manage devices, **Check again** asks for a fresh lookup, with a short cooldown for the same IP. Other users can also click **Check again**, but they get the saved result until it is old enough to refresh.
+  </Step>
+  <Step title="Wait if a lookup is already running">
+    If another lookup for the same IP is in progress, wait a moment and click **Check again** to get its result.
+  </Step>
+</Steps>
 
 ## When no external IP is available
 
-The **IP location** section displays a message when no external IP has been reported. In that case:
+The **IP location** section shows "No external IP has been reported by this device's integrations yet." In that case:
 
-1. Confirm the device's integration is connected and syncing successfully.
-2. Check whether the source platform reports an external or public IP for that device.
-3. Allow the next device sync to complete, then reopen the device details.
+<Steps>
+  <Step title="Check the integration">
+    Confirm the device's integration is connected and syncing.
+  </Step>
+  <Step title="Check the source">
+    Check that the source tool reports an external or public IP for the device.
+  </Step>
+  <Step title="Wait for the next sync">
+    After the next device sync finishes, reopen the device.
+  </Step>
+</Steps>
 
-MSPortal ignores private, reserved, malformed, and network-range addresses because they cannot provide a meaningful public location.
+MSPortal ignores private, reserved, malformed, and network-range addresses because they cannot give a public location.
 
 ## Troubleshooting
 
+| Problem | What to do |
+| --- | --- |
+| No external IP has been reported | The source has not sent a usable public IP. Check the integration sync and the device in the source tool. |
+| No approximate location is available | The IP is valid but the provider has no result for it. This happens with new or privacy-managed ranges. Try again later. |
+| The location service is temporarily unavailable | Wait a few minutes and try again. MSPortal delays retries after an error. |
+| The map shows the wrong city | The IP may belong to an ISP gateway, VPN, or mobile carrier exit. Use the accuracy radius and compare with other device details. |
+
+## Frequently asked questions
+
 <AccordionGroup>
-  <Accordion title="No external IP has been reported">
-    The connected source has not supplied a usable public IP. Check the integration sync and the device record in the source platform.
+  <Accordion title="Can company users see device IP locations?">
+    Yes, when their role lets them view the device. Your MSP controls company user permissions.
   </Accordion>
-  <Accordion title="No approximate location is available">
-    The external IP is valid, but the location provider has no coordinate result for it. This can occur with new address ranges, privacy-managed ranges, or some network providers. Try again later.
+  <Accordion title="Does opening Overview run a paid lookup?">
+    No. Opening the device only shows the saved result. **Find approximate location** and **Check again** start a lookup.
   </Accordion>
-  <Accordion title="The location service is temporarily unavailable">
-    Wait a few minutes and try again. MSPortal temporarily delays retries after provider or network errors so one failure does not create repeated requests.
+  <Accordion title="Does Check again always contact the location provider?">
+    No. Most users get the saved result. Users who can manage devices can force a refresh, subject to the cooldown.
   </Accordion>
-  <Accordion title="The map shows the wrong city">
-    IP geolocation can identify an ISP gateway, VPN endpoint, mobile carrier exit, or nearby network hub instead of the device's physical location. Use the accuracy radius and corroborate the result with other device information.
+  <Accordion title="Do I need to save the device to keep a result?">
+    No. The result is saved on its own.
+  </Accordion>
+  <Accordion title="Can I type a different IP address?">
+    No. The lookup always uses the external IP on the device record.
+  </Accordion>
+  <Accordion title="Does Open map show all devices?">
+    No. It opens one point on OpenStreetMap.
   </Accordion>
 </AccordionGroup>
 
-
-## Task questions
-
-<AccordionGroup>
-  <Accordion title="Can Company users read device IP locations?">
-    Authorized Company and MSP device viewers can use the location section within their permitted company/device scope. Your MSP controls Company permissions; an MSP screenshot does not establish your access.
-  </Accordion>
-  <Accordion title="Does opening Overview trigger a paid location lookup?">
-    No. Opening the device displays its available cached state. Find approximate location or Check again is an explicit lookup request; background enrichment is a separate service setting.
-  </Accordion>
-  <Accordion title="Does Check again always contact MaxMind?">
-    No. Ordinary viewers reuse eligible cached results. Device managers can request a forced refresh, subject to the cooldown and any lookup already in progress.
-  </Accordion>
-  <Accordion title="Does a lookup result save only after I save the device?">
-    No. Lookup caching is independent of the device editor. There is no extra device Save step to retain a resolved result.
-  </Accordion>
-  <Accordion title="Can I type a different IP into this lookup?">
-    No. The lookup uses the external IP on the authorized device record, reported by its integration. It is not a general arbitrary-IP search tool.
-  </Accordion>
-  <Accordion title="Does Open map show all devices together?">
-    No. It opens one approximate coordinate on OpenStreetMap in a new tab. It is not a fleet map or live tracker.
-  </Accordion>
-</AccordionGroup>
-
-## Related resources
+## Related guides
 
 - [Understand Device IP Location Results](/user-guides/devices/ip-location-accuracy-and-privacy)
 - [Devices](/user-guides/devices/index)

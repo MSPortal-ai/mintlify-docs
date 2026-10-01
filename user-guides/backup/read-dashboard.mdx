@@ -1,96 +1,120 @@
 ---
 title: "Read the Backup Dashboard"
-description: "Interpret device protection tiles, provider cards, backup trends, and Microsoft 365 summaries without mistaking missing data for success."
+description: "Read the device protection tiles, provider cards, backup trends and Microsoft 365 summaries."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access.
+The Backup Dashboard summarizes device backups from Cove, Acronis, NinjaOne, Datto Backup and Slide Backup, plus Microsoft 365 backup health when it is available. MSP staff and company users with Backup read access can use it.
 
-## Review the summary
+## Before you start
 
-1. Open **Backup > Dashboard**.
-2. Confirm the company selection before comparing numbers. When you select several companies, the tiles and cards add their results together.
-3. Read the summary tiles across the top.
-4. Scroll to the provider cards to see results for each connected backup provider.
-5. Select a tile, a status segment, or a bar to open the matching records.
+- You have Backup read access and a provider has reported data for your companies.
+- The company selector at the top shows the companies you want. With several companies selected, tiles and cards add their results together.
 
-The dashboard summarizes Cove, Acronis, and NinjaOne device backups. It also shows Microsoft 365 backup health when that data is available.
+## Review the dashboard
 
-## Read the summary tiles
+<Steps>
+  <Step title="Open the Dashboard">
+    Go to **Backup > Dashboard**.
+  </Step>
+  <Step title="Check the company selection">
+    Confirm the selector before you compare numbers.
+  </Step>
+  <Step title="Read the tiles">
+    Read the summary tiles across the top. See the table below.
+  </Step>
+  <Step title="Read the provider cards">
+    Scroll to the card for each connected provider.
+  </Step>
+  <Step title="Open the matching records">
+    Select a tile, a status segment or a bar to open the records behind it.
+  </Step>
+</Steps>
+
+<Frame caption="The Backup Dashboard. A provider card shows only the sections that provider supplied data for.">
+  <img src="/images/product/backup-fixed.png" alt="Backup dashboard" width="2880" height="1920" />
+</Frame>
+
+## Summary tiles
 
 | Tile | What it shows | Where it opens |
 | --- | --- | --- |
-| **Protected devices** | Records the providers classify as protected, out of the total device count. The ring shows **Protection coverage** as a percentage. | Devices, filtered to Success |
+| **Protected devices** | Records the providers classify as protected, out of the total. The ring shows **Protection coverage**. | Devices, filtered to Success, Completed and Ok |
 | **Needs attention** | Records with a warning or a backup still in progress. | Devices, filtered to Warning and InProcess |
-| **Failed backups** | Records whose latest result failed or that have no backup. | Devices, filtered to Failed and NoBackup |
+| **Failed backups** | Records whose latest result failed, or that have no backup. | Devices, filtered to Failed, Error, Critical and NoBackup |
 | **Unprotected devices** | Records that are not protected, with their share of all devices. | Devices, with the default status filter |
 | **Storage used** | Total storage the providers report. | Does not open a list |
-| **Active alerts** | Active Acronis alerts. This tile appears only when Acronis is connected. | Alerts |
+| **Active alerts** | Active alerts from Acronis, Datto Backup and Slide Backup. It appears only when one of them is connected. | Alerts |
 
-When Cove or Acronis has recent session history, **Needs attention** and **Failed backups** add a small trend line for the last 7 days. Their descriptions then count sessions instead of devices, for example "3 failed sessions in 7 days". Without session history, the descriptions show a percentage of devices instead.
+When Cove or Acronis has recent session history, **Needs attention** and **Failed backups** add a 7-day trend line and count sessions instead of devices, for example "3 failed sessions in 7 days". Without session history, they show a percentage of devices.
 
-A session count and a device count answer different questions. One device can fail several sessions in a week, and a device that failed yesterday can succeed today.
+A session count and a device count answer different questions. One device can fail several sessions in a week, and a device that failed yesterday can succeed today. Backups that an MSP paused on purpose count as neither a warning nor a failure.
 
-## Read a provider card
+## Provider cards
 
-Each connected device-backup provider gets its own card, titled **Cove overview**, **Acronis overview**, or **NinjaOne overview**. Cards appear in that order.
+MSP staff see one card per connected provider, titled **Cove overview**, **Acronis overview**, **NinjaOne overview**, **Datto Backup overview** or **Slide Backup overview**. Company users see one **Managed Device Backup** card that combines every provider.
 
 | Section | What it shows |
 | --- | --- |
-| **Device status** | A bar split into Protected, Warning, Failed, and Unprotected. Select a segment to open Devices filtered to that status and provider. |
-| **By workload** | The most common workload types, such as Files and folders, Disk image, Server, or Workstation. Types the portal does not recognize appear as Other workload. |
-| **Last backup** | Cove and Acronis only. Devices grouped by their latest backup: Under 24 hours, 1 to 3 days, 3 to 7 days, Over 7 days, or Never. |
-| **Backup sessions per day** | Cove and Acronis only. Successful, Warnings, and Failed sessions for each of the last 7 days. |
-| **Active alerts by severity** | Acronis only. Active alerts grouped as Critical, Error, Warning, and Information. Select a bar to open Alerts. |
-| **Protection coverage** | The protected share for that provider, for example "12 of 14 devices protected", with the provider's reported **Storage**. |
+| **Device status** | A bar split into Protected, Warning, Failed and Unprotected. Select a segment to open Devices for that status and provider. |
+| **By workload** | The most common workload types, such as Files and folders, Disk image, Server or Workstation. Unrecognized types show as Other workload. |
+| **Last backup** | Cove and Acronis only. Devices grouped by latest backup: Under 24 hours, 1 to 3 days, 3 to 7 days, Over 7 days or Never. |
+| **Backup sessions per day** | Cove and Acronis only. Successful, Warnings and Failed sessions for each of the last 7 days. |
+| **Active alerts by severity** | Acronis only. Critical, Error, Warning and Information. Select a bar to open Alerts. |
+| **Protection coverage** | The protected share, for example "12 of 14 devices protected", with the provider's reported **Storage**. |
 
-Selecting a **By workload** or **Last backup** bar opens Devices filtered to that provider only. The list does not narrow to the workload type or age group, so review the **Type** and **Last Backup** columns yourself.
+Selecting a **By workload** or **Last backup** bar opens Devices filtered to that provider only. It does not filter by workload type or age, so check the **Type** and **Last Backup** columns yourself.
 
-Acronis counts can include resources that are not single endpoints. See [Find device backups](/user-guides/backup/find-device-backups) for how to read those rows.
+A card shows only the sections its provider supplied data for. **Device status** and **Protection coverage** always appear. A missing section does not mean backups succeeded or failed. Datto Backup and Slide Backup cards show no workload, age or session sections.
 
-A card only shows the sections the provider has supplied data for in the selected scope. **Device status** and **Protection coverage** always appear. If **By workload**, **Last backup**, **Backup sessions per day**, or **Active alerts by severity** is missing from a card, the provider has not supplied that data. A missing section does not mean backups succeeded or failed.
+Acronis counts can include resources that are not single endpoints. See [Find device backups](/user-guides/backup/find-device-backups).
 
-## Review Microsoft 365 and alerts
+## Microsoft 365 cards
 
-Microsoft 365 cards share the grid with the provider cards when Microsoft 365 data is available:
+These share the grid with the provider cards when Microsoft 365 data exists.
 
-- **Cove Microsoft 365** shows a **Backup status** bar and a **Workloads** breakdown for Exchange, OneDrive, SharePoint, and Teams. The card leaves out **Workloads** when Cove has not supplied workload data. Select a segment or bar to open the Cove Microsoft 365 report.
-- Kaseya SaaS Protection and Spanning show their backup health widgets.
-- Acronis Microsoft 365 appears as a link card with the provider name and **View Microsoft 365 backups**. Cove uses the same link card when its detailed summary is unavailable.
+- **Cove Microsoft 365** shows a **Backup status** bar and a **Workloads** breakdown for Exchange, OneDrive, SharePoint and Teams. Select a segment or bar to open the Cove Microsoft 365 report.
+- **Acronis Microsoft 365** shows the last backup result for items backed up in the last 90 days.
+- Kaseya SaaS Protection and Spanning Backup show their backup health widgets.
+- A provider without a summary card shows a link card named for it with **View Microsoft 365 backups**.
 
-Open [Microsoft 365](/user-guides/backup/read-microsoft-365-backups) to investigate individual users, sites, or teams. A company with only Microsoft 365 data does not see the device tiles or provider cards.
+Open [Microsoft 365](/user-guides/backup/read-microsoft-365-backups) to investigate individual users, sites or teams. A company with only Microsoft 365 data does not see the device tiles or provider cards.
 
-For Acronis alerts, select **Active alerts** or a severity bar, then follow the [alerts guide](/user-guides/backup/review-alerts).
+## Check freshness
 
-## Check freshness before relying on a result
+A protected status describes the imported result. It does not prove a backup ran recently or that a restore works. Use the **Last backup** groups on Cove and Acronis cards to spot stale devices, then open a device to see its dates. Other providers' cards do not show backup age.
 
-A protected status describes the imported result. It does not prove that a backup ran recently or that a restore was tested. Use the **Last backup** groups on the Cove and Acronis cards to spot stale devices, then open a device to inspect its dates. NinjaOne cards do not show backup age.
+If the dashboard shows **No Backup Data Yet**, zero totals or missing cards, check the company selector, then ask your MSP to check mapping and sync. If a note says some backup data could not be loaded, a provider failed to read and its zeros are unknown. Do not treat zero failed backups as proof that everything is protected.
 
-If the dashboard shows **No Backup Data Yet**, zero totals, or missing cards, confirm company scope and ask the MSP to check mapping and synchronization. A trend or workload section that fails to load is left off the card. Do not treat zero failed backups as evidence that all systems are protected.
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A tile opens a list with different numbers | The list applies its own filters and paging, and tiles can cover several companies. Check the filters and the company selection. |
+| **Unprotected devices** does not show the devices you expected | It opens Devices with the default status filter, which hides **Not Configured** rows. Choose **Not Configured** in the **Status** filter. |
+| The NinjaOne card has fewer sections | NinjaOne supplies no session history or last-backup time to the dashboard. Open a NinjaOne device row for its dates. |
+| A card section is missing | The provider has not supplied that data for your companies. Ask your MSP to check the sync. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why does clicking a tile show a different number of devices?">
-    The device list applies its own status filters and pagination. Dashboard counts can also cover several selected companies. Check the filters and the company selection, and treat the shortcut as a starting point for investigation.
-  </Accordion>
-  <Accordion title="Why does Unprotected devices not show the devices I expected?">
-    The tile opens Devices with the default status filter, which excludes Not Configured records. Choose **Not Configured** in the Status filter to review them.
-  </Accordion>
   <Accordion title="Can I change the trend period?">
-    No. The trend lines and session counts always cover the last 7 days.
-  </Accordion>
-  <Accordion title="Why does the NinjaOne card have fewer sections?">
-    NinjaOne does not supply daily session history or a last-backup time to this dashboard, so its card omits **Last backup** and **Backup sessions per day**. Open a NinjaOne device row for its available dates.
+    No. Trend lines and session counts always cover the last 7 days.
   </Accordion>
   <Accordion title="Does Protected mean I can restore successfully?">
-    It reports a provider status. Backup freshness, coverage, retention, and restore testing need separate confirmation from your MSP.
+    No. It reports a provider status. Freshness, coverage, retention and restore testing need separate confirmation from your MSP.
+  </Accordion>
+  <Accordion title="Why does a company user see no vendor names?">
+    Company users buy a managed backup service from their MSP, so MSPortal shows the service name instead of the vendor.
   </Accordion>
   <Accordion title="How do I report an old or failed backup?">
-    Start with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the device, provider, status, and date, then confirm the request when prompted.
+    Start with the Home AI Assistant, as described in [Open a ticket](/user-guides/ticketing/open-a-ticket). Include the device, status and date, then confirm the request.
   </Accordion>
 </AccordionGroup>
 
-<Frame caption="The Cove card shows only the sections Cove has supplied data for, so Backup sessions per day is left off.">
-  <img src="/images/product/backup-fixed.png" alt="Backup dashboard" width="2880" height="1920" />
-</Frame>
+## Related guides
+
+- [Find device backups](/user-guides/backup/find-device-backups)
+- [Read Microsoft 365 backups](/user-guides/backup/read-microsoft-365-backups)
+- [Review backup alerts](/user-guides/backup/review-alerts)
+- [Backup overview](/user-guides/backup/index)

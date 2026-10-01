@@ -4,107 +4,109 @@ description: 'Choose a company and base year, compare projected costs, and under
 icon: 'chart-line'
 ---
 
-Open **Budgets > Budgets Menu > Forecast** to project a company's category costs beyond a selected **Base Year**. This is a planning worksheet, separate from a budget's approval and Actuals.
+Use **Budgets Menu > Forecast** to project one company's category costs for the years after a **Base Year**. The forecast is a planning worksheet. It is separate from budget approval and Actuals. This guide is for MSP staff, and for company users whose MSP has given them budget access.
 
-**Audience:** MSP staff and Company users with budget editing access assigned by their MSP. Ordinary budget read access does not open Forecast. Saving and syncing require budget management permission; ask your MSP if those buttons are missing.
+## Before you start
 
-## Open the right forecast
+- You need budget edit access (**write_budgets** or **manage_budgets**) to open the page. Without it the page says **You don't have permission to view budget forecast.**
+- Only people with **manage_budgets** see the **Sync from Budget**, **Sync from Planner** and **Save** buttons. You can type in the worksheet with edit access, but you cannot save it without **manage_budgets**.
+- Select exactly one company in the top bar. Global View and a list of several companies show **Select a single company to forecast**.
+
+## Open the forecast
 
 <Steps>
   <Step title="Select one company">
-    Use the company selector at the top of the portal. Global View and an assigned-company portfolio are not a combined forecast. If you see **Select a single company to forecast**, choose one company there.
+    Pick the company in the top bar.
+  </Step>
+  <Step title="Open Forecast">
+    Click **Budgets**, then **Budgets Menu**, then **Forecast**. The page is titled **Budget Forecast**.
   </Step>
   <Step title="Choose the Base Year">
-    Check the selected fiscal year and the years in the table headings. When you select another Base Year with unsaved changes, **Discard unsaved changes?** asks you to choose. **Cancel** keeps the current year and edited worksheet. **Switch base year** discards those local edits and loads the selected year. Save work you want to keep before switching; after loading, confirm the selector and table headings agree. Company switching is a separate scope change, so save needed work before changing company.
+    Use **Base Year** at the top left. It lists fiscal years from two years ago to five years ahead and starts on the current year. If you have unsaved changes, a message asks **Switch to base year 2026 and discard your unsaved forecast changes?** Click **Keep editing** to stay, or **Switch base year** to discard the edits and load the new year. Save first if you want to keep your work.
+
+    <img src="/images/product/budget-forecast-years.png" alt="Years to Forecast choices from one through five years, with three selected." width="500" height="332" />
   </Step>
-  <Step title="Review the starting amounts">
-    Read each category's Base Year amount, Include switch and projected years. Saved forecast rules can contain manually adjusted starting amounts. Use [Sync from Budget](/user-guides/budgets/sync-budget-forecast) when you intend to replace those amounts with current budget totals.
-  </Step>
-  <Step title="Compare the projection">
-    Check the Total row and the changes shown under each year. These changes compare against the previous year, not always the original base year. Scroll the table horizontally to reach later years, % Increase and Use Global.
+  <Step title="Read the table">
+    Each row is a category. Read **Include**, the **Base Year** amount, one column per forecast year, **% Increase** and **Use Global**. Scroll sideways for later years. The **Total** row adds the included categories. Under each year, the change compares with the year before, not with the base year. Rows come from your Planner item types.
   </Step>
 </Steps>
 
-## Understand the starting totals
+## Where the starting amounts come from
 
-When there are no saved rules, Forecast starts from categorized budget costs for the selected company and fiscal year. It combines matching budgets; it does not offer a source-budget picker or limit the calculation to one approved budget. Drafts, copies and archived plans can overlap, and rejected lines with positive costs can still contribute. Review those sources before relying on the forecast.
+With no saved rules, the forecast starts from the company's budget lines for the Base Year. It adds up every budget the company has for that fiscal year. It does not let you pick one budget. Drafts, copies, archived budgets and rejected lines all count. Each line adds its twelve-month cost, which includes its billing schedule and any monthly overrides. A line with no category is not shown in any row.
 
-The starting cost is the line's twelve-month billing total, including its billing schedule and monthly overrides. A line without a usable category is not represented by a forecast category. Locked budgets can retain historical category names after a category is renamed or removed.
-
-The displayed currency comes from the company's budget data, with a tenant default fallback. It does not convert mixed-currency prices. Reconcile the sources with your MSP when the forecast differs from a budget list total, approved plan or Actuals.
-
-<img src="/images/product/budget-forecast-years.png" alt="Years to Forecast choices from one through five years, with three selected." width="500" height="332" />
-
-*MSP example: choose how many years follow the selected Base Year.*
+The currency comes from the company's budget data, with your MSP's default as a fallback. Amounts in different currencies are not converted. If the forecast differs from a budget total or Actuals, compare the budgets for that company and year.
 
 ## Adjust the projection
 
 | Control | What it does |
 | --- | --- |
-| **Years to Forecast** | Shows 1–5 years after Base Year. Reducing it discards proposed overrides beyond the shorter horizon; increasing it again does not restore them. |
-| **Default Annual Increase (%)** | Sets a percentage from 0–100. Changing this field alone does not apply growth to every category. |
-| **Apply to All Categories** | Copies the default percentage into all category rows. Turning it off does not erase the percentages already copied. |
-| **Include** | Includes the category in base-year and projected totals. Turning it off excludes the category; it does not mean keep the cost flat. |
-| **Base Year** amount | Changes this forecast's starting amount. It does not edit a source budget line. |
-| **% Increase** | Compounds the category's percentage from the previous year's amount. A blank percentage repeats the base-year amount in years without overrides. |
-| **Use Global** | While Apply to All Categories is on, selects the current default for that row. Clear it to enter a category-specific percentage. |
-| A future-year amount | Creates a manual Override for that category and year. Clear the field to return to its calculated amount. Entering 0 creates a real zero override. |
-| **Hide Empty Categories** | Hides rows whose base amount is zero. It does not remove them from calculations, so a hidden row with a future override can still affect Total. |
+| **Years to Forecast** | Shows 1 to 5 years after the Base Year. Lowering it drops overrides past the new end. Raising it again does not bring them back. |
+| **Default Annual Increase (%)** | A percentage from 0 to 100. It does not change any row until **Apply to All Categories** is on. |
+| **Apply to All Categories** | Copies the default percentage into every row. Turning it off keeps the percentages already copied. |
+| **Include** | Counts the category in the totals. Turn it off to leave the category out of every total. It does not hold the cost flat. |
+| **Base Year** amount | Sets this forecast's starting amount. It does not change any budget. |
+| **% Increase** | Grows the category each year from the year before. A blank percentage repeats the base amount in years that have no override. |
+| **Use Global** | While **Apply to All Categories** is on, ticks the row to use the default percentage. Clear it to type a percentage for the row. |
+| A future-year amount | Typing in the box sets an **Override** for that category and year. Clear the box to go back to the calculated amount. Typing 0 sets a zero override. |
+| **Hide Empty Categories** | Hides rows with a zero base amount. A hidden row with a future override still counts in the total. This setting is not saved. |
 
-For example, a 1,000 base amount with a 5% category increase projects 1,050, then 1,102.50. A manual first-year override of 2,000 makes the next year 2,100 at 5%. With a blank percentage, the next year returns to the 1,000 base instead. A 0% rate carries the previous amount forward; it is different from a blank rate after an override.
+For example, a base amount of 1,000 with a 5% increase gives 1,050, then 1,102.50. If you override the first year to 2,000, the next year is 2,100 at 5%. With a blank percentage the next year goes back to 1,000. A 0% rate carries the previous amount forward, which is different from a blank percentage after an override.
 
-## Save and verify
+## Save the forecast
 
-Finish numeric edits by tabbing or clicking out of the field, then check the recalculated amounts. Changes remain unsaved until an authorized manager chooses **Save**. Wait for **Budget forecast rules have been saved successfully**, then reopen the same company and base year to check the settings and amounts.
+<Steps>
+  <Step title="Finish your edits">
+    Tab out of the last box and check the new amounts. An **Unsaved changes** badge shows next to **Base Year** while edits are waiting.
+  </Step>
+  <Step title="Click Save">
+    Click **Save** on the toolbar. This needs **manage_budgets**. Wait for **Budget forecast rules have been saved successfully.**
+  </Step>
+  <Step title="Check it">
+    Reload the same company and Base Year and check the settings and amounts.
+  </Step>
+</Steps>
 
-Save records forecast rules for that company and base year. It does not approve a budget, create future budget documents, change Planner work or update provider prices. Hide Empty Categories is a temporary display preference rather than a saved planning rule.
+Save keeps the forecast rules for that company and Base Year. It does not approve a budget, create budgets, change Planner work or change provider prices. To fill the worksheet from budgets or Planner first, see [Sync a forecast from budgets or Planner](/user-guides/budgets/sync-budget-forecast).
 
 ## Troubleshooting
 
-| Result | What to check |
+| Problem | What to do |
 | --- | --- |
-| No permission to view | Ask the MSP to check budget editing access; read-only budget access is not enough for Forecast. |
-| Save or Sync buttons are missing | These require budget management permission. Local changes are not saved by navigating away. |
-| Years or company do not match the selection | Stop editing and reload the selected company/year. Confirm the table headings before saving. |
-| Default is 5%, but amounts stay flat | Check the row's % Increase or enable Apply to All Categories. The default field alone is not a growth rule. |
-| Total differs from visible rows | Turn off Hide Empty Categories and check Include switches and future overrides. |
-| Total differs from one budget | Check all budgets for this company/year, categories, rejected lines, currency and saved forecast adjustments. |
-| Unexpected zero starting totals | Check source budgets and access. Reload before replacing existing rules; an unexpected empty load is not proof of zero planned cost. |
-| Save fails | Keep the worksheet open, review the error and ask your MSP to check access. Do not assume the changes persisted. |
+| **You don't have permission to view budget forecast.** | Ask your MSP admin for budget edit access. Read-only budget access is not enough. |
+| **Select a single company to forecast** | Pick one company in the top bar. |
+| **Sync** and **Save** are missing | You need **manage_budgets**. Changes are not saved if you leave the page. |
+| The default is 5% but amounts stay flat | Turn on **Apply to All Categories** or type a percentage in each row. The default field alone changes nothing. |
+| **Total** does not match the visible rows | Clear **Hide Empty Categories** and check the **Include** switches and future overrides. |
+| **Total** does not match one budget | The forecast adds every budget for that company and year, including rejected lines. |
+| The starting amounts are all zero | Check that the company has budgets with categories for that year. Reload before you replace saved rules. |
+| **Failed to save budget forecast rules.** | Keep the page open, read the error, and try again. Ask your MSP admin if it keeps failing. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where can I forecast future company IT costs?">
-    Select one company and open Budgets > Budgets Menu > Forecast. Check Base Year and the projected columns. Budget editing access is required; management permission is required to save.
-  </Accordion>
-  <Accordion title="Can a Company user with read-only budget access open Forecast?">
-    No. Forecast requires budget editing access assigned by the MSP. Ordinary budget viewing and Forecast have different access requirements.
+  <Accordion title="Can a company user with read-only budget access open Forecast?">
+    No. Forecast needs budget edit access.
   </Accordion>
   <Accordion title="Does Forecast use only my latest approved budget?">
-    No. Starting category totals combine matching company/year budgets. Check overlapping copies, statuses, rejected lines and categories before relying on them.
+    No. It adds every budget for the company and year, whatever the status.
   </Accordion>
   <Accordion title="Does turning Include off keep a category flat?">
-    No. It excludes the category from totals. Keep Include on and use a blank percentage for a flat base amount in years without overrides.
-  </Accordion>
-  <Accordion title="Why does changing the default percentage not increase every row?">
-    Each row needs a percentage. Apply to All Categories copies the default into the rows; merely changing Default Annual Increase does not do that.
+    No. It leaves the category out of the totals. Keep **Include** on and leave **% Increase** blank to hold a base amount flat.
   </Accordion>
   <Accordion title="Does turning Apply to All Categories off restore my old rates?">
-    No. Percentages already copied to rows remain. Review and edit the category rates explicitly.
+    No. The percentages already copied stay. Edit each row.
   </Accordion>
   <Accordion title="How do I remove a forecast override?">
-    Clear that future-year amount field. The calculated value returns. Typing zero instead creates a zero override.
-  </Accordion>
-  <Accordion title="Can a hidden empty category still change the total?">
-    Yes. Hide Empty Categories looks at the base amount only; a hidden included row may have a nonzero future override.
-  </Accordion>
-  <Accordion title="Will shortening the forecast keep overrides for later years?">
-    No. Reducing Years to Forecast discards proposed overrides beyond that horizon. Review the effect before saving.
+    Clear that future-year box. The calculated value returns.
   </Accordion>
   <Accordion title="Does saving a forecast approve or create budgets?">
-    No. It saves planning rules for one company and base year. Budget creation, approval, Actuals and provider changes are separate workflows.
+    No. It only saves the forecast rules.
   </Accordion>
 </AccordionGroup>
 
-Related: [Sync forecast sources](/user-guides/budgets/sync-budget-forecast), [Read a budget](/user-guides/budgets/read-budget), [Monthly Breakdown](/user-guides/budgets/read-monthly-breakdown).
+## Related guides
+
+- [Sync a forecast from budgets or Planner](/user-guides/budgets/sync-budget-forecast)
+- [Read a budget overview](/user-guides/budgets/read-budget)
+- [Read a budget monthly breakdown](/user-guides/budgets/read-monthly-breakdown)

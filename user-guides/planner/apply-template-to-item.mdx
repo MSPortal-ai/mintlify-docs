@@ -4,98 +4,122 @@ description: 'Choose which reusable fields replace an item’s values, review th
 icon: 'list-check'
 ---
 
-**Audience:** MSP staff with Planner editing access and access to available templates. Creating or managing the template catalog requires **Manage Planner**. Company users do not browse the staff template catalog.
+Fill a new or existing Planner item from a template, and choose which fields the template overwrites. This guide is for MSP staff with Planner editing access. To make the template first, see [Create and manage Planner templates](/user-guides/planner/manage-templates).
 
-Use this workflow to populate a new item or update selected fields on an existing item. To create the reusable defaults first, see [Create and manage Planner templates](/user-guides/planner/manage-templates).
+## Before you start
 
-## Choose the template and fields
+- You need **Write Planner** or **Manage Planner**. The **Apply Template** button is turned off when no templates exist.
+- Set the item's **Company** first if you want **Compliance auto-link** to work.
+- Applying a template changes the item's form. Nothing is saved until you click **Save**.
 
-1. Open a Planner item from **List View** or the timeline. For a new item, choose **Add Item**, then set its company and title.
-2. Beside **Description**, choose **Apply Template**. Some new-item entry points label this **Use Template**.
-3. Search the template list by its displayed name and select the required template.
-4. Review **Fields to Apply**. All fields start selected. Choose **None** to start with an empty selection, then check only what you intend to copy; **All** selects every listed field.
-5. Choose **Apply Template** in the selection dialog.
-6. Review the resulting item, including its title, notes, costs, relationships and visibility.
-7. Choose the item's **Save** button and wait for success. Reopen it to confirm the saved values.
+## Apply a template
 
-<Frame caption="Example: copy Estimated Hours, Cost Rows and the template’s visibility setting; retain the other item fields.">
-  <img src="/images/product/planner-template-field-selection.png" alt="Fields to Apply with only Estimated Hours, Cost Rows and Hide from company users selected." width="696" height="892" />
-</Frame>
+<Steps>
+  <Step title="Open the item">
+    Open an item from List View or the timeline. For a new item, click **Add Item**, then set its company and title.
+  </Step>
+  <Step title="Click Apply Template">
+    Click **Apply Template** beside **Description**. On a new item the button says **Use Template**.
+  </Step>
+  <Step title="Pick a template">
+    Search under **Select Template** and click the template you want. Clicking a name only selects it.
+  </Step>
+  <Step title="Choose the fields to copy">
+    Review **Fields to Apply**. Every field starts ticked. Click **None** to clear them all and tick only what you need, or **All** to tick every field.
 
-Selecting a template alone does not apply it. The selection dialog's **Apply Template** changes the item form; the item's **Save** persists those changes. Close the item and choose **Discard Changes** if you do not want to save the resulting form.
+    <Frame caption="Example: copy Estimated Hours, Cost Rows and the template's visibility setting. The other item fields stay as they are.">
+      <img src="/images/product/planner-template-field-selection.png" alt="Fields to Apply with only Estimated Hours, Cost Rows and Hide from company users selected." width="696" height="892" />
+    </Frame>
+  </Step>
+  <Step title="Click Apply Template">
+    The dialog's **Apply Template** button is turned off until a template and at least one field are chosen. The values now appear in the item form.
+  </Step>
+  <Step title="Review the item">
+    Check the title, notes, costs, relationships and the **Hide from company users** box.
+  </Step>
+  <Step title="Click Save">
+    Wait for the success message, then reopen the item to confirm.
+  </Step>
+</Steps>
 
-The Apply button is unavailable until a template and at least one field are selected. If no templates appear, clear the search and ask the MSP to check the catalog and your access.
+To throw the result away, close the item and choose **Discard**. If no template appears in the list, clear the search box and ask your MSP to check the template catalog and your access.
 
-## Know what you are replacing
+## Know what each field replaces
 
-| Selected field | Effect on the item form |
+| Field | What happens |
 | --- | --- |
-| **Title**, **Description**, **Type**, **Status**, **Business Value** | Copies the corresponding template value. Leave unchecked to retain the item's own value. |
-| **Estimated Hours**, **Probability of Success** | Replaces that planning estimate. It does not add to the existing estimate. |
-| **Cost Rows (one-time / monthly / annual)** | Replaces the cost-row list rather than appending another set. Review each cadence afterward. |
-| **Public Notes**, **Private Notes** | Replaces the corresponding notes content when the template provides it. It is not an append operation. |
-| **Hide from company users** | Copies the template's saved visibility setting. The target may become visible or hidden depending on that setting. |
-| **Compliance auto-link** | Resolves matching assignments for the item's company and replaces its compliance relationships with the resolved set. |
+| **Title**, **Description**, **Type**, **Status**, **Business Value** | Copies the template's value. Leave a field unticked to keep the item's own value. |
+| **Estimated Hours**, **Probability of Success** | Replaces the item's estimate. It does not add to it. |
+| **Cost Rows (one-time / monthly / annual)** | Replaces the whole cost list with the template's rows, including quantity and unit amount. A template with no rows adds its legacy estimate as one One-time row. |
+| **Public Notes**, **Private Notes** | Replaces the notes when the template has them. It does not append. |
+| **Hide from company users** | Copies the template's visibility setting. The item can end up visible or hidden. |
+| **Compliance auto-link** | Replaces the item's compliance links with the newest matching assignment in the item's company for each check. |
 
-Unchecked fields keep their current form values. A selected field with a null or missing template value can leave the existing value unchanged; an explicitly empty text value can clear it. Review the result instead of assuming every selected blank field behaves identically.
+Unticked fields keep their current values. A template field that is empty (null) leaves the item's value alone. A field that holds empty text can clear the item's value, so check the result.
 
-Company, due date and assignee are not in this field selection. Set them on the item itself. Custom-field values and uploaded files are not copied by this operation. A Tool Stack-managed title remains subject to its standard's title lock.
+**Company**, **Due Date** and **Assignee** are not part of the choices. Set them on the item. Custom field values and uploaded files are not copied.
+
+To copy only an estimate, click **None**, tick **Estimated Hours** and **Cost Rows**, then click **Apply Template**.
+
+## Review compliance links
+
+**Compliance auto-link** looks for the newest assignment of each configured check in the item's company. It does not create a missing assignment, fix a finding or copy another company's assignment.
+
+If no company is set on the item, no links are added. If some checks have no matching assignment, a message says so and the other fields still apply. Check **Relationships** before you save. If the lookup fails, the dialog keeps your template and field choices so you can try again.
 
 ## Review costs, notes and visibility
 
-Templates retain cost amounts and cadences but currently normalize the original quantity/unit breakdown. For example, a template entered as 3 × 200 Monthly applies as a 600 Monthly row. Check quantities on the actual item before saving. A template without cost rows uses its legacy estimate as a One-time row, so inspect the cadence.
+- Public Notes are visible to anyone who can read the item. Private Notes stay MSP-only.
+- Ticking **Hide from company users** copies the template's saved setting. Check the checkbox at the bottom of the item afterward.
+- Compare the cost rows with what you expect before you save.
 
-Public Notes are visible to users who can read the item. Private Notes remain internal to authorized MSP staff. Selecting the visibility field does not reveal Private Notes or grant access to another module.
+## Troubleshooting
 
-To copy only an estimate while retaining the title and description, choose **None**, select **Estimated Hours** and **Cost Rows**, then Apply Template. Check the unchanged text and new estimates before Save.
+| Problem | What to do |
+| --- | --- |
+| **Apply Template** is grayed out on the item | No templates exist yet. Ask someone with Manage Planner to create one. |
+| The dialog's **Apply Template** is grayed out | Choose a template and tick at least one field. |
+| No compliance links were added | Set the item's company first, and check that the company has matching assignments. |
+| Costs look different | **Cost Rows** replaces the list. Compare the quantity, amount and recurrence of each row. |
+| Notes were overwritten | Public and Private Notes replace the existing text. Untick them to keep your notes. |
 
-## Compliance relationships
-
-Set the item's company before applying **Compliance auto-link**. It looks for the newest matching assignment for each configured check in that company. It does not create missing assignments, remediate findings or copy another company's assignment.
-
-The resolved set replaces the item's compliance links, so leave this field unchecked when you want to preserve those links. If no matching assignments exist, a message can report missing links. Inspect Relationships before Save; do not treat a missing-link message as proof that no other selected field was applied.
-
-If assignment lookup fails, the selection dialog retains your template and field choices. Resolve the displayed error before trying again. Permission to read the relevant compliance data is required for that lookup.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where do I apply a template to an existing Planner item?">
-    Open the item and choose Apply Template beside Description. Select the template and fields, apply them, review the item and choose Save.
+  <Accordion title="Where do I apply a template to an existing item?">
+    Open the item and click **Apply Template** beside **Description**. Pick the template and fields, apply, review and **Save**.
   </Accordion>
-  <Accordion title="Does clicking a template name apply or save it?">
-    No. Select fields and use Apply Template in the selection dialog. The separate item Save persists the resulting form.
+  <Accordion title="Does clicking a template name apply it?">
+    No. Choose fields and click **Apply Template**. The item's **Save** keeps the result.
   </Accordion>
-  <Accordion title="How can I copy estimates without replacing the title?">
-    Choose None, then select Estimated Hours and Cost Rows only. Apply Template and review the unchanged title before Save.
+  <Accordion title="How do I copy estimates without changing the title?">
+    Click **None**, tick **Estimated Hours** and **Cost Rows**, apply and **Save**.
   </Accordion>
-  <Accordion title="Are all fields initially selected?">
-    Yes. Review the selection each time. None clears it and All selects every listed field.
+  <Accordion title="Are all fields ticked at first?">
+    Yes. Review them each time.
   </Accordion>
-  <Accordion title="Does applying costs add more rows to the existing costs?">
-    No. Selecting Cost Rows replaces the list. Review the resulting quantities, amounts and cadences before saving.
+  <Accordion title="Does applying costs add rows to the existing list?">
+    No. It replaces the list.
   </Accordion>
   <Accordion title="Does applying Public Notes append the template text?">
-    No. It replaces that notes field when the template provides a value. Leave it unchecked to preserve existing notes.
+    No. It replaces the notes when the template has text.
   </Accordion>
-  <Accordion title="Does selecting Hide from company users always hide the item?">
-    No. It copies the template's saved visibility setting, which can make the item visible or hidden. Review the item checkbox afterward.
+  <Accordion title="Does Hide from company users always hide the item?">
+    No. It copies the template's setting, which can be visible or hidden.
   </Accordion>
-  <Accordion title="Can template application change the company, due date or assignee?">
-    These are not selectable template fields here. Set them directly on the item. Uploaded files and custom-field values are not copied either.
+  <Accordion title="Can a template change the company, due date or assignee?">
+    No. Set them on the item.
   </Accordion>
-  <Accordion title="Does compliance auto-link add to existing compliance relationships?">
-    It replaces them with the resolved matching company assignments. Leave it unchecked when you want to keep the current links.
-  </Accordion>
-  <Accordion title="What if the company has no matching compliance assignment?">
-    Auto-link cannot create the missing assignment. Review the missing-link message and Relationships; other selected template fields can still be applied.
-  </Accordion>
-  <Accordion title="Can I undo template application before saving?">
-    Close the item and choose Discard Changes to abandon its unsaved form. This does not undo separate operations that already completed, such as attachment changes.
+  <Accordion title="Can I undo a template before saving?">
+    Yes. Close the item and choose **Discard**. File changes you already made stay.
   </Accordion>
   <Accordion title="Is this the same as Apply to Companies?">
-    No. This updates selected fields in one item form. Apply to Companies creates new items for selected template/company combinations.
+    No. This changes fields on one item. Apply to Companies creates new items.
   </Accordion>
 </AccordionGroup>
 
-For the bulk creation workflow, see [Create Planner items for multiple companies](/user-guides/planner/apply-templates-to-companies).
+## Related guides
+
+- [Create Planner items for multiple companies](/user-guides/planner/apply-templates-to-companies)
+- [Create and manage Planner templates](/user-guides/planner/manage-templates)
+- [Plan costs and hours](/user-guides/planner/plan-costs-and-hours)

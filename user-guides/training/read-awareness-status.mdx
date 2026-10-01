@@ -1,55 +1,80 @@
 ---
 title: "Read security awareness learner status"
-description: "Find learners, filter provider results, and interpret completion and phishing metrics without confusing them with course actions."
+description: "Find a learner, filter the table, and read training completion and phishing results from your connected providers."
 icon: user-shield
 ---
 
-**Audience:** Company users and MSP staff with Security Awareness read access to the selected companies. Your MSP connects and maps the providers and manages access.
+This guide is for company users and MSP staff who need to see who has finished security awareness training and how people did on phishing tests. The table shows imported results from Breach Secure Now, Phin, Huntress, CyberHoot, and Phished.io.
+
+## Before you start
+
+- You need Security Awareness read access for the companies you select.
+- Your MSP must connect each provider and map its customers to companies. See [Security awareness training](/user-guides/training/security-awareness).
+- This table is read-only. It does not enroll learners, send reminders, play courses, or export CSV.
+
+## Open the learner table
+
+You can open the table from two places.
+
+<Steps>
+  <Step title="Option A: Security Training (all providers)">
+    Open **Training > Training Menu > Security Training**. This table includes every connected provider, including CyberHoot. When Huntress assignments are available, this page has two tabs and **Training Status** is the one that shows learners.
+  </Step>
+  <Step title="Option B: Security Awareness (one provider at a time)">
+    Open **Security > Security Awareness**. When more than one provider is connected, provider tabs appear at the top. Click the tab for **BSN**, **Phin**, or **Huntress** to see that provider's learners. For Phished.io, click **Phished.io**, then **Learners**. The **CyberHoot** tab shows CyberHoot company and challenge sections instead of this table.
+  </Step>
+</Steps>
 
 ## Find a learner
 
-1. Open **Security > Security Awareness** and locate the learner table below any CyberHoot sections. This table contains the connected Breach Secure Now, Phin, and Huntress providers.
-2. To include CyberHoot learners, use **Training > Training Menu > Security Training**, when that entry is available. **Training Status** is the status tab when Huntress Assignments is also available.
-3. Confirm the main company selection. The **Company** column is hidden when exactly one company is selected.
-4. Use the **User** column's text filter and **Provider** choices to narrow the results. The search also matches company names and source user identifiers.
-5. Use the column controls to filter or sort, then browse the 25-row pages. Filtering and sorting request the matching result set across pages.
+<Steps>
+  <Step title="Check the company selection">
+    The table follows the company selector. The **Company** column is hidden when you select exactly one company.
+  </Step>
+  <Step title="Search by user">
+    Use the filter on the **User** column. It matches the learner's name and email.
+  </Step>
+  <Step title="Filter or sort">
+    Use the column filters and sort controls. Filtering and sorting apply to the whole result set, not only the page on screen. Browse the results 25 rows at a time.
+  </Step>
+  <Step title="Open a Breach Secure Now learner">
+    Click a Breach Secure Now row to see [risk details](/user-guides/training/read-bsn-risk). Rows from other providers do not open a panel.
+  </Step>
+</Steps>
 
-Select a Breach Secure Now row to [read its risk details](/user-guides/training/read-bsn-risk). Other provider rows do not open that panel.
+Changing the company selector resets the filters, sorting, and page. Close any open Breach Secure Now panel and select the learner again after you change companies.
 
 ## Filter the table
 
-| Control | Use |
+| Column or control | How to use it |
 | --- | --- |
-| Provider | Select one or more providers available to this view. |
-| Company | Narrow by company within the main selected scope. |
-| Assigned, Completed, Completion | Apply numeric ranges. |
-| Training Status | Choose **Up to date**, **Behind**, or **Not assigned**. Clear this filter to include missing status values. |
-| Phishing Sent, Clicked, Click Rate, Active Campaigns | Apply numeric ranges to provider metrics. |
-| Column visibility | Show additional provider fields such as **ESS**, **Security score**, **Micro training**, **Account**, or **Last Sync**. |
-| Last training, Last login, Last Sync | Use date filters when that provider supplies the field. |
+| **Provider** | Pick one or more providers. |
+| **Company** | Pick companies within your selected scope. |
+| **Assigned**, **Completed**, **Completion** | Enter a number range. |
+| **Training Status** | Choose **Up to date**, **Behind**, or **Not assigned**. |
+| **Phishing Sent**, **Clicked**, **Click Rate**, **Active Campaigns** | Enter a number range. |
+| Column toggle | Show more columns: **ESS**, **Security score**, **Micro training**, **Breaches**, **Credentials captured**, **Last training**, **Last login**, **Account**, and **Last Sync**. |
+| **Last training**, **Last login**, **Last Sync** | Pick a date range. These are filled in only when the provider supplies them. |
 
-CyberHoot adds **Overdue**, **HootScore**, and optional columns for outstanding work, HootRank, individual scores, attempts, late submissions, and AttackPhish failures. These are CyberHoot fields; turning a column on does not make another provider supply it.
-
-Changing company scope resets the table's filters, sorting, and page. Recheck the company and learner after a scope change; close any previously opened BSN detail panel before opening the current row.
+CyberHoot adds **Overdue**, **HootScore**, and columns you can turn on for **HootRank**, individual scores, **Outstanding**, **Attempts**, **Late submissions**, and **AttackPhish failures**. Only CyberHoot fills these in.
 
 <img src="/images/product/security-awareness-training-status.png" alt="Training Status filter: All, Up to date, Behind, and Not assigned" width="256" height="268" />
 
-This generic filter was captured in an MSP Demo session. It shows the available choices, not a learner completion result.
+## Read the figures
 
-## Understand the figures
+- **Not assigned** means the learner has zero assigned trainings.
+- **Up to date** and **Behind** come from each provider's own compliance value. For Breach Secure Now, **Up to date** means completion is 100%.
+- **Not provided** means the provider did not send that value. It does not mean zero risk or finished training.
 
-**Not assigned** means the assigned count is zero. **Up to date** and **Behind** use completion or compliance information available for that provider. **Not provided** means that a usable status or metric was not supplied. A zero can also result from absent imported counts for some providers; it is not an independent provider health check.
-
-| Provider | How to interpret the learner row |
+| Provider | How to read the row |
 | --- | --- |
-| Breach Secure Now | Assigned and Completed combine security courses, micro training, and additional courses. Overall completion uses those totals. The risk panel separates the categories. |
-| Phin | Completion uses completed versus assigned counts. Training Status follows Phin's up-to-date value. Active Campaigns is a company-level count repeated on learner rows. |
-| Huntress SAT | Assigned counts distinct synced assignments linked to the learner; completed counts assignments with recorded completion or progress of at least 100%. Active Campaigns is company-level, not a learner's course count. |
-| CyberHoot | Uses imported assignment, completion, compliance, and Hoot metrics. Phishing Sent and Clicked are not supplied in these generic columns; use the dedicated CyberHoot metrics and HootPhish views. |
+| Breach Secure Now | **Assigned** and **Completed** add up security courses, micro training, and additional courses. The risk panel breaks them apart. **Active Campaigns** shows 1 or 0 for the learner's enrollment in a campaign. |
+| Phin | **Completion** is completed divided by assigned. **Active Campaigns** is a company count, repeated on every learner row. |
+| Huntress | **Assigned** counts the learner's synced assignments. **Completed** counts assignments with a completion date or progress of 100% or more. **Active Campaigns** is a company count. |
+| CyberHoot | Uses CyberHoot's own assignment, completion, compliance, and Hoot figures. Use the CyberHoot tab for phishing results. |
+| Phished.io | **Assigned** and **Completed** come from Phished's recipient summary. Phishing sent, clicked, and click-rate columns stay empty for Phished. Use its **Insights** view for simulation events from the last 30 days. |
 
-For BSN, Active Campaigns is an enrollment indicator displayed as 1 or 0. Do not add repeated company campaign counts across learners. Phishing simulations and captured-credential metrics do not by themselves prove a real account compromise.
-
-The optional **Account** value is a display summary. Missing account activity can display as Active; it is not proof that the person can sign in. Likewise, a non-BSN **Breaches** value of 0 is not proof of a completed dark-web check.
+Do not add up **Active Campaigns** across learners, because Phin and Huntress repeat the same company count on each row.
 
 ## Phished.io
 
@@ -57,25 +82,37 @@ The [Phished.io integration](/user-guides/integrations/enable-phished-integratio
 
 The generic phishing sent, clicked and click-rate columns are unavailable for Phished. Use its **Insights** view for simulation event counts from the last 30 days. These event counts are distinct from a calculated click rate or a unique learner count.
 
-## Missing or stale results
+## Troubleshooting
 
-Clear the relevant filters, check company scope, and reload the page if necessary. Ask your MSP to inspect provider mapping and sync information if the learner remains absent. Earlier results can remain visible while a new request loads, and an empty or missing table does not prove a successful refresh.
+| Problem | What to do |
+| --- | --- |
+| A learner is missing | Clear filters, check the company selector, and check the provider filter. Reload if needed, then ask your MSP to check the provider mapping and last successful sync. |
+| Clicking a row does nothing | Only Breach Secure Now rows open a panel. |
+| A column is blank or says **Not provided** | The provider does not supply that value. |
+| The table is empty | Check the company selector and filters. An empty table does not mean everyone finished. |
+| You need to change an assignment or account | Start with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket), then review and confirm the request. MSP staff make the change in the provider. |
 
-This table does not export CSV, enroll learners, send reminders, or play courses. For an account or assignment problem, start with the [Home AI Assistant](/user-guides/ticketing/open-a-ticket), then review and confirm the request.
+Earlier results can remain visible while a new request loads. An empty or missing table does not prove a successful refresh.
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why does clicking a Phin, Huntress, or CyberHoot learner do nothing?">
-    Only Breach Secure Now rows open the BSN risk panel in this table. Use the relevant provider or assigned training entry for other actions.
+    Only Breach Secure Now rows open the risk panel in this table.
   </Accordion>
-  <Accordion title="Can I add up Active Campaigns across every learner?">
-    No. Phin and Huntress repeat company-level campaign counts on learner rows. BSN uses an enrollment indicator.
+  <Accordion title="Does Not assigned mean the learner passed?">
+    No. It means no trainings are assigned. Check the provider's assignments with your MSP.
   </Accordion>
-  <Accordion title="Does Not assigned mean the learner passed their training?">
-    No. It means the assigned count is zero. Check provider data and assignments with your MSP before drawing a conclusion.
+  <Accordion title="Why do I see different providers on Security Training and Security Awareness?">
+    **Security Training** lists all providers in one table. **Security Awareness** shows one provider per tab.
   </Accordion>
-  <Accordion title="Why are some provider columns blank or Not provided?">
-    Providers supply different metrics. A visible column does not guarantee a value for every provider; missing data is not a zero-risk or completion result.
+  <Accordion title="Does the Account column prove someone can sign in?">
+    No. It shows **Active** unless the provider reports the account as inactive or locked.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read a Breach Secure Now learner's risk details](/user-guides/training/read-bsn-risk)
+- [Find Huntress training assignments](/user-guides/training/read-huntress-assignments)
+- [Security awareness training](/user-guides/training/security-awareness)

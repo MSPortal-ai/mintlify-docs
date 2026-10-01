@@ -8,7 +8,13 @@ Account Readiness measures how completely each client is set up in MSPortal.ai, 
 
 <Note>Account Readiness replaces the Company Audit. The old address `/settings/companies/audit` now redirects here, and any saved links keep working.</Note>
 
-## Accessing Account Readiness
+## Before you start
+
+- This is an MSP staff view. Company users cannot open Account Readiness.
+- You need **Account Readiness: Read** to open it. Changing requirements needs **Account Readiness: Manage**. The **By owner** tab has its own permission, so a scorecard of named staff is never granted by accident.
+- Requirements assign owners by Team Role, so assign people to roles on each company's **Team** tab. See [Account teams and Team Roles](/user-guides/getting-started/onboarding/company-roles).
+
+## Open Account Readiness
 
 <Steps>
   <Step title="Open MSP Tools">
@@ -17,9 +23,10 @@ Account Readiness measures how completely each client is set up in MSPortal.ai, 
   <Step title="Choose your scope">
     Use the company selector at the top of the page to look at one client, your assigned clients, or the whole portfolio.
   </Step>
+  <Step title="Pick a view">
+    Use the **Companies** tab for the grid, or **By owner** for the per-person rollup.
+  </Step>
 </Steps>
-
-This is an **MSP staff** view; Company users cannot open Account Readiness. It requires the **Account Readiness: Read** permission. Configuring requirements requires **Account Readiness: Manage**, and the per-person view requires its own permission so a scorecard of named staff is never granted by accident.
 
 ## Summary cards
 
@@ -79,9 +86,20 @@ Read **Current configuration, evaluated when you open this page** or the display
 
 ### Bulk changes
 
-With Manage permission, select companies on the current page and click **Bulk update**, or use a row’s **Update readiness** action. Selection does not mean every matching page is selected; changing page, filters, sorting or scope clears the selection.
-
-In **Update readiness**, review the named companies and **Change** operation. Choose the requirement where relevant, and supply a reason for an exemption. Available operations exempt/remove exemption, confirm/clear confirmation, and exclude/include companies. **Apply to…** saves the operation; Cancel closes the draft. Confirmation requires an already-satisfied check for every selected company.
+<Steps>
+  <Step title="Select companies">
+    With Manage permission, tick companies on the current page, then click **Bulk update**. For one company, use the row's **Update readiness** action instead. The selection covers only the current page. Changing page, filters, sorting, or scope clears it.
+  </Step>
+  <Step title="Choose the change">
+    In **Update readiness**, review the named companies. In **Change**, choose **Exempt a requirement**, **Remove an exemption**, **Confirm a requirement**, **Clear a confirmation**, **Exclude from readiness**, or **Include in readiness**.
+  </Step>
+  <Step title="Fill in the details">
+    Choose the **Requirement** where asked. An exemption also needs a reason. Confirming needs every selected company to already satisfy the check.
+  </Step>
+  <Step title="Apply">
+    Click **Apply to N companies**. Click **Cancel** to close without saving.
+  </Step>
+</Steps>
 
 The check menu’s **Exclude check** and **Remove exclusion** actions can save immediately. Inspect the company and requirement before using them; there is no page-level Save to undo them.
 
@@ -125,15 +143,36 @@ Interpret **vs team** with the number and nature of assigned checks, client cove
 
 Trend deliberately ignores requirements that did not exist at the start of the period. Adding a new requirement raises the bar, and that should not read as everyone regressing.
 
-## Configuring requirements
+## Configure requirements
 
-Go to **Settings > MSP Tools > Account Readiness** to decide what "ready" means for your clients. Each requirement has:
+<Steps>
+  <Step title="Open the settings">
+    Go to **Settings > MSP Tools > Account Readiness**. You need **Account Readiness: Manage**.
+  </Step>
+  <Step title="Add a requirement">
+    Click **Add requirement**. To change one, edit its row.
+  </Step>
+  <Step title="Choose what it checks">
+    In **What does this check?**, pick a kind, such as **Company profile fields** or **Integration company mapping**. Then fill in its specifics, picked from your own data, such as your roles, custom fields, compliance groups, or report templates.
+  </Step>
+  <Step title="Set the owner">
+    Choose a **Primary owner** role. Add **Supporting roles** if others can fix it. The score counts the check once, against the primary owner.
+  </Step>
+  <Step title="Choose the options">
+    Optionally set a **Name (optional)**, and turn on **Needs a person to confirm it** if someone must confirm the value on top of the data check.
+  </Step>
+  <Step title="Save">
+    Click **Save**. Use the **On** switch to turn a requirement off or on, and **Move up** or **Move down** to reorder.
+  </Step>
+</Steps>
+
+Each requirement has these settings.
 
 | Setting | Purpose |
 |---------|---------|
 | **What does this check?** | The kind of check, such as a company field, an integration mapping, or a record that must exist |
 | **Configuration** | The specifics, picked from your own data: your roles, your custom fields, your compliance groups, your report templates |
-| **Name** | An optional label that replaces the default one |
+| **Name (optional)** | A label that replaces the default one |
 | **Primary owner** | The role that carries this in the score |
 | **Supporting roles** | Other roles that should see the work |
 | **Needs a person to confirm it** | Requires a confirmation on top of the data check |
@@ -187,6 +226,18 @@ Some clients are not meant to be measured at all. Use the company row or bulk **
   </Accordion>
 </AccordionGroup>
 
+## Troubleshooting
+
+| Problem | What to do |
+|---------|------------|
+| Account Readiness is missing from the sidebar | You need **Account Readiness: Read**. Ask an administrator. |
+| A company shows **No score** | It has no applicable requirements. Check the requirements and exemptions. |
+| A check shows **Unconfirmed** again | The underlying value changed, so the confirmation lapsed. Check the value, then confirm it again. |
+| A requirement says it is misconfigured | Edit it in **Settings > MSP Tools > Account Readiness** and fill in the missing specifics. |
+| The score looks out of date | The grid evaluates current configuration when you open it. Click **Refresh** or reopen the page after you fix the source. |
+| **Bulk update** shows no companies | Tick companies on the current page. Changing page or filters clears the selection. |
+| A company is missing from the grid | It may be excluded. Restore it in the readiness settings under **Excluded companies**. |
+
 ## Frequently asked questions
 
 <AccordionGroup>
@@ -224,6 +275,6 @@ Some clients are not meant to be measured at all. Use the company row or bulk **
 
 ## Related guides
 
-- [Companies](/user-guides/company-overview/index)
+- [Company overview](/user-guides/company-overview/index)
 - [Company settings](/user-guides/settings/companies)
 - [Client Health](/user-guides/msp-tools/client-health)

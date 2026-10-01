@@ -5,44 +5,82 @@ description: "Connect the selected PSA and verify its data before continuing."
 icon: "ticket"
 ---
 
-**Audience:** MSP staff with integration-management access. Have the provider administrator prepare the credentials and permissions required by its setup guide.
+Connect your PSA so MSPortal can sync companies, contacts, and tickets. This page is for MSP staff with integration-management access. It covers Halo PSA, ConnectWise Manage, Autotask, and Syncro.
 
-## Connect the intended instance
+## Before you start
 
-1. In **Launch Center**, review the selected PSA and connection instance, then open its setup step. You can also open the provider from **Settings > Integrations**.
-2. Follow the provider's credential and connection workflow. Exact fields, test controls and supported features differ by provider.
-3. Use the displayed connection/save action and wait for its result. Correct credential, region or permission errors before proceeding.
-4. Review synchronization status and available companies, contacts and supported ticket data. A successful credential check is not the same as a completed import.
-5. Map provider companies or sites to the intended MSPortal company. Review import settings before importing or enabling continuing synchronization.
-6. Return to Launch Center and inspect the selected connection's readiness and the separate client-data findings.
+- Choose your PSA in the **Integrations** step first. See [Choose launch integrations](/user-guides/getting-started/onboarding/integration-selection).
+- Have your PSA administrator create an API user and give you its credentials. The fields differ by provider, so keep the provider's setup guide open (see Related guides).
+- Know which boards, queues, or teams hold your client tickets.
+
+## Connect your PSA
+
+<Steps>
+  <Step title="Open the step">
+    In **Launch Center**, select **Connect your PSA** in **Setup guide**. The PSA setup wizard opens inside the plan. You can also use **Settings > Integrations**.
+  </Step>
+  <Step title="Connect">
+    On the **Connect** step, enter your API credentials and click **Test Connection**. Wait for **Connection Verified**. If you see **Connection Failed**, check the credentials, region, or URL, then click **Retry Connection**. Click **Next**.
+  </Step>
+  <Step title="Check permissions">
+    The **Permissions** step checks what the API user can read. Required items show a **Required** badge. If any are **Not permitted**, grant them in your PSA, then click **Re-check**. If a permission is granted but returns no data, setup can continue, but nothing syncs until the API user can see records. Click **Next** when the required items pass.
+  </Step>
+  <Step title="Choose what to sync">
+    On the **Sync** step, turn on the data to sync, such as **Sync Users**, **Sync Companies**, and **Enable Ticket Sync**. Pick the boards, queues, or teams to sync. Data starts syncing in the background when you continue. Use **Contact Auto-Import** only if you want active contacts created as portal users, and choose a **Default Role for Imported Contacts**.
+  </Step>
+  <Step title="Configure tickets">
+    On the **Configure** step, open **Ticket Settings** and set the fields it shows, such as **Closed Statuses**, **Client Comment Status**, and **Default Board for New Tickets**. In **Resolution Status Stepper**, click each stage and choose the PSA statuses that belong to it. Status choices appear only after you select boards, queues, or teams in the **Sync** step. Save the settings and wait for **Ticket settings saved**. Syncro configures tickets automatically, and Autotask shows its own fields such as **Fallback Resource**.
+  </Step>
+  <Step title="Import (optional)">
+    On the **Import** step, import users and companies, or click **Skip**. You can import them later from **Settings > Users & Roles** and **Settings > Companies**.
+  </Step>
+  <Step title="Complete setup">
+    Click **Complete Setup**. Use **Save & Exit** if you need to stop and come back. Your progress is saved.
+  </Step>
+</Steps>
 
 <Frame caption="The plan identifies which PSA and RMM connections to configure and check.">
   <img src="/images/product/launch-integration-choices.png" alt="The plan identifies which PSA and RMM connections to configure and check." width="1780" height="650" />
 </Frame>
 
-## Connection versus readiness
+## Check the data
 
-The connection check applies to the provider instance selected for the plan. An unrelated active integration does not satisfy it. Data requirements are checked separately for the rollout companies. Do not assume all provider features, records or writeback operations are supported because the connection succeeds.
+<Steps>
+  <Step title="Check the sync status">
+    Open the integration in **Settings > Integrations** and look at the last sync time. The first sync can take a while for a large account.
+  </Step>
+  <Step title="Map companies">
+    Map your PSA companies to MSPortal companies. A similar name is not enough, so confirm each match. See [Integration company mapping](/user-guides/settings/integration-company-mapping).
+  </Step>
+  <Step title="Check Launch Center">
+    In **Launch Center**, open **Live verification**. **A healthy PSA connection is available when required** is blocking when your plan needs a PSA. It checks the instance chosen in your plan. An unrelated active integration does not satisfy it.
+  </Step>
+</Steps>
 
-Next, review ticket delivery, visibility and client-available templates. Do not assume every ticket setting waits on one universal initial-sync timer.
+Next, set up [ticket delivery, visibility, and templates](/user-guides/getting-started/onboarding/ticket-settings).
 
 ## Troubleshooting
 
-If the selected connection is missing, return to the strategy step and choose the intended instance. If synchronization has no expected records, inspect its status, provider permissions, scope and company mappings. Preserve the current connection while investigating; clearing and resyncing can remove staged or mapped data and is not a harmless refresh.
+| Problem | What to do |
+| --- | --- |
+| **Connection Failed** | Check the credentials, region or URL, and the API user's status in your PSA. Then click **Retry Connection**. |
+| Required permissions are missing | Grant them in your PSA and click **Re-check**. |
+| "Please complete the connection step first" | Finish **Connect** and **Test Connection** before the later steps. |
+| Status choices are empty on **Configure** | Select boards, queues, or teams in the **Sync** step first. |
+| The wrong connection is checked | Go back to **Integrations** and choose the intended instance. |
+| No records arrive | Check the sync status, the API user's permissions, and the company mappings. Do not clear and resync until you know why. Clearing data can remove mapped records. |
 
-Use the specific guide below for credential preparation and provider behavior.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does a successful PSA credential test complete the rollout?">
-    No. Verify the selected connection, company mapping, actual imported records and remaining readiness findings.
+  <Accordion title="Does a successful credential test complete the rollout?">
+    No. Check the sync, the company mappings, the imported records, and the remaining findings.
   </Accordion>
   <Accordion title="Can any active connection satisfy this step?">
-    No. The check applies to the provider instance selected in the plan.
+    No. The check applies to the instance selected in your plan.
   </Accordion>
-  <Accordion title="Should I clear and resync immediately when data is missing?">
-    No. Inspect status, permissions, scope and mappings first; clearing data is a separate consequential operation.
+  <Accordion title="Can I set this up later from Settings?">
+    Yes. Open your PSA in **Settings > Integrations**. The wizard resumes where you stopped.
   </Accordion>
 </AccordionGroup>
 

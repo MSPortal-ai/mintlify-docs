@@ -1,68 +1,84 @@
 ---
 title: "Refresh Client Health scores"
-description: "Publish a new scorecard, understand freshness and distinguish job submission from completion."
+description: "Publish a new Client Health scorecard on demand, and understand the daily schedule and what to do when a refresh fails."
 icon: "arrows-rotate"
 ---
 
-**Audience:** MSP staff using Client Health. This refresh processes the MSP's tenant; choosing one company at the top does not limit the refresh to that company.
+This guide shows MSP staff how to request a new Client Health scorecard. The refresh covers your whole tenant. Choosing one company in the company selector does not limit it.
+
+## Before you start
+
+- You need access to Client Health under **MSP Tools**.
+- If source data looks missing or stale, check integration sync health and company mappings first. A refresh calculates scores from data MSPortal already has. It does not resync your integrations.
+- Scores also refresh on their own every day at **2:00 AM UTC**.
 
 ## Request a new scorecard
 
-1. Review integration sync health and company mappings if source data is missing or stale.
-2. Open **MSP Tools > Client Health**. The Refresh Scores button is on the portfolio page; use the back arrow if you are on a company detail.
-3. Select **Refresh Scores**. The button changes to **Refreshing...** while the page checks the background task.
-4. Wait for a completion or failure message. Submission alone does not prove a new scorecard was published.
-5. Review the returned dashboard and a relevant company's **Last computed** date, evidence coverage and values.
+<Steps>
+  <Step title="Open Client Health">
+    In the sidebar, open **MSP Tools > Client Health**. The refresh button is on the portfolio page. On a company's detail page, click the back arrow first.
+  </Step>
+  <Step title="Click Refresh Scores">
+    The button changes to **Refreshing...** while MSPortal checks the job every two seconds.
+  </Step>
+  <Step title="Wait for the message">
+    A success toast reads **Refreshed N companies**. A failure toast reads **Refresh failed**, or a more specific error.
+  </Step>
+  <Step title="Check the result">
+    The page reloads with the new scorecard. Open a company and check its **Last computed** date and evidence coverage.
+  </Step>
+</Steps>
 
-The existing complete scorecard remains available until a replacement is published. A failed incomplete run is not published as a partial scorecard. The scheduled refresh is configured for **02:00 UTC daily**; execution can take time and is not a guarantee of completion at that exact minute.
+The last complete scorecard stays visible while a refresh runs. A failed run never publishes a partial scorecard. If you leave the button waiting for more than five minutes, the page stops watching the job, so reload the page and check the latest scorecard before you click again.
 
-## Refreshing scores versus syncing sources
+## Fix stale or missing evidence first
 
-This action computes a scorecard from available application evidence. It is not a command to resync every external provider. Repair an integration or company mapping, let its data arrive, then request the score refresh.
+<Steps>
+  <Step title="Repair the source">
+    Reconnect the integration or correct the company mapping. See [Integration Company Mapping](/user-guides/settings/integration-company-mapping).
+  </Step>
+  <Step title="Let the data sync">
+    Wait for the integration to bring in the new data.
+  </Step>
+  <Step title="Refresh the scores">
+    Click **Refresh Scores** so the next scorecard uses the corrected evidence.
+  </Step>
+</Steps>
 
-The stale warning uses the scorecard's source-data freshness: more than 36 hours old, or an unavailable freshness value, can be stale. **Last computed** is not proof that every underlying feed is fresh. A newly computed result can still contain missing or stale evidence.
+The stale banner shows when the scorecard's source data is more than 36 hours old. **Last computed** only says when the scores were calculated. It does not say the source feeds are fresh. A refresh does not remove manual risk flags, so a company can keep a displayed risk level that differs from the calculated one.
 
-A refresh also does not remove manual risk flags. The effective label can continue to differ from the calculated risk after new scores are published.
+## Troubleshooting
 
-## Handle unavailable or failed results
+| Problem | What to do |
+| --- | --- |
+| **No published Customer Success generation is available yet** | No complete scorecard exists yet. Click **Refresh Scores**. If it keeps failing, contact MSPortal support. |
+| **Failed to start refresh** | The refresh was not accepted. Wait a moment and try again. |
+| **Failed to check refresh status** | The page lost track of the job. It may still be running. Reload and check the latest **Last computed** date before you try again. |
+| **Refresh failed** | The old scorecard stays in place. Check integration health, then try again. |
+| A company still shows **Limited data** after a refresh | The company still lacks the evidence the scoring model needs. See [Understand Client Health scoring and evidence](/user-guides/msp-tools/understand-health-scoring). |
 
-**No published Customer Success generation is available yet** means there is no usable published scorecard for that view. It is not a zero score. Request a refresh or ask the MSP administrator to investigate a failed first generation.
-
-**Failed to start refresh** means submission was not confirmed. **Failed to check refresh status** means this page could not determine the job's result; it does not prove the job stopped. Reopen the dashboard, inspect the latest result and ask the administrator to check the run before repeatedly submitting new refreshes.
-
-If a run reports failure, keep the existing scorecard's date and source limitations in mind while the failure is investigated. Refreshing does not guarantee that every company reaches the evidence threshold or that its score improves.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where is Refresh Scores on a company detail page?">
-    Return to the Client Health portfolio with the back arrow; Refresh Scores is in that page header.
+  <Accordion title="Does Refresh Scores affect only the selected company?">
+    No. It recalculates the scorecard for your whole tenant.
   </Accordion>
-  <Accordion title="Does refresh affect only the selected company?">
-    No. The action runs for the MSP tenant; the top company selection does not restrict it to one company.
+  <Accordion title="When is the automatic refresh?">
+    Every day at 2:00 AM UTC. It can take some time to finish.
   </Accordion>
-  <Accordion title="When is the scheduled refresh?">
-    It is configured for 02:00 UTC daily. Processing can take time; that is not a guaranteed completion time.
+  <Accordion title="Does Refresh Scores resync my integrations?">
+    No. It uses the data already in MSPortal.
   </Accordion>
-  <Accordion title="Does Refresh Scores resync every integration?">
-    No. It computes from application evidence. Let source integration data arrive before refreshing scores.
+  <Accordion title="What happens to the old scorecard during a refresh?">
+    It stays visible until the new one is published.
   </Accordion>
-  <Accordion title="Does a started refresh mean the new scorecard is ready?">
-    No. Wait for completion and inspect the resulting scorecard.
-  </Accordion>
-  <Accordion title="What happens to the previous scorecard during a refresh?">
-    The last complete published scorecard remains available until a replacement is published.
-  </Accordion>
-  <Accordion title="Can a newly computed scorecard still use stale data?">
-    Yes. Last computed and source-data freshness are different. Review the stale warning and evidence coverage.
-  </Accordion>
-  <Accordion title="Does a failed status check prove the refresh stopped?">
-    No. The page may have lost the ability to observe the job. Check the latest result and run status before submitting another.
-  </Accordion>
-  <Accordion title="Will refreshing remove manual risk flags?">
-    No. Manual flags remain separate from the calculated scorecard.
-  </Accordion>
-  <Accordion title="Will refresh give every company a numeric score?">
-    Not necessarily. The available evidence must still meet the scoring model’s requirements.
+  <Accordion title="Does a refresh give every company a score?">
+    No. A company still needs enough evidence to meet the scoring model's requirements.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Client Health](/user-guides/msp-tools/client-health)
+- [Understand Client Health scoring and evidence](/user-guides/msp-tools/understand-health-scoring)
+- [Find companies in Client Health](/user-guides/msp-tools/find-client-health)

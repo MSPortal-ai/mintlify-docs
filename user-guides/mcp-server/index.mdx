@@ -4,161 +4,266 @@ description: 'Connect an AI client to your MSPortal account, limit access, revie
 icon: 'plug'
 ---
 
-The MSPortal MCP server lets a compatible AI client use portal tools under your account's access. It is separate from the built-in Home assistant: you configure and authenticate your external client before it can request MSPortal data or actions.
+The MSPortal MCP server lets a compatible AI client, such as Claude, Cursor, Codex or Gemini CLI, use portal tools under your account's access. This guide is for MSP staff and API consumers who connect an external AI client. It is separate from the built-in Home assistant. Sign-in uses a browser and OAuth, so there is no API key to copy.
 
 ## Before you start
 
-You need an MSPortal account, access to **Settings > MCP Server**, and **MCP Server** write permission to connect or revoke clients. Read-only settings access lets you inspect the page but does not authorize a connection. Your MSP administers Company-user permissions.
-
-Choose a client that supports remote **Streamable HTTP** MCP and browser OAuth authentication. A generic MCP setting or local-server support alone is not enough. Your client subscription and organization policies can also affect availability.
-
-The connection uses browser sign-in and OAuth consent rather than a portal API key. Data returned by tools goes to the external AI client you connect, under that service's handling and your organization's policies. Connect only the areas you intend to use.
+- You need an MSPortal account and a role with **MCP Server** write permission. Without it you can open **Settings > MCP Server** and see the page, but the setup cards are disabled and the page says "You have view-only access."
+- Your MSP administrator manages roles in **Settings > Users & Roles**, including for company users.
+- Your AI client must support remote **Streamable HTTP** MCP servers with browser OAuth sign-in. Local-server support alone is not enough.
+- Data that tools return goes to the AI client you connect. It is handled under that service's terms and your organization's policies. Connect only the areas you need.
 
 ## Connect your client
 
 <Steps>
-  <Step title="Copy the correct server URL">
-    Open **Settings > MCP Server** and copy **Server URL**. Use the URL shown by your own regional portal. Each person authenticates with their own account; copying the URL does not copy another person's access.
+  <Step title="Open MCP Server settings">
+    In MSPortal, go to **Settings > MCP Server**. The page shows **MSPortal MCP server** with the badges **OAuth 2.1 + PKCE**, **Streamable HTTP** and **Scoped to your permissions**.
   </Step>
-  <Step title="Choose the client setup card">
-    Under **Connect your client**, choose the matching client. The dialog provides a command, configuration or install link where supported. Opening the dialog or copying a snippet does not connect the client.
+  <Step title="Copy the Server URL">
+    Click the copy button beside **Server URL**. The same URL works for everyone in your organization, and each person signs in with their own account. Use the URL shown by your own regional portal.
   </Step>
-  <Step title="Add the remote server in the client">
-    Follow the matching instructions. A one-click install link opens a client application; the client may still ask you to trust or start the server. For Copilot, use the [dedicated guide](/user-guides/mcp-server/github-copilot).
+  <Step title="Open the setup card for your client">
+    Under **Connect your client**, click your client. A dialog titled **Set up** and the client's name opens with a ready-made command or configuration. Copying a snippet does not connect anything yet.
   </Step>
-  <Step title="Authenticate and review consent">
-    Complete the browser sign-in and normal account verification. Review the requested read/write areas before approving. If the client or requested access is unexpected, cancel. Role permissions and company scope still limit approved OAuth access.
+  <Step title="Add the server to your client">
+    Follow the section for your client below. Where the card has a one-click button, such as **Add to Cursor**, it opens the client app, which may ask you to trust and start the server.
   </Step>
-  <Step title="Verify a real connection">
-    Check the client's server status and available tools. Ask it to use **get_current_user** to verify the connected identity and company context. A prose answer listing possible tools without a tool call is not connection verification.
+  <Step title="Sign in and approve access">
+    Your browser opens **Authorize MSPortal MCP access**. Complete sign-in and any account verification. Under **Choose which areas this client can use**, tick only the areas you need. The page shows **Tools selected** and warns when the count may exceed your client's tool limit. Click **Allow access**, or **Deny** if you do not expect this request.
+  </Step>
+  <Step title="Check that it works">
+    In your client, check the server status and the tool list. Then ask it to call **get_current_user**. The result shows the connected user, tenant and company. An answer that only lists tool names, with no tool call, does not prove the connection works.
   </Step>
 </Steps>
 
-<Frame caption="MSP setup dialog; no client authorization submitted.">
+<Frame caption="The Codex setup dialog in MSPortal. Nothing is authorized until you approve access in the browser.">
   <img src="/images/product/mcp-codex-setup-controls.png" alt="Codex MCP setup dialog with command, configuration and browser sign-in instructions." width="1024" height="1156" />
 </Frame>
 
-### Codex CLI
+### Add the server to your client
 
-Replace the quoted placeholder with the **Server URL** copied from MSPortal:
+Replace `YOUR_SERVER_URL` with the **Server URL** you copied. The setup card in MSPortal fills in your URL for you.
 
-```bash
-codex mcp add msportal --url "YOUR_SERVER_URL"
-codex mcp login msportal
-```
+<Tabs>
+  <Tab title="Claude Code">
+    1. Run this command in your terminal:
+       ```bash
+       claude mcp add --transport http msportal YOUR_SERVER_URL
+       ```
+    2. In Claude Code, run `/mcp` and select **msportal** to authenticate.
+    3. Approve access in the browser window that opens.
+  </Tab>
+  <Tab title="Claude Desktop & Web">
+    1. Open **Settings**, then **Connectors**.
+    2. Click **Add custom connector**.
+    3. Name it **MSPortal**, paste the Server URL, then click **Add**.
+    4. Click **Connect** and approve access in your browser.
+  </Tab>
+  <Tab title="Cursor">
+    1. Click **Add to Cursor** on the setup card, or paste this into `~/.cursor/mcp.json`:
+       ```json
+       {
+         "mcpServers": {
+           "msportal": { "url": "YOUR_SERVER_URL" }
+         }
+       }
+       ```
+    2. Open **Cursor Settings**, then **MCP**, and click **Connect** next to **msportal**.
+    3. Approve access in the browser window that opens.
+  </Tab>
+  <Tab title="GitHub Copilot (VS Code)">
+    1. Click **Add to GitHub Copilot (VS Code)** on the setup card, or run:
+       ```bash
+       code --add-mcp '{"name":"msportal","type":"http","url":"YOUR_SERVER_URL"}'
+       ```
+    2. When VS Code asks, allow it to start the server and sign in.
+    3. Approve access in the browser window that opens.
 
-Complete browser authorization when prompted. The equivalent server entry belongs under `[mcp_servers.msportal]` in Codex configuration, with `url` set to the copied URL. See [official OpenAI MCP instructions](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) for client configuration and tool controls.
+    For the complete VS Code and Copilot CLI steps, see [Connect GitHub Copilot](/user-guides/mcp-server/github-copilot).
+  </Tab>
+  <Tab title="OpenAI Codex">
+    1. Run these commands:
+       ```bash
+       codex mcp add msportal --url "YOUR_SERVER_URL"
+       codex mcp login msportal
+       ```
+       Or add this to `~/.codex/config.toml`:
+       ```toml
+       [mcp_servers.msportal]
+       url = "YOUR_SERVER_URL"
+       ```
+    2. Approve access in the browser window that opens.
+  </Tab>
+  <Tab title="Gemini CLI">
+    1. Run this command in your terminal:
+       ```bash
+       gemini mcp add --transport http msportal YOUR_SERVER_URL
+       ```
+    2. In Gemini CLI, run `/mcp auth msportal` and approve access in your browser.
+  </Tab>
+  <Tab title="Windsurf">
+    1. Open **Windsurf Settings**, then **Cascade**, and click **Add Server**.
+    2. Paste this into `mcp_config.json` and save:
+       ```json
+       {
+         "mcpServers": {
+           "msportal": { "serverUrl": "YOUR_SERVER_URL" }
+         }
+       }
+       ```
+    3. Refresh the server list and approve access in your browser.
+  </Tab>
+  <Tab title="Other clients">
+    1. Add a remote MCP server in your client and paste the Server URL.
+    2. Most clients accept a JSON entry like this:
+       ```json
+       {
+         "mcpServers": {
+           "msportal": { "type": "http", "url": "YOUR_SERVER_URL" }
+         }
+       }
+       ```
+    3. Authenticate when prompted and approve access in your browser.
+  </Tab>
+</Tabs>
 
-### Other clients
-
-Use the matching in-app card for Claude Code, Claude Desktop/Web, Cursor, GitHub Copilot in VS Code, Gemini CLI, Windsurf or other compatible clients. Configuration formats differ: do not paste another client's JSON or CLI syntax unchanged. Client releases can change menus; use that client's current documentation when its interface differs from the card.
+Configuration formats differ between clients. Do not paste one client's JSON or command into another.
 
 ## What an assistant can do
 
-Tools cover tickets, devices, reporting, Planner, goals, budgets, meetings, compliance, projects, financial data, cloud services, security, backup, surveys, training, onboarding and other supported areas. Read the [MCP Tools Reference](/user-guides/mcp-server/tools-reference) for exact capabilities and action behavior.
+Tools cover tickets, devices, reporting, Planner, goals, budgets, meetings, compliance, projects, financial data, cloud services, security, backup, surveys, training, onboarding and more. The [MCP Tools Reference](/user-guides/mcp-server/tools-reference) lists every action and how it behaves.
 
-The available set depends on deployed tools, consent scopes, your role, company access, provider availability and client-side selection. A Company identity does not inherit MSP-only tools by granting broader scopes. List results can be paginated or truncated; a small response is not proof of a complete portfolio search.
+What you actually get depends on the server version, the areas you approved, your role, your company access, your integrations and your client's tool selection. A company identity does not get MSP-only tools, even with broader scopes. List results can be paginated or cut short, so a small result does not prove a search was complete.
 
-### A smaller tool catalog
+A good first request is: "Use read tools to find the company I name and summarize the available evidence. Do not change records or send messages." Then check the cited records, dates and gaps before you ask for follow-up work.
 
-The consolidated catalog groups related operations into **93 public tools**, covering the same **260 existing operations**. Read tools use names such as `query_planner`; changes use names such as `manage_planner`, with a separate action for creating, editing or archiving an item. The assistant uses the input schema to choose the action and its arguments.
+### Grouped tools and existing connections
 
-The full catalog fits below a 128-tool client budget without deselecting feature areas. Your consent screen counts the grouped tools available to your account. Scopes, role permissions and company access still apply to each action, and other connected servers may contribute additional tools to your client's total. The exact catalog depends on the deployed server version.
+The catalog groups related operations into **93 public tools** that cover **260 existing operations**. Read tools have names such as `query_planner`. Changes use names such as `manage_planner`, with an action for creating, editing or archiving. The assistant reads each tool's input schema to pick the action and its arguments.
 
-### Existing connections
+The full catalog fits under a 128-tool client limit. The consent screen counts the tools for the areas you pick. Other servers connected to your client also count toward its limit.
 
-Existing tool names remain callable with their original arguments and response shapes, including the two compatibility aliases. Pending confirmations retain their original operation identity and expiry. You do not need to change the server URL or grant broader access just because the catalog is consolidated.
+Existing tool names keep working with their original arguments and response shapes, including the two compatibility aliases. Pending confirmations keep their original operation and expiry. You do not need a new server URL or broader access because of the grouping.
 
-When your client refreshes its tool list, it sees the grouped names. Update any tool-name allowlist when adopting those names. Custom clients that require old names to appear in `tools/list` must update their discovery logic; preserving old calls does not preserve the old discovery response. See [grouped calls and legacy compatibility](/user-guides/mcp-server/tools-reference#existing-connections-and-legacy-names).
-
-A useful first request is: “Use read tools to identify the company I name and summarize the available evidence. Do not change records or send messages.” Check cited records, dates and gaps before requesting follow-up work.
+When your client refreshes its tool list, it sees the grouped names. Update any tool-name allowlist to include them. A custom client that needs old names in `tools/list` must change its discovery logic, because old calls still work but the old discovery response does not. See [grouped calls and legacy compatibility](/user-guides/mcp-server/tools-reference#existing-connections-and-legacy-names).
 
 ### Confirmation before changes
 
-Most portal mutations use a proposal/confirmation flow:
+Most changes use a two-call proposal and confirmation flow.
 
-1. Request the proposed change and inspect the returned preview, company, records and effects.
-2. Approve that proposal only when it matches your intent.
-3. The client confirms the staged proposal before it expires, normally within ten minutes.
-4. Verify the resulting record or background operation. An accepted job request is not proof of completed provider delivery.
+<Steps>
+  <Step title="Request the change">
+    The client calls the `manage_*` tool without `confirm`. MSPortal returns a proposal with a preview, the company, the records and the effects. Nothing is saved yet.
+  </Step>
+  <Step title="Review and approve">
+    Read the proposal. Approve it only if it matches what you intended.
+  </Step>
+  <Step title="Confirm before it expires">
+    The client calls the same tool and action again with `confirm: true` and the returned `confirmationId`. A proposal expires after ten minutes.
+  </Step>
+  <Step title="Check the result">
+    Open the resulting record or background job. An accepted job request does not prove the provider delivered it.
+  </Step>
+</Steps>
 
-The confirmation applies the **stored proposal**. To change its target or values, request a new proposal and review it again. An expired or already-used confirmation cannot be reused. A staging response is not evidence that a business record was created.
+The confirmation applies the **stored proposal**. To change the target or values, request a new proposal and review it again. An expired or used confirmation cannot be reused.
 
 <Warning>
-Not every tool has a server confirmation round trip. **mark_notification_read** changes your notification state immediately. **draft_compliance_notes** generates drafts without saving them. **submit_feedback** sends a message to MSPortal immediately and must only be used when you explicitly ask to send feedback; finding a missing capability does not authorize a message. Inspect each tool's behavior rather than relying on a blanket read/write label.
+Not every tool has a confirmation step. **mark_notification_read** changes your notification state at once. **draft_compliance_notes** generates drafts and does not save them. **submit_feedback** sends a message to MSPortal at once and is for MSP staff only. Use it only when you explicitly ask to send feedback. Finding a missing feature does not authorize a message.
 </Warning>
 
-If a write times out or returns an uncertain result, inspect the target record before asking the assistant to repeat it. Multi-step workflows and external side effects should not be assumed to roll back together.
+If a change times out or the result is unclear, check the target record before you ask the assistant to repeat it. Steps in a multi-step workflow are not rolled back together.
 
-## Ron: the AI vCIO skill
+## Install the Ron skill (optional)
 
-The optional Ron skill provides instructions for client briefings, risk reviews, QBR preparation and planning. It does not establish an MCP connection or grant permissions, and cannot guarantee that every client follows its instructions.
+The Ron skill is a set of instructions that guides an assistant through client briefings, risk reviews, QBR preparation and planning. It does not connect to MSPortal or grant permissions. You still connect the MCP server first.
 
-The published package has a **SKILL.md**, **references/playbooks.md** and **references/tool-map.md**. Review and install the files together using your client's supported skill or instruction mechanism. Preserve their relative paths. Do not blindly append downloaded content to an existing project instruction file.
+<Steps>
+  <Step title="Download the three files">
+    Get the [Ron skill](https://app.msportal.ai/skills/ron-vcio/SKILL.md), the [playbooks](https://app.msportal.ai/skills/ron-vcio/references/playbooks.md) and the [tool map](https://app.msportal.ai/skills/ron-vcio/references/tool-map.md). On an EU portal, use the same paths on your regional portal address.
+  </Step>
+  <Step title="Keep the folder layout">
+    Put `SKILL.md` in a folder named `ron-vcio`, and the other two files in a `references` folder inside it.
+  </Step>
+  <Step title="Add it to your client">
+    Install the folder with your client's skill or custom instruction feature. Do not paste the files at the end of an existing instruction file.
+  </Step>
+  <Step title="Test it">
+    Ask the assistant for a client briefing and check that it calls MSPortal tools. If it answers without any tool calls, check the server connection and the enabled tools first.
+  </Step>
+</Steps>
 
-Use the published [Ron skill](https://app.msportal.ai/skills/ron-vcio/SKILL.md), [playbooks](https://app.msportal.ai/skills/ron-vcio/references/playbooks.md) and [tool map](https://app.msportal.ai/skills/ron-vcio/references/tool-map.md), or the matching paths on your regional portal. Keep your chosen instructions consistent with the actual tool confirmation and immediate-action behavior above.
+## Manage connected clients
 
-An assistant answering without tool calls does not prove the skill failed to load. Check server connectivity, enabled tools and the actual calls made; ask for an evidence-backed answer.
+Open **Settings > MCP Server** and scroll to **Connected clients**. It lists the applications you have authorized, each with an **MSPortal** or **External app** badge, the **Last authorized** time, the number of active sessions and the number of scopes. It shows only your own connections, not those of other users.
 
-## Connected clients and revocation
+<Steps>
+  <Step title="Find the client">
+    Look for the client name in **Connected clients**.
+  </Step>
+  <Step title="Revoke it">
+    Click **Revoke** on its row. The dialog **Revoke access for** the client name asks you to confirm. Click **Revoke** again. You see **Access revoked**.
+  </Step>
+  <Step title="Reconnect if needed">
+    To connect it again, add the server in the client and approve access in the browser.
+  </Step>
+</Steps>
 
-**Connected clients** lists the applications authorized by your current user, with their names, first-party/external labels, last-authorized time, session count and scopes. It is not a tenant-wide inventory of every employee's clients. Session counts describe active refresh-token sessions, not a live count of open browser tabs.
-
-Select **Revoke** for the intended client and confirm to revoke your grant and refresh sessions. There is no separate page Save. Already-issued access tokens can remain valid until expiry, up to about **15 minutes**. Removing the user's MCP Server write permission blocks subsequent MCP requests through the permission check. Ask the MSP administrator to make role changes when required.
-
-Revocation does not erase data already returned to the external client, undo completed actions or remove the local server configuration. Reconnection requires authentication and consent again.
+Revoking ends the client's grant and refresh sessions. An access token already issued can work until it expires, up to about 15 minutes. To block access sooner, ask your MSP administrator to remove your **MCP Server** permission, which MSPortal checks on every request. Revoking does not take back data the client already received, undo finished actions or remove the client's local server entry.
 
 ## Troubleshooting
 
-| Symptom | What to check |
+| Problem | What to do |
 | --- | --- |
-| Setup cards are disabled | MCP Server write permission; read-only page access is insufficient. |
-| Sign-in does not open | Client authentication action, remote HTTP/OAuth support and organization policy. |
-| Wrong tenant or company | Stop the task and verify the signed-in identity and regional URL before requesting data. |
-| A tool is missing | Look for its grouped public tool in the reference, then check deployed version, scopes, permissions, integrations and client tool selection. |
-| Too many tools for the client | Refresh the client's discovered catalog. The consolidated MSPortal catalog has 93 tools before access filtering; also check other connected servers and any lower client limit. If necessary, enable only the areas/tools needed. |
-| Confirmation expired | Request a new proposal and review it; do not claim the old proposal was saved. |
-| Revoke failed | Reopen the connections list and verify state before assuming access was removed. |
+| The setup cards are disabled | You have view-only access. Ask your MSP administrator for the **MCP Server** write permission. |
+| The consent page says MCP access is not permitted | Your role does not include the MCP Server permission. Ask your MSP administrator. |
+| The browser sign-in does not open | Run your client's authenticate step again, such as `/mcp` in Claude Code, `codex mcp login msportal` in Codex or **Connect** in Cursor. Check that your client supports remote HTTP and OAuth. |
+| You see the wrong company or tenant | Stop. Call **get_current_user**, check the identity and the regional URL, then reconnect if needed. |
+| A tool is missing | Find its grouped tool in the reference. Then check the server version, the areas you approved, your permissions, integrations and your client's tool selection. |
+| Your client has too many tools | Refresh the client's tool list. Reconnect and approve fewer areas, and check other connected servers. |
+| A confirmation expired | Request a new proposal and review it. The old one was not saved. |
+| The assistant answers without calling tools | Ask it to list the MSPortal tools it can see. If the list is empty, the connection is not live. Reconnect. |
+| **Failed to revoke access** | Reload the list and check whether the client is still there before you assume access ended. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does copying the server URL authorize an AI client?">
-    No. Add the URL in a compatible client, authenticate and approve the requested access. Copying a snippet or opening a setup dialog does not connect anything.
+  <Accordion title="Does copying the Server URL connect a client?">
+    No. You must add the URL in a compatible client, sign in and approve access.
   </Accordion>
-  <Accordion title="Can read-only MCP settings users connect new clients?">
-    No. Connecting requires MCP Server write permission. Ask your MSP administrator to review your role.
+  <Accordion title="Can a view-only user connect clients?">
+    No. Connecting needs the **MCP Server** write permission.
   </Accordion>
-  <Accordion title="Do broader OAuth scopes override my portal permissions?">
-    No. Scopes, role permissions, company scope and tool-specific restrictions all apply. Company identities remain subject to MSP-only restrictions.
+  <Accordion title="Do broader OAuth scopes override my permissions?">
+    No. Scopes, role permissions, company scope and tool-specific limits all apply.
   </Accordion>
-  <Accordion title="Will consolidation break calls using the old tool names?">
-    The 260 legacy names remain callable with their original arguments and result shapes, and pending confirmations retain their operation identity. Discovery now returns grouped names, so client allowlists and custom discovery checks may need updating. Existing grants do not expand automatically.
+  <Accordion title="Will the grouped catalog break calls with the old tool names?">
+    No. The 260 old names still work with their original arguments and results. Only discovery changed, so client allowlists and custom discovery checks may need updating.
   </Accordion>
   <Accordion title="Does a proposal mean a record was created?">
-    No. A proposal awaits confirmation. Inspect the final result and target record after confirming.
+    No. A proposal waits for confirmation. Check the record after you confirm.
   </Accordion>
   <Accordion title="Can I change a proposal by changing the confirmation arguments?">
-    Request a new proposal instead. The confirmation commits the stored proposal, not a newly described change.
+    No. The confirmation commits the stored proposal. Request a new proposal instead.
   </Accordion>
-  <Accordion title="Does every action wait for a second confirmation call?">
-    No. Some actions run immediately, including marking notifications and sending explicitly requested feedback. Read the tool reference before authorizing them.
+  <Accordion title="Does every action need a second confirmation call?">
+    No. Some run at once, including marking notifications read and sending requested feedback.
   </Accordion>
-  <Accordion title="Will the assistant automatically report missing features to MSPortal?">
-    It should not. submit_feedback is MSP-only and requires your explicit request to send feedback; discovering a limitation is insufficient.
+  <Accordion title="Will the assistant report missing features to MSPortal by itself?">
+    It should not. **submit_feedback** is for MSP staff and needs your explicit request.
   </Accordion>
-  <Accordion title="Does Revoke immediately invalidate every existing access token?">
-    It revokes the grant and refresh sessions, but an issued access token can remain valid until expiry, up to about 15 minutes. MCP permission removal is checked on subsequent requests.
+  <Accordion title="Does Revoke cancel every token right away?">
+    It ends the grant and refresh sessions. An issued access token can last up to about 15 minutes.
   </Accordion>
-  <Accordion title="Does Revoke erase information already sent to the client?">
-    No. It does not recall returned data, undo completed work or delete the client's local configuration.
+  <Accordion title="Does Revoke erase data the client already has?">
+    No. It does not recall data, undo work or delete the client's local setup.
   </Accordion>
-  <Accordion title="Does the Ron skill replace authentication or permissions?">
-    No. It is optional client guidance. The MCP connection, consent and server access checks remain separate.
+  <Accordion title="Does the Ron skill replace sign-in or permissions?">
+    No. It is optional guidance. Connection, consent and access checks stay separate.
   </Accordion>
 </AccordionGroup>
 
-## Related resources
+## Related guides
 
 - [MCP Tools Reference](/user-guides/mcp-server/tools-reference)
 - [Connect GitHub Copilot](/user-guides/mcp-server/github-copilot)

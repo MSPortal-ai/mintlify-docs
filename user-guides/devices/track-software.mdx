@@ -47,6 +47,8 @@ Branch preview for the Devices software update. For MSP staff with access to Dev
 | **Current** | No lifecycle or version rule marks this install as needing attention. |
 | **Unknown** | The RMM reported no usable version for this install. |
 
+Only **End of life**, **Ending soon** and **Outdated** have visible status badges. **Current** and **Unknown** stay blank in lists and version rows; you can still use them in filters.
+
 End-of-life dates and latest versions come from [endoflife.date](https://endoflife.date), refreshed daily. Products with a reported version but no lifecycle data are **Current** unless you set a target version. **Current** means no known issue was found; it does not establish that the vendor supports the installed release.
 
 ## Investigate a product
@@ -80,9 +82,49 @@ MSP staff who can edit devices can change these settings in the product sheet. E
 | **Ignore** | Hides the product from the default and system component views and from the summary counts. | Open the **Ignored** view, select the product, then **Restore** |
 | **Set target** | Counts installs below the version you enter as **Outdated**. Enter a version number such as 124.0.2. | **Clear target** |
 
+## Include software end of life in AI reports
+
+AI reports, including scheduled QBRs, cover software end of life through the **Devices** source. Open **Devices options** in the report builder and choose what **Software end of life** covers:
+
+| Option | What the report receives |
+| --- | --- |
+| **Key applications** (default) | Every product you marked as a key app at the report's company, with its status, end-of-life dates and affected device counts |
+| **All software** | The products with the most end-of-life, ending-soon or outdated installs at the company |
+| **Don't include** | No software information |
+
+Saved templates and scheduled reports that include **Devices** use **Key applications** until you change the option. The report receives counts and a short product list rather than every install, and it lists releases whose support ends in the next 12 months for budget and roadmap planning.
+
+If you have not marked any key apps, the report leaves software out of the client-facing text and adds a note for your team to mark your key applications. Software end of life appears only for tenants with the Software tab enabled and for staff who can view devices.
+
+<Frame caption="The Software end of life option under Devices in the AI report builder.">
+  <img src="/images/product/report-builder-software-end-of-life-desktop.png" alt="AI report builder with the Devices source expanded and Software end of life set to Key applications" width="1440" height="960" />
+</Frame>
+
+## Review shared software assessments
+
+<Note>Branch preview. Assessment screenshots use synthetic inventory in a disposable database. The **Software assessments** feature flag is off by default. Assessment panels, LOB classification controls and update priorities appear only when it is enabled after the migration and background job are deployed. Existing inventory and lifecycle warnings remain available.</Note>
+
+The **Update priority** column highlights **Urgent** and **High** priorities. Other priorities stay blank. Open a product to see high security exposure, confident LOB suggestions and the evidence behind urgent or high version priorities.
+
+The shared assessment suggests whether a recognizable product is typically a line-of-business (LOB) application. Confident LOB suggestions show a confidence percentage. Only high security exposure is displayed; low, medium, missing and uncertain ratings stay blank. Security exposure describes software capabilities; it does not establish a vulnerability, malware, or exploitation.
+
+If you can edit devices, use **Line-of-business classification** to choose **Line-of-business app** or **Not a line-of-business app**. Your override applies only to your tenant. Choose **Use shared suggestion** to reset it. This classification is independent of **Mark as key app**.
+
+Priorities use the matched endoflife.date release. Unsupported high-exposure software receives **Urgent** priority; other unsupported releases receive **High**. Verified outdated releases receive at least **Normal**, or **High** for high-exposure software. Support ending within 90 days receives **Normal**. A supported current release receives **Routine** when there is enough evidence to classify it. Missing lifecycle evidence leaves the version priority **Unknown**.
+
+Generic product ratings are reused across tenants and regions; tenant overrides remain separate. The background job refreshes stale evidence automatically for enabled pilots. Missing and stale ratings are hidden. Turning the assessment flag off hides ratings and classification controls while retaining saved overrides and cached knowledge. Existing **Outdated**, **Ending soon** and **End of life** warnings remain visible; healthy and unknown lifecycle statuses have no badge.
+
+<Frame caption="Branch preview: shared software assessment, tenant LOB override and version update priority using synthetic inventory.">
+  <img src="/images/product/pr1601-software-assessment-desktop.png" alt="Shared software assessment with a confident LOB suggestion, security exposure, tenant override selector and an urgent unsupported version" width="1440" height="960" />
+</Frame>
+
+<Frame caption="Branch preview: the same assessment on a phone.">
+  <img src="/images/product/pr1601-software-assessment-mobile.png" alt="Phone layout of the software assessment and update priority" width="390" height="844" />
+</Frame>
+
 ## Check one device's software
 
-Open a device from **Devices** and select its **Software** tab. The list shows each product with its version, status and end-of-life date, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
+Open a device from **Devices** and select its **Software** tab. The list shows each product with its version, status, end-of-life date and cached update priority, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
 
 <Frame caption="Branch preview: device software with the resync action beside the close button.">
   <img src="/images/product/pr1601-device-software-desktop.png" alt="Device details on the Software tab with resync beside the close button" width="1440" height="960" />
@@ -92,7 +134,7 @@ Open a device from **Devices** and select its **Software** tab. The list shows e
 
 Connect an AI client to the [MSPortal MCP server](/user-guides/mcp-server/index) and ask for installed products, key applications, outdated or end-of-life installs, product version details, or the devices running a particular product. The server reads the same staged inventory within your staff permissions and selected company scope.
 
-The grouped **query_software** tool exposes four read actions: **get_software_inventory_overview**, **list_software_products**, **get_software_product**, and **list_software_product_devices**. Use the schemas returned by your connected server; product and device lists are paginated. Product details return up to 200 version groups and signal truncation when that cap is reached. These actions do not install, update, uninstall, or reclassify software. Use the Software workspace to change key-app, ignore, or target-version settings.
+The grouped **query_software** tool exposes four read actions: **get_software_inventory_overview**, **list_software_products**, **get_software_product**, and **list_software_product_devices**. When Software assessments is enabled, product and version responses also include cached assessments, tenant LOB overrides, update priorities and freshness. Disabled tenants receive no assessment or override values. Use **sort=priority** to rank products by update priority. Unknown or stale ratings are not security verdicts. Use the schemas returned by your connected server; product and device lists are paginated. Product details return up to 200 version groups and signal truncation when that cap is reached. These actions do not install, update, uninstall, or reclassify software. Use the Software workspace to change key-app, ignore, or target-version settings.
 
 ## Choose what the integration syncs
 

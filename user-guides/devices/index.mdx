@@ -1,84 +1,135 @@
 ---
 title: 'Devices'
-description: 'Find equipment, inspect reported information, maintain inventory, and navigate network and configuration views.'
+description: 'Find equipment, read device details, keep inventory current, and use the Networks and Configurations tabs.'
 icon: 'computer'
 ---
 
-**Devices** brings together manual inventory records and equipment imported from connected tools. Use it to find a device, inspect the information reported for it, review warranty dates, and maintain supported inventory fields.
+**Devices** brings together manual inventory records and equipment imported from connected tools such as your RMM. Use it to find a device, read what is reported for it, check warranty dates, and keep supported fields up to date.
 
-Company users see records permitted by their role and company scope. MSP staff can have additional management, import, duplicate-review, and provider controls. The MSP manages Company user permissions.
+Company users see the devices their role and company allow. MSP staff can also manage devices, review duplicates, and import equipment.
 
 ## Choose a task
 
 <CardGroup cols={2}>
   <Card title="Find and export devices" icon="magnifying-glass" href="/user-guides/devices/find-devices">
-    Search inventory, review warranty shortcuts, choose columns, and export matching records.
+    Search inventory, use the warranty shortcuts, choose columns, and export matching records.
   </Card>
   <Card title="Understand device details" icon="computer" href="/user-guides/devices/understand-device-details">
-    Read available hardware, security, network, warranty, and integration information.
+    Read hardware, security, network, warranty, and integration information.
   </Card>
   <Card title="Add and edit records" icon="pen-to-square" href="/user-guides/devices/add-and-edit-devices">
-    Create manual inventory, update supported fields, and check what was saved.
+    Add manual inventory, update fields, and delete records.
   </Card>
   <Card title="Networks and configurations" icon="network-wired" href="/user-guides/devices/view-networks-and-configurations">
-    Read Domotz site information and unlinked IT Glue configurations.
+    Read Domotz site information and IT Glue configurations that are not linked to a device.
   </Card>
   <Card title="Track installed software (MSP)" icon="box-open" href="/user-guides/devices/track-software">
     Branch preview: find software that needs attention and update several products at once.
   </Card>
   <Card title="Find an approximate IP location" icon="location-dot" href="/user-guides/devices/ip-location">
-    Check the integration-reported external IP and its approximate internet exit point.
+    Check a device's reported external IP and its approximate internet exit point.
   </Card>
-  <Card title="Import devices — MSP" icon="file-import" href="/user-guides/integrations/import-devices">
+  <Card title="Import devices (MSP)" icon="file-import" href="/user-guides/integrations/import-devices">
     Review source mappings and bring equipment into the inventory.
   </Card>
 </CardGroup>
 
-## Understand the views
+## Before you start
 
-| View | Availability and purpose |
+- Click **Devices** in the sidebar. If it is missing, ask your MSP to check that the module is on and that your role includes it.
+- Viewing, adding, editing, and deleting are separate. Adding, editing, and deleting need manage access to Devices.
+- Use the company selector in the header to narrow the list to one company.
+
+## The tabs on the Devices page
+
+| Tab | When you see it | What it shows |
+| --- | --- | --- |
+| **Devices** | Always | Inventory for the companies you can see |
+| **Networks** | Domotz is connected | Sites, speeds, uptime, and reported issues |
+| **Configurations** | IT Glue is connected and some configurations are not linked to a device | Unlinked IT Glue configurations |
+| **Duplicates** | MSP staff with manage access to Devices | Possible duplicate devices to review and merge |
+
+If none of the optional tabs apply, the page shows only the inventory.
+
+## Check a device
+
+<Steps>
+  <Step title="Open Devices">
+    Click **Devices** in the sidebar.
+  </Step>
+  <Step title="Find the device">
+    Use the column filters or the summary cards. See [Find and export devices](/user-guides/devices/find-devices).
+  </Step>
+  <Step title="Click the device Name">
+    The panel opens on **Overview**. Tabs such as **Edit**, **Cork**, **Liongard**, **Backup**, and **IT Glue** appear when they apply. See [Understand device details](/user-guides/devices/understand-device-details).
+  </Step>
+  <Step title="Check where the information came from">
+    Look at the timestamps and the source. A blank value does not mean the device is healthy, covered by warranty, or free of security problems.
+  </Step>
+</Steps>
+
+Some fields are controlled by the tool that imported the device. Editing them in MSPortal does not change the external tool or the physical computer. After you save, reopen the record and check the result.
+
+## Use actions on several devices (MSP staff)
+
+<Steps>
+  <Step title="Select devices">
+    Check the boxes at the left of the rows. Checkboxes appear only if you have manage access to Devices.
+  </Step>
+  <Step title="Open the Actions menu">
+    It appears above the table and shows the selected count. Check the count before you continue.
+  </Step>
+  <Step title="Choose an action">
+    The menu can include **Bulk Update**, **Add to Planner**, **Add to Meeting**, **Merge Selected**, and **Delete Selected**. When all selected devices are Meraki devices it also offers **Refresh Meraki Status**. **Merge Selected** is for MSP staff only.
+  </Step>
+</Steps>
+
+A single device has the same kind of actions in its row menu: **Edit** (or **View Details** without manage access), **Add to Planner**, **Add to Meeting**, and **Delete**. Planner and meeting actions also need access to those modules. Deleting a device removes the portal record, not the computer or its agent.
+
+## Warranty
+
+The **Warranty End** column and the summary cards use the warranty dates on the record. A device with no dates has no warranty status. Use **Add to Planner** on a device to create a task for a renewal. See [Planner](/user-guides/planner/index).
+
+## Custom fields
+
+An MSP admin can add custom fields for devices in **Settings > Customization > Fields** by choosing the Device type. They then appear in the device's **Edit** tab.
+
+## Troubleshooting
+
+| Problem | What to do |
 | --- | --- |
-| **Devices** | Inventory in your permitted company scope |
-| **Networks** | Domotz-backed sites, measurements, reported issues, and location links |
-| **Configurations** | Unlinked IT Glue configurations; the tab requires available rows in the current scope |
-| **Duplicates** | MSP staff with device-management permission can review possible duplicate records |
-| Device **Overview** | Available inventory and reported details |
-| Device **Edit** | Device-management permission is required; supported saves also depend on the source |
-| Device integration tabs | Cork/Liongard data or IT Glue integration availability |
-
-If no optional destinations are available, the page can show only the inventory without a tab strip.
-
-## Check the evidence behind a value
-
-Use reported timestamps and source information when interpreting a device. Missing information does not mean a device is healthy, covered by warranty, or free of security issues. A warranty status depends on recorded dates; IP location is approximate and is not GPS tracking.
-
-Some device details are source-controlled. Editing the portal does not necessarily change an external RMM/PSA record or the physical computer. After a save, reopen the record and verify the intended fields, especially after an error or later synchronization.
-
-## Management actions
-
-Authorized users can have row and selection actions such as adding inventory to a planner item or meeting, bulk updates, provider data refresh, and deletion. The available actions depend on both device permissions and access to the destination module. Check the selected count before applying a bulk action.
-
-Duplicate merging is restricted to MSP staff. Removing an inventory record is different from wiping a device or uninstalling an agent. Provider synchronization and import settings should be reviewed when correcting integrated records.
+| No devices appear | Check the company selector and any column filters. Ask your MSP whether devices have been imported. |
+| A device is missing | Search by **Serial Number**. Your MSP can check the integration's import settings. |
+| A value looks old | Check **Last Seen** and the integration's last sync. Ask your MSP. |
+| I cannot edit a device | You need manage access to Devices. Ask your MSP. |
+| A tab is missing | Tabs depend on integrations, data, and permissions. See the table above. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Can Company users see devices?">
-    Yes, when their role and company scope permit access. The MSP decides their permission assignment. Viewing, creating, editing, and deletion are separately controlled by the available actions.
+  <Accordion title="Can company users see devices?">
+    Yes, when their role and company allow it. Editing and deleting are controlled separately.
   </Accordion>
   <Accordion title="Where do I correct a serial number or warranty date?">
-    Open the device and use **Edit** when available. Manual and integrated devices can support different updates. Follow the [editing guide](/user-guides/devices/add-and-edit-devices) and verify the stored result.
+    Open the device and use the **Edit** tab if you have it. Follow [Add and edit device records](/user-guides/devices/add-and-edit-devices).
   </Accordion>
-  <Accordion title="Where do I find equipment from a specific office?">
-    Use the inventory's Location filter. In Networks, the Devices online link also opens inventory for the linked site, falling back to the company when no site is linked.
+  <Accordion title="How do I find equipment from one office?">
+    Use the **Location** column filter. In **Networks**, the **Devices online** count opens the inventory for the linked site.
   </Accordion>
-  <Accordion title="Does the inventory show live data from every provider?">
-    It shows the data available from manual records and connected sources. Fields and freshness vary. Check timestamps and ask the MSP about missing or stale information.
+  <Accordion title="Is the inventory live data from every provider?">
+    No. It shows what manual records and connected tools have reported, as of their last sync.
   </Accordion>
-  <Accordion title="Can a Company administrator merge duplicates?">
-    No. Duplicate merging is an MSP staff operation requiring device-management access.
+  <Accordion title="Can a company admin merge duplicates?">
+    No. Merging is for MSP staff with manage access to Devices.
   </Accordion>
-  <Accordion title="Does device access let me configure integrations?">
-    No. MSP integration administration is separate from viewing inventory. Ask your provider to review mappings, imports, or synchronization.
+  <Accordion title="Does device access let me change integrations?">
+    No. Integration setup is separate. Ask your provider to review mappings, imports, or sync.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Import devices](/user-guides/integrations/import-devices)
+- [Planner](/user-guides/planner/index)
+- [Calendar](/user-guides/calendar/index)
+- [Understand IP location results](/user-guides/devices/ip-location-accuracy-and-privacy)

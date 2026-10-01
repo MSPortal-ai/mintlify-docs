@@ -1,61 +1,102 @@
 ---
 title: "Read the Security Dashboard"
-description: "Understand provider summaries and follow links to the underlying security records."
+description: "Read the provider tiles and cards on the Security Dashboard and follow them to the underlying records."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Security read access and an active Cork, Acronis, or Huntress integration.
+Use this page to read the Security Dashboard and jump to the records behind each number. It is for company users and MSP staff.
 
-## Review the selected scope
+## Before you start
 
-1. Open **Security > Dashboard**.
-2. Confirm the company selection. An MSP aggregate view can include multiple companies.
-3. Read the provider sections that appear.
-4. Follow a count or status link to inspect its underlying records. Check any filters already applied on the destination page.
+- You need Security read access.
+- At least one of Cork, Acronis, Huntress, or Avanan must be connected. The **Dashboard** tab appears only then. See [Security](/user-guides/security/index) for the integration guides.
+- The dashboard shows imported data. Opening it does not run a scan.
 
-The dashboard shows imported provider summaries. It does not run a new scan, start remediation, or prove the current state of every device.
+## Review the dashboard
 
-## Read Cork results
+<Steps>
+  <Step title="Open the Dashboard">
+    Open **Security > Dashboard** and check the company selector. A selection of several companies adds them together.
+  </Step>
+  <Step title="Read the tiles">
+    The tiles at the top show the key numbers for each connected provider. Colors mark tiles that need attention.
+  </Step>
+  <Step title="Read the cards">
+    Below the tiles, one card per provider gives more detail. Only connected providers appear.
+  </Step>
+  <Step title="Follow a number">
+    Click a tile or a count on a card to open the matching list. Check the filters already set on that list.
+  </Step>
+</Steps>
 
-**Compliance Events** highlights the number marked **At Risk**, with a total-event count below it. The Compliance Overview includes separate **At Risk** and **Resolved** counts. These are different properties, not complementary categories that must add up to the total.
+## Read the tiles
 
-**Vulnerabilities** highlights **Critical** priority. Its detail card shows Total, Critical Priority, Known Exploited, and Monitored Endpoints when available. Critical and Known Exploited can overlap; do not add them together as a count of distinct findings.
+| Provider | Tiles |
+| --- | --- |
+| Acronis | **Open Incidents** and **Endpoints Online**. |
+| Huntress | **Open escalations**, **Open incident reports**, and **Active agents**. |
+| Cork | **At-risk compliance events** and **Critical vulnerabilities**, with the known exploited count underneath. |
+| Avanan | **Open threats** and **Phishing (30 days)**. |
 
-Use [Cork events](/user-guides/security/read-cork-events) or [vulnerabilities](/user-guides/security/read-vulnerabilities) to investigate. An At Risk, Resolved, Critical, or Known Exploited shortcut applies that filter to the relevant table.
+Tiles show how many items were new in the last 30 days when that history is available.
 
-## Read Acronis results
+## Read the cards
 
-**EDR Incidents** shows a total and the number open. The EDR Overview separates Open Incidents, Investigating, and Closed, with Not Mitigated shown when applicable. Incident state and mitigation are separate: a state label alone does not establish that mitigation is complete.
+### Cork
 
-**Endpoints Online** and **Endpoint Health** distinguish Online/Offline from Protected/Unprotected. Online describes connectivity; it does not itself prove protection. Follow an available endpoint or incident shortcut to review the underlying records.
+- **Compliance Overview** shows **At Risk** and **Resolved** counts, **At-risk events by control**, and **New events per day**. At Risk and Resolved are separate properties and need not add up to the total.
+- **Vulnerabilities** shows **Total**, **By priority**, **Known Exploited**, and **Monitored Endpoints**. **Critical** and **Known Exploited** can overlap, so do not add them.
+- Counts link to [Security > Compliance](/user-guides/security/read-cork-events) or [Security > Vulnerabilities](/user-guides/security/read-vulnerabilities), with the matching filter set.
 
-The phrase **All addressed** can appear when the open count is zero, including a zero-total summary. Check the total, other incident states, provider freshness, and mitigation before relying on that wording.
+### Acronis
 
-## Read Huntress results
+- **EDR Overview** shows **Open Incidents**, **Investigating**, and **Closed**, plus **Open by severity**, **New incidents per day**, a **high severity** count, and **Not Mitigated**.
+- **Endpoint Health** shows **Online**, **Protected**, **Offline**, and **Unprotected**. Online and Protected are separate.
+- **All addressed** can appear when the open count is zero. Check the other states and **Not Mitigated** before you rely on it.
+- Counts link to [EDR Incidents](/user-guides/security/read-edr-incidents) and [Endpoints](/user-guides/security/find-endpoints).
 
-Huntress summaries can show open escalations, active agents, SAT learners and accounts, open incident reports, and pending remediations. The links lead to **Huntress**. They do not necessarily prefilter the destination to the exact category shown on the card.
+### Huntress
 
-Active agents, protected-agent totals, and learner counts describe different populations. SAT learner counts do not mean all learners completed their training.
+- **Huntress overview** shows escalations, incident reports, and remediations with open, resolved, and pending counts, **Open by severity**, **Detections per day**, **Agent coverage**, and **SAT learners** and **SAT accounts**.
+- Every link opens [Security > Huntress](/user-guides/security/read-huntress). It does not preselect a type.
 
-## If numbers are missing or unexpected
+### Avanan
 
-Only available provider summaries appear. A provider read failure can omit its section while other providers still render. **No Security Data Yet**, an absent card, or zero totals should not be interpreted as a clean security assessment.
+- **Email security overview** shows **Threats by type, last 30 days**, a threat trend, **SAT-covered tenants**, **Spam (30 days)**, and **Graymail (30 days)**.
+- Links open **Security > Email Security**.
 
-Check company scope, the source provider, and any destination-table filters. MSP staff should verify synchronization when figures appear stale. Company users can request investigation through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket).
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **No Security Data Yet** | No security integration is connected or synced. An admin can connect one from **Settings > Integrations**. |
+| A provider card is missing | That provider is not connected, you lack access, or its data failed to load. An Avanan load error shows as a red notice with the provider name. |
+| Numbers look old | The dashboard shows synced data. Ask your MSP to check the integration sync. |
+| A list is empty after you click a number | Clear the filter the dashboard set on that list. |
+| Zero counts everywhere | Check the company selector. Zero counts do not prove you are safe, so ask your MSP to verify the sync. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Can I add Critical and Known Exploited to get a total?">
-    No. A vulnerability can belong to both groups. Use Total for the summary's overall finding count.
+    No. A vulnerability can be both. Use **Total** for the overall count.
   </Accordion>
   <Accordion title="Does At Risk plus Resolved equal every Cork event?">
-    Not necessarily. Risk and resolution are separate event properties.
+    Not necessarily. They are separate properties.
   </Accordion>
   <Accordion title="Does Online mean an endpoint is protected?">
     No. Connectivity and protection are reported separately.
   </Accordion>
-  <Accordion title="Why did the Huntress shortcut open a broader list?">
-    Dashboard Huntress links open the Huntress section. Review its item-type and search filters rather than assuming the exact card category is already selected.
+  <Accordion title="Why did a Huntress link open a broader list?">
+    Huntress links open the whole Huntress tab. Use the **Type** filter there.
+  </Accordion>
+  <Accordion title="I am a company user. How do I ask about a number?">
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) which tile or card you mean and the company, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Security](/user-guides/security/index)
+- [Read Huntress security items](/user-guides/security/read-huntress)
+- [Read Acronis EDR incidents](/user-guides/security/read-edr-incidents)
