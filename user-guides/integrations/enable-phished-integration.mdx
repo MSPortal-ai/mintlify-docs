@@ -1,0 +1,85 @@
+---
+title: 'Connect Phished.io'
+description: 'Connect one Phished organization, map its company, and review training progress and simulation events.'
+icon: 'shield-halved'
+---
+
+Connect Phished.io to review learner training progress, training-session totals and phishing simulation events in MSPortal. Setup is an **MSP staff** task requiring integration configuration permission. Viewing results requires **Security Awareness** read access and access to the mapped company.
+
+## Before you start
+
+- An active Phished plan with API access.
+- An organization token from **Organisation > Tokens** in [Phished](https://app.phished.io/en/organisation/tokens).
+- These read permissions on the token:
+  - `recipients:read`
+  - `training-session-progression-report:read`
+  - `simulation-events:read`
+- The MSPortal company that should own the organization's results.
+
+One token accesses one Phished organization. Add a separate connection for each organization, then map each connection to its intended MSPortal company. The **Organization name** is the label you supply to recognize this connection; a successful test does not independently verify that label.
+
+Keep the token private. Phished displays newly created tokens once; follow its [API authentication guidance](https://developer.phished.io/docs/api/a95345046734e-getting-started) when creating or rotating a token.
+
+## Connect and map the organization
+
+<Steps>
+  <Step title="Open Phished.io setup">
+    Open **Settings > Integrations**, find **Phished.io**, and open its setup. Review existing connections first so you choose the correct organization.
+  </Step>
+  <Step title="Test the token, then save">
+    On **Connect**, enter **Organization name** and **API token**. Select **Test Connection**, then **Create Integration** after verification succeeds. Testing alone does not save the connection. For an existing connection, use **Save Changes** after editing and testing its credentials. Saving a replacement token clears the previous company mapping and imported snapshot; map the organization again before reviewing new results.
+  </Step>
+  <Step title="Map the company">
+    Select **Next** to open **Map Companies**. Choose the MSPortal company for this organization and save the mapping with the shared mapping controls. **Next** saves pending mappings before continuing. Review the company carefully before allowing users to see the results.
+  </Step>
+  <Step title="Review synchronization">
+    On **Status**, review the mapped organization, recipient, training-session and simulation-event counts, together with **Last sync**. Use **Sync All Data** when you need to request another provider sync. Check the final result and timestamp before relying on the imported figures.
+  </Step>
+</Steps>
+
+<img src="/images/product/phished-connect.png" alt="Phished.io setup with empty Organization name and API token fields, required read permissions, and Test Connection and Create Integration controls" width="1280" height="853" />
+
+*The connection screen before entering credentials. Add one connection for each Phished organization.*
+
+## Read training and simulation insights
+
+Open **Security > Security Awareness**, choose **Phished.io** when multiple providers are available, and confirm the company selector.
+
+- **Learners** shows the shared learner status table, including the training counts supplied by Phished.
+- **Insights** shows recipient and training-session counts, the latest synchronization time, simulation event types and counts, and paginated training-session summaries.
+- The **Phished.io Training and Simulation Insights** report block presents current coverage and recent simulation activity for the report's company scope.
+
+Training values are a **current snapshot**, not a history for the report's selected dates. Simulation events cover the **last 30 days**. The event types remain the values supplied by Phished.io; event counts are not unique learner counts and are not a calculated phishing click rate. The report date selector does not change these fixed data windows.
+
+Missing training statistics remain unavailable. A blank result, **Not provided**, or an organization that has never synced does not prove that every learner completed training. These views read Phished data; they do not assign courses, launch simulations or change Phished users.
+
+## Maintain the connection
+
+Reopen the intended connection to update its token. Saving a different token clears the existing company mapping and the previously synchronized Phished snapshot. This also applies when rotating a token for the same organization. Return to **Map Companies**, confirm and save the intended company, then check the next successful sync before relying on the results.
+
+Saving with the unchanged masked token keeps the stored token, company mapping and existing snapshot. The mask represents the saved credential; it is not a new token.
+
+Use the integration card's **Pause** and **Resume** controls to stop or resume scheduled synchronization. Use **Delete** only when you intend to disconnect the integration and remove its stored credentials and synchronized Phished data. Reconnecting requires setup and mapping again.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Token test fails | The token belongs to the intended organization, the Phished plan is active, and all three read permissions are enabled. |
+| No company results appear | The connection is saved, the organization is mapped, the sync has succeeded, and the selected company and role permit access. |
+| Saving a replacement token fails | Retry testing and saving the intended token. The connection stays unmapped and synchronization stays blocked until a save succeeds; then map the company again and request a fresh sync. |
+| Mapping or previous results disappeared after changing the token | A replacement token clears the old mapping and snapshot. Map the organization again and verify the next sync. An unchanged masked token does not trigger this reset. |
+| Training counts are missing | Phished may not supply training statistics for that recipient. Check the source record and last successful sync. |
+| Simulation counts differ from a campaign report | These are event counts for the last 30 days, grouped by source event type. They are not campaign-level click rates. |
+| A sync fails or counts stay unchanged | Read the status error, inspect the token permissions and source availability, then request **Sync All Data** after correcting the cause. Previous data can remain until a complete sync succeeds. |
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="Company mapping" icon="arrow-right" href="/user-guides/settings/integration-company-mapping">
+    Review shared mapping controls and save boundaries.
+  </Card>
+  <Card title="Security awareness" icon="arrow-right" href="/user-guides/training/security-awareness">
+    Find learner status and understand provider-specific metrics.
+  </Card>
+</CardGroup>
