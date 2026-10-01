@@ -4,7 +4,7 @@ description: "Find grouped MCP tools, their actions, permissions, confirmations 
 icon: "screwdriver-wrench"
 ---
 
-The reviewed consolidated catalog exposes **93 public tools covering 260 existing operations across 30 modules**. Related operations share a tool, so full MSPortal access fits below a 128-tool client budget without removing feature areas. Your connected client receives a subset according to the deployed version, granted OAuth access, MSPortal permissions, company scope, integrations and client tool selection. A listed tool is not proof that it is available in your session.
+The MCP catalog groups related operations into public tools. Related operations share a tool, so full MSPortal access fits below a 128-tool client budget without removing feature areas. Your connected client receives a subset according to the deployed version, granted OAuth access, MSPortal permissions, company scope, integrations and client tool selection. A listed tool is not proof that it is available in your session.
 
 ## Grouped tools and actions
 
@@ -47,7 +47,7 @@ Do not resend changed values on a confirmation call. Request a new proposal to c
 
 ## Existing connections and legacy names
 
-All **260 legacy operation names** remain accepted by `tools/call` with their original arguments and result shapes. Existing connections keep their OAuth grants and access restrictions; consolidation alone does not require a different server URL or a new grant.
+Existing legacy operation names remain accepted by `tools/call` with their original arguments and result shapes. Existing connections keep their OAuth grants and access restrictions; consolidation alone does not require a different server URL or a new grant.
 
 Pending confirmations keep the original operation identity. A proposal for an operation can be confirmed through its legacy tool name or the corresponding grouped action, subject to the same user/client identity, expiry and replay checks. The compatibility aliases `update_compliance_status` and `list_compliance_templates` remain callable directly but are not separately advertised. Confirmations created through an alias must continue using that alias's identity.
 
@@ -110,6 +110,10 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
 | `device_summary` | `query_devices` | Read | `read_devices` | Fleet-wide device summary: total count and grouped counts by status, OS family (Windows/macOS/Linux/…), device type, and manufacturer; warranty status (active/expired/unknown/expiring in the next 90 days) with upcoming expiries by calendar quarter; activity/staleness (never seen, not seen in 30/90 days); and the top companies by device count. Pass companyId to scope the summary to one company. Respects the caller's company scope. |
+| `get_software_inventory_overview` | `query_software` | Read | **MSP staff only.** `read_devices` | Get installed-software counts and lifecycle attention totals in the selected companies. |
+| `list_software_products` | `query_software` | Read | **MSP staff only.** `read_devices` | Search installed products by name or publisher, filter lifecycle status or key apps, and read key-app markers, target versions and installation counts. Paginated. |
+| `get_software_product` | `query_software` | Read | **MSP staff only.** `read_devices` | Read one visible installed product and its version/lifecycle groups. Returns null without visible installs; up to 200 version groups, with a truncation indicator at the cap. |
+| `list_software_product_devices` | `query_software` | Read | **MSP staff only.** `read_devices` | List devices with a product installed, including company, version and lifecycle status. Filter and paginate the result. |
 | `get_device` | `query_devices` | Read | `read_devices` | Get one device, including its custom field values (label → value). |
 | `list_device_alerts` | `query_devices` | Read | `read_devices` | List active device alerts: offline servers (status offline or not seen in 7 days; workstations are excluded as expected noise) and devices with warranties expiring within the next 30 days. The limit applies per alert category. |
 | `list_device_types` | `query_devices` | Read | `read_devices` | List device types. |
