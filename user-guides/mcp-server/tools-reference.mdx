@@ -565,3 +565,18 @@ For tool parameters, use the schema supplied by your connected server. Resolve r
 - [MCP Server setup and access](/user-guides/mcp-server/index)
 - [Connect GitHub Copilot](/user-guides/mcp-server/github-copilot)
 - [AI Assistant](/user-guides/ai-assistant/index)
+
+
+## Personal task lists — branch preview
+
+The private-task-list branch adds the following staff-only operations. Availability depends on the deployed catalog; use the schemas returned by your connection. Task tools use the existing `mcp.read` and `mcp.write` grants.
+
+| Operation | Purpose | Access |
+| --- | --- | --- |
+| `list_my_tasks` | Read your own tasks or your assigned companies' tasks | Read |
+| `create_tasks` | Propose up to 100 new tasks, optionally with a company and source link | Write; confirmation required |
+| `update_task` | Propose an edit to an editable task | Write; confirmation required |
+| `complete_tasks` | Complete a selected batch atomically | Write; confirmation required |
+| `delete_tasks` | Propose deletion of a selected batch | Write; confirmation required |
+
+Ownership, company sharing and tenant boundaries are enforced when a change is committed. Private tasks can also be read by authorized task-list auditors in the portal. Scratch notes are not exposed by these tools. See [Tasks and notes](/user-guides/tasks/index) for the portal workflow.
