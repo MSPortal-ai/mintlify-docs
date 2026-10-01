@@ -130,11 +130,39 @@ Remind users 7 days before assigned training expires.
   - **Message**: `Please complete "{{entity.name}}" by {{entity.due_date}}.`
   - **Send To**: Specific Users — use the user picker to target the assigned user directly. The current UI requires picking users from a list; templated user IDs like `{{entity.assigned_to}}` are not resolved by the recipient selector.
 
+### 4. Annual License Renewal Notice
+
+Tell each client which annual subscriptions renew soon, while there is still time to change seat counts or cancel. The fastest setup is the built-in rule set: on **Settings > Automation**, select **Import**, choose **Annual license renewal notice**, pick the PSA contact types to email (billing and primary are selected by default), then select **Import rule set**. The rule is imported disabled so you can review the email before enabling it.
+
+![Import automation dialog with the Annual license renewal notice rule set and its contact types](/images/automation/license-renewal-import.png)
+
+The imported rule uses these settings, which you can also build by hand:
+
+- **Entity**: License Subscription (one row per Pax8, Sherweb, Adobe or Microsoft 365 subscription for a mapped company)
+- **Trigger**: Date Threshold &rarr; **Renewal Date**, **60 days**, **Upcoming**, **Within 60 days**
+- **Conditions**: **Annual or Longer Commitment** is true, and **Is Active** is true
+- **Bundling**: Group by company, so each company gets one email listing all of its matching renewals
+- **Action**: Send Email to **Company Contacts** with the chosen contact types
+  - **Subject**: `Upcoming license renewals for {{entity.company_name}}`
+  - **Body**: includes `{{entity_list}}`, which renders one line per subscription with its renewal date
+
+Useful fields for narrowing the rule:
+
+| Field | Notes |
+|-------|-------|
+| **Vendor Source** | Pax8, Sherweb, Adobe or Microsoft 365 |
+| **Annual or Longer Commitment** | True for 1-year and multi-year terms. Microsoft 365 does not report its term, so its subscriptions never match true. |
+| **Commitment Term** | The term as the vendor reports it, such as `1-Year` or `Monthly` |
+| **Auto-Renews** | Reported by Pax8 (false when a cancellation is pending) and Adobe |
+| **Client Unit Price** / **Client Total Price** | Your sell price to the client. Partner cost is never available to rules. |
+
+Each subscription is notified once per renewal date. When the next term's renewal date syncs, the rule fires again the following year.
+
 ## State-Driven Examples
 
 These use a **Scheduled** trigger so the rule checks for a condition on a repeating interval. Useful when the thing you want to act on is a state (status, field value) rather than a date.
 
-### 4. CSAT Survey for Resolved Tickets
+### 5. CSAT Survey for Resolved Tickets
 
 Check hourly for tickets currently in **Resolved** status and send the configured request. These conditions do not establish how long a ticket has been resolved, and the Primary Contact recipient is not necessarily the person who opened the ticket.
 
@@ -189,7 +217,7 @@ Check hourly for tickets currently in **Resolved** status and send the configure
 Scheduled rules offer **Once per entity** dedup or **Every run**. Choose deliberately. A custom done flag can encode a business workflow, but action failure or pending approval can separate flag state from actual delivery. Inspect execution results before relying on it.
 </Note>
 
-### 5. Stale Goal Nudge
+### 6. Stale Goal Nudge
 
 Once a week at the configured time, alert account managers about in-progress goals below 50% whose target date is more than 60 days overdue. These conditions measure an overdue target, not the time since the last progress update.
 
@@ -205,7 +233,7 @@ Once a week at the configured time, alert account managers about in-progress goa
   - **Title**: `Goal stalled: {{entity.name}}`
   - **Message**: `{{entity.name}} at {{entity.company_name}} has a target date over 60 days overdue and is below 50% progress.`
 
-### 6. Overdue Compliance Control
+### 7. Overdue Compliance Control
 
 Every day at 7 AM, create a planner task for any compliance control that is past due and not yet assigned a remediation task.
 
@@ -219,7 +247,7 @@ Every day at 7 AM, create a planner task for any compliance control that is past
   1. Add to Planner &rarr; Task Title: `Remediate: {{entity.name}} ({{entity.company_name}})`, Business Value: High, Due Offset: 14
   2. Update Field &rarr; Field `custom_fields.remediation_task_created`, Value `true` (flag it so this doesn't re-create tomorrow)
 
-### 7. Meeting Without Notes Follow-Up
+### 8. Meeting Without Notes Follow-Up
 
 Every evening, find meetings in Pending Notes that have agenda items and alert the selected users. These conditions do not restrict matches to meetings that ended today or dynamically select each organizer.
 

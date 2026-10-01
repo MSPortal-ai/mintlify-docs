@@ -82,6 +82,7 @@ Each field has a **Type** that controls how clients answer it:
 | **Location** | Select a location from the portal company |
 | **Device** | Select devices from the portal company |
 | **Contact** | Select a contact from the portal company |
+| **Content Block** | Read-only formatted text, such as instructions, terms, or a policy. Clients read it and answer nothing, unless you require acknowledgment |
 
 Location, Device, and Contact choices come from company data. Do not enter their options manually. If a picker is empty, check the company and available records.
 
@@ -94,6 +95,15 @@ Each field supports:
 - **Placeholder** — example text inside the input
 - **Help Text** — guidance shown under the field
 - **Options** — for select fields, one option per line or comma-separated
+
+A **Content Block** field swaps these settings for its own:
+
+- **Heading (optional)** is shown above the block. Leave it blank for a block with no heading.
+- **Content** is written in the rich-text editor, with bold, italics, colors, alignment, lists, and links. The client sees it as formatted, read-only text.
+- **Require Acknowledgment** adds a checkbox under the block. The client must tick it before the form can be saved.
+- **Acknowledgment Text** sets the checkbox label. It appears only when acknowledgment is required. Leave it blank to use "I have read and agree".
+
+Content blocks store no answer unless acknowledgment is required, and they can't be mapped to Hudu or IT Glue fields. Switching an existing field to a Content Block removes its mappings.
 Field keys are generated from labels. Give fields clear, distinct labels, and check existing submissions before changing the structure of a shared form.
 
 <Tip>
@@ -145,6 +155,7 @@ See [Onboarding Templates](/user-guides/client-onboarding/templates) for task co
 When a client opens a form task in their portal, the form renders inline with all its fields laid out by type — dropdowns for selects, toggles for Yes/No, date pickers, and so on. Required fields are marked.
 
 - Clients fill out the fields and click **Save Form**
+- Content blocks appear as formatted text across the full width of the form. When a block requires acknowledgment, **Save Form** stays unavailable until the client ticks its checkbox, and the entry records the acknowledgment as **Yes**
 - Wait for the save result; a previously displayed **Saved** badge can remain while the client edits, so changed values need another **Save Form**
 - If the form allows repeat entries, submitted entries appear as chips (Entry 1, Entry 2, …) and a **One More** button lets clients add another
 
