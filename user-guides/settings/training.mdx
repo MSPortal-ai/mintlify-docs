@@ -17,7 +17,7 @@ Use Training settings to choose which courses your clients can take, set the bra
 
 <Steps>
   <Step title="Open Settings > Training">
-    The course table lists every available course with its **Enabled** switch, **Course Title**, **Type**, **Category**, **Tags**, **Duration** and **Enrollments**. **Type** shows **Included**, **Premium** or **Custom**.
+    The course table lists every available course with its **Enabled** switch, **Course Title**, **Type**, **Category**, **Tags**, **Duration** and **Enrollments**. **Type** shows **Included**, **Premium** or **Custom**. **Duration** reads like **15m** or **1h 30m**.
     <Frame>
       <img src="/images/settings/settings-training-courses.png" alt="Training settings course table with Enabled switches, Type, Category, Duration and Enrollments" />
     </Frame>
@@ -35,6 +35,8 @@ Use Training settings to choose which courses your clients can take, set the bra
     Tick the checkbox on each row, then use the bulk menu to choose **Enable Selected** or **Disable Selected**.
   </Step>
 </Steps>
+
+Custom courses that you created appear in the same table with the **Custom** type. They follow the company selector. A course with no company shows for everyone, and a course tied to one company shows when you select all companies or that company. Custom courses are always enabled, so their **Enabled** switch is locked on, their checkbox is disabled, and their row menu has no **Enable Course** or **Disable Course**. **Preview Course** and **Manage Questions** still work.
 
 Enabling a course makes it available. It does not enroll anyone. To assign courses, use [Learning Paths](/user-guides/training/learning-paths) or [Find and enroll](/user-guides/training/find-and-enroll).
 
@@ -80,6 +82,22 @@ The **Certificate branding** card at the top of **Settings > Training** sets the
 
 With **Client branding**, a company without a logo shows its name instead. Learners who do not belong to a company keep MSP branding. The setting is read when a certificate is viewed, downloaded or shared, so it applies to certificates you already issued. With read-only access you see the current choice and no **Save** button.
 
+## Delete a custom course
+
+<Steps>
+  <Step title="Open the row menu">
+    Find the custom course in the table and open its row menu. Only custom courses have **Delete Course**.
+  </Step>
+  <Step title="Choose Delete Course">
+    A confirmation names the course and warns that enrolled learners lose access to it.
+  </Step>
+  <Step title="Confirm">
+    Confirm to delete the course. It leaves the table and learners can no longer open it.
+  </Step>
+</Steps>
+
+You need the **Manage Training** permission. Company users see **Delete Course** only on their own company's custom courses, never on courses for your whole organization. You cannot undo a deletion in the app, and custom courses cannot be edited in the app after you create them. Included and Premium courses cannot be deleted.
+
 ## Create a custom course
 
 <Steps>
@@ -111,11 +129,11 @@ With **Client branding**, a company without a logo shows its name instead. Learn
     The course is created and its content uploads. **Cancel** closes the form without saving.
   </Step>
   <Step title="Check the new course">
-    Find it in the table, make sure its **Enabled** switch is on, and open **Preview Course** to check the content before you assign learners.
+    Find it in the table with the **Custom** type and open **Preview Course** to check the content before you assign learners. Its duration shows as you entered it, for example **15m**.
   </Step>
 </Steps>
 
-The create form has no company selector. Check the course's availability after you create it.
+The create form has no company field. If exactly one company is selected in the company selector when you click **Create Course**, the form says the course is for the selected company only, and the course is scoped to that company. With no company or several companies selected, the course is created for your whole organization.
 
 ## Troubleshooting
 
@@ -124,7 +142,9 @@ The create form has no company selector. Check the course's availability after y
 | Switches or the bulk menu are missing or disabled | You need Training settings write access and active billing. |
 | **Create Course** is disabled | You need the **Manage Training** permission. |
 | The **Certificate branding** card has no **Save** button | You have read-only access. |
-| A course is missing from the table | Check the company selector and clear the table filters. |
+| A course is missing from the table | Check the company selector and clear the table filters. A custom course tied to one company shows only for all companies or for that company. |
+| **Delete Course** is missing on a custom course | You need the **Manage Training** permission. Company users can delete only their own company's custom courses. |
+| **Failed to delete course** | The course may already be deleted, or you may not have access to it. Reload the table and try again. |
 | A learner cannot launch an enabled course | Check Premium access for the company and user, training permissions and the learner's assignment. |
 | A toast says the content upload failed | The course record already exists. Find it in the table and upload its content again instead of creating a duplicate. |
 | **Settings > Training** is missing | Your organization uses the direct Bigger Brains experience. Open **Training** from the main menu. |
@@ -148,7 +168,10 @@ The create form has no company selector. Check the course's availability after y
     Yes. The course is created first and its content uploads second. Find the course before you try again.
   </Accordion>
   <Accordion title="Does the company selector make a new course private to one company?">
-    No. The create form does not use it. Review the course's availability after you create it.
+    Yes, when exactly one company is selected as you click **Create Course**. The form then says the course is for the selected company only. With no company or several companies selected, the course is for your whole organization.
+  </Accordion>
+  <Accordion title="Can I turn a custom course off?">
+    No. Custom courses are always enabled and have no switch. To remove one, use **Delete Course** in its row menu.
   </Accordion>
   <Accordion title="Does disabling a course remove existing enrollments?">
     No, but do not rely on it as a cleanup step. Check the learner's actual access.

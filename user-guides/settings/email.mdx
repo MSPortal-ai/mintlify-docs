@@ -83,7 +83,9 @@ To remove the domain, click **Remove** and confirm **Remove Domain**. MSPortal s
 
 ## Manage receiving addresses
 
-Every company has a permanent email address for importing reports from RMM, backup and security tools. Forward a report to a company's address and MSPortal imports its attachments. See [email imports](/user-guides/reporting/email-imports). These addresses are not mailboxes.
+Every company has its own email address for importing reports from RMM, backup and security tools. Forward a report to a company's address and MSPortal imports its attachments. See [email imports](/user-guides/reporting/email-imports). These addresses are not mailboxes.
+
+An address stays the same until you regenerate it, so renaming a company does not change it. New addresses end in a random 13-character code, so nobody can guess one from the company name. Keep each address private, because anyone who has it can send files to that company. Each sender can file up to 60 messages an hour to one address, and each address accepts up to 300 messages an hour in total. MSPortal drops the extras without a bounce.
 
 <Steps>
   <Step title="Open Receiving">
@@ -96,14 +98,14 @@ Every company has a permanent email address for importing reports from RMM, back
     Click **Activate address** or **Deactivate address**. It saves at once. A toast confirms.
   </Step>
   <Step title="Regenerate an address (only if needed)">
-    Click **Regenerate address** on a row, read the warning and click **Regenerate**. The old address stops working at once. Update every forwarding rule that used it.
+    Click **Regenerate address** on a row, read the warning and click **Regenerate**. The company gets a new address with a new random ending, and the old address stops working at once. Update every forwarding rule that used it. Regenerate an address that may have been shared.
   </Step>
   <Step title="Regenerate every address (rare)">
-    Click **Regenerate All**, read the warning and click **Regenerate All**. Every old address stops working at once. The toast says how many were updated and how many were already correct.
+    Click **Regenerate All**, read the warning and click **Regenerate All**. Every company gets a new random address, and every old address stops working at once. The toast says **N addresses regenerated**, or **N regenerated, M failed** when some could not be changed.
   </Step>
 </Steps>
 
-If a regenerate fails partway, reload the list and look at the current addresses before you try again.
+If a regenerate fails partway, reload the list and look at the current addresses before you try again. Addresses created before this change keep their old form, without the random ending, until you regenerate them.
 
 ## Troubleshooting
 
@@ -116,6 +118,7 @@ If a regenerate fails partway, reload the list and look at the current addresses
 | A template preview looks right but the email never arrived | Check the recipient, the spam folder, your domain status and the sending workflow. Preview does not send mail |
 | A sender still uses the old address | Check the saved **Default From Address** and the workflow's template |
 | Imports stopped after a regenerate | Change the forwarding rule to the company's new address and check that it is **Active** |
+| Some reports from a busy sender never arrive | Each sender can file 60 messages an hour to one address, and each address takes 300 an hour. Extra messages are dropped without a bounce. Spread a large backlog over several hours |
 | **Create Template** or **Add Domain** is missing | You need write access to Email settings |
 
 ## Frequently asked questions
@@ -129,6 +132,9 @@ If a regenerate fails partway, reload the list and look at the current addresses
   </Accordion>
   <Accordion title="Does the default apply to every category?">
     No. Each category has its own default.
+  </Accordion>
+  <Accordion title="Does renaming a company change its receiving address?">
+    No. The address stays the same until you regenerate it.
   </Accordion>
   <Accordion title="Do the receiving address switches need a Save?">
     No. Activate and Deactivate save at once.

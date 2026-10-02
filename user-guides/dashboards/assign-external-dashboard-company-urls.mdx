@@ -4,13 +4,13 @@ description: 'Give each company its own external dashboard destination and maint
 icon: 'chart-mixed'
 ---
 
-Each company needs its own URL before its users can open an external dashboard. This guide is for MSP staff with Dashboards access under Settings.
+Each company needs its own URL before its users can open an external dashboard. This guide is for MSP staff with Dashboards access under Settings. Adding and editing URLs needs **Write**. Removing a URL needs **Manage**.
 
 ## Before you start
 
 - Add the external dashboard first. See [Configure external dashboards](/user-guides/dashboards/configure-external-dashboards).
 - Company users always use their company's URL. A company with no URL never falls back to the default URL, and the dashboard is hidden from it. The default URL is used for MSP staff in **Global View**.
-- Every URL must start with `https://`.
+- Every URL must start with `https://`. MSPortal rejects anything else with **URL must start with https://**.
 
 ## Add a company URL
 
@@ -46,7 +46,7 @@ The image shows the **Add Manually** form before a company and URL are entered.
     Click the pencil icon, change the URL, then click the check mark to save. The **X** cancels the edit.
   </Step>
   <Step title="Or remove the assignment">
-    Click the trash icon. The assignment is removed at once with no confirmation. That company no longer sees the dashboard.
+    Click the trash icon. It needs **Manage** on Dashboards under Settings, so users with only **Write** do not see it. The assignment is removed at once with no confirmation. That company no longer sees the dashboard.
   </Step>
 </Steps>
 
@@ -61,13 +61,13 @@ The dialog works on one external item at a time.
     Click **Export CSV** above the list. Choose **Export Current (n)** for assigned URLs only. Choose **Export All Companies (n)** for every company, with a blank URL for those not assigned. The filter box does not narrow either export.
   </Step>
   <Step title="Edit the file">
-    Keep the header `"Company Name","URL"`. Put both values in double quotes, one company per line. Match the company's name. Use `https://` addresses.
+    Keep the header `"Company Name","URL"`. Put both values in double quotes, one company per line. Match the company's name. Use `https://` addresses. A row that does not use `https://` is not imported.
   </Step>
   <Step title="Upload it">
     Under **Import from CSV**, click **Upload CSV** and choose the file. It processes as soon as you pick it. There is no preview.
   </Step>
   <Step title="Read the result">
-    A message reports how many rows were added, updated, skipped or failed. Open **Assigned URLs** to check the actual result.
+    A message reports how many rows were added, updated, skipped or not imported. If any row failed, a red **Rows not imported (n)** list appears in the dialog. Each entry starts with the row number in your file, counting the header as row 1, for example **Row 4: the URL for Contoso must start with https://.** Fix those rows and upload the file again. Open **Assigned URLs** to check the actual result.
   </Step>
 </Steps>
 
@@ -81,7 +81,9 @@ The import matches company names without regard to case. It skips rows with a bl
 | A company cannot open the dashboard | Check its assigned URL, that the item is **Active**, that the user's Company role is allowed, and that the user can sign in to the external service. |
 | The URL saves but does not load in the frame | Open the URL on its own. The embedding check covers only the default URL. |
 | Closing the dialog did not undo a change | Each change saves on its own. Edit the value back or add the assignment again. |
-| A CSV import changed only some rows | Read the message and check **Assigned URLs**. Unchanged and blank rows are skipped and other rows can fail alone. |
+| A CSV import changed only some rows | Read the **Rows not imported** list in the dialog and check **Assigned URLs**. Unchanged and blank rows are skipped and other rows can fail alone. |
+| A CSV row says the URL must start with https:// | Each row is checked on its own. Change the URL in that row to a full `https://` address and upload again. |
+| The trash icon is missing | Removing a company URL needs **Manage** on Dashboards under Settings. |
 | A URL is rejected | It must be a full `https://` address. |
 
 ## Frequently asked questions

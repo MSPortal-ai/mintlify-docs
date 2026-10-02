@@ -1,10 +1,10 @@
 ---
 title: 'Find and export domains'
-description: 'Filter the domain inventory and download the page you are viewing as a CSV.'
+description: 'Filter the domain inventory and download every matching domain as a CSV.'
 icon: 'filter'
 ---
 
-Use the column filters on **Cloud > Domains** to find domains, then **Export CSV** to download the page you are viewing. This page is for MSP staff and company users who can see the Domains tab.
+Use the column filters on **Cloud > Domains** to find domains, then **Export CSV** to download every matching domain. This page is for MSP staff and company users who can see the Domains tab.
 
 ## Before you start
 
@@ -54,26 +54,23 @@ There are no filters for **Services**, **Expires**, **Auto-renew**, **Registrar 
   </Step>
 </Steps>
 
-## Export the page you are viewing
+## Export every matching domain
 
 <Steps>
   <Step title="Set your filters">
     Set the company selector and any column filters first.
   </Step>
-  <Step title="Go to the page you need">
-    Use the page controls under the table. The export includes only the rows on the current page.
-  </Step>
   <Step title="Click Export CSV">
-    Click **Export CSV** above the table. The browser downloads `cloud-domains`. When one company is selected, the company name is added to the file name.
+    Click **Export CSV** above the table. A progress toast shows how many domains are loaded. The export includes every domain that matches your filters, across all pages. The browser downloads `cloud-domains`. When one company is selected, the company name is added to the file name.
   </Step>
-  <Step title="Repeat for other pages">
-    If more than 50 domains match, go to the next page and export again. The file does not include rows from pages you did not open.
+  <Step title="Check the result">
+    The toast reads **Exported N rows** when the file is ready. If it reads **The export could not finish. Try again.**, no file was downloaded. Click **Export CSV** again.
   </Step>
 </Steps>
 
 The CSV columns are **Domain**, **Provider**, **Company**, **Primary**, **Verification**, **Cloud presence**, **Expires**, **Auto-renew**, **Registrar status**, **Services**, **Authentication**, **Aliases**, and **Last synced**. Hidden table columns are still exported. **Services** and **Aliases** use semicolons between values. **Created** is not exported.
 
-The summary counts at the top of the page cover every page, so they can be larger than the rows in your CSV.
+The summary counts at the top of the page cover every page, as does the CSV.
 
 ## Troubleshooting
 
@@ -82,14 +79,15 @@ The summary counts at the top of the page cover every page, so they can be large
 | You see **No cloud domains match these filters.** | Click **Clear Filters** and check the company selector. |
 | A domain you know is missing | Check the company selector and the **Provider** filter. DNSimple domains appear only when mapped to a company. |
 | **Export CSV** is missing | Your role does not have Cloud read access. |
-| The CSV has fewer rows than **Total domains** | The export covers the current page only. Export each page. |
+| The CSV has fewer rows than **Total domains** | The export follows the company selector and column filters, and the summary may not. Clear the filters, then export again. |
+| **The export could not finish. Try again.** | No file was downloaded. Click **Export CSV** again. |
 | The **Primary** or **Cloud presence** filter is not on screen | Show the column with **Columns**, then click **Save Changes**. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Export CSV download every matching page?">
-    No. It exports the rows on the page you are viewing, up to 50 domains.
+    Yes. It exports every domain that matches your company and filters, not only the page you see.
   </Accordion>
   <Accordion title="Do I need management permission to export?">
     No. Cloud read access is enough.
@@ -98,7 +96,7 @@ The summary counts at the top of the page cover every page, so they can be large
     No. It searches the domain name only. Use the company selector or the **Company** filter for companies.
   </Accordion>
   <Accordion title="Can I filter or sort by expiry date?">
-    No. Export the pages you need and sort in a spreadsheet.
+    No. Export the list and sort it in a spreadsheet.
   </Accordion>
   <Accordion title="Why does Unverified include DNSimple rows?">
     DNSimple does not report a verification flag, so those rows count as **Unverified**.

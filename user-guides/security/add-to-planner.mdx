@@ -25,7 +25,7 @@ Use this page to turn Cork findings into Planner work you can assign, date, and 
     Open **Actions (N)** in the page header and choose **Add to Planner**.
   </Step>
   <Step title="Review the draft">
-    The Planner item dialog opens with a title, **Description**, **Business Value**, **Due Date**, and **Private Notes** already filled in. The status starts as Not Started, and the due date starts as today. Change **Type**, **Status**, **Due Date**, **Est. Hours**, **Est. Cost**, or the notes as needed.
+    The Planner item dialog opens with a title, **Description**, **Business Value**, **Due Date**, and **Private Notes** already filled in. The status starts as Not Started, and the due date starts as today. Change **Type**, **Status**, **Assignee**, the dates, **Est. Hours**, the costs, the links, the custom fields, **Hide from company users**, or the notes as needed.
   </Step>
   <Step title="Save">
     Click **Save**. MSPortal shows **Cork items added to planner.**
@@ -37,9 +37,9 @@ Use this page to turn Cork findings into Planner work you can assign, date, and 
 
 Opening the dialog does not save anything. Several findings become one Planner item, not one item per row. The original findings stay as they are.
 
-<Warning>
-This shortcut saves only Company, Type, Status, Business Value, Due Date, Est. Hours, Est. Cost, Description, Notes, and Private Notes. It does not save **Assignee**, **Hide from company users**, start or end dates, probability, other relationships, or custom fields. Do not put confidential details in the title, description, or public notes. Open the saved item in Planner and set those fields there.
-</Warning>
+Every field in the dialog is saved, including visibility, assignee, dates, costs, links and custom fields. **Hide from company users** is honored. It starts checked in this shortcut, so the item stays hidden from company users unless you clear it. If you clear it, keep confidential details out of the title, description, and public notes.
+
+If the save fails, the dialog stays open and nothing is saved. Fix the problem or try again.
 
 ## What the draft contains
 
@@ -72,7 +72,9 @@ This shortcut saves only Company, Type, Status, Business Value, Due Date, Est. H
 | Hostname | Private Notes |
 | OS and OS version | Private Notes |
 | IP addresses | Private Notes |
-| Last seen | Private Notes |
+| Last seen | Private Notes, when the row has one |
+
+For Acronis rows, the details go only into **Private Notes**. They are not linked under **Cork Endpoints**, because only Cork endpoints can be linked. Acronis does not report an OS version or last seen time, so those lines are left out.
 
 ### Business Value
 
@@ -105,8 +107,8 @@ Private Notes are for MSP staff and are hidden from company users. Put anything 
 | **Add to Planner** is missing from the Actions menu | Your role lacks Planner write or manage access. Ask your MSP admin. |
 | **Please select items from the same company** | Clear your selection and pick rows from one company. |
 | **Please select a company first** | Pick a company in the company selector. |
-| **Could not save planner item.** | The item may already exist without its links, because the item is saved first and the findings are linked second. Open Planner and fix that item instead of creating another. Linking needs Planner write access and Security read access, so ask your MSP admin to check your role. |
-| You selected Acronis endpoint rows | The shortcut links every endpoint row as a Cork endpoint. Use it for Cork endpoints only. |
+| **Could not save planner item.** | Nothing was saved and the dialog stays open. Check the fields, then click **Save** again. If it keeps failing, ask your MSP admin to check your Planner write access. |
+| You selected Acronis endpoint rows | The Planner item holds their details in **Private Notes** only. Nothing appears under **Cork Endpoints** for them. |
 
 ## Frequently asked questions
 
@@ -118,7 +120,7 @@ Private Notes are for MSP staff and are hidden from company users. Put anything 
     No. Planner tracks your work. Patching and resolving the finding happen in the provider, and the result shows up here after the next sync.
   </Accordion>
   <Accordion title="Can I rely on Hide from company users here?">
-    No. This shortcut does not save that setting. Set it in the saved Planner item.
+    Yes. This shortcut saves it like the Planner page does. The box starts checked, so the item is hidden from company users unless you clear it.
   </Accordion>
   <Accordion title="Where do I see the linked findings later?">
     Open the item in **Planner** and look under **Relationships**.

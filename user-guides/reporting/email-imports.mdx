@@ -30,22 +30,26 @@ The **Imports** tab on the **Reporting** page stores files that arrive by email 
 
 <Steps>
   <Step title="Open Settings > Email">
-    Go to **Settings > Email** and click the **Receiving** tab. **Receiving Addresses** lists every company with its address and an **Active** or **Inactive** status.
+    Go to **Settings > Platform > Email** and click the **Receiving** tab. **Receiving Addresses** lists every company with its address and an **Active** or **Inactive** status.
   </Step>
   <Step title="Copy the address">
     Click **Copy address** on the company's row.
   </Step>
 </Steps>
 
-You can also copy a folder's full address from the **...** menu next to the folder in the Imports rail (**Copy email address**). The **Export email addresses (Excel)** button on the Imports tab downloads a spreadsheet of every company's address. On the Receiving tab you can deactivate an address, or regenerate it. A regenerated address replaces the old one, so update any forwarding rules. See [Email settings](/user-guides/settings/email).
+You can also copy a folder's full address from the **...** menu next to the folder in the Imports rail (**Copy email address**). The **Export email addresses (Excel)** button on the Imports tab downloads a spreadsheet of every company's address. On the Receiving tab you can deactivate an address, or regenerate it. A regenerated address gets a new random ending and replaces the old one, so update any forwarding rules. See [Email settings](/user-guides/settings/email).
 
-An address looks like this, where `acme123` is the company's import code.
+An address looks like this, where `acme-dental-msp-7k2m9q4xh3c0d` is the company's import code.
 
 ```
-acme123@inbox.msportal.ai
+acme-dental-msp-7k2m9q4xh3c0d@inbox.msportal.ai
 ```
 
-A file emailed to that address lands in that company's **Unfiled** area. MSPortal does not check who the sender is, so keep addresses private and use them only in rules you control.
+The code starts with the company and MSP names, so you can read it. It ends in a random 13-character code that makes the address hard to guess. Addresses created before this change keep their old form until you regenerate them.
+
+A file emailed to that address lands in that company's **Unfiled** area. MSPortal does not check who the sender is, so keep addresses private, use them only in rules you control, and regenerate any address that may have been shared.
+
+Each sender can file up to 60 messages an hour to one address, and each address accepts up to 300 messages an hour from all senders together. MSPortal drops messages over either limit without a bounce. A sender that forwards a large backlog should spread it over several hours.
 
 ## Send files in by email
 
@@ -71,14 +75,14 @@ An email with no accepted attachment is saved as one **Email Body** document. Ot
 Add `+folder-slug` after the import code to send the file straight into a folder.
 
 ```
-acme123+invoices@inbox.msportal.ai      lands in the "Invoices" folder
-acme123+contracts@inbox.msportal.ai     lands in the "Contracts" folder
-acme123+vendor-quotes@inbox.msportal.ai lands in the "Vendor Quotes" folder
+acme-dental-msp-7k2m9q4xh3c0d+invoices@inbox.msportal.ai      lands in the "Invoices" folder
+acme-dental-msp-7k2m9q4xh3c0d+contracts@inbox.msportal.ai     lands in the "Contracts" folder
+acme-dental-msp-7k2m9q4xh3c0d+vendor-quotes@inbox.msportal.ai lands in the "Vendor Quotes" folder
 ```
 
-This is standard plus-addressing. Mail still goes to `acme123@inbox.msportal.ai`, and MSPortal reads the `+vendor-quotes` part.
+This is standard plus-addressing. Mail still goes to `acme-dental-msp-7k2m9q4xh3c0d@inbox.msportal.ai`, and MSPortal reads the `+vendor-quotes` part.
 
-If the slug does not match a folder, MSPortal creates a global folder from it, and files the email there. So `acme123+vendor-quotes@inbox.msportal.ai` creates a **Vendor Quotes** folder for every company the first time it is used. Later emails with that tag reuse it. Check the slug for typos, since a typo makes a new folder.
+If the slug does not match a folder, MSPortal creates a global folder from it, and files the email there. So `acme-dental-msp-7k2m9q4xh3c0d+vendor-quotes@inbox.msportal.ai` creates a **Vendor Quotes** folder for every company the first time it is used. Later emails with that tag reuse it. Check the slug for typos, since a typo makes a new folder.
 
 ## Create a folder
 
@@ -106,7 +110,7 @@ If the slug does not match a folder, MSPortal creates a global folder from it, a
     For example **Invoices** or **Contracts**.
   </Step>
   <Step title="Click Create">
-    The folder now exists under every company. Each company gets its own address for it, such as `acme123+invoices@inbox.msportal.ai` and `globex456+invoices@inbox.msportal.ai`. Each company sees only its own files.
+    The folder now exists under every company. Each company gets its own address for it, such as `acme-dental-msp-7k2m9q4xh3c0d+invoices@inbox.msportal.ai` and `globex-corp-msp-3n8w5ztq2b6ya+invoices@inbox.msportal.ai`. Each company sees only its own files.
   </Step>
 </Steps>
 
@@ -151,7 +155,7 @@ Tick rows to get a bar with **N selected**, **Move to folder...**, **Download**,
     Create a global folder named **Invoices**.
   </Step>
   <Step title="Copy each address">
-    Copy the folder address for each client, for example `acme123+invoices@inbox.msportal.ai`.
+    Copy the folder address for each client, for example `acme-dental-msp-7k2m9q4xh3c0d+invoices@inbox.msportal.ai`.
   </Step>
   <Step title="Send it to the client">
     Ask them to email or forward invoices to it.
@@ -179,7 +183,7 @@ For forwarding rules, Outlook can forward mail that matches a rule to the folder
 
 | Problem | What to do |
 | --- | --- |
-| A file never arrived | Check the company's address on **Settings > Email > Receiving**. It must be **Active** and spelled exactly. Mail must go to `inbox.msportal.ai`. Then look at the Imports table for a **Failed** status. |
+| A file never arrived | Check the company's address on **Settings > Platform > Email > Receiving**. It must be **Active** and spelled exactly. Mail must go to `inbox.msportal.ai`. Then look at the Imports table for a **Failed** status. If a sender sent a burst, it may have passed the limit of 60 messages an hour per sender or 300 an hour per address. Extra messages are dropped without a bounce, so resend the rest after an hour. |
 | A file landed in a folder you did not expect | The `+slug` did not match your folder, so a new global folder was created from it. Check for typos. Slugs are lowercase with hyphens. |
 | A file is stuck on **Pending** or **Processing** | Wait for **Completed**. You cannot open or download it before then. |
 | A rename broke a forwarding rule | A rename changes the slug. Copy the new address and update the rule. |
@@ -202,10 +206,10 @@ For forwarding rules, Outlook can forward mail that matches a rule to the folder
     No. It downloads each completed file on its own.
   </Accordion>
   <Accordion title="Can the address change?">
-    Yes. Regenerating it on **Settings > Email > Receiving** replaces the old one. Folder renames change folder addresses too.
+    Yes. Regenerating it on **Settings > Platform > Email > Receiving** gives it a new random ending and replaces the old one. Renaming a company does not change it. Folder renames change folder addresses.
   </Accordion>
   <Accordion title="Can a Company user send files to their company's address?">
-    MSPortal does not check the sender, so anyone who has the address can send to it. Share it only with people you trust.
+    MSPortal does not check the sender, so anyone who has the address can send to it, up to the hourly limits. Share it only with people you trust, and regenerate it if it may have leaked.
   </Accordion>
   <Accordion title="How do I use an imported file in a report?">
     Add the **Imported Document** or **PDF Viewer** block in the report builder and choose the file.
