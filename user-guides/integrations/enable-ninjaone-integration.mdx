@@ -1,10 +1,12 @@
 ---
 title: 'Configure NinjaOne Integration'
-description: 'Connect your NinjaOne (NinjaRMM) instance to MSPortal.ai to sync organizations, locations, and devices'
+description: 'Connect NinjaOne to MSPortal.ai to sync organizations, locations, devices, and installed software'
 icon: 'plug'
 ---
 
-This guide walks you through connecting your NinjaOne instance to MSPortal.ai using our streamlined 4-step setup wizard: **Connect**, **Map**, **Map Locations** and **Import**.
+This guide walks you through connecting your NinjaOne instance to MSPortal.ai using our 5-step setup wizard: **Connect**, **Sync**, **Map**, **Map Locations** and **Import**.
+
+<Note>Software synchronization collects inventory for imported devices in mapped companies. Screenshots use MSPortal Demo inventory.</Note>
 
 ## Overview
 
@@ -13,7 +15,7 @@ The NinjaOne integration syncs your organizations, locations, and devices into M
 - Import and manage devices from NinjaOne
 - Map NinjaOne organizations to your MSPortal companies
 - Map NinjaOne locations to your PSA locations for accurate site-level tracking
-- Keep device inventory synchronized automatically with daily syncs
+- Keep device and installed-software inventory synchronized automatically with daily syncs
 - Track device status, backup usage, and ownership details
 - View NinjaOne devices in reports and compliance tracking
 
@@ -104,7 +106,7 @@ Before connecting to MSPortal, you need to create API credentials in NinjaOne.
 
 ## Part 2: MSPortal Setup Wizard
 
-MSPortal provides a guided 4-step wizard to connect and configure your NinjaOne integration.
+MSPortal provides a guided 5-step wizard to connect and configure your NinjaOne integration.
 
 ### Starting the Wizard
 
@@ -168,7 +170,17 @@ Enter your NinjaOne API credentials to establish the connection.
 
 ---
 
-### Step 2: Map Organizations
+### Step 2: Sync
+
+In **Sync**, leave **Software** enabled to collect installed applications for imported devices. It defaults on. Changes save when you continue to the next step.
+
+Turning **Software** off removes this connection's installed-software data from MSPortal after cleanup completes. It does not uninstall applications or remove inventory supplied by another connection. Turn it back on to collect the inventory again.
+
+Company mapping is still required. Software uses the device's mapped company; enabling it does not import an unmapped organization's devices.
+
+---
+
+### Step 3: Map Organizations
 
 Map your NinjaOne organizations to MSPortal companies. Only devices from mapped organizations will be available for import.
 
@@ -228,7 +240,7 @@ You must map at least one organization before proceeding to device import. Devic
 
 ---
 
-### Step 3: Map Locations
+### Step 4: Map Locations
 
 Map your NinjaOne locations to PSA locations in MSPortal. This step preserves your organizational hierarchy from NinjaOne and ensures devices are assigned to the correct site within each company.
 
@@ -271,7 +283,7 @@ Location mapping is most useful when your NinjaOne locations correspond to physi
 
 ---
 
-### Step 4: Import Devices
+### Step 5: Import Devices
 
 After mapping organizations (and optionally locations), import devices from NinjaOne into your MSPortal asset inventory.
 
@@ -409,6 +421,20 @@ For bulk imports, use the device type mapping's "Import All" button instead of s
 
 ---
 
+## Review installed software
+
+After devices are imported, software synchronization is queued separately and also runs daily. Wait for that work to finish before checking inventory. Failed reads preserve the last known inventory; a device missing from a snapshot is not proof that all its applications were removed.
+
+MSP staff with device-read access and software inventory enabled can open **Devices > Software** when Asio, Datto RMM, or NinjaOne is connected. Use the company selector to narrow the fleet. In an individual device, **Software** appears only when its installed inventory is available. Company users do not receive these Software destinations.
+
+<Frame caption="Installed applications in an MSPortal Demo device's Software tab.">
+  <img src="/images/product/ninja-software-preview-desktop.png" alt="Device Software tab with installed applications, versions, and lifecycle status" width="2880" height="1920" />
+</Frame>
+
+See [understand device details](/user-guides/devices/understand-device-details#review-installed-software) for tab availability and filtering, and [Sync Schedules](/user-guides/integrations/sync-schedules) for cadence.
+
+---
+
 ## Sync Schedule
 
 Syncs run automatically on a daily schedule:
@@ -420,6 +446,7 @@ Syncs run automatically on a daily schedule:
 | Auto-Import | Immediately after device sync | Imports new devices for types with auto-sync enabled |
 | Auto-Import Catch-Up | Daily at 2:45 AM UTC | Imports any auto-sync devices that were missed |
 | Backup Usage | Daily at 3:30 AM UTC | Refreshes backup status after the device sync |
+| Software inventory | Daily at 4:30 AM UTC | Collects installed software for imported devices when Software is enabled |
 
 <Note>
 Device syncs may take a few minutes depending on the size of your environment. You can also trigger a manual sync at any time using the **Sync Now** button on the device import page.

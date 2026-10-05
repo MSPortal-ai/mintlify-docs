@@ -7,13 +7,13 @@ icon: 'box-open'
 The **Software** tab under **Devices** lists the software installed on your clients' devices. It groups each product across devices and flags installs that have reached end of life, reach it soon, or are behind the latest update.
 
 <Note>
-Branch preview for the Devices software update. For MSP staff with access to Devices. Company users do not see the Software tab. The tab appears when the Software inventory feature is turned on for your portal.
+Branch preview for the Devices software update. For MSP staff with access to Devices. Company users do not see the Software tab. The tab requires device-read access, the Software inventory feature, and a connected ConnectWise Asio, Datto RMM, or NinjaOne integration.
 </Note>
 
 ## Before you start
 
-- Connect **ConnectWise Asio** or **Datto RMM** and import devices. Software is collected only for imported devices.
-- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported. Ongoing inventory syncs run daily: **ConnectWise Asio at 04:00 UTC** and **Datto RMM at 04:30 UTC**. See [Sync schedules](/user-guides/integrations/sync-schedules).
+- Connect **ConnectWise Asio**, **Datto RMM**, or **NinjaOne** and import devices. Software is collected only for imported devices.
+- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported. Ongoing inventory syncs run daily: **ConnectWise Asio at 04:00 UTC** and **Datto RMM at 04:30 UTC**, and **NinjaOne at 04:30 UTC**. The NinjaOne Software switch defaults on and company mapping remains required. See [Sync schedules](/user-guides/integrations/sync-schedules).
 - See [Choose what the integration syncs](#choose-what-the-integration-syncs) to enable or disable inventory collection.
 
 ## Review software across your clients
@@ -124,7 +124,7 @@ Generic product ratings are reused across tenants and regions; tenant overrides 
 
 ## Check one device's software
 
-Open a device from **Devices** and select its **Software** tab. The list shows each product with its version, status, end-of-life date and cached update priority, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
+Open a device from **Devices** and select its **Software** tab once installed inventory has been confirmed. The tab is hidden while the first read is pending, if it fails, or if inventory is empty. If inventory disappears, the sheet returns to **Overview** and stays there after inventory returns until you select Software again. The list shows each product with its version, status, end-of-life date and cached update priority, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
 
 <Frame caption="Branch preview: device software with the resync action beside the close button.">
   <img src="/images/product/pr1601-device-software-desktop.png" alt="Device details on the Software tab with resync beside the close button" width="1440" height="960" />
@@ -140,10 +140,10 @@ The grouped **query_software** tool exposes four read actions: **get_software_in
 
 <Steps>
   <Step title="Open the integration">
-    Go to **Settings > Integrations**, open your ConnectWise Asio or Datto RMM integration, and continue to the **Sync** step.
+    Go to **Settings > Integrations**, open your ConnectWise Asio, Datto RMM, or NinjaOne integration, and continue to the **Sync** step.
   </Step>
   <Step title="Select supported categories">
-    Asio offers **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, and **Software**. Datto RMM offers **Companies (Datto sites)**, **Devices**, and **Software**.
+    Asio offers **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, and **Software**. Datto RMM offers **Companies (Datto sites)**, **Devices**, and **Software**. NinjaOne offers **Software**, enabled by default.
   </Step>
   <Step title="Save your choices">
     Select **Next** to save the choices and continue to company mapping and imports. Existing connections retain their current behavior until you save different choices.
@@ -152,7 +152,7 @@ The grouped **query_software** tool exposes four read actions: **get_software_in
 
 Turning **Software** off removes that integration's software inventory from MSPortal. Turning it on starts collection for imported devices; new connections collect software after their device import finishes. Disabling other categories stops their future synchronization.
 
-Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration) or [Datto RMM setup](/user-guides/integrations/enable-datto-rmm-integration) for credentials, mapping, and import details.
+Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration), [Datto RMM setup](/user-guides/integrations/enable-datto-rmm-integration), or [NinjaOne setup](/user-guides/integrations/enable-ninjaone-integration) for credentials, mapping, and import details.
 
 <Frame caption="Branch preview: choose what ConnectWise Asio syncs.">
   <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio setup Sync step with six supported data categories" width="1440" height="960" />
@@ -162,8 +162,8 @@ Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration)
 
 | Situation | What to check |
 | --- | --- |
-| No **Software** tab | The Software inventory feature is not turned on for your portal, or you are signed in as a company user. |
-| The tab shows no products | Whether ConnectWise Asio or Datto RMM is connected, devices are imported, and an inventory sync has finished. |
+| No **Software** tab | Check staff device-read access, Software inventory enablement, and a connected Asio, Datto RMM, or NinjaOne integration. A device tab also requires confirmed installed inventory. |
+| The tab shows no products | Whether ConnectWise Asio, Datto RMM, or NinjaOne is connected, devices are imported, and an inventory sync has finished. |
 | A device has no software | Whether it is imported from a supported RMM and whether **Software** is selected and saved in that integration's **Sync** step. |
 | A product shows **Unknown** | The RMM reported no usable version for that install. |
 | An auto-updating app shows **Outdated** | A target version is set above the installed version. Clear or change the target. |
