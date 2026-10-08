@@ -6,10 +6,12 @@ icon: inbox
 
 The **Imports** tab on the **Reporting** page stores files that arrive by email or upload: insurance binders, vendor quotes, signed agreements, exported PDFs and tool reports. Each company has its own import address, and you can sort the files into folders. Once imported, a file can be shown in a report with the **Imported Document** or **PDF Viewer** block. This guide is for MSP staff.
 
+<Note>Branch preview: the Imports table cleanup below is part of the upcoming release.</Note>
+
 ## Before you start
 
 - You need **Manage** access to Reporting to see the **Imports** tab. **Write** or **Manage** lets you upload, move and delete files and manage folders.
-- Imports follow the company selector. With one company selected you see only its files. With several or **Global View** you see a rail with a section for each company.
+- Imports follow the company selector. With one company selected you see only its files. With several or **Global View** the folder list has a section for each company.
 - Each company has an import address on `inbox.msportal.ai`. Copy the current address from MSPortal rather than typing it. See [Find a company's import address](#find-a-companys-import-address).
 
 ## Open Imports
@@ -22,7 +24,7 @@ The **Imports** tab on the **Reporting** page stores files that arrive by email 
     Click the **Imports** tab at the top of the page.
   </Step>
   <Step title="Choose the scope">
-    Use the company selector to pick a company. The rail on the left shows **All files**, then each company with its folders. Click a folder to filter the table to it.
+    Use the company selector to pick a company. On desktop, the rail on the left shows **All files**, then each company with its folders. On a phone, tap **Folders** above the table to open the folder selector. Choose a folder to filter the files; the phone selector closes automatically.
   </Step>
 </Steps>
 
@@ -37,7 +39,7 @@ The **Imports** tab on the **Reporting** page stores files that arrive by email 
   </Step>
 </Steps>
 
-You can also copy a folder's full address from the **...** menu next to the folder in the Imports rail (**Copy email address**). The **Export email addresses (Excel)** button on the Imports tab downloads a spreadsheet of every company's address. On the Receiving tab you can deactivate an address, or regenerate it. A regenerated address gets a new random ending and replaces the old one, so update any forwarding rules. See [Email settings](/user-guides/settings/email).
+You can also copy a folder's full address from the **...** menu next to the folder in the Imports rail (**Copy email address**). The **Export email addresses (Excel)** button on the Imports tab downloads a spreadsheet of every company's address. On phones, this button shows a spreadsheet icon. On the Receiving tab you can deactivate an address, or regenerate it. A regenerated address gets a new random ending and replaces the old one, so update any forwarding rules. See [Email settings](/user-guides/settings/email).
 
 An address looks like this, where `acme-dental-msp-7k2m9q4xh3c0d` is the company's import code.
 
@@ -63,8 +65,8 @@ Each sender can file up to 60 messages an hour to one address, and each address 
   <Step title="Send the email">
     The `From` address, subject and time are saved with each file.
   </Step>
-  <Step title="Wait for Completed">
-    New files show **Pending** or **Processing**. When the status reads **Completed** you can open or download the file. **Failed** means it could not be stored.
+  <Step title="Open the file">
+    Wait for the file to finish importing. Click its name to preview it, or open its **...** menu and choose **View** or **Download** when those actions become available.
   </Step>
 </Steps>
 
@@ -85,6 +87,8 @@ This is standard plus-addressing. Mail still goes to `acme-dental-msp-7k2m9q4xh3
 If the slug does not match a folder, MSPortal creates a global folder from it, and files the email there. So `acme-dental-msp-7k2m9q4xh3c0d+vendor-quotes@inbox.msportal.ai` creates a **Vendor Quotes** folder for every company the first time it is used. Later emails with that tag reuse it. Check the slug for typos, since a typo makes a new folder.
 
 ## Create a folder
+
+On a phone, tap **Folders** above the table first. Folder actions are available inside the selector.
 
 ### A folder for one company
 
@@ -142,7 +146,19 @@ Open the **...** menu next to a folder in the rail.
   </Step>
 </Steps>
 
-The table shows **File**, **Company**, **Type**, **From**, **Subject**, **Size**, **Status** and **Received**. Click a completed file's name to preview it. PDFs, Word files, spreadsheets, CSV files and email bodies show inline. If a file cannot be previewed, download it. Open a row's **...** menu for **View**, **Download**, **Move to folder...** and **Delete**.
+The table shows **File**, **Type**, **From**, **Subject**, **Size** and **Received**. **Company** appears when the company selector covers multiple companies or **Global View**; it is omitted with one company selected. Processing status is no longer a table column. Click a completed file's name to preview it. PDFs, Word files, spreadsheets, CSV files and email bodies show inline. If a file cannot be previewed, download it. Open a row's **...** menu for **View**, **Download**, **Move to folder...** and **Delete**.
+
+<Frame caption="Branch preview: one company selected; Company and Status are omitted.">
+  <img src="/images/product/imports-single-desktop-preview.png" alt="Reports Imports with one company selected and six file columns" width="1440" height="960" />
+</Frame>
+
+<Frame caption="Branch preview: the phone folder selector keeps the file list within reach.">
+  <img src="/images/product/imports-single-mobile-preview.png" alt="Phone Imports with a compact Folders selector above the file list" width="390" height="844" />
+</Frame>
+
+<Frame caption="Branch preview: choose a folder in the phone drawer; it closes when selected.">
+  <img src="/images/product/imports-mobile-folders-drawer-preview.png" alt="Phone folder drawer with All files, No folder and company folders" width="390" height="844" />
+</Frame>
 
 Tick rows to get a bar with **N selected**, **Move to folder...**, **Download**, **Delete** and **Clear**. **Download** counts only completed files. **Delete** asks you to confirm and removes the files from storage for good.
 
@@ -183,9 +199,9 @@ For forwarding rules, Outlook can forward mail that matches a rule to the folder
 
 | Problem | What to do |
 | --- | --- |
-| A file never arrived | Check the company's address on **Settings > Platform > Email > Receiving**. It must be **Active** and spelled exactly. Mail must go to `inbox.msportal.ai`. Then look at the Imports table for a **Failed** status. If a sender sent a burst, it may have passed the limit of 60 messages an hour per sender or 300 an hour per address. Extra messages are dropped without a bounce, so resend the rest after an hour. |
+| A file never arrived | Check the company's address on **Settings > Platform > Email > Receiving**. It must be **Active** and spelled exactly. Mail must go to `inbox.msportal.ai`. If a sender sent a burst, it may have passed the limit of 60 messages an hour per sender or 300 an hour per address. Extra messages are dropped without a bounce, so resend the rest after an hour. |
 | A file landed in a folder you did not expect | The `+slug` did not match your folder, so a new global folder was created from it. Check for typos. Slugs are lowercase with hyphens. |
-| A file is stuck on **Pending** or **Processing** | Wait for **Completed**. You cannot open or download it before then. |
+| A file has no **View** or **Download** action | Wait for the import to finish. If those actions remain unavailable, contact support. |
 | A rename broke a forwarding rule | A rename changes the slug. Copy the new address and update the rule. |
 | An image or text attachment did not import | Email imports accept only PDF, DOCX, XLS, XLSX and CSV. Convert the file or attach a PDF. |
 | You cannot upload | Select a company or folder first. Files must be PDF, DOCX, XLS, XLSX or CSV and up to 50 MB. |

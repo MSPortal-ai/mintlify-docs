@@ -6,6 +6,10 @@ icon: 'arrows-rotate'
 
 Sync Standards creates a tracking record and a Planner item for every standard at every active company, and refreshes the Planner items that already exist. This page is for MSP staff who manage the Standards catalog.
 
+<Note>
+Branch preview: excluded companies are skipped by Standards sync after the eligibility fix is deployed. Excluding a company also archives its generated Standards Planner work immediately.
+</Note>
+
 ## Before you start
 
 - You need Manage access to Standards settings and an active billing status. Company administrator access does not grant this.
@@ -57,9 +61,9 @@ Sync Standards creates a tracking record and a Planner item for every standard a
 
 | Record | What the sync does |
 | --- | --- |
-| A company and standard with no tracking record | Creates a **Not Started** tracking record for each active company where the standard applies. Applicability rules decide this. A company you [excluded from Standards](/user-guides/msp-tools/manage-standards-exclusions) is still synced, because it is active. See [Choose which Standards apply](/user-guides/settings/standards-applicability). |
-| A tracking record with no linked Planner item | Creates the Planner item, including for optional standards and for categories with no Planner type. |
-| A standard that no longer applies to a company | Archives the Planner item the sync created. The sync restores an item it archived if the standard applies again. |
+| A company and standard with no tracking record | Creates a **Not Started** tracking record for each active company where the standard applies. Applicability rules decide this. Companies [excluded from Standards](/user-guides/msp-tools/manage-standards-exclusions) are skipped. See [Choose which Standards apply](/user-guides/settings/standards-applicability). |
+| A tracking record with no linked Planner item | Creates the Planner item for an included company where the standard applies, including for optional standards and categories with no Planner type. |
+| A standard that no longer applies to a company | Archives the Planner item the sync created. The sync restores an item it archived if the company is included again, the standard applies and the item has not been changed since the archive. |
 | Existing company deployment status | Kept as recorded. |
 | Linked Planner title, description and type | Refreshed from the catalog, or from the standard's [Planner template](/user-guides/settings/standards#apply-a-planner-template) when it has one. |
 | Linked Planner estimate | Set from **Default Price** when the item has no cost rows. When it has cost rows, their total is the estimate. |

@@ -6,6 +6,8 @@ icon: 'chart-pie'
 
 This guide explains how each Planner Analytics panel is calculated, so you can read the charts correctly. It is for company users and MSP staff.
 
+<Note>Branch preview: these Analytics corrections are awaiting release.</Note>
+
 ## Before you start
 
 - You need Planner read access.
@@ -54,9 +56,13 @@ A Risk Matrix category is not the same as a Project Health category. Overdue wor
 
 **EV by Status** and **EV by Quarter** compare the **Expected** amount (cost times probability) with the **Planned** cost. Completed work counts its full cost and Cancelled work is left out. Click a bar to filter by that status or quarter.
 
-Quarters are calendar quarters of an item's due date, or of its start date when it has no due date. An item with neither date can show under Q1 of the current year. That is a display fallback, not a real due date.
+Quarters are calendar quarters of an item's due date, or of its start date when it has no due date. Items with neither date appear in **Unscheduled**, including their costs and hours. Click that bucket to analyze the same undated work.
 
 **High Risk Items** lists up to five unfinished items that have a cost above zero, ranked by cost times (1 minus probability). This is different from the Risk Matrix quadrants. Click an item to narrow Analytics to it. Use List View to open and edit it.
+
+<Frame caption="Branch preview: undated work has an Unscheduled bucket in EV by Quarter.">
+  <img src="/images/product/planner-audit-analytics-unscheduled-desktop.png" alt="Expected value charts with a separate Unscheduled bucket." width="1440" height="960" />
+</Frame>
 
 ## Pipeline: status and resources
 
@@ -66,16 +72,24 @@ Its Completion Rate is the plain share of non-cancelled work that is Completed. 
 
 **Resource Allocation** is a heatmap of estimated hours by quarter and status, leaving out Cancelled work. Darker cells hold more hours compared with the largest cell in the filtered chart. It does not show technician availability or a capacity limit. Click a cell to filter by its quarter and status. **No hours allocated to display** means the matching work has zero estimated hours.
 
+<Frame caption="Branch preview: Resource Allocation separates Unscheduled from calendar quarters.">
+  <img src="/images/product/planner-audit-pipeline-unscheduled-desktop.png" alt="Resource Allocation heatmap with a separate Unscheduled column." width="1440" height="960" />
+</Frame>
+
 ## Pipeline: Client Commitment Tracker
 
-This panel groups the filtered work by company and shows up to ten companies, ordered by cost in the selected cost type.
+This panel leaves out Cancelled work, then groups the filtered work by company and shows up to ten companies, ordered by cost in the selected cost type.
 
-- **Committed** is the sum of that company's Planner estimates. It does not mean the client approved anything or signed a commitment.
+- **Committed** is the sum of that company's non-cancelled Planner estimates. It does not mean the client approved anything or signed a commitment.
 - **Delivered** is the cost of Completed items. **Delivery Rate** is Delivered divided by Committed, or zero when Committed is zero.
 - **Upcoming** counts unfinished, non-cancelled items due in the next 30 days.
 - Click a company card to narrow Analytics to that company.
 
 The company badge uses its own score. It starts at 100, subtracts 10 for each overdue item and 5 for each unfinished item below 50% probability, then adds 10 for a delivery rate above 75% or subtracts 20 for one below 25%. The result stays between 0 and 100. **Good** is 75 or more, **Fair** is 50 or more and **Poor** is below 50. This is not the Project Health gauge, and it does not check invoices or actual effort.
+
+<Frame caption="Branch preview: client names, health badges and committed amounts fit on phones.">
+  <img src="/images/product/planner-audit-client-commitments-mobile.png" alt="Client Commitment Tracker cards on a phone with names and amounts on separate lines." width="390" height="844" />
+</Frame>
 
 ## Clear a chart selection
 
@@ -88,7 +102,7 @@ Click **Clear** in the toolbar to remove the chart selection and keep your other
 | A panel says there is no active data | Check the period, status and type filters and the company selector. Completed and Cancelled work is left out of some panels. |
 | The two Completion Rate figures differ | The headline figure is weighted by Business Value. The Health panel uses a plain count. |
 | An item is Critical in Health but Opportunity in the Risk Matrix | The two panels use different rules. This is expected. |
-| An undated item appears in Q1 | Quarter charts fall back to Q1 of the current year when an item has no dates. |
+| An item appears in Unscheduled | It has neither a due date nor a start date. Choose **All Time** to include undated work. |
 | Fewer companies show in Client Commitment Tracker than your selection | It shows up to ten companies, after the Analytics filters. |
 
 ## Frequently asked questions
