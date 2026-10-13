@@ -1,6 +1,6 @@
 ---
 title: 'Create and manage project decisions and action items'
-description: 'Create requests, assign Company users or staff, notify assignees, and maintain project decision and action registers'
+description: 'Create requests, assign Company users or staff, notify assignees, turn action items into tickets, and maintain project decision and action registers'
 icon: 'clipboard-list'
 ---
 
@@ -63,6 +63,42 @@ In-app notices need a portal login, and email needs an email address. Hidden Com
 
 If someone is missing from **Assigned To**, ask an admin to check that they are not hidden, that a Company user belongs to this project's company, and that your role can read users. A blank search can also come from a lookup error.
 
+## Create a ticket from an action item
+
+<Note>
+Branch preview: creating tickets from action items is described here before release.
+</Note>
+
+MSP staff can turn a pending action item into a project ticket, so the work is scheduled and tracked with the rest of the project. You need permission to edit project collaboration items, to edit projects, and to create tickets. Company users never see this control.
+
+<Steps>
+  <Step title="Open the action item">
+    Open the project, select **Action Items**, and select a pending item that has no linked ticket.
+  </Step>
+  <Step title="Select Create ticket">
+    Select **Create ticket** at the top of the item. The dialog says where the ticket is created: your PSA (ConnectWise, Halo PSA or Autotask) for a PSA project, or MSPortal for an MSPortal project.
+  </Step>
+  <Step title="Review the ticket">
+    Check **Ticket summary**, which starts as the item's title, and choose a **Phase**. The phase starts as the item's linked phase, otherwise a **Priority work** phase, which is created when the project has none. ConnectWise project tickets always need a phase. **Priority** comes from your PSA project ticket defaults and **Due date** from the item.
+  </Step>
+  <Step title="Choose who sees the ticket">
+    Leave **Show this ticket to the client** off to keep the ticket internal. Company users still see the action item and its status either way; they see the ticket number only when the ticket is shown to them.
+  </Step>
+  <Step title="Create it">
+    Select **Create ticket**. The item's **Linked ticket** shows the new ticket number, and **Complete when the ticket closes** is on.
+  </Step>
+</Steps>
+
+The ticket's description holds the item's description and, for a PSA ticket, a link back to the action item. In **Tasks**, the ticket's row links back to the action item.
+
+- **It writes to your PSA at once.** Selecting Create ticket twice, or from two browser tabs, still creates one ticket.
+- **A ticket is never created twice.** If the ticket was created but could not be linked, for example because MSPortal had not synced it yet, the item shows **Link ticket #N** instead of Create ticket. Select it to link that ticket; nothing new is created in your PSA.
+- **PSA defaults must be set.** Board, status, priority and type come from **Settings > Onboarding > PSA Projects**. When they are missing, the dialog says so and Create ticket stays unavailable.
+- **The item completes when the ticket closes.** It shows **Completed when ticket #N closed**. MSPortal tickets complete the item at once. PSA tickets are read on the next project sync. ConnectWise, Autotask, and Halo PSA project status syncs are scheduled every 15 minutes; completion appears after the sync finishes. Queues, retries, or a paused integration can delay the update.
+- **Reopening the ticket leaves the item completed.** Change the item's **Status** yourself if the work starts again.
+- **You can turn completion off.** Turn off **Complete when the ticket closes** to complete the item yourself. The switch appears on every action item with a linked ticket, including one you linked by hand; turning it on for a ticket that is already closed completes the item immediately.
+- **Unlinking leaves the ticket alone.** Choose **No ticket** under **Linked ticket** to unlink. MSPortal never closes or deletes the ticket, and completing the item writes nothing back to the PSA. After unlinking, you can create another ticket from the item.
+
 ## Completion, cancellation, and removal
 
 An assigned person completes an item with the action button at the top of the item (for example **Approve** or **Answer**). One assignee completing it resolves it for everyone. Questions need text. See the [response guide](/user-guides/projects/respond-to-project-actions).
@@ -88,7 +124,7 @@ This Status menu is from a Demo action item. Changing it here is an admin edit, 
 
 Changing or resolving a linked decision can change or remove matching **Decisions Needed** text. Matching uses the decision title, so repeated titles in different updates change together. Check **Updates** after you rename, complete, cancel, or delete a linked decision. Give different decisions different titles.
 
-These items live in MSPortal. A linked phase or ticket is only context. Editing a request does not edit or close the PSA record.
+These items live in MSPortal. A linked phase or ticket is only context. Editing or completing a request never edits or closes the PSA record. The reverse is possible: an action item with **Complete when the ticket closes** turned on completes when its ticket closes.
 
 ## Troubleshooting
 
@@ -116,6 +152,9 @@ These items live in MSPortal. A linked phase or ticket is only context. Editing 
   </Accordion>
   <Accordion title="Why did a decision also appear in Updates?">
     Pending decisions and approvals stay in sync with **Decisions Needed** in a weekly update. Check both after you edit or resolve them, especially with repeated titles.
+  </Accordion>
+  <Accordion title="Why is an action item still pending after its ticket closed?">
+    PSA tickets are read on the next project sync, scheduled every 15 minutes for ConnectWise, Autotask, and Halo PSA. Allow time for the sync to finish, and check the integration status if the item still has not updated. Also check that **Complete when the ticket closes** is on and that the closed ticket is the one under **Linked ticket**. Items that are already completed or cancelled are left as they are.
   </Accordion>
   <Accordion title="Does marking an item Completed prove the client approved it?">
     No. An MSP editor can set **Status** directly. Check the saved response and completion details, and use the assigned person's response when you need their confirmation.
