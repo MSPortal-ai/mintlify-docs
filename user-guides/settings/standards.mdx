@@ -156,6 +156,16 @@ Wait a moment before you leave the page. If a red error message appears, the cha
 
 Saving the catalog does not change company Planner items. Review [Sync Standards to companies](/user-guides/settings/sync-standards) before you click **Sync All Companies**.
 
+## Detect standards from domain checks
+
+<Note>Branch preview: native domain signals are part of PR #1879 and are not deployed yet.</Note>
+
+This feature is **off by default**. An internal administrator enables **Email domain security checks** in Features for a tenant or a personal pilot. Until enabled, the email-security column, **Check now**, report block and **Domain check** choice are hidden. Turning it off stops new checks and hides stored DNS results without deleting them. Turning it off also hides stored domain signal rules, evidence and automatic answers immediately. Saving other detection rules preserves those hidden signal rules for when the feature is reenabled.
+
+In setup's **Detection** step, choose **Domain check** and select the DMARC-enforced or safe-SPF signal. A company satisfies the rule when at least the configured minimum number of checked domains pass and no domain receiving mail fails that signal. A parked domain without MX records does not block the rule. One passing domain cannot hide another unprotected mail domain. A successful DNS measurement can prove a standard for 48 hours. Failed checks retain the historical result, but do not extend that window. Expired mail-domain evidence blocks the signal even if another domain passes. On its next read, the matrix hides expired proof, including after checks are reenabled; a successful recheck can restore it.
+
+DMARC enforcement means a quarantine or reject policy. Safe SPF requires one SPF record without a pass-all mechanism and with no more than ten DNS-lookup terms in that record. Billing evidence takes precedence over domain detection; integration evidence also takes precedence when both match. The matrix identifies an answer detected from domain checks. Request fresh DNS checks through the domain row menu; Standards reevaluates the stored evidence on its scheduled run.
+
 ## Troubleshooting
 
 | Problem | What to do |
