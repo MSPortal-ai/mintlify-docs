@@ -8,7 +8,7 @@ Change the same field on many Planner items at once from List View. This guide i
 
 ## Before you start
 
-- You need **Write Planner** or **Manage Planner**. **Delete Selected** needs **Manage Planner**.
+- You need **Write Planner** or **Manage Planner**. **Merge Items** and **Delete Selected** need **Manage Planner**.
 - List View shows 25 rows per page by default. Bulk actions work on the rows you select on the current page.
 - Bulk changes edit Planner data only. They do not change linked tickets or projects in your PSA.
 
@@ -91,6 +91,30 @@ To keep separate lines, descriptions or recurrences, edit each item's **Costs** 
 
 The same number applies in each item's own currency. The dialog does not convert currencies, and it hides the currency symbol when your selection mixes currencies. Select items from one currency where you can.
 
+## Merge similar items
+
+Use **Merge Items** when several items describe the same work for one company, for example overdue hardware lifecycle items from different quarters.
+
+1. Select two or more items for the same company.
+2. Choose **Actions (N) > Merge Items…**.
+3. Under **Item to keep**, pick the item that stays. The others are merged into it.
+4. Read **What moves**: the devices, tickets, licenses, goals, projects, compliance checks, meeting links, tasks, attachments, budget lines, cost lines, notes and other records that move to the kept item.
+5. Choose **Merge N items**.
+
+The kept item gains every linked record from the other items; a record it already has is not duplicated. Their cost lines are appended to its Costs section, their hours are added to its hours, and their public and private notes are appended under a "Merged from" heading. Its title, description, status, dates and type do not change.
+
+The other items are archived, not deleted. Find them under **Archived** and [restore one](/user-guides/planner/archive-restore-delete) if you merged it by mistake; the linked records stay on the kept item. Each merge is recorded in **Settings > Activity & Audit** for every item involved.
+
+Merge is unavailable, with the reason shown in the dialog, when:
+
+- the items belong to different companies;
+- an item is kept in sync by a Standard or an automation rule (the Standard or rule would recreate it);
+- the item to keep is archived;
+- an item hidden from company users would be merged into one they can see;
+- the kept item would have more than 20 cost lines.
+
+Lines on approved or obsolete budgets are locked, so they stay linked to the archived item.
+
 ## Delete selected items
 
 <Steps>
@@ -122,6 +146,8 @@ Deleted items cannot be restored. To keep an item for later, use **Archive** on 
 | An updated item disappeared from the list | Its new value no longer matches your filter. Clear the filters and check **Archived**. |
 | A number is rejected | Use zero or higher. Read the message under the box. |
 | Cost lines disappeared | **Set Cost** replaced them with one row. Re-enter the detail lines on the item if you need them. |
+| **Merge Items** is missing | Select at least two items and check Manage Planner permission. |
+| The Merge button stays disabled | Read the reason in the Merge dialog, such as items from different companies or an item managed by a Standard or automation rule. |
 | **Delete Selected** is missing | You need Manage Planner, and no selected item may be a Standards item. |
 
 ## Frequently asked questions
@@ -146,10 +172,16 @@ Deleted items cannot be restored. To keep an item for later, use **Archive** on 
     No. It replaces them with one row in the item's current recurrence.
   </Accordion>
   <Accordion title="Can I archive several items at once?">
-    No. Archive and Restore are row actions. The Actions menu has field updates and **Delete Selected**.
+    No. Archive and Restore are row actions. The Actions menu has field updates, **Merge Items** and **Delete Selected**.
   </Accordion>
   <Accordion title="Can I use bulk actions on archived items?">
     Yes, if you have permission. Updating a field does not restore the item.
+  </Accordion>
+  <Accordion title="Can I undo a merge?">
+    Restore the merged items from Archived. Their linked records, cost lines and notes stay on the kept item, so move anything back by editing the items.
+  </Accordion>
+  <Accordion title="Why can't I merge automation items?">
+    An automation rule keeps its own items in sync and would recreate or change them on its next run. Rules that use the current period for past dates already keep one item per company for each period.
   </Accordion>
 </AccordionGroup>
 
