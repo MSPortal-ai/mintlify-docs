@@ -4,7 +4,7 @@ description: 'Connect the CIPP API to power the client-facing Microsoft 365 Post
 icon: 'cloud'
 ---
 
-This guide walks you through connecting CIPP (the CyberDrain Improved Partner Portal) to MSPortal.ai. The setup wizard has four steps: **Connect**, **Map companies**, **Review**, and **Data**.
+This guide walks you through connecting CIPP (the CyberDrain Improved Partner Portal) to MSPortal.ai. The setup wizard has five steps: **Connect**, **Choose data**, **Map companies**, **Review**, and **Data**.
 
 Once connected, MSPortal synchronizes security, identity, email, Intune, and tenant configuration data from CIPP and presents it to your clients as the [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page.
 
@@ -65,7 +65,19 @@ CIPP is currently a **Pilot** integration available to selected tenants. If you 
   </Step>
 </Steps>
 
-## Part 3: Map Companies
+## Part 3: Choose Data
+
+**Document Intune policies** is off by default, including for existing connections. After saving credentials, open **Choose data**, before matching companies. Leave **Document Intune policies** unchecked to keep the feature off, or check it to enable it. Changes save immediately. Continue to company matching when the choice has saved; leaving it unchecked is valid. The older wizard uses the same **Choose data** step before **Map companies**. Subsequent CIPP syncs record policy versions and look up readable setting names. Clear the checkbox to stop both operations on subsequent syncs. An already-running sync can finish using its saved choice; previously documented versions remain available. Company-user visibility is controlled separately in **Settings > Documentation > Intune**.
+
+<Frame caption="Branch preview: Choose data between Connect and company matching (component preview with sample data).">
+  <img src="/images/product/cipp-choose-data-preview-desktop.png" alt="CIPP Choose data step with Intune documentation unchecked" width="1440" height="960" />
+</Frame>
+
+<Frame caption="Branch preview: Choose data in the older wizard (sample connection).">
+  <img src="/images/product/cipp-choose-data-legacy-preview-desktop.png" alt="CIPP wizard Choose data step with Document Intune policies unchecked" width="1440" height="960" />
+</Frame>
+
+## Part 4: Map Companies
 
 After connecting, MSPortal discovers the Microsoft 365 tenants managed in CIPP. Map each tenant to the matching MSPortal company so security, Intune, and Microsoft 365 data appears in the correct customer context.
 
@@ -91,7 +103,7 @@ After connecting, MSPortal discovers the Microsoft 365 tenants managed in CIPP. 
 Data is only stored and shown for tenants that are mapped to a company. Unmapped tenants are listed for mapping but their data stays out of every page and report.
 </Note>
 
-## Part 4: Review
+## Part 5: Review
 
 The Review step confirms your data coverage before you finish setup:
 
@@ -121,7 +133,7 @@ If the Review step shows **Only one CIPP tenant was returned** and you expected 
 1. In CIPP, open **Integrations > CIPP-API** and assign the API client a role with AllTenants access, such as the built-in **readonly** role
 2. Return to the Review step and click **Start full sync**
 
-## Part 5: Data
+## Part 6: Data
 
 The **Data** step is your admin console for everything CIPP is syncing:
 
@@ -131,7 +143,7 @@ The **Data** step is your admin console for everything CIPP is syncing:
 
 Use this view to confirm data is flowing, investigate a specific record, or check why a dataset has no data. Filter to the right company and dataset before you open a record, because some records show the full provider payload. This console is for your team; clients see the curated [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page instead.
 
-## Part 6: Import CIPP Standards into Compliance
+## Part 7: Import CIPP Standards into Compliance
 
 The **Data** step can turn your CIPP standards into a reusable company-level Compliance group. MSPortal creates one check per standard. You then assign the group to runs through your normal Compliance workflow.
 

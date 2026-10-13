@@ -1,6 +1,6 @@
 ---
 title: 'View shared IT records and procedures'
-description: 'Browse documentation assets, IT Glue configurations, provider procedures, and Liongard inspection data.'
+description: 'Browse documentation assets, IT Glue configurations, provider procedures, Liongard inspection data, and Intune configuration.'
 icon: 'server'
 ---
 
@@ -9,7 +9,7 @@ Use this page to read the IT records your MSP shares with you: assets, configura
 ## Before you start
 
 - You need Documentation read access.
-- **Assets** and **Procedures** need Hudu or IT Glue. **Configurations** needs IT Glue. **Inspectors** needs Liongard. Your MSP controls connections, sharing, and company scope.
+- **Assets** and **Procedures** need Hudu or IT Glue. **Configurations** needs IT Glue. **Inspectors** needs Liongard. **Intune** needs CIPP and, for company users, sharing turned on by the MSP. Your MSP controls connections, sharing, and company scope.
 - These are records from your documentation tools. For device monitoring and device actions, use [Devices](/user-guides/devices).
 
 ## Browse assets
@@ -83,6 +83,18 @@ The task marks show the status recorded in your provider. You cannot tick tasks 
 
 Inspector types mapped to devices appear on the device pages instead. This tab covers service and environment inspectors.
 
+## Review Intune configuration
+
+<Note>Branch preview: Intune documentation must first be enabled by MSP staff using **Document Intune policies** on the CIPP integration’s **Choose data** step, between credentials and company matching (saved immediately). This option is off by default. Production verification is pending.</Note>
+
+Open **Documentation > Intune** when your MSP manages Microsoft Intune through CIPP. The table lists each company's Intune policies with their type, platform, assigned groups, last modified date and, under **Changed**, when the portal last detected a change. Use the company selector or the table filters to narrow the list.
+
+Select a policy's name to open its details: the configured settings as names and values, the groups it is assigned to or excluded from, and **Changes**, which compares each documented version with the one before it and shows the old and new values. Secrets, certificates and scripts are never stored or shown; they appear as **Hidden**. For administrative templates and endpoint security intents, CIPP does not report individual settings, so only the name, assignments and dates are documented.
+
+To print or save one company's Intune documentation as a PDF, select that company and choose **Export**.
+
+Company users see this tab only when the MSP turns on **Show Intune documentation to company users** in **Settings > Documentation > Intune**, and then only for their own company.
+
 ## Troubleshooting
 
 | Problem | What to do |
@@ -107,6 +119,9 @@ Inspector types mapped to devices appear on the device pages instead. This tab c
   </Accordion>
   <Accordion title="Are inspection results live?">
     No. Use the last inspected and updated times to judge how fresh they are.
+  </Accordion>
+  <Accordion title="When does an Intune change appear?">
+    When **Document Intune policies** is enabled for the CIPP integration, the portal documents policies during the nightly CIPP sync. A change made in Intune appears after the next sync, with the date the portal detected it.
   </Accordion>
   <Accordion title="Where are workstation or server inspector details?">
     On the matching device in **Devices**.
