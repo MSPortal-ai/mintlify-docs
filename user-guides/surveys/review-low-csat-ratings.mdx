@@ -1,0 +1,119 @@
+---
+title: 'Review low CSAT ratings'
+description: 'Send every rating below your threshold to a reviewer, record what happened, close reviews, and correct ratings submitted by mistake.'
+icon: 'list-check'
+---
+
+<Note>Branch preview: the CSAT review queue is verified on its review branch. Production screenshots and steps will be rechecked after release.</Note>
+
+<Note>The review queue is available only for tenants where MSPortal has enabled it. Until then, the **CSAT Review Queue** menu item, **Review** settings tab and correction badges are hidden. Your existing CSAT dashboard continues to work.</Note>
+
+<Frame caption="Branch preview: when review access is off, CSAT settings keep the Display tab and hide Review.">
+  <img src="/images/product/csat-review-flag-off-settings-preview.png" alt="CSAT settings with Display selected and no Review tab while review access is off" width="2880" height="1920" />
+</Frame>
+
+The CSAT review queue gives every low rating an owner. Choose a reviewer, and each rating below your threshold is added to their queue as it arrives, including ratings imported from HaloPSA, Autotask and Simplesat. The reviewer records what happened, closes the review, or corrects a rating that the customer submitted by mistake.
+
+A correction keeps the original rating, the reason and who made it. Your CSAT dashboards, reports and exports then use the corrected rating.
+
+The review queue is for MSP staff. Company users never see reviews, explanations or correction reasons. In their own CSAT views they see the corrected rating, without any indication that it was corrected.
+
+## Who can do what
+
+| Task | Who |
+| --- | --- |
+| Turn the queue on and change its settings | Staff who can manage surveys |
+| Be the reviewer, or be copied on decisions | Staff with access to CSAT |
+| Open the queue and read reviews | Staff with access to CSAT |
+| Explain, close, correct, reopen or reassign a review | The assigned reviewer, or staff who can manage surveys |
+
+## Turn on the review queue
+
+1. Open **Surveys** from the sidebar, then choose **Configure** from the **Surveys** menu.
+2. Select the **CSAT** tab, then the **Review** tab.
+3. Turn on **Send low ratings to a reviewer**.
+4. Choose a **Reviewer**. Only staff with access to CSAT are listed.
+5. Under **Review ratings**, choose which ratings go to the queue:
+   - **Below the top score**: every rating except the best one, for example 1 to 3 out of 4.
+   - **Below satisfied (under 80%)**: neutral and dissatisfied ratings.
+   - **Dissatisfied only (under 40%)**: only the lowest ratings.
+6. Under **Sources to review**, choose **Built-in CSAT**, **HaloPSA**, **Autotask** and **Simplesat** as needed.
+7. Optionally change **Review ratings submitted on or after**. The queue starts today when you turn it on. Choose an earlier date, up to 365 days back, to review past ratings; the reviewer gets one summary email for them.
+8. Optionally add up to 10 managers under **Copy managers**, then choose **Copy managers on corrections** and **Copy managers on explanations and closed reviews**.
+9. Select **Save Review Settings**.
+
+When you save, MSPortal adds every matching rating since the start date to the queue and tells you how many were added.
+
+<Tip>If your survey rates almost everything one point below the top (for example a thumbs-up mapped to 4 out of 5), **Below the top score** sends nearly every rating to the queue. Choose **Below satisfied** instead.</Tip>
+
+Only ratings linked to a company are queued, the same ratings the CSAT dashboards count. Customer-effort (CES) and NPS-style campaigns are not reviewed.
+
+Changing the **Reviewer** moves the previous reviewer's open reviews, and any unassigned ones, to the new reviewer. Reviews someone reassigned by hand stay where they are. Turning the queue off stops new ratings from being added and keeps existing reviews available.
+
+## Work the queue
+
+1. Open **Surveys** from the sidebar, then choose **CSAT Review Queue** from the **Surveys** menu. On the CSAT dashboard you can also select **Review queue**, which shows the number of open reviews.
+2. The queue opens on every **Open** review. Use **Assigned to me** to see only your reviews, or **Everyone** for the whole queue.
+3. Filter or sort by **Rating**, **Company**, **Respondent**, **Comment**, **Source**, **Status**, **Reviewer** or **Submitted**. Change the **Status** filter to see explained, corrected or closed reviews.
+4. Select a row to open the review.
+
+The review shows the rating, the respondent's comment, the technician, the survey for built-in CSAT ratings, the reviewer, and the full **History** of the review.
+
+### Explain a rating
+
+Write what happened, and what was done about it, in **Explanation**, then select **Explain and close**. The review's status becomes **Explained**.
+
+To close a review without an explanation, select **Close without explanation**. Its status becomes **Closed**. Select **Reopen** to send an explained or closed review back to **Open**.
+
+### Correct a mis-submitted rating
+
+1. In **Correct a mis-submitted rating**, choose the **Corrected rating**.
+2. Give a **Reason**, for example "The customer told us they meant to select 4".
+3. Select **Correct rating**.
+
+The review's status becomes **Corrected**, and the rating shows a **Corrected from** badge with the original. Dashboards, trends, company and technician figures, report blocks and CSV exports use the corrected rating from then on. The next import from HaloPSA, Autotask or Simplesat does not undo it.
+
+To change a correction, choose a different rating and select **Update correction**. To undo it, select **Remove correction**: the original rating is restored everywhere and the review returns to **Open**.
+
+If the respondent later changes their rating in the PSA, the correction stays and the history records the new original rating. If the PSA's rating scale changes, MSPortal removes the correction and reopens the review, because the corrected value no longer fits the scale.
+
+### Reassign a review
+
+Choose another person under **Reviewer** in the review. They are notified, and the change is recorded in the history.
+
+## Notifications
+
+- The reviewer gets one email and one in-app notification for each batch of new reviews, a few minutes after the ratings arrive. Turning the queue on with an earlier start date sends one summary, not one message per rating.
+- Copied managers get an email and in-app notification for corrections and removed corrections, and, when **Copy managers on explanations and closed reviews** is on, for explanations and closed reviews too.
+- Nobody is emailed about their own decisions.
+
+Notifications open the review queue, or the review itself when there is only one.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why can't I see the Review tab or review queue?">
+    The feature must be enabled for your tenant, and you must be MSP staff with the relevant CSAT or survey-management permission. Contact MSPortal if your tenant needs access. If access to the feature is turned off later, existing rating corrections remain in your dashboards and reports.
+  </Accordion>
+  <Accordion title="Does correcting a rating change it in HaloPSA or Autotask?">
+    No. The correction stays in MSPortal. The PSA keeps the customer's original rating.
+  </Accordion>
+  <Accordion title="Can a client see that a rating was corrected?">
+    No. Company users never see reviews, explanations or reasons. Their CSAT views use the corrected rating.
+  </Accordion>
+  <Accordion title="Why is a rating I expected missing from the queue?">
+    Check the threshold, the sources and the start date in the Review settings, and that the rating is linked to a company. CES and NPS-style campaigns are not reviewed.
+  </Accordion>
+  <Accordion title="Why can't I change a review?">
+    Only the assigned reviewer, or staff who can manage surveys, can change a review. Ask your survey administrator to reassign it.
+  </Accordion>
+  <Accordion title="Does closing a review delete the rating?">
+    No. Closing a review only records that it was handled. The rating stays in every dashboard and report.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read and export support satisfaction feedback](/user-guides/surveys/read-csat-feedback)
+- [Rate a support experience](/user-guides/surveys/rate-your-support)
+- [Enable the HaloPSA integration](/user-guides/integrations/enable-halo-integration)
