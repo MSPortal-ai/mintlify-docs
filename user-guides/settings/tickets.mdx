@@ -1,6 +1,6 @@
 ---
 title: "Ticket settings"
-description: "Configure ticket delivery, request forms, role display groups and company routing."
+description: "Configure ticket delivery, note emails, request forms, role display groups and company routing."
 icon: ticket
 ---
 
@@ -68,18 +68,46 @@ The **Ticket Defaults** card appears under the delivery settings once a PSA is s
     Find the **New Ticket View** card.
   </Step>
   <Step title="Set the options">
-    - **Default to AI sidebar open**: on, users start with the assistant visible. Off, they start at manual template selection. The branch preview defaults to off when no preference is saved; existing saved choices still apply.
+    - **Default to AI sidebar open**: on, users start with the assistant visible. Off, they start at manual template selection. The setting is off until you turn it on.
     - **Manual template selection**: choose **Cards** or **List**.
     - **Form section layout**: choose **Tabs** or **All sections** for templates with several sections.
 
     Each choice saves immediately.
     <Frame>
-      <img src="/images/product/ticket-ai-default-off-desktop-preview.png" alt="Branch preview: Default to AI sidebar open disabled, with manual template and form layout choices in Ticket settings." width="1440" height="960" />
+      <img src="/images/product/ticket-ai-default-off-desktop-preview.png" alt="Default to AI sidebar open disabled, with manual template and form layout choices in Ticket settings." width="1440" height="960" />
     </Frame>
   </Step>
 </Steps>
 
 These options change the new-ticket page only. Users can still start a request from the [Home assistant](/user-guides/ticketing/open-a-ticket-with-ai) or the [manual ticket form](/user-guides/ticketing/open-a-ticket).
+
+## Let users email ticket notes
+
+When this is on, MSP staff and company users can email a public ticket note to people straight from the ticket. It is off by default and works on service tickets from HaloPSA, ConnectWise, Autotask and Syncro.
+
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    Find the **Email ticket notes** card.
+  </Step>
+  <Step title="Turn on Allow emailing ticket notes">
+    The change saves immediately, and "Emailing ticket notes is on." confirms it. Public notes then show an **Email to** field under the editor.
+  </Step>
+  <Step title="Set a reply mailbox for ConnectWise, Autotask or Syncro">
+    HaloPSA sends the email itself, so it needs nothing more. For ConnectWise, Autotask and Syncro, MSPortal sends the email, and replies need somewhere to land. Go to **Settings > Integrations**, open the PSA connection, and select **Configure tickets**. Under **Emailing contacts from notes**, enter your PSA's inbound support mailbox in **Reply mailbox**, such as `support@example.com`. Replies go to that mailbox with the ticket number in the subject, so your PSA adds them to the ticket. Changing the reply mailbox needs permission to manage the integration.
+  </Step>
+</Steps>
+
+Until a reply mailbox is set, staff see "To email notes, set a reply mailbox in this PSA connection's ticket settings." in place of **Email to** on that PSA's tickets, and company users see no **Email to** field.
+
+How emailing works:
+
+- Anyone who can add notes to a ticket, MSP staff or company user, can email its public notes. Project tickets are not included.
+- A note can go to up to 10 people. The ticket's company contacts are suggested as you type, and any full email address can be added.
+- The people on a note stay in **Email to** for the ticket's next notes until someone removes them.
+- Internal notes, private notes, and ConnectWise **Internal** and **Resolution** notes are never emailed.
+- Under each emailed note, a status line shows **Emailed to**, **Emailing**, or **Could not email** with the people's names. Hover over a line to see the addresses.
+
+See [Find and follow up on a ticket](/msp-guides/ticketing/follow-up-on-a-ticket#email-a-note-to-people) for the steps on a ticket.
 
 ## Manage ticket categories
 
@@ -267,7 +295,7 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
     **PSA Integration** and **Email (SMTP)**. Portal visibility is controlled by display groups and roles.
   </Accordion>
   <Accordion title="Which settings wait for a Save click?">
-    Delivery Method, PSA Integration, New Ticket View, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Change Approvals** uses **Save**. Display groups use **Create Group** or **Update Group**.
+    Delivery Method, PSA Integration, New Ticket View, **Allow emailing ticket notes**, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Change Approvals** uses **Save**. Display groups use **Create Group** or **Update Group**.
   </Accordion>
   <Accordion title="Where do I choose which statuses a role can use?">
     In the display group, under **Allowed Ticket Statuses**, next to the board and ticket-type restrictions.
@@ -286,6 +314,9 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
   </Accordion>
   <Accordion title="Do the General defaults apply to compliance tickets?">
     Only when a compliance field is blank. Set the **Compliance** tab to route those tickets differently.
+  </Accordion>
+  <Accordion title="Why is Email to missing from a ticket note?">
+    Check that **Allow emailing ticket notes** is on, that the note is a public note, and that the ticket is a service ticket from HaloPSA, ConnectWise, Autotask or Syncro. For ConnectWise, Autotask and Syncro, the PSA connection also needs a **Reply mailbox**.
   </Accordion>
   <Accordion title="Does the New Ticket View setting submit a ticket?">
     No. It changes how the new-ticket page looks. A user still completes and submits the request.

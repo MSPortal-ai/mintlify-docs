@@ -6,6 +6,8 @@ icon: 'dollar-sign'
 
 Financial Reporting shows each client's revenue next to the support effort and endpoints behind it. Each company gets a letter grade so you can find your best and weakest accounts quickly. It is for MSP staff.
 
+Financial Reporting lives in **MSP Tools > Client Success** as two tabs: **Financial** for the per-company table and **Revenue Trends** for monthly revenue history.
+
 ## Before you start
 
 - You need Financial Reporting read access. Company portal users cannot open the page. Changing the reporting model needs separate settings permissions.
@@ -18,8 +20,8 @@ Financial Reporting shows each client's revenue next to the support effort and e
 ## Compare companies
 
 <Steps>
-  <Step title="Open Financial Reporting">
-    In the sidebar, open **MSP Tools > Financial Reporting**, then the **By Company** tab.
+  <Step title="Open the Financial tab">
+    In the sidebar, open **MSP Tools > Client Success**, then select the **Financial** tab.
   </Step>
   <Step title="Choose the company scope">
     Use the company selector at the top of the app.
@@ -100,11 +102,35 @@ Pricing seats and support endpoints can differ. An email-only profile can count 
 
 Financial grades feed the Financial dimension of [Client Health](/user-guides/msp-tools/client-health).
 
+## Check Microsoft 365 licenses against devices
+
+The Microsoft 365 license check compares each client's licensed users with its device count, so you can find clients with more devices than licensed users. It needs a Microsoft 365 or CIPP connection. MSPortal reads licenses from Microsoft 365 first, and from CIPP for clients without a Microsoft 365 connection.
+
+<Steps>
+  <Step title="Add the columns">
+    On the **Financial** tab, click **Columns** and turn on the columns you want.
+  </Step>
+  <Step title="Read the difference">
+    Sort or filter **Licensed users minus devices**. A red, negative number means the client has more devices than licensed users, so per-user billing may be short.
+  </Step>
+  <Step title="Check the figures">
+    Hover a **Licensed users minus devices** value to see the licensed users, the device count and the license source.
+  </Step>
+</Steps>
+
+| Column | What it shows |
+|---|---|
+| **M365 Business Basic**, **M365 Business Standard**, **M365 Business Premium**, **M365 E1**, **M365 E3**, **M365 E5**, **M365 F1/F3** | Assigned licenses on each Microsoft 365 plan. |
+| **Licensed users** | People on the plans chosen in [Financial Reporting settings](/user-guides/settings/financial-reporting#choose-the-plans-for-the-microsoft-365-license-check). Each person counts once, even with several plans. |
+| **Licensed users minus devices** | Licensed users minus the client's devices. Green means more licensed users, red means more devices. |
+
+The device count uses the **Managed Device Types** chosen in Financial Reporting settings. A dash means the client has no Microsoft 365 license data, or no managed device types are chosen. Hover the dash to see which.
+
 ## Review Revenue Trends
 
 <Steps>
   <Step title="Open Revenue Trends">
-    On **MSP Tools > Financial Reporting**, click the **Revenue Trends** tab and check the company scope.
+    On **MSP Tools > Client Success**, click the **Revenue Trends** tab and check the company scope.
   </Step>
   <Step title="Choose the window">
     Open **Complete month window** and pick the last 3, 6, 12 or 24 complete months. The current month is left out.
@@ -124,18 +150,18 @@ Click a legend item to hide or show a series in the chart. This does not reclass
 
 **Previous 2 months** compares the latest complete month with the one before it. **Rolling 90-day average** compares the average of the latest three complete months with the three before them. It uses calendar months, not a daily window. A change may show **Not enough completed history** when there are too few months or the earlier period is zero.
 
-Revenue Trends shows monthly revenue history. By Company shows monthly-average metrics for the period you picked. A trend total for a window does not equal one company's monthly-average MRR.
+Revenue Trends shows monthly revenue history. The **Financial** tab shows monthly-average metrics for the period you picked. A trend total for a window does not equal one company's monthly-average MRR.
 
 ## Troubleshooting
 
 | Problem | What to do |
 | --- | --- |
-| **Financial Reporting** is missing from the sidebar | Ask an administrator to check your read permission and that the Client Health feature is on. |
+| The **Financial** and **Revenue Trends** tabs are missing from **Client Success** | Ask an administrator to check your Financial Reporting read permission and that the Client Health feature is on. |
 | The page says **No financial data available** | Connect ConnectWise, Autotask or Halo, set your revenue categories in settings, and wait for contracts and invoices to sync. |
 | A company shows **Needs setup** | Open its endpoint detail and fix the seat-profile gaps in Financial Reporting settings. Allow time for recalculation. |
 | EHR shows a dash although revenue exists | The company has less than one support hour per month. Check support hours and the support boards in settings. |
 | Numbers differ from your PSA | Compare company mapping, period totals against monthly averages, revenue category rules, billing cadence and sync freshness. Open the linked values to see the records. |
-| Revenue Trends omits this month | It uses complete months only. Use **By Company** and **Current Month** for the month in progress. |
+| Revenue Trends omits this month | It uses complete months only. Use the **Financial** tab with **Current Month** for the month in progress. |
 | A settings change has not shown up | Saving starts a background recalculation. Wait a few minutes. Client Health updates on its own refresh. |
 
 ## Frequently asked questions
@@ -159,8 +185,11 @@ Revenue Trends shows monthly revenue history. By Company shows monthly-average m
   <Accordion title="Does Rolling 90-day average use the last 90 days?">
     No. It compares the latest three complete months with the three before.
   </Accordion>
+  <Accordion title="Does Licensed users count a person with two plans twice?">
+    No. Each person counts once across the plans chosen in settings. Add-ons such as Copilot, Teams Phone or E5 Security never count.
+  </Accordion>
   <Accordion title="Will a settings save update Client Health right away?">
-    No. Financial recalculation and Client Health publication are separate. Click **Refresh Scores** on Client Health after the financial data updates.
+    No. Financial recalculation and Client Health publication are separate. Click **Refresh Scores** on the **Health** tab after the financial data updates.
   </Accordion>
 </AccordionGroup>
 

@@ -4,7 +4,7 @@ description: 'Connect your Datto RMM instance to MSPortal.ai to sync sites, devi
 icon: 'plug'
 ---
 
-This guide walks you through connecting your Datto RMM instance to MSPortal.ai using our streamlined 3-step setup wizard: **Connect**, **Map** and **Import**.
+This guide walks you through connecting your Datto RMM instance to MSPortal.ai using the setup wizard: **Connect**, **Sync**, **Map** and **Import**.
 
 ## Overview
 
@@ -69,7 +69,7 @@ Before connecting to MSPortal, you need to enable API access and generate API ke
 
 ## Part 2: MSPortal Setup Wizard
 
-MSPortal provides a guided 3-step wizard to connect and configure your Datto RMM integration.
+MSPortal provides a guided wizard to connect and configure your Datto RMM integration.
 
 ### Starting the Wizard
 
@@ -132,15 +132,15 @@ Enter your Datto RMM API credentials to establish the connection.
 
 ---
 
-### Choose What to Sync (Branch Preview)
+### Choose What to Sync
 
-<Note>Branch preview: this setup flow includes a dedicated **Sync** step between Connect and Map. It is not yet available in every tenant.</Note>
+The **Sync** step sits between Connect and Map.
 
 <Steps>
   <Step title="Open the Sync step">
     After connecting, open **Sync**. The **Choose what to sync** card lists the data categories this provider supports: **Companies** (Datto sites), **Devices**, and **Software**.
 
-    <Frame caption="Branch preview: choose the Datto RMM data to sync.">
+    <Frame caption="Choose the Datto RMM data to sync.">
       <img src="/images/product/pr1601-datto-sync-desktop.png" alt="Datto RMM Sync step with companies, devices and software choices" width="1440" height="960" />
     </Frame>
   </Step>
@@ -346,8 +346,14 @@ For bulk imports, use the device type mapping's "Import All" button instead of s
 | Sites | Datto → MSPortal | Site information for mapping to companies |
 | Devices | Datto → MSPortal | All managed devices from mapped sites |
 | Device Types | Datto → MSPortal | Device categories and types for mapping |
-| Device Details | Datto → MSPortal | Hostname, manufacturer, model, OS |
+| Device Details | Datto → MSPortal | Hostname, OS, internal IP, model, serial number, last user and description |
 | Software | Datto → MSPortal | Installed software inventory for devices |
+
+### How Device Details Update
+
+Each device sync updates the **hostname**, **OS**, **internal IP**, **model**, **serial number** and **last user** on devices imported from Datto RMM. A value you edit in MSPortal for one of these fields is replaced by Datto's value at the next sync, so make the correction in Datto RMM. When Datto sends a blank value, the device keeps its existing value. A device that another integration, such as your PSA, owns keeps that source's values; Datto only fills in fields that are blank.
+
+The Datto **Description** appears in the device's Datto RMM details and in the optional **Description** column on **Devices**, where you can filter and sort by it. It is also included in the Devices CSV export. See [Find and export your devices](/user-guides/devices/find-devices#show-optional-columns).
 
 ## Sync Schedule
 

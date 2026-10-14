@@ -1,15 +1,15 @@
 ---
-title: "Find and read Cork vulnerabilities"
-description: "Filter Cork vulnerabilities by CVE, software, priority, CVSS, and known exploitation, then plan follow-up."
+title: "Find and read vulnerabilities"
+description: "Filter vulnerabilities from Cork, Action1, and RoboShadow by CVE, software, source, priority, CVSS, known exploitation, and status, then plan follow-up."
 icon: shield-halved
 ---
 
-Use this page to find software vulnerabilities that Cork found and to read what each column means. It is for company users and MSP staff.
+Use this page to find software vulnerabilities found by Cork, Action1, and RoboShadow, and to read what each column means. It is for company users and MSP staff.
 
 ## Before you start
 
 - You need Security read access.
-- Cork must be connected and its companies mapped. Without Cork, the **Vulnerabilities** tab does not appear. See [Enable the Cork integration](/user-guides/integrations/enable-cork-integration).
+- Cork, Action1, or RoboShadow must be connected and its companies mapped. Without one of them, the **Vulnerabilities** tab does not appear. See [Configure Cork Integration](/user-guides/integrations/enable-cork-integration), [Configure Action1 Integration](/user-guides/integrations/enable-action1-integration), or [Configure RoboShadow Integration](/user-guides/integrations/enable-roboshadow-integration).
 
 ## Find a vulnerability
 
@@ -18,10 +18,13 @@ Use this page to find software vulnerabilities that Cork found and to read what 
     Open **Security > Vulnerabilities** and check the company selector.
   </Step>
   <Step title="Search by CVE or software">
-    Type in the **CVE** or **Software** column filter. Use only one at a time. When both are filled, the CVE search is used.
+    Type in the **CVE** or **Software** column filter. When both are filled, a row must match both.
   </Step>
   <Step title="Narrow the list">
-    Use **Company** to pick companies, **Priority** to pick a priority, **Known Exploited** to pick **Yes** or **No**, and **CVSS** to set a score range.
+    Use **Company** to pick companies, **Source** to pick Cork, Action1, or RoboShadow, **Priority** to pick a Cork priority, **Known Exploited** to pick **Yes** or **No**, and **CVSS** to set a score range. **Source** lists only the scanners you have connected.
+  </Step>
+  <Step title="Choose open or resolved findings">
+    **Status** shows **Open** findings by default. Choose **Resolved** to see Cork findings that Cork stopped reporting.
   </Step>
   <Step title="Sort and page">
     Click a column header to sort. The table shows 20 vulnerabilities per page.
@@ -37,11 +40,21 @@ A link from the Security Dashboard can open the list already filtered to **Criti
 | **CVE** | The vulnerability ID. Click it to open its National Vulnerability Database page in a new tab. |
 | **Software** | The product, with its vendor underneath. |
 | **Company** | The mapped company. |
+| **Source** | The scanner that reported the finding: **Cork**, **Action1**, or **RoboShadow**. |
 | **CVSS** | The severity score to one decimal place. A dash means no score. |
-| **Priority** | The Cork priority, such as Critical, Accelerated, or Routine. The filter lists the priorities that exist in your data. |
-| **Known Exploited** | **Yes** when Cork flags the vulnerability as known to be exploited. |
+| **Priority** | The Cork priority: Critical, Accelerated, or Routine. Action1 and RoboShadow findings have no priority and show a dash. |
+| **Known Exploited** | **Yes** when the scanner flags the vulnerability as known to be exploited. For Action1, this follows the CISA Known Exploited Vulnerabilities list. |
+| **Status** | **Open**, or **Resolved** with the date the finding was resolved. |
+
+Action1 lists one row for each endpoint and CVE, so the same CVE can appear once per affected device. The same CVE can also appear once per source.
 
 **Known Exploited** describes the vulnerability, not your company. It does not mean you were attacked. A missing score or a **No** does not mean the software is safe.
+
+## Resolved findings
+
+A Cork finding becomes **Resolved** when a complete Cork sync no longer reports it. MSPortal keeps resolved Cork findings for a year, and the **Status** column shows **Resolved** with the date. Action1 and RoboShadow findings are listed only while they are open.
+
+MSP staff can also report on resolved findings with a custom report block that uses the **Resolved vulnerabilities** data source. See [Custom blocks](/user-guides/reporting/custom-blocks).
 
 The table is read-only. You cannot patch, mark a finding fixed, or export a CSV here.
 
@@ -49,40 +62,36 @@ The table is read-only. You cannot patch, mark a finding fixed, or export a CSV 
 
 Select rows from one company, then open **Actions (N)** in the page header.
 
-- **Add to Planner** creates one Planner item that links every selected vulnerability. See [Add security findings to Planner](/user-guides/security/add-to-planner).
-- **Add to Meeting** adds one agenda entry per vulnerability. See [Add Cork findings to a meeting agenda](/user-guides/security/add-to-meeting).
+- **Add to Planner** creates one Planner item for the selected vulnerabilities. Cork findings are linked to the item. Action1 and RoboShadow findings are listed in the item's **Private Notes**. See [Add security findings to Planner](/user-guides/security/add-to-planner).
+- **Add to Meeting** adds one agenda entry per vulnerability. Action1 and RoboShadow findings are added as text entries. See [Add Cork findings to a meeting agenda](/user-guides/security/add-to-meeting).
 
-Finishing the Planner item does not patch the software or rescan it in Cork.
+Finishing the Planner item does not patch the software or rescan it in the scanner.
 
 ## Troubleshooting
 
-<Note>
-Branch preview: the improved loading-error and Retry behavior below is being prepared for release.
-</Note>
-
 | Problem | What to do |
 | --- | --- |
-| My **Software** search is ignored | You also have text in **CVE**. Clear **CVE**. |
 | The list is empty | Clear every filter, including any set by a dashboard link, and check the company selector. |
-| **No vulnerabilities found** for a company you expect to have data | Ask your MSP to check the Cork sync and company mapping. |
+| **No vulnerabilities found** for a company you expect to have data | Check **Source** and **Status**, then ask your MSP to check the scanner's sync and company mapping. |
+| **No resolved vulnerabilities** | Only Cork keeps resolved findings. Clear **Source** or choose Cork. |
 | **Failed to load vulnerabilities** | Select **Retry**. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
-| **Priority: Something went wrong. Please try again.** | Select **Retry** to reload the available priorities. A successful vulnerability read is kept while priorities are retried. |
-| **Security integration unavailable** | Cork is not connected, or you lack Security read access. Ask your MSP admin. |
+| **Priority** shows a dash | The finding comes from Action1 or RoboShadow, which have no priority. Filtering by **Priority** shows Cork findings only. |
+| **Security integration unavailable** | No vulnerability scanner is connected, or you lack Security read access. Ask your MSP admin. |
 
 <Tabs>
 <Tab title="Desktop retry">
-<Frame caption="Branch preview: Retry reloads failed priorities without repeating a successful vulnerability read."><img src="/images/product/vulnerabilities-error-desktop.png" alt="Vulnerabilities list showing a priority-loading error and Retry" width={1280} height={853} /></Frame>
+<Frame caption="Retry after a loading error."><img src="/images/product/vulnerabilities-error-desktop.png" alt="Vulnerabilities list showing a priority-loading error and Retry" width={1280} height={853} /></Frame>
 </Tab>
 <Tab title="Phone retry">
-<Frame caption="Branch preview: priority-loading error and Retry at phone width."><img src="/images/product/vulnerabilities-error-mobile.png" alt="Phone vulnerability list showing the priority-loading error and Retry" width={780} height={1688} /></Frame>
+<Frame caption="Retry after a loading error at phone width."><img src="/images/product/vulnerabilities-error-mobile.png" alt="Phone vulnerability list showing the priority-loading error and Retry" width={780} height={1688} /></Frame>
 </Tab>
 </Tabs>
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why is my Software filter ignored when I enter a CVE?">
-    The page sends one search value. A filled **CVE** filter takes priority over **Software**.
+  <Accordion title="Why does the same CVE appear more than once?">
+    Each source reports its own findings, and Action1 lists one row for each endpoint. Check **Source** and **Company**.
   </Accordion>
   <Accordion title="Does Known Exploited mean our company was compromised?">
     No. It flags the vulnerability. Your MSP must check your environment.
@@ -101,5 +110,7 @@ Branch preview: the improved loading-error and Retry behavior below is being pre
 ## Related guides
 
 - [Read Cork security compliance events](/user-guides/security/read-cork-events)
+- [Configure Action1 Integration](/user-guides/integrations/enable-action1-integration)
+- [Configure RoboShadow Integration](/user-guides/integrations/enable-roboshadow-integration)
 - [Read the Security Dashboard](/user-guides/security/read-dashboard)
 - [Security](/user-guides/security/index)

@@ -7,13 +7,13 @@ icon: 'box-open'
 The **Software** tab under **Devices** lists the software installed on your clients' devices. It groups each product across devices and flags installs that have reached end of life, reach it soon, or are behind the latest update.
 
 <Note>
-Branch preview for the Devices software update. For MSP staff with access to Devices. Company users do not see the Software tab. The tab requires device-read access, the Software inventory feature, and a connected ConnectWise Asio, Datto RMM, or NinjaOne integration.
+For MSP staff with access to Devices. Company users do not see the Software tab. The tab requires device-read access and a connected ConnectWise Asio, Datto RMM, NinjaOne, or Action1 integration.
 </Note>
 
 ## Before you start
 
-- Connect **ConnectWise Asio**, **Datto RMM**, or **NinjaOne** and import devices. Software is collected only for imported devices.
-- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported. Ongoing inventory syncs run daily: **ConnectWise Asio at 04:00 UTC** and **Datto RMM at 04:30 UTC**, and **NinjaOne at 04:30 UTC**. The NinjaOne Software switch defaults on and company mapping remains required. See [Sync schedules](/user-guides/integrations/sync-schedules).
+- Connect **ConnectWise Asio**, **Datto RMM**, **NinjaOne**, or **Action1** and import devices. Software is collected only for imported devices. Action1 (Beta) collects software for endpoints linked to devices; see [Configure Action1 Integration](/user-guides/integrations/enable-action1-integration).
+- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported. Ongoing inventory syncs run daily: **ConnectWise Asio at 04:00 UTC** and **Datto RMM at 04:30 UTC**, and **NinjaOne at 04:30 UTC**. The NinjaOne Software switch defaults on and company mapping remains required. Action1 always syncs software, daily at **06:40 UTC**, with no separate switch. See [Sync schedules](/user-guides/integrations/sync-schedules).
 - See [Choose what the integration syncs](#choose-what-the-integration-syncs) to enable or disable inventory collection.
 
 ## Review software across your clients
@@ -33,7 +33,7 @@ Branch preview for the Devices software update. For MSP staff with access to Dev
   </Step>
 </Steps>
 
-<Frame caption="Branch preview: select products for bulk classification on Devices > Software.">
+<Frame caption="Select products for bulk classification on Devices > Software.">
   <img src="/images/product/pr1601-software-bulk-desktop.png" alt="Selected software products with bulk actions and sortable, filterable columns" width="1440" height="960" />
 </Frame>
 
@@ -60,7 +60,7 @@ Select a product to open its details. The sheet shows the lifecycle source, each
 - The compact device table supports sorting and filtering by device, company, version, and status. It displays 25 rows per page.
 - Select a device to open its details.
 
-<Frame caption="Branch preview: the product sheet with a compact table of affected devices.">
+<Frame caption="The product sheet with a compact table of affected devices.">
   <img src="/images/product/pr1601-software-sheet-desktop.png" alt="Software product sheet with version details and a compact, filterable devices table" width="1440" height="960" />
 </Frame>
 
@@ -126,7 +126,7 @@ Generic product ratings are reused across tenants and regions; tenant overrides 
 
 Open a device from **Devices** and select its **Software** tab once installed inventory has been confirmed. The tab is hidden while the first read is pending, if it fails, or if inventory is empty. If inventory disappears, the sheet returns to **Overview** and stays there after inventory returns until you select Software again. The list shows each product with its version, status, end-of-life date and cached update priority, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
 
-<Frame caption="Branch preview: device software with the resync action beside the close button.">
+<Frame caption="Device software with the resync action beside the close button.">
   <img src="/images/product/pr1601-device-software-desktop.png" alt="Device details on the Software tab with resync beside the close button" width="1440" height="960" />
 </Frame>
 
@@ -154,7 +154,7 @@ Turning **Software** off removes that integration's software inventory from MSPo
 
 Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration), [Datto RMM setup](/user-guides/integrations/enable-datto-rmm-integration), or [NinjaOne setup](/user-guides/integrations/enable-ninjaone-integration) for credentials, mapping, and import details.
 
-<Frame caption="Branch preview: choose what ConnectWise Asio syncs.">
+<Frame caption="Choose what ConnectWise Asio syncs.">
   <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio setup Sync step with six supported data categories" width="1440" height="960" />
 </Frame>
 
@@ -162,9 +162,9 @@ Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration)
 
 | Situation | What to check |
 | --- | --- |
-| No **Software** tab | Check staff device-read access, Software inventory enablement, and a connected Asio, Datto RMM, or NinjaOne integration. A device tab also requires confirmed installed inventory. |
-| The tab shows no products | Whether ConnectWise Asio, Datto RMM, or NinjaOne is connected, devices are imported, and an inventory sync has finished. |
-| A device has no software | Whether it is imported from a supported RMM and whether **Software** is selected and saved in that integration's **Sync** step. |
+| No **Software** tab | Check staff device-read access and a connected Asio, Datto RMM, NinjaOne, or Action1 integration. A device tab also requires confirmed installed inventory. |
+| The tab shows no products | Whether ConnectWise Asio, Datto RMM, NinjaOne, or Action1 is connected, devices are imported or linked, and an inventory sync has finished. |
+| A device has no software | Whether it is imported from a supported RMM and whether **Software** is selected and saved in that integration's **Sync** step. For Action1, check that the endpoint is linked to the device, then choose **Run sync** and **Software** on the Action1 connection. |
 | A product shows **Unknown** | The RMM reported no usable version for that install. |
 | An auto-updating app shows **Outdated** | A target version is set above the installed version. Clear or change the target. |
 

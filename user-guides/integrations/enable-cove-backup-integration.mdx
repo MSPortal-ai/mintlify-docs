@@ -205,20 +205,41 @@ After setup, you can manage your integration from **Settings** > **Integrations*
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the setup wizard to retest the connection or add more partner mappings |
+| **Configure** | Re-open the connection to test or update credentials, or add more partner mappings |
 | **Resync** | Trigger a manual sync of data from Cove |
 | **Rename** / **Disconnect** | In the row's **...** menu. Rename labels the connection; Disconnect removes it |
 | **Delete** | In the setup wizard footer. Removes the integration and its stored credentials |
 
 Cove supports more than one connection, so you can add a second Cove account as its own row.
 
-### Checking Your Credentials
+### Updating Your Credentials
 
-After the integration is created, the **Partner Name** and **API User Name** fields are locked. To check the stored token, click **Configure**, then click **Retest Connection** on the Connect step.
+After the integration is created, the **Partner Name** is locked. You can change the **API User Name** and **API Token** from the Connect step, for example to rotate the token or move the connection to a new API user.
+
+<Steps>
+  <Step title="Open the Connect step">
+    In **Settings** > **Integrations**, open the Cove connection and go to its Connect step. The stored token appears masked.
+  </Step>
+  <Step title="Enter the new values">
+    Enter the new **API User Name**, **API Token**, or both. When you change the API User Name, enter that user's token as well.
+  </Step>
+  <Step title="Test the connection">
+    Click **Test connection** and wait for it to pass. **Save changes** stays unavailable until the test passes.
+  </Step>
+  <Step title="Save">
+    Click **Save changes**. Partner mappings and settings are kept.
+  </Step>
+</Steps>
+
+To check the stored credentials without changing them, click **Test connection** on the Connect step.
 
 <Warning>
-  **Retest Connection** does not save a new token. To move the integration to a new API user, contact support@msportal.ai before you delete the old API user in Cove.
+  Save the new API user in MSPortal before you delete the old API user in Cove, so syncs keep running.
 </Warning>
+
+### When Credentials Are Missing
+
+If the stored credentials for a connection are lost, the connection shows **Needs attention** and its overview lists **Credentials are missing**. Nothing syncs until they are entered again. Someone with integration management permission clicks **Re-enter**, fills in the **Partner Name**, **API User Name** and **API Token**, clicks **Test connection**, then **Save changes**. Partner mappings and settings are kept.
 
 ---
 
@@ -250,13 +271,13 @@ After the integration is created, the **Partner Name** and **API User Name** fie
 | No partners appear | Click **Sync Partners** on the Map step to fetch data from Cove |
 | Backup data not showing | Ensure the partner is mapped to a company first |
 | Quick Match didn't work | Use manual mapping for partners with different names in Cove vs MSPortal |
-| Token expired/invalid | Create a new API user in Cove, then contact support@msportal.ai to move the integration to it |
+| Token expired/invalid | Create a new API token or API user in Cove, then [update your credentials](#updating-your-credentials) on the Connect step |
 
 ---
 
 ## Important Notes
 
-- **Token Security**: Store your API token securely. If compromised, delete the API user in Cove and create a new one
+- **Token Security**: Store your API token securely. If compromised, create a new API user in Cove, [update your credentials](#updating-your-credentials) in MSPortal, then delete the old API user
 - **Partner Mapping**: Only backup data from mapped partners will sync to MSPortal
 - **Role Permissions**: The Supporter role provides read-only access, which is sufficient for MSPortal integration
 - **Sync Timing**: Initial synchronization may take several minutes depending on your account size

@@ -1,0 +1,84 @@
+---
+title: "Configure Fortinet Integration"
+description: "Connect FortiGate Cloud with a FortiCloud IAM API user, match FortiGate Cloud groups to companies, and track FortiGate firmware and renewals."
+icon: "plug"
+---
+
+<Note>
+Fortinet is in **Beta**. It is available to every tenant and shows a **Beta** badge in **Settings › Integrations › Directory**. If something does not match your FortiGate Cloud account, contact support@msportal.ai.
+</Note>
+
+Fortinet brings your clients' FortiGate firewalls into MSPortal from FortiGate Cloud: model, serial number, FortiOS firmware compared with the latest release in its branch, whether each FortiGate is connected to FortiGate Cloud management, and FortiCare and FortiGuard renewal dates from FortiCloud Asset Management. This setup is for **MSP staff with integration management access**.
+
+MSPortal only reads from FortiCloud. It never changes a FortiGate, its configuration or its policies.
+
+## What the integration covers
+
+- **Covered:** FortiGates managed in FortiGate Cloud, added to **Devices** for the companies you match, with firmware status, management connection and renewal dates.
+- **Not covered:** firewall policies, traffic logs, VPNs, security events and threat activity. FortiGates managed only through FortiManager, or not registered in FortiGate Cloud, do not sync.
+
+## Before you connect
+
+Create an IAM API user in FortiCloud. See [Fortinet's API access guide](https://docs.fortinet.com/document/fortigate-cloud/26.2.a/administration-guide/557024/api-access).
+
+1. In the FortiCloud IAM portal, add an API user and download its credentials file. The file holds the API ID and password. Downloading the file again resets the password.
+2. Give the API user the **FortiGate Cloud** portal with **Admin** access type. MSPortal only reads the device list.
+3. To see FortiCare and FortiGuard renewal dates, also add the **Asset Management** portal. Read-only access is enough. Without it, FortiGates still sync, but renewal dates do not.
+
+One API user covers every FortiGate in your FortiGate Cloud account, including sub-accounts.
+
+## Connect
+
+1. Open **Settings › Integrations**, choose **Directory**, find **Fortinet**, and choose **Connect**.
+2. Choose the **FortiGate Cloud region**: **Global**, **United States**, **Europe** or **Japan**. Use **Global** unless your FortiGate Cloud portal address starts with us, eu or jp.
+3. Enter the **API ID** and **API password** from the credentials file.
+4. Choose **Test connection**. A successful test shows how many FortiGates FortiGate Cloud lists, and whether renewal dates will sync from Asset Management.
+5. Choose **Save and continue**. MSPortal saves the credentials in the vault and starts the first sync.
+
+## Match FortiGate Cloud groups to companies
+
+Open **Import or match companies**. Each FortiGate Cloud sub-account is one row that covers all of its FortiGates. Each FortiGate in your primary account is its own row. The **FortiGate Cloud group** column shows **Primary account** or **Sub-account** with its ID, and **FortiGates** shows how many each row covers.
+
+For each row, accept the suggested company, choose another one, or use **Import company** to create a company from it. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them. **Ignore** hides a row that is not a client's, and you can restore it later.
+
+FortiGates appear in **Devices** only for matched rows.
+
+## Import devices
+
+Open **Import devices**. The **FortiGates and devices** page shows the last sync:
+
+| Row | What it counts |
+| --- | --- |
+| **FortiGates in linked companies** | FortiGates whose sub-account or primary-account row is matched to a company. |
+| **Linked to devices** | FortiGates that reached a device in MSPortal. |
+| **Management tunnel down** | FortiGates that were not connected to FortiGate Cloud at the last sync. |
+| **Firmware behind** | FortiGates on an older FortiOS patch than their branch's latest, or on a branch past end of life. |
+| **Renewals due in 90 days** | FortiCare and FortiGuard coverage lines that end in the next 90 days. |
+
+Choose a device type for each FortiGate family. Every sync links each FortiGate to the device another source already reports, by serial number or name, and adds a new device when none matches. Choose **Sync All Data** to sync now.
+
+## Where the data appears
+
+- **Device details:** open a FortiGate in **Devices**. The **Fortinet** section shows the serial number, model, **FortiOS firmware** with a **Current**, **Update available** or **End of life** badge, **Latest in branch**, **Branch end of life**, **FortiGate Cloud management**, the **FortiGate Cloud group**, **FortiGate Cloud subscription ends**, **Registered**, **Model end of support**, and **FortiCare and FortiGuard coverage** with each line's end date.
+- **Security › Dashboard:** the **FortiGates connected** and **FortiGates behind on firmware** tiles, and the **Fortinet firewalls** card with connection, firmware, renewals due in 90 days, the coverage ending soonest and issues by company. See [Read the Security Dashboard](/user-guides/security/read-dashboard).
+- **Reports:** add the **Fortinet Firewall Health** block. It shows connection status, FortiOS firmware status and the coverage ending soonest. It reflects the latest sync, not the report period.
+- **AI reports:** security reports include FortiGates that are disconnected, behind on firmware or have coverage ending.
+- **MCP:** use `list_fortinet_firewalls` to list a client's FortiGates and those with a problem.
+
+## Sync and troubleshooting
+
+Fortinet syncs daily. Saving the connection starts a sync, and **Sync All Data** on **Import devices** starts one at any time.
+
+- **FortiCloud rejected this API user:** check the API ID and password from the credentials file, and that the user has the FortiGate Cloud portal. FortiCloud locks an account after repeated failed sign-ins, so check the values before you test again. If you downloaded the credentials file again, use the new password.
+- **FortiCloud is limiting requests for this API user:** wait a few minutes and test again.
+- **FortiGate Cloud did not answer in this region:** choose the region your FortiGate Cloud portal runs in.
+- **Renewal dates are off:** the API user has no Asset Management access. Add the Asset Management portal to the user in FortiCloud IAM, then test the connection again.
+- **A FortiGate is missing from Devices:** match its sub-account or primary-account row to a company, then sync.
+
+To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored credentials, the matches and the data synced from Fortinet. It changes nothing in FortiCloud; delete the API user there when you no longer need it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Understand device details](/user-guides/devices/understand-device-details)

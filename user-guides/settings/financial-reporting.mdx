@@ -4,7 +4,7 @@ description: 'Classify PSA revenue, map SKUs, choose how endpoints are counted a
 icon: 'dollar-sign'
 ---
 
-These settings control how MSPortal classifies your PSA billing into revenue and how it counts endpoints for [Financial Reporting](/user-guides/msp-tools/financial-reporting). This page is for MSP staff. It has three tabs: **Revenue Categories**, **SKU Mapping** and **Reporting Model**.
+These settings control how MSPortal classifies your PSA billing into revenue and how it counts endpoints for [Financial Reporting](/user-guides/msp-tools/financial-reporting), the **Financial** and **Revenue Trends** tabs of **MSP Tools > Client Success**. This page is for MSP staff. It has three tabs: **Revenue Categories**, **SKU Mapping** and **Reporting Model**.
 
 ## Before you start
 
@@ -41,7 +41,7 @@ Save a tab before you switch tabs or leave.
     In **Per-Contract Overrides**, find the company and contract and pick an **Override Category**. For a recurring override, choose the **Billing Cadence**: **Use PSA cadence**, **Monthly**, **Quarterly**, **Semiannual** or **Annual**. This sets how MSPortal spreads the revenue across months.
   </Step>
   <Step title="Save">
-    Click **Save Changes** and wait for **Revenue category mappings saved successfully**. After the recalculation, open Financial Reporting to check the result.
+    Click **Save Changes** and wait for **Revenue category mappings saved successfully**. After the recalculation, open the **Financial** tab of **MSP Tools > Client Success** to check the result.
   </Step>
 </Steps>
 
@@ -112,7 +112,10 @@ Use **SKU Mapping** to map each product and service your PSA bills, once. It lis
     Under **Hybrid Endpoint Rules**, set a **Default Fallback**. Then under **Per-Type Rules**, choose an **Endpoint Source** for each company type: **Use Default**, **Per Device**, **Per User** or **Greater of Both**. **Greater of Both** uses the larger count, not the total. If a company has several types with different rules, **Per Device** wins over **Per User**.
   </Step>
   <Step title="Pick managed device types">
-    Under **Managed Device Types**, tick the device types that count as managed endpoints. If the list is empty, add device types under **Settings > Customization > Types**.
+    Under **Managed Device Types**, tick the device types that count as managed endpoints. These types also set the device count for the Microsoft 365 license check. If the list is empty, add device types under **Settings > Customization > Types**.
+  </Step>
+  <Step title="Choose the license check plans">
+    Under **Microsoft 365 license check**, tick the Microsoft 365 plans that count as licensed users. See [Choose the plans for the Microsoft 365 license check](#choose-the-plans-for-the-microsoft-365-license-check).
   </Step>
   <Step title="Pick the support boards">
     Under **Support Hour** (boards, queues or teams, depending on your PSA), tick only your reactive support boards. Time on tickets in them counts as reactive support hours. Leave out project, internal and sales boards.
@@ -121,6 +124,34 @@ Use **SKU Mapping** to map each product and service your PSA bills, once. It lis
     Click **Save Changes**. A toast says **Reporting model saved successfully**.
   </Step>
 </Steps>
+
+## Choose the plans for the Microsoft 365 license check
+
+The **Microsoft 365 license check** card on **Reporting Model** chooses which Microsoft 365 plans count as licensed users. The **Financial** tab compares licensed users with each client's device count in its **Licensed users** and **Licensed users minus devices** columns. See [Check Microsoft 365 licenses against devices](/user-guides/msp-tools/financial-reporting#check-microsoft-365-licenses-against-devices).
+
+| Plan | Counted by default |
+|------|--------------------|
+| **Microsoft 365 Business Basic** | Yes |
+| **Microsoft 365 Business Standard** | Yes |
+| **Microsoft 365 Business Premium** | Yes |
+| **Office 365 E1** | Yes |
+| **Microsoft 365 / Office 365 E3** | Yes |
+| **Microsoft 365 / Office 365 E5** | Yes |
+| **Microsoft 365 / Office 365 F1 and F3** | No |
+
+<Steps>
+  <Step title="Open Reporting Model">
+    Go to **Settings > MSP Tools > Financial Reporting** and click **Reporting Model**.
+  </Step>
+  <Step title="Pick the plans">
+    Under **Microsoft 365 license check**, tick each plan that normally belongs to one named person you bill. Keep at least one plan ticked.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes** in the page header.
+  </Step>
+</Steps>
+
+Each person counts once, even with several plans. Add-ons such as Copilot, Teams Phone or E5 Security never count. Licenses come from Microsoft 365, or from CIPP for clients without a Microsoft 365 connection. The choice applies to your whole tenant.
 
 ## Set up Company Seat Profiles
 
@@ -166,6 +197,7 @@ A grade needs every profile that has seats to have a target, seats mapped by lic
 | **Waiting for data to sync** | Your PSA is connected but nothing has synced yet. Wait a few hours, then check the integration's permissions |
 | **Save Changes** is disabled | Nothing has changed on this tab, or a save is running |
 | **Target seat price must be a positive number** | Enter a number above zero, or leave the field empty |
+| **Choose at least one Microsoft 365 plan for the license check.** | Tick at least one plan under **Microsoft 365 license check**, then save again |
 | The company picker is disabled | Save or discard the company's unsaved seat-profile changes |
 | A company shows **Needs setup** | Add a target, license mappings and billing mappings to each profile that has seats |
 | Numbers did not change after saving | The recalculation runs in the background. Check again after a little while |

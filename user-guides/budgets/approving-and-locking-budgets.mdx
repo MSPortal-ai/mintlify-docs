@@ -4,7 +4,7 @@ description: 'Finalize a budget as an immutable baseline and prepare its line it
 icon: 'lock'
 ---
 
-Approving a budget turns it into the fixed baseline MSPortal uses to compare planned costs with customer invoice spend. Approval also gives every line item a unique reference, so projects, purchases, licenses, labor and other costs can be traced back to the approved plan. This guide is for MSP staff whose role has the **manage_budgets** permission. Other readers can review the plan and ask their MSP to approve it.
+Approving a budget turns it into the fixed baseline MSPortal uses to compare planned costs with customer invoice spend. Approval also gives every line item a unique reference, so projects, purchases, licenses, labor and other costs can be traced back to the approved plan. Locking a budget needs the **manage_budgets** permission. Deciding individual lines needs the **Approve budget items** permission, described in [Approve or reject budget lines](#approve-or-reject-budget-lines). Other readers can review the plan and ask their MSP to approve it.
 
 <Warning>
 Approval is permanent. You cannot edit an approved budget or return it to Draft. Review the budget carefully before you confirm.
@@ -17,6 +17,34 @@ Approval is permanent. You cannot edit an approved budget or return it to Draft.
 - The budget has a company, fiscal year, currency and a complete set of lines.
 - Quantities, prices, recurrence, categories, line statuses and linked projects or products are final.
 - A supported PSA integration with invoice sync is on, if you plan to track actual spend.
+
+## Approve or reject budget lines
+
+Each line has its own status: **Pending**, **Approved**, **Rejected** or **Draft**. Changing a line's status needs the **Approve budget items** permission. In **Settings > Users & Roles > Roles**, it sits under **Budgets** in the role editor. **Manage** access to Budgets includes it. **Write** access does not, so a role can edit budgets without deciding lines, or decide lines without editing budgets.
+
+| Your access | Where you can decide lines | Statuses you can set |
+|-------------|----------------------------|----------------------|
+| **Approve budget items** without Write | Budgets in **Pending Approval** | Approved, Rejected, Pending |
+| **Approve budget items** with Write or Manage | Budgets in **Draft** or **Pending Approval** | Approved, Rejected, Pending, Draft |
+
+Approved and Archived budgets are locked, so nobody can change their line statuses.
+
+<Steps>
+  <Step title="Open the budget">
+    In **Budgets**, click **...** then **View** on the budget's row.
+  </Step>
+  <Step title="Change a line">
+    On the **Overview** tab, open the **...** menu next to a line's status and choose **Approve**, **Reject**, **Mark as pending** or **Mark as draft**. The menu lists only the statuses you can set. The change saves at once.
+  </Step>
+  <Step title="Approve every pending line">
+    To approve all Pending lines together, click **Approve all pending** above the line table. It shows the number of Pending lines and appears only when there are some. The confirmation shows how many lines and what total will be approved. Click **Approve _N_ items** to confirm. You can still change individual lines until the budget is approved.
+  </Step>
+  <Step title="Check the totals">
+    The summary shows **Total**, **Approved**, **Pending** and **Rejected**. **Pending** includes Draft lines.
+  </Step>
+</Steps>
+
+Approving every line does not approve or lock the budget. To lock it, follow [Approve a budget](#approve-a-budget). You can also change line statuses in the budget editor's **Approval** column, or for several lines at once with **Update Statuses** in the Budgets list row menu. See [Add and edit budget line items](/user-guides/budgets/edit-line-items#change-a-lines-approval-status).
 
 ## Approve a budget
 
@@ -141,6 +169,8 @@ Archiving retires an approved budget and keeps its baseline and history. Only th
 | Issue | What to do |
 |-------|------------|
 | **Approved** is missing from **Status** | You need **manage_budgets**, and the budget must be Draft or Pending Approval. |
+| A line has no status menu | You need **Approve budget items**. Without Write access, you can decide lines only while the budget is Pending Approval. |
+| **Mark as draft** is missing | Only people who can also edit budgets can return a line to Draft. |
 | Approval fails with a validation error | Complete the company, fiscal year, currency, categories and line data, then try again. |
 | The budget cannot be edited after approval | That is expected. Duplicate it for an editable copy. |
 | A line has no reference | An older locked budget has none. Use manual allocation. For a new budget, reload and confirm the save finished. |
@@ -167,7 +197,10 @@ Archiving retires an approved budget and keeps its baseline and history. Only th
     No. It only sets the status in the editor. You must click **Save**.
   </Accordion>
   <Accordion title="Can a company administrator approve budgets?">
-    Only if their MSP gives them **manage_budgets**. The company administrator label alone does not.
+    The company administrator label alone does not grant approval. To decide lines, their MSP gives their role **Approve budget items**. To lock the whole budget, they need **manage_budgets**.
+  </Accordion>
+  <Accordion title="Does approving every line lock the budget?">
+    No. Line statuses and the budget status are separate. Only setting the budget's **Status** to **Approved** locks it.
   </Accordion>
   <Accordion title="Can I unlock an approved budget or change a rejected line?">
     No. Duplicate the budget, fix the Draft copy and approve it.
