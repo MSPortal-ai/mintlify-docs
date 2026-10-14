@@ -1,0 +1,38 @@
+---
+title: 'Connect Datto Backup'
+description: 'Map Datto BCDR organizations and review backup coverage'
+icon: 'plug'
+---
+
+<Note>Branch preview: these instructions describe the current setup flow. Provider availability depends on the integrations enabled for your portal. Production verification is pending.</Note>
+
+Connect Datto BCDR to review appliances, protected systems, backup status, and alerts for mapped companies.
+
+Open **Settings > Integrations**, find the provider in the directory, and open its setup. You need an MSP staff account with permission to manage integrations. Company users should ask their MSP to connect the service.
+
+## Before you start
+
+In the Datto Partner Portal, open **Admin > Integrations > API Keys** and choose **Create API Key**. Copy the REST API public key and secret key; the secret is shown only once. Leave the key's client restriction blank to include all clients, or deliberately restrict it if this connection should cover only one client.
+
+## Connect and map companies
+
+1. In **Connect**, enter **REST API Public Key** and **REST API Secret Key**.
+2. Select **Test Connection** and review the number of appliances found.
+3. Select **Save connection**. MSPortal saves the connection and starts the first sync.
+4. Continue to **Map companies**. Match Datto organizations to portal companies, reviewing **Quick Match** suggestions before applying them.
+5. Open **Review** and check appliance, protected-system, and alert counts. Select **View backup devices** to inspect the data.
+
+Only mapped organizations appear in Backup and reports. You may finish setup while the first sync runs. This connection supplies backup data; it does not automatically turn protected systems into portal device-inventory records.
+
+## Troubleshooting
+
+- **Only one client appears:** check whether the Datto API key has a client restriction.
+- **No data has been synced yet:** use **Start first sync** if shown, then wait for discovery.
+- **A company has no backup data:** check its organization mapping and company scope.
+- **Rate-limit error:** wait before retrying. Do not create a duplicate connection to work around it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Map and import companies](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)
