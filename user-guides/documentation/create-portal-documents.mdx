@@ -21,7 +21,7 @@ Use this page to create pages, upload files, and keep portal documents organized
     Enter a **Page title**. Choose a **Company** for company-specific content, or leave **Global page** for a page with no company. Choose a custom **Folder**, or leave **Unfiled**.
   </Step>
   <Step title="Write the page">
-    Type the **Body**. Use the toolbar for text styles, lists, links, and supported images. Check the content and the selected company.
+    Type the **Body**, or start from a document with **Import Word file** or **Write with AI** (see below). Use the toolbar for text styles, lists, links, and supported images. Check the content and the selected company.
   </Step>
   <Step title="Create the page">
     Click **Create page**. MSPortal shows **Page created**. **Cancel** closes the editor without creating anything.
@@ -36,6 +36,78 @@ Use this page to create pages, upload files, and keep portal documents organized
 </Frame>
 
 The company setting says whose page it is. Visibility rules decide who can read it, so check the audience in Documentation settings. A global page is not a private draft.
+
+## Start from a Word file or with AI
+
+The editor's **Body** row has two shortcuts. Both replace the body in the editor. Nothing is saved until you click **Create page** or **Save**, and **Undo** beside the result puts back what was there before.
+
+### Import a Word file
+
+<Steps>
+  <Step title="Click Import Word file">
+    In the page editor, click **Import Word file** and choose a Word document (.docx). The file is converted in your browser and is not uploaded.
+  </Step>
+  <Step title="Check the result">
+    The editor shows **Imported** with the file name. Headings, lists, bold, italic, underlined text, links, tables, and images come across. If the page had no title, the document's title (or its file name) becomes the **Page title**.
+  </Step>
+  <Step title="Save">
+    Edit as needed, then click **Create page** or **Save**.
+  </Step>
+</Steps>
+
+<Frame caption="A client's Remote Work Policy imported from Word, with its headings, list, table, and image. The page has not been saved.">
+  <img src="/images/product/documentation-import-word.png" alt="New page editor after importing remote-work-policy.docx, with the Imported status line, Undo, Turn it into a client template with AI, and the converted policy in the body." width="1440" height="960" />
+</Frame>
+
+Images over 500 KB, and drawings in formats browsers can't show, are left out; the editor says how many. Comments, headers, and footers are not imported, and a document with tracked changes imports as if every change were accepted. Save an older .doc file as .docx in Word first. To keep the original file instead of converting it, use **Upload**.
+
+### Write with AI
+
+<Steps>
+  <Step title="Click Write with AI">
+    In the page editor, click **Write with AI**. A prompt opens above the editor. It appears only when AI is turned on for your organization.
+  </Step>
+  <Step title="Describe the page or the change">
+    On an empty page, describe the page you need, such as an acceptable use policy for laptops, email, and Wi-Fi. On a page with content, describe the change, such as adding a section on password managers. Or click **Tidy the formatting**.
+  </Step>
+  <Step title="Review the draft">
+    The editor shows **AI wrote the page** or **AI updated the page**. Read it, fill in any bracketed placeholders, then click **Create page** or **Save**.
+  </Step>
+</Steps>
+
+AI is told not to invent facts such as prices, phone numbers, or dates. Where a detail is unknown, it writes a bracketed placeholder for you to fill in.
+
+### Turn a client's document into a client template
+
+After you import a document written for one client, click **Turn it into a client template with AI**, or **Make it a client template** in the AI prompt, and send it. AI replaces that client's name, logo, address, website, domain, and contact details with merge fields, and your organization's name with **MSP name**. Because the result uses merge fields, the editor turns on **Client template**. Check every field before you save: the template is what every client reads.
+
+<Frame caption="AI turned the imported policy into a client template. Client details became merge fields and Client template switched on.">
+  <img src="/images/product/documentation-write-with-ai.png" alt="New page editor after Write with AI: the Client template switch is on, the AI prompt offers Make it a client template and Tidy the formatting, and the body shows company_logo, company_name and tenant_name merge fields." width="1440" height="960" />
+</Frame>
+
+## Write a page once for every client
+
+Turn on **Client template** in the page editor to write one policy or guide that every client reads in their own name. While it is on, **Insert field** adds a merge field at the cursor, such as `{{company_name}}`.
+
+| Field | Fills in |
+| --- | --- |
+| Client name, logo, address, website, domain | The company's details from **Settings > Companies** |
+| Client contact name, email, phone | The company's primary contact details |
+| MSP name | Your organization's name |
+| Effective date, Today's date | The date the page was last saved, and the date it is read |
+| Team roles | The people assigned to that team role for the company, or their email addresses |
+
+Each company user sees the page filled in for their own company, never another client's version. MSP staff see the template with labeled fields; select a company in the company selector to read that company's version. The saved page always keeps the fields, so editing never stores one client's details in the template. A field the company has no value for, such as a missing website, is left blank.
+
+## Export a branded PDF
+
+Click **Export PDF** on a portal page to download it as a PDF. The PDF starts with the client's logo and name, the page title, its effective date and revision, and numbers each page. For a client template, the PDF is filled in for the company you are viewing. If no company is selected, choose the client in the export dialog.
+
+Set how portal pages export in **Settings > Documentation > Documents**, in the **PDF export** section at the end of the tab:
+
+- **Export portal pages as PDF** shows or hides **Export PDF** on portal pages for everyone. It is on by default.
+- **"Prepared by" line** chooses where the PDF names your organization: **Not shown** (the default, so a client's PDF carries only their branding), **Footer of every page**, or **Title page only**.
+- When Hudu or IT Glue is connected, the same section also turns **Export PDF** on or off for its synced articles.
 
 ## Upload files
 
@@ -143,6 +215,10 @@ If the page changed while you were editing, reload the current version and merge
 | **Couldn't replace the file** | Try again. If the document changed meanwhile, reload it first. |
 | **Failed to move document** | Reload the page and try again. |
 | A provider article has no Edit button | Provider articles are managed in Hudu or IT Glue. |
+| **Import Word file** refuses a file | Only .docx files work. Save an older .doc as .docx in Word, or use **Upload** to keep the original file. |
+| Images are missing after a Word import | Images over 500 KB and drawings in formats browsers can't show are left out. Add them with the toolbar's image control. |
+| **Write with AI** is missing | AI is turned off for your organization. |
+| **Export PDF** is missing on a portal page | Turn on **Export portal pages as PDF** in **Settings > Documentation > Documents**. |
 
 ## Frequently asked questions
 
@@ -161,6 +237,15 @@ If the page changed while you were editing, reload the current version and merge
   </Accordion>
   <Accordion title="Can I recover a previous version of a page?">
     Yes. Open **Revisions** and click **Restore** on the version you need.
+  </Accordion>
+  <Accordion title="Does Write with AI save the page?">
+    No. AI fills the editor. Review the draft and click **Create page** or **Save**. **Undo** beside the result restores the previous content, title, and Client template setting.
+  </Accordion>
+  <Accordion title="Can a client see another client's version of a template?">
+    No. A company user's page and PDF are always filled in for their own company. Only MSP staff can choose another company.
+  </Accordion>
+  <Accordion title="Does a client template update Hudu or IT Glue?">
+    No. Client templates and their branded PDFs live in MSPortal Documentation only.
   </Accordion>
   <Accordion title="Does copying a document URL create a public link?">
     No. A normal portal URL keeps its access checks.
