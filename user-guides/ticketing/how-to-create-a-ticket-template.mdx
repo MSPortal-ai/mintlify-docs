@@ -1,10 +1,10 @@
 ---
 title: How to Create a Ticket Template
-description: Create, customize, and manage ticket templates, company branches, access settings, and import/export
+description: Create, customize, and manage ticket templates, shared branches, access settings, and import/export
 icon: file-lines
 ---
 
-Ticket templates give requesters a pre-built form with the questions your team needs. This guide is for MSP staff. It covers creating a template, configuring PSA defaults and access, adding sections and fields, company branches, and import and export.
+Ticket templates give requesters a pre-built form with the questions your team needs. This guide is for MSP staff. It covers creating a template, configuring PSA defaults and access, adding sections and fields, branches, and import and export.
 
 For a short first template, follow [Create and preview a ticket template](/user-guides/ticketing/create-and-preview-ticket-template). Company users should read [Understand your available request templates](/user-guides/ticketing/understand-request-templates).
 
@@ -108,26 +108,22 @@ Open **Subject Configuration**.
 Open **Company Visibility** in the editor to choose which companies can use the template.
 
 <Steps>
-  <Step title="Set the New Companies default">
-    Under **New Companies**, choose **Enabled** (the default) or **Disabled**. This sets the template's visibility for any company added later.
+  <Step title="Set the default for new companies">
+    Under **New Companies**, choose **Enabled** (the default) or **Disabled**. This sets the template's visibility for any company added later. When the form has branches, the setting is called **New companies get** and offers **Main form**, each branch, or **No form**. See [Choose what new companies get](#choose-what-new-companies-get).
   </Step>
   <Step title="Search for companies">
     Use **Search companies...** to find a company, then use its switch to turn the template on or off.
   </Step>
   <Step title="Use bulk buttons if needed">
-    **Enable All** and **Disable All** change every company. **Enable All Except Branched** appears when the template has branches.
+    **Enable All** and **Disable All** change every company. On the main form, **Enable All** leaves companies that use a branch on their branch.
   </Step>
   <Step title="Save">
-    Click **Save Template**. If some existing companies are off while **New Companies** is on, a "New companies will receive this template" prompt appears. Click **Save Anyway** to accept it, or **Cancel** to go back.
+    Click **Save Template**. If some existing companies have no form while new companies get the main form, a "New companies will receive this template" prompt appears. Click **Save Anyway** to accept it, or **Cancel** to go back.
   </Step>
 </Steps>
 
-<Tip>
-When you use company branches, click **Enable All Except Branched** so companies with a branch use their branch and every other company uses the parent template.
-</Tip>
-
 <Note>
-A company with a branch uses its branch version whether or not the parent template is enabled for it.
+Each company uses one version of a form: the main form, one branch, or none. On the main form, companies that use a branch show the branch name next to their switch.
 </Note>
 
 ### Role Access
@@ -169,34 +165,55 @@ How gating combines:
 
 Gating applies on the New Ticket page, in the AI Assistant, and in the browser extension. If you remove a company from a group, the template stops showing for it on the next page load. Existing tickets are not affected.
 
-## Create a company branch
+## Create a branch
 
-A branch is a company-specific copy of a template. Use one when a client needs different fields, labels, or PSA routing.
+A branch is a version of a form that any set of companies can share. Use one when some clients need different fields, labels, or PSA routing. For example, two clients with the same approval process can share one branch while every other company keeps the main form.
+
+Each company uses one version of a form: the main form, one branch, or no form.
 
 <Steps>
   <Step title="Open Branches">
-    Open the template, then expand **Branches**. This section appears after the template has been saved.
+    Open the main form, then expand **Branches**. This section appears after the form has been saved. It does not appear on a branch.
   </Step>
   <Step title="Click Create Branch">
-    Click **Create Branch**.
+    Click **Create Branch**. The **New branch** dialog opens.
   </Step>
-  <Step title="Select the company">
-    Use **Search companies...** to find the company and click it. Companies that already have a branch are not listed.
+  <Step title="Name the branch">
+    Enter a **Branch Name**, such as "Enterprise Clients". The name is required and shows in the Templates list and in each company's form choices.
+  </Step>
+  <Step title="Choose companies (optional)">
+    Under **Companies (optional)**, select the companies that should use this branch. Chosen companies move onto it from the main form or from any other branch. You can leave this empty and add companies later.
   </Step>
   <Step title="Click Create & Edit">
-    Click **Create & Edit**. MSPortal copies the template and opens the copy for editing.
+    Click **Create & Edit**. MSPortal copies the form, with its fields, rules, and PSA defaults, and opens the copy for editing.
   </Step>
   <Step title="Edit the branch">
-    Change fields, labels, help text, defaults, and PSA routing. You can also set a **Branch Name**, which shows in the Templates list.
+    Change fields, labels, help text, defaults, and PSA routing, then click **Save Template**.
   </Step>
 </Steps>
 
-A branch is a full independent copy. It is visible only to its company, its version history starts fresh, and later changes to the parent do not sync to it.
+A branch is a full independent copy. Only companies on the branch see it, its version history starts fresh, and later changes to the main form do not sync to it. A branch of an inactive form starts inactive. Turn on **Template is active and available for use** on the branch when it is ready.
+
+### Move companies onto or off a branch
+
+You can change which version a company uses in three places:
+
+- **On the branch.** Open the branch and expand **Company Visibility**. Turn a company on to move it onto this branch. Turning one off puts it back on the main form. Click **Save Template** to apply the moves.
+- **On the main form.** In **Company Visibility**, turning a company on moves it to the main form. Turning it off leaves it with no form. Click **Save Template** to apply the moves.
+- **On the company.** Go to **Settings > Companies**, open the company, and select the **Ticketing** tab. Under **Available Templates**, each form with branches has a select with **Main form**, each branch, and **Off**. Inactive branches are marked **(inactive)**. Forms without branches keep an on and off switch. Each change saves right away.
+
+### Choose what new companies get
+
+On the main form, open **Company Visibility**. When the form has branches, **New companies get** sets the version that companies added later receive: **Main form**, a branch, or **No form**. This applies only to companies added later. It never moves companies that already exist.
+
+The branch you choose shows a **New companies** badge in the **Branches** section. Set this on the main form. A branch's **Company Visibility** shows "New companies are set on the main form."
+
+### Edit or delete a branch
 
 | Action | How |
 |--------|-----|
-| **Edit** a branch | Click the edit branch icon in the Branches section. |
-| **Delete** a branch | Click the trash icon and confirm. The company goes back to the parent template. Deleting cannot be undone. |
+| **Edit** a branch | Click the edit branch icon next to it in the **Branches** section. Each branch shows how many companies use it. |
+| **Delete** a branch | Click the trash icon and confirm. The branch's companies go back to the main form. Deleting cannot be undone. |
 | See branches in the list | In the Templates list, click the number in the **Branches** column to expand the rows. |
 
 ## Manage templates in the list
@@ -386,7 +403,7 @@ Each embedded template is a normal ticket template, so all of its PSA settings a
 - **Ticket type / subtype / category**: the embed's defaults are used.
 - **Halo Category / Impact / Urgency**: the embed's Halo-specific routing is used.
 - **Use client's PSA defaults toggle**: if the embed has this toggle on, the embed reads board/priority/status from the client's company-level defaults instead of the embed's own template defaults.
-- **Per-company branches on the embed**: if the embed has a branch for the parent's company, the branch's overrides apply.
+- **Branches on the embed**: if the parent's company uses a branch of the embedded template, the branch's settings apply.
 
 <Warning>
 **ConnectWise specifically:** the embed's default status must be active on the embed's default board. If they don't match, the embed throws a clear error like "Template status X is not active on the selected ConnectWise board" and the child ticket fails. The parent ticket still succeeds. Verify each embed's board+status combination in the editor's PSA Integration Settings.
@@ -480,7 +497,7 @@ Appointment scheduling is not available on webhook-only templates, because no PS
 ## Activate and verify a template
 
 <Note>
-Branch preview: choose multi-select defaults using the **Default Value** checkboxes. The Form Preview starts with the configured defaults, and **Reset** restores them after testing. All fields, including embedded fields, use their configured conditions to determine when they appear in the form and preview.
+Choose multi-select defaults with the **Default Value** checkboxes. The Form Preview starts with the configured defaults, and **Reset** restores them after testing. All fields, including embedded fields, use their configured conditions to decide when they appear in the form and the preview.
 </Note>
 
 <Steps>
@@ -514,7 +531,7 @@ Branch preview: choose multi-select defaults using the **Default Value** checkbo
     Save the template as inactive, preview it, and activate it when the fields capture the right information.
   </Accordion>
   <Accordion title="Use Branches Sparingly">
-    Create a company branch only for significant differences. Conditional fields handle minor variations.
+    Create a branch only for significant differences, and let clients with the same needs share it. Conditional fields handle minor variations.
   </Accordion>
   <Accordion title="Use Embedded Templates for Multi-Ticket Workflows">
     Use **Embedded Template** fields when one request should create several PSA tickets with different routing. For variations that share routing, use conditional fields in one template.

@@ -8,6 +8,8 @@ This guide walks you through connecting CIPP (the CyberDrain Improved Partner Po
 
 Once connected, MSPortal synchronizes security, identity, email, Intune, and tenant configuration data from CIPP and presents it to your clients as the [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page.
 
+For every mapped tenant, CIPP also supplies Intune managed devices, Windows Autopilot devices and SharePoint storage quota. Intune details appear on matching [device records](/user-guides/devices/understand-device-details#review-microsoft-entra-id-and-intune-details), and Intune devices without an RMM agent are listed in **Devices > Not in RMM** (see [Find Intune devices missing from your RMM](/user-guides/devices/find-devices#find-intune-devices-missing-from-your-rmm)).
+
 <Note>
 CIPP is currently a **Pilot** integration available to selected tenants. If you don't see the CIPP card in **Settings > Integrations**, contact support@msportal.ai. The pilot secures and validates the API connection; data sync features build on this connection.
 </Note>
@@ -67,13 +69,29 @@ CIPP is currently a **Pilot** integration available to selected tenants. If you 
 
 ## Part 3: Choose Data
 
-**Document Intune policies** is off by default, including for existing connections. After saving credentials, open **Choose data**, before matching companies. Leave **Document Intune policies** unchecked to keep the feature off, or check it to enable it. Changes save immediately. Continue to company matching when the choice has saved; leaving it unchecked is valid. The older wizard uses the same **Choose data** step before **Map companies**. Subsequent CIPP syncs record policy versions and look up readable setting names. Clear the checkbox to stop both operations on subsequent syncs. An already-running sync can finish using its saved choice; previously documented versions remain available. Company-user visibility is controlled separately in **Settings > Documentation > Intune**.
+**Choose data** holds the optional **Document Intune policies** setting. Intune policy documentation is opt-in: the setting is off by default, including for existing connections.
 
-<Frame caption="Branch preview: Choose data between Connect and company matching (component preview with sample data).">
+<Steps>
+  <Step title="Open Choose data">
+    After saving credentials, open **Choose data**, before matching companies. The older wizard shows the same **Choose data** step before **Map companies**.
+  </Step>
+  <Step title="Choose whether to document Intune policies">
+    Check **Document Intune policies** to turn it on, or leave it unchecked to keep it off. The choice saves immediately. Leaving it unchecked is valid.
+  </Step>
+  <Step title="Continue">
+    Continue to company matching once the choice has saved.
+  </Step>
+</Steps>
+
+With the setting on, the nightly CIPP sync saves each Intune policy's versions and looks up readable setting names. The policies appear in [Documentation > Intune](/user-guides/documentation/view-it-records#review-intune-configuration), where staff can export one company's Intune documentation as a PDF after selecting that company. Clear the checkbox to stop documenting policies on later syncs. A sync that is already running finishes with its saved choice, and versions documented earlier stay available.
+
+Sharing Intune documentation with company users is a separate switch, **Show Intune documentation to company users** in **Settings > Documentation > Intune**. It is off by default.
+
+<Frame caption="Choose data between Connect and company matching.">
   <img src="/images/product/cipp-choose-data-preview-desktop.png" alt="CIPP Choose data step with Intune documentation unchecked" width="1440" height="960" />
 </Frame>
 
-<Frame caption="Branch preview: Choose data in the older wizard (sample connection).">
+<Frame caption="Choose data in the older wizard.">
   <img src="/images/product/cipp-choose-data-legacy-preview-desktop.png" alt="CIPP wizard Choose data step with Document Intune policies unchecked" width="1440" height="960" />
 </Frame>
 

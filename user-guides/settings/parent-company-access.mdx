@@ -62,7 +62,7 @@ Impersonation opens on the user's own company. Choose **Global View** in the com
 
 <Steps>
   <Step title="Link the child">
-    In **Settings > Companies**, select the child company, then choose **Actions > Set Parent Company** and pick the parent. MSPortal adds every existing Parent Admin to that child automatically.
+    In **Settings > Companies**, select the child company, then choose **Actions > Set Parent Company** and pick the parent. MSPortal adds every Parent Admin set to **All child companies** to that child automatically. Parent Admins limited to **Selected companies** get the new child only when you add it to their list.
   </Step>
   <Step title="Check linked-another-way children">
     If you linked the child another way, such as a PSA import, open the child's **Team** tab. If the Parent Admin role does not list the user, add the user to the role and select **Save Changes**.
@@ -72,6 +72,26 @@ Impersonation opens on the user's own company. Choose **Global View** in the com
 <Warning>
 The parent company's row menu also offers **Sync Roles to Children**. This action replaces every Team Role assignment on each child company with the parent company's assignments. Assignments that exist only on a child, such as a different account manager, are removed. To fix a single missing child, add the user on that child's **Team** tab instead.
 </Warning>
+
+## Limit a parent admin to selected child companies
+
+A Parent Admin sees every child company by default, including child companies linked later. You can limit one to a chosen set instead.
+
+<Steps>
+  <Step title="Open the user">
+    Open **Settings > Users & Roles > Company Users**, find the Parent Admin and choose **Edit User** from the row menu. The **Edit Company User** dialog opens.
+  </Step>
+  <Step title="Choose the companies">
+    In **Child company access**, choose **Selected companies**, then pick the child companies in **Companies this admin can see**. With no companies selected, the admin sees only their own company.
+  </Step>
+  <Step title="Save">
+    Select **Save Changes**. The admin's company selector, pages, reports, API and MCP access now cover their own company and the selected child companies.
+  </Step>
+</Steps>
+
+**Child company access** appears only for users who hold the Parent Admin role on their own company. **All child companies** includes child companies added later. **Selected companies** includes only the companies you choose, so a child linked later stays hidden from this admin until you add it, and **Sync Roles to Children** leaves their list unchanged.
+
+To give the admin every child company again, edit the user and choose **All child companies**.
 
 ## Troubleshooting
 
@@ -99,7 +119,7 @@ Once the user holds the Parent Admin role and the selector is on **Global View**
     No. Only the Parent Admin role for the user's own parent company turns on the company selector and adds the child companies.
   </Accordion>
   <Accordion title="Can the user see some child companies but not others?">
-    Yes. Assign the Parent Admin role on the parent company first, then open each child the user should not see and remove them from the Parent Admin role on that child's Team tab. Linking another child with **Set Parent Company** adds Parent Admins back to every child, so recheck those children afterward.
+    Yes. Edit the user and choose **Selected companies** under **Child company access**, then pick the child companies they should see. See [Limit a parent admin to selected child companies](#limit-a-parent-admin-to-selected-child-companies). While the user has **All child companies**, removing them from a child's Team tab does not hide that child.
   </Accordion>
   <Accordion title="The Parent Admin role is missing from the Team tab">
     Check that the company has children in **Settings > Companies**. If it does, select one child, choose **Set Parent Company** and apply the same parent again. This creates the Parent Admin role for the parent company.

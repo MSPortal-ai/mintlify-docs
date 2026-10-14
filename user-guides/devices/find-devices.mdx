@@ -1,6 +1,6 @@
 ---
 title: 'Find and export your devices'
-description: 'Find a device, filter by warranty date or type, choose columns, and download a device list.'
+description: 'Find a device, filter by warranty date or type, choose columns, find Intune devices missing from your RMM, and download a device list.'
 icon: 'laptop'
 ---
 
@@ -30,6 +30,35 @@ Use **Devices** to find equipment you can see, check its details, and review war
 </Steps>
 
 The table has pages. Use the controls at the bottom to move through them. If a column is missing, open the column selector, because some columns are hidden until you turn them on.
+
+## Show optional columns
+
+**Description**, **Purchase Date** and **Device Age** are hidden until you turn them on in the column selector. The Intune columns show when devices in view have Intune data.
+
+| Column | What it shows |
+| --- | --- |
+| **Description** | The device description from Datto RMM. You can filter, sort and search on it. |
+| **Purchase Date** | The recorded purchase date, from a connected tool or entered on the device. See [Understand device details](/user-guides/devices/understand-device-details#purchase-date-and-device-age). |
+| **Device Age** | Years since the purchase date, or since the warranty start when no purchase date is recorded. |
+| **Entra join type**, **Intune compliance**, **Intune check-in** | Microsoft Entra ID and Intune details from CIPP. They appear when CIPP is connected and are hidden when no device in view has an Intune record. These three columns cannot be sorted or filtered; use the **Not in RMM** tab for a filterable Intune list. |
+
+## Find Intune devices missing from your RMM
+
+When your MSP connects CIPP, a **Not in RMM** tab appears in **Devices**. It lists Intune devices from CIPP that no RMM agent reports, for the companies in the company selector.
+
+<Steps>
+  <Step title="Open the tab">
+    Open **Devices > Not in RMM**.
+  </Step>
+  <Step title="Filter the list">
+    Use the column filters on **Device**, **Company**, **Join type**, **Compliance**, **Ownership**, **Operating system**, **Primary user**, **Last check-in** and **Portal device**. **Serial number** is available from the column selector.
+  </Step>
+  <Step title="Open a matching portal record">
+    **Portal device** links to the device when the portal already has a record for it, for example from a PSA. **Not in portal** means there is no device record yet.
+  </Step>
+</Steps>
+
+**Every Intune device is in your RMM** means CIPP reports no Intune device without an RMM agent for the selected companies. Intune devices appear here only for Microsoft tenants mapped to companies in the [CIPP integration](/user-guides/integrations/enable-cipp-integration).
 
 ## Review warranty dates
 
@@ -66,7 +95,7 @@ MSP staff also see an **Unimported Devices** row under the cards when connected 
   </Step>
 </Steps>
 
-The export includes every matching device across all pages. It does not depend on which rows are checked or which page you are on. It uses its own set of columns, so hiding a column on screen does not remove it from the file. The columns include **Name**, **Company**, **Device Type**, **Manufacturer**, **Model**, **OS**, **Serial Number**, **IP addresses**, **Location**, **Last User**, **Assigned Owner**, **Last Seen**, **Integration**, **Warranty Start**, **Warranty End**, and **Device Age**.
+The export includes every matching device across all pages. It does not depend on which rows are checked or which page you are on. It uses its own set of columns, so hiding a column on screen does not remove it from the file. The columns include **Name**, **Display Name**, **Description**, **Company**, **Device Type**, **Manufacturer**, **Model**, **OS**, **Serial Number**, **IP addresses**, **Location**, **Last User**, **Assigned Owner**, **Last Seen**, **Integration**, **Warranty Start**, **Warranty End**, **Purchase Date**, and **Device Age**.
 
 If the file is empty or wrong, check your filters and try again after the list has finished loading. An empty file does not prove you have no devices.
 

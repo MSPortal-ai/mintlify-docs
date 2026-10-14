@@ -1,16 +1,16 @@
 ---
 title: "Find security endpoints"
-description: "Find Cork and Acronis endpoint records, filter by status, source, and company, and open a record for details."
+description: "Find Cork, Acronis, and Bitdefender GravityZone endpoint records, filter by status, source, and company, and open a record for details."
 icon: shield-halved
 ---
 
-Use this page to find a device in the Security Endpoints list. It is for company users and MSP staff. The list combines endpoint records from Cork and Acronis.
+Use this page to find a device in the Security Endpoints list. It is for company users and MSP staff. The list combines endpoint records from Cork, Acronis, and Bitdefender GravityZone.
 
 ## Before you start
 
 - You need Security read access.
-- Cork or Acronis must be connected. Without either, the **Endpoints** tab does not appear.
-- Your MSP manages integrations and company mapping. See [Enable the Cork integration](/user-guides/integrations/enable-cork-integration) and [Enable the Acronis integration](/user-guides/integrations/enable-acronis-integration).
+- Cork, Acronis, or Bitdefender GravityZone must be connected. Without one of them, the **Endpoints** tab does not appear.
+- Your MSP manages integrations and company mapping. See [Enable the Cork integration](/user-guides/integrations/enable-cork-integration), [Enable the Acronis integration](/user-guides/integrations/enable-acronis-integration), and [Configure Bitdefender GravityZone Integration](/user-guides/integrations/enable-bitdefender-integration).
 
 ## Find a device
 
@@ -22,25 +22,38 @@ Use this page to find a device in the Security Endpoints list. It is for company
     Type in the **Device Name** column filter to narrow the list. Wait for the table to finish loading.
   </Step>
   <Step title="Filter the list">
-    Use the column filters to narrow further. **Status** offers **Online** and **Offline**. **Company** lets you pick companies. **Source** lets you pick one or more sources, and appears when the list holds records from more than one source. **Last Seen** takes a date range.
+    Use the column filters to narrow further. **Status** offers **Online**, **Offline**, and **Unknown**. **Company** lets you pick companies. **Source** lets you pick one or more of the sources in your data. **Last Seen** takes a date range.
 
     <img src="/images/product/security-endpoint-status-filter.png" alt="Endpoint Status filter options: All, Online, and Offline" width="318" height="204" />
   </Step>
   <Step title="Identify the right record">
-    Check **Company**, **OS**, and **Source**. Cork records show **Cork -** followed by the source tool name. Acronis records show **Acronis**. The same device can appear once per source.
+    Check **Company**, **OS**, and **Source**. Cork records show **Cork -** followed by the source tool name. Acronis records show **Acronis**, and Bitdefender GravityZone records show **Bitdefender**. The same device can appear once per source.
   </Step>
   <Step title="Open the details">
     Click a row, away from its checkbox, to open the side panel. See [Read security endpoint details](/user-guides/security/read-endpoint-details).
   </Step>
 </Steps>
 
-The table shows 20 rows per page. A link from the Security Dashboard can open the list already filtered to **Online** or **Offline**. Clear that filter to see every endpoint.
+The table shows 20 rows per page, and you can choose 50, 100, or 250. A link from the Security Dashboard can open the list already filtered to **Online** or **Offline**. Clear that filter to see every endpoint.
 
 ## Read status and dates
 
-- **Status** comes from Acronis. It shows **Online** or **Offline** for Acronis devices and is blank for Cork devices. A blank Status does not mean a Cork device is offline.
-- **Online** does not mean **Protected**. Protection status is in the side panel for Acronis records.
+- **Status** comes from Acronis and Bitdefender. It shows **Online** or **Offline** for their devices and is blank for Cork devices, which count as **Unknown** in the filter. A blank Status does not mean a Cork device is offline. A suspended Bitdefender endpoint counts as **Offline**.
+- **Online** does not mean **Protected**. Protection status is in the side panel for Acronis and Bitdefender records.
 - **Last Seen** is blank for Acronis rows, because Acronis does not report it. The registration date is in the side panel, under **Acronis Agent**. A badge like **45d ago** appears when a date is more than 30 days old.
+
+## Read Bitdefender badges
+
+Bitdefender rows can show badges beside their status:
+
+| Badge | Meaning |
+| --- | --- |
+| **Infected** | GravityZone reports the endpoint as infected. |
+| **Malware detected** | GravityZone detected malware on the endpoint, which is not reported as infected. |
+| **Signatures outdated** | The antivirus signatures are out of date. |
+| **Agent outdated** | The Bitdefender agent is out of date. |
+
+Badges reflect the latest GravityZone sync, every 4 hours. Open the row to see the **Bitdefender agent** section with the agent version, license, last update, policy, network isolation, and protection modules.
 
 ## Follow up on endpoints
 
@@ -49,7 +62,7 @@ Select rows from one company, then open **Actions (N)** in the page header.
 - **Add to Meeting** adds the endpoints to an upcoming meeting agenda. See [Add Cork findings to a meeting agenda](/user-guides/security/add-to-meeting).
 - **Add to Planner** creates one Planner item. It appears only if your role has Planner write or manage access. See [Add security findings to Planner](/user-guides/security/add-to-planner).
 
-Both actions work with Acronis rows, but they handle them differently from Cork rows. **Add to Meeting** adds an Acronis row as a text entry, not a Cork endpoint. **Add to Planner** puts Acronis rows only in the item's **Private Notes**, with no Cork link.
+Both actions work with Acronis and Bitdefender rows, but they handle them differently from Cork rows. **Add to Meeting** adds an Acronis or Bitdefender row as a text entry, not a Cork endpoint. **Add to Planner** puts Acronis and Bitdefender rows only in the item's **Private Notes**, with no Cork link.
 
 The list is read-only. You cannot edit an endpoint, change protection, run a scan, start a backup, or export a CSV here.
 
@@ -58,11 +71,10 @@ The list is read-only. You cannot edit an endpoint, change protection, run a sca
 | Problem | What to do |
 | --- | --- |
 | The list is empty | Clear the column filters and any dashboard filter, then check the company selector. An empty list can also mean the integration has not synced. |
-| **Security integration unavailable** | Cork or Acronis is not connected, or you lack Security read access. Ask your MSP admin. |
+| **Security integration unavailable** | Cork, Acronis, or Bitdefender GravityZone is not connected, or you lack Security read access. Ask your MSP admin. |
 | **Failed to load endpoints** | Reload the page. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
-| A device shows twice | It exists in both Cork and Acronis. Check the **Source** column. |
-| A large environment seems cut off | The list loads up to 1,000 Cork and 500 Acronis records per request. Narrow by company or **Device Name**. |
-| The **Source** filter is missing | It only appears when the loaded records come from more than one source. |
+| A device shows twice | It exists in more than one source, such as Cork and Bitdefender. Check the **Source** column. |
+| A Bitdefender badge looks out of date | Badges reflect the last GravityZone sync, every 4 hours. Ask your MSP to check the sync. |
 
 ## Frequently asked questions
 
@@ -74,7 +86,7 @@ The list is read-only. You cannot edit an endpoint, change protection, run a sca
     Acronis does not report a last-seen time. Check **Status** for the connection state, and the side panel for the registration date.
   </Accordion>
   <Accordion title="Is this the same as the Devices inventory?">
-    No. Security Endpoints lists records from Cork and Acronis. See [Find devices](/user-guides/devices/find-devices) for the device inventory.
+    No. Security Endpoints lists records from Cork, Acronis, and Bitdefender GravityZone. See [Find devices](/user-guides/devices/find-devices) for the device inventory.
   </Accordion>
   <Accordion title="I am a company user. How do I ask about a device?">
     Describe it to the [Home AI Assistant](/user-guides/ticketing/open-a-ticket), including the device name, company, and source, then confirm the request when prompted.
