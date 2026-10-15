@@ -1,147 +1,113 @@
 ---
 title: 'Map Salesbuildr companies for quote access'
-description: 'Link imported Salesbuildr companies to MSPortal companies and understand what unlinking does to imported quotes.'
+description: 'Match imported Salesbuildr companies to MSPortal companies and understand what removing a match does to imported quotes.'
 icon: 'file-invoice-dollar'
 ---
 
-Use the **Map** step in Salesbuildr setup to link each imported Salesbuildr company to the right MSPortal company. Salesbuildr quotes are imported only for mapped companies. Mapping is separate from each company user's permission to see those quotes.
+Use **Import or match companies** on the Salesbuildr connection page to link each imported Salesbuildr company to the right MSPortal company. Salesbuildr quotes are imported only for matched companies. Matching is separate from each company user's permission to see those quotes.
 
 ## Before you start
 
-- You are MSP staff with integration-company mapping access. Company users ask their MSP to fix a link or quote permission.
+- You are MSP staff with integration-company mapping access. Company users ask their MSP to fix a match or quote permission.
 - Salesbuildr is connected. See [Connect and manage Salesbuildr](/user-guides/integrations/enable-salesbuildr-integration).
-- To create a new portal company from this page you also need company-write access and active billing.
+- To import a new portal company from this page you also need company-write access and active billing.
 
-## Map a company
+## Match a company
 
 <Steps>
-  <Step title="Open the Map step">
-    Go to **Settings > Integrations**, manage the **Salesbuildr** connection and select **Map**.
+  <Step title="Open the matching task">
+    Go to **Settings > Integrations**, open the intended **Salesbuildr** connection from the **Active** tab, and select **Import or match companies** in the **Setup guide**.
   </Step>
   <Step title="Find the source company">
-    Wait for the table. Use the **Name** and **Mapped** filters. The **Type** column helps identify the Salesbuildr record. If the company is missing, select **Sync**, wait for it to finish and check for connection errors.
+    The workspace opens on **Import**, which lists every company that still needs a match. Use **Suggested**, **Matched** and **Ignored** to switch views, and **Search companies** to find the record. If no companies have synced yet, select **Sync companies**. For a single missing company, select **Run sync > Companies** in the page header, wait for it to finish and check **Sync activity** for connection errors.
   </Step>
   <Step title="Choose the portal company">
-    In the row's company selector, pick the existing MSPortal company. The row shows **Pending**.
+    For a company with a suggestion, check the proposed company and select **Accept**, or select **Change** to pick another. For a company without one, select **Choose company…** and pick the existing MSPortal company.
   </Step>
-  <Step title="Save">
-    Clear unrelated row checkboxes, then select **Import Selected**. Check that the row shows **Saved**.
+  <Step title="Check the result">
+    Each match saves immediately. Wait for the success message and find the company in **Matched**. There is no separate save step.
   </Step>
-  <Step title="Continue and check quotes">
-    Select **Next** and let the quote sync finish. Then open a known quote under the company to confirm it arrived.
-  </Step>
-</Steps>
-
-The **Mapped** count includes pending choices, so rely on the row's **Saved** status and on what you see when you reopen the step.
-
-## Assign several companies to one portal company
-
-<Steps>
-  <Step title="Select the rows">
-    Check only the Salesbuildr companies you want.
-  </Step>
-  <Step title="Choose the company and assign">
-    Pick an existing company in the bulk selector and select **Assign**. The rows show **Pending** and the selection clears.
-  </Step>
-  <Step title="Save">
-    Review each target, select **Import Selected** and check for **Saved**.
+  <Step title="Import its quotes">
+    Matching does not import quotes. Select **Run sync > Quotes** in the page header, let the sync finish, then open a known quote under the company to confirm it arrived.
   </Step>
 </Steps>
 
-Several source companies can share one portal company. Confirm their quotes should appear under it first.
+Several Salesbuildr companies can match one portal company. Confirm their quotes should appear under it first.
 
-## Use Quick Match
+## Accept strong matches in bulk
 
 <Steps>
-  <Step title="Open Quick Match">
-    Select **Quick Match**.
+  <Step title="Open the review">
+    Select **Accept N strong matches**. Only pairs with 90% confidence or more are included.
   </Step>
   <Step title="Review the pairs">
-    Check each Salesbuildr company and portal company pair. A name score is not proof of the same organization. A narrowed search can hide suggestions that are still selected, so review the full selection.
+    Check each Salesbuildr company and portal company pair, and untick any you want to review yourself. A name score is not proof of the same organization.
   </Step>
-  <Step title="Apply and save">
-    Apply the pairs you want, select **Import Selected** and check for **Saved**.
+  <Step title="Accept">
+    Confirm the review. A batch can partly succeed. Check **Matched** and review only the companies still waiting.
   </Step>
 </Steps>
 
-Quick Match does not import quotes.
+Accepting matches does not import quotes. Run a quote sync afterwards.
 
-## Create a portal company
+## Import a portal company
+
+Search existing companies before importing. On an unmatched row, select **Import** to create a portal company from the Salesbuildr record and match it right away. To import several at once, use **Import companies** and review the selection. Existing companies with the same name are matched instead of duplicated.
+
+If the company is imported but matching fails, choose that company from the row on retry. Leaving setup does not delete it.
+
+**Ignore** sets a record aside from matching; it does not delete the Salesbuildr company. **Restore** in **Ignored** returns it for review.
+
+## Remove or correct a match
 
 <Steps>
-  <Step title="Open Create Company">
-    Use the add-company control on the row.
+  <Step title="Open the matched company">
+    In **Matched**, find the company and select **Change**.
   </Step>
-  <Step title="Create it">
-    Confirm the name and submit. The company is created right away and its mapping stays **Pending**.
+  <Step title="Choose the correct company, or remove the match">
+    Pick the right existing company to move the match, or select **Remove match**. Either change saves right away, with no confirmation.
   </Step>
-  <Step title="Save the mapping">
-    Select **Import Selected** and check for **Saved**.
+  <Step title="Resync quotes if you removed a match">
+    After you match a previously unmatched company again, select **Run sync > Quotes** and check that the quotes appear under the right company.
   </Step>
 </Steps>
 
 <Warning>
-**Import Selected** both saves pending mappings and creates companies for selected unmapped rows. To reuse existing companies, choose them first and clear unrelated selections.
+Removing a match deletes the company's imported Salesbuildr quotes and line items from MSPortal. QuoteWerks behaves differently and keeps its quotes unassigned. The original quotes in Salesbuildr and the portal company are not deleted. Matching the company again does not bring the deleted rows back, so run a quote sync after you rematch. Changing a match to a different company moves its imported quotes to the new company.
 </Warning>
 
-## Remove or correct a mapping
+## Finish setup
 
-<Steps>
-  <Step title="Click the x on the row">
-    On a **Pending** row, the **x** clears the unsaved choice. On a **Saved** row, it removes the link right away, with no confirmation.
-  </Step>
-  <Step title="Choose the correct company">
-    Pick the right existing company in the row selector.
-  </Step>
-  <Step title="Save and resync quotes">
-    Select **Import Selected**, then request a quote sync and check that the quotes appear under the right company.
-  </Step>
-</Steps>
+Select **Continue to Review**, then **Finish setup**. This records that setup is complete. It does not certify every match or start a quote sync. Connect form changes are separate: select **Test connection** and **Save changes** on **Connect** before you leave it.
 
-<Warning>
-Unlinking a Salesbuildr company deletes its imported quotes and line items from MSPortal. QuoteWerks behaves differently and keeps its quotes unassigned. The original quotes in Salesbuildr and the portal company are not deleted. Saving a new link does not bring the deleted rows back, so run a quote sync after you relink.
-</Warning>
-
-If a batch shows an error, some changes may already be saved. Reopen the table, check which rows show **Saved** and retry only the rest.
-
-## Leave the step
-
-**Next** and the step headings try to save pending Map work and request a quote sync. **Complete Setup** also requests a quote sync. Check for errors and confirm the rows show **Saved**. The footer **Back** does not save pending work, so select **Import Selected** before you use it. Connect form changes are separate. Select **Save settings** or **Update credentials** before you leave Connect.
-
-A paused integration keeps its saved mappings but refuses to sync. Ask an MSP administrator to restore the connection, then request the quote import again.
+A paused integration keeps its saved matches but refuses to sync. Ask an MSP administrator to restore the connection, then request the quote import again.
 
 ## Troubleshooting
 
 | Problem | What to do |
 | --- | --- |
-| A company is missing from the table | Select **Sync**, wait, and check for connection errors. |
-| Mapped but no quotes appear | Request a quote sync and check the integration is not paused. |
-| Quotes vanished after an unlink | Relink the company, save, then run a quote sync. |
-| Unwanted companies were created | **Import Selected** created them for selected unmapped rows. Clear unrelated selections next time. |
+| A company is missing from the list | Select **Run sync > Companies**, wait, and check **Sync activity** for connection errors. Supplier, manufacturer, vendor and distributor companies are never listed. |
+| Matched but no quotes appear | Select **Run sync > Quotes** and check the integration is not paused. |
+| Quotes vanished after removing a match | Match the company again, then run a quote sync. |
+| You cannot import a company | Importing a company needs company-write access and active billing. Ask an MSP administrator. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does choosing a portal company save it?">
-    No. The row shows **Pending** until you select **Import Selected** and it shows **Saved**.
+    Yes. Accepting a suggestion, choosing a company or importing a company saves right away.
   </Accordion>
-  <Accordion title="Does bulk Assign save mappings?">
-    No. It stages pending choices. Save with **Import Selected**.
+  <Accordion title="Does matching import quotes?">
+    No. Quotes are imported for matched companies on the next quote sync. Select **Run sync > Quotes** to start one now.
   </Accordion>
-  <Accordion title="Can Import Selected create companies?">
-    Yes, for selected unmapped rows. Pick existing companies first if you only want to link.
+  <Accordion title="What does Remove match do?">
+    It removes the match and the company's imported quotes and line items right away. The original Salesbuildr quotes and the portal company stay.
   </Accordion>
-  <Accordion title="What does the x on a Saved link do?">
-    It removes the link and the company's imported quotes and line items right away. The original Salesbuildr quotes and the portal company stay.
-  </Accordion>
-  <Accordion title="Will relinking restore deleted quotes?">
-    Relinking makes the company eligible for import again. Run a quote sync and check that the quotes reappear.
-  </Accordion>
-  <Accordion title="Does Back save pending mappings?">
-    No. Use **Import Selected** before **Back**.
+  <Accordion title="Will matching again restore deleted quotes?">
+    Matching makes the company eligible for import again. Run a quote sync and check that the quotes reappear.
   </Accordion>
   <Accordion title="Why did only part of my batch save?">
-    A batch can fail after earlier rows saved. Reopen **Map** and check which rows show **Saved**.
+    A batch can fail after earlier pairs saved. Check **Matched** and retry only the rest.
   </Accordion>
 </AccordionGroup>
 
@@ -149,4 +115,4 @@ A paused integration keeps its saved mappings but refuses to sync. Ask an MSP ad
 
 - [Connect and manage Salesbuildr](/user-guides/integrations/enable-salesbuildr-integration)
 - [Troubleshoot Salesbuildr quotes](/user-guides/quotes/troubleshoot-salesbuildr-quotes)
-- [Manage Company quote access](/user-guides/quotes/manage-company-access)
+- [Control company quote access](/user-guides/quotes/manage-company-access)

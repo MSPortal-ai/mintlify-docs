@@ -4,7 +4,7 @@ description: 'Connect your Addigy instance to MSPortal.ai to sync policies and A
 icon: 'apple'
 ---
 
-This guide walks you through connecting your Addigy instance to MSPortal.ai using our streamlined setup wizard. Addigy is a cloud-based Apple device management platform, and this integration syncs your policies and macOS/iOS devices into MSPortal.
+This guide walks you through connecting your Addigy instance to MSPortal.ai. Addigy is a cloud-based Apple device management platform, and this integration syncs your policies and macOS/iOS devices into MSPortal. You choose data, match policies to companies and import devices on the Addigy connection page.
 
 ## Overview
 
@@ -74,11 +74,11 @@ Before proceeding to MSPortal, ensure you have:
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect Addigy in MSPortal
 
-MSPortal provides a guided setup wizard to connect and configure your Addigy integration: **Connect**, **Map** and **Import**.
+The Addigy connection page has five setup tasks: **Connect**, **Choose data**, **Import or match policies**, **Import devices** and **Review**. Select a task in the **Setup guide** to return to it at any time.
 
-### Starting the Wizard
+### Open the connection
 
 <Steps>
   <Step title="Navigate to Integrations">
@@ -86,13 +86,13 @@ MSPortal provides a guided setup wizard to connect and configure your Addigy int
   </Step>
 
   <Step title="Start Setup">
-    Find **Addigy** and click **Connect** to launch the setup wizard. For an existing connection, click **Configure**.
+    Find **Addigy** and select **Connect**. To manage an established setup, open the existing Addigy connection instead.
   </Step>
 </Steps>
 
 ---
 
-### Step 1: Connect
+### Connect
 
 Enter your Addigy API token to establish the connection.
 
@@ -100,15 +100,13 @@ Enter your Addigy API token to establish the connection.
   <Step title="Enter API Token">
     Paste your Addigy V2 API token into the **API Token** field.
 
-    <img src="/images/product/addigy-setup-connection.png" alt="Addigy setup in MSPortal with blank credential inputs" width="1024" height="776" />
-
     <Note>
       Your token is stored securely using encrypted vault storage. It is never exposed in logs or API responses.
     </Note>
   </Step>
 
-  <Step title="Test Connection">
-    Click **Test Connection** to verify your token. You will see a green "Connection tested successfully" message when the test passes.
+  <Step title="Test the connection">
+    Select **Test connection** to verify your token. **Connection verified** appears when the test passes.
 
     If the connection fails:
     - Verify your API token is copied correctly without extra spaces
@@ -116,159 +114,78 @@ Enter your Addigy API token to establish the connection.
     - Confirm your Addigy account has API access enabled
   </Step>
 
-  <Step title="Create Integration">
-    Once the connection test passes, click **Create Integration** to save your credentials and proceed. A successful test alone does not save the connection.
+  <Step title="Save and continue">
+    Once the test passes, select **Save and continue**. This saves the connection and starts discovering your policies. A successful test alone does not save the connection.
   </Step>
 </Steps>
 
 ---
 
-### Step 2: Map Policies
+### Choose data
 
-Map your Addigy policies to MSPortal companies. Addigy uses policies as the primary organizational unit (similar to sites in other RMM tools). Only devices from mapped policies will be available for import.
+Addigy has no optional datasets, so MSPortal syncs all supported Addigy data. Open **Choose data** to start the initial sync when it is offered and follow its progress. The first sync runs in the background and may take 10 minutes or more depending on device count.
+
+---
+
+### Import or match policies
+
+Map your Addigy policies to MSPortal companies. Addigy uses policies as the primary organizational unit (similar to sites in other RMM tools). Saved matches decide which company receives each policy's devices.
 
 <Steps>
-  <Step title="Wait for Initial Sync">
-    After creating the integration, MSPortal begins syncing your policies from Addigy. This may take a few minutes depending on the number of policies.
-
-    <Info>
-    If no policies appear, wait a few minutes and click **Check for Policies**. The initial sync runs in the background and may take 10 minutes or more depending on device count.
-    </Info>
+  <Step title="Load policies">
+    Open **Import or match policies**. If no policies appear yet, select **Sync policies** and wait a few minutes for the background sync.
   </Step>
 
-  <Step title="Review Policy List">
-    The mapping table displays all policies from Addigy with:
-    - **Name** - The name of the policy in Addigy
-    - **Mapped** - The MSPortal company the policy is linked to
-    - **Status** - **Pending** for a link that is not saved yet, **Saved** for a saved link
-
-    The **Total Items**, **Mapped** and **Unmapped** tiles above the table show your progress. Click a tile to filter the list to those policies.
+  <Step title="Review suggestions">
+    Use **Suggested** to review proposed matches. Each suggestion shows its confidence. Select **Accept** on a row to save that match, or use the **Accept strong matches** button to accept every pair with 90% confidence or more. Untick any pair you want to review yourself.
   </Step>
 
-  <Step title="Use Quick Match (Recommended)">
-    Click **Quick Match** to find companies with similar names. A **Quick Match Results** dialog lists each suggested match with its confidence score.
-
-    - Matches at 70% confidence or higher are selected by default. Move the slider to select more or fewer matches.
-    - Check or uncheck individual matches, then click **Apply Matches**.
-    - Applied matches appear as **Pending** in the table. They are not saved yet.
+  <Step title="Match the remaining policies">
+    Use **Import** to find policies without a match. Select **Choose company…** to pick an existing MSPortal company, or select **Import** on the row to create a company from the policy and match it. **Import companies** imports several policies at once; existing companies with the same name are matched instead of duplicated. Check for an existing company first to avoid duplicates.
   </Step>
 
-  <Step title="Manually Map Remaining Policies">
-    For policies that were not matched:
-
-    1. Find the policy in the list
-    2. Click the company dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-    4. The row shows **Pending** until you save it
-
-    To link several policies to the same company, check their rows, choose the company in the selection bar above the table, and click **Assign**.
-
-    <Tip>
-    If a company does not exist yet, click the **+** button in the row (or **Create new company** above the table) to create it. Check for an existing company first to avoid duplicates.
-    </Tip>
-  </Step>
-
-  <Step title="Save Your Mappings">
-    Click **Import Selected** to save the pending links. The button shows how many changes are waiting. Clicking **Next** also saves pending links before moving on.
-  </Step>
-
-  <Step title="Unmap Policies (Optional)">
-    To remove a saved mapping, click the **X** button next to the mapped company name. Removing a saved link takes effect immediately. Removing a pending link only discards the draft.
+  <Step title="Check saved matches">
+    Use **Matched** to review saved links. To unlink a policy, select **Change** and choose **Remove match**; it takes effect immediately. Use **Ignore** for policies you never want to map.
   </Step>
 </Steps>
 
+Each match saves as soon as you apply it; wait for the confirmation before you leave. Review sync results separately from the matching result.
+
 <Warning>
-You must map at least one policy before proceeding to device import. Devices from unmapped policies will not appear in the import staging area.
+Match at least one policy before you import devices. Devices from unmatched policies show **Match company first** and are not imported.
 </Warning>
 
 ---
 
-### Step 3: Import Devices
+### Import devices
 
-After mapping policies, import devices from Addigy into your MSPortal asset inventory.
+Open **Import devices** to map device types and import devices on the connection page. Every change saves immediately. For more detail, see [Import Devices](/user-guides/integrations/import-devices).
 
 <Steps>
-  <Step title="Open Device Import">
-    Click **Open Device Import** to access the full device import interface. This opens a dedicated page for managing device imports.
+  <Step title="Match device types">
+    Under **Match device types**, choose the MSPortal device type each Addigy type becomes. Select **Match all suggested** to accept the suggestions, **Match the rest with AI** for the remaining types, or **Choose device type…** on a row. Use **Ignore** on types you never want to import.
   </Step>
 
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard. You can always return to the device import page later from **Settings > Integrations**. Completing setup does not mean every background sync or import has finished.
+  <Step title="Turn on Auto-import (Optional)">
+    Turn on **Auto-import** for device types you want imported automatically. New devices of those types are imported during each sync cycle. A type needs a device type before it can be auto-imported.
+  </Step>
+
+  <Step title="Import staged devices">
+    **Staged devices** lists the devices Addigy sent that are waiting to be imported. Select devices and choose **Import _n_ selected**, or choose **Import all matched** to import every device whose type is matched. To hide devices you never want to import, select them and choose **Ignore _n_ selected**.
+  </Step>
+
+  <Step title="Check the result">
+    Check the import result and the new records in the Devices module.
   </Step>
 </Steps>
+
+The staged device list shows each device's name, type, company, model, operating system and import status. Addigy devices are always made by Apple.
 
 ---
 
-## Part 3: Device Import
+### Review
 
-The device import page lets you configure device type mappings and selectively import devices. For a detailed guide on device type mappings, auto-sync, and category ignore, see [Import Devices](/user-guides/integrations/import-devices).
-
-### Device Type Mappings
-
-Before importing devices, map Addigy device types to your MSPortal device types.
-
-<Steps>
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically map Addigy device types to existing MSPortal device types with similar names.
-  </Step>
-
-  <Step title="Use Quick Create for Remaining Types">
-    Click **Quick Create** to automatically create new MSPortal device types for any unmatched Addigy types.
-  </Step>
-
-  <Step title="Enable Auto-Sync (Optional)">
-    Turn on **Auto-Sync** for device types you want automatically imported. New devices of these types will be imported without manual intervention during each sync cycle. Click **Enable All Auto-Sync** to turn it on for every mapped type.
-
-    <Note>
-    Auto-sync requires a device type mapping. You must select a "Maps To" value before enabling auto-sync.
-    </Note>
-  </Step>
-
-  <Step title="Ignore Categories (Optional)">
-    Check the **Ignore** checkbox for device types you never want to import. Ignored categories are dimmed and excluded from pending import counts.
-  </Step>
-</Steps>
-
-### Device Preview
-
-The **Device Preview** table shows devices ready for import from mapped policies.
-
-<Steps>
-  <Step title="Trigger a Sync">
-    Click **Sync Now** in the page header to fetch the latest devices from Addigy.
-
-    <Info>
-    The initial sync may take some time to complete depending on the size of your fleet. Subsequent syncs are faster.
-    </Info>
-  </Step>
-
-  <Step title="Review Staged Devices">
-    The table displays:
-    - **Name** - Hostname of the device
-    - **Type** - Addigy device classification
-    - **Company** - The mapped MSPortal company
-    - **Manufacturer** - Always Apple for Addigy devices
-    - **Model** - Device model (e.g., MacBook Pro, iMac)
-    - **OS** - Operating system version
-    - **Status** - Whether the device has been imported
-  </Step>
-
-  <Step title="Search and Filter Devices">
-    Use the search bar to find specific devices. Toggle **Show unimported only** to hide devices that have already been imported.
-  </Step>
-
-  <Step title="Select and Import">
-    1. Check the boxes next to devices you want to import
-    2. Click **Import Selected** to import the selected devices
-    3. Imported devices appear in your MSPortal device inventory
-
-    To hide devices you never want to import, select them and click **Ignore Selected**.
-  </Step>
-</Steps>
-
-<Tip>
-For bulk imports, use the device type mapping's "Import All" button or click "Import All Mapped" instead of selecting individual devices.
-</Tip>
+Open **Review** and select **Finish setup** once the required tasks are complete. Finishing setup does not mean every background sync or device import has completed.
 
 ---
 
@@ -310,44 +227,39 @@ Addigy data syncs automatically on the following schedule:
 | Sync Type | Schedule | Description |
 |-----------|----------|-------------|
 | **Policies** | Daily at 2:00 AM UTC | Syncs all policies from Addigy |
-| **Devices** | Every 4 hours | Syncs devices from mapped policies, updates staged data, and auto-imports types with Auto-Sync on |
+| **Devices** | Every 4 hours | Syncs devices from mapped policies, updates staged data, and auto-imports types with **Auto-import** on |
 
-You can trigger a manual sync at any time by clicking **Sync Now** on the device import page.
+You can request a sync at any time with **Run sync** on the Addigy connection page. A scheduled time does not guarantee a successful run, so check **Sync activity** when data looks old.
 
 ---
 
 ## Managing Your Integration
 
-After setup, manage your integration from **Settings > Integrations**:
+After setup, manage the integration from its connection page:
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the setup wizard to modify settings or re-map policies |
-| **Import Devices** | Access the device import page directly |
-| **Resync** | Trigger a fresh sync of all data from Addigy |
-| **Delete** | Available inside the Configure wizard. It opens a **Delete Addigy Integration?** confirmation and permanently removes the integration. It does not revoke the token in Addigy. |
+| **Setup guide** tasks | Reopen any task to change settings, re-match policies or import devices |
+| **Overview** and **Sync activity** | Check connection status, sync results and errors |
+| **Run sync** | Request a fresh sync of all data, or one data type, from Addigy |
+| **More actions** > **Disconnect…** | Removes the stored token, policy matches and synced data after confirmation. It cannot be undone, and it does not revoke the token in Addigy. |
 
-### Re-running the Wizard
-
-You can return to any step of the setup wizard at any time:
-
-1. Go to **Settings > Integrations**
-2. Click **Configure** on the Addigy connection
-3. Navigate between steps using the step indicators or Back/Next buttons
-
-### Retesting the Connection
+### Replacing or Retesting the Token
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the Addigy connection.
+  <Step title="Open the connection">
+    Go to **Settings > Integrations** and open the Addigy connection.
   </Step>
-  <Step title="Retest">
-    On the Connect step, click **Retest Connection**. MSPortal tests the saved token. You can also paste a token into **API Token** to test it.
+  <Step title="Open Connect">
+    Select **Connect** in the **Setup guide**. The stored token shows masked.
+  </Step>
+  <Step title="Retest or replace">
+    To check the stored token, select **Test connection** without changing the field. To replace it, paste a new V2 token, select **Test connection**, then select **Save changes**.
   </Step>
 </Steps>
 
 <Note>
-Retesting does not save a new token. The Connect step on an existing Addigy connection has no credential update action. If you need to replace the token, contact support@msportal.ai. Do not delete a working connection just to diagnose a failed test, because deleting removes its mappings.
+Retesting alone does not save a new token. Do not disconnect a working connection just to diagnose a failed test, because disconnecting removes its matches and synced data.
 </Note>
 
 ---
@@ -368,56 +280,56 @@ Retesting does not save a new token. The Connect step on an existing Addigy conn
     3. Confirm your Addigy account has API access permissions
   </Accordion>
 
-  <Accordion title="No policies appear in mapping step">
+  <Accordion title="No policies appear in the policy task">
     **Causes:**
     - Initial sync still in progress
     - API token lacks read permissions
 
     **Solutions:**
     1. Wait a few minutes for the background sync to complete
-    2. Click **Check for Policies**, or **Resync** on the Integrations page
+    2. Select **Sync policies**, or use **Run sync** on the connection page
     3. Verify your API token has the necessary read permissions in Addigy
+    4. Avoid creating extra connections to work around an empty list
   </Accordion>
 
   <Accordion title="A mapping disappeared">
-    **Cause:** The link was still **Pending** when you left the page. Pending links are drafts until you save them.
-
-    **Solution:** Re-select the company and click **Import Selected** (or **Next**). Check that the row shows **Saved**.
+    Check the result of the last matching action, then reopen **Import or match policies** and look in **Matched** to confirm the saved state. Removing a saved match takes effect immediately.
   </Accordion>
 
   <Accordion title="No devices in staging area">
     **Causes:**
-    - No policies have been mapped to companies
+    - No policies have been matched to companies
     - Device sync still in progress
     - Policies do not have any enrolled devices
 
     **Solutions:**
-    1. Map at least one policy to a company in the Map step and save it
+    1. Match at least one policy to a company in **Import or match policies**
     2. Wait for the device sync to complete (can take several minutes initially)
-    3. Click **Sync Now** to trigger a fresh sync
+    3. Use **Run sync** to request a fresh sync
   </Accordion>
 
   <Accordion title="Import fails for some devices">
     **Causes:**
     - Device type not mapped
-    - Policy mapping was removed
+    - Policy match was removed
+    - Device type or device is ignored
 
     **Solutions:**
-    1. Ensure all device types have a "Maps To" value configured
-    2. Verify the policy is still mapped to a company
+    1. Ensure every device type you want has a device type under **Match device types**
+    2. Verify the policy is still matched to a company
     3. Check for error messages in the import results
   </Accordion>
 
-  <Accordion title="Auto-sync not importing new devices">
+  <Accordion title="Auto-import not importing new devices">
     **Causes:**
-    - Auto-sync not enabled for the device type
+    - **Auto-import** not turned on for the device type
     - Device type not mapped
-    - Policy not mapped to a company
+    - Policy not matched to a company
 
     **Solutions:**
-    1. Enable Auto-Sync for the device type
-    2. Ensure the device type has a "Maps To" mapping configured
-    3. Verify the device's policy is mapped to a company
+    1. Turn on **Auto-import** for the device type
+    2. Ensure the device type is mapped to an MSPortal device type
+    3. Verify the device's policy is matched to a company
   </Accordion>
 
   <Accordion title="Extended device data not showing">
@@ -427,8 +339,26 @@ Retesting does not save a new token. The Connect step on an existing Addigy conn
 
     **Solutions:**
     1. Wait for the next sync cycle to populate extended data
-    2. Click **Sync Now** to trigger a manual refresh
+    2. Use **Run sync** to request a manual refresh
     3. Verify the device is online in your Addigy portal
+  </Accordion>
+
+  <Accordion title="Inventory is out of date">
+    Check the last successful sync in **Sync activity**, whether the connection is paused, and any connection errors.
+  </Accordion>
+</AccordionGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Test connection save the integration?">
+    No. For a new connection, complete the successful test and then choose **Save and continue**. On an existing connection, retesting is separate from **Save changes**.
+  </Accordion>
+  <Accordion title="Are suggested links saved automatically?">
+    No. Suggestions wait for your review. Accepting a suggestion saves its link immediately; removing a saved link also takes effect immediately.
+  </Accordion>
+  <Accordion title="Does Finish setup mean all devices are imported?">
+    No. Device discovery, saved matches and device imports have separate results. Check **Import devices** and the resulting inventory.
   </Accordion>
 </AccordionGroup>
 
@@ -438,16 +368,16 @@ Retesting does not save a new token. The Connect step on an existing Addigy conn
 
 <CardGroup cols={2}>
   <Card title="Map Policies First" icon="sitemap">
-    Always map your Addigy policies to companies before trying to import devices. Unmapped policy devices will not appear in staging.
+    Always match your Addigy policies to companies before trying to import devices. Devices from unmatched policies cannot be imported.
   </Card>
-  <Card title="Use Quick Match" icon="wand-magic-sparkles">
-    Start with Quick Match for policy mapping, then manually adjust any incorrect matches. It saves significant time.
+  <Card title="Accept Strong Matches" icon="wand-magic-sparkles">
+    Start with **Accept strong matches** for policies, then review the rest yourself. It saves significant time.
   </Card>
-  <Card title="Enable Auto-Sync" icon="rotate">
-    For device types you always want imported (like MacBooks and iMacs), enable Auto-Sync to reduce manual work.
+  <Card title="Turn On Auto-import" icon="rotate">
+    For device types you always want imported (like MacBooks and iMacs), turn on **Auto-import** to reduce manual work.
   </Card>
   <Card title="Ignore Unwanted Types" icon="eye-slash">
-    Use the Ignore checkbox to permanently hide device types you do not manage. This keeps your pending import counts clean and accurate.
+    Use **Ignore** to hide device types you do not manage. This keeps your import list clean.
   </Card>
 </CardGroup>
 
@@ -464,9 +394,10 @@ Retesting does not save a new token. The Connect step on an existing Addigy conn
 
 ## Related Resources
 
-- [Import Devices](/user-guides/integrations/import-devices) - Detailed guide on device type mappings, auto-sync, and category ignore
+- [Import Devices](/user-guides/integrations/import-devices) - Detailed guide on device type mappings, auto-import, and ignoring types
+- [Import or match companies](/user-guides/integrations/import-companies) - General company import guide
+- [Integration company mapping](/user-guides/settings/integration-company-mapping) - Review saved company mappings
 - [Devices Module](/user-guides/devices/index) - Managing devices in MSPortal
-- [Import Companies](/user-guides/integrations/import-companies) - General company import guide
 - [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) - Troubleshooting sync issues
 - [Datto RMM Integration](/user-guides/integrations/enable-datto-rmm-integration) - Similar RMM integration guide
 

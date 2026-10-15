@@ -4,7 +4,7 @@ description: 'Connect Phin Security to MSPortal.ai to sync security awareness tr
 icon: 'shield-halved'
 ---
 
-This guide walks you through connecting Phin Security to MSPortal.ai using the guided setup wizard.
+Connect Phin Security to review synchronized training status, campaign information and report artifacts alongside your client data. This is an **MSP setup task** that needs integration management permission. Company users use the training and reporting views their IT provider makes available.
 
 ## Overview
 
@@ -57,33 +57,17 @@ Before connecting to MSPortal.ai, you need API credentials from Phin.
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Set Up Phin in MSPortal
 
-MSPortal.ai provides a guided 4-step wizard to connect and configure your Phin Security integration.
+Phin setup runs on its connection page. The **Setup guide** rail lists the tasks: **Connect**, **Choose data**, **Import or match companies** and **Review**.
 
-### Starting the Wizard
-
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
-
-  <Step title="Find Phin Security">
-    Locate the **Phin Security** card under **Add integration**.
-  </Step>
-
-  <Step title="Start Setup">
-    Click **Connect** on its row to launch the setup wizard. If Phin is already connected, click **Configure** on its row under **Connected Services** instead, so you don't create a second connection.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your Phin credentials to establish the connection.
+### Connect
 
 <Steps>
+  <Step title="Open the connection">
+    In MSPortal.ai, go to **Settings > Integrations**, open the **Directory** tab, find **Phin Security**, and choose **Connect**. If Phin is already connected, open that connection from the **Active** tab instead, so you don't create a second connection.
+  </Step>
+
   <Step title="Enter Credentials">
     Fill in the three credential fields:
 
@@ -94,14 +78,12 @@ Enter your Phin credentials to establish the connection.
     | **Client Secret** | The Client Secret from your Phin API credentials |
 
     <Note>
-      Your credentials are stored securely using Supabase Vault encryption. They are never exposed in logs or API responses.
+      Credentials are stored in the vault and never shown again. They are never exposed in logs or API responses.
     </Note>
   </Step>
 
   <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials.
-
-    On success, you'll see a confirmation showing your Phin partner name and the number of companies found, for example "Connected to Acme MSP (42 companies)".
+    Choose **Test connection** to verify your credentials. On success, you see your Phin partner name, for example "Connected to Acme MSP".
 
     If the connection fails:
     - Verify the Partner ID, Client ID, and Client Secret were copied without extra spaces
@@ -109,110 +91,36 @@ Enter your Phin credentials to establish the connection.
     - Check that your Phin account has API access enabled
   </Step>
 
-  <Step title="Connect">
-    Once the connection test passes, click **Connect Phin** to save your credentials and create the integration. A successful test on its own does not save anything.
-
-    When editing an existing integration, the button is labeled **Save Connection**.
+  <Step title="Save">
+    Once the test passes, choose **Save and continue** to save your credentials and create the connection. A successful test on its own does not save anything.
   </Step>
 </Steps>
 
----
+### Choose data
 
-### Step 2: Configure
+Open **Choose data** to choose what MSPortal syncs from Phin. All four datasets are on by default. Each switch saves as soon as you change it, and a dataset you turn off stops syncing on the next run.
 
-Choose which data types sync from Phin. All four options are enabled by default.
+| Option | Description |
+|--------|-------------|
+| **Companies** | Refresh Phin company inventory for mapping. |
+| **Training Status** | Sync user-level awareness training and phishing aggregates. |
+| **Active Campaigns** | Sync active Phin campaign metadata for each mapped company. |
+| **Report Artifacts** | Sync Phin report PDF metadata for Security Awareness reports. |
 
-<Steps>
-  <Step title="Review Sync Options">
-    Toggle each data type on or off:
+### Import or match companies
 
-    | Option | Description |
-    |--------|-------------|
-    | **Companies** | Refresh Phin company inventory for mapping. |
-    | **Training Status** | Sync user-level awareness training and phishing aggregates. |
-    | **Active Campaigns** | Sync active Phin campaign metadata for each mapped company. |
-    | **Report Artifacts** | Sync Phin report PDF metadata for Security Awareness reports. |
-  </Step>
+Open **Import or match companies** to match each Phin company to an MSPortal company. This decides which company each record belongs to. Only data from matched companies syncs to MSPortal.
 
-  <Step title="Save Settings">
-    Click **Save Sync Settings** to apply your choices, then click **Next**.
+- If no companies appear, wait for the first sync or start one from the empty list. It runs in the background and usually completes within a minute.
+- Review the **Suggested** matches and choose **Accept**, or use **Accept N strong matches** to accept every suggestion at 90% confidence or more.
+- In the **Import** view, pick the correct MSPortal company from **Choose company…**, or use **Import company** to create one. **Import companies** creates several at once; an existing company with the same name is matched instead of duplicated.
+- Use **Ignore** for a Phin company you don't want to match, and **Restore** to bring it back.
 
-    <Note>
-      Toggling a switch does not save it. **Next** stays unavailable until you click **Save Sync Settings**.
-    </Note>
-  </Step>
-</Steps>
+Matches, imports and **Remove match** save immediately. Matching establishes company scope; it does not invite users or grant portal roles.
 
----
+### Review
 
-### Step 3: Map Companies
-
-Map Phin companies to your MSPortal companies. This determines which data syncs to which company.
-
-<Steps>
-  <Step title="Sync Companies">
-    If no companies appear, click **Sync Companies** to fetch them from Phin. The sync runs in the background and usually completes within a minute.
-  </Step>
-
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Phin companies to MSPortal companies based on name similarity. Review the suggested matches and apply the ones that look correct.
-  </Step>
-
-  <Step title="Manual Mapping">
-    For companies that weren't automatically matched:
-
-    1. Find the company in the list
-    2. Click the **Select company** dropdown in the "Mapped To" column
-    3. Search for and select the correct MSPortal company
-
-    To remove a mapping, use the unmap button next to the company badge. Removing a saved mapping takes effect immediately.
-  </Step>
-
-  <Step title="Create New Companies">
-    If a Phin company doesn't have a corresponding MSPortal company, use **Create new company** to add one. New companies are automatically mapped to their Phin counterparts.
-
-    <Note>
-      MSPortal creates the new company right away, but its mapping stays **Pending** until you save it in the next step.
-    </Note>
-  </Step>
-
-  <Step title="Import Selected">
-    Pending mappings show a **Pending** badge. Click **Import Selected** to save them, or click **Next**, which saves pending mappings automatically.
-
-    <Warning>
-      You must map at least one company before proceeding. Only data from mapped companies is synced to MSPortal.
-    </Warning>
-
-    When you advance past this step, MSPortal automatically starts a sync for the newly mapped companies.
-  </Step>
-</Steps>
-
----
-
-### Step 4: Status
-
-Review the sync status and finish setup.
-
-<Steps>
-  <Step title="Review Sync Stats">
-    The Status step displays counts for each data type:
-
-    - Companies
-    - Training users
-    - Active campaigns
-    - Report artifacts
-
-    The "Last synced" timestamp shows when data was last updated. If data hasn't appeared yet, the sync starts automatically after company mappings are saved and may take a few minutes.
-  </Step>
-
-  <Step title="Explore Your Data">
-    Use the **Security Training** and **Security Awareness** buttons to jump directly to the synced data.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page. Background syncs keep running after you leave, so reopen the Status step later if counts are still empty.
-  </Step>
-</Steps>
+Open **Review** and choose **Finish setup** once the required tasks are complete. Background syncs keep running after setup finishes, so check **Overview** and **Sync activity** later if counts are still empty.
 
 ---
 
@@ -222,7 +130,7 @@ Phin Security integration syncs the following data types to MSPortal:
 
 ### Companies
 
-Your Phin company inventory, used for mapping Phin companies to MSPortal companies.
+Your Phin company inventory, used for matching Phin companies to MSPortal companies.
 
 ### Training Status
 
@@ -238,7 +146,7 @@ Metadata for active Phin campaigns running in each mapped company.
 
 ### Report Artifacts
 
-Metadata for Phin report PDFs, including report type, scope, file name, and creation date. These feed Security Awareness reporting in MSPortal.
+Metadata for Phin report PDFs, including report type, scope, file name, and creation date. These feed Security Awareness reporting in MSPortal. A report-artifact count describes synced metadata; it does not guarantee a PDF is downloadable.
 
 ---
 
@@ -254,42 +162,40 @@ After initial setup, data syncs automatically:
 | Report Artifacts | Daily (06:55 UTC) |
 
 <Note>
-A sync also runs automatically right after you save company mappings in the wizard.
+To refresh data without waiting for the daily sync, choose **Run sync** on the connection page, then **All data** or one dataset.
 </Note>
 
 ---
 
 ## Managing Your Integration
 
-After setup, manage your integration from **Settings > Integrations**:
+After setup, open the Phin connection from **Settings > Integrations**. The **Manage** group in the **Setup guide** holds **Overview** and **Sync activity** for connection status and background results.
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the wizard to update credentials, sync settings, or company mappings |
-| **Resync** | Trigger a full refresh of all enabled Phin data types |
-| **Delete** | Remove the integration (available in the wizard footer) |
+| **Run sync** | Refresh **All data** or one dataset now |
+| **Connect** | Test the saved credentials or enter replacements |
+| **Choose data** | Turn datasets on or off |
+| **More actions › Rename** | Rename the connection |
+| **More actions › Disconnect…** | Remove the connection |
 
 ### Updating Your Credentials
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the Phin Security card.
+  <Step title="Open Connect">
+    Open the Phin connection and choose **Connect**.
   </Step>
   <Step title="Enter New Credentials">
-    On the Connect step, update the Partner ID, Client ID, or Client Secret.
+    Update the Partner ID, Client ID, or Client Secret. Leave the masked Client Secret unchanged to keep the stored secret.
   </Step>
   <Step title="Test and Save">
-    Click **Test Connection** to verify, then click **Save Connection**.
-
-    <Note>
-      The saved Client Secret shows as a masked value. **Test Connection** stays disabled until you type the actual Client Secret, even if you only changed the Partner ID or Client ID.
-    </Note>
+    Choose **Test connection** to verify, then choose **Save changes**. A test alone does not save a replacement.
   </Step>
 </Steps>
 
-### Deleting the Integration
+### Disconnecting the Integration
 
-Click **Delete** in the wizard footer, then confirm in the **Delete Phin Security?** dialog. This removes the integration, stored credentials, mapped Phin data, and sync state for your tenant.
+Open **More actions** on the connection page and choose **Disconnect…**. This removes the stored credentials, the matches between Phin companies and your companies, and the data synced from Phin. It does not revoke the credentials in Phin.
 
 ---
 
@@ -298,18 +204,41 @@ Click **Delete** in the wizard footer, then confirm in the **Delete Phin Securit
 | Issue | Solution |
 |-------|----------|
 | Connection test fails | Verify the Partner ID, Client ID, and Client Secret are correct and haven't been revoked |
-| **Test Connection** is disabled on an existing connection | Type the actual Client Secret. The masked value cannot be used for a test |
-| Sync settings reverted after leaving the Configure step | Click **Save Sync Settings** before **Next** |
-| No companies in the Map step | Click "Sync Companies" and wait a minute for the background sync to complete |
-| Data not syncing | Ensure companies are mapped and the relevant sync toggle is enabled in the Configure step |
-| Missing report artifacts | Confirm the "Report Artifacts" toggle is on and the company is mapped |
-| Stale data | Data refreshes daily; use **Resync** on the integration row for an immediate refresh |
+| Test fails on an existing connection | Keep the masked secret to test the saved credentials, or enter a matching replacement. Resolve the reported validation error |
+| No companies to match | Check the credentials, that the connection is saved and the **Companies** dataset is on, then wait for the first sync |
+| Company has no training or campaigns | Check its match, the relevant switch in **Choose data**, that Phin has data for it, and the last successful sync |
+| Missing report artifacts | Confirm **Report Artifacts** is on in **Choose data** and the company is matched |
+| Setup is finished but counts are missing | **Finish setup** does not wait for syncs. Check **Sync activity** and the synced records |
+| Stale data | Data refreshes daily; use **Run sync** on the connection page for an immediate refresh |
+
+---
+
+<AccordionGroup>
+  <Accordion title="Does Test connection save my Phin credentials?">
+    No. Use **Save and continue** for a new connection or **Save changes** for tested replacements.
+  </Accordion>
+  <Accordion title="Do Phin sync switches save immediately?">
+    Yes. Each switch in **Choose data** saves when changed.
+  </Accordion>
+  <Accordion title="Can I test a saved Phin secret?">
+    Yes. Leave the masked secret unchanged to test the saved value. Enter a replacement if you change the associated account details.
+  </Accordion>
+  <Accordion title="Can I undo a removed match by closing the Phin connection page?">
+    No. **Remove match** saves immediately. Match the correct company again if you need to restore it.
+  </Accordion>
+  <Accordion title="Does Finish setup mean every Phin dataset has finished syncing?">
+    No. Background syncs can continue. Check matches, dataset switches, **Sync activity** and the training or reporting view.
+  </Accordion>
+  <Accordion title="Can a company user configure Phin?">
+    No. This setup is for MSP staff with integration management permission. Company users access only the training and reporting views their IT provider enables.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
 ## Security & Privacy
 
-- **Credential Storage**: Your Phin credentials are encrypted using Supabase Vault and never exposed in logs or responses
+- **Credential Storage**: Your Phin credentials are encrypted in the vault and never exposed in logs or responses
 - **Data Isolation**: All synced data is tenant-isolated and only visible to your organization
 - **Read-Only Access**: MSPortal only reads Phin data; it never modifies your Phin configuration
 
@@ -318,6 +247,8 @@ Click **Delete** in the wizard footer, then confirm in the **Delete Phin Securit
 ## Next Steps
 
 After setting up the Phin Security integration:
+
+- [Import or match companies](/user-guides/integrations/import-companies)
 
 <CardGroup cols={2}>
   <Card title="Training Module" icon="graduation-cap" href="/user-guides/training/index">

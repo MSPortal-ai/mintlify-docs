@@ -1,134 +1,98 @@
 ---
 title: 'Map QuoteWerks customers to companies'
-description: 'Link imported QuoteWerks customers to MSPortal companies with the company picker, bulk Assign and Quick Match.'
+description: 'Match imported QuoteWerks customers to MSPortal companies, accept suggestions, and import new companies.'
 icon: 'file-invoice-dollar'
 ---
 
-Use the **Map** step in QuoteWerks setup to link each imported QuoteWerks customer to the right MSPortal company. A saved link decides which company a customer's quotes and line items belong to.
+Use **Import or match companies** on the QuoteWerks connection page to link each imported QuoteWerks customer to the right MSPortal company. A saved match decides which company a customer's quotes and line items belong to. Matching is separate from each user's permission to read quotes.
 
 ## Before you start
 
-- You are MSP staff with integration-company mapping access. Company users ask their MSP to fix a mapping.
+- You are MSP staff with integration-company mapping access. Company users ask their MSP to fix a match.
 - QuoteWerks is connected and its customers have been imported. See [Connect and manage QuoteWerks](/user-guides/integrations/enable-quotewerks-integration).
-- To create a new portal company from this page you also need company-write access and active billing.
+- To import a new portal company from this page you also need company-write access and active billing.
 
-## Find the customer
+## Find a customer
 
 <Steps>
-  <Step title="Open the Map step">
-    Go to **Settings > Integrations**, manage the **QuoteWerks** connection and open **Map**.
+  <Step title="Open the matching task">
+    Go to **Settings > Integrations**, open the intended **QuoteWerks** connection from the **Active** tab, and select **Import or match companies** in the **Setup guide**. The workspace is titled **Import or match QuoteWerks customers**.
   </Step>
-  <Step title="Find the row">
-    Wait for the customer table to load. Use the **Name** and **Mapped** filters to find the customer. The **QuoteWerks ID** column shows the source record. You never type it in.
+  <Step title="Choose a view">
+    The workspace opens on **Import**, which lists every customer that still needs a company. Use **Suggested** for customers with a proposed company, **Matched** to review saved matches, and **Ignored** for customers you set aside.
+  </Step>
+  <Step title="Search">
+    Use **Search customers** to find the customer and check its identity.
   </Step>
   <Step title="Import missing customers">
-    If a new customer is missing, select **Sync** and wait for the customer import to finish.
+    If no customers have synced yet, select **Sync customers** and wait for them to arrive. For a single missing customer on an existing connection, select **Run sync > Customers** in the page header, then check again.
   </Step>
 </Steps>
 
-The **Total Items**, **Mapped** and **Unmapped** cards count pending choices too. Check each row's **Pending** or **Saved** status to see what is really stored.
-
-## Link one customer to an existing company
+## Match a customer to a company
 
 <Steps>
-  <Step title="Choose the company">
-    In the customer's company selector, search for the MSPortal company and select it. Check the name carefully when several companies look alike.
-  </Step>
-  <Step title="Review the pending choice">
-    The row shows **Pending**. Nothing is saved yet. Clear any unrelated row checkboxes, because **Import Selected** can create new companies for selected unmapped rows.
-  </Step>
-  <Step title="Save the link">
-    Select **Import Selected** and wait for the row to show **Saved**. This saves pending mappings even when no row is checked.
+  <Step title="Accept or choose">
+    For a customer with a suggestion, check the proposed company and its confidence, then select **Accept**. To pick a different company, select **Change**. For a customer without a suggestion, select **Choose company…** and search for the MSPortal company. Check the name carefully when several companies look alike.
   </Step>
   <Step title="Check the result">
-    Reopen the **Map** step to confirm the company, then open a quote for that customer under **Quotes**. Saving a link also moves the customer's already imported quotes and line items to the company, so you do not need to reimport.
+    Each match saves immediately. Wait for the success message, then find the customer in **Matched**. Navigation does not submit a separate set of pending links.
+  </Step>
+  <Step title="Check a quote">
+    Open a quote for that customer under **Quotes**. Saving a match also moves the customer's already imported quotes and line items to the company, so you do not need to reimport.
   </Step>
 </Steps>
 
-<Frame caption="Sync, Quick Match and Import Selected on the Map step. Quick Match and Import Selected are disabled here because nothing is waiting to match or save.">
-  <img src="/images/product/quotewerks-mapping-actions.png" alt="Sync, Quick Match and Import Selected controls in the QuoteWerks Map step." width="694" height="72" />
-</Frame>
+Several customers can match one portal company. Confirm their quotes belong under that company before combining them.
 
-## Assign several customers to one company
+## Accept strong matches in bulk
 
 <Steps>
-  <Step title="Select the customers">
-    Check the boxes for only the customers you want.
+  <Step title="Open the review">
+    Select **Accept N strong matches**. Only pairs with 90% confidence or more are included.
   </Step>
-  <Step title="Choose the company">
-    In the bulk company selector, pick the existing company.
+  <Step title="Review every pair">
+    Untick any pair you want to review yourself. A high score is only a name match, so confirm the two records are the same organization.
   </Step>
-  <Step title="Assign">
-    Select **Assign**. The rows show **Pending** and the selection clears.
-  </Step>
-  <Step title="Save">
-    Review the pending company names, select **Import Selected** and check the rows show **Saved**.
+  <Step title="Accept">
+    Confirm the review. A batch can partly succeed. Check **Matched** and review only the customers still waiting.
   </Step>
 </Steps>
 
-Several customers can share one company. Check that all their quotes belong under that company first.
+## Import a company when none exists
 
-## Use Quick Match
+Search existing companies before importing. On an unmatched row, select **Import** to create a portal company from the customer and match it right away. To import several at once, use **Import companies** and review the selection. Existing companies with the same name are matched instead of duplicated.
+
+If the company is imported but matching fails, choose that company from the row on retry. Leaving setup does not delete it.
+
+## Ignore or restore a customer
+
+Select **Ignore** to set aside a customer you never want matched. It moves to **Ignored** and is not deleted from QuoteWerks. Select **Restore** in **Ignored** to return it for review.
+
+## Remove or change a saved match
 
 <Steps>
-  <Step title="Open Quick Match">
-    Select **Quick Match** while unmapped customers remain.
+  <Step title="Open the matched customer">
+    In **Matched**, find the customer and select **Change**.
   </Step>
-  <Step title="Review the suggestions">
-    Check each customer and company pair and its confidence score. A narrowed search can hide suggestions that are still selected, so review the full selection. Adjust the threshold or selections if needed.
-  </Step>
-  <Step title="Apply and save">
-    Apply the suggestions you want. They appear as **Pending**. Select **Import Selected** and check for **Saved**.
+  <Step title="Pick the correct company, or remove the match">
+    Choose the right company, or select **Remove match**. Either change saves immediately, with no confirmation, and leaving the page does not undo it.
   </Step>
 </Steps>
 
-A high score is only a name match. Confirm the two records are the same organization.
+Removing a saved match leaves the quotes and line items already imported without a company, so the previous company's users can no longer see them. It does not delete the QuoteWerks customer, the quotes or the company. Saving a corrected match updates the company on already imported quotes and line items. A sync is only needed for new or changed QuoteWerks data.
 
-## Create a company when none exists
-
-<Steps>
-  <Step title="Open Create Company">
-    Use the add-company control on the customer's row.
-  </Step>
-  <Step title="Name and create it">
-    Confirm the company name and submit. The company is created right away and the customer's link stays **Pending**.
-  </Step>
-  <Step title="Save the link">
-    Select **Import Selected** and check for **Saved**.
-  </Step>
-</Steps>
-
-<Warning>
-**Import Selected** both saves pending mappings and creates companies for selected unmapped customers. To reuse existing companies, choose them first with the row selector or **Assign**, and clear unrelated selections.
-</Warning>
-
-## Clear or change a link
+## Finish the task
 
 <Steps>
-  <Step title="Click the x on the row">
-    On a **Pending** row, the **x** clears the unsaved choice. On a **Saved** row, it removes the saved link right away, with no confirmation.
-  </Step>
-  <Step title="Choose the correct company">
-    Pick the right company in the row selector.
-  </Step>
-  <Step title="Save">
-    Select **Import Selected** and check for **Saved**.
-  </Step>
-</Steps>
-
-Removing a saved link leaves the quotes and line items already imported without a company, so the previous company's users can no longer see them. It does not delete the QuoteWerks customer, the quotes or the company. Clearing a pending link does not delete a company you just created.
-
-## Finish the step
-
-<Steps>
-  <Step title="Save first">
-    Select **Import Selected** and check that every intended row shows **Saved**.
-  </Step>
   <Step title="Continue">
-    Select **Next**. It tries to save pending work, so check for any error. Clicking a step heading instead can discard unsaved choices.
+    Select **Continue to Review**.
+  </Step>
+  <Step title="Finish setup">
+    On **Review**, select **Finish setup**. This records that setup is complete. It does not certify every match or start a quote sync.
   </Step>
   <Step title="Start the quote sync">
-    On **Complete**, select **Start quote sync** to import quotes from QuoteWerks.
+    Select **Run sync > Quotes** in the page header to import quotes from QuoteWerks. Check **Sync activity**, then check a known quote's company and line items under **Quotes**, and confirm the intended company role has quote access.
   </Step>
 </Steps>
 
@@ -136,32 +100,29 @@ Removing a saved link leaves the quotes and line items already imported without 
 
 | Problem | What to do |
 | --- | --- |
-| A customer is missing | Select **Sync** and wait for the import to finish. |
-| Counts changed but nothing saved | Counts include pending choices. Select **Import Selected** and check for **Saved**. |
-| New companies appeared that you did not want | **Import Selected** created them for selected unmapped rows. Clear unrelated selections and pick existing companies first next time. |
-| A company's quotes disappeared from its users | A saved link was removed. Relink the customer and save. |
-| You cannot create a company | Creating a company needs company-write access and active billing. Ask an MSP administrator. |
+| A customer is missing | Select **Run sync > Customers** (or **Sync customers** when the list is empty) and wait for the import to finish. |
+| A company's quotes disappeared from its users | A saved match was removed. Match the customer again. |
+| A customer's quotes appear under the wrong company | Open **Matched**, select **Change** and choose the correct company. |
+| You cannot import a company | Importing a company needs company-write access and active billing. Ask an MSP administrator. |
+| A sync is refused because the connection is paused | Saved matches stay in place. Resolve the connection problem before running the sync again. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does choosing a company save the mapping?">
-    No. The row shows **Pending** until you select **Import Selected** and it shows **Saved**.
+  <Accordion title="Does choosing a company save the match?">
+    Yes. Accepting a suggestion, choosing a company or importing a company saves right away.
   </Accordion>
-  <Accordion title="Does bulk Assign save?">
-    No. It stages pending choices and clears the selection. Save with **Import Selected**.
+  <Accordion title="Does Accept strong matches save its suggestions?">
+    Yes. Accepted pairs save when you confirm. Unticked pairs stay as suggestions for you to review.
   </Accordion>
-  <Accordion title="Does Quick Match save its suggestions?">
-    No. Applied suggestions are **Pending** until you save them.
-  </Accordion>
-  <Accordion title="Do I need to check a row to save a pending link?">
-    No. **Import Selected** saves pending mappings without any checked rows. Checked unmapped rows are used to create new companies.
-  </Accordion>
-  <Accordion title="Do I need to sync quotes again after fixing a mapping?">
-    No. Saving a mapping moves the quotes and line items already imported. Sync only brings in new or changed data from QuoteWerks.
+  <Accordion title="Do I need to sync quotes again after fixing a match?">
+    No. Saving a match moves the quotes and line items already imported. A sync only brings in new or changed data from QuoteWerks.
   </Accordion>
   <Accordion title="Can several QuoteWerks customers map to one company?">
-    Yes. Use the row selector or **Assign**, then save.
+    Yes. Choose the same company for each customer.
+  </Accordion>
+  <Accordion title="Does Ignore delete the customer?">
+    No. It only sets the customer aside in MSPortal. Select **Restore** to bring it back.
   </Accordion>
 </AccordionGroup>
 
@@ -169,4 +130,4 @@ Removing a saved link leaves the quotes and line items already imported without 
 
 - [Connect and manage QuoteWerks](/user-guides/integrations/enable-quotewerks-integration)
 - [Troubleshoot QuoteWerks quotes](/user-guides/quotes/troubleshoot-quotewerks-quotes)
-- [Manage Company quote access](/user-guides/quotes/manage-company-access)
+- [Control company quote access](/user-guides/quotes/manage-company-access)

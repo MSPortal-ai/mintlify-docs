@@ -4,7 +4,7 @@ description: 'Connect Salesbuildr to MSPortal.ai to sync companies, quotes with 
 icon: 'file-invoice-dollar'
 ---
 
-This guide walks you through connecting Salesbuildr to MSPortal.ai using the 3-step setup wizard.
+This guide walks you through connecting Salesbuildr to MSPortal.ai. Setup happens on the Salesbuildr connection page, where the **Setup guide** lists three tasks: **Connect**, **Import or match companies** and **Review**. Salesbuildr supplies company records for matching, quotes and line items for matched companies, and products that MSP staff can import into their budget catalog. See [Connect and manage integrations](/user-guides/integrations/index#connect-match-and-verify) for the shared connection tasks.
 
 ## Overview
 
@@ -26,7 +26,7 @@ Before you begin, ensure you have:
 - Salesbuildr administrator access, with the **Public API** feature enabled on your Salesbuildr account
 - Your Salesbuildr account URL, which ends in `.salesbuildr.com` (for example `https://acme.salesbuildr.com`)
 - Admin access to MSPortal.ai with the **manage_settings_integrations** permission
-- Companies already set up in MSPortal (from your PSA integration or manually created)
+- Companies already set up in MSPortal (from your PSA integration or manually created), or permission to import new companies while matching
 
 ---
 
@@ -50,45 +50,44 @@ Before you begin, ensure you have:
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect Salesbuildr in MSPortal
 
-MSPortal provides a guided 3-step wizard to connect and configure your Salesbuildr integration.
-
-### Step 1: Connect
+### Task 1: Connect
 
 <Steps>
-  <Step title="Open the setup page">
-    In MSPortal, go to **Settings > Integrations**, find **Salesbuildr**, and click **Connect**.
+  <Step title="Open the connection page">
+    In MSPortal, go to **Settings > Integrations**. On the **Directory** tab, find **Salesbuildr** and select **Connect**. To continue an existing connection, open it from the **Active** tab.
   </Step>
   <Step title="Enter the connection details">
     Enter the **Account URL** and the **API key**. You can paste the full URL from your browser; everything after the host name is ignored. Paste only the key value, without an `api-key:` prefix.
-
-    <Frame>
-      <img src="/images/product/salesbuildr-connection-fields.png" alt="Salesbuildr Connect step with Account URL and API key fields" width="1152" height="448" />
-    </Frame>
   </Step>
   <Step title="Test the connection">
-    Click **Test Connection**. MSPortal verifies the API key and reports the number of companies it can see. Testing does not save anything.
+    Select **Test connection**. You must test before you can save. MSPortal verifies the API key and reports the number of companies it can see. That count is not the number of companies matched or quotes imported. Testing does not save anything.
   </Step>
-  <Step title="Connect">
-    Click **Connect Salesbuildr**. The API key is stored securely in Vault and MSPortal starts importing your Salesbuildr company list in the background.
+  <Step title="Save and continue">
+    Select **Save and continue** and wait for success. MSPortal tests the connection again, stores the API key in the vault, and starts importing your Salesbuildr company list in the background. If that import cannot start, the saved connection still exists; check **Import or match companies** rather than creating another connection.
   </Step>
 </Steps>
 
-### Step 2: Map
+### Task 2: Import or match companies
 
-Link each Salesbuildr company to the matching MSPortal company.
+Link each Salesbuildr company to the matching MSPortal company. The workspace is titled **Import or match Salesbuildr companies**.
 
-- Use **Quick Match** to propose links by name, review the confidence scores, and apply the ones you agree with.
-- Pick a company manually from the dropdown for anything Quick Match missed, or create a new MSPortal company from the Salesbuildr record.
-- Click **Import Selected** to save pending mappings. **Next** also saves them before moving on.
-- Only quotes for mapped companies are imported. Unmapped Salesbuildr companies are skipped until you map them.
+- The workspace opens on the **Import** view, which lists every company that still needs a match. **Suggested** narrows it to proposed matches.
+- Select **Accept** on a correct suggestion, or **Accept N strong matches** to review and accept every suggestion with 90% confidence or more.
+- For anything without a suggestion, select **Choose company…**, or select **Import** on the row to create a new MSPortal company from the Salesbuildr record.
+- Each match saves immediately. There is no separate save step.
+- Only quotes for matched companies are imported. Unmatched Salesbuildr companies are skipped until you match them.
 
-Click **Next** when you are done. MSPortal queues a quote sync for the companies you just mapped. For more detail, see [Map Salesbuildr companies](/user-guides/integrations/map-salesbuildr-companies).
+Select **Continue to Review** when you are done. For more detail, see [Map Salesbuildr companies](/user-guides/integrations/map-salesbuildr-companies).
 
-### Step 3: Complete
+### Task 3: Review
 
-Click **Start quote sync** to pull quotes for the mapped companies now, then click **Open Quotes** to view them. **Complete Setup** also requests a quote sync before it closes the wizard. Quotes appear on the **Quotes** page as soon as the sync finishes.
+Select **Finish setup** once the required tasks are complete. Finishing records that setup is complete. It does not start a quote sync.
+
+### Start and verify the quote sync
+
+Quotes are only staged for matched companies, so newly matched companies have no quotes until a quote sync runs. In the connection page header, select **Run sync**, then **Quotes** (or **All data**). A started message confirms the request, not that every quote imported. Check **Sync activity**, then open **Quotes** and check a known quote's company, number, status, line items, totals and document.
 
 ---
 
@@ -96,9 +95,9 @@ Click **Start quote sync** to pull quotes for the mapped companies now, then cli
 
 | Data | Schedule | Notes |
 |------|----------|-------|
-| Companies | Nightly, plus after connect and from the mapping page | Source list for company mapping (customers, leads, and your own record; suppliers and manufacturers are skipped) |
-| Quotes and line items | Every 4 hours, plus after mapping changes | Only for mapped companies; deleted quotes are removed on the next sync |
-| Products | Nightly, plus from the Refresh action on the integration row | Available in **Budgets > Products > Import**; products removed in Salesbuildr stop being offered |
+| Companies | Nightly, plus after the connection is saved and from **Run sync** | Source list for company matching (customers, leads, and your own record; suppliers, manufacturers, vendors and distributors are skipped) |
+| Quotes and line items | Every 4 hours, plus from **Run sync** | Only for matched companies; deleted quotes are removed on the next sync |
+| Products | Nightly, plus from **Run sync** | Available in **Budgets > Products > Import**; products removed in Salesbuildr stop being offered |
 
 Each quote shows its number, title, status, the Salesbuildr contact and owner, and monthly, annual, and one-time totals calculated from its line items. **Open in Salesbuildr** opens the customer quote portal for that quote, and **Download PDF** fetches the current quote PDF from Salesbuildr.
 
@@ -116,20 +115,26 @@ Each quote shows its number, title, status, the Salesbuildr contact and owner, a
   </Step>
 </Steps>
 
+Importing products does not change existing budget lines. Review product prices and recurrence in your budgets separately.
+
 ## Managing the Connection
 
-- Click **Manage** on your Salesbuildr connection to test, rotate the API key, change the account URL, or adjust company mappings. Leave the API key blank to keep the stored key; the save button then reads **Save settings** instead of **Update credentials**. Save your Connect changes before you click **Next**, because **Next** does not save them.
-- Mappings can also be managed on **Settings > Integrations > Company Mapping** alongside your other integrations. Unlinking a company removes its imported quotes; relinking moves them to the new company.
-- To remove the integration, click **Delete** in the wizard footer and confirm. This deletes the stored connection and the imported Salesbuildr data from MSPortal. It does not change anything in Salesbuildr or delete the MSPortal companies you mapped to.
+- Open your Salesbuildr connection from the **Active** tab in **Settings > Integrations**. Use the **Setup guide** to return to any task.
+- To rotate the API key or change the account URL, open **Connect**. The stored key is not shown; leave it unchanged to keep it, or type a new one. Changing the **Account URL** asks for the key again, because a stored key is only sent to the address it was saved with. Select **Test connection**, then **Save changes**. Navigating away does not save edited fields.
+- Matches can also be managed with **Map companies** on **Settings > Integrations**, alongside your other integrations. Removing a match removes that company's imported quotes; matching it to a different company moves them to the new company.
+- To rename the connection, select **More actions > Rename**.
+- To remove the integration, select **More actions > Disconnect…** and confirm. This removes the stored credentials, the company matches and the data synced from Salesbuildr. It does not change anything in Salesbuildr or delete the MSPortal companies you matched to.
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
 | Account URL is rejected | Enter your `.salesbuildr.com` address. A custom quote portal domain does not serve the API. |
-| API key is rejected | Confirm the **Public API** feature is enabled in Salesbuildr. Create a new key under **Settings > Integrations > API Key** and paste it without extra spaces, then click **Update credentials**. |
-| A client sees no quotes | Confirm their Salesbuildr company is mapped to their MSPortal company and that a quote sync has run since the mapping was saved. |
-| The integration shows as paused | The API key was revoked or Salesbuildr was unreachable for an extended period. Click **Manage**, enter a working key, and save to resume syncing. |
+| API key is rejected | Confirm the **Public API** feature is enabled in Salesbuildr and the user has the Admin role. Create a new key under **Settings > Integrations > API Key**, paste it on **Connect** without extra spaces, then select **Test connection** and **Save changes**. |
+| A client sees no quotes | Confirm their Salesbuildr company is matched to their MSPortal company and that a quote sync has run since the match was saved. |
+| Supplier or manufacturer records are missing from matching | Salesbuildr supplier, manufacturer, vendor and distributor companies are excluded. Check the record type in Salesbuildr. |
+| The integration shows as paused | The API key was revoked or Salesbuildr was unreachable for an extended period. Open **Connect**, enter a working key, then select **Test connection** and **Save changes** to resume syncing. Check the next quote sync in **Sync activity**. |
+| An existing connection opens as a blank setup form | The saved connection may have failed to load. Return to **Settings > Integrations** and check its status before creating another connection. |
 
 ## Related Resources
 
@@ -137,11 +142,17 @@ Each quote shows its number, title, status, the Salesbuildr contact and owner, a
   <Card title="Quotes" icon="file-invoice-dollar" href="/user-guides/quotes/index">
     Learn how MSPortal presents quote data
   </Card>
+  <Card title="Map Salesbuildr Companies" icon="link" href="/user-guides/integrations/map-salesbuildr-companies">
+    Match Salesbuildr companies to your companies
+  </Card>
   <Card title="Import Budget Products" icon="box" href="/user-guides/budgets/import-products-from-integrations">
     Import or link Salesbuildr products in your catalog
   </Card>
   <Card title="Troubleshoot Salesbuildr Quotes" icon="wrench" href="/user-guides/quotes/troubleshoot-salesbuildr-quotes">
     Fix missing or wrong quotes
+  </Card>
+  <Card title="Download Quote Documents" icon="file-arrow-down" href="/user-guides/quotes/download-quotes">
+    Get quote documents or export the quote list
   </Card>
   <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
     Manage all MSPortal integrations
