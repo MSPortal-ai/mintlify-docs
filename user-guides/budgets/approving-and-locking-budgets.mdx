@@ -4,13 +4,121 @@ description: 'Finalize a budget as an immutable baseline and prepare its line it
 icon: 'lock'
 ---
 
-Approving a budget turns it into the fixed baseline MSPortal uses to compare planned costs with customer invoice spend. Approval also gives every line item a unique reference, so projects, purchases, licenses, labor and other costs can be traced back to the approved plan. Locking a budget needs the **manage_budgets** permission. Deciding individual lines needs the **Approve budget items** permission, described in [Approve or reject budget lines](#approve-or-reject-budget-lines). Other readers can review the plan and ask their MSP to approve it.
+Approving a budget turns it into the fixed baseline MSPortal uses to compare planned costs with customer invoice spend. Approval also gives every line item a unique reference, so projects, purchases, licenses, labor and other costs can be traced back to the approved plan. Locking a budget from the editor needs the **manage_budgets** permission. Deciding individual lines needs the **Approve budget items** permission, described in [Approve or reject budget lines](#approve-or-reject-budget-lines).
+
+Approval is the client's decision. A typical budget goes through three steps:
+
+1. **Submit for review** (optional): colleagues at the MSP check the draft.
+2. **Submit for approval**: the budget goes to the people at the client who decide it.
+3. **Sign off**: a client approver approves the budget, line by line or all at once, and signs it with their typed name.
 
 <Warning>
-Approval is permanent. You cannot edit an approved budget or return it to Draft. Review the budget carefully before you confirm.
+Approval is permanent. You cannot edit an approved budget or return it to Draft. Review the budget carefully before it is approved.
 </Warning>
 
-## Before you start
+## Submit a budget for review
+
+Ask colleagues at the MSP to check a draft before it goes to the client. The budget stays a Draft and you can keep editing it. Clients never see the review.
+
+<Steps>
+  <Step title="Open the budget">
+    Open the Draft budget in View mode.
+  </Step>
+  <Step title="Click Submit for review">
+    Click **Submit for review** in the **Approval** row.
+  </Step>
+  <Step title="Choose the reviewers">
+    Under **Reviewers**, choose one or more MSP staff members. The list shows staff who can see budgets. Optionally add a message saying what they should check.
+  </Step>
+  <Step title="Send the request">
+    Click **Send for review**. Each reviewer receives an email and an in-app notification. The **Approval** row shows who asked, when, and who the review is waiting on.
+  </Step>
+</Steps>
+
+Reviewers open the budget, click **Review** in the **Approval** row and answer **Looks good** or **Needs changes**, optionally with a note. The person who asked receives an in-app notification, and each answer appears in the **Approval** row. A reviewer can change their answer until the budget is sent to the client.
+
+Click **Change reviewers** to ask different people (this clears the answers so far), or **Cancel review** to end the review. Submitting the budget for approval also ends the review; its answers stay in the history.
+
+## Submit a budget for approval
+
+Send the budget to the people at the client who decide it. Approvers are always client users: people at the budget's company, or at a parent company that manages it, who hold the **Approve budget items** permission. A parent company admin limited to selected child companies can approve only for those companies. MSP staff are not approvers; ask them for a review instead. MSPortal never sends the request to someone who cannot approve it.
+
+<Steps>
+  <Step title="Open the budget">
+    Open the Draft budget in View mode. The **Approval** row in the budget summary shows that it has not been submitted yet.
+  </Step>
+  <Step title="Click Submit for approval">
+    Click **Submit for approval** in the **Approval** row.
+  </Step>
+  <Step title="Choose the approvers">
+    In the **People at** list, which names the client, choose one or more approvers. Under **Company role**, optionally choose a role: everyone at the client who holds that role and can approve budget items is asked too. Each role shows how many people would be asked; a role nobody can approve with is unavailable. People in the role who cannot approve budget items are not asked.
+  </Step>
+  <Step title="Add a message">
+    Optionally add a message for the approvers, such as a deadline.
+  </Step>
+  <Step title="Send the request">
+    Click **Submit for approval**. The budget moves to **Pending Approval**, lines still in Draft move to Pending, and each approver receives an email and an in-app notification linking to the budget. The **Approval** row shows who submitted the budget, when, and who it is waiting on.
+  </Step>
+</Steps>
+
+### Decide each line
+
+Approvers open the budget from the email or notification and use each line's status menu to approve or reject it, or **Approve all pending** to approve every pending line at once. Approvers who cannot edit budgets can decide lines only while the budget is Pending Approval.
+
+### Change approvers or withdraw
+
+While the budget is Pending Approval, budget editors can:
+
+- Click **Change approvers** to choose different people or a different role. Everyone chosen receives the request again.
+- Click **Withdraw** to return the budget to Draft. The approvers receive an in-app notice that the budget no longer needs their review. Submit it again when it is ready.
+
+<Note>
+A budget set to Pending Approval from the budget editor records who submitted it, but no approvers are notified. Click **Choose approvers** in the **Approval** row to send the request.
+</Note>
+
+### Sign off the budget
+
+A client approver signs off the budget to approve and lock it. They can decide each line first, or sign off straight away to approve the whole budget: lines still pending are approved by the sign-off.
+
+<Steps>
+  <Step title="Review the lines">
+    The **Approval** row shows how many lines are decided. Reject any line the client does not want; lines left pending are approved when you sign off.
+  </Step>
+  <Step title="Click Sign off">
+    Click **Sign off** in the **Approval** row. The dialog shows the approved and rejected lines with their totals, how many pending lines the sign-off approves, and the budget's fingerprint.
+  </Step>
+  <Step title="Agree and type your name">
+    Read the statement, tick the box to agree, and type your full name. Your typed name is your signature.
+  </Step>
+  <Step title="Sign">
+    Click **Sign off budget**. The budget becomes **Approved** and locked. The submitter and the other approvers receive an email and an in-app notification.
+  </Step>
+</Steps>
+
+Approvers the request was sent to can sign off. If the request named nobody, any client approver can. MSP staff cannot sign off, and you cannot sign off while viewing MSPortal as another user.
+
+The sign-off records:
+
+- Your typed name, your account name and email
+- The date and time, your IP address and browser
+- The statement you agreed to, including how many pending lines it approved
+- The budget's **fingerprint**: a SHA-256 hash of the budget exactly as you approved it
+
+If anyone changes the budget while you are reviewing it, the fingerprint no longer matches and the sign-off is refused. Review the updated budget and sign again.
+
+The exported PDF of a signed-off budget ends with a **Sign-off certificate** page listing these details. The signer's email and IP address appear only in PDFs exported by MSP staff.
+
+### Review the approval history
+
+Click **History** in the **Approval** row to see every step, newest first: internal reviews and their answers (MSP staff only), submission, approval requests, each line approved or rejected, edits that returned a line to Pending, sign-off, approval and archiving. Each entry shows who acted and when. Names stay in the history after a user is deleted.
+
+Each approved or rejected line also shows who decided it and when, below its status.
+
+<Note>
+Changing anything that defines an approved or rejected line, such as its quantity, price, recurrence or category, returns it to **Pending** so it is decided again. Editing only its notes does not.
+</Note>
+
+## Before you lock a budget from the editor
 
 - The budget is **Draft** or **Pending Approval**, and it has no more than 500 lines.
 - You have the **manage_budgets** permission. Without it, **Approved** is missing from the **Status** list.
@@ -44,7 +152,7 @@ Approved and Archived budgets are locked, so nobody can change their line status
   </Step>
 </Steps>
 
-Approving every line does not approve or lock the budget. To lock it, follow [Approve a budget](#approve-a-budget). You can also change line statuses in the budget editor's **Approval** column, or for several lines at once with **Update Statuses** in the Budgets list row menu. See [Add and edit budget line items](/user-guides/budgets/edit-line-items#change-a-lines-approval-status).
+Approving every line does not approve or lock the budget. To lock it, a client approver [signs it off](#sign-off-the-budget), or someone with **manage_budgets** follows [Approve a budget](#approve-a-budget). You can also change line statuses in the budget editor's **Approval** column, or for several lines at once with **Update Statuses** in the Budgets list row menu. See [Add and edit budget line items](/user-guides/budgets/edit-line-items#change-a-lines-approval-status).
 
 ## Approve a budget
 
@@ -169,6 +277,15 @@ Archiving retires an approved budget and keeps its baseline and history. Only th
 | Issue | What to do |
 |-------|------------|
 | **Approved** is missing from **Status** | You need **manage_budgets**, and the budget must be Draft or Pending Approval. |
+| **Submit for approval** or **Submit for review** is missing | Your role must be able to edit budgets, and the budget must be Draft. Only MSP staff see **Submit for review**. |
+| A person is missing from the approver list | Only client users who are active, can sign in, hold **Approve budget items**, and belong to this company or a parent company that manages it are listed. MSP staff are never approvers. Ask them for a review instead. |
+| A colleague is missing from the reviewer list | Only MSP staff who are active, can sign in and can see budgets are listed. You cannot review your own request. |
+| **Nobody you chose can approve budget items** | Nobody you chose can approve for this company. Grant **Approve budget items** to the people who should approve. |
+| A company role is unavailable, or **Nobody at ... who holds this role can approve budget items** | Nobody holding that role at this company can approve budget items. Choose another role, or grant **Approve budget items** to the role's members. |
+| **This budget changed since you opened it** | Someone saved the budget after you opened it. The page reloads. Review the change and submit again. |
+| **Sign off** is unavailable | The budget has no lines, or you are viewing MSPortal as another user. |
+| **Sign off** is missing | Only client approvers the request was sent to can sign off. MSP staff cannot. |
+| **This budget changed while you were reviewing it** | The fingerprint changed. Review the updated budget and sign again. |
 | A line has no status menu | You need **Approve budget items**. Without Write access, you can decide lines only while the budget is Pending Approval. |
 | **Mark as draft** is missing | Only people who can also edit budgets can return a line to Draft. |
 | Approval fails with a validation error | Complete the company, fiscal year, currency, categories and line data, then try again. |
@@ -197,10 +314,25 @@ Archiving retires an approved budget and keeps its baseline and history. Only th
     No. It only sets the status in the editor. You must click **Save**.
   </Accordion>
   <Accordion title="Can a company administrator approve budgets?">
-    The company administrator label alone does not grant approval. To decide lines, their MSP gives their role **Approve budget items**. To lock the whole budget, they need **manage_budgets**.
+    The company administrator label alone does not grant approval. To decide lines or sign off a budget sent to them, their MSP gives their role **Approve budget items**. To lock the whole budget from the editor, they need **manage_budgets**.
+  </Accordion>
+  <Accordion title="Is a sign-off legally binding?">
+    A sign-off records the signer's typed name, account, time, IP address, browser and the exact budget they approved, identified by its fingerprint. Whether that meets the requirements of a particular contract or jurisdiction is for you and your client to decide.
+  </Accordion>
+  <Accordion title="Who receives the approval request?">
+    Everyone at the client chosen by name, plus everyone at the client who holds the chosen company role and can approve budget items. The person who submits the budget is not notified about their own request.
+  </Accordion>
+  <Accordion title="Can MSP staff approve a budget for the client?">
+    Not through a sign-off: approval requests and sign-offs are for client users. Staff who manage budgets can still set a budget to **Approved** in the editor, for example after the client approved it outside MSPortal. That is recorded as staff approval, not a client sign-off.
+  </Accordion>
+  <Accordion title="Can the client approve the whole budget at once?">
+    Yes. An approver can sign off without deciding each line: every line still pending is approved by the sign-off. Reject any line the client does not want first.
+  </Accordion>
+  <Accordion title="Does the client see our internal review?">
+    No. The review, its answers and its history entries are visible to MSP staff only.
   </Accordion>
   <Accordion title="Does approving every line lock the budget?">
-    No. Line statuses and the budget status are separate. Only setting the budget's **Status** to **Approved** locks it.
+    No. Line statuses and the budget status are separate. Only a client sign-off, or setting the budget's **Status** to **Approved**, locks it.
   </Accordion>
   <Accordion title="Can I unlock an approved budget or change a rejected line?">
     No. Duplicate the budget, fix the Draft copy and approve it.

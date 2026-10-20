@@ -26,10 +26,10 @@ Internal MSP staff and client contacts are imported in different places:
 
 | People | Where to import |
 |--------|-----------------|
-| Internal MSP staff | **Settings** → **Users & Roles** → **Users** tab → **Import** |
-| Client contacts (Company users) | **Settings** → **Users & Roles** → **Company Users** tab → **Import** |
+| Internal MSP staff | **Settings** → **Users & Roles** → **Users** tab → **Import**, then the intended PSA. Provider labels include members, Halo agents, Autotask resources or Syncro technicians. |
+| Client contacts (Company users) | **Settings** → **Users & Roles** → **Company Users** tab → **Import**, or **Import or match users** on a PSA connection page in **Settings** → **Integrations**. PSA and Microsoft 365 sources depend on active connections and company mappings. |
 
-The steps below cover internal staff. Company users follow the same dialog; see [Import Company Users](#import-company-users).
+The steps below cover internal staff. Company users follow the same dialog; see [Import Company Users](#import-company-users). For the connection-page task, see [Import or match PSA contacts in the connection page](#import-or-match-psa-contacts-in-the-connection-page).
 
 ## Prerequisites
 
@@ -39,15 +39,13 @@ The steps below cover internal staff. Company users follow the same dialog; see 
 
 ## Import Users from Settings
 
-<Note>
-Branch preview: filter counts and **Clear Filters** share the toolbar with **Quick Match** and **Role**. Searching keeps the table in place. The rows fill the dialog above its footer; on a phone, open **Filters** to search and clear filters.
-</Note>
+Filter counts and **Clear Filters** share the toolbar with **Quick Match** and **Role**. Searching keeps the table in place. The rows fill the dialog above its footer; on a phone, open **Filters** to search and clear filters.
 
-<Frame caption="Branch preview: searching staff users keeps the existing toolbar and footer in place.">
+<Frame caption="Searching staff users keeps the existing toolbar and footer in place.">
   <img src="/images/product/import-users-filtered-desktop-preview.png" alt="Staff import dialog with an active name filter and Clear Filters in the existing toolbar" width="1440" height="960" />
 </Frame>
 
-<Frame caption="Branch preview: the phone import dialog keeps its filters and footer reachable.">
+<Frame caption="The phone import dialog keeps its filters and footer reachable.">
   <img src="/images/product/import-users-filtered-mobile-preview.png" alt="Phone staff import dialog with one active filter and a visible footer" width="390" height="844" />
 </Frame>
 
@@ -145,7 +143,7 @@ Branch preview: filter counts and **Clear Filters** share the toolbar with **Qui
 
 Client contacts are imported as Company users, with a Company role.
 
-<Frame caption="Branch preview: company-user imports keep pagination visible when a search has no matches.">
+<Frame caption="Company-user imports keep pagination visible when a search has no matches.">
   <img src="/images/product/import-company-users-mobile-preview.png" alt="Phone company-user import with an active filter and pagination showing zero users" width="390" height="844" />
 </Frame>
 
@@ -158,6 +156,38 @@ If contact-type role mappings or company default roles are configured for the in
 
 For linked Company users, Microsoft 365 account status takes priority over PSA contact status. An enabled Microsoft 365 account can restore access after a recorded automatic disable; an explicit administrator disable or an access rule still prevents sign-in. Synchronization preserves established identity links when a contact email changes. Multiple existing login accounts are left for staff to review.
 
+## Import or match PSA contacts in the connection page
+
+Halo PSA, ConnectWise Manage, Autotask and Syncro offer **Import or match users** on their connection pages, and in Launch Center when it is embedded there. This imports Company users, not internal MSP staff.
+
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Import or match contacts directly in the Autotask connection page.">
+      <img src="/images/product/integration-users-import-preview-desktop.png" alt="Autotask contact import workspace with a visible row Import action and current-page and all-pages selection controls" width="1280" height="853" />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="The same contact import and selection controls on a phone.">
+      <img src="/images/product/integration-users-import-preview-mobile.png" alt="Autotask contact import on a phone with page selection controls, a row Import action and Import selected in the footer" width="780" height="1688" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+1. Import or match at least one company, then open **Import or match users** in the intended PSA connection. Only contacts belonging to connected companies are available. You can return to import more users without importing or matching every company or contact.
+2. The workspace opens on **Import**, including contacts with suggested matches. Use **Suggested** to review proposed links, or **Matched** and **Ignored** to revisit those records. Search and filter the contacts. Select **Import** beside one contact, or tick multiple contacts and choose **Import selected**. The button includes the selected count when contacts are selected.
+3. Use the header checkbox to select the current page, click it again to select all pages matching the current filters, and click again to clear the selection. Use row checkboxes for individual contacts. **Select all with email** replaces the selection with contacts that have an email address across all pages matching the current filters, leaving out contacts with missing emails. Review the selection, then choose **Import selected**. Wait for the full selection to load and review its count before continuing. Large selections are processed in batches, so you do not need to import each page separately.
+4. In the review panel, check the ready-to-import and skipped counts. Contacts without an email address are skipped. You can add an address for an individual contact to include it; correct invalid addresses or clear them to skip those contacts, and resolve duplicate addresses. The review list has pages for large selections. Email edits are submitted with the portal import; they do not change the upstream PSA contact's email.
+5. Choose the intended Company role in **Role**. Review its permissions, then confirm with the **Import** button showing the user count and role.
+6. Follow the processed/imported progress, then read the imported or matched and skipped results. Verify the actual users, company assignments and roles. A partial failure can leave some users imported; inspect the remaining contacts before retrying.
+
+You can also choose an existing portal user or accept a reviewed suggestion. Those matching actions save immediately. Review name-only suggestions carefully. Ignoring a contact removes it from the active review list; restore it if it should be considered later.
+
+Opening the review panel does not import users. The waiting count includes both suggested and unmatched contacts. Importing users does not automatically send portal invitations; review access and invitation delivery separately.
+
+<Frame caption="The Halo review panel inside Launch Center identifies contacts skipped for missing email addresses before import.">
+  <img src="/images/product/launch-users-skipped-email-preview-desktop.png" alt="Halo user import review in Launch Center with a Company role, editable email fields and counts showing zero ready to import and 19 skipped without email" width="1280" height="853" />
+</Frame>
+
 ## Post-Import Tasks
 
 After importing users:
@@ -168,6 +198,8 @@ After importing users:
 - **Enable 2FA**: Set up two-factor authentication for admin users
 
 ## Troubleshooting
+
+Missing records can reflect source permissions, inactive accounts, company mapping, filters or synchronization. In the connection-page import, missing email skips that contact; an invalid nonblank email needs correction or clearing before confirmation. Other import screens may require missing emails to be supplied. If an account already exists, verify the identity and use linking where appropriate. If a role changes again after sync, review the provider's role rules instead of repeatedly overriding the same field.
 
 ### Common Issues
 
@@ -211,6 +243,14 @@ After importing users:
     - Available when importing company users
     - Syncs users from your connected M365 tenant
     - Requires active Microsoft 365 integration per company
+  </Accordion>
+</AccordionGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can the staff import dialog's Import Selected action also apply pending links?">
+    Yes. Review both selected new users and pending links, including all-pages scope. In the connection-page Company-user task, matching actions save immediately and **Import selected** opens a review of the selected contacts.
   </Accordion>
 </AccordionGroup>
 

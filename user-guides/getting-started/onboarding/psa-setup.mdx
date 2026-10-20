@@ -9,39 +9,47 @@ Connect your PSA so MSPortal can sync companies, contacts, and tickets. This pag
 
 ## Before you start
 
-- Choose your PSA in the **Integrations** step first. See [Choose launch integrations](/user-guides/getting-started/onboarding/integration-selection).
-- Have your PSA administrator create an API user and give you its credentials. The fields differ by provider, so keep the provider's setup guide open (see Related guides).
+- Choose your PSA on the **Connect your PSA** step first. See [Choose launch integrations](/user-guides/getting-started/onboarding/integration-selection).
+- Have your PSA administrator create an API user and give you its credentials. The fields and the permissions it needs differ by provider, so keep the provider's setup guide open (see Related guides).
 - Know which boards, queues, or teams hold your client tickets.
 
 ## Connect your PSA
 
 <Steps>
   <Step title="Open the step">
-    In **Launch Center**, select **Connect your PSA** in **Setup guide**. The PSA setup wizard opens inside the plan. You can also use **Settings > Integrations**.
+    In **Launch Center**, select **Connect your PSA** in **Launch steps** and choose your PSA's card. Its setup tasks appear under the step in the rail. **Setup guide** on the card opens the provider's instructions. You can also open the PSA from **Settings > Integrations**.
   </Step>
   <Step title="Connect">
-    On the **Connect** step, enter your API credentials and click **Test Connection**. Wait for **Connection Verified**. If you see **Connection Failed**, check the credentials, region, or URL, then click **Retry Connection**. Click **Next**.
+    On **Connect**, enter your API credentials and click **Test connection**. If the test fails, check the credentials, region, or URL, and the API user's status in your PSA. In Launch Center, click **Continue** after a successful test to save the connection and move on. In Settings, click **Save and continue**.
   </Step>
   <Step title="Check permissions">
-    The **Permissions** step checks what the API user can read. Required items show a **Required** badge. If any are **Not permitted**, grant them in your PSA, then click **Re-check**. If a permission is granted but returns no data, setup can continue, but nothing syncs until the API user can see records. Click **Next** when the required items pass.
+    **Permissions** checks what the API user can read. Areas marked **Required** must be granted before you can continue. If any are missing, grant them in your PSA, then click **Re-check**. Optional areas you leave ungranted stay switched off in **Choose data**.
   </Step>
   <Step title="Choose what to sync">
-    On the **Sync** step, turn on the data to sync, such as **Sync Users**, **Sync Companies**, and **Enable Ticket Sync**. Pick the boards, queues, or teams to sync. Data starts syncing in the background when you continue. Use **Contact Auto-Import** only if you want active contacts created as portal users, and choose a **Default Role for Imported Contacts**.
+    On **Choose data**, turn on the data to sync and pick the boards, queues, or teams to sync. Data starts syncing in the background when you continue.
+  </Step>
+  <Step title="Import or match companies and users">
+    Open **Import or match companies** to import PSA companies or link them to existing MSPortal companies. Then use **Import or match users** for their contacts. See [Import companies and contacts inline](#import-companies-and-contacts-inline).
   </Step>
   <Step title="Configure tickets">
-    On the **Configure** step, open **Ticket Settings** and set the fields it shows, such as **Closed Statuses**, **Client Comment Status**, and **Default Board for New Tickets**. In **Resolution Status Stepper**, click each stage and choose the PSA statuses that belong to it. Status choices appear only after you select boards, queues, or teams in the **Sync** step. Save the settings and wait for **Ticket settings saved**. Syncro configures tickets automatically, and Autotask shows its own fields such as **Fallback Resource**.
+    On **Configure tickets**, set the fields it shows, such as **Closed Statuses**, **Client Comment Status**, and **Default Board for New Tickets**. In **Resolution Status Stepper**, click each stage and choose the PSA statuses that belong to it. Status choices appear only after you select boards, queues, or teams in **Choose data**. Autotask shows its own fields such as **Fallback Resource**.
   </Step>
-  <Step title="Import (optional)">
-    On the **Import** step, import users and companies, or click **Skip**. You can import them later from **Settings > Users & Roles** and **Settings > Companies**.
-  </Step>
-  <Step title="Complete setup">
-    Click **Complete Setup**. Use **Save & Exit** if you need to stop and come back. Your progress is saved.
+  <Step title="Finish the connection">
+    Open **Review** and check the result. In Launch Center, click **Finish connection setup**. In Settings, click **Finish setup**. You can leave and come back. Your progress is saved.
   </Step>
 </Steps>
 
-<Frame caption="The plan identifies which PSA and RMM connections to configure and check.">
-  <img src="/images/product/launch-integration-choices.png" alt="The plan identifies which PSA and RMM connections to configure and check." width="1780" height="650" />
-</Frame>
+The exact tasks, fields, and optional tasks such as **Import devices** or **Configure opportunities** differ by provider. Follow the provider's guide for its fields and console steps.
+
+## Import companies and contacts inline
+
+The company and contact workspaces open on **Import**, including records with suggested matches. Use **Suggested** to review proposed links. Import or match at least one company to work with its contacts and devices. You can leave other companies and contacts for later.
+
+For companies, choose **Import** beside a source record or **Import companies** for a batch. The selection dialog loads unmatched records across provider pages for the current search. Use **Select current page** or **Select all pages** to choose the scope. Review the selection and confirm. Existing portal companies with the same name are reused. Choosing an existing company or accepting a suggestion saves that match immediately.
+
+For contacts, choose **Import** beside a row or select contacts and choose **Import selected**. Use the header checkbox to select the current page, click it again to select all pages matching the current filters, and click again to clear the selection. Use row checkboxes for individual contacts. **Select all with email** replaces the selection with contacts that have an email address across all pages matching the current filters. Review the selection, then choose **Import selected**. Choose the Company role and review the ready-to-import and skipped counts before you confirm. Contacts without email addresses are skipped. Adding an address in the dialog includes that contact. Correct invalid addresses or clear them to skip those contacts. Check the saved users and their company assignments afterward. Invitations are separate actions.
+
+See [Import companies](/user-guides/integrations/import-companies) and [Import users](/user-guides/integrations/import-users) for detailed selection and retry behavior.
 
 ## Check the data
 
@@ -49,13 +57,15 @@ Connect your PSA so MSPortal can sync companies, contacts, and tickets. This pag
   <Step title="Check the sync status">
     Open the integration in **Settings > Integrations** and look at the last sync time. The first sync can take a while for a large account.
   </Step>
-  <Step title="Map companies">
-    Map your PSA companies to MSPortal companies. A similar name is not enough, so confirm each match. See [Integration company mapping](/user-guides/settings/integration-company-mapping).
+  <Step title="Check company mappings">
+    Confirm each PSA company is linked to the right MSPortal company. A similar name is not enough. See [Integration company mapping](/user-guides/settings/integration-company-mapping).
   </Step>
   <Step title="Check Launch Center">
-    In **Launch Center**, open **Live verification**. **A healthy PSA connection is available when required** is blocking when your plan needs a PSA. It checks the instance chosen in your plan. An unrelated active integration does not satisfy it.
+    In **Launch Center**, **Connect your PSA** turns **Done** once the connection is healthy and its required tasks are done. It checks the connection you set up on this step. An unrelated active integration does not satisfy it.
   </Step>
 </Steps>
+
+A successful credential check is not the same as a completed import. Do not assume every provider feature or writeback action is supported because the credentials work.
 
 Next, set up [ticket delivery, visibility, and templates](/user-guides/getting-started/onboarding/ticket-settings).
 
@@ -63,24 +73,23 @@ Next, set up [ticket delivery, visibility, and templates](/user-guides/getting-s
 
 | Problem | What to do |
 | --- | --- |
-| **Connection Failed** | Check the credentials, region or URL, and the API user's status in your PSA. Then click **Retry Connection**. |
+| The connection test fails | Check the credentials, region or URL, and the API user's status in your PSA. Then test again. |
 | Required permissions are missing | Grant them in your PSA and click **Re-check**. |
-| "Please complete the connection step first" | Finish **Connect** and **Test Connection** before the later steps. |
-| Status choices are empty on **Configure** | Select boards, queues, or teams in the **Sync** step first. |
-| The wrong connection is checked | Go back to **Integrations** and choose the intended instance. |
-| No records arrive | Check the sync status, the API user's permissions, and the company mappings. Do not clear and resync until you know why. Clearing data can remove mapped records. |
+| Status choices are empty on **Configure tickets** | Select boards, queues, or teams in **Choose data** first. |
+| **Connect your PSA** needs attention | Open the connection and check its status and remaining tasks. |
+| No records arrive | Check the sync status, the API user's permissions and scope, and the company mappings. Do not clear and resync until you know why. Clearing data can remove staged or mapped records. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does a successful credential test complete the rollout?">
-    No. Check the sync, the company mappings, the imported records, and the remaining findings.
+    No. Check the sync, the company mappings, the imported records, and the remaining setup tasks.
   </Accordion>
   <Accordion title="Can any active connection satisfy this step?">
-    No. The check applies to the instance selected in your plan.
+    No. Launch Center checks the connection tracked by this step, including its required tasks.
   </Accordion>
   <Accordion title="Can I set this up later from Settings?">
-    Yes. Open your PSA in **Settings > Integrations**. The wizard resumes where you stopped.
+    Yes. Open your PSA in **Settings > Integrations**. The connection keeps the tasks you finished.
   </Accordion>
 </AccordionGroup>
 

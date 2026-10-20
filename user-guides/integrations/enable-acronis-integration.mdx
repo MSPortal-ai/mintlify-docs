@@ -4,7 +4,7 @@ description: 'Connect your Acronis Cyber Protect Cloud instance to MSPortal.ai t
 icon: 'cloud-arrow-down'
 ---
 
-This guide walks you through connecting your Acronis Cyber Protect Cloud instance to MSPortal.ai using our streamlined 2-step setup wizard.
+This guide walks you through creating an Acronis API client and connecting your Acronis Cyber Protect Cloud instance to MSPortal.ai. Setup is for MSP staff with integration management permission and authorized credentials for the intended Acronis account.
 
 ## Overview
 
@@ -31,7 +31,7 @@ The Acronis integration maps tenants to existing companies in MSPortal. Import y
 
 ## Part 1: Generate API Credentials in Acronis
 
-Before connecting to MSPortal.ai, you need to create an API client in Acronis Cyber Protect Cloud.
+Before connecting to MSPortal.ai, you need to create an API client in Acronis Cyber Protect Cloud. Create it in the Acronis tenant that can access the customer tenants you want to sync. An API client's access depends on where it was created, so a successful test does not prove it can see every customer. See [Acronis's API client authentication guidance](https://developer.acronis.com/doc/account-management/v2/guide/getting-started/authenticating.html) for more detail.
 
 <Steps>
   <Step title="Log into Acronis Management Console">
@@ -81,17 +81,17 @@ Before proceeding to MSPortal, ensure you have the following:
 
 | Information | Description |
 |-------------|-------------|
-| **Datacenter** | Your Acronis datacenter region (MSPortal provides a dropdown of known datacenters, with a custom URL option) |
+| **Datacenter** | Your Acronis datacenter region (MSPortal provides a dropdown of known datacenters, with a **Custom URL** option) |
 | **Client ID** | The client identifier generated when creating the API client |
 | **Client Secret** | The secret generated when creating the API client |
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect Acronis in MSPortal
 
-MSPortal.ai provides a guided 2-step wizard to connect and configure your Acronis integration.
+The Acronis connection page has three setup tasks: **Connect**, **Import or match tenants** and **Review**. Select a task in the **Setup guide** to return to it at any time.
 
-### Starting the Wizard
+### Open the connection
 
 <Steps>
   <Step title="Navigate to Integrations">
@@ -99,19 +99,15 @@ MSPortal.ai provides a guided 2-step wizard to connect and configure your Acroni
   </Step>
 
   <Step title="Start Setup">
-    Find the **Acronis Cyber Protect** row and click **Connect** (or **Configure** if it is already connected) to launch the setup wizard.
+    Find **Acronis Cyber Protect** and select **Connect**. To change an existing connection, open that connection instead.
 
     <Info>
-      Acronis supports more than one connection. If you manage several Acronis accounts, add each one as its own connection.
+      Acronis supports more than one connection. If you manage several Acronis accounts, add each one as its own connection, and check that you opened the intended one before you change anything.
     </Info>
   </Step>
 </Steps>
 
----
-
-### Step 1: Connect
-
-Enter your Acronis API credentials to establish the connection.
+### Connect
 
 <Steps>
   <Step title="Enter API Credentials">
@@ -119,7 +115,7 @@ Enter your Acronis API credentials to establish the connection.
 
     | Field | Description |
     |-------|-------------|
-    | **Datacenter** | Select your Acronis datacenter from the dropdown. If your datacenter is not listed, choose **Custom URL** and enter the base URL manually. |
+    | **Datacenter** | Select the datacenter that belongs to this Acronis account. If it is not listed, choose **Custom URL** and enter the base URL in **Datacenter URL**. Do not guess a region. |
     | **Client ID** | The client identifier from your Acronis API client |
     | **Client Secret** | The secret from your Acronis API client |
 
@@ -132,8 +128,8 @@ Enter your Acronis API credentials to establish the connection.
     </Note>
   </Step>
 
-  <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials. MSPortal will use your Client ID and Client Secret to authenticate with the Acronis API and retrieve your root tenant information. When the test passes, you will see a **Connection successful!** message, and the green banner shows your root tenant name.
+  <Step title="Test the connection">
+    Select **Test connection**. MSPortal uses your Client ID and Client Secret to authenticate with the Acronis API and read your root tenant. When the test passes, **Connection verified** appears with your root tenant name.
 
     If the connection fails:
     - Verify you selected the correct datacenter from the dropdown (or entered the correct custom URL)
@@ -142,73 +138,46 @@ Enter your Acronis API credentials to establish the connection.
     - Confirm your Acronis account has administrative access
   </Step>
 
-  <Step title="Create Integration">
-    Once the connection test passes, click **Create Integration** to save your credentials. MSPortal starts the first tenant sync in the background.
+  <Step title="Save and continue">
+    Once the test passes, select **Save and continue** to save the connection. MSPortal also requests the first tenant sync in the background. The connection can be saved even if that first sync request fails, so check the tenant list before assuming tenants are available.
 
     <Note>
-      **Test Connection** does not save anything. If you change a field after testing, test again before you click **Create Integration**.
+      **Test connection** does not save anything. If you change a field after testing, test again before you save.
     </Note>
   </Step>
-
-  <Step title="Continue to Mapping">
-    Click **Next** to move to the Map step.
-  </Step>
 </Steps>
 
----
+### Import or match tenants
 
-### Step 2: Map Tenants
-
-Map Acronis tenants (your customers/clients) to MSPortal companies. This determines which backup data syncs to which company.
+Map Acronis tenants (your customers) to MSPortal companies. This determines which company each tenant's backup data appears under.
 
 <Steps>
-  <Step title="Sync Tenants">
-    If no tenants appear, click **Sync Tenants** (or **Sync** above the list) to fetch tenants from your Acronis account. The initial sync may take a few minutes depending on the number of tenants in your environment.
-
-    <Info>
-      The sync runs in the background. If tenants do not appear immediately, wait a few minutes and check again.
-    </Info>
+  <Step title="Load tenants">
+    Open **Import or match tenants**. If no tenants appear, select **Sync tenants** and wait for the background sync. The first sync can take a few minutes depending on the number of tenants.
   </Step>
 
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Acronis tenants to MSPortal companies based on name similarity. This saves significant time when you have many tenants with matching names.
-
-    <Tip>
-      Quick Match uses intelligent name matching to find likely matches. Review the results and make manual adjustments for any incorrect or missing matches.
-    </Tip>
+  <Step title="Review suggestions">
+    Use **Suggested** to review proposed matches. Each suggestion shows its confidence. Select **Accept** on a row to save that match, or use the **Accept strong matches** button to accept every pair with 90% confidence or more. Untick any pair you want to review yourself.
   </Step>
 
-  <Step title="Manual Mapping">
-    For tenants that were not automatically matched or need adjustment:
-
-    1. Find the tenant in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-
-    If the company does not exist yet, click the **+** button next to the dropdown to create it and map the tenant in one go. MSPortal creates the company right away, so check for an existing match first to avoid duplicates.
-
-    To remove a mapping, click the **X** button next to the company badge. Removing a saved mapping takes effect immediately.
+  <Step title="Match the rest">
+    Use **Import** to find tenants without a match. Select **Choose company…** to pick an existing MSPortal company, or select **Import** on the row to create the company from the tenant and match it. **Import companies** imports several tenants at once; existing companies with the same name are matched instead of duplicated. Check for an existing company first to avoid duplicates.
   </Step>
 
-  <Step title="Save Your Mappings">
-    New matches show as **Pending** until you save them. Click **Import Selected** to save pending mappings. **Complete Setup** also saves any pending mappings before it closes the wizard.
-  </Step>
-
-  <Step title="Filter Tenants">
-    Click the summary cards above the list to filter the view:
-    - **Total Items** - Show all synced tenants
-    - **Mapped** - Show only tenants linked to companies
-    - **Unmapped** - Show tenants that still need mapping
-  </Step>
-
-  <Step title="Complete Setup">
-    Once you have mapped your tenants, click **Complete Setup** to finish the wizard and return to **Settings** > **Integrations**. Backup data for the mapped tenants loads in the background over the next sync cycles.
-
-    <Info>
-      Only data from mapped tenants will sync to MSPortal. You can return to add more mappings at any time.
-    </Info>
+  <Step title="Check saved matches">
+    Use **Matched** to review saved links. To unlink a tenant, select **Change** and choose **Remove match**; it takes effect immediately. Use **Ignore** for tenants you never want to map.
   </Step>
 </Steps>
+
+Matches save as soon as you apply them; wait for the confirmation before you rely on a link. Matching does not create an Acronis customer or start a backup job.
+
+<Info>
+  Only data from mapped tenants syncs to MSPortal. You can return to add more mappings at any time.
+</Info>
+
+### Review
+
+Open **Review** and select **Finish setup** once the required tasks are done. Finishing setup does not mean backup data has loaded; data for mapped tenants arrives over the next sync cycles.
 
 ---
 
@@ -262,38 +231,38 @@ After initial setup, data syncs automatically:
 | Incidents | Every hour (at :20) |
 
 <Note>
-You can trigger a manual sync at any time from **Settings** > **Integrations** by clicking **Resync** on the Acronis Cyber Protect row.
+You can request a sync at any time from the Acronis connection page with **Run sync**. Choose **All data** or a single data type.
 </Note>
 
 ---
 
 ## Managing Your Integration
 
-After setup, manage your integration from **Settings** > **Integrations**:
+After setup, manage the integration from its connection page:
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the setup wizard to retest the connection or update tenant mappings |
-| **Resync** | Trigger a fresh sync of all data from Acronis |
-| **Rename** / **Disconnect** | In the row's **...** menu. Rename labels the connection; Disconnect removes it |
-| **Delete** | In the setup wizard footer. Removes the integration and all stored credentials |
+| **Setup guide** tasks | Reopen **Connect** to retest the connection, or **Import or match tenants** to update mappings |
+| **Run sync** | Request a fresh sync of all data, or one data type, from Acronis |
+| **More actions** > **Rename** | Label the connection |
+| **More actions** > **Disconnect…** | Remove the stored credentials, tenant matches and synced data after confirmation. This cannot be undone. |
 
 ### Checking Your Credentials
 
-After the integration is created, the **Datacenter** and **Client ID** fields are locked.
+After the integration is created, the credentials are shown read-only. You can test them again, but you cannot change them here.
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings** > **Integrations** and click **Configure** on the Acronis Cyber Protect row.
+  <Step title="Open the connection">
+    Go to **Settings** > **Integrations** and open the Acronis Cyber Protect connection.
   </Step>
 
   <Step title="Retest the Connection">
-    On the Connect step, click **Retest Connection**. Leave the **Client Secret** field as it is to test the stored secret.
+    Open **Connect** and select **Test connection**. The stored secret is used for the test.
   </Step>
 </Steps>
 
 <Warning>
-  **Retest Connection** does not save a new secret. To move the integration to a new API client, contact support@msportal.ai before you delete the old API client in Acronis.
+  A successful retest does not save a new secret. To use a different API client, disconnect and connect again, which removes the connection's matches and synced data. To keep them, contact support@msportal.ai before you delete the old API client in Acronis.
 </Warning>
 
 ### Adding More Tenant Mappings
@@ -301,20 +270,20 @@ After the integration is created, the **Datacenter** and **Client ID** fields ar
 As you onboard new clients in Acronis:
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings** > **Integrations** and click **Configure** on the Acronis Cyber Protect row.
+  <Step title="Open the connection">
+    Go to **Settings** > **Integrations** and open the Acronis Cyber Protect connection.
   </Step>
 
-  <Step title="Navigate to Map Step">
-    Click **Map** in the wizard stepper.
+  <Step title="Open the tenant task">
+    Select **Import or match tenants** in the **Setup guide**.
   </Step>
 
   <Step title="Sync New Tenants">
-    Click **Sync** to fetch any new tenants from Acronis.
+    Use **Run sync** to fetch any new tenants from Acronis.
   </Step>
 
   <Step title="Map New Tenants">
-    Use Quick Match or manual mapping to connect new tenants to MSPortal companies.
+    Accept suggestions or choose companies manually to connect new tenants to MSPortal companies.
   </Step>
 </Steps>
 
@@ -330,21 +299,21 @@ As you onboard new clients in Acronis:
     - Insufficient account permissions
 
     **Solutions:**
-    1. Verify you selected the correct datacenter from the dropdown, or entered the correct custom URL
+    1. Verify you selected the correct datacenter from the dropdown, or entered the correct custom URL. The datacenter must belong to the Client ID.
     2. Confirm the Client ID and Client Secret are copied exactly, without extra spaces or missing characters
     3. Log into Acronis and verify the API client still exists under **Settings** > **API Clients**
     4. Ensure your Acronis account has administrative privileges
     5. If credentials are lost, create a new API client in Acronis and contact support@msportal.ai to move the integration to it
   </Accordion>
 
-  <Accordion title="No tenants appear in mapping step">
+  <Accordion title="No tenants appear in the tenant task">
     **Causes:**
     - Initial sync still in progress
     - API client lacks sufficient permissions
 
     **Solutions:**
-    1. Click **Sync** and wait a few minutes for the background sync to complete
-    2. Verify that your Acronis account has access to view tenant information
+    1. Select **Sync tenants** or use **Run sync**, and wait a few minutes for the background sync to complete
+    2. Verify that your Acronis API client can access the tenant. Creating companies in MSPortal will not fix provider visibility.
     3. Confirm that your Acronis environment has sub-tenants configured (if you only have a root tenant, there may be nothing to map)
   </Accordion>
 
@@ -356,8 +325,8 @@ As you onboard new clients in Acronis:
 
     **Solutions:**
     1. Ensure at least one tenant is mapped to a company. Only data from mapped tenants syncs
-    2. Wait for the sync to complete, then check again
-    3. Click **Configure** on the Acronis Cyber Protect row and use **Retest Connection** to confirm the stored credentials still work
+    2. Wait for the current sync to complete before you request another, then check again
+    3. Open **Connect** on the Acronis connection page and select **Test connection** to confirm the stored credentials still work
   </Accordion>
 
   <Accordion title="Missing alerts or resources">
@@ -366,8 +335,12 @@ As you onboard new clients in Acronis:
     - Sync for that data type has not run yet
 
     **Solutions:**
-    1. Verify the tenant is mapped in the integration wizard
-    2. Click **Resync** on the Acronis Cyber Protect row to trigger a fresh sync
+    1. Verify the tenant is matched in **Import or match tenants**
+    2. Use **Run sync** on the Acronis connection page to request a fresh sync
+  </Accordion>
+
+  <Accordion title="Data appears under the wrong company">
+    Review the saved match for the correct connection in **Import or match tenants** before you change it. Removing a saved match takes effect immediately.
   </Accordion>
 
   <Accordion title="Wrong datacenter selected">
@@ -376,8 +349,28 @@ As you onboard new clients in Acronis:
 
     **Solutions:**
     1. Log into your Acronis management console and check the URL in your browser address bar
-    2. Select the matching datacenter from the dropdown, or use **Custom URL** and enter the base domain only (e.g., `https://us5-cloud.acronis.com`), not a full page path
-    3. Test the connection again after updating
+    2. For a new connection, select the matching datacenter from the dropdown, or use **Custom URL** and enter the base domain only (e.g., `https://us5-cloud.acronis.com`), not a full page path
+    3. Test the connection again after updating. The datacenter of a saved connection cannot be changed, so disconnect and connect again if it is wrong.
+  </Accordion>
+</AccordionGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Test connection save the integration?">
+    No. For a new connection, wait for a successful test, then choose **Save and continue**. That action saves the connection; synchronization is separate.
+  </Accordion>
+  <Accordion title="Does Connection verified mean a new check just ran?">
+    An existing integration can open with its saved verified state. Use **Test connection** when you need a current connection check, then inspect the result.
+  </Accordion>
+  <Accordion title="Do suggestions create companies or save every proposed match?">
+    Suggestions wait for review. Accepting a suggestion saves that match. Importing a tenant as a company also saves the new company and its match, so check for an existing company first.
+  </Accordion>
+  <Accordion title="Why is backup data still missing after Finish setup?">
+    **Finish setup** records that setup is complete; matches save separately. Check the correct connection, saved tenant matches, provider access and the sync result. A setup-success message does not mean backup data has finished loading.
+  </Accordion>
+  <Accordion title="Is removing a saved company match only a draft?">
+    No. Removing a saved match takes effect immediately. Verify the company and the Acronis tenant before you remove it.
   </Accordion>
 </AccordionGroup>
 
@@ -389,8 +382,8 @@ As you onboard new clients in Acronis:
   <Card title="Map Tenants First" icon="sitemap">
     Always map your Acronis tenants to companies before expecting data to appear. Only mapped tenant data syncs to MSPortal.
   </Card>
-  <Card title="Use Quick Match" icon="wand-magic-sparkles">
-    Start with Quick Match for tenant mapping, then manually adjust any incorrect matches. It saves significant time with large tenant lists.
+  <Card title="Accept Strong Matches" icon="wand-magic-sparkles">
+    Start with **Accept strong matches**, then review the remaining suggestions and unmatched tenants. It saves significant time with large tenant lists.
   </Card>
   <Card title="Secure Your Credentials" icon="lock">
     Store your Client ID and Client Secret securely. If you suspect they have been compromised, delete the API client in Acronis and create a new one.
@@ -425,8 +418,8 @@ After setting up the Acronis integration:
   <Card title="Import Companies" icon="building" href="/user-guides/integrations/import-companies">
     Set up companies if you have not done so already
   </Card>
-  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
-    Explore additional integration options
+  <Card title="Integration Troubleshooting" icon="plug" href="/user-guides/integrations/faq">
+    Answers to common integration questions
   </Card>
 </CardGroup>
 

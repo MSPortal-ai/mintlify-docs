@@ -10,15 +10,11 @@ The UniFi Console integration connects your Ubiquiti UniFi environment to MSPort
 
 UniFi is treated as an RMM-style device source. Once connected, MSPortal syncs:
 
-- **Sites** from the UniFi console, which you map to MSPortal companies
+- **Sites** from the UniFi console, which you match to MSPortal companies
 - **Devices** (access points, switches, gateways, cameras) into a staging area, ready to import into your device inventory
 - **Networks** (VLAN, LAN, and WAN configurations) for self-hosted controllers
 
-UniFi is set up through the standard integration wizard with three steps: **Connect**, **Map**, and **Import**. Each console is added as its own connection, and you can connect as many consoles as you need.
-
-<Note>
-The UniFi integration is in early access and is hidden until it is enabled for your tenant. If you do not see the **UniFi Console** row under **Settings > Integrations**, contact support@msportal.ai to have it turned on.
-</Note>
+Each console is added as its own connection, and you can connect as many consoles as you need. A UniFi connection page has these setup tasks: **Connect**, **Choose data**, **Import or match companies**, **Import devices** and **Review**. See [Connect and manage integrations](/user-guides/integrations/index#connect-match-and-verify) for the tasks every connection shares.
 
 ### Connection models
 
@@ -26,10 +22,10 @@ You can add as many UniFi connections as you need, and mix the models freely.
 
 <CardGroup cols={2}>
   <Card title="Global console" icon="globe">
-    One UniFi console that spans all of your clients. Sites are mapped to companies manually after the first sync.
+    One UniFi console that spans all of your clients. You match each site to a company after the first sync.
   </Card>
   <Card title="Per-company console" icon="building">
-    A console that belongs to a single client. Every site it discovers is automatically linked to that company.
+    A console that belongs to a single client. Every site on it is matched to that company.
   </Card>
   <Card title="UniFi Cloud" icon="cloud">
     Connects through Ubiquiti's Site Manager API using an API key from your ui.com account.
@@ -43,10 +39,9 @@ You can add as many UniFi connections as you need, and mix the models freely.
 
 Before you begin, make sure you have:
 
-- The UniFi integration enabled for your tenant (see the note above)
 - Administrative access to your UniFi Cloud account or self-hosted controller
 - MSPortal integration management permissions
-- Companies already created in MSPortal, so you have something to map sites to
+- Companies already created in MSPortal, or permission to create them, so you have something to match sites to
 
 ---
 
@@ -109,114 +104,97 @@ MSPortal needs to reach your controller over the network. A controller that is o
 ## Part 2: Connect a Console in MSPortal
 
 <Steps>
-  <Step title="Start the setup wizard">
-    Go to **Settings > Integrations**, find **UniFi Console**, and click **Connect**. If you already have a UniFi connection and want to add another console, click **Connect another** on the UniFi Console row instead.
+  <Step title="Open the connection page">
+    Go to **Settings > Integrations**, open the **Directory** tab, find **UniFi Console**, and click **Connect**. If you already have a UniFi connection and want to add another console, click **Connect another** on the UniFi Console row, or **Add connection** under UniFi Console on the **Active** tab.
   </Step>
 
   <Step title="Fill in the connection details">
     | Field | Description |
     |-------|-------------|
     | **Connection name** | An optional label, for example "Main office console". Use this when you have several connections, so they are easy to tell apart in lists. |
-    | **Scope** | **Global (all companies)** for a console that serves multiple clients, or **Per company** for a console that belongs to one client. |
-    | **Company** | Shown when scope is Per company. The client this console belongs to. |
+    | **Scope** | **Global (all companies)** for a console that serves multiple clients, or **Per company** for a console that belongs to one client. You cannot change this after connecting. |
+    | **Company** | Shown when scope is Per company. The client this console belongs to. You cannot change this after connecting. |
     | **Connection mode** | **UniFi Cloud** or **Self-hosted controller**. |
     | **Controller URL** | Shown for self-hosted controllers, for example `https://192.168.1.1:8443`. |
+    | **Certificate** | Shown for self-hosted controllers. Choose **Allow self-signed certificate** for a controller using a self-signed TLS certificate, which is common on self-hosted UniFi. Otherwise keep **Require a trusted certificate**. |
     | **Authentication method** | **API key** or **Username & password**. UniFi Cloud requires API key authentication. |
     | **API key** / **Username** and **Password** | The credentials you created in Part 1. |
-    | **Allow self-signed certificate** | Turn this on for controllers using a self-signed TLS certificate, which is common on self-hosted UniFi. |
-    | **Sync devices** | Whether devices are pulled from this console. |
-    | **Sync networks** | Whether network configurations are pulled from this console. |
-
-    <Frame>
-      <img src="/images/product/unifi-setup-fields.png" alt="UniFi Console setup in MSPortal with a blank API key field" width="892" height="120" />
-    </Frame>
   </Step>
 
   <Step title="Test the connection">
-    Click **Test Connection**. A "Connected to UniFi successfully" message confirms MSPortal can reach the console and authenticate.
+    Click **Test connection** and resolve any reported error. If you change a field after testing, test again.
   </Step>
 
-  <Step title="Create the integration">
-    Click **Create Integration**. MSPortal stores the credentials securely and starts the first sync.
-
-    <Note>
-      **Test Connection** does not save anything. If you change a field after testing, test again before you click **Create Integration**.
-    </Note>
-  </Step>
-
-  <Step title="Continue to mapping">
-    Click **Next** to move to the Map step.
+  <Step title="Save the connection">
+    After a successful test, click **Save and continue**. MSPortal stores the credentials and starts discovering sites and devices. A successful test on its own does not save anything.
   </Step>
 </Steps>
 
 <Note>
-Credentials are encrypted in secure vault storage. They are never shown again after saving, and never appear in logs. When you reopen the wizard later, leaving a credential field masked or empty keeps the existing value.
+Credentials are stored in the vault and never shown again after saving. When you reopen **Connect** later, leaving a masked credential unchanged keeps the stored value. Changing the connection mode, controller URL or authentication method clears the stored credentials, so enter the credentials for the new endpoint.
 </Note>
 
 ---
 
-## Part 3: Map Sites to Companies
+## Part 3: Choose Data and Match Sites to Companies
 
-A UniFi **site** is the unit that maps to an MSPortal company. Devices and networks inherit the company from their site.
+Open **Choose data** to pick what this console syncs. **Devices** and **Networks** each have a switch. Changes save as you make them, and turning a dataset on starts its first sync. Network configurations are only returned by a self-hosted controller using username and password.
+
+A UniFi **site** is the unit that matches to an MSPortal company. Devices and networks inherit the company from their site.
 
 <Tabs>
   <Tab title="Per-company connection">
-    Nothing to do. Every site discovered by a per-company connection is linked to that company automatically at sync time.
+    Nothing to match. Every site on a per-company console is matched to the company you chose when connecting.
   </Tab>
 
   <Tab title="Global connection">
-    <Steps>
-      <Step title="Wait for the first sync">
-        The wizard's **Map** step checks for new sites automatically while the first sync runs. Sites usually appear within a few minutes.
-      </Step>
-      <Step title="Review the site list">
-        Each site is listed with its device count and network count.
-      </Step>
-      <Step title="Use Quick Match">
-        Click **Quick Match** to automatically suggest company matches based on site names. Review the suggestions before applying them.
-      </Step>
-      <Step title="Map the remaining sites manually">
-        Use the **Select company...** dropdown on a site to choose the MSPortal company it belongs to. If the company does not exist yet, click the **+** button next to the dropdown to create it. MSPortal creates the company right away, so check for an existing match first.
-      </Step>
-      <Step title="Save your mappings">
-        New matches show as **Pending** until you save them. Click **Import Selected** to save the pending mappings, then click **Next** to continue. **Next** also saves any pending mappings. Removing a saved mapping takes effect immediately.
-      </Step>
-    </Steps>
+    1. Open **Import or match companies** after discovery has returned the console's sites. If the list is empty, wait for the first sync to finish.
+    2. Review each suggested company and choose **Accept**, or choose **Change** to pick another existing company. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them.
+    3. Wait for each action to save and check the resulting company match. Accepting a match or removing a saved match takes effect immediately.
+    4. If a client is missing, choose **Import company** only after checking for an existing company. Confirmed creation and matching are saved actions.
+
+    Each UniFi console comes with a site named **Default**. When a site has a generic name like this, the list shows the console's name instead, and creating a company uses that name. Under each site, the list shows its console (when the site has its own name) and how many devices it has.
+
+    Use **Ignore** for a site that does not belong to a client. You can restore it from **Ignored** later.
 
     <Note>
-      Sites that are not mapped have no company. Their devices stay in staging and cannot be imported.
+      Sites that are not matched have no company. Their devices stay in staging and cannot be imported.
     </Note>
   </Tab>
 </Tabs>
+
+Saved matches determine which company receives UniFi data. Review sync results separately from the matching result.
 
 ---
 
 ## Part 4: Import Devices
 
 <Steps>
-  <Step title="Open Device Import">
-    On the wizard's **Import** step, click **Open Device Import**. You can also reach this page anytime using the **Import Devices** action on the UniFi row under **Settings > Integrations**.
+  <Step title="Open Import devices">
+    Open **Import devices** on the UniFi connection page.
   </Step>
 
-  <Step title="Map device types">
-    In the **Device Type Mappings** table, map each discovered UniFi device type (access points, switches, gateways, cameras) to an MSPortal device type. Use **Ignore** for types you do not want in your inventory.
+  <Step title="Match device types">
+    Under **Match device types**, match each discovered UniFi device type (access points, switches, gateways, cameras) to an MSPortal device type. **Match all suggested** accepts the suggestions, and **Match the rest with AI** suggests types for the rest.
   </Step>
 
-  <Step title="Enable Auto-Sync (optional)">
-    Check **Auto-Sync** on a mapped device type, or use **Enable All Auto-Sync**, to automatically import new devices of that type after each sync.
+  <Step title="Turn on Auto-import (optional)">
+    Turn on **Auto-import** on a matched device type to import new devices of that type automatically after each sync.
   </Step>
 
   <Step title="Import staged devices">
-    The **Staged Devices** list shows each discovered device with its name, model, type, MAC address, IP address, firmware, status, site, and company. Select the devices you want and click **Import Selected**. They are created in your device inventory with UniFi as the source and Ubiquiti as the manufacturer, and they appear in the Devices module, reports, and compliance alongside devices from your RMM.
+    **Staged devices** lists each discovered device waiting to be imported. Select the devices you want and click **Import N selected**, or click **Import all matched**. Devices on a site without a company show **Match company first**. Imported devices are created in your device inventory with UniFi as the source and Ubiquiti as the manufacturer, and they appear in the Devices module, reports, and compliance alongside devices from your RMM.
   </Step>
 
-  <Step title="Finish the wizard">
-    Return to the wizard and click **Complete Setup**.
+  <Step title="Finish setup">
+    Open **Review** and click **Finish setup** once the required tasks are done. Finishing setup does not mean every sync or device import has completed. Check **Import devices** and the resulting inventory.
   </Step>
 </Steps>
 
+For type matching and import results in more detail, see [Import Devices](/user-guides/integrations/import-devices).
+
 <Tip>
-Auto-Sync replaces manual importing. Once a device type has Auto-Sync enabled, new devices found on mapped sites are imported automatically after each sync.
+Auto-import replaces manual importing. Once a device type has Auto-import turned on, new devices found on matched sites are imported automatically after each sync.
 </Tip>
 
 ---
@@ -225,7 +203,7 @@ Auto-Sync replaces manual importing. Once a device type has Auto-Sync enabled, n
 
 | Data Type | Sync Direction | Notes |
 |-----------|----------------|-------|
-| Consoles and sites | UniFi -> MSPortal | Sites are the company-mappable unit |
+| Consoles and sites | UniFi -> MSPortal | Sites are the company-matchable unit |
 | Devices | UniFi -> MSPortal | Name, model, type, MAC, IP address, firmware, status |
 | Networks | UniFi -> MSPortal | VLAN, subnet, purpose, and enabled state |
 | Device import | MSPortal only | Staged devices become records in your device inventory |
@@ -242,9 +220,9 @@ MSPortal only reads from UniFi. It never changes your UniFi configuration, adopt
 
 | Sync Type | Schedule |
 |-----------|----------|
-| Automatic sync | Every 2 hours |
-| Manual sync | On demand, using **Resync** on the UniFi row under **Settings > Integrations**, or **Sync Now** on the device import page |
-| Auto-import | Immediately after each sync, for device types with **Auto-Sync** enabled |
+| Automatic sync | Every 6 hours |
+| Manual sync | On demand, using **Run sync** on the UniFi connection page |
+| Auto-import | Immediately after each sync, for device types with **Auto-import** turned on |
 
 Each connection shows its own last sync time on the integrations list.
 
@@ -252,16 +230,17 @@ Each connection shows its own last sync time on the integrations list.
 
 ## Managing Connections
 
-Each UniFi connection appears as its own row under **Settings > Integrations**. From the row you can:
+Each UniFi connection appears as its own row under UniFi Console on the **Active** tab of **Settings > Integrations**. Open a connection to manage it:
 
-- **Configure**: reopen the setup wizard to change connection settings, credentials, sync toggles, or site mappings. On the Connect step, click **Save connection** to apply changes
-- **Resync**: pull the latest sites, devices, and networks from that console
-- **Import Devices**: open the device import page for that console
-- **Rename**: give the connection a nickname to tell it apart from other consoles
-- **Disconnect**: remove the connection and its stored credentials. This is in the row's **...** menu, next to **Rename**. The wizard footer also has a **Delete** button that does the same
+- **Connect**: enter replacement credentials, click **Test connection**, then click **Save changes**. Testing again on its own does not save anything. Scope and company stay fixed; use a separate connection for a different company scope.
+- **Run sync**: pull the latest sites, devices, and networks from that console
+- **Import devices**: work with staged devices and device type matches for that console
+- **Overview** and **Sync activity**: check connection status, the last runs and any errors
+- **Rename**: in **More actions**, give the connection a nickname to tell it apart from other consoles
+- **Disconnect…**: in **More actions**, remove the connection
 
 <Warning>
-Disconnecting removes the stored credentials and the synced UniFi data for that connection, and cannot be undone. Devices you already imported into your inventory are kept.
+Disconnecting removes the stored credentials, the matches between UniFi sites and your companies, and the data synced from this connection. It cannot be undone, and it does not revoke the API key or account in UniFi.
 </Warning>
 
 ---
@@ -269,10 +248,6 @@ Disconnecting removes the stored credentials and the synced UniFi data for that 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="I do not see UniFi Console under Settings > Integrations">
-    The integration is in early access and is enabled per tenant. Contact support@msportal.ai to have it turned on for your account.
-  </Accordion>
-
   <Accordion title="Test connection fails on a self-hosted controller">
     **Causes:**
     - The controller URL is wrong, or is missing the port (for example `:8443`)
@@ -282,7 +257,7 @@ Disconnecting removes the stored credentials and the synced UniFi data for that 
 
     **Solutions:**
     1. Confirm the URL by opening it in a browser from outside your network
-    2. Turn on **Allow self-signed certificate**
+    2. Set **Certificate** to **Allow self-signed certificate**
     3. Publish the controller through a VPN, reverse proxy, or port forward, or switch to a UniFi Cloud connection
     4. On older controllers, switch the authentication method to **Username & password**
   </Accordion>
@@ -297,22 +272,40 @@ Disconnecting removes the stored credentials and the synced UniFi data for that 
     2. Confirm the account that created the key owns the consoles you want to sync
   </Accordion>
 
-  <Accordion title="No sites appear on the Map step">
+  <Accordion title="No sites appear in Import or match companies">
     **Causes:**
     - The first sync has not finished yet
     - The credentials only have access to consoles with no sites
 
     **Solutions:**
-    1. The Map step checks for new sites automatically. Give it a few minutes, or use the sync button on the step to trigger a fresh sync
+    1. Give the first sync a few minutes, or use **Run sync** to start a fresh one. Avoid creating extra connections for the same console.
     2. Confirm the account or API key can see the sites in UniFi itself
   </Accordion>
 
   <Accordion title="Devices have no company and cannot be imported">
-    Devices inherit their company from their site. Click **Configure** on the UniFi connection, open the **Map** step, map the site to a company, then sync again.
+    Devices inherit their company from their site. Open the UniFi connection, match the site in **Import or match companies**, then sync again.
   </Accordion>
 
   <Accordion title="No network data is synced">
-    Network configurations are only returned by a self-hosted controller using **Username & password** authentication. UniFi Cloud and controller API keys do not expose them. Check also that **Sync networks** is enabled on the connection.
+    Network configurations are only returned by a self-hosted controller using **Username & password** authentication. UniFi Cloud and controller API keys do not expose them. Check also that **Networks** is turned on in **Choose data**.
+  </Accordion>
+
+  <Accordion title="Devices are missing or the inventory is old">
+    Check the site's saved company match, the last successful sync in **Sync activity**, any paused state on the connection, the device type matches, and the import result in **Import devices**.
+  </Accordion>
+</AccordionGroup>
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Test connection save the integration?">
+    No. For a new connection, complete a successful test and then click **Save and continue**. For an existing connection, click **Save changes** after testing new credentials.
+  </Accordion>
+  <Accordion title="Are suggested matches saved automatically?">
+    No. Suggestions wait for your review. Accepting a suggestion saves its match immediately, and removing a saved match also takes effect immediately.
+  </Accordion>
+  <Accordion title="Does Finish setup mean all devices are imported?">
+    No. Device discovery, saved matches and inventory imports have separate results. Check **Import devices** and the resulting inventory.
   </Accordion>
 </AccordionGroup>
 
@@ -324,14 +317,14 @@ Disconnecting removes the stored credentials and the synced UniFi data for that 
   <Card title="Name every connection" icon="tag">
     With several consoles in play, a connection name like "Acme HQ Cloud Key" is far easier to work with than a scope label.
   </Card>
-  <Card title="Map sites before importing" icon="sitemap">
-    Devices on unmapped sites have no company and cannot be imported. Finish the Map step first.
+  <Card title="Match sites before importing" icon="sitemap">
+    Devices on unmatched sites have no company and cannot be imported. Finish **Import or match companies** first.
   </Card>
   <Card title="Use per-company connections where you can" icon="building">
-    Sites link to the company automatically, which removes the mapping step entirely.
+    Every site is matched to the company automatically, which removes the matching step entirely.
   </Card>
-  <Card title="Turn on Auto-Sync for network gear" icon="rotate">
-    Access points and switches rarely need review before import, so Auto-Sync on those device types keeps the inventory current with no manual work.
+  <Card title="Turn on Auto-import for network gear" icon="rotate">
+    Access points and switches rarely need review before import, so Auto-import on those device types keeps the inventory current with no manual work.
   </Card>
 </CardGroup>
 
@@ -339,9 +332,11 @@ Disconnecting removes the stored credentials and the synced UniFi data for that 
 
 ## Related Resources
 
+- [Import or match companies](/user-guides/integrations/import-companies) - Matching integration records to companies
 - [Import Devices](/user-guides/integrations/import-devices) - General device import guide
 - [Devices Module](/user-guides/devices/index) - Managing devices in MSPortal
 - [Integration Company Mapping](/user-guides/settings/integration-company-mapping) - Mapping integration companies and sites
+- [Integration settings](/user-guides/settings/integrations) - Managing connections
 - [Sync Schedules](/user-guides/integrations/sync-schedules) - When each integration syncs
 
 ## Need Help?

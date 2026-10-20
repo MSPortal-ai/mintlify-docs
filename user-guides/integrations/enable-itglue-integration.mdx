@@ -4,7 +4,7 @@ description: 'Connect your IT Glue instance to MSPortal.ai to sync documentation
 icon: 'book'
 ---
 
-This guide walks you through connecting your IT Glue documentation platform to MSPortal.ai using our streamlined 3-step setup wizard.
+Connect IT Glue to synchronize documents, configurations, flexible assets and checklists. Password sharing is optional. Setup requires **MSP integration management permission**, and Company sharing requires the appropriate Documentation settings access.
 
 ## Overview
 
@@ -43,7 +43,7 @@ Before connecting to MSPortal, you need to create an API key in IT Glue.
 
 <Steps>
   <Step title="Log into IT Glue">
-    Access your IT Glue account. Note which region your account uses -- this is visible in your URL:
+    Access your IT Glue account. Note which region your account uses. This is visible in your URL:
 
     | URL | Region |
     |-----|--------|
@@ -67,7 +67,7 @@ Before connecting to MSPortal, you need to create an API key in IT Glue.
     IT Glue lets you restrict an API key to specific IP addresses. This is optional:
 
     - **No IP restriction (simplest):** leave the **IP Address Access List** field empty.
-    - **With IP restriction:** MSPortal supports IP-restricted keys. During setup, the MSPortal wizard displays a static MSPortal IP range for you to add to the key's access list (see Part 2, Step 1).
+    - **With IP restriction:** MSPortal supports IP-restricted keys. During setup, MSPortal shows a static MSPortal IP range for you to add to the key's access list (see [Connect](#connect)).
 
     <Warning>
       If you set an IP Address Access List on the key without adding MSPortal's IP range, IT Glue will return **403 Forbidden** on every request from MSPortal, even with a valid key.
@@ -98,37 +98,15 @@ Before proceeding to MSPortal, ensure you have the following:
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Set up the connection in MSPortal
 
-MSPortal.ai provides a guided 3-step wizard to connect and configure your IT Glue integration: **Connect**, **Map Organizations**, and **Sync & Sharing**.
+Open **Settings > Integrations**, choose the **Directory** tab and select **IT Glue**. For an existing account, open its saved connection. The **Setup guide** lists **Connect**, **Choose data**, **Import or match companies**, **Configure warranty**, **Import devices** and **Review**.
 
-### Starting the Wizard
-
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
-
-  <Step title="Start Setup">
-    Find the **IT Glue** integration and click **Connect** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your IT Glue region and API key to establish the connection.
+### Connect
 
 <Steps>
-  <Step title="Select Your Region">
-    Choose the region that matches your IT Glue account from the dropdown:
-    - **US** (api.itglue.com)
-    - **EU** (api.eu.itglue.com)
-
-    This setting picks the IT Glue endpoint MSPortal calls. It does not change your MSPortal region.
-
-    <img src="/images/product/itglue-connection-region.png" alt="IT Glue Region selector on the Connect step" width="892" height="180" />
+  <Step title="Select your region">
+    In **Region**, choose **United States** (api.itglue.com) or **Europe** (api.eu.itglue.com) to match your IT Glue account. This setting picks the IT Glue endpoint MSPortal calls. It does not change your MSPortal region.
 
     <Tip>
       If you are unsure which region you are on, check your IT Glue URL. For example, `app.eu.itglue.com` indicates the EU region.
@@ -136,17 +114,9 @@ Enter your IT Glue region and API key to establish the connection.
   </Step>
 
   <Step title="Handle IP restrictions (if your key uses them)">
-    If your API key has an IP Address Access List in IT Glue, check the box **My API key only allows approved IP addresses**. The wizard reveals an **Add MSPortal static IP range** panel with the IP range to allowlist.
+    In **IP allowlist**, choose **Any IP address can use this key**, or **Only approved IP addresses can use this key** if your key has an IP Address Access List in IT Glue.
 
-    1. Click the copy button next to the displayed range
-    2. In IT Glue, add the range to the key's **IP Address Access List** (under **Account > API Keys**)
-    3. Return to the wizard and continue
-
-    Use the range shown in your own wizard. Do not copy a range from another account or from an example.
-
-    <img src="/images/product/itglue-ip-allowlist.png" alt="IP restriction checkbox and the Add MSPortal static IP range panel" width="892" height="472" />
-
-    If your key has no IP restriction, leave the checkbox off.
+    For a restricted key, add the exact MSPortal static IP range shown by your connection to the key's **IP Address Access List** (under **Account > API Keys** in IT Glue) before saving. Use the range shown in your own connection. Do not copy a range from another account or from an example.
   </Step>
 
   <Step title="Enter API Key">
@@ -157,144 +127,86 @@ Enter your IT Glue region and API key to establish the connection.
     </Note>
   </Step>
 
-  <Step title="Save and Test Connection">
-    Click **Save and Test Connection**. The wizard saves your credentials and verifies the connection in one step, then shows a green success message and moves on to organization mapping.
+  <Step title="Test and save">
+    Select **Test connection**. For an unrestricted key, this checks API access. For a new IP-restricted key, it shows the range to allowlist; MSPortal tests the key from that range when you select **Save and continue**, and stores nothing if that test fails. Wait for a successful save before moving on.
 
-    If the connection fails with **403 Forbidden**, jump to the [troubleshooting section](#troubleshooting) below. The three most common causes, in order, are:
+    If the connection fails with **403 Forbidden**, see [Troubleshooting](#troubleshooting). The three most common causes, in order, are:
     1. Your IT Glue plan is not Enterprise (API access is Enterprise-only)
     2. The API key has an IP Address Access List that does not include MSPortal's IP range
     3. The key was created without the required access level
 
     For **401 Unauthorized** or network errors, verify the region matches your IT Glue login URL and that the key was copied without extra whitespace.
-
-    <Note>
-      A separate **Test Connection** button appears on this step only when you reopen the wizard for an already-connected integration.
-    </Note>
   </Step>
 </Steps>
 
----
+### Choose data
 
-### Step 2: Map Organizations
+Choose which IT Glue content syncs into MSPortal and whether passwords are shared. Each switch saves as soon as you flip it. Turning a dataset off hides its selectors without clearing the saved choices.
+
+| Setting | Description |
+|---------|-------------|
+| **Documents** | Standard IT Glue documents for each mapped organization |
+| **Configurations** | Servers, workstations and network devices from IT Glue |
+| **Checklists** | IT Glue checklists and checklist templates |
+| **Enable Password Sharing** | Allow team members to view passwords from IT Glue within MSPortal. Also controls password-metadata sync. |
+| **Flexible Asset Types** | Flexible asset types pulled live from your IT Glue account, so any custom types you have created appear automatically |
+
+Turning a type on starts a background sync for it. The data appears once that sync finishes.
+
+Document sync reads your IT Glue document folders first, then collects the documents in them. See [IT Glue document folders](/user-guides/integrations/itglue-sync-folders) if documents you expect are missing.
+
+For **Flexible Asset Types**, enable or disable syncing per type, use the search box to find a specific type, or use **Enable All** / **Disable All**.
+
+<Note>
+  **Enable All** and **Disable All** change every type in the connection, including types the search box is hiding.
+</Note>
+
+#### Password sharing
+
+Before enabling password sharing, it is important to understand how MSPortal handles IT Glue passwords:
+
+- **Password values are never stored in MSPortal.** Only password names and folder details sync, and each value is fetched live from IT Glue when a user reveals it
+- **Every password reveal is audit-logged** with the user, timestamp, and password name
+- **Users must have the `read_documentation_passwords` permission** to reveal passwords
+- IT Glue's own password access gating is respected at all times
+
+When password sharing is enabled, per-company password folder and role visibility can be fine-tuned in **Settings > Documentation > Passwords**.
+
+Turning password sharing off removes the synced IT Glue password details from MSPortal. It does not delete anything in IT Glue.
+
+### Import or match companies
 
 Map your IT Glue organizations to MSPortal companies. This determines which documentation, passwords, and checklists sync to which company.
 
-<Steps>
-  <Step title="Review Organization List">
-    After connecting, MSPortal fetches your organizations from IT Glue. The mapping table displays:
+1. Wait for discovery. After connecting, MSPortal fetches your organizations from IT Glue. Review organization names and any **PSA ID** or **Type** recorded in IT Glue.
+2. Review the suggested matches. MSPortal suggests a company when an organization's PSA ID matches an external company ID from your connected PSA integration, or when the names match ignoring case and whitespace.
+3. Accept a suggestion, choose another company in the row, or use **Import company** to create a portal company. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them.
+4. Choose **Ignore** for any organization you never want to map. You can restore it later.
 
-    - **Name** - The name of the organization in IT Glue
-    - **PSA ID** and **Type** - The PSA ID and organization type recorded in IT Glue
-    - **Mapped** - The MSPortal company the organization links to
-    - **Status** - **Pending** for a link you have not saved yet, **Saved** for a stored link, or **Ignored**
+Each accepted match, unlink and import saves immediately; check the result before leaving. Closing setup does not undo them.
 
-    If the list is empty, wait for the first fetch to finish or click **Check for Organizations**.
-  </Step>
+<Info>
+  Only data from mapped organizations will be accessible in MSPortal. You can return to add more mappings at any time.
+</Info>
 
-  <Step title="Use Quick Match (Recommended)">
-    Click **Quick Match** to automatically map IT Glue organizations to MSPortal companies. Quick Match uses two strategies:
+### Configure warranty
 
-    1. **PSA ID cross-referencing** - If your IT Glue organizations have a PSA ID, it matches against the external company IDs from your connected PSA integration
-    2. **Case-insensitive name matching** - Organizations with matching names (ignoring case and whitespace) are matched automatically
+The **Warranty Writeback** card writes MSPortal warranty dates back to IT Glue.
 
-    Quick Match fills in the matches as pending links. Review them, then click **Import Selected** to save them.
+1. Turn on **Write warranty dates to IT Glue configurations** to set the **Warranty Expires** field on the configuration linked to each device
+2. Click **Map configuration types** if you want to choose which IT Glue configuration types import as MSPortal device types
+3. If you record warranty dates in flexible assets instead, expand **Flexible assets (optional)**, turn on **Write warranty dates to flexible assets**, and map each device type to an asset type and its serial number and date fields
+4. Click **Save warranty settings**
 
-    <Tip>
-      Quick Match is most effective when your IT Glue organizations share the same names or PSA IDs as your MSPortal companies. Review the results and adjust any incorrect mappings.
-    </Tip>
-  </Step>
+Unlike the switches in **Choose data**, these settings do not save until you click **Save warranty settings**. **Finish setup** does not save them for you. See [Warranty Writeback to IT Glue Configurations](/user-guides/integrations/itglue-configuration-warranty-writeback) for matching rules and which dates are written.
 
-  <Step title="Manual Mapping">
-    For organizations that were not automatically matched:
+### Import devices
 
-    1. Find the organization in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-    4. If the company does not exist yet, use **Create new company** to add it and link it in one step
-    5. Click **Import Selected** to save the pending links
+**Import devices** maps IT Glue configuration types to MSPortal device types. IT Glue creates devices during configuration sync, after type mapping. You can ignore configuration types you do not want as devices. See [Import Devices](/user-guides/integrations/import-devices).
 
-    To remove a saved mapping, click the **X** button next to the company badge. The removal takes effect immediately. A company you create here is also saved immediately, even if you leave the wizard before saving its link.
+### Review and finish setup
 
-    Click **Ignore** on any organization you never want to map.
-  </Step>
-
-  <Step title="Filter Organizations">
-    Click a summary tile above the table to filter the list:
-    - **Total Items** - Show all synced organizations
-    - **Mapped** - Show only organizations linked to companies
-    - **Unmapped** - Show organizations that still need mapping
-    - **Ignored** - Show organizations you chose to ignore
-  </Step>
-
-  <Step title="Proceed">
-    Once you have mapped the organizations you need, click **Next**. **Next** saves any pending links and starts the content sync for mapped organizations. You must map at least one organization to continue.
-
-    <Info>
-      Only data from mapped organizations will be accessible in MSPortal. You can return to add more mappings at any time.
-    </Info>
-  </Step>
-</Steps>
-
----
-
-### Step 3: Sync & Sharing
-
-Choose which IT Glue content syncs into MSPortal and configure password sharing. This step is optional -- you can skip it and configure later.
-
-Each content switch on this step saves as soon as you flip it. The Warranty Writeback card is the only part with its own save button.
-
-<Steps>
-  <Step title="Toggle Content Types">
-    Under **Content Types**, enable or disable each category with its toggle switch:
-
-    | Category | Description |
-    |----------|-------------|
-    | **Documents** | Standard IT Glue documents for each mapped organization |
-    | **Configurations** | Servers, workstations and network devices from IT Glue |
-    | **Checklists** | IT Glue checklists and checklist templates |
-    | **Password Sharing** | Allow team members to view passwords from IT Glue within MSPortal |
-
-    Turning a type on starts a background sync for it. The data appears once that sync finishes.
-
-    Document sync reads your IT Glue document folders first, then collects the documents in them. See [IT Glue document folders](/user-guides/integrations/itglue-sync-folders) if documents you expect are missing.
-  </Step>
-
-  <Step title="Understand Password Security">
-    Before enabling password sharing, it is important to understand how MSPortal handles IT Glue passwords:
-
-    - **Password values are never stored in MSPortal** -- only password names and folder details sync, and each value is fetched live from IT Glue when a user reveals it
-    - **Every password reveal is audit-logged** with the user, timestamp, and password name
-    - **Users must have the `read_documentation_passwords` permission** to reveal passwords
-    - IT Glue's own password access gating is respected at all times
-
-    When password sharing is enabled, per-company password folder and role visibility can be fine-tuned in **Settings > Documentation > Passwords**.
-
-    Turning **Password Sharing** off removes the synced IT Glue password details from MSPortal. It does not delete anything in IT Glue.
-  </Step>
-
-  <Step title="Toggle Flexible Asset Types">
-    Under **Flexible Asset Types**, MSPortal lists the flexible asset types pulled live from your IT Glue account, so any custom types you have created appear automatically. Enable or disable syncing per type, use the search box to find a specific type, or use **Enable All** / **Disable All**.
-
-    <Note>
-      **Enable All** and **Disable All** change every type in the connection, including types the search box is hiding.
-    </Note>
-  </Step>
-
-  <Step title="Set up Warranty Writeback (optional)">
-    The **Warranty Writeback** card writes MSPortal warranty dates back to IT Glue.
-
-    1. Turn on **Write warranty dates to IT Glue configurations** to set the **Warranty Expires** field on the configuration linked to each device
-    2. Click **Map configuration types** if you want to choose which IT Glue configuration types import as MSPortal device types
-    3. If you record warranty dates in flexible assets instead, expand **Flexible assets (optional)**, turn on **Write warranty dates to flexible assets**, and map each device type to an asset type and its serial number and date fields
-    4. Click **Save warranty settings**
-
-    These settings do not save until you click **Save warranty settings**. **Complete Setup** does not save them for you. See [Warranty Writeback to IT Glue Configurations](/user-guides/integrations/itglue-configuration-warranty-writeback) for matching rules and which dates are written.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page. Background syncs may still be running after you leave.
-  </Step>
-</Steps>
+Open **Review** and select **Finish setup** once the required tasks are complete. Warranty settings still require their own save, and background syncs can keep running after setup.
 
 ---
 
@@ -308,7 +220,7 @@ IT Glue integration provides access to the following data types in MSPortal:
 | **Documents** | Synced on schedule | Standard IT Glue documentation |
 | **Configurations** | Synced on schedule | Servers, workstations and network devices |
 | **Flexible Assets** | Synced on schedule | Custom flexible asset types and their entries |
-| **Passwords** | Names synced, values live-fetched on reveal | Password values are never stored -- fetched in real time from IT Glue |
+| **Passwords** | Names synced, values live-fetched on reveal | Password values are never stored. They are fetched in real time from IT Glue |
 | **Checklists** | Synced on schedule | Checklist templates and completion status |
 | **Warranty dates** | Written to IT Glue after warranty checks | Only when Warranty Writeback is enabled and saved |
 
@@ -341,56 +253,19 @@ Password handling in the IT Glue integration follows strict security practices:
   </Accordion>
 
   <Accordion title="IT Glue access gating is respected">
-    If a password is restricted in IT Glue (e.g., through IT Glue's own access control), MSPortal respects those restrictions. The API key's access level determines what is retrievable.
+    If a password is restricted in IT Glue (e.g., through IT Glue's own access control), MSPortal respects those restrictions. The API key's access level determines what is retrievable. Provider **Password Access**, enabled sharing, company mapping and the user's permissions must all allow a reveal.
   </Accordion>
 </AccordionGroup>
 
 ---
 
-## Managing Your Integration
+## Maintain the connection
 
-After setup, manage your integration from **Settings > Integrations**:
+Open the IT Glue connection from **Settings > Integrations** and choose a task in the **Setup guide** to change its settings. **Run sync** in the connection header triggers a manual data refresh, and **Sync activity** shows each run's result.
 
-| Action | Description |
-|--------|-------------|
-| **Configure** | Re-open the setup wizard to modify settings, update mappings, or change sync and sharing configuration |
-| **Resync** | Trigger a manual data refresh (runs separate sync tasks for organizations, documents, passwords, flexible assets, and checklists) |
-| **Disconnect** | In the row's actions menu. Removes the integration and its stored credentials. Synced data may be purged |
-
-### Updating Your API Key
-
-If you need to rotate or replace your IT Glue API key:
-
-<Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the IT Glue integration.
-  </Step>
-  <Step title="Enter New API Key">
-    On the Connect step, the current key is shown masked and the **Region** is locked. Enter your new API key in the **API Key** field.
-  </Step>
-  <Step title="Update API Key">
-    Click **Update API Key** to save the new key.
-  </Step>
-  <Step title="Retest the Connection">
-    Once the field is empty again, click **Retest Connection** to verify the saved key. If the new key uses an IP Address Access List or needs Password Access, set those in IT Glue before you retest.
-  </Step>
-</Steps>
-
-### Adding More Organization Mappings
-
-As you onboard new clients in IT Glue:
-
-<Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the IT Glue integration.
-  </Step>
-  <Step title="Navigate to Map Step">
-    Click on Step 2 (Map Organizations) in the wizard stepper.
-  </Step>
-  <Step title="Map New Organizations">
-    New IT Glue organizations will appear in the list. Use Quick Match or manual mapping to connect them to MSPortal companies.
-  </Step>
-</Steps>
+- **Rotate the API key:** open **Connect**. The **Region** and **IP allowlist** choice stay fixed. Enter the replacement, select **Test connection**, then **Save changes**. Saving verifies the replacement, from the approved range for IP-restricted keys. A failed verification does not establish a working replacement; resolve the error and check password access before you revoke the old key in IT Glue.
+- **Map new organizations:** as you onboard new clients in IT Glue, open **Import or match companies**. New IT Glue organizations appear in the list for you to match or import.
+- **Disconnect:** open **More actions** and choose **Disconnect…**. The confirmation lists the stored credentials, matches and synced data that will be removed.
 
 ---
 
@@ -402,7 +277,7 @@ As you onboard new clients in IT Glue:
 
     - Re-copy the key directly from **Account > API Keys** in IT Glue
     - Paste it into a plain-text editor first if you suspect formatting was added along the way
-    - Make sure no leading or trailing spaces came along with the paste
+    - Make sure no leading or trailing spaces or quotes came along with the paste
   </Accordion>
   <Accordion title="Connection test returns 403 Forbidden (most common)">
     A **403 Forbidden** response means IT Glue received your request and recognized the key, but refused to authorize it. This is different from a 401 (bad key). There are three common causes, in order of likelihood:
@@ -419,10 +294,10 @@ As you onboard new clients in IT Glue:
 
     When creating an API key, IT Glue lets you restrict usage to specific IP addresses. An IP-restricted key only works with MSPortal when MSPortal's static IP range is on the list.
 
-    - In the MSPortal wizard's Connect step, check **My API key only allows approved IP addresses** to reveal the **Add MSPortal static IP range** panel, and copy the displayed range
+    - In **Connect**, choose **Only approved IP addresses can use this key** in **IP allowlist** and copy the range MSPortal shows
     - Go to **Account > API Keys** in IT Glue and add that range to the key's **IP Address Access List**
     - Alternatively, clear the IP Address Access List entirely if your security policy allows it
-    - Run **Save and Test Connection** again
+    - Select **Save and continue** again
 
     **3. The key was created without the required access level**
 
@@ -438,7 +313,7 @@ As you onboard new clients in IT Glue:
     **Solutions:**
     1. Check that the API key was copied exactly, with no leading or trailing spaces
     2. Verify the key has not been revoked in IT Glue (**Account > API Keys**)
-    3. Generate a fresh key and paste it into the wizard
+    3. Generate a fresh key and paste it into **Connect**
   </Accordion>
 
   <Accordion title="Connection test fails with a network or timeout error">
@@ -453,7 +328,7 @@ As you onboard new clients in IT Glue:
     3. Wait a minute and retry
   </Accordion>
 
-  <Accordion title="No organizations appear in mapping step">
+  <Accordion title="No organizations appear in Import or match companies">
     **Causes:**
     - API key lacks organization read permissions
     - Initial sync still in progress
@@ -461,53 +336,59 @@ As you onboard new clients in IT Glue:
     **Solutions:**
     1. Wait a few minutes for the initial fetch to complete
     2. Verify your API key has sufficient permissions in IT Glue
-    3. Click **Sync Organizations** or **Check for Organizations** to refresh the list
+    3. Use **Run sync** and check **Sync activity**
   </Accordion>
 
-  <Accordion title="Quick Match did not match expected organizations">
+  <Accordion title="Expected organizations have no suggested match">
     **Causes:**
     - Organization names differ between IT Glue and MSPortal
     - PSA IDs are not configured in IT Glue
 
     **Solutions:**
-    1. Use manual mapping for organizations with different names across systems
-    2. If your IT Glue organizations have PSA IDs set, Quick Match will use those for more accurate matching
+    1. Choose the company in the row for organizations with different names across systems
+    2. If your IT Glue organizations have PSA IDs set, suggestions use those for more accurate matching
   </Accordion>
 
   <Accordion title="Passwords are not visible">
     **Causes:**
-    - Password Sharing is not enabled in the Sync & Sharing step
+    - Password sharing is not enabled in **Choose data**
     - Per-company password access is set to "No access"
     - User does not have the `read_documentation_passwords` permission
+    - The API key does not have **Password Access**
 
     **Solutions:**
-    1. Re-open the wizard and enable **Password Sharing** in Step 3 (Sync & Sharing)
+    1. Open **Choose data** and turn on **Enable Password Sharing**
     2. Check the per-company password category settings in **Settings > Documentation > Passwords**
     3. Verify the user's role includes the `read_documentation_passwords` permission in **Settings > Users & Roles**
+    4. Confirm **Password Access** on the IT Glue key
   </Accordion>
 
   <Accordion title="Flexible asset types are missing">
     **Causes:**
     - The flexible asset type was created in IT Glue after the last sync
-    - The type is not enabled in the Sync & Sharing step
+    - The type is not enabled in **Choose data**
 
     **Solutions:**
-    1. Re-open the wizard and navigate to Step 3 (Sync & Sharing) to see the latest types
+    1. Reopen **Choose data** to see the latest types
     2. Enable the toggle for any new flexible asset types you want to sync
   </Accordion>
 
   <Accordion title="No documents for a company">
     **Causes:**
     - The organization mapping was never saved
-    - **Documents** is turned off in the Sync & Sharing step
+    - **Documents** is turned off in **Choose data**
     - The document sync has not finished, or the documents sit in folders it has not reached yet
     - Documentation settings do not share documents with that company or role
 
     **Solutions:**
-    1. Confirm the organization shows **Saved** in Step 2 (Map Organizations)
-    2. Confirm **Documents** is on in Step 3 (Sync & Sharing)
+    1. Confirm the organization is matched in **Import or match companies**
+    2. Confirm **Documents** is on in **Choose data**
     3. Follow [IT Glue document folders](/user-guides/integrations/itglue-sync-folders) to check folder coverage
     4. Review sharing in **Settings > Documentation**
+  </Accordion>
+
+  <Accordion title="An uploaded Word, Excel or PDF document says it is stored in IT Glue">
+    IT Glue does not let an API key download attachment files, so MSPortal cannot copy them. MSP staff can open the file in IT Glue with their own sign-in; Company users see that the file is not available in the portal. Images inside documents are copied and display normally.
   </Accordion>
 
   <Accordion title="Rate limiting errors during sync">
@@ -516,7 +397,7 @@ As you onboard new clients in IT Glue:
     - Large accounts with many organizations and assets may hit this limit during initial sync
 
     **Solutions:**
-    1. Wait a few minutes and trigger the sync again -- MSPortal will resume where it left off
+    1. Wait a few minutes and trigger the sync again. MSPortal will resume where it left off
     2. For very large accounts, the initial sync may take multiple cycles to complete fully
   </Accordion>
 </AccordionGroup>
@@ -529,11 +410,11 @@ As you onboard new clients in IT Glue:
 - **API Key Security**: Your API key is encrypted in vault storage and never exposed in logs or API responses. If you suspect it has been compromised, revoke it in IT Glue and generate a new one
 - **Password Privacy**: Passwords are never stored in MSPortal. They are fetched live from IT Glue on each reveal and every access is audit-logged
 - **Regional Endpoints**: Make sure you select the correct region (US or EU) during setup. Using the wrong region will cause connection failures even with a valid API key
-- **IP-Restricted Keys**: If your API key uses an IP Address Access List, enable the checkbox on the Connect step and add the displayed MSPortal IP range to the key before saving
+- **IP-Restricted Keys**: If your API key uses an IP Address Access List, choose **Only approved IP addresses can use this key** in **Connect** and add the displayed MSPortal IP range to the key before saving
 - **Rate Limits**: IT Glue allows 3,000 requests per 5-minute window. Large initial syncs may take multiple cycles if this limit is reached
 - **Organization Mapping**: Only data from mapped organizations is accessible in MSPortal. Unmapped organizations are ignored during sync
 - **Mapping Is Not Access**: Mapping an organization does not invite its users. Portal invitations and role access are set up separately
-- **Warranty Writeback**: Warranty settings save only with **Save warranty settings**. **Complete Setup** does not save them
+- **Warranty Writeback**: Warranty settings save only with **Save warranty settings**. **Finish setup** does not save them
 
 ---
 
@@ -556,6 +437,12 @@ After setting up the IT Glue integration:
   </Card>
   <Card title="Warranty Writeback" icon="shield-check" href="/user-guides/integrations/itglue-configuration-warranty-writeback">
     Write MSPortal warranty dates to IT Glue configurations
+  </Card>
+  <Card title="Company mapping" icon="arrow-right" href="/user-guides/settings/integration-company-mapping">
+    Review matching actions and saved links
+  </Card>
+  <Card title="Import or match companies" icon="building" href="/user-guides/integrations/import-companies">
+    Learn the shared company matching controls
   </Card>
   <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
     Explore additional integration options

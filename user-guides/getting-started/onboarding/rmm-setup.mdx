@@ -5,40 +5,38 @@ description: "Connect the selected RMM and verify its data before continuing."
 icon: "desktop"
 ---
 
-Connect your primary RMM so MSPortal can pull in sites and devices. This page is for MSP staff with integration-management access. The same flow covers Datto RMM, NinjaOne, ConnectWise Asio, N-central, Addigy, Meraki, UniFi, and WatchGuard.
+Connect your primary RMM so MSPortal can pull in sites and devices. This page is for MSP staff with integration-management access. **Connect your RMM** in Launch Center offers ConnectWise Asio, Datto RMM, NinjaOne, and UniFi. Other device tools, such as N-central, Addigy, Meraki, and WatchGuard, connect the same way from **Settings > Integrations**.
 
 ## Before you start
 
-- Choose your RMM in the **Integrations** step first. See [Choose launch integrations](/user-guides/getting-started/onboarding/integration-selection).
+- **Connect your RMM** is optional. If you do not use an RMM, choose **No RMM** and Launch Center marks the step **Not needed**.
 - Have your RMM administrator create API credentials. The fields differ by provider, so keep the provider's setup guide open (see Related guides).
-- Connect your PSA first and map your companies. RMM sites map to those companies. See [PSA connection](/user-guides/getting-started/onboarding/psa-setup).
+- Connect your PSA first and import or match your companies. RMM sites map to those companies. See [PSA connection](/user-guides/getting-started/onboarding/psa-setup).
 
 ## Connect your RMM
 
 <Steps>
   <Step title="Open the step">
-    In **Launch Center**, select **Connect your RMM** in **Setup guide**. The RMM wizard opens inside the plan. You can also use **Settings > Integrations**.
+    In **Launch Center**, select **Connect your RMM** in **Launch steps** and choose your RMM's card. Its setup tasks appear under the step in the rail. **Setup guide** on the card opens the provider's instructions. You can also open the RMM from **Settings > Integrations**.
   </Step>
   <Step title="Connect">
-    On the **Connect** step, enter your API credentials, such as a key and secret, and a region or URL where the provider asks for one. Click **Test Connection**. When the test passes, click **Create Integration**, then **Next**. If you see **Connection failed**, check the credentials and the region, then retest.
+    On **Connect**, enter your API credentials, such as a key and secret, and a region or URL where the provider asks for one. Test the connection and wait for the result. If the test fails, check the credentials, the region, and that the API user is active in your RMM, then test again. Continue to save the connection.
   </Step>
-  <Step title="Map sites or companies">
-    On the **Map** step, wait for the first sync to finish. It can take a few minutes, and much longer for a large ConnectWise Asio account. If the list is empty, click the sync button or check for updates. For each provider site or company, click **Select company...** and choose the matching MSPortal company. **Quick Match** suggests matches by name, so check each one. Click **Create new company** if no match exists. Click **Import Selected** to save the mappings. You must map at least one before you continue.
+  <Step title="Import or match sites">
+    Open **Import or match companies**. Wait for the first sync to finish. It can take a few minutes, and much longer for a large ConnectWise Asio account. The **Import** view includes unlinked records with suggestions. Use **Suggested** to review proposed links, and check each one. Import or match at least one provider company or site to the right MSPortal company. Its device tasks become available while other companies wait.
   </Step>
   <Step title="Map locations (optional)">
-    Providers that support it show a **Map Locations** step. Map each location to a PSA location, then click **Save All**, or click **Skip**.
+    Providers that support it show a **Locations** task. Map each location, or leave it for later.
   </Step>
-  <Step title="Open device import">
-    On the **Import** step, click **Open Device Import**. You land on the integration's device page. Continue in [Import rollout devices](/user-guides/getting-started/onboarding/device-import).
+  <Step title="Import devices">
+    Open **Import devices**. Continue in [Import rollout devices](/user-guides/getting-started/onboarding/device-import).
   </Step>
-  <Step title="Complete setup">
-    Return to the wizard and click **Complete Setup** when you have finished.
+  <Step title="Finish the connection">
+    Open **Review** and check the result. In Launch Center, click **Finish connection setup**. In Settings, click **Finish setup**.
   </Step>
 </Steps>
 
-<Frame caption="PSA and primary RMM selections have separate controls.">
-  <img src="/images/product/launch-integration-choices.png" alt="PSA and primary RMM selections have separate controls." width="1780" height="650" />
-</Frame>
+The exact tasks and fields differ by provider. Review import settings before you import or turn on continuing sync.
 
 ## Check the connection
 
@@ -47,33 +45,33 @@ Connect your primary RMM so MSPortal can pull in sites and devices. This page is
     Open the integration in **Settings > Integrations**. Check that the last sync finished and that your sites show the right device counts.
   </Step>
   <Step title="Check Launch Center">
-    In **Launch Center**, open **Live verification**. **A healthy RMM connection is available** is blocking when your plan needs an RMM. It checks the instance chosen in your plan. An unrelated active integration does not satisfy it.
+    In **Launch Center**, **Connect your RMM** turns **Done** once the connection is healthy and its required tasks are done. It checks the connection you set up on this step. An unrelated active integration does not satisfy it.
   </Step>
 </Steps>
 
-Staged devices alone do not satisfy device readiness. Import them next.
+A successful credential check is not the same as a completed import. Staged devices are not imported devices. Import them next.
 
 ## Troubleshooting
 
 | Problem | What to do |
 | --- | --- |
-| **Connection failed** | Check the key, secret, region or URL, and that the API user is active in your RMM. |
-| The **Map** list is empty | The first sync may still be running. Wait, then click the check or sync button. |
-| "You must map at least one site before proceeding." | Map one site to a company and click **Import Selected**. |
-| The wrong connection is checked | Go back to **Integrations** and choose the intended instance. |
-| No devices show later | Check the sync status, the mapping, and the API user's permissions. Do not clear and resync before you know why. |
+| The connection test fails | Check the key, secret, region or URL, and that the API user is active in your RMM. |
+| The company list is empty | The first sync may still be running. Wait, then check again. |
+| Device tasks are not available | Import or match at least one site or company first. |
+| **Connect your RMM** needs attention | Open the connection and check its status and remaining tasks. |
+| No devices show later | Check the sync status, the mapping, and the API user's permissions. Do not clear and resync before you know why. Clearing data can remove staged or mapped records. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does a successful credential test complete the rollout?">
-    No. Check the sync, the site mappings, the imported devices, and the remaining findings.
+    No. Check the sync, the site mappings, the imported devices, and the remaining setup tasks.
   </Accordion>
   <Accordion title="Can any active connection satisfy this step?">
-    No. The check applies to the instance selected in your plan.
+    No. Launch Center checks the connection tracked by this step, including its required tasks.
   </Accordion>
   <Accordion title="Can I use Addigy without another RMM?">
-    Yes. Pick Addigy under **Other integrations**. Launch Center then uses it for the device step.
+    Yes. Choose **No RMM** on **Connect your RMM**, then tick Addigy under **Infrastructure** in **Connect other tools**.
   </Accordion>
 </AccordionGroup>
 

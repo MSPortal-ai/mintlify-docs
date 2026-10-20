@@ -4,10 +4,10 @@ description: 'Connect CyberHoot to MSPortal.ai to sync security awareness, compl
 icon: 'graduation-cap'
 ---
 
-This guide walks you through connecting CyberHoot to MSPortal.ai using the guided setup wizard.
+Connect CyberHoot to review customer awareness metrics, user compliance, HootScore and available HootPhish results. This is an **MSP integration management** workflow.
 
 <Note>
-  The CyberHoot integration is currently available in beta. Contact support@msportal.ai if CyberHoot does not appear in your available integrations.
+  If CyberHoot does not appear in **Settings > Integrations**, contact support@msportal.ai to have it enabled for your account.
 </Note>
 
 ## Overview
@@ -59,37 +59,17 @@ Before connecting to MSPortal.ai, you need your API URL and API key from CyberHo
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect CyberHoot in MSPortal
 
-MSPortal.ai provides a guided 3-step wizard to connect and configure your CyberHoot integration.
+The CyberHoot connection page lists its tasks in the **Setup guide**: **Connect**, **Import or match companies** and **Review**. See [Connect and manage integrations](/user-guides/integrations/index) for the tasks every connection shares.
 
-### Starting the Wizard
-
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
-
-  <Step title="Find CyberHoot">
-    Locate the **CyberHoot** row in the list of available integrations.
-
-    <Note>
-      If the CyberHoot card is not visible, contact support@msportal.ai to have it enabled for your account.
-    </Note>
-  </Step>
-
-  <Step title="Start Setup">
-    Click **Configure** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your CyberHoot credentials to establish the connection. As the wizard notes: copy the API URL and API key from the CyberHoot Partner portal. Customer discovery and available features are detected automatically.
+### Connect
 
 <Steps>
+  <Step title="Open the connection page">
+    In MSPortal.ai, go to **Settings > Integrations**. On the **Directory** tab, find **CyberHoot** and click **Connect**. To continue a saved connection, open it from your active integrations instead.
+  </Step>
+
   <Step title="Enter Credentials">
     Fill in the two fields:
 
@@ -103,8 +83,8 @@ Enter your CyberHoot credentials to establish the connection. As the wizard note
     </Note>
   </Step>
 
-  <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials. Testing does not save anything.
+  <Step title="Test the connection">
+    Click **Test connection** to verify your credentials. Testing does not save anything.
 
     On success, you'll see a confirmation showing your partner name and how many customers were found, for example "Connection verified for Acme MSP with 25 customers."
 
@@ -114,97 +94,60 @@ Enter your CyberHoot credentials to establish the connection. As the wizard note
     - Ensure the key has not been regenerated since you copied it
   </Step>
 
-  <Step title="Connect">
-    Once the connection test passes, click **Connect** to save your credentials and create the integration. MSPortal immediately starts discovering your CyberHoot customers in the background.
-
-    When editing an existing integration, the button is labeled **Save connection**.
+  <Step title="Save and continue">
+    Once the connection test passes, click **Save and continue** to save your credentials and create the connection. MSPortal immediately starts discovering your CyberHoot customers in the background.
   </Step>
 </Steps>
 
----
+### Import or match companies
 
-### Step 2: Map Companies
-
-Map CyberHoot customers to your MSPortal companies. This determines which data syncs to which company.
+This task opens **Import or match CyberHoot customers**. Match each CyberHoot customer to an MSPortal company. This determines which data syncs to which company. Only data from matched customers is synced to MSPortal.
 
 <Steps>
-  <Step title="Wait for Customer Discovery">
+  <Step title="Wait for customer discovery">
     Customer discovery starts automatically when you connect. If no customers appear yet, wait a moment and check again.
 
     The list includes each customer's **Domain** where CyberHoot provides one.
   </Step>
 
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match CyberHoot customers to MSPortal companies based on name similarity. Review the suggested matches and apply the ones that look correct. A matching domain helps you confirm a match, but check the company name too.
+  <Step title="Review suggestions">
+    Open **Suggested** to review matches based on name similarity, and accept the ones that look correct. A matching domain helps you confirm a match, but it is not proof; check the company name too.
   </Step>
 
-  <Step title="Manual Mapping">
-    For customers that weren't automatically matched:
-
-    1. Find the customer in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-
-    To remove a saved mapping, use the unmap button next to the company badge. The removal takes effect immediately.
+  <Step title="Match the rest">
+    For customers that weren't matched, choose the correct MSPortal company in the row. To remove a saved match, use **Remove match**. The removal takes effect immediately.
   </Step>
 
-  <Step title="Create New Companies">
-    If a CyberHoot customer doesn't have a corresponding MSPortal company, use **Create new company** to add one. The new company is saved immediately and its link to the CyberHoot customer shows as **Pending** until you save it in the next step.
-  </Step>
-
-  <Step title="Import Selected">
-    Pending mappings show a **Pending** badge. Click **Import Selected** to save them, or click **Next**, which saves pending mappings automatically.
-
-    <Warning>
-      You must map at least one customer before proceeding. Only data from mapped customers is synced to MSPortal.
-    </Warning>
-
-    Saving mappings automatically triggers a detailed sync of the newly mapped customers.
+  <Step title="Import missing companies">
+    If a CyberHoot customer doesn't have a corresponding MSPortal company, click **Import company** in its row. The new company is saved and matched immediately; check the resulting link.
   </Step>
 </Steps>
+
+Each accepted or chosen match saves straight away and requests a detailed sync of the affected customers. Match at least one customer before expecting customer-level reporting data. Closing setup does not undo saved matches.
+
+### Review and finish setup
+
+Open **Review** and select **Finish setup** once the required tasks are complete. Finishing does not wait for customer discovery, user data or challenge results. Check the actual data after background synchronization finishes.
 
 ---
 
-### Step 3: Status
+## Check your data
 
-Review the sync status and finish setup.
-
-<Steps>
-  <Step title="Review Sync Stats">
-    The Status step displays:
-
-    - **Mapped customers** (mapped out of total discovered)
-    - **Active users**
-    - **Mean HootScore**
-    - **HootPhish challenges**
-
-    The "Last synced" timestamp shows when data was last updated. Metrics that your CyberHoot plan does not provide display as "Not provided". "Not provided" means no value is available. It is not a zero, a perfect score, or proof that there was no phishing activity.
-
-    The Status step does not refresh itself while background work runs. Reopen it later to see updated counts.
-  </Step>
-
-  <Step title="Explore Your Data">
-    Use the **View security awareness** and **View reports** buttons to jump directly to the synced data.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page. Customer discovery and detailed syncs may still be running after you leave.
-  </Step>
-</Steps>
+Open Security Awareness or Reports to review customer scores, compliance and available HootPhish results. Metrics that your CyberHoot plan does not provide display as **Not provided**. That means no value is available. It is not a zero, a perfect score, or proof that there was no phishing activity.
 
 ---
 
 ## What Gets Synced
 
-CyberHoot integration syncs the following data types to MSPortal for mapped customers:
+CyberHoot integration syncs the following data types to MSPortal for matched customers:
 
 ### Customers
 
-Your CyberHoot customer inventory, including customer name and domain, used for mapping and for customer-level metrics such as active user counts and HootScore.
+Your CyberHoot customer inventory, including customer name and domain, used for matching and for customer-level metrics such as active user counts and HootScore.
 
 ### Users
 
-Per-user records for each mapped customer, including training compliance and user ranking data.
+Per-user records for each matched customer, including training compliance and user ranking data.
 
 ### Compliance Snapshots
 
@@ -212,7 +155,7 @@ Daily snapshots of customer-level compliance metrics, including HootScore and ac
 
 ### HootPhish Challenges
 
-Phishing challenge records for each mapped customer, including per-participant results linked to synced users where an email match exists.
+Phishing challenge records for each matched customer, including per-participant results linked to synced users where an email match exists.
 
 <Info>
   Available data depends on the Power-Ups enabled in your CyberHoot account. MSPortal detects the available capabilities per customer and syncs what your plan provides.
@@ -231,40 +174,37 @@ After initial setup, data syncs automatically:
 In addition to the daily schedule:
 
 - Connecting or updating credentials triggers a customer discovery sync
-- Saving customer mappings triggers a detailed sync of the newly mapped customers
+- Saving customer matches triggers a detailed sync of the newly matched customers
 
 ---
 
 ## Managing Your Integration
 
-After setup, manage your integration from **Settings > Integrations**:
+Open the CyberHoot connection from **Settings > Integrations** to manage it:
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the wizard to update credentials or customer mappings |
-| **Disconnect** | In the row's actions menu. Removes the integration and its stored credentials |
-| **Delete** | Remove the integration (available in the wizard footer) |
+| **Connect** | Test the saved credentials or update the API URL or API key |
+| **Import or match companies** | Update customer matches |
+| **Overview** and **Sync activity** | Review connection status and background results |
+| **Disconnect…** | Under **More actions**. Review the confirmation: disconnecting removes the integration, synced CyberHoot data, and stored credentials for this connection, and cannot be undone. It does not revoke the API key in CyberHoot. |
 
 ### Updating Your API Key
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the CyberHoot card.
+  <Step title="Open Connect">
+    Go to **Settings > Integrations**, open the CyberHoot connection and select **Connect**.
   </Step>
   <Step title="Enter New Credentials">
-    On the Connect step, update the API URL or API key.
+    Update the API URL or API key. Leave the masked key unchanged to keep the stored one. Changing the API URL requires entering the key for that URL again.
   </Step>
   <Step title="Test and Save">
-    Click **Test Connection** to verify, then click **Save connection**. Testing a new key does not store it; only **Save connection** does.
+    Click **Test connection** to verify, then click **Save changes**. Testing a new key does not store it; only **Save changes** does.
   </Step>
-  <Step title="Review Mappings">
-    Saving starts a fresh customer discovery. If you switched to a different CyberHoot account, review the Map companies step afterward.
+  <Step title="Review Matches">
+    Saving starts a fresh customer discovery. If you switched to a different CyberHoot account, review **Import or match companies** afterward.
   </Step>
 </Steps>
-
-### Deleting the Integration
-
-Click **Delete** in the wizard footer. This removes the integration, synced CyberHoot data, and stored credentials for the connection.
 
 ---
 
@@ -272,12 +212,35 @@ Click **Delete** in the wizard footer. This removes the integration, synced Cybe
 
 | Issue | Solution |
 |-------|----------|
-| CyberHoot card not visible | Contact support@msportal.ai to enable CyberHoot for your account |
+| CyberHoot not visible | Contact support@msportal.ai to enable CyberHoot for your account |
 | Connection test fails | Verify the API URL ends with `/api`, uses HTTPS, and the API key is current |
-| No customers in the Map step | Customer discovery runs after connecting; wait a minute and check again |
-| Data not syncing | Ensure customers are mapped to companies; only mapped customer data syncs |
+| No customers to match | Customer discovery runs after connecting; wait a minute and check again |
+| Data not syncing | Ensure customers are matched to companies; only matched customer data syncs |
 | Metrics show "Not provided" | The corresponding CyberHoot Power-Up is not enabled for that customer |
-| Stale data | Data refreshes daily at 07:05 UTC; re-saving a mapping triggers a fresh sync for that customer. If data stays stale, check the customer's Power-Ups and mapping, then contact support rather than re-saving credentials repeatedly |
+| Stale data | Data refreshes daily at 07:05 UTC; re-saving a match triggers a fresh sync for that customer. If data stays stale, check the customer's Power-Ups and match, then contact support rather than re-saving credentials repeatedly |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can every tenant configure CyberHoot?">
+    Setup requires MSP integration management permission. Ask your administrator or support if CyberHoot is not listed.
+  </Accordion>
+  <Accordion title="Does testing CyberHoot save the API key?">
+    No. Use **Save and continue** for a new connection or **Save changes** for tested replacements.
+  </Accordion>
+  <Accordion title="Do CyberHoot suggestions guarantee the right company?">
+    No. Review proposed names and any supplied Domain, then accept the intended matches. Each accepted match saves immediately.
+  </Accordion>
+  <Accordion title="Does Not provided mean a CyberHoot customer has no phishing issues?">
+    No. It indicates missing applicable data or capability. Check the customer Power-Ups, match and sync outcome.
+  </Accordion>
+  <Accordion title="Does Finish setup finish the CyberHoot import?">
+    No. Background work can continue. Revisit **Sync activity** and check the actual awareness or reporting view.
+  </Accordion>
+  <Accordion title="Can Company users manage CyberHoot matches?">
+    No. The connection is an MSP integration management task. Company users see only the data and views made available through their portal access.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
@@ -292,6 +255,8 @@ Click **Delete** in the wizard footer. This removes the integration, synced Cybe
 ## Next Steps
 
 After setting up the CyberHoot integration:
+
+- [Import or match companies](/user-guides/integrations/import-companies)
 
 <CardGroup cols={2}>
   <Card title="Security Awareness" icon="shield-check" href="/user-guides/training/security-awareness">

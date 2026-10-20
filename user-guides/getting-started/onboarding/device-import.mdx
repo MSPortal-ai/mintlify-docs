@@ -9,16 +9,16 @@ Bring devices from your RMM into the portal's inventory for each rollout company
 
 ## Before you start
 
-- Finish the [RMM connection](/user-guides/getting-started/onboarding/rmm-setup) and map your sites or companies first. Devices from unmapped sites do not appear.
+- Finish the [RMM connection](/user-guides/getting-started/onboarding/rmm-setup) and import or match your sites or companies first. Devices from unmapped sites do not appear. You can import devices for one company and leave other companies for later.
 - Check that at least one device sync finished. The first sync can take a while for a large account.
 - Importing only the pilot companies first keeps the first pass simple.
-- You can also use Addigy for this step when you chose it without a primary RMM.
+- For Addigy or another device provider, use that provider's own import page.
 
 ## Import devices
 
 <Steps>
   <Step title="Open the device page">
-    In **Launch Center**, select **Client devices** in **Setup guide**, then click **Open Device Import**. You can also open **Settings > Integrations**, click your integration, and open its **Devices** tab. ConnectWise Manage calls it **Configurations**, and Halo PSA and Syncro call it **Assets**.
+    If your tool sets up inside Launch Center, open its **Import devices** task under the connection step. Otherwise, in **Launch Center**, open **Portal checklist** and click **Open settings** on **Import client devices**. It opens **Settings > Integrations** in a new tab. Click your integration and open its **Devices** tab. ConnectWise Manage calls it **Configurations**, and Halo PSA and Syncro call it **Assets**.
   </Step>
   <Step title="Map the device types">
     In the **Device Type Mappings** table, click **Quick Match** to map provider types to your device types by name. Click **Map with AI** for types name matching missed, and **Quick Create** for any type that still has no match. Or choose a type yourself in the **Maps To** dropdown. **Map with AI** saves right away, so review the result before you import.
@@ -27,7 +27,7 @@ Bring devices from your RMM into the portal's inventory for each rollout company
     Check **Ignore** on categories you do not want, such as printers or sensors. Ignored types are hidden from pending imports.
   </Step>
   <Step title="Import">
-    Click **Import All Mapped** to import every unimported device of a mapped type. Or click **Import All** on one type row. Or tick devices in **Staged Devices** and click **Import Selected**. Wait for the result.
+    Confirm the company mappings first. A similar company name is not proof that the records belong together. Click **Import All Mapped** to import every unimported device of a mapped type. Or click **Import All** on one type row. Or tick devices in **Staged Devices** and click **Import Selected**. Wait for the result.
   </Step>
   <Step title="Turn on auto-sync (optional)">
     Check **Auto-Sync** on a mapped type to import new devices of that type on every sync. Check the mapping first, because those devices are imported without review.
@@ -36,7 +36,7 @@ Bring devices from your RMM into the portal's inventory for each rollout company
     Open **Devices** in the sidebar, choose the company in the company selector, and confirm the imported devices and their source.
   </Step>
   <Step title="Check Launch Center">
-    In **Launch Center**, open **Live verification** and check **Devices imported for the rollout audience**.
+    In **Launch Center**, the **Import client devices** item in the **Portal checklist** shows how many devices are imported and ticks itself once there is at least one.
   </Step>
 </Steps>
 
@@ -44,7 +44,7 @@ See [Import Devices](/user-guides/integrations/import-devices) for every control
 
 ## What counts as ready
 
-The check looks for real devices in the Devices inventory for every rollout company, from the RMM you selected, or from Addigy when you added it. These do not count: staged rows, a device you added by hand, or a healthy connection alone. It is a blocking check when your plan includes client data and a device integration. One imported device does not cover every company.
+Check the real devices in the Devices inventory for every company you plan to launch, from the source you selected. These do not count: staged rows, a device you added by hand, or a healthy connection alone. The checklist count does not check device coverage for every company. One imported device does not cover every company.
 
 If a device count looks low, check which categories you ignored. Excluded records stay out of the import on purpose.
 
@@ -54,7 +54,7 @@ If a device count looks low, check which categories you ignored. Excluded record
 | --- | --- |
 | The staged list is empty | Check the sync status, the API user's scope, and that the sites are mapped. |
 | Devices are staged but not in inventory | Check the type mapping, ignored types, and the import result. |
-| Inventory exists but the check fails | Check that the devices belong to the selected RMM and to every rollout company. Do not import duplicates. |
+| Inventory looks wrong | Check that the devices belong to the selected source and to the right company. Do not import duplicates. |
 | A type cannot be imported | It needs a **Maps To** device type first. Ignored types cannot be imported. |
 
 ## Frequently asked questions
@@ -64,7 +64,7 @@ If a device count looks low, check which categories you ignored. Excluded record
     No. Check the real **Devices** records for the company.
   </Accordion>
   <Accordion title="Does one imported device satisfy a wider rollout?">
-    No. Each rollout company needs matching devices.
+    No. Review the imported inventory for each company you plan to launch.
   </Accordion>
   <Accordion title="Is Map with AI a draft preview?">
     No. It saves the mappings it creates right away.

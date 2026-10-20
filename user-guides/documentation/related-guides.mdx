@@ -1,0 +1,90 @@
+---
+title: 'Suggest related guides on new tickets'
+description: 'MSP guide to curating the documents the AI Assistant offers while someone drafts a ticket, and reviewing the AI-written summaries and keywords.'
+icon: 'book-open'
+---
+
+Related guides are documents the AI Assistant offers while a ticket is being drafted, so the requester can try a known fix before the ticket is picked up. The ticket is still created. You choose which documents take part, AI writes a summary, keywords and matching hints for each one, and a person reviews that text before any requester sees it.
+
+<Note>
+Related guides are turned on per organization by MSPortal. The **Related guides** tab appears in **Settings > Documentation** once it is on. Contact MSPortal support to enable it.
+</Note>
+
+## Before you start
+
+- You need permission to manage Documentation settings.
+- AI must be on for your portal (**Settings > Tenant > AI**). Without it, the tab still works for editing, but **Generate metadata** stays off.
+- The documents come from folders you already have in Documentation: portal pages, Hudu articles or IT Glue documents. Images inside IT Glue documents do not render in MSPortal.
+- Company users only ever see guides whose document they can already open, following the same folder and document sharing rules as the **Documents** tab. Share the folder with the right client roles before expecting clients to see its guides.
+
+## Add a folder's documents as guides
+
+<Steps>
+  <Step title="Open the tab">
+    Open **Settings > Documentation** and click **Related guides**.
+  </Step>
+  <Step title="Choose a folder">
+    Under **Generate guide metadata**, pick a folder in **Folder**. The line below the folder tells you how many documents it holds and how many already have metadata.
+  </Step>
+  <Step title="Generate metadata">
+    Click **Generate metadata for N documents**. AI reads each document and writes a one-to-three sentence summary, up to fifteen keywords, and a "show when" hint. The button shows progress and works through the folder ten documents at a time. Leave **Skip documents that already have metadata** ticked to add only new documents; untick it to rewrite every document in the folder, which clears their reviewed status.
+  </Step>
+  <Step title="Check the result">
+    Each document appears in the **Guides** table with **Needs review**. A document that could not be processed is listed under the button so you can try it again.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview on the Demo tenant: the Guides table after review, with reviewed badges, enabled switches and the row menu.">
+  <img src="/images/product/related-guides-table-preview.png" alt="Settings > Documentation > Related guides with the Generate guide metadata card and a Guides table listing three documents, each marked Reviewed and enabled." width="1440" height="900" />
+</Frame>
+
+## Review each guide
+
+Requesters never see a guide until a person has marked it reviewed. Open the row menu (**⋯**) and click **Edit**.
+
+<Steps>
+  <Step title="Read the summary">
+    **Summary** is what the matcher reads to decide whether the document fits a request. Keep it to the problem the document solves and the product it covers.
+  </Step>
+  <Step title="Tune the keywords">
+    **Keywords** are the words a requester would type: symptoms, product names, error text. A request that contains two keywords, or one multi-word phrase, always shows the guide; otherwise the AI picks from the best keyword matches. Add a keyword by typing it and pressing Enter; remove one with its ×.
+  </Step>
+  <Step title="Set when to show it">
+    **Show when** tells the matcher when the guide applies and when it does not, for example "Sign-in errors in Procore only; not for other apps."
+  </Step>
+  <Step title="Mark it reviewed and save">
+    Tick **Reviewed and accurate** once the text matches the document, then click **Save**. The row changes to **Reviewed**. Saving without the tick keeps the guide hidden from requesters.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview on the Demo tenant: the Edit guide dialog with the AI-written summary, keywords and show-when hint for an acceptable use policy.">
+  <img src="/images/product/related-guides-edit-dialog-preview.png" alt="Edit guide dialog titled Acceptable Use Policy with Summary, Keywords, Show when, a Show as a related guide switch and a Reviewed and accurate checkbox." width="1440" height="900" />
+</Frame>
+
+Use the **Enabled** switch in the table to pause a guide without losing its text; the switch saves immediately and keeps the review. Choose **Delete** from the row menu to remove a guide; the document itself is kept. Regenerating a document's metadata replaces the text and clears its review.
+
+## What requesters see
+
+When someone describes a request to the AI Assistant, on the **New Ticket** page or from **Home**, the assistant starts the ticket draft and shows up to three matching guides beneath its reply, with each guide's reviewed summary. Clicking a guide opens the document in MSPortal. The ticket draft continues as normal.
+
+<Frame caption="Branch preview on the Demo tenant: the assistant drafting an offboarding ticket and showing the matching Employee Offboarding Procedure under its reply.">
+  <img src="/images/product/related-guides-assistant-preview.png" alt="New Ticket page with the Assistant drawer open. The reply says a draft was started and a Related guides card lists Employee Offboarding Procedure with its summary." width="1440" height="900" />
+</Frame>
+
+Guides are matched against the request text only. A guide with no keyword in the request can still be chosen by the AI from its summary and hint, but the deterministic rule above is the one to rely on when a document must always appear for a known phrase.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| No **Related guides** tab | The feature is not on for your organization. Contact MSPortal support. |
+| **Generate metadata** is disabled | Choose a folder with documents, check that AI is on for your portal, and untick **Skip documents that already have metadata** if every document already has text. |
+| A guide never appears for requesters | It must be **Reviewed** and **Enabled**, and the requester must be able to open the document. Check the folder's sharing on the **Documents** tab and try a request containing two of its keywords. |
+| A client sees a guide they should not | Guides follow document sharing. Remove the client role from the folder or document on the **Documents** tab. |
+| The summary is wrong | Edit it, or regenerate the document and review it again. Images in IT Glue documents are not read. |
+
+## Related guides
+
+- [Create and maintain portal documents](/user-guides/documentation/create-portal-documents)
+- [Create a ticket with AI assistance](/msp-guides/ticketing/open-a-ticket-with-ai)
+- [Use the Home AI Assistant](/user-guides/ai-assistant/use-home-assistant)

@@ -27,20 +27,20 @@ Use a read/write API key. MSPortal tests read access during setup, but it does n
   <Step title="Create an API key">
     In TimeZest, create a dedicated read/write API key for MSPortal and copy it to a secure location.
   </Step>
-  <Step title="Open the setup page">
-    In MSPortal, go to **Settings > Integrations**, find **TimeZest** under **Add integration**, and click **Connect**. If TimeZest is already connected, click **Configure** on its row instead.
+  <Step title="Open the connection page">
+    In MSPortal, go to **Settings > Integrations**, open the **Directory** tab, find **TimeZest**, and select **Connect**. If TimeZest is already connected, select **Open** on its row in **Active** instead. The **Setup guide** lists **Connect**, **Configure appointments** and **Review**.
   </Step>
   <Step title="Test the connection">
-    Enter the key in the **API Key** field and click **Test Connection**. MSPortal verifies read access and reports how many appointment types and scheduling resources it found. Resolve any access error before you continue.
+    In **Connect**, enter the key in the **API Key** field and select **Test connection**. MSPortal verifies read access and reports how many appointment types and scheduling resources it found. Resolve any access error before you continue.
   </Step>
   <Step title="Save the connection">
-    After the test succeeds, click **Create Integration**. MSPortal stores the key securely and does not display it again. A successful test on its own does not save the key.
+    After the test succeeds, select **Save and continue**. Credentials are stored in the vault and never shown again. A successful test on its own does not save the key.
   </Step>
 </Steps>
 
 ## Configure Scheduling Capabilities
 
-Enable each capability independently in the **Configure** step:
+Every capability starts off. Turn on each capability independently in **Configure appointments**:
 
 | Capability | What it enables |
 |------------|-----------------|
@@ -49,9 +49,11 @@ Enable each capability independently in the **Configure** step:
 | Show appointments on tickets | Adds an Appointments tab to supported ticket details |
 | Allow appointment changes | Exposes the secure TimeZest link for scheduling, rescheduling, or canceling an appointment |
 
-For each capability, you can optionally select **Client security roles** and **Company groups**. Leaving a list empty means all client roles or all company groups. When both restrictions are set, a client must match both rules. MSP staff retain access to enabled capabilities.
+When a capability is on, you can optionally select **Client security roles** and **Company groups** for it. Leaving a list empty means all client roles or all company groups. When both restrictions are set, a client must match both rules. MSP staff retain access to enabled capabilities.
 
-Click **Save All** after changing the capabilities or their audience restrictions. Switches and selections do not save until you click it.
+Each switch saves as soon as you change it, and a role or company group selection saves when you close the list. Turning a capability on starts the appointment sync.
+
+**Configure appointments** is optional. When you are done, open **Review** and select **Finish setup**.
 
 ## Turn On Scheduling in a Ticket Template
 
@@ -76,15 +78,17 @@ Connecting TimeZest does not turn on scheduling for any template. Turn it on in 
   </Step>
 </Steps>
 
-## Review Connection Status
+## Check the Connection
 
-The **Status** step lists the active and inactive appointment types, their durations, and the schedulable users or teams returned by TimeZest, with the time they were fetched. Use this page to confirm the API key can see the resources you expect to use in ticket templates.
+**Test connection** in **Connect** reports how many appointment types and scheduling resources the API key can see. Use it to confirm the key can see the resources you expect to use in ticket templates. The appointment types and resources themselves appear when you choose the appointment details in a ticket template.
+
+Use **Overview** for the connection's status and **Sync activity** to check recent appointment syncs.
 
 ## Managing the Connection
 
-- Reopen the **Configure** step to change capabilities or audience restrictions, then click **Save All**.
-- To replace the API key, open the **Connect** step, enter the new key, click **Test Connection**, then click **Update API Key**.
-- **Delete** in the wizard footer opens a confirmation. Confirming deletes the stored key and TimeZest configuration from MSPortal. It does not remove or cancel appointments in TimeZest.
+- Open **Configure appointments** to change capabilities or audience restrictions. Changes save as you make them.
+- To replace the API key, open **Connect**, enter the new key, select **Test connection**, then select **Save changes**.
+- **More actions > Disconnect…** opens a confirmation. Confirming removes the stored key and data synced from this connection. It does not remove or cancel appointments in TimeZest.
 
 ## Troubleshooting
 
@@ -92,10 +96,10 @@ The **Status** step lists the active and inactive appointment types, their durat
 |-------|----------|
 | Connection test fails | Confirm the API key is active and has read access to appointment types and scheduling resources. |
 | Scheduling request fails after setup | Replace the key with one that has both read and write access. Setup intentionally tests only read access. |
-| A client cannot see a capability | Confirm the capability is enabled and saved with **Save All**, and that the client matches both the selected security-role and company-group restrictions. |
+| A client cannot see a capability | Confirm the capability is turned on in **Configure appointments**, and that the client matches both the selected security-role and company-group restrictions. |
 | Clients cannot schedule from a template | Confirm **Offer Schedule Appointment for this template** is on and the template has an appointment type and resource selected. |
-| Settings did not persist | Click **Save All** on the Configure step. Key changes use **Update API Key** on the Connect step instead. |
-| An appointment type or resource is missing | Confirm it is active and visible to the API key in TimeZest, then reopen the **Status** step. |
+| Settings did not persist | Wait for each change in **Configure appointments** to finish saving and check for an error. Key changes use **Save changes** in **Connect** instead. |
+| An appointment type or resource is missing | Confirm it is active and visible to the API key in TimeZest, then select **Test connection** again. |
 
 ## Related Resources
 

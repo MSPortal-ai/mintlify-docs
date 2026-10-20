@@ -1,70 +1,46 @@
 ---
-title: 'Configure Intermedia Integration'
-description: 'Connect Intermedia Unite Extend Analytics to prepare call and usage reporting'
-icon: 'phone'
+title: 'Provide Intermedia Partner API access'
+description: 'Securely submit Intermedia Partner API credentials for integration development'
+icon: 'plug'
 ---
 
-This guide walks you through connecting Intermedia Unite to MSPortal.ai through the Unite Extend Analytics API.
+Provide Partner API access for the MSPortal team to develop the Intermedia integration, which will map Intermedia customers to companies and show their services, seats and usage. This is a **credential intake**: the credentials are stored securely but are not tested yet, and nothing syncs until the integration ships.
+
+Open **Settings > Integrations**, find **Intermedia** in the directory, and open its setup. You need an MSP staff account with permission to manage integrations, and the provider must be enabled for your portal. Company users should ask their MSP to connect the service.
 
 <Note>
-Intermedia is currently a **Pilot** integration available to selected tenants. If you don't see Intermedia in **Settings > Integrations**, contact support@msportal.ai. The pilot secures and validates the API connection and notifies the MSPortal integration team. It does not sync call or usage data yet; data sync features build on this connection.
+Intermedia is currently a **Pilot** integration available to selected tenants. If you don't see Intermedia in **Settings > Integrations**, contact support@msportal.ai. The pilot stores your Partner API credentials securely and notifies the MSPortal integration team. It does not sync customer, service or usage data yet; data sync features build on this access.
 </Note>
 
-## Prerequisites
+## Before you start
 
-- An Intermedia Unite account with HostPilot admin access
-- MSPortal.ai integration management permission
+1. In the Intermedia Partner Portal, open **Integrations > Public API** and select **Get Access to Partner API**. Intermedia confirms when access is on.
+2. Select **Create a New API Client** with **Enable Client** checked.
+3. Make sure your account contact has the **Public API** and **Billing Support** roles.
+4. Copy your **Partner ID** (shown at the top of the side menu), the **Client ID** and the **Client Secret**.
 
-## Part 1: Create a Unite Extend Service Account
+## Submit your credentials
 
-<Steps>
-  <Step title="Open HostPilot">
-    Log in to HostPilot, Intermedia's admin portal.
-  </Step>
-  <Step title="Create a Service Account">
-    Go to **Intermedia Unite > Apps & Integrations > Unite Extend API access** and create a Service Account with **Analytics API** access.
-  </Step>
-  <Step title="Copy the Credentials">
-    Copy the **Client ID** and **Secret Key**.
-  </Step>
-</Steps>
+1. Open the Intermedia setup form.
+2. Enter **Partner ID**, **Client ID** and **Client Secret**.
+3. Select **Secure credentials**. MSPortal stores the Client ID and Client Secret only in Vault, and a successful first submission notifies the MSPortal integration team. They will contact you if more information is needed.
 
-## Part 2: Connect in MSPortal
+## Replace or remove access
 
-<Steps>
-  <Step title="Open the Setup Page">
-    Go to **Settings > Integrations**, find **Intermedia**, and click **Connect**.
-  </Step>
-  <Step title="Enter Your Credentials">
-    | Field | Value |
-    |-------|-------|
-    | **Client ID** | The service account's client ID |
-    | **Secret key** | The service account's secret key |
-  </Step>
-  <Step title="Test the Connection">
-    Click **Test Connection**. On success you'll see **Connection verified** with the message "Intermedia issued an Analytics API access token for this service account." You must pass the test before you can save.
-  </Step>
-  <Step title="Secure Your Credentials">
-    Click **Secure credentials** to save. Both values are stored only in Vault, and the MSPortal integration team is notified that your account is connected.
-  </Step>
-</Steps>
+Open the existing intake to replace credentials. Stored secrets stay masked; enter the replacements, then select **Update credentials**. A successful replacement notifies the integration team; saving unchanged values does not resubmit them.
 
-## Managing the Connection
+To remove access, disconnect Intermedia and confirm in the **Remove Intermedia credentials?** dialog. This removes the intake record and its stored Vault credentials and cannot be undone. It does not revoke access at Intermedia; disable or delete the API client in the Partner Portal when it is no longer needed.
 
-- To update credentials later, click **Configure** on your Intermedia connection, enter the new values, click **Test Connection**, then click **Update credentials**. Changing a field clears the earlier test result, so test again before you save.
-- To disconnect, click **Disconnect** and confirm in the **Remove Intermedia credentials?** dialog. This removes the connection and its stored Vault credentials and cannot be undone. It does not delete the service account in HostPilot.
-- Users without integration management permission see the connection read-only.
+Users without integration management permission see the intake read-only.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Credentials rejected | The client ID or secret key was rejected, or the Analytics API scope is not enabled on the service account. Recheck the service account in HostPilot |
+- **No test step:** expected. Intermedia publishes its Partner API reference only inside the Partner Portal, so MSPortal stores these credentials without testing them until the integration is built.
+- **Cannot edit:** ask an MSP administrator for integration management access.
+- **Missing data after submission:** data sync is not part of this intake yet.
 
-## Related Resources
+## Related guides
 
-<CardGroup cols={2}>
-  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
-    Explore all available integrations
-  </Card>
-</CardGroup>
+- [Integration setup guides](/user-guides/integrations/index)
+- [Map and import companies](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)

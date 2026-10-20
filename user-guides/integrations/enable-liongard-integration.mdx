@@ -4,7 +4,9 @@ description: 'Connect your Liongard instance to MSPortal.ai to sync configuratio
 icon: 'magnifying-glass-chart'
 ---
 
-This guide walks you through connecting your Liongard instance to MSPortal.ai using our streamlined setup wizard. Liongard is a configuration audit platform that continuously inspects your clients' IT environments. By integrating with MSPortal.ai, you can map Liongard metrics directly to compliance checks, bridging automated configuration audits with your compliance reporting workflow.
+This guide walks you through connecting your Liongard instance to MSPortal.ai. Liongard is a configuration audit platform that continuously inspects your clients' IT environments. By integrating with MSPortal.ai, you can map Liongard metrics directly to compliance checks, bridging automated configuration audits with your compliance reporting workflow.
+
+Connecting Liongard imports its data for MSP staff workflows. It does not share Liongard data with your clients or prove that a compliance check has passed.
 
 ## Overview
 
@@ -21,7 +23,7 @@ The compliance metric mapping feature is what makes this integration especially 
 </Info>
 
 <Info>
-The Liongard integration is currently in **Beta**. Core functionality is complete and available for all users. You will see a "Beta" badge on the Liongard card in the Integrations page.
+The Liongard integration is currently in **Beta**. Core functionality is complete and available for all users. You will see a "Beta" badge on Liongard in the Integrations page.
 </Info>
 
 ## Prerequisites
@@ -33,7 +35,7 @@ Before you begin, ensure you have:
 - Companies already set up in MSPortal (from your PSA integration or manually created)
 
 <Note>
-The Liongard integration maps environments to existing companies in MSPortal. Import your companies from your PSA integration first, or create them manually before setting up Liongard.
+The Liongard integration matches environments to companies in MSPortal. Import your companies from your PSA integration first, or create them manually, so you can match environments to existing companies.
 </Note>
 
 ---
@@ -85,31 +87,17 @@ Before proceeding to MSPortal, ensure you have the following:
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect in MSPortal
 
-MSPortal.ai provides a guided 3-step wizard to connect and configure your Liongard integration.
+Go to **Settings > Integrations**, open the **Directory** tab, find **Liongard**, and select **Connect**. If Liongard is already connected, open it from the **Active** tab with **Open** instead.
 
-### Starting the Wizard
+The connection page lists its tasks in the **Setup guide**. Under **Setup** you will find **Connect**, **Choose data**, **Import or match companies**, **Import devices**, and **Review**. Under **Manage** you will find **Overview** and **Sync activity**. Select a task to open it.
 
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
-
-  <Step title="Start Setup">
-    Find the **Liongard** row and click **Configure** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your Liongard API credentials to establish the connection.
+### Connect
 
 <Steps>
   <Step title="Enter Instance URL">
-    Enter your Liongard Roar instance name. You can enter either:
+    In **Instance URL**, enter your Liongard Roar instance name. You can enter either:
     - Just the instance name (e.g., `us1`, `ca1`, `safari`)
     - The full URL (e.g., `https://us1.app.liongard.com`)
 
@@ -125,113 +113,97 @@ Enter your Liongard API credentials to establish the connection.
     | **Access Key Secret** | Your Liongard API key secret |
 
     <Note>
-      Your credentials are stored securely using encrypted vault storage. They are never exposed in logs or API responses.
+      Credentials are stored in the vault and never shown again. They are never exposed in logs or API responses.
     </Note>
 
-    <Frame caption="The Connect step. Test Connection and Create Integration are separate buttons.">
+    <Frame caption="The Connect task's Instance URL, Access Key ID and Access Key Secret fields.">
       <img src="/images/product/liongard-setup-connection-fields.png" alt="Liongard Instance URL, Access Key ID and Access Key Secret fields" width="892" height="640" />
     </Frame>
   </Step>
 
   <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials. You'll see a green "Connection tested successfully" message when the test passes. Testing does not save the integration.
+    Select **Test connection** to verify your credentials. You'll see **Connection verified** when the test passes. Testing does not save the integration.
 
     If the connection fails:
-    - Verify your Instance URL matches your Liongard region exactly
+    - Verify your Instance URL matches your Liongard instance exactly
     - Check that your Access Key ID and Access Key Secret are copied correctly without extra spaces
     - Ensure the API key has not been revoked or expired
     - Confirm your Liongard account has API access enabled
   </Step>
 
-  <Step title="Create Integration">
-    Once the connection test passes, click **Create Integration** to save your credentials and proceed. MSPortal starts fetching your environments in the background.
+  <Step title="Save and Continue">
+    Once the connection test passes, select **Save and continue** to save your credentials. MSPortal starts fetching your environments in the background. Allow that work to finish before you expect every environment to appear.
   </Step>
 </Steps>
 
 ---
 
-### Step 2: Map Environments
+### Import or match companies
 
-Map Liongard environments to your MSPortal companies. This determines which audit data syncs to which company.
+Match Liongard environments to your MSPortal companies. This determines which audit data syncs to which company. The workspace is titled **Import or match Liongard environments**.
 
 <Steps>
-  <Step title="Wait for Initial Sync">
-    After creating the integration, MSPortal begins syncing your environments from Liongard. This may take a few minutes depending on the number of environments.
+  <Step title="Wait for Environments">
+    After you save the connection, MSPortal begins syncing your environments from Liongard. This may take a few minutes depending on the number of environments.
 
     <Info>
-      If no environments appear, wait a few minutes and check back. The initial sync runs in the background.
+      If no environments appear, wait a few minutes and check back. If they still don't appear, select **Sync environments** in the empty list or **Run sync** in the connection header, then check **Sync activity**.
     </Info>
   </Step>
 
-  <Step title="Use Quick Match (Recommended)">
-    Click **Quick Match** to automatically match Liongard environments to MSPortal companies based on name similarity.
+  <Step title="Review Suggested Matches">
+    Open **Suggested** to see environments MSPortal matched to companies by name. Select **Accept** to save a suggestion, or **Change** to pick a different company. **Accept N strong matches** accepts every suggestion with 90% confidence or more at once.
 
-    Quick Match uses a confidence threshold to find likely matches and fills them in as pending links. Review the results, adjust any incorrect mappings, then click **Import Selected** to save them.
-
-    <Tip>
-      Quick Match saves significant time when you have many environments with similar names in both systems. Start here, then manually adjust any mismatches.
-    </Tip>
+    Review suggestions before you accept them. Similar names do not always mean two records belong to the same client.
   </Step>
 
-  <Step title="Manual Mapping">
-    For environments that weren't automatically matched:
+  <Step title="Match Remaining Environments">
+    In **Import**, the view the workspace opens on, choose the correct MSPortal company for each environment. If the company does not exist yet, select **Import company** to create it and match it in one step. Use existing companies where possible.
 
-    1. Find the environment in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-    4. If the company does not exist yet, use **Create new company** to add it and link it in one step
-    5. Click **Import Selected** to save the pending links
-
-    The **Status** column shows **Pending** until a link is saved, then **Saved**. A company you create here is saved immediately, even if you leave before saving its link.
-
-    To remove a saved mapping, click the **X** button next to the company badge. The removal takes effect immediately. It does not delete the Liongard environment or the MSPortal company.
+    Select **Ignore** for environments you don't need. You can find them under **Ignored** and **Restore** them later.
   </Step>
 
-  <Step title="Filter Environments">
-    Click the summary cards above the list to filter the view:
-    - **Total Items** - Show all synced environments
-    - **Mapped** - Show only environments linked to companies
-    - **Unmapped** - Show environments that still need mapping
-    - **Ignored** - Show environments you chose to ignore
-  </Step>
+  <Step title="Check Your Matches">
+    Review **Matched**. Choosing a company or accepting a suggestion saves the match immediately, and a company you create here is saved right away. Wait for each save to finish before you rely on the link.
 
-  <Step title="Proceed">
-    Once you've mapped the environments you need, click **Next** to continue. **Next** also saves any pending links. Clicking a step name in the stepper does not save them.
+    **Remove match** clears the saved link immediately. It does not delete the Liongard environment or the MSPortal company.
 
     <Warning>
-      Only data from mapped environments will sync to MSPortal. You can return to add more mappings at any time.
+      Only data from matched environments will sync to MSPortal. You can return to match more environments at any time.
     </Warning>
   </Step>
 </Steps>
 
 ---
 
-### Step 3: Configure
+### Choose data
 
-Review the data synced from Liongard and start a sync if needed.
+**Choose data** comes before **Import or match companies** in the **Setup guide**, but it only fills in once you have matched environments. It shows what has synced for your matched environments. There are no separate switches per data type; everything below syncs for matched environments.
 
-<Steps>
-  <Step title="Review Synced Data">
-    The Configure step displays **Synced Data** counts for each data type as they sync from Liongard. There are no separate switches per data type; everything below syncs for mapped environments.
+| Data Type | Description |
+|-----------|-------------|
+| **Environments** | Client environments that map to your companies |
+| **Inspectors** | The Liongard inspectors that collect this data |
+| **Systems** | Inspected assets like Active Directory, M365, firewalls, and more |
+| **Metrics** | Health checks with pass/fail results that can be mapped to compliance checks |
+| **Metric values** | Pass and fail results for each metric |
+| **Detections** | Configuration change alerts and anomaly detections |
 
-    | Data Type | Description |
-    |-----------|-------------|
-    | **Environments** | Customer environments mapped to companies |
-    | **Inspectors** | Integration connectors and their types (e.g., Active Directory, Microsoft 365, Firewall inspectors) |
-    | **Systems** | Monitored assets and infrastructure |
-    | **Metrics** | Configuration audit data points |
-    | **Metric Values** | Current metric readings with status |
-    | **Detections** | Security findings and anomalies |
-  </Step>
+If nothing has synced yet, match environments, then select **Sync all data**. The sync runs in the background and may take several minutes; the counts update as data arrives. If the counts stay at zero, check your matches and connection rather than starting more syncs.
 
-  <Step title="Sync Data">
-    If no data has synced yet, click **Sync All Data** to trigger an initial sync from your mapped environments. The sync runs in the background and may take several minutes. Check the counts and the last sync time afterward. If the counts stay at zero, check your mappings and connection rather than starting more syncs.
-  </Step>
+This task is optional. It counts as done once systems have synced for a matched environment.
 
-  <Step title="Complete Setup">
-    Click **Complete Setup** to finish the wizard and return to the Integrations page. Background syncs may still be running after you leave.
-  </Step>
-</Steps>
+---
+
+### Import devices
+
+Use **Import devices** to bring Liongard systems into your MSPortal device inventory. Under **Match device types**, choose the device type each Liongard type becomes, or use **Match all suggested** or **Match the rest with AI**. Turn on **Auto-import** for types you want imported automatically, then use **Import all matched** to import the staged devices. Every change saves immediately. See [Import Devices](/user-guides/integrations/import-devices).
+
+---
+
+### Review
+
+Open **Review** and select **Finish setup** once the required tasks are done. Finishing setup does not wait for all Liongard data to finish syncing. Check the counts in **Choose data** and the results in **Sync activity** before you rely on the data.
 
 ---
 
@@ -297,7 +269,7 @@ For the full guide on creating compliance checks from metrics, custom rule evalu
 
 ## Part 4: Liongard Data on Devices
 
-Once Liongard environments are mapped and data is synced, you can view Liongard configuration audit data directly on individual devices in the Devices module.
+Once Liongard environments are matched and data is synced, you can view Liongard configuration audit data directly on individual devices in the Devices module.
 
 ### Accessing the Liongard Tab
 
@@ -370,34 +342,30 @@ Once matched, the link is saved so future lookups are instant.
 
 ## Managing Your Integration
 
-After setup, manage your integration from **Settings > Integrations**:
+After setup, open the Liongard connection from the **Active** tab in **Settings > Integrations**. Select any task in the **Setup guide** to return to it.
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the setup wizard to modify settings, update credentials, or adjust environment mappings |
-| **Import Devices** | Import Liongard systems into your MSPortal device inventory. Map inspector types to device types, enable auto-sync, and ignore categories you don't need. See [Import Devices](/user-guides/integrations/import-devices). |
-| **Resync** | Trigger a fresh sync of all data from Liongard |
-| **Disconnect** | In the row's actions menu. Removes the integration and its stored credentials. **Delete Integration** inside the Configure wizard does the same |
+| **Overview** | Check the connection's status and anything that needs attention |
+| **Sync activity** | Review recent syncs and their results |
+| **Import or match companies** | Match more environments or change existing matches |
+| **Import devices** | Import Liongard systems into your device inventory. See [Import Devices](/user-guides/integrations/import-devices). |
+| **Run sync** | In the connection header. Start a fresh sync of **All data** or one dataset |
+| **Rename** / **Disconnect…** | Under **More actions** in the connection header |
 
-### Re-running the Wizard
-
-You can return to any step of the setup wizard at any time:
-
-1. Go to **Settings > Integrations**
-2. Click **Configure** on the Liongard card
-3. Navigate between steps using the step indicators or Back/Next buttons
+**Disconnect…** removes the stored credentials, the matches between Liongard environments and companies, and synced data.
 
 ### Checking or Replacing API Credentials
 
 <Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the Liongard card.
+  <Step title="Open Connect">
+    Open the Liongard connection and select **Connect** in the **Setup guide**.
   </Step>
   <Step title="Retest the Saved Credentials">
-    On the Connect step, the **Instance URL** is locked. Leave the key fields empty and click **Retest Connection** to check the saved credentials.
+    The saved credentials are read-only. Select **Test connection** to check them again.
   </Step>
   <Step title="Replace a Key">
-    The Connect step does not save new keys for an existing Liongard integration, even though the fields show **Enter to update**. To rotate a key, contact support@msportal.ai before you revoke the working key in Liongard.
+    Credentials for an existing Liongard connection cannot be changed on this page yet. To use different credentials, disconnect and connect again. Disconnecting also removes your environment matches and synced data, so contact support@msportal.ai first if you want help, and don't revoke the working key in Liongard until the new connection works.
   </Step>
 </Steps>
 
@@ -419,26 +387,30 @@ You can return to any step of the setup wizard at any time:
     4. Confirm your Liongard account has API access permissions
   </Accordion>
 
-  <Accordion title="No environments appear in mapping step">
+  <Accordion title="Does Test connection save my new integration?">
+    No. **Test connection** only checks the credentials. Select **Save and continue** to save a new connection, then check environment discovery and synced data separately.
+  </Accordion>
+
+  <Accordion title="No environments appear in Import or match companies">
     **Causes:**
     - Initial sync still in progress
     - API key lacks read permissions
 
     **Solutions:**
     1. Wait a few minutes for the background sync to complete
-    2. Click **Sync Environments** or **Check for Environments** to refresh the list
+    2. Use **Run sync** in the connection header, then check **Sync activity**
     3. Verify your API key has the necessary read permissions in Liongard
   </Accordion>
 
   <Accordion title="Metrics not appearing on the Metrics page">
     **Causes:**
     - Metrics sync not yet complete
-    - No environments have been mapped to companies
+    - No environments have been matched to companies
 
     **Solutions:**
-    1. Ensure at least one environment is mapped to a company
+    1. Ensure at least one environment is matched to a company
     2. Wait for the metrics sync to complete (this may take several minutes after initial setup)
-    3. Check the **Metrics** and **Metric Values** counts in the Configure step, and click **Sync All Data** if they are zero
+    3. Check the **Metrics** and **Metric values** counts in **Choose data**, and select **Sync all data** if they are zero
   </Accordion>
 
   <Accordion title="Compliance checks not updating from mapped metrics">
@@ -450,17 +422,29 @@ You can return to any step of the setup wizard at any time:
     **Solutions:**
     1. Navigate to the Metrics page and verify the mapping is in place
     2. Wait for the next sync cycle to update metric values
-    3. Trigger a manual sync from the integration settings if needed
+    3. Use **Run sync** on the Liongard connection if needed
   </Accordion>
 
   <Accordion title="Missing data for some environments">
     **Causes:**
-    - Environment is not mapped to a company
+    - Environment is not matched to a company
     - Inspectors are not configured for that environment in Liongard
 
     **Solutions:**
-    1. Map the environment to a company in the wizard's Map step
+    1. Match the environment to a company in **Import or match companies**
     2. Verify that the environment has active inspectors configured in Liongard
+  </Accordion>
+
+  <Accordion title="Can I undo a removed match by leaving the connection?">
+    No. **Remove match** clears that link immediately. Match the environment again if the removal was unintended.
+  </Accordion>
+
+  <Accordion title="Does Finish setup mean all Liongard data is ready?">
+    No. It completes the setup flow, while sync work can continue in the background. Verify relevant records, company matches and timestamps before using them.
+  </Accordion>
+
+  <Accordion title="Will connecting Liongard expose its data to my clients?">
+    No. Connecting and importing do not share Liongard data with company users. Set inspector and system sharing in **Settings > Documentation** under the Liongard tab, then verify access with the intended company user.
   </Accordion>
 </AccordionGroup>
 
@@ -469,11 +453,11 @@ You can return to any step of the setup wizard at any time:
 ## Best Practices
 
 <CardGroup cols={2}>
-  <Card title="Map Environments First" icon="sitemap">
-    Always map your Liongard environments to companies before expecting data to flow. Only mapped environment data syncs to MSPortal.
+  <Card title="Match Environments First" icon="sitemap">
+    Always match your Liongard environments to companies before expecting data to flow. Only matched environment data syncs to MSPortal.
   </Card>
-  <Card title="Use Quick Match" icon="wand-magic-sparkles">
-    Start with Quick Match for environment mapping, then manually adjust any incorrect matches. It saves significant time with large environment lists.
+  <Card title="Start With Strong Matches" icon="wand-magic-sparkles">
+    Use **Accept N strong matches** for environment matching, then review the rest one by one. It saves significant time with large environment lists.
   </Card>
   <Card title="Prioritize Key Metrics" icon="bullseye">
     Focus your compliance metric mappings on high-value checks first, such as MFA status, backup verification, and firewall configuration metrics.
@@ -500,7 +484,9 @@ You can return to any step of the setup wizard at any time:
 - [Liongard Compliance Metrics](/user-guides/compliance/liongard-metrics) - Custom rules, per-device tracking, and auto-sync details
 - [Liongard Documentation Visibility](/user-guides/settings/liongard-visibility) - Choose which Liongard data company users can see
 - [Compliance Module](/user-guides/compliance/index) - Manage compliance checks and assessments
-- [Import Companies](/user-guides/integrations/import-companies) - General company import guide
+- [Compliance Settings](/user-guides/settings/compliance) - Configure compliance checks and metrics
+- [Import or Match Companies](/user-guides/integrations/import-companies) - General company import guide
+- [Integration Company Mapping](/user-guides/settings/integration-company-mapping) - Shared matching controls
 - [Import Devices](/user-guides/integrations/import-devices) - Import Liongard systems as MSPortal devices
 - [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) - Troubleshooting sync issues
 - [Cork Integration](/user-guides/integrations/enable-cork-integration) - Another security-focused integration

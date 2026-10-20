@@ -66,23 +66,15 @@ Before connecting to MSPortal.ai, you need a Meraki Dashboard API key.
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Connect in MSPortal
 
-Meraki uses a three-step setup wizard: **Connect**, **Map**, and **Import**. You connect one API key for your whole tenant, then map organizations to companies and import devices.
+You connect one API key for your whole tenant, then match organizations to companies and import devices.
 
-### Starting the Wizard
+Go to **Settings > Integrations**, open the **Directory** tab, find **Cisco Meraki**, and select **Connect**. If Meraki is already connected, open it from the **Active** tab with **Open** instead.
 
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
+The connection page lists its tasks in the **Setup guide**. Under **Setup** you will find **Connect**, **Choose data**, **Import or match companies**, **Locations** (optional), **Import devices**, and **Review**. Under **Manage** you will find **Overview** and **Sync activity**. Select a task to open it.
 
-  <Step title="Find Cisco Meraki">
-    Locate the **Cisco Meraki** row and click **Connect** (or **Configure** if it is already connected) to launch the setup wizard.
-  </Step>
-</Steps>
-
-### Step 1: Connect
+### Connect
 
 <Steps>
   <Step title="Enter the API Key">
@@ -93,98 +85,70 @@ Meraki uses a three-step setup wizard: **Connect**, **Map**, and **Import**. You
     </Frame>
 
     <Note>
-      Your API key is encrypted and stored securely. It is used to sync device information from all organizations accessible with the key.
+      Credentials are stored in the vault and never shown again. The key is used to sync device information from all organizations accessible with it.
     </Note>
   </Step>
 
   <Step title="Test the Connection">
-    Click **Test Connection**. You will see a **Connection successful!** message when the key works.
+    Select **Test connection**. You will see **Connection verified** when the key works.
 
-    If the test fails:
-    - **Invalid API key format** means the key was not copied in full
-    - **Invalid API key or insufficient permissions** means Meraki rejected the key, or Dashboard API access is not enabled for the organization
+    If the test fails, check that the key was copied in full and that Dashboard API access is enabled for the organization.
   </Step>
 
-  <Step title="Create the Integration">
-    Click **Create Integration** to save the key. MSPortal discovers the organizations the key can access.
+  <Step title="Save the Connection">
+    Select **Save and continue** to save the key. MSPortal saves the organizations the key can access so you can match them to companies.
 
     <Note>
-      **Test Connection** does not save anything. If you change the key after testing, test again before you click **Create Integration**.
+      **Test connection** does not save anything. If you change the key after testing, select **Test again** before you save.
     </Note>
   </Step>
-
-  <Step title="Continue to Mapping">
-    Click **Next** to move to the Map step.
-  </Step>
 </Steps>
 
-### Step 2: Map Organizations
+### Choose data
 
-Map each Meraki organization to an MSPortal company. Only devices from mapped organizations are imported.
+Meraki syncs all of its device data, so **Choose data** has no dataset switches. The task is done once the first sync has run. To start a sync now instead of waiting for the daily schedule, use **Run sync** in the connection header. The initial device sync may take an hour or two to complete.
+
+### Import or match companies
+
+Match each Meraki organization to an MSPortal company. Only devices from matched organizations are imported. The workspace is titled **Import or match Cisco Meraki organizations**.
 
 <Steps>
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Meraki organizations to MSPortal companies based on name similarity. Review the results and adjust as needed.
+  <Step title="Review Suggested Matches">
+    Open **Suggested** to see organizations MSPortal matched to companies by name. Select **Accept** to save a suggestion, or **Change** to choose a different company. **Accept N strong matches** accepts every suggestion with 90% confidence or more at once.
   </Step>
 
-  <Step title="Map Manually">
-    For organizations that were not matched automatically:
-
-    1. Find the organization in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-
-    If the company does not exist yet, click the **+** button next to the dropdown to create it. MSPortal creates the company right away, so check for an existing match first to avoid duplicates.
-
-    Click the **Total Items**, **Mapped**, or **Unmapped** summary cards above the list to filter it.
+  <Step title="Match Remaining Organizations">
+    In **Import**, the view the workspace opens on, choose the correct MSPortal company for each organization. If the company does not exist yet, select **Import company**. MSPortal creates the company right away, so check for an existing match first to avoid duplicates.
   </Step>
 
-  <Step title="Save Your Mappings">
-    New matches show as **Pending** until you save them. Click **Import Selected** to save them, then click **Next**. Saving organization mappings also starts a device sync for the mapped organizations.
-
-    Removing a saved mapping takes effect immediately.
+  <Step title="Check Your Matches">
+    Review **Matched**. Accepting or choosing a company saves the match immediately. **Remove match** also takes effect immediately.
   </Step>
 </Steps>
 
-### Step 3: Import
+### Locations (optional)
 
-<Steps>
-  <Step title="Open Device Import">
-    On the **Import** step, click **Open Device Import**. You can also reach this page anytime with the **Import Devices** action on the Cisco Meraki row under **Settings > Integrations**.
+Use **Locations** to match each Meraki network to one of the matched company's locations, so devices land in the right place. Accept a suggestion, choose a location, or select **Create location** to create one from the network and match it. **Accept N suggested** accepts all suggestions at once. Every change saves immediately.
 
-    <Info>
-      The initial device sync may take an hour or two to complete.
-    </Info>
-  </Step>
+If no networks appear, match the organization to a company first.
 
-  <Step title="Verify Devices">
-    After you import, open the **Devices** page for a mapped company and confirm the Meraki hardware appears with the expected device types.
-  </Step>
-</Steps>
+### Import devices
 
-### Device Import Page
+Use **Import devices** to bring Meraki hardware into your device inventory. Every change saves immediately.
 
-The device import page gives you the same staged-import workflow as other device integrations:
-
-**Device Type Mappings card**
-
-- Map each Meraki device type (appliance, switch, wireless, camera, cellular gateway, sensor, and others) to an MSPortal device type. For example, appliances usually map to Firewalls, switches to Switches, and wireless devices to Access Points
-- Turn on **Auto-Sync** per type so future synced devices of that type import automatically (a device type must be selected first)
-- **Ignore** a category to exclude that external type from import entirely; un-ignore it at any time
-- Use **Map with AI** to auto-match unmapped types, **Quick Create** to create matching MSPortal device types in one click, **Import All Mapped** to import everything that has a mapping, or **Enable All Auto-Sync**
-
-**Device Preview card**
-
-- Search and filter staged devices, and turn **Show unimported only** on or off
-- Select rows and use **Import Selected** or **Ignore Selected**
+- Under **Match device types**, choose the MSPortal device type for each Meraki type (appliance, switch, wireless, camera, cellular gateway, sensor, and others). For example, appliances usually map to Firewalls, switches to Switches, and wireless devices to Access Points. Use **Match all suggested** or **Match the rest with AI** to fill in types quickly.
+- Turn on **Auto-import** for a type so future synced devices of that type import automatically.
+- Under **Staged devices**, select **Import all matched** to import every device whose type is matched, or select rows and use **Import N selected** or **Ignore N selected**.
 
 <Note>
-Devices only get a company when their Meraki organization is mapped. If the list is empty, map your organizations first, then sync again.
+Devices only get a company when their Meraki organization is matched. If the list is empty, match your organizations first, then use **Run sync**.
 </Note>
 
-Click **Sync Now** in the page header to trigger a fresh device sync and refresh the staged list.
+After you import, open the **Devices** page for a matched company and confirm the Meraki hardware appears with the expected device types. See [Import Devices](/user-guides/integrations/import-devices) for more detail.
 
-Back in the wizard, click **Complete Setup** to finish.
+### Review
+
+Open **Review** and select **Finish setup** once the required tasks are done. Finishing setup does not mean every device has synced or been imported. Check **Import devices** and your device inventory.
 
 ---
 
@@ -211,7 +175,7 @@ In addition to the tenant-wide API key, individual companies can connect their o
     Click **Map Networks to Locations** to assign each Meraki network to a company location. Devices are automatically associated with these locations when synced.
 
     <Note>
-      Locations must already exist in the company's settings before they can be assigned to networks.
+      Locations must already exist in the company's settings before they can be assigned to networks here.
     </Note>
   </Step>
 
@@ -233,7 +197,7 @@ The Meraki integration syncs the following data to MSPortal:
 
 ### Devices
 
-Network hardware from mapped organizations:
+Network hardware from matched organizations:
 
 - Device name
 - Serial number
@@ -253,39 +217,42 @@ After initial setup, data syncs automatically:
 |-----------|----------------|
 | Devices (organizations and networks included) | Daily at 3:00 AM UTC |
 
-Each integration syncs at most once every 24 hours on the schedule. Manual syncs are not limited by this interval.
+Each integration syncs at most once every 24 hours on the schedule. Manual syncs are not limited by this interval. Saving a new API key on an existing connection lets the next scheduled run sync even if one ran in the last 24 hours.
 
 <Note>
-You can trigger a manual sync at any time with **Resync** on the Cisco Meraki row, **Sync Now** on the device import page, or **Sync Now** on a company's Meraki card.
+You can trigger a manual sync at any time with **Run sync** in the Cisco Meraki connection header, or **Sync Now** on a company's Meraki card.
 </Note>
 
 ---
 
 ## Managing Your Integration
 
-After setup, manage the integration from the **Cisco Meraki** row under **Settings > Integrations**:
+After setup, open the Cisco Meraki connection from the **Active** tab in **Settings > Integrations**. Select any task in the **Setup guide** to return to it.
 
 | Action | Description |
 |--------|-------------|
-| **Configure** | Re-open the wizard to replace the API key, change organization mappings, or reach device import |
-| **Import Devices** | Open the device import page to adjust device type mappings and import devices |
-| **Resync** | Trigger an immediate device sync for all mapped organizations |
-| **Rename** / **Disconnect** | In the row's **...** menu |
-| **Delete** | In the wizard footer. Removes the integration and its stored API key |
+| **Overview** | Check the connection's status and anything that needs attention |
+| **Sync activity** | Review recent syncs and their results |
+| **Import or match companies** / **Locations** | Change organization or network matches |
+| **Import devices** | Adjust device type matches and import devices |
+| **Run sync** | In the connection header. Start an immediate device sync for all matched organizations |
+| **Rename** / **Disconnect…** | Under **More actions** in the connection header |
+
+**Disconnect…** removes the stored API key, the matches between Meraki organizations and companies, and synced data. It does not revoke the key in Meraki.
 
 Your tenant has one active Meraki connection. Organizations from every Meraki account you manage must be reachable with that one key.
 
 ### Replacing the API Key
 
 <Steps>
-  <Step title="Open the Connect Step">
-    Click **Configure** on the Cisco Meraki row. The wizard opens on **Connect**.
+  <Step title="Open Connect">
+    Open the Cisco Meraki connection and select **Connect** in the **Setup guide**. A stored key shows as masked.
   </Step>
   <Step title="Enter and Test the New Key">
-    Paste the new key into the **API Key** field and click **Test Connection**. Leave the field blank and click **Retest Connection** if you only want to test the stored key.
+    Paste the new key into the **API Key** field and select **Test connection**. Leave the masked value unchanged and select **Test connection** if you only want to test the stored key.
   </Step>
   <Step title="Save the Key">
-    Click **Update API Key** to save it.
+    Select **Save changes** to store the new key. Testing alone does not save it.
   </Step>
 </Steps>
 
@@ -297,10 +264,29 @@ Your tenant has one active Meraki connection. Organizations from every Meraki ac
 |-------|----------|
 | API key rejected | Verify the key was copied fully and that Dashboard API access is enabled in Meraki |
 | No organizations listed | Confirm the Meraki account that generated the key has access to the expected organizations |
-| No devices syncing | Check that organizations are mapped to companies; only mapped organizations import devices |
-| Devices classified incorrectly | Adjust the **Device Type Mappings** card on the device import page |
-| Data looks stale | Scheduled syncs run once per day; use **Resync** on the Cisco Meraki row to force an immediate refresh |
-| Devices missing a location | Use **Map Networks to Locations** on the company's Meraki card and confirm locations exist for the company |
+| No devices syncing | Check that organizations are matched to companies; only matched organizations import devices. Then check **Sync activity** |
+| Devices classified incorrectly | Change the type under **Match device types** in **Import devices** |
+| Data looks stale | Scheduled syncs run once per day; use **Run sync** to force an immediate refresh, and check **Sync activity** for errors |
+| Devices missing a location | Match the network in **Locations**, or use **Map Networks to Locations** on the company's Meraki card |
+
+---
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Does Test connection save the integration?">
+    No. For a new connection, test the key and then select **Save and continue**. For an existing connection, select **Save changes** to store a new key.
+  </Accordion>
+  <Accordion title="Are suggested matches saved automatically?">
+    No. Suggestions wait for your review. Accepting a suggestion saves its match immediately; removing a saved match also takes effect immediately.
+  </Accordion>
+  <Accordion title="Does Finish setup mean all devices are imported?">
+    No. Device sync, saved matches and device imports have separate results. Check **Import devices** and the resulting inventory.
+  </Accordion>
+  <Accordion title="Will one key expose every Meraki organization to every client?">
+    No. The key decides which organizations MSPortal can discover. Saved organization-to-company matches and portal permissions decide which company sees each device.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
@@ -330,6 +316,10 @@ After setting up the Meraki integration:
     Explore additional integration options
   </Card>
 </CardGroup>
+
+- [Import or match companies](/user-guides/integrations/import-companies)
+- [Integration company mapping](/user-guides/settings/integration-company-mapping)
+- [Integration settings](/user-guides/settings/integrations)
 
 ## Need Help?
 

@@ -46,11 +46,11 @@ Use custom fields to capture information the built-in fields do not cover, such 
 | **Multi-Select** | Several choices from your saved options |
 
 <Note>
-Choose the field type carefully when you create the field. Changing the **Type** on a saved field does not convert its stored values. For a different type, create a new field and move the values over before you delete the old one.
+Choose the field type carefully. A saved field's type cannot be changed. For a different type, create a new field and move the values over before you delete the old one.
 </Note>
 
 <Note>
-The new-row form has no **Hide from company users** option. To make a field internal, create it, then edit the saved field and check **Hide from company users**. Do this before you enter sensitive values.
+New fields are visible to company users. To make a field internal, check **Hide from company users** in the new row, before you enter sensitive values. Fields synced from HaloPSA start hidden.
 </Note>
 
 ## Scope and Company visibility
@@ -59,7 +59,7 @@ The new-row form has no **Hide from company users** option. To make a field inte
 | --- | --- |
 | **All Types** or a specific type | Where the field applies. You can pick a type for Devices, Compliance and Planner fields when types exist. Goals, Budgets and Companies have no type list |
 | **Both**, **Tenant Users**, **Company Users** | Which kind of user gets a Users field. This is separate from who can see it |
-| **Hide from company users** | Makes the field internal (shown as **Internal only**). New fields are visible to company users until you edit them |
+| **Hide from company users** | Makes the field internal (shown as **Internal only**). New fields are visible to company users unless you check it; fields synced from HaloPSA start hidden |
 | **Required** | Requires a value in record forms. A choice field needs at least one saved option first |
 
 For Compliance, also choose the fill location when creating the field:
@@ -71,34 +71,60 @@ The Compliance fill location is fixed after creation. Plan a replacement and pre
 
 ## Company fields from HaloPSA and alerts
 
-Two extra controls appear on the **Companies** tab for text fields (**Short Text** and **Long Text**).
+A Companies field can follow a HaloPSA customer field or the customer's pop-up notes, and can show its value as a warning banner on the company's pages. A common setup brings HaloPSA pop-up warnings, such as "sensitive client, proceed with care", into MSPortal and alerts the account manager when one changes.
 
-### Sync a company field from HaloPSA
+### Before you start
 
-When HaloPSA is connected, a Companies field can follow a HaloPSA customer field or the customer's pop-up notes.
+- HaloPSA is connected and active, with **Sync Companies** on in the connection's **Choose data** step. See [Enable the HaloPSA integration](/user-guides/integrations/enable-halo-integration).
+- Your HaloPSA customers are linked to MSPortal companies. Only linked companies get values.
+- HaloPSA has synced at least once. Its customer fields appear in **Sync from HaloPSA** after a sync, so a field you add in HaloPSA later appears after the next sync.
+
+### Sync a field from HaloPSA pop-up notes
 
 <Steps>
-  <Step title="Edit the field">
-    On the **Companies** tab, create a text field or click a saved one to edit it.
+  <Step title="Add a Companies field">
+    Open **Settings > Customization > Fields**, choose the **Companies** tab and click **Add Companies Field**. Enter a **Label**, for example **Customer notes**.
   </Step>
   <Step title="Choose the HaloPSA source">
-    In **Sync from HaloPSA**, pick a HaloPSA customer field or **Customer pop-up notes**. Choose **Not synced** to stop syncing.
+    In **Sync from HaloPSA**, choose **Customer pop-up notes**, or a HaloPSA customer field. The source sets the **Type**: **Long Text** for pop-up notes, **Short Text** for a customer field. The type is locked and reads **Set by the HaloPSA source.**
+  </Step>
+  <Step title="Check who can see it">
+    **Hide from company users** is checked for you, because pop-up notes are often internal warnings about the client. Leave it checked unless the client's own users should read the value.
+  </Step>
+  <Step title="Turn on the alert (optional)">
+    Check **Show as alert** to show the value as a banner on the company's pages. See [Show a field as a company alert](#show-a-field-as-a-company-alert).
   </Step>
   <Step title="Save the row">
-    Click the row's checkmark. The field shows a **HaloPSA:** badge with the source name.
+    Click the row's checkmark. The field shows a **HaloPSA:** badge with the source name, and **Internal only** while it is hidden.
   </Step>
 </Steps>
 
-MSPortal fills the field for each company from HaloPSA soon after you save, then updates it with each HaloPSA company sync. On the company's **Custom Fields** section, a synced field is read-only and shows **Synced from HaloPSA**. Change the value in HaloPSA. Only text fields can sync; other types show **Only text fields can sync from HaloPSA.** If the HaloPSA field is removed, the source reads **Field no longer in HaloPSA**.
+MSPortal fills the field for every linked company within a minute or so, then updates it with each HaloPSA company sync. Companies without a value stay empty.
+
+To link a saved field instead, click its label, choose the source in **Sync from HaloPSA**, and save. Only a saved **Short Text** or **Long Text** field can be linked; for another type, add a new field. Linking a saved field also checks **Hide from company users**.
+
+### What gets synced
+
+- **Pop-up notes**: the customer's current pop-up notes as plain text, oldest first, with a blank line between notes. Notes outside their HaloPSA date range are left out.
+- **Customer fields**: HaloPSA's display text, so a dropdown shows its label and a checkbox shows **Yes** or **No**. Encrypted HaloPSA fields never sync.
+- A synced value is read-only in MSPortal. On the company's **Custom Fields** section it shows **Synced from HaloPSA**. Change it in HaloPSA.
+- To stop syncing, edit the field and choose **Not synced**. The current values stay and become editable.
 
 ### Show a field as a company alert
 
-Check **Show as alert** on any Companies text field to show its value as a warning banner at the top of the company's pages, for example a note that a client is sensitive. It works with any PSA and with values you type in MSPortal. The field shows an **Alert** badge in the list.
+Check **Show as alert** on any Companies text field (**Short Text** or **Long Text**). It works with HaloPSA, with any other PSA, and with values you type in MSPortal. The field shows an **Alert** badge in the list.
 
-- A company with no value in the field shows no banner.
+- When a company has a value in the field, a warning banner shows it at the top of the company's **Company** page and its page under **Settings > Companies**. A company with no value shows no banner.
 - Anyone can dismiss a banner. It returns on that device when the value changes.
-- When HaloPSA sets or changes the value of a synced alert field, the company's account manager gets an in-app notification.
-- Company users see the banner unless the field is set to **Hide from company users**.
+- Company users see the banner only when the field is visible to them. Check **Hide from company users** to keep it for MSP staff.
+
+### Who gets notified
+
+When HaloPSA fills or changes the value of a synced alert field, MSPortal notifies the company's account manager. Values you type in MSPortal, and values HaloPSA clears, send no notification.
+
+- **Where**: an in-app notification under the bell in the top bar, titled with the field and company, for example **Customer notes for Gradient MSP**. It reads **Changed in HaloPSA:** followed by the new value. Click it to open the company. No email is sent.
+- **Who**: active MSP staff assigned to the company in a team role that is mapped to HaloPSA's **Account Manager**, or a team role named **Account Manager**. Assign the role on the company's **Team** tab, and map it under **Halo Roles** when you edit the team role. See [Account teams and Team Roles](/user-guides/getting-started/onboarding/company-roles).
+- If no one holds that role on a company, the banner still shows but nobody is notified.
 
 ## Edit, reorder, or delete
 
@@ -138,8 +164,13 @@ If a save or reorder shows an error, reopen the page and check the saved fields 
 | **Failed to save custom field** appears | Check that the label is not empty and is not already used, then try again |
 | I need to change a Compliance field's fill location | It is fixed after creation. Create a new field and delete the old one |
 | **Sync from HaloPSA** is missing | It appears only on the **Companies** tab while a HaloPSA connection is active |
+| A HaloPSA customer field is not in **Sync from HaloPSA** | Wait for the next HaloPSA sync after adding it in HaloPSA, then reopen the page |
+| **Sync from HaloPSA** is disabled on a saved field | Only saved **Short Text** and **Long Text** fields can be linked. Add a new field and choose the source there |
+| A company has no synced value | Check that the company is linked to a HaloPSA customer and has a current value or pop-up note in HaloPSA |
 | A company field cannot be edited and shows **Synced from HaloPSA** | Change the value in HaloPSA, or set the field to **Not synced** |
 | **Show as alert** is missing | It is available only for Companies fields of type **Short Text** or **Long Text** |
+| Nobody was notified about an alert | Check that the company has an active staff member in a team role mapped to HaloPSA's **Account Manager** or named **Account Manager**. Only changes HaloPSA makes notify |
+| Client users can see a HaloPSA warning | Edit the field and check **Hide from company users** |
 
 ## Frequently asked questions
 

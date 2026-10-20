@@ -4,7 +4,7 @@ description: 'Connect Huntress to MSPortal.ai to sync Managed EDR agents, escala
 icon: 'shield-dog'
 ---
 
-This guide walks you through connecting Huntress to MSPortal.ai using the guided setup wizard. The Huntress integration is currently in Beta.
+Connect Huntress to review Managed EDR agents, escalations, incident reports and summary reports. You can also connect Managed SAT for learner, assignment and phishing information. Setup requires **MSP integration management permission**; Company users access only the resulting views enabled for them.
 
 ## Overview
 
@@ -50,47 +50,26 @@ Before connecting to MSPortal.ai, create an API key pair in Huntress.
 </Steps>
 
 <Note>
-  If you plan to sync Managed SAT training data, you will also need Curricula OAuth credentials (client ID and client secret). You enter these on the wizard's Connect step, right below the EDR keys. Contact Huntress support if you don't have SAT API credentials for your account.
+  If you plan to sync Managed SAT training data, you will also need Curricula OAuth credentials (client ID and client secret). You enter these in **Connect**, below the EDR keys. Contact Huntress support if you don't have SAT API credentials for your account.
 </Note>
 
 ---
 
-## Part 2: MSPortal Setup Wizard
+## Part 2: Set up the connection in MSPortal
 
-MSPortal.ai provides a guided wizard to connect and configure your Huntress integration:
+Open **Settings > Integrations**, choose the **Directory** tab, find **Huntress** and connect it. To maintain a saved account, open that connection. The **Setup guide** lists these tasks:
 
 1. **Connect** - Add EDR API keys and, optionally, Managed SAT credentials
-2. **Sync** - Choose data sets
-3. **Map Organizations** - Link Huntress EDR organizations to companies
-4. **SAT accounts** - Link Managed SAT accounts to companies (appears only when Managed SAT is enabled)
-5. **Import Agents** - Create device coverage
+2. **Choose products** - Choose the datasets to sync
+3. **Import or match companies** - Link Huntress EDR organizations to companies
+4. **Import or match security awareness accounts** - Link Managed SAT accounts to companies (optional; used only when Managed SAT is connected)
+5. **Import devices** - Link agents to devices
+6. **Review** - Finish setup
 
-### Starting the Wizard
-
-<Steps>
-  <Step title="Navigate to Integrations">
-    In MSPortal.ai, go to **Settings > Integrations**.
-  </Step>
-
-  <Step title="Find Huntress">
-    Locate the **Huntress** row in the list of available integrations.
-  </Step>
-
-  <Step title="Start Setup">
-    Click **Configure** to launch the setup wizard.
-  </Step>
-</Steps>
-
----
-
-### Step 1: Connect
-
-Enter your Huntress API credentials to establish the connection. If you use Managed SAT, enter its credentials on this same step.
+### Connect
 
 <Steps>
-  <Step title="Enter API Details">
-    Fill in the connection fields:
-
+  <Step title="Enter API details">
     | Field | Value |
     |-------|-------|
     | **API URL** | `https://api.huntress.io/v1` (pre-filled; only change this if Huntress support directs you to) |
@@ -102,23 +81,8 @@ Enter your Huntress API credentials to establish the connection. If you use Mana
     </Note>
   </Step>
 
-  <Step title="Test Connection">
-    Click **Test Connection** to verify your credentials.
-
-    A green "Connected to [account name]" message appears when the test passes.
-
-    If the connection fails:
-    - Verify both keys were copied in full without extra spaces
-    - Ensure the key pair has not been revoked in Huntress
-    - Confirm the API URL is `https://api.huntress.io/v1`
-  </Step>
-
-  <Step title="Enable Managed SAT (Optional)">
-    If you use Huntress Managed SAT, turn on **Enable Managed SAT** in the **Managed SAT** card below the EDR fields.
-
-    <img src="/images/product/huntress-sat-enable-control.png" alt="Enable Managed SAT switch on the Huntress Connect step" width="380" height="48" />
-
-    Fill in the Curricula API credentials:
+  <Step title="Choose the Huntress products">
+    Under **Huntress products**, choose **Managed EDR**, or **Managed EDR and Managed SAT** if you use Huntress Managed SAT. For SAT, fill in the Curricula API credentials:
 
     | Field | Value |
     |-------|-------|
@@ -126,26 +90,30 @@ Enter your Huntress API credentials to establish the connection. If you use Mana
     | **SAT client secret** | Your Curricula OAuth client secret |
     | **SAT API URL** | `https://mycurricula.com/api/v1` (pre-filled) |
     | **SAT token URL** | `https://mycurricula.com/oauth/token` (pre-filled) |
-
-    Click **Test SAT Connection** to verify the credentials. Turning on the switch and testing do not save anything yet.
   </Step>
 
-  <Step title="Connect Huntress">
-    Once the connection test passes, click **Connect Huntress** to save your credentials (including SAT, if enabled), then click **Next**.
+  <Step title="Test the connection">
+    Select **Test connection**. It checks EDR and, when selected, SAT access. Resolve any failure before saving.
+
+    If the connection fails:
+    - Verify both keys were copied in full without extra spaces
+    - Ensure the key pair has not been revoked in Huntress
+    - Confirm the API URL is `https://api.huntress.io/v1`
+    - For SAT, confirm the client ID and secret are Curricula credentials, not your EDR keys
+  </Step>
+
+  <Step title="Save">
+    Select **Save and continue** for a new connection. The product selection and credentials are saved together.
 
     If the EDR connection saves but SAT fails, reopen the saved connection and fix SAT there. Do not start a second Huntress connection.
   </Step>
 </Steps>
 
----
+### Choose products
 
-### Step 2: Sync
-
-Choose which Huntress datasets MSPortal syncs. The switches on this step are drafts until you click **Save Sync Settings**. **Next** does not save them.
+Choose which Huntress datasets MSPortal syncs. Each switch saves as soon as you change it. Turned-off datasets stop syncing on the next run.
 
 #### Managed EDR
-
-Toggle the EDR datasets you want to sync:
 
 | Option | Description |
 |--------|-------------|
@@ -153,15 +121,15 @@ Toggle the EDR datasets you want to sync:
 | **Agents** | Device coverage source |
 | **Escalations and incident reports** | Security page source |
 | **Summary reports** | Reports page source |
-| **Auto-import mapped agents** | Creates devices from mapped Huntress agents during sync (off by default) |
+| **Auto-import mapped agents** | Creates devices from mapped Huntress agents during sync (off by default). Appears beneath **Agents** when agent sync is on. |
 
 <Tip>
-  Leave **Auto-import mapped agents** off during initial setup. You can review and import agents manually in Step 4, then enable auto-import once you're confident in your organization mappings.
+  Leave **Auto-import mapped agents** off during initial setup. Review and import agents in **Import devices**, then enable auto-import once you're confident in your organization mappings.
 </Tip>
 
 #### Managed SAT (Optional)
 
-If you enabled Managed SAT on the Connect step, choose which SAT datasets to sync:
+If you connected Managed SAT, choose which SAT datasets to sync:
 
 | Option | Description |
 |--------|-------------|
@@ -171,113 +139,39 @@ If you enabled Managed SAT on the Connect step, choose which SAT datasets to syn
 | **SAT phishing** | Phishing campaigns and learner attempts |
 | **SAT reports** | Managed SAT account summary reports |
 
-Click **Save Sync Settings**, then click **Next**.
-
----
-
-### Step 3: Map Organizations
+### Import or match companies
 
 Map Huntress organizations to your MSPortal companies. This determines which data syncs to which company.
 
-<Steps>
-  <Step title="Sync Organizations">
-    If no organizations appear, click **Sync Organizations** to fetch organizations from your Huntress account.
+1. Wait for the organizations to appear. The initial sync runs in the background, so check back after a few minutes if they don't appear immediately.
+2. Review the suggested matches, then accept them, choose another company in the row, or use **Import company** to create a portal company. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them.
+3. Choose **Ignore** for organizations you never want to map.
 
-    <Info>
-      The initial sync runs in the background. Check back after a few minutes if organizations don't appear immediately.
-    </Info>
-  </Step>
+Accepted matches and removals save immediately; importing a company is also a saved action.
 
-  <Step title="Use Quick Match">
-    Click **Quick Match** to automatically match Huntress organizations to MSPortal companies based on name similarity. Quick Match fills in the matches as pending links. Review them, adjust as needed, then click **Import Selected** to save them.
-  </Step>
+<Warning>
+  Only data from mapped organizations syncs to MSPortal. Unmapped organizations are skipped.
+</Warning>
 
-  <Step title="Manual Mapping">
-    For organizations that weren't automatically matched:
+### Import or match security awareness accounts
 
-    1. Find the organization in the list
-    2. Click the **Select company...** dropdown in the **Mapped** column
-    3. Search for and select the correct MSPortal company
-    4. If the company does not exist yet, use **Create new company** to add it and link it in one step
-    5. Click **Import Selected** to save the pending links
+When Managed SAT is connected, use **Import or match security awareness accounts** to map each Curricula account to its MSPortal company the same way. Mapping an EDR organization does not map its SAT account. Check that each company's EDR organization and SAT account point to the same company.
 
-    A company you create here is saved immediately. To remove a saved mapping, click the **X** button next to the company badge. The removal takes effect immediately.
-  </Step>
+### Import devices
 
-  <Step title="Proceed">
-    Once your organizations are mapped, click **Next** to continue. **Next** also saves any pending links.
+Open **Import devices** to review synchronized agents and their device links. Opening the task does not import anything.
 
-    <Warning>
-      Only data from mapped organizations syncs to MSPortal. Unmapped organizations are skipped.
-    </Warning>
-  </Step>
-</Steps>
+Huntress agents link to existing MSPortal devices first. Only an agent that cannot be safely matched by Huntress identity, serial number, MAC address, or hostname in the mapped company creates a new device. Confirm the intended companies and link or create choices before importing.
 
----
+<Tip>
+  Set up device type mappings before importing so brand-new devices get the right device type.
+</Tip>
 
-### Step 4: SAT Accounts (Managed SAT only)
+See [Import Devices](/user-guides/integrations/import-devices) for the shared import controls.
 
-If you enabled Managed SAT, the wizard adds a **SAT accounts** step after Map Organizations. Mapping an EDR organization does not map its SAT account, so map each one here.
+### Review and finish setup
 
-<Steps>
-  <Step title="Map Each SAT Account">
-    Map each Curricula account to its MSPortal company the same way as the organizations, using **Quick Match** or the **Select company...** dropdown.
-  </Step>
-  <Step title="Save and Continue">
-    Click **Import Selected** or **Next** to save the links. Check that each company's EDR organization and SAT account point to the same company.
-  </Step>
-</Steps>
-
----
-
-### Step 5: Import Agents
-
-Review synced data and link Huntress agents to devices.
-
-<Steps>
-  <Step title="Review Sync Stats">
-    The Import step shows counts for each synced data type:
-
-    - Organizations
-    - Agents
-    - Escalations
-    - Incidents
-    - Reports
-
-    The "Last synced" timestamp shows when data was last updated.
-  </Step>
-
-  <Step title="Sync Huntress Data">
-    Click **Sync Huntress Data** to trigger a full background sync of all enabled datasets. Depending on your data volume, this may take several minutes.
-  </Step>
-
-  <Step title="Import Agents as Devices">
-    Click **Import Agents as Devices** to open the agent import page. Opening the page does not import anything.
-
-    Huntress agents link to existing MSPortal devices first. Only an agent that cannot be safely matched by Huntress identity, serial number, MAC address, or hostname in the mapped company creates a new device.
-
-    The import page shows:
-
-    | Status | Meaning |
-    |--------|---------|
-    | **Linked to devices** | Agents already attached to a MSPortal device |
-    | **Ready to link or create** | Agents that can be imported now |
-    | **Need company mapping** | Agents whose organization isn't mapped yet |
-    | **Ignored** | Agents you've excluded from import |
-
-    Use **Import Selected** or **Import All Mapped** to link agents. Both link to existing devices first and only create new devices for unmatched agents.
-
-    <Tip>
-      Set up device type mappings before importing so brand-new devices get the right device type. The import page warns you if any Huntress types still need a mapping.
-    </Tip>
-
-    See [Import Devices](/user-guides/integrations/import-devices) for the import controls.
-  </Step>
-
-  <Step title="Complete Setup">
-    Click **Complete Setup** to return to the Integrations page. Syncs may still be running. Check the Devices, Security and Training pages afterward. An **Agents** count does not mean every agent is linked to a device.
-  </Step>
-</Steps>
+Open **Review** and select **Finish setup** once the required tasks are complete. Syncs may still be running. Check the Devices, Security and Training pages afterward. An **Agents** count does not mean every agent is linked to a device.
 
 ---
 
@@ -325,55 +219,22 @@ Managed SAT data only appears for Huntress organizations mapped to an MSPortal c
 
 ## Synchronization Schedule
 
-After initial setup, all enabled datasets sync automatically once per day. You can trigger a manual sync at any time from the wizard's Import step using **Sync Huntress Data**.
+After initial setup, all enabled datasets sync automatically once per day. To sync now, use **Run sync** in the connection header, and check the result in **Sync activity**.
 
 <Note>
-  Only datasets enabled and saved on the Sync step are synced. Data from unmapped organizations is skipped.
+  Only datasets turned on in **Choose products** are synced. Data from unmapped organizations is skipped.
 </Note>
 
 ---
 
-## Managing Your Integration
+## Maintain the connection
 
-After setup, manage your integration from **Settings > Integrations**:
+Open the Huntress connection from **Settings > Integrations** and choose a task in the **Setup guide** to change its settings. Use **Overview** and **Sync activity** to inspect background results.
 
-| Action | Description |
-|--------|-------------|
-| **Configure** | Re-open the wizard to modify settings or add more mappings |
-| **Resync** | Trigger a full data refresh |
-| **Disconnect** | In the row's actions menu. Removes the integration and its stored credentials. It does not uninstall Huntress agents |
-
-### Updating Your API Keys
-
-<Steps>
-  <Step title="Open Integration Settings">
-    Go to **Settings > Integrations** and click **Configure** on the Huntress card.
-  </Step>
-  <Step title="Enter New Keys">
-    On the Connect step, enter your new public and private keys. Saved keys show masked, and **Test Connection** stays disabled until you type the actual private key.
-  </Step>
-  <Step title="Test and Save">
-    Click **Test Connection**, then **Save Connection**.
-  </Step>
-</Steps>
-
-To turn Managed SAT on or off later, change **Enable Managed SAT** on the Connect step and click **Save Connection**. SAT dataset choices still save separately with **Save Sync Settings**.
-
-<Steps>
-</Steps>
-
-### Adding More Organization Mappings
-
-As you onboard new clients in Huntress:
-
-<Steps>
-  <Step title="Open the Map Step">
-    Open the wizard and click **Map Organizations** in the stepper.
-  </Step>
-  <Step title="Sync and Map">
-    Click **Sync Organizations** to fetch new organizations, then use Quick Match or manual mapping to connect them to companies.
-  </Step>
-</Steps>
+- **Update API keys:** in **Connect**, enter your new public and private keys. Saved keys show masked; leave masks unchanged to test the saved credentials. Select **Test connection**, then **Save changes**. An existing connected badge does not mean a fresh test ran.
+- **Turn Managed SAT on or off:** change **Huntress products** in **Connect**, test, and select **Save changes**. SAT dataset choices stay in **Choose products**.
+- **Map new organizations:** as you onboard new clients in Huntress, open **Import or match companies** after the next sync and match them.
+- **Disconnect:** open **More actions** and choose **Disconnect…**. The confirmation lists what is removed from MSPortal. It does not uninstall Huntress agents and is not an endpoint remediation action.
 
 ---
 
@@ -383,15 +244,36 @@ As you onboard new clients in Huntress:
 |-------|----------|
 | Connection test fails | Verify both API keys are correct and the key pair hasn't been revoked in Huntress |
 | SAT connection test fails | Confirm the client ID and secret are valid Curricula OAuth credentials, not your EDR keys |
-| EDR works but SAT data is missing | Confirm **Enable Managed SAT** is on and saved on the Connect step, the SAT datasets are saved on the Sync step, and the SAT accounts are mapped |
-| Test Connection is disabled | The saved key is masked. Type the actual key to run a fresh test |
-| Sync choices reverted | Click **Save Sync Settings** before leaving the Sync step |
-| No organizations appear | Click **Sync Organizations** on the Map Organizations step and wait a few minutes |
-| Agents not creating devices | Check that the agent's organization is mapped to a company and device type mappings are set |
+| EDR works but SAT data is missing | Confirm **Managed EDR and Managed SAT** is saved in **Connect**, the SAT datasets are on in **Choose products**, and the SAT accounts are mapped |
+| Test button is disabled with a mask | Keep stored masks unchanged to test saved credentials, or type the actual key; resolve any field or endpoint validation error |
+| Sync choices disappeared | Check the saving state and any error in **Choose products**; switches save when changed |
+| No organizations appear | Wait a few minutes for the first sync, or use **Run sync** and check **Sync activity** |
+| Agents not creating devices | Check that the agent's organization is mapped to a company, device type mappings are set, and whether **Auto-import mapped agents** is on |
 | Duplicate devices | Agents link to existing devices by identity, serial, MAC, or hostname first; verify the existing device belongs to the mapped company |
-| Data not syncing | Ensure the dataset is enabled and saved on the Sync step and the organization is mapped |
+| Data not syncing | Ensure the dataset is on in **Choose products** and the organization is mapped |
 | Security counts are zero | Check that the security dataset is enabled, the organization is mapped and a sync has finished. Zero does not prove there are no threats |
-| Stale data | Use "Sync Huntress Data" on the Import step to trigger a manual refresh |
+| Stale data | Use **Run sync** in the connection header to trigger a manual refresh |
+
+<AccordionGroup>
+  <Accordion title="Where do I add Huntress Managed SAT credentials?">
+    In **Connect**, choose **Managed EDR and Managed SAT** under **Huntress products**, enter its separate credentials, test and save. Use **Choose products** for dataset choices.
+  </Accordion>
+  <Accordion title="Can I use Huntress EDR keys for Managed SAT?">
+    No. SAT requires its own client ID and secret. EDR uses the public/private API key pair.
+  </Accordion>
+  <Accordion title="Does mapping an EDR organization also map its SAT account?">
+    No. Use the separate **Import or match security awareness accounts** task when SAT is configured and map each account to the correct company.
+  </Accordion>
+  <Accordion title="Does opening Import devices create devices?">
+    No. It shows staged agents. Review and apply the import choices there. Separately, enabled **Auto-import mapped agents** can create devices during sync.
+  </Accordion>
+  <Accordion title="Does a Huntress Agents count prove all agents are linked to devices?">
+    No. Review the device import or coverage view and company mappings. Synchronized agents and linked MSPortal devices are different outcomes.
+  </Accordion>
+  <Accordion title="Does disconnecting Huntress uninstall agents?">
+    No. Disconnecting removes the MSPortal integration. Do not use it as an endpoint uninstall or remediation action.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
@@ -422,6 +304,9 @@ After setting up the Huntress integration:
   </Card>
   <Card title="Build Reports" icon="chart-bar" href="/user-guides/reporting/index">
     Include Huntress security data in client reports
+  </Card>
+  <Card title="Import or match companies" icon="building" href="/user-guides/integrations/import-companies">
+    Learn the shared company matching controls
   </Card>
   <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
     Explore additional integration options

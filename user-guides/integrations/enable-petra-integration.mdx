@@ -8,7 +8,7 @@ icon: "plug"
 Petra Security is in **Beta**. It is available to every tenant and shows a **Beta** badge in **Settings › Integrations › Directory**. If something does not match your Petra account, contact support@msportal.ai.
 </Note>
 
-Petra Security brings Microsoft 365 identity threats into MSPortal: account compromise incidents, failed sign-in attacks and each tenant's posture report score. This setup is for **MSP staff with integration management access**.
+Petra Security brings Microsoft 365 identity threats into MSPortal: account compromise incidents, failed sign-in attacks and each tenant's posture report score. This setup is for **MSP staff with integration management access**. Company users should ask their MSP to connect the service.
 
 MSPortal only reads from Petra. It never remediates incidents or changes anything in Petra or Microsoft 365.
 
@@ -29,7 +29,9 @@ See [Petra's API authentication guide](https://docs.petrasecurity.com/docs/api-r
 1. Open **Settings › Integrations**, choose **Directory**, find **Petra Security**, and choose **Connect**.
 2. Paste the key into **API Key**. Paste only the key, without the Bearer prefix.
 3. Choose **Test connection**. A successful test shows your Petra organization and how many tenants it covers.
-4. Choose **Save and continue**. MSPortal saves the key in the vault and starts the first sync.
+4. Choose **Save and continue**. MSPortal saves the key in the vault only after Petra accepts it, then starts the first sync.
+
+If you submitted a Petra key through the earlier credential form, that connection keeps its key: open it, test it and match its tenants.
 
 ## Match tenants to companies
 
@@ -38,6 +40,8 @@ Open **Import or match companies** after the first sync. Each row is a Petra ten
 A tenant whose Microsoft tenant ID matches a company's Microsoft 365 or CIPP connection is suggested at 100% confidence. Other tenants are suggested by name. Accept a suggestion, choose another company, or use **Import company** to create one. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them. **Ignore** hides a tenant that is not a client's, and you can restore it later.
 
 Incidents, failed attacks and posture appear only for matched tenants.
+
+When the tenants are matched, open **Review** to check the connection and choose **Finish setup**.
 
 ## Where the data appears
 
@@ -57,6 +61,7 @@ Petra syncs every 2 hours. Saving the connection starts a sync. Petra allows one
 - **No tenants to match:** wait for the first sync to finish. While none have synced, **Import or match companies** offers a button to sync tenants.
 - **A company has no data:** check its tenant match and the company selector. Paused Petra tenants are not read for new incidents or failed attacks.
 - **Failed attacks look older than incidents:** failed attacks refresh about once a day per tenant, while incidents refresh every 2 hours.
+- **Sync needs attention:** a partial failure keeps previously collected data. Fix the key in **Connect** if Petra rejected it, then choose **Save changes** to start a new sync.
 
 To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored key, the tenant matches and the data synced from Petra. It changes nothing in Petra; delete the key there when you no longer need it.
 
@@ -65,3 +70,5 @@ To remove the connection, open **More actions** on the connection page and choos
 - [Integration setup guides](/user-guides/integrations/index)
 - [Security](/user-guides/security/index)
 - [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Map and import companies](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)
