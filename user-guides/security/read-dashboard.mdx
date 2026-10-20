@@ -9,7 +9,7 @@ Use this page to read the Security Dashboard and jump to the records behind each
 ## Before you start
 
 - You need Security read access.
-- At least one of Cork, Acronis, Huntress, Avanan, Petra Security, or Fortinet must be connected. The **Dashboard** tab appears only then. See [Security](/user-guides/security/index) for the integration guides.
+- At least one of Cork, Acronis, Huntress, Avanan, Petra Security, Fortinet, or Cyrisma must be connected. The **Dashboard** tab appears only then. See [Security](/user-guides/security/index) for the integration guides.
 - The dashboard shows imported data. Opening it does not run a scan.
 
 ## Review the dashboard
@@ -39,6 +39,7 @@ Use this page to read the Security Dashboard and jump to the records behind each
 | Avanan | **Open threats** and **Phishing (30 days)**. |
 | Petra Security | **Open identity incidents** and **Failed sign-in attacks (30 days)**, with the number of tenants attacked underneath. |
 | Fortinet | **FortiGates connected**, out of all FortiGates, and **FortiGates behind on firmware**, with how many are past end of life underneath. The firmware tile turns red when any FortiGate runs a FortiOS branch past end of life. |
+| Cyrisma | **Critical findings**, with all open findings underneath, **Known exploited CVEs**, and **Remediated (30 days)**, with the findings opened in the same period underneath and a daily trend. |
 
 Tiles show how many items were new in the last 30 days when that history is available.
 
@@ -80,12 +81,20 @@ Tiles show how many items were new in the last 30 days when that history is avai
 - The card appears when Fortinet is connected and at least one FortiGate is in the selected companies. Renewal dates need Asset Management access on the Fortinet connection. See [Configure Fortinet Integration](/user-guides/integrations/enable-fortinet-integration).
 - The Fortinet tiles and card do not open a list. Open a FortiGate in **Devices** to see its firmware and coverage.
 
+### Cyrisma
+
+- **Cyrisma vulnerability posture** covers the Cyrisma tenants mapped to the selected companies. It shows the **Average score** (or the company's **Overall grade** when one company is selected), **Clients graded**, **Assets scanned**, and **Distinct CVEs**.
+- **Open findings by severity** splits the open findings into Critical, High, Medium, and Low. A finding is one CVE on one asset, so one CVE on ten assets counts ten times.
+- **Findings opened and remediated per day** draws the daily counts Cyrisma reports for the last 31 days, today included. The remediated total matches the **Remediated (30 days)** tile. The chart appears after the first daily Cyrisma sync.
+- **Lowest grades** lists the five companies with the weakest Cyrisma grade, with their open critical findings and findings remediated in the last 30 days. Grades are Cyrisma's own letters, from A+ to F.
+- The tiles and each company open **Security > Vulnerabilities** filtered to Cyrisma, and to that company or to known exploited CVEs where it applies.
+
 ## Troubleshooting
 
 | Problem | What to do |
 | --- | --- |
 | **No Security Data Yet** | No security integration is connected or synced. An admin can connect one from **Settings > Integrations**. |
-| A provider card is missing | That provider is not connected, you lack access, or its data failed to load. An Avanan load error shows as a red notice with the provider name. |
+| A provider card is missing | That provider is not connected, you lack access, or its data failed to load. An Avanan or Cyrisma load error shows as a red notice with the provider name. The Cyrisma card also needs at least one Cyrisma tenant mapped to a selected company. |
 | Numbers look old | The dashboard shows synced data. Ask your MSP to check the integration sync. |
 | A list is empty after you click a number | Clear the filter the dashboard set on that list. |
 | Zero counts everywhere | Check the company selector. Zero counts do not prove you are safe, so ask your MSP to verify the sync. |
