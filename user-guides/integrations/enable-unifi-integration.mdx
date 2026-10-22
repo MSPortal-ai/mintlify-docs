@@ -268,6 +268,20 @@ Disconnecting removes the stored credentials, the matches between UniFi sites an
     4. On older controllers, switch the authentication method to **Username & password**
   </Accordion>
 
+  <Accordion title="Test connection says the controller answered with a web page">
+    The controller URL works, but the controller returned its sign-in page instead of its API. MSPortal tries the API path for UniFi OS consoles and the path for a standalone UniFi Network application, and neither answered.
+
+    **Causes:**
+    - The URL includes a path after the port, such as `/manage` or `/network`
+    - The controller, or the hosting provider in front of it, does not offer API keys
+    - A proxy in front of the controller sends API requests to its sign-in page
+
+    **Solutions:**
+    1. Enter only the address and port, for example `https://unifi.example.com:8443`
+    2. Check that the controller has **Settings > Control Plane > Integrations**, where API keys are created. If it does not, it cannot use API key authentication.
+    3. Switch the authentication method to **Username & password** with a local administrator account. This works on older self-hosted and hosted controllers, on any port.
+  </Accordion>
+
   <Accordion title="Test connection fails on UniFi Cloud">
     **Causes:**
     - The API key was copied incorrectly, or has been revoked
