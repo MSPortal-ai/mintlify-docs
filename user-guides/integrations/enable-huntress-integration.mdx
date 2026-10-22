@@ -122,6 +122,7 @@ Choose which Huntress datasets MSPortal syncs. Each switch saves as soon as you 
 | **Escalations and incident reports** | Security page source |
 | **Summary reports** | Reports page source |
 | **Auto-import mapped agents** | Creates devices from mapped Huntress agents during sync (off by default). Appears beneath **Agents** when agent sync is on. |
+| **Retire agents that stop checking in** | Removes a device once its Huntress agent has not checked in for the chosen number of days (30, 60, 90 or 180). Off by default. Found under **Agent import** on the connection page. |
 
 <Tip>
   Leave **Auto-import mapped agents** off during initial setup. Review and import agents in **Import devices**, then enable auto-import once you're confident in your organization mappings.
@@ -224,6 +225,12 @@ After initial setup, all enabled datasets sync automatically once per day. To sy
 <Note>
   Only datasets turned on in **Choose products** are synced. Data from unmapped organizations is skipped.
 </Note>
+
+### Agents removed from Huntress
+
+Each agent sync removes agents that Huntress no longer returns for a mapped organization, and their devices when no other integration reports them. A device that another connected integration still reports, such as an RMM, stays in the inventory and only loses its Huntress link.
+
+Huntress keeps an agent on its list until someone removes it, even when the computer stopped checking in months ago. To retire those automatically, set **Retire agents that stop checking in** under **Agent import** to 30, 60, 90 or 180 days. On each sync, an agent whose last check-in is older than that is treated as removed. An agent with no check-in date is never retired.
 
 ---
 

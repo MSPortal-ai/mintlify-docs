@@ -270,6 +270,10 @@ Open **Review** and choose **Finish setup** once the required tasks are complete
 | Last Logged In User | NinjaOne -> MSPortal | Last user who logged into the device |
 | Assigned Owner | NinjaOne -> MSPortal | Device's assigned owner in NinjaOne |
 
+### Devices removed in NinjaOne
+
+Each device sync compares the inventory with what NinjaOne returns for your mapped organizations. A device that NinjaOne no longer reports is removed from MSPortal on that sync, along with its planner and meeting agenda references. If another connected integration still reports the same device, for example a Huntress agent that was never uninstalled, the device stays in the inventory and its **Source** changes to that integration. Remove the agent in that product to retire the device everywhere.
+
 ---
 
 ## Review installed software
@@ -456,6 +460,9 @@ On an existing connection, the **Region** (and any custom URL) stays fixed. To c
   </Accordion>
   <Accordion title="Does Finish setup mean all devices are imported?">
     No. Device discovery, saved matches and inventory imports have separate results. Check **Import devices** and the resulting inventory.
+  </Accordion>
+  <Accordion title="A device I deleted in NinjaOne is still listed. Why?">
+    Devices leave the inventory on the next device sync after NinjaOne stops reporting them, so allow one daily sync or choose **Run sync** on the connection page. If the device is still listed afterwards, check its **Source** column. Another integration, such as Huntress, still reports it, and the device stays until that agent is removed there.
   </Accordion>
 </AccordionGroup>
 

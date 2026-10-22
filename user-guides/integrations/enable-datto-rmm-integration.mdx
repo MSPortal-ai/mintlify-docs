@@ -44,11 +44,21 @@ Before connecting to MSPortal, you need to enable API access and generate API ke
   </Step>
 
   <Step title="Generate API Keys">
-    In the user's **API Keys** section, click **Generate API Keys**, then **Save** the user. The keys do not work until the user is saved.
+    In the user's **API Keys** section, click **Generate API Keys**.
 
     <Warning>
       Copy the **API URL**, **API Key** and **API Secret Key** immediately after generating them. The Secret Key cannot be retrieved once you leave the page. Regenerating keys invalidates the previous pair.
     </Warning>
+  </Step>
+
+  <Step title="Set the API Security Level">
+    Beside the keys, choose the **API Security Level** and **API Component Level**. The security level decides what the keys can read. MSPortal needs a level that can view **Global Settings**, every **Site** and every **Device** in the account. **Administrator**, or a copy of it, works. Leave the component level unrestricted.
+
+    Then click **Save User**. The keys do not work until the user is saved.
+
+    <Note>
+      A level limited to selected sites still passes the connection test, because Datto accepts the keys. The site and device syncs then fail with "Authenticated user doesn't have access to this resource". The **Permissions** task in MSPortal catches this before the first sync.
+    </Note>
   </Step>
 
   <Step title="Note Your Platform">
@@ -69,7 +79,7 @@ Before connecting to MSPortal, you need to enable API access and generate API ke
 
 ## Part 2: Connect Datto RMM in MSPortal
 
-The Datto RMM connection page lists its tasks in the **Setup guide**: **Connect**, **Choose data**, **Import or match companies**, **Import devices** and **Review**. See [Connect and manage integrations](/user-guides/integrations/index) for the tasks every connection shares.
+The Datto RMM connection page lists its tasks in the **Setup guide**: **Connect**, **Permissions**, **Choose data**, **Import or match companies**, **Import devices** and **Review**. See [Connect and manage integrations](/user-guides/integrations/index) for the tasks every connection shares.
 
 ### Connect
 
@@ -106,9 +116,31 @@ The Datto RMM connection page lists its tasks in the **Setup guide**: **Connect*
   </Step>
 
   <Step title="Save and continue">
-    Once the connection test passes, click **Save and continue**. This saves the connection and starts discovering your sites. A successful test alone does not save the connection.
+    Once the connection test passes, click **Save and continue**. This saves the connection and moves to **Permissions**. A successful test alone does not save the connection.
   </Step>
 </Steps>
+
+### Permissions
+
+The connection test only proves that Datto RMM accepts the keys. **Permissions** checks what the keys may read, using the API user's **API Security Level**.
+
+<Steps>
+  <Step title="Run the check">
+    Click **Run check**. MSPortal reads one record from each area it syncs. Nothing changes in Datto RMM.
+  </Step>
+
+  <Step title="Review the results">
+    **Sites** and **Devices** are required. **Software inventory** is recommended. A granted row shows **Granted**. A row that reads **Not permitted** shows the Datto permission to grant, for example **Sites > Sites: View** across the whole account.
+  </Step>
+
+  <Step title="Fix and re-check">
+    In Datto RMM, open **Setup > Users**, open the API user, raise its **API Security Level** to one that covers the whole account, and click **Save User**. Back in MSPortal, click **Re-check**. **Continue** is held until both required rows are granted.
+  </Step>
+</Steps>
+
+<Info>
+A sync whose permission is missing stays switched off in **Choose data** until the check passes. The same check is available later from **Permissions** in the Setup guide.
+</Info>
 
 ### Choose data
 
@@ -264,6 +296,16 @@ Open the Datto RMM connection from **Settings > Integrations** to manage it:
     4. Ensure **Enable API Access** is on under **Setup > Global Settings > Access Control**
   </Accordion>
 
+  <Accordion title="Connection test passes but the connection pauses, or Permissions shows Not permitted">
+    **Cause:** the API user's **API Security Level** does not cover the whole account. Datto accepts the keys but answers the account-wide site and device lists with "Authenticated user doesn't have access to this resource".
+
+    **Solution:**
+    1. In Datto RMM, open **Setup > Users** and open the API user
+    2. Beside the API keys, choose an **API Security Level** that can view Global Settings and every site and device (Administrator, or a copy of it), and leave the **API Component Level** unrestricted
+    3. Click **Save User**
+    4. In MSPortal, open the Datto RMM connection, choose **Permissions** and click **Re-check**. If the connection was paused, click **Reactivate**.
+  </Accordion>
+
   <Accordion title="No sites appear to match">
     **Causes:**
     - Initial sync still in progress
@@ -272,7 +314,7 @@ Open the Datto RMM connection from **Settings > Integrations** to manage it:
     **Solutions:**
     1. Wait a few minutes for the initial sync to complete
     2. Click **Sync sites**, or **Run sync** in the connection header
-    3. Verify the API user can see the sites in Datto RMM. Avoid creating repeated connections.
+    3. Run **Permissions** to confirm the API user can read every site. Avoid creating repeated connections.
   </Accordion>
 
   <Accordion title="A match disappeared">

@@ -134,7 +134,7 @@ The module scopes below are a summary. You do not need to grant every scope. Rea
 
 ## Devices
 
-**Module scopes:** `devices.read`
+**Module scopes:** `devices.read`, `companies.read` (industry insights)
 
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
@@ -143,6 +143,8 @@ The module scopes below are a summary. You do not need to grant every scope. Rea
 | `list_software_products` | `query_software` | Read | **MSP staff only.** `read_devices` | Search installed products by name or publisher, filter lifecycle status or key apps, and read key-app markers, target versions and installation counts. Paginated. |
 | `get_software_product` | `query_software` | Read | **MSP staff only.** `read_devices` | Read one visible installed product and its version/lifecycle groups. Returns null without visible installs; up to 200 version groups, with a truncation indicator at the cap. |
 | `list_software_product_devices` | `query_software` | Read | **MSP staff only.** `read_devices` | List devices with a product installed, including company, version and lifecycle status. Filter and paginate the result. |
+| `get_industry_overview` | `query_industry_insights` | Read | **MSP staff only.** `read_devices`, `read_settings_companies` | List the industries your active clients belong to: sector, client count, clients with software inventory, distinct line-of-business application families and whether an industry profile exists. A client's industry is its stored sector or one read from its free-text industry label. Needs the Industry insights feature. |
+| `get_industry_insights` | `query_industry_insights` | Read | **MSP staff only.** `read_devices`, `read_settings_companies` | Read one industry (sector and optional vertical) or one client's industry: the shared profile (trends, standard applications with how many of your clients run them, compliance frameworks, IT priorities), the peer clients, and the line-of-business application families they share with adoption bands. With companyId it adds the peer standards the client has, lacks, and the applications only it runs. Peer figures cover your clients only. Needs the Industry insights feature. |
 | `get_device` | `query_devices` | Read | `read_devices` | Get one device, including its custom field values (label → value). |
 | `list_device_alerts` | `query_devices` | Read | `read_devices` | List active device alerts: offline servers (status offline or not seen in 7 days; workstations are excluded as expected noise) and devices with warranties expiring within the next 30 days. The limit applies per alert category. |
 | `list_device_types` | `query_devices` | Read | `read_devices` | List device types. |
