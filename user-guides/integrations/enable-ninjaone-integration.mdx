@@ -54,6 +54,14 @@ Review the company and device type before importing. Map provider categories to 
 
 Follow [Import Devices](/user-guides/integrations/import-devices) for selection, type mappings and result handling. Check the import result and resulting Devices records. **Complete Setup** finishes the wizard; its success message does not prove every background sync or device import has completed.
 
+## Devices removed in NinjaOne
+
+Each NinjaOne device sync removes devices that NinjaOne no longer reports, in the companies mapped to that connection. This includes devices imported before MSPortal tracked device sources.
+
+A device another integration still reports is kept. It moves to that integration instead of staying labelled NinjaOne. If that integration is Huntress, the device stays until its Huntress agent is removed or stops checking in for the period set in [Retire agents that stop checking in](/user-guides/integrations/enable-huntress-integration#agents-removed-from-huntress).
+
+Archived devices are never removed. To clean up right away, open the NinjaOne connection and select **Run sync**.
+
 ## Manage an existing connection
 
 On an existing connection, the region and Access Key ID are locked. Entering a secret and choosing **Retest Connection** tests access; this screen does not offer a credential-update action. Do not treat a successful retest as saved credential rotation.
@@ -86,6 +94,9 @@ The wizard’s **Delete** action opens a **Delete Integration** confirmation. Re
   </Accordion>
   <Accordion title="Can a Company user configure this provider?">
     No. Provider setup is an MSP settings task. Company access to resulting data depends on portal permissions and company scope.
+  </Accordion>
+  <Accordion title="Why is a device deleted in NinjaOne still in MSPortal?">
+    Another integration, often Huntress, still reports it. The device moves to that integration after the next NinjaOne sync. For Huntress, remove the agent there or set **Retire agents that stop checking in** on the Huntress connection.
   </Accordion>
   <Accordion title="Does this also configure NinjaOne Ticketing?">
     No. This connection supplies RMM organizations, locations and devices. NinjaOne Ticketing has its own setup and capability limits.

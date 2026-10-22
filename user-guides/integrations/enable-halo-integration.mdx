@@ -62,7 +62,7 @@ Save both the application and agent changes, then return to **Settings > Integra
 
 ## Select synchronization scope
 
-Select the intended teams and excluded ticket statuses. Halo also offers company/contact filters, opportunities, projects, invoices, product catalog, asset sync, change management and satisfaction ratings when their permissions are available. Asset status exclusions affect synchronization; inactive Halo assets are excluded and filtering does not delete existing portal devices.
+Select the intended teams and excluded ticket statuses. Halo also offers company/contact filters, opportunities, projects, invoices, product catalog, asset sync, change management and satisfaction ratings when their permissions are available. Asset status exclusions affect synchronization. Inactive and status-excluded Halo assets leave staging, and their devices follow the rules in [Devices from Halo assets](#devices-from-halo-assets).
 
 Review filters before continuing. Synchronizing source records, linking them to companies and importing portal records are separate steps. Automatic company/contact import options can create portal records when matching source records arrive. Review any import preview and the selected categories carefully; do not rely on a confirmation appearing for every save.
 
@@ -109,6 +109,16 @@ The Import step offers **Users**, **Companies** and **Assets**. **Open Asset Imp
 Apply the intended company and user selections and check the result. **Complete Setup** also attempts to apply pending company/user imports before completing the wizard. It can start background work, so setup completion is not proof that every import or sync succeeded. An import-page link only navigates to that workflow.
 
 Use **Save & Exit** to save wizard progress when pausing. Reopen the connection to continue and verify the saved state. Portal invitations and client permissions remain separate from discovering provider contacts.
+
+## Devices from Halo assets
+
+MSPortal treats an RMM, MDM or network tool as the source of truth for a device. Halo assets only decide which devices exist when Halo is the only device integration connected.
+
+- **Auto-Sync in a tenant with an RMM.** Auto-Sync links each asset to a device your RMM or another device integration already reports. It does not create a new device for a asset nothing else reports. Importing assets yourself from the import page still creates devices.
+- **Assets removed in Halo.** Every asset sync reads the full asset list from Halo. MSPortal only acts on a list it read to the end. An asset deleted in Halo is removed from staging three days after Halo stops listing it, and stays if it comes back in the meantime. An asset Halo marks inactive, or one with an excluded status, leaves staging on the next sync.
+- **What happens to the device.** When the asset leaves staging, its device moves to another integration that still reports it, such as your RMM. A device nothing else reports is removed. In a tenant with an RMM, a device only IT Glue or another PSA still lists is removed too.
+
+Only companies still mapped to this connection are affected, and archived devices are never removed.
 
 ## Maintain the connection
 

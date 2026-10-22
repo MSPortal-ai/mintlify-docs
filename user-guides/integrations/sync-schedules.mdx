@@ -104,6 +104,8 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Users | Every 4 hours |
     | Assets | Every 4 hours |
     | Reference data | Daily |
+
+    The first Assets sync after midnight UTC reads every asset and removes devices Syncro no longer lists for your linked customers, unless another integration still reports them. The other Assets syncs only pick up changes.
   </Accordion>
 </AccordionGroup>
 
@@ -125,15 +127,19 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Organizations | Daily |
     | Devices | Daily |
     | Backups | Daily |
+
+    Each Devices sync also removes devices NinjaOne no longer reports, unless another integration still reports them.
   </Accordion>
 
   <Accordion title="UniFi Console">
     | Data Type | Frequency |
     |-----------|-----------|
-    | Sites | Every 2 hours |
-    | Devices | Every 2 hours |
-    | Networks | Every 2 hours |
+    | Sites | Every 6 hours |
+    | Devices | Every 6 hours |
+    | Networks | Every 6 hours |
     | Device auto-import | After each sync, when enabled |
+
+    Each Devices sync also removes devices a site no longer lists, unless another integration still reports them. A site that could not be read, or returned no devices, keeps its devices until a later sync reads it.
   </Accordion>
 
   <Accordion title="ConnectWise Asio (RMM)">
@@ -171,6 +177,8 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Data Type | Frequency |
     |-----------|-----------|
     | Devices | Daily |
+
+    Each Devices sync also removes devices a mapped organization no longer lists, unless another integration still reports them. An organization that could not be read in full keeps its devices.
   </Accordion>
 </AccordionGroup>
 
@@ -212,6 +220,8 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Agents | Daily |
     | Security | Daily |
     | Summary reports | Daily |
+
+    With **Retire agents that stop checking in** set, each Agents sync also removes agents idle longer than the chosen threshold.
   </Accordion>
 </AccordionGroup>
 

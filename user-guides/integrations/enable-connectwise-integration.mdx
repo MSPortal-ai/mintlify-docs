@@ -123,6 +123,16 @@ Apply the intended company and user selections and check the result. **Complete 
 
 Use **Save & Exit** to save wizard progress when pausing. Reopen the connection to continue and verify the saved state. Portal invitations and client permissions remain separate from discovering provider contacts.
 
+## Devices from ConnectWise configurations
+
+MSPortal treats an RMM, MDM or network tool as the source of truth for a device. ConnectWise configurations only decide which devices exist when ConnectWise is the only device integration connected.
+
+- **Auto-Sync in a tenant with an RMM.** Auto-Sync links each configuration to a device your RMM or another device integration already reports. It does not create a new device for a configuration nothing else reports. Importing configurations yourself from the import page still creates devices.
+- **Configurations removed in ConnectWise.** Once a day MSPortal checks the full list of active configurations in ConnectWise. A configuration that is deleted or made inactive is removed from staging three days after ConnectWise stops listing it. If it came back in the meantime, it stays.
+- **What happens to the device.** When the configuration leaves staging, its device moves to another integration that still reports it, such as your RMM. A device nothing else reports is removed. In a tenant with an RMM, a device only IT Glue or another PSA still lists is removed too.
+
+Only companies still mapped to this connection are affected, and archived devices are never removed.
+
 ## Maintain the connection
 
 Reopen setup to inspect scope and errors. A successful retest of changed fields is not proof of credential rotation: this wizard has no separate update-credentials action. Confirm the supported replacement path before revoking working vendor credentials.
