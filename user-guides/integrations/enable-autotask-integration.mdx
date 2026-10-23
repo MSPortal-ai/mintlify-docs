@@ -516,6 +516,15 @@ Set which ticket statuses users can select when updating tickets:
 
 ---
 
+## Devices from Autotask configuration items
+
+MSPortal treats an RMM, MDM or network tool as the source of truth for a device. When an RMM is connected, a Autotask configuration item keeps or creates a device only when its type has **Auto-import** on and is not ignored in [Import Devices](/user-guides/integrations/import-devices). Configuration items of other types add their details to devices your RMM reports.
+
+- **Configuration items removed in Autotask.** Once a day MSPortal checks the full list of active configuration items in Autotask. A configuration item that is deleted or made inactive is removed from staging three days after Autotask stops listing it, and stays if it comes back in the meantime.
+- **What happens to the device.** When the configuration item leaves staging, its device moves to another integration that still reports it, such as your RMM. A device nothing else reports is removed. In a tenant with an RMM, an IT Glue or other PSA record keeps the device only when its type has Auto-import on.
+
+Only companies still mapped to this connection are affected. Unmapping a company or excluding a type stops syncing those records and keeps their devices. Archived devices are never removed.
+
 ## Troubleshooting
 
 | Issue | Solution |

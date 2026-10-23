@@ -184,7 +184,7 @@ Choose what to sync from Halo PSA. Each dataset switch keeps its filters directl
 | **Enable Project Sync** | Sync projects from Halo PSA. Use **Exclude Project Types** to skip projects of certain Halo ticket types. |
 | **Enable Invoice Sync** | Sync invoices from Halo PSA. Reveals **Hide Invoice Statuses**. |
 | **Sync product catalog** | Import the product and service catalog for quoting and budgets |
-| **Enable asset sync** | Sync assets on a recurring schedule. Use **Asset statuses to exclude** to skip statuses. Inactive Halo assets are always excluded, and existing MSPortal devices are not deleted. |
+| **Enable asset sync** | Sync assets on a recurring schedule. Use **Asset statuses to exclude** to skip statuses. Excluding a status stops syncing those assets and keeps their devices. Inactive assets follow [Devices from Halo assets](#devices-from-halo-assets). |
 | **Enable change management** | Import Halo changes into the change calendar |
 | **Import satisfaction ratings** | Import Halo satisfaction feedback. See [Import HaloPSA native CSAT](#import-halopsa-native-csat-for-dashboards-and-reports). |
 | **Warranty writeback** | Write warranty data back to Halo assets when MSPortal resolves a device's warranty. Appears when **Enable asset sync** is on. This is a vendor write; enable it only when you intend resolved warranty data to update Halo. |
@@ -375,6 +375,15 @@ These CSAT views can include other connected feedback sources alongside Halo. Ch
 Connecting Halo does not turn on the import by itself. Check that **Import satisfaction ratings** is saved, **Satisfaction feedback** is granted, the last import succeeded in **Sync activity**, the rating scale and **Lowest score is best** setting are right, the tickets have synced, the companies are linked, the selected dates are right and the reader has the CSAT permission. If the **Import satisfaction ratings** toggle does not appear at all, contact MSPortal support.
 
 If most of your technicians show unexpectedly low CSAT, check the survey direction first. Read a few imported comments: praise attached to low scores means **Lowest score is best** should be on.
+
+## Devices from Halo assets
+
+MSPortal treats an RMM, MDM or network tool as the source of truth for a device. When an RMM is connected, a Halo asset keeps or creates a device only when its type has **Auto-import** on and is not ignored in [Import Devices](/user-guides/integrations/import-devices). Assets of other types add their details to devices your RMM reports.
+
+- **Assets removed in Halo.** Every asset sync reads the full asset list from Halo. MSPortal only acts on a list it read to the end. An asset deleted or marked inactive in Halo is removed from staging three days later, and stays if it comes back or is reactivated in the meantime. An asset with an excluded status, or in a company no longer mapped, stops syncing and keeps its device.
+- **What happens to the device.** When the asset leaves staging, its device moves to another integration that still reports it, such as your RMM. A device nothing else reports is removed. In a tenant with an RMM, an IT Glue or other PSA record keeps the device only when its type has Auto-import on.
+
+Only companies still mapped to this connection are affected, and archived devices are never removed.
 
 ## Troubleshooting
 

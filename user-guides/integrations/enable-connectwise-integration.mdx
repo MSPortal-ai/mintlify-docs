@@ -401,6 +401,15 @@ To remove the integration, open **More actions** in the connection header and ch
 
 ---
 
+## Devices from ConnectWise configurations
+
+MSPortal treats an RMM, MDM or network tool as the source of truth for a device. When an RMM is connected, a ConnectWise configuration keeps or creates a device only when its type has **Auto-import** on and is not ignored in [Import Devices](/user-guides/integrations/import-devices). Configurations of other types add their details to devices your RMM reports.
+
+- **Configurations removed in ConnectWise.** Once a day MSPortal checks the full list of active configurations in ConnectWise. A configuration that is deleted or made inactive is removed from staging three days after ConnectWise stops listing it, and stays if it comes back in the meantime.
+- **What happens to the device.** When the configuration leaves staging, its device moves to another integration that still reports it, such as your RMM. A device nothing else reports is removed. In a tenant with an RMM, an IT Glue or other PSA record keeps the device only when its type has Auto-import on.
+
+Only companies still mapped to this connection are affected. Unmapping a company or excluding a type stops syncing those records and keeps their devices. Archived devices are never removed.
+
 ## Troubleshooting
 
 | Issue | Solution |

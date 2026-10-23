@@ -14,7 +14,7 @@ You do not have to pick a project first. The page opens on every open project in
 - Booking, and changing dates or people, also needs project write permission. Without it, the board, the queue and the task editor are read-only, and Smart Schedule and **Schedule settings…** do not appear.
 - The board follows the company selector. Pick a company, or **Global View**, before you open it. Only open projects load. When you arrive from a project or a task, that project is loaded whatever the selector says.
 - Bookings and busy time come from ConnectWise schedule entries, Autotask service calls and Halo appointments.
-- Booking needs a role that can see every appointment (**All appointments** on the Calendar permission). If yours cannot, the board says **PSA bookings are hidden because your role cannot see every appointment. Task dates and owners still show.** and does not book. See [Calendar visibility](/user-guides/ticketing/change-management#calendar-visibility).
+- Booking needs **Manage** on the Projects permission or **All appointments** on the Calendar permission. If your role has neither, the board says **PSA bookings are hidden because your role needs Projects > Manage or Calendar > All appointments. Task dates and owners still show.** and does not book. See [Calendar visibility](/user-guides/ticketing/change-management#calendar-visibility).
 
 ## Open the page
 
@@ -54,7 +54,7 @@ On a desktop everything sits in one row, and it wraps when the window is narrow.
 | **Technicians**, **Companies**, **Projects**, **Phases** | Show only matching work. The board and the queue both follow them. The lists come from the projects in scope. |
 | **Overdue (N)** | Appears when N projects are past their due date and still have unscheduled work. Click it to keep only overdue projects. |
 | **Clear** | Appears once any filter is set and removes them all, including **Projects**. |
-| Bookings status icon | A spinner while PSA bookings load. An amber warning icon appears if they are hidden for your role (**PSA bookings are hidden because your role cannot see every appointment. Task dates and owners still show.**) or could not be loaded (**PSA bookings could not be loaded. Task dates and owners still show.**), and shows the reason. |
+| Bookings status icon | A spinner while PSA bookings load. An amber warning icon appears if they are hidden for your role (**PSA bookings are hidden because your role needs Projects > Manage or Calendar > All appointments. Task dates and owners still show.**) or could not be loaded (**PSA bookings could not be loaded. Task dates and owners still show.**), and shows the reason. |
 | **Status colours** | Opens the legend of ticket statuses in scope, most common first, with their colours. |
 
 When you narrow **Projects** to exactly one project, that project becomes the one you are planning. The toolbar then adds **View**, **Smart Schedule** and a **More planner actions** menu (**...**) after the **Status colours** button. See [Plan one project](#plan-one-project).
@@ -100,7 +100,7 @@ Click any chip or queue row to open that task in a side sheet. For a ConnectWise
 
 If the task belongs to a different project than the one you were editing, the page switches to that project. With unsaved changes, **Discard this schedule draft?** asks you to **Keep editing** or **Discard changes** first.
 
-The **Bookings** section does not appear when you cannot book (no project write permission, or no **All appointments**), or for a native MSPortal project.
+The **Bookings** section does not appear when you cannot book (no project write permission, or neither **Manage** on Projects nor **All appointments**), or for a native MSPortal project.
 
 ## Clear the Needs scheduling queue
 
@@ -129,7 +129,7 @@ The queue sorts by each project's Estimated End, which is its due date in MSPort
 
 On a ConnectWise, Autotask or Halo project, a booking is a real entry in your PSA, a ConnectWise schedule entry, an Autotask service call or a Halo appointment. Every booking change on the board is written to the PSA right away. It does not wait for **Save** and it is not part of the plan draft. Native MSPortal projects have no PSA, so they keep the draft (see [Date native project work by dragging](#date-native-project-work-by-dragging)).
 
-You need project write permission and **All appointments** on the Calendar permission. Bookings can be all-day or timed, and can cover one day or several days or weeks.
+You need project write permission, and either **Manage** on Projects or **All appointments** on the Calendar permission. Bookings can be all-day or timed, and can cover one day or several days or weeks.
 
 ### Book by dragging
 
@@ -204,7 +204,7 @@ A one-line notice appears under the toolbar and the board rolls the change back.
 
 ## Date native project work by dragging
 
-Native MSPortal projects have no PSA to book in, so a drag edits the plan draft. If your role cannot book on a ConnectWise, Autotask or Halo project (no write permission, or no **All appointments**), the board does not book either, and drags edit the draft the same way.
+Native MSPortal projects have no PSA to book in, so a drag edits the plan draft. If your role cannot book on a ConnectWise, Autotask or Halo project (no write permission, or neither **Manage** on Projects nor **All appointments**), the board does not book either, and drags edit the draft the same way.
 
 Drag a queue row or a chip onto a technician's day. The task starts on that day and keeps its duration in working days. You can drag work from any project you can edit.
 
@@ -274,7 +274,7 @@ When it is off, the task is left out of this page, the project Gantt and Smart S
 | --- | --- |
 | The **Dispatch** tab is missing | You need MSP staff access with the Projects **Schedule** view permission, and the scheduling feature must be enabled for your portal. |
 | Nothing can be dragged | You need project write permission, and the project must be a ConnectWise, Autotask, Halo or native project. Completed tasks never move. For a native project, or when the board cannot book, anchored tasks never move either, and an open Smart Schedule proposal pauses dragging. |
-| A drop dates the task in the draft and does not book anyone | The board books only on ConnectWise, Autotask and Halo projects, and only when your role has project write permission and **All appointments**. Otherwise the drop edits the plan draft, and you need **Save**. |
+| A drop dates the task in the draft and does not book anyone | The board books only on ConnectWise, Autotask and Halo projects, and only when your role has project write permission and either **Manage** on Projects or **All appointments**. Otherwise the drop edits the plan draft, and you need **Save**. |
 | **Save or discard changes to {project} first** | You dragged native-project work from a different project while the project you were editing still has unsaved changes. Click **Save** or **Discard** in the toolbar, then drag again. |
 | **Drop the work on a technician's row to book it.** | You dropped on the **Unassigned** row. Drop on a named technician instead. |
 | **{name} is not linked to a {provider} member, so they cannot be booked.** | That row is not a member of the project's PSA connection. Book someone who is a member of that PSA. |
@@ -287,9 +287,9 @@ When it is off, the task is left out of this page, the project Gantt and Smart S
 | **The booking changed in {provider}. The board now shows the latest version.** | Someone changed the booking in the PSA after the board loaded. Check the refreshed chip, then repeat your change if you still need it. |
 | **The ticket or booking no longer exists in {provider}.** or **That person cannot be booked in {provider}.** | The ticket or booking was removed in the PSA, or that member is not bookable there. Reload the board. |
 | **View**, **Smart Schedule** and the **...** menu are missing | They appear only when **Projects** is narrowed to exactly one project. Smart Schedule and **Schedule settings…** also need project write permission. |
-| **PSA bookings are hidden because your role cannot see every appointment. Task dates and owners still show.** | Ask an admin for a role with **All appointments** on the Calendar permission. See [Calendar visibility](/user-guides/ticketing/change-management#calendar-visibility). The board does not book until then. |
+| **PSA bookings are hidden because your role needs Projects > Manage or Calendar > All appointments. Task dates and owners still show.** | Ask an admin for a role with **Manage** on Projects or **All appointments** on the Calendar permission. See [Calendar visibility](/user-guides/ticketing/change-management#calendar-visibility). The board does not book until then. |
 | **PSA bookings could not be loaded. Task dates and owners still show.** | Reload the page. If it persists, check the PSA connection under **Settings > Integrations**. |
-| The **Bookings** section is missing from the task sheet | It appears only for ConnectWise, Autotask and Halo tasks, and only when you can book (project write permission and **All appointments**). It is not shown for native projects. |
+| The **Bookings** section is missing from the task sheet | It appears only for ConnectWise, Autotask and Halo tasks, and only when you can book (project write permission, and **Manage** on Projects or **All appointments**). It is not shown for native projects. |
 | **No technicians to show for these filters.** | Widen the range, click **Clear**, check the company selector, and check that the work has dates or a booking. |
 | A technician is missing from the rows | Rows come from work in scope and the team of the project you are editing. There is no full staff roster on the board. Give them dated work, or open a task on their project so its team loads. |
 | A chip is headed **Project outside the selected companies** | The booked ticket belongs to a project outside the loaded scope. Change the company selector. |
