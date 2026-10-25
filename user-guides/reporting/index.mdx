@@ -33,11 +33,34 @@ The Reporting module lets you build professional reports by combining data block
     Click the report title, or open the row's **...** menu and choose **View**.
   </Step>
   <Step title="Export or edit">
-    Use **Print/Export PDF** to print or save a PDF. Full reports also offer **Word (.docx)** in an **Export** menu. Users with write access see **Edit Report**.
+    Open the **Export** menu in the report header to download a PDF or print. Users with write access see **Edit Report**. On a phone, the header buttons are under **Actions**.
   </Step>
 </Steps>
 
-**Print/Export PDF** opens your browser's print dialog, so choose the destination and options there. The button waits until every block has finished loading.
+## Export or print a report
+
+The **Export** menu in the report header offers:
+
+| Option | What it does |
+| --- | --- |
+| **Export PDF** | Downloads a PDF of the report. MSPortal builds the file, so it is the same in every browser. Portrait and landscape pages keep their own orientation in one file, so a wide table such as the **Device Appendix** prints on a landscape page between portrait pages. |
+| **Print** | Opens your browser's print dialog, for printing on paper. Choose the printer and options there. |
+| **Word (.docx)** | Full reports only. Downloads the written report as a Word document. |
+
+The menu stays disabled until every block has finished loading. Keep the page open while **Export PDF** prepares the file; your browser then downloads it. Some browsers cannot mix portrait and landscape pages in their print dialog and shrink the whole report instead, so use **Export PDF** for a report with landscape pages.
+
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Branch preview on the Demo tenant: the Export menu in the report header.">
+      <img src="/images/product/report-export-menu-desktop-preview.png" alt="Report viewer with the Export menu open, offering Export PDF and Print." width="2880" height="1920" />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="Branch preview on the Demo tenant: on a phone, Export PDF and Print open from the Actions panel.">
+      <img src="/images/product/report-export-menu-mobile-preview.png" alt="Phone report viewer with the actions panel open and the Export menu showing Export PDF and Print." width="780" height="1688" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ## Choose recipients for a scheduled report
 
@@ -179,9 +202,44 @@ The Blocks panel uses a searchable category dropdown with multiple selections. C
     Click the gear to edit the block's settings. Click **X** to remove it.
   </Step>
   <Step title="Manage pages">
-    Click **+ Add Page** to add a page. Use the trash icon next to a page number to delete that page.
+    Click **+ Add Page** to add a page. Each page's right margin holds its page controls: the trash icon deletes the page, and the up and down arrows move it. See [Reorder pages](#reorder-pages).
   </Step>
 </Steps>
+
+### Reorder pages
+
+Use the arrows in a page's right margin, below the trash icon and above the orientation button.
+
+<Steps>
+  <Step title="Move the page">
+    Click **Move page up** or **Move page down** (the up and down arrows). Hover over an arrow to see its full label, such as **Move page 3 up**. The page swaps places with its neighbor and the blocks on it move with it.
+  </Step>
+  <Step title="Check and save">
+    Check the new order. To reverse a move, click the undo button in the builder header. Save when the order is right.
+  </Step>
+</Steps>
+
+- The up arrow is unavailable on the first page and the down arrow on the last page.
+- The arrows appear only when there is another page to swap with.
+- Pages that hold one linked block, such as a block split across pages, move together. Their arrows name every page that moves, such as **Move pages 3 to 6 up**. A move swaps the group with the page or group next to it, so linked parts never separate.
+
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Branch preview on the Demo tenant: the page margin with the trash icon, the up and down arrows and the orientation button.">
+      <img src="/images/product/report-builder-page-controls-desktop-preview.png" alt="Report builder page 2 with a Stale Devices block and, in the right margin, a trash icon, up and down arrows and an orientation button." width="2880" height="1920" />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="Branch preview on the Demo tenant: the same page controls on a phone.">
+      <img src="/images/product/report-builder-page-controls-mobile-preview.png" alt="Phone report builder showing the right page margin with a trash icon, up and down arrows and an orientation button." width="780" height="1688" />
+    </Frame>
+  </Tab>
+  <Tab title="After a move">
+    <Frame caption="Branch preview on the Demo tenant: the Device Appendix page moved up to page 2. The report shows Unsaved and the undo button is available.">
+      <img src="/images/product/report-builder-after-move-desktop-preview.png" alt="Report builder after moving a page: page 2 now holds the Device Appendix table, page 3 the Stale Devices block, and the header shows Unsaved with the undo button active." width="2880" height="1920" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 <Tabs>
   <Tab title="Desktop category filter">
@@ -197,6 +255,43 @@ The Blocks panel uses a searchable category dropdown with multiple selections. C
 </Tabs>
 
 Some blocks with long lists have **Split across pages**. It spreads the rows over several blocks on following pages. Check each page for clipped or missing rows.
+
+## Print every item in a Compliance Report block
+
+The **Compliance Report** block shows summary tiles, a status breakdown and a list of compliance items. A long list does not fit one page, so the block ends with a "+N more items" footer. Split the block to print every item.
+
+<Steps>
+  <Step title="Make the block full size">
+    Add **Compliance Report** from the **Compliance** group in the **Blocks** panel. Use the size button to make it at least 3 columns wide and 3 rows tall. Smaller sizes do not list items, so they cannot be split.
+  </Step>
+  <Step title="Split it">
+    Hover over the block and click **Split across pages**, the scissors icon in the block toolbar.
+  </Step>
+  <Step title="Check the parts">
+    The block stays in place with its summary tiles and the items its frame holds. MSPortal adds whole pages titled **Compliance Report (Part 2)**, **Compliance Report (Part 3)** and so on, which continue the item list. Continuation parts list items only and do not repeat the summary. A block with a custom title uses that title for its parts.
+  </Step>
+  <Step title="Save">
+    Click **Save** and wait for the status to read **Saved**.
+  </Step>
+</Steps>
+
+The parts form one linked block. Each part shows a link icon with its part number, such as **Linked block, part 2 of 3**. Change a setting on any part and every part updates. Rows move between parts to fit, and MSPortal adds or removes parts as needed. Removing or duplicating a part acts on the whole block. To edit parts separately, open a part's settings and click **Unlink parts**.
+
+Changing a page's orientation after you split does not re-cut the parts. Check the last page before you print.
+
+In **Continuous** mode, every part shows in one scrolling column. **Export PDF** and **Print** in the report's **Export** menu put one part per page, so the PDF holds every item. To move the parts, use the page arrows: linked pages move together. See [Reorder pages](#reorder-pages).
+
+<Frame caption="a full-size Compliance Report block with Split across pages (the scissors icon) in its toolbar.">
+  <img src="/images/product/compliance-report-split-toolbar-desktop-preview.png" alt="Report builder with a Compliance Report block showing 31 total items, the status breakdown and the item list, with the scissors icon in the block toolbar." width="2880" height="1920" />
+</Frame>
+
+<Frame caption="after the split, page 2 continues the list as Compliance Report (Part 2), with no repeated summary.">
+  <img src="/images/product/compliance-report-split-part2-desktop-preview.png" alt="Report builder showing the end of the first Compliance Report block on page 1 and a Compliance Report (Part 2) block on page 2 that lists the next items." width="2880" height="1920" />
+</Frame>
+
+<Frame caption="the printed PDF, one part per page.">
+  <img src="/images/product/compliance-report-split-print-preview.png" alt="Three printed pages side by side: Compliance Report with summary tiles and items, then Compliance Report (Part 2) and Compliance Report (Part 3) with the remaining items." width="2400" height="1100" />
+</Frame>
 
 ## Read ranked summaries and large values
 
@@ -300,7 +395,7 @@ The library is large and changes with your integrations and permissions. Use **S
 | **Compliance** | **Compliance Score Overview**, **Compliance Breakdown**, **Compliance Progress Over Time**, **Non-Compliance Items List**, **Compliance Report** |
 | **Goals** | **Goals** |
 | **Budgets** | **Budget Detail**, **Budget Forecast** |
-| **Devices** | **Device Inventory**, **Device Warranties**, **Warranty Timeline**, **Stale Devices** |
+| **Devices** | **Device Inventory**, **Device Warranties**, **Warranty Timeline**, **Stale Devices**, **Device Appendix / List** |
 | **Tickets** | **Ticket Open/Close Summary**, **Tickets by Type**, **Top Ticket Submitters** |
 | **Users** | **List of Users** |
 | **Data** | **Client Benchmark** |
@@ -331,6 +426,35 @@ A coverage matrix that shows which systems each user is in.
 | **Maximum rows to fetch** and **Show all rows** | Cap the data for speed, or grow the block to show every user. |
 
 The block lists users in the report's allowed company scope.
+
+### Device Appendix / List
+
+Lists the client's devices as a table, or as counts per group, for an appendix to a QBR or device review. Click the block's gear to open **Configure Device Appendix / List**.
+
+| Setting | Description |
+| --- | --- |
+| **Display Mode** | **Full List (appendix)** shows every device as a row. **Summary (counts per group)** shows counts grouped by the selected field. |
+| **Group / Sort By** | Group or sort the devices, for example by **Device Type**, **Manufacturer** or **Company**, or choose **No Grouping**. |
+| **Columns** | In the full list, tick the columns to show: **Name**, **Display Name**, **Company**, **Type**, **Manufacturer**, **Model**, **Serial Number**, **Warranty End Date**, **Purchase Date**, **Device Age**, **Last Seen**, **Last User**, **Location** and **Operating System**. |
+| **Display Options** | Show the total device count and group counts, and repeat the group label on continued pages. |
+| **Maximum Rows** | Cap the number of devices listed. Use filters or the company selector to narrow a large fleet. |
+
+**Last User** shows the last user logged in to each device, as synced from your RMM, such as NinjaOne. Its table heading reads **Last user**. A dash means the RMM has not reported a user for that device.
+
+A list with many columns is wide, so its page can print in landscape. **Export PDF** keeps that page landscape and the rest of the report portrait. For a long list, use **Split across pages** to continue the rows on following pages.
+
+<Tabs>
+  <Tab title="Columns setting">
+    <Frame caption="Branch preview on the Demo tenant: Last User ticked in the block's Columns settings.">
+      <img src="/images/product/report-builder-appendix-columns-desktop-preview.png" alt="Configure Device Appendix / List dialog with Full List (appendix) display mode and the Columns section, where Name, Manufacturer, Model, Serial Number, Last Seen, Last User and Operating System are ticked." width="2880" height="1920" />
+    </Frame>
+  </Tab>
+  <Tab title="In the report">
+    <Frame caption="Branch preview on the Demo tenant: the Last user column in the report viewer, with a dash where no user was reported.">
+      <img src="/images/product/report-viewer-last-user-desktop-preview.png" alt="Device Appendix table in the report viewer with Name, Manufacturer, Model, Serial, Last seen, Last user and OS columns for 18 Demo devices." width="2880" height="1920" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ### Client Benchmark
 
@@ -380,7 +504,10 @@ Select **Email domain checks** in the security provider filters to include the s
 | You cannot see **Templates** or **Imports** | Those tabs need **Write** or **Manage** access to Reporting. Provider tabs also need the integration. |
 | A block does not load or is empty | Check the company has data for the date range, the integration is connected and synced, then reload the page. |
 | **Save** reads **Select Company**, or the builder shows **Select a Company** | Choose a company in the company selector, or in **Report Settings** if it offers one. |
-| Export or print is disabled | Wait for the blocks to finish loading. A failed chart also keeps export disabled; correct its data or loading error before exporting. |
+| The **Export** menu is disabled | Wait for the blocks to finish loading. A failed chart also keeps export disabled; correct its data or loading error before exporting. |
+| **Export PDF** shows **Failed to export PDF** | Reload the report, wait for every block to load and try again. **Print** still works from the same menu. |
+| A landscape page prints shrunk or portrait | Use **Export PDF** rather than **Print**. Some browsers' print dialogs cannot mix page orientations. |
+| **Last user** shows a dash | Your RMM has not reported a logged-in user for that device. Check the device in the RMM and wait for the next sync. |
 | An exported block is missing rows | Check its filters, date range, row limit and page space. Use **Split across pages** for long lists. |
 | A new template did not autosave | Save it manually once. Autosave works after that. |
 
