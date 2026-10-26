@@ -1,0 +1,192 @@
+---
+title: 'Track installed software'
+description: 'Find end-of-life and out-of-date software across your clients from Devices > Software.'
+icon: 'box-open'
+---
+
+The **Software** tab under **Devices** lists the software installed on your clients' devices. It groups each product across devices and flags installs that have reached end of life, reach it soon, or are behind the latest update.
+
+<Note>
+For MSP staff with access to Devices. Company users do not see the Software tab. The tab requires device-read access and a connected ConnectWise Asio, Datto RMM, NinjaOne, or Action1 integration.
+</Note>
+
+## Before you start
+
+- Connect **ConnectWise Asio**, **Datto RMM**, **NinjaOne**, or **Action1** and import devices. Software is collected only for imported devices. Action1 (Beta) collects software for endpoints linked to devices; see [Configure Action1 Integration](/user-guides/integrations/enable-action1-integration).
+- Choose **Software** in the integration's dedicated **Sync** step. New connections sync software after devices are imported. Ongoing inventory syncs run daily: **ConnectWise Asio at 04:00 UTC** and **Datto RMM at 04:30 UTC**, and **NinjaOne at 04:30 UTC**. The NinjaOne Software switch defaults on and company mapping remains required. Action1 always syncs software, daily at **06:40 UTC**, with no separate switch. See [Sync schedules](/user-guides/integrations/sync-schedules).
+- See [Choose what the integration syncs](#choose-what-the-integration-syncs) to enable or disable inventory collection.
+
+## Review software across your clients
+
+<Steps>
+  <Step title="Open Software">
+    Select **Devices > Software**. The company selector applies, so choose the companies you want to review.
+  </Step>
+  <Step title="Read the summary">
+    The summary shows **Tracked products**, **Installs**, **Needs attention**, and **Devices with inventory**. **Needs attention** breaks down into end of life, ending soon, and outdated installs.
+  </Step>
+  <Step title="Focus on what needs attention">
+    Select **Needs attention** in the summary, or choose **Needs attention** in the **Status** filter. Use the **Product** filter to search by name or publisher. Every data column supports sorting and filtering: numeric columns accept ranges and **Next end of life** accepts a date range. Filters apply to the full matching inventory, including rows on later pages.
+  </Step>
+  <Step title="Choose which products to show">
+    **Applications** is the default view. **Include system components** adds runtimes and vendor utilities that have no lifecycle data, such as Visual C++ redistributables. **Ignored** lists products you have ignored.
+  </Step>
+</Steps>
+
+<Frame caption="Select products for bulk classification on Devices > Software.">
+  <img src="/images/product/pr1601-software-bulk-desktop.png" alt="Selected software products with bulk actions and sortable, filterable columns" width="1440" height="960" />
+</Frame>
+
+## What each status means
+
+| Status | Meaning |
+| --- | --- |
+| **End of life** | The release is end of life. Releases with a published end-of-life date are flagged after a 30-day grace period. |
+| **Ending soon** | The installed release reaches end of life within 90 days. Shown for releases with long support periods, such as Microsoft Office, .NET, Java and SQL Server. |
+| **Outdated** | The install is below the target version you set, or below the latest update published for its release. |
+| **Current** | No lifecycle or version rule marks this install as needing attention. |
+| **Unknown** | The RMM reported no usable version for this install. |
+
+Only **End of life**, **Ending soon** and **Outdated** have visible status badges. **Current** and **Unknown** stay blank in lists and version rows; you can still use them in filters.
+
+End-of-life dates and latest versions come from [endoflife.date](https://endoflife.date), refreshed daily. Products with a reported version but no lifecycle data are **Current** unless you set a target version. **Current** means no known issue was found; it does not establish that the vendor supports the installed release.
+
+## Investigate a product
+
+Select a product to open its details. The sheet shows the lifecycle source, each installed version with its status and end-of-life date, and the devices that have the product.
+
+- Select a version to list only the devices running it. Select it again to clear the filter.
+- The **Status** filter defaults to **Needs attention only**. Clear it to see every device with the product.
+- The compact device table supports sorting and filtering by device, company, version, and status. It displays 25 rows per page.
+- Select a device to open its details.
+
+<Frame caption="The product sheet with a compact table of affected devices.">
+  <img src="/images/product/pr1601-software-sheet-desktop.png" alt="Software product sheet with version details and a compact, filterable devices table" width="1440" height="960" />
+</Frame>
+
+### Update several products
+
+1. Select the intended products using their checkboxes. Selection applies to the current page, with up to 200 products per page.
+2. Open **Actions (selected count)** and choose **Mark as key app**, **Remove key app**, **Ignore**, or **Restore**.
+3. Review the result. Ignored products move to **Ignored**, where you can select and restore them. Changing company scope, filters, sorting, or pages clears selection.
+
+Bulk actions require permission to edit devices. They change the portal's software classification; they do not uninstall applications or change installed versions.
+
+### Mark key apps, ignore products, and set a target version
+
+MSP staff who can edit devices can change these settings in the product sheet. Each change saves immediately.
+
+| Action | Effect | Reverse |
+| --- | --- | --- |
+| **Mark as key app** | Adds a star to the product and includes it in the **Key apps** status filter. | **Remove key app** |
+| **Ignore** | Hides the product from the default and system component views and from the summary counts. | Open the **Ignored** view, select the product, then **Restore** |
+| **Set target** | Counts installs below the version you enter as **Outdated**. Enter a version number such as 124.0.2. | **Clear target** |
+
+## Include software end of life in AI reports
+
+AI reports, including scheduled QBRs, cover software end of life through the **Devices** source. Open **Devices options** in the report builder and choose what **Software end of life** covers:
+
+| Option | What the report receives |
+| --- | --- |
+| **Key applications** (default) | Every product you marked as a key app at the report's company, with its status, end-of-life dates and affected device counts |
+| **All software** | The products with the most end-of-life, ending-soon or outdated installs at the company |
+| **Don't include** | No software information |
+
+Saved templates and scheduled reports that include **Devices** use **Key applications** until you change the option. The report receives counts and a short product list rather than every install, and it lists releases whose support ends in the next 12 months for budget and roadmap planning.
+
+If you have not marked any key apps, the report leaves software out of the client-facing text and adds a note for your team to mark your key applications. Software end of life appears only for tenants with the Software tab enabled and for staff who can view devices.
+
+<Frame caption="The Software end of life option under Devices in the AI report builder.">
+  <img src="/images/product/report-builder-software-end-of-life-desktop.png" alt="AI report builder with the Devices source expanded and Software end of life set to Key applications" width="1440" height="960" />
+</Frame>
+
+## Review shared software assessments
+
+<Note>The **Software assessments** feature flag is off by default. Assessment panels, LOB classification controls and update priorities appear only when it's turned on for your organization. Existing inventory and lifecycle warnings remain available.</Note>
+
+The **Update priority** column highlights **Urgent** and **High** priorities. Other priorities stay blank. Open a product to see high security exposure, confident LOB suggestions and the evidence behind urgent or high version priorities.
+
+The shared assessment suggests whether a recognizable product is typically a line-of-business (LOB) application. Confident LOB suggestions show a confidence percentage. Only high security exposure is displayed; low, medium, missing and uncertain ratings stay blank. Security exposure describes software capabilities; it does not establish a vulnerability, malware, or exploitation.
+
+If you can edit devices, use **Line-of-business classification** to choose **Line-of-business app** or **Not a line-of-business app**. Your override applies only to your tenant. Choose **Use shared suggestion** to reset it. This classification is independent of **Mark as key app**.
+
+Priorities use the matched endoflife.date release. Unsupported high-exposure software receives **Urgent** priority; other unsupported releases receive **High**. Verified outdated releases receive at least **Normal**, or **High** for high-exposure software. Support ending within 90 days receives **Normal**. A supported current release receives **Routine** when there is enough evidence to classify it. Missing lifecycle evidence leaves the version priority **Unknown**.
+
+Generic product ratings are reused across tenants and regions; tenant overrides remain separate. The background job refreshes stale evidence automatically for enabled pilots. Missing and stale ratings are hidden. Turning the assessment flag off hides ratings and classification controls while retaining saved overrides and cached knowledge. Existing **Outdated**, **Ending soon** and **End of life** warnings remain visible; healthy and unknown lifecycle statuses have no badge.
+
+<Frame caption="Shared software assessment, tenant LOB override and version update priority using synthetic inventory.">
+  <img src="/images/product/pr1601-software-assessment-desktop.png" alt="Shared software assessment with a confident LOB suggestion, security exposure, tenant override selector and an urgent unsupported version" width="1440" height="960" />
+</Frame>
+
+<Frame caption="The same assessment on a phone.">
+  <img src="/images/product/pr1601-software-assessment-mobile.png" alt="Phone layout of the software assessment and update priority" width="390" height="844" />
+</Frame>
+
+## Check one device's software
+
+Open a device from **Devices** and select its **Software** tab once installed inventory has been confirmed. The tab is hidden while the first read is pending, if it fails, or if inventory is empty. If inventory disappears, the sheet returns to **Overview** and stays there after inventory returns until you select Software again. The list shows each product with its version, status, end-of-life date and cached update priority, worst status first. Use **Search software** or turn on **Needs attention only** to narrow the list.
+
+<Frame caption="Device software with the resync action beside the close button.">
+  <img src="/images/product/pr1601-device-software-desktop.png" alt="Device details on the Software tab with resync beside the close button" width="1440" height="960" />
+</Frame>
+
+## Retrieve software information through MCP
+
+Connect an AI client to the [MSPortal MCP server](/user-guides/mcp-server/index) and ask for installed products, key applications, outdated or end-of-life installs, product version details, or the devices running a particular product. The server reads the same staged inventory within your staff permissions and selected company scope.
+
+The grouped **query_software** tool exposes four read actions: **get_software_inventory_overview**, **list_software_products**, **get_software_product**, and **list_software_product_devices**. When Software assessments is enabled, product and version responses also include cached assessments, tenant LOB overrides, update priorities and freshness. Disabled tenants receive no assessment or override values. Use **sort=priority** to rank products by update priority. Unknown or stale ratings are not security verdicts. Use the schemas returned by your connected server; product and device lists are paginated. Product details return up to 200 version groups and signal truncation when that cap is reached. These actions do not install, update, uninstall, or reclassify software. Use the Software workspace to change key-app, ignore, or target-version settings.
+
+## Choose what the integration syncs
+
+<Steps>
+  <Step title="Open the integration">
+    Go to **Settings > Integrations**, open your ConnectWise Asio, Datto RMM, or NinjaOne integration, and continue to the **Sync** step.
+  </Step>
+  <Step title="Select supported categories">
+    Asio offers **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, and **Software**. Datto RMM offers **Companies (Datto sites)**, **Devices**, and **Software**. NinjaOne offers **Software**, enabled by default.
+  </Step>
+  <Step title="Save your choices">
+    Select **Next** to save the choices and continue to company mapping and imports. Existing connections retain their current behavior until you save different choices.
+  </Step>
+</Steps>
+
+Turning **Software** off removes that integration's software inventory from MSPortal. Turning it on starts collection for imported devices; new connections collect software after their device import finishes. Disabling other categories stops their future synchronization.
+
+Read [Asio setup](/user-guides/integrations/enable-connectwise-asio-integration), [Datto RMM setup](/user-guides/integrations/enable-datto-rmm-integration), or [NinjaOne setup](/user-guides/integrations/enable-ninjaone-integration) for credentials, mapping, and import details.
+
+<Frame caption="Choose what ConnectWise Asio syncs.">
+  <img src="/images/product/pr1601-asio-sync-desktop.png" alt="Asio setup Sync step with six supported data categories" width="1440" height="960" />
+</Frame>
+
+## Troubleshooting
+
+| Situation | What to check |
+| --- | --- |
+| No **Software** tab | Check staff device-read access and a connected Asio, Datto RMM, NinjaOne, or Action1 integration. A device tab also requires confirmed installed inventory. |
+| The tab shows no products | Whether ConnectWise Asio, Datto RMM, NinjaOne, or Action1 is connected, devices are imported or linked, and an inventory sync has finished. |
+| A device has no software | Whether it is imported from a supported RMM and whether **Software** is selected and saved in that integration's **Sync** step. For Action1, check that the endpoint is linked to the device, then choose **Run sync** and **Software** on the Action1 connection. |
+| A product shows **Unknown** | The RMM reported no usable version for that install. |
+| An auto-updating app shows **Outdated** | A target version is set above the installed version. Clear or change the target. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is a browser that updates itself not flagged as outdated?">
+    Browsers and other auto-updating apps move through versions quickly. They are flagged when their release passes end of life by more than 30 days, or when they fall below a target version you set.
+  </Accordion>
+  <Accordion title="Does ignoring a product remove it from the RMM?">
+    No. Ignoring only hides the product in MSPortal. Nothing changes on the device or in the RMM.
+  </Accordion>
+  <Accordion title="Can my clients see this tab?">
+    No. The Software tab is available to MSP staff only.
+  </Accordion>
+</AccordionGroup>
+
+<CardGroup cols={2}>
+  <Card title="Devices" icon="laptop" href="/user-guides/devices/index">
+    Return to the Devices overview.
+  </Card>
+  <Card title="Understand device details" icon="circle-info" href="/user-guides/devices/understand-device-details">
+    Read the other tabs in a device's details.
+  </Card>
+</CardGroup>

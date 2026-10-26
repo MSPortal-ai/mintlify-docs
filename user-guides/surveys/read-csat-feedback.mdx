@@ -4,94 +4,151 @@ description: 'Read and export CSAT feedback, including HaloPSA and Autotask nati
 icon: 'face-smile'
 ---
 
-Open **Surveys** from the sidebar, then choose **CSAT Dashboard** from the **Surveys** menu. You can also select the **CSAT** summary link when it appears. For a particular campaign, use its survey row's **... > View Dashboard** action.
+Use this guide to read the CSAT dashboard and export its responses. CSAT is the satisfaction rating clients give after a support ticket. This guide is for MSP staff and for company users whose role includes CSAT access.
 
-Your MSP must make CSAT available and grant your role access to it. General survey access alone is not sufficient. Company users view their permitted company information; the comparison table across companies is an MSP view.
+## Before you start
 
-## HaloPSA and Autotask native CSAT responses
+- Your role needs **Surveys** read access and **View CSAT dashboards**. An MSP administrator turns this on per role in **Settings > Users & Roles**, under **Surveys**. General survey access is not enough.
+- CSAT must be available for your portal. That means built-in CSAT campaigns are turned on, or an integration that imports ratings (HaloPSA, Autotask or Simplesat) is active.
+- Company users see only their permitted company. The **CSAT by Company** comparison table is for MSP staff.
 
-MSPortal supports importing and presenting **HaloPSA native CSAT feedback** and **Autotask native survey results** in this dashboard, custom dashboard widgets, report blocks and CSV exports. Your MSP can keep collecting feedback through the PSA's own survey. Simplesat is not required.
+## Open the CSAT dashboard
 
-The MSP enables **Import satisfaction ratings** in the PSA integration's **Sync** settings and grants the PSA-side read access. For Halo the MSP also selects the matching **Rating scale**; Autotask surveys are always rated 1 to 5. Imports are off by default. Companies must be linked, and related tickets synchronized, before feedback appears in company-scoped results. Imported surveys are named **Halo PSA satisfaction** and **Autotask PSA satisfaction**. Autotask responses carry ratings only, because its API does not expose free-text answers.
-
-Company users should ask their MSP to check import configuration and CSAT access if responses are missing. MSP staff can follow [Halo native CSAT setup](/user-guides/integrations/enable-halo-integration#import-halopsa-native-csat-for-dashboards-and-reports) or [Autotask native CSAT setup](/user-guides/integrations/enable-autotask-integration#import-autotask-native-csat-for-dashboards-and-reports). An empty view alone does not establish that the integration is unsupported.
+<Steps>
+  <Step title="Open Surveys">
+    Click **Surveys** in the sidebar.
+  </Step>
+  <Step title="Choose the dashboard">
+    Open the **Surveys Menu** in the page header and click **CSAT Dashboard**. You can also click the **CSAT** summary card on the Surveys list. For one campaign, open its row menu and choose **View Dashboard**.
+  </Step>
+  <Step title="Check which dashboard you are on">
+    The overall view is titled **CSAT** and covers every CSAT and CES campaign, native and synced. A campaign dashboard shows the campaign name and an **Overview** button to go back.
+  </Step>
+</Steps>
 
 ## Read the dashboard
 
-1. Check whether the heading names a particular campaign or shows the overall **CSAT** view.
-2. Check the **Last … days** period below the summary. This period is configured by the MSP.
-3. Compare **CSAT**, **Responses**, **Satisfied**, and **Dissatisfied**.
-4. Read **Trend** and **Score Distribution** together with the number of responses.
-5. Expand **Recent Responses** to inspect available ratings and comments. Section arrows collapse or reopen the content; they do not delete records.
+<Steps>
+  <Step title="Check the period">
+    The summary says **Last N days**. Your MSP sets N under the dashboard display settings.
+  </Step>
+  <Step title="Read the numbers">
+    Compare **CSAT**, **Responses**, **Satisfied**, **Dissatisfied** and **Companies**.
+  </Step>
+  <Step title="Read the charts">
+    **Trend** shows CSAT % over the period. **Score Distribution** counts **Satisfied**, **Neutral** and **Dissatisfied** ratings.
+  </Step>
+  <Step title="Read the lists">
+    **CSAT by Company** and **CSAT by Technician** rank each group by responses, CSAT and low scores. **Recent Responses** shows the newest ratings with their comments and ticket numbers.
+  </Step>
+</Steps>
 
-The **CSAT** percentage is the share of included responses classified as satisfied. It is not the average raw rating. Ratings use normalized scores so feedback from different rating scales can be classified consistently: at least 80 is satisfied, 40 to below 80 is neutral, and below 40 is dissatisfied. The response list also displays the original rating and scale, such as 4/5.
+**CSAT** is the share of included responses rated satisfied. It is not the average star rating. MSPortal turns every rating into a 0 to 100 score so different scales compare fairly. A score of 80 or more is satisfied, 40 to below 80 is neutral, and below 40 is dissatisfied. Each response also shows its original rating and scale, such as 4/5.
 
-Neutral ratings count in **Responses**, so adding Satisfied and Dissatisfied does not necessarily equal the total. A dash or empty view is not a satisfaction score; check the scope, access, and available response data.
+Neutral responses count in **Responses**, so **Satisfied** plus **Dissatisfied** can be less than the total. A dash instead of a score means there is no data for that scope. Check the period, the company selection and your access.
 
-The overall dashboard includes CSAT responses mapped to a company. Unmapped responses can exist without appearing in these figures. For an effort-score (CES) campaign, open its own campaign dashboard rather than assuming it is included in the overall CSAT total.
+The overall dashboard counts responses mapped to a company. Responses with no company appear as **No company mapped** in the company table. For a customer effort score (CES) campaign, open its own dashboard.
 
-## Comments, names, and technician information
+## Choose what the dashboard shows
 
-The MSP controls whether the dashboard displays comments, respondent details, and **CSAT by Technician**. A hidden comment section does not establish that no written feedback was collected. When comments are enabled, **No comment** means no comment is present for that displayed response.
+Your MSP controls whether the dashboard shows written feedback, respondent details and the technician table. A user with manage access opens **Display settings** from the dashboard header to change them. The settings are **Lookback window**, **Recent responses to list**, **Show written feedback**, **Show respondent details** and **Show team member breakdown**.
 
-Technician results depend on the assigned technician and available mapping to a portal user. **No matching portal user** is a mapping state, not a zero score or proof that the ticket was unassigned.
+These settings change only what the dashboards display. They do not stop an authorized CSV export from including names, emails and comments.
 
-These are display settings. They are not a guarantee that identifying fields or comments are excluded from an authorized CSV export or other accessible views.
+In **CSAT by Technician**, a technician is matched to a portal user by email. **No matching portal user** means no match was found. It does not mean a zero score.
 
-## Check the time window before comparing figures
+## Check the time window before you compare numbers
 
 | View | Which responses it uses |
 | --- | --- |
-| Summary, trend, company and technician figures | The configured dashboard period and applicable campaign/company scope |
-| **Recent Responses** | The configured number of newest available ratings; not necessarily limited to the summary period |
-| MSP company-response panel | Up to 50 newest available responses for the selected company |
-| Dashboard **Export CSV** | The last 90 days by default, with the selected campaign and company scope |
+| Summary, trend, company and technician figures | The dashboard period and the selected campaign and company |
+| **Recent Responses** | The newest ratings, up to the **Recent responses to list** setting |
+| Company response panel | Up to 50 newest responses for the company you selected |
+| **Export CSV** | The last 90 days, for the selected campaign and company |
 
-Different counts between these views can be expected. Compare the period, campaign, company, and response limit before treating the difference as missing feedback.
+Counts can differ between these views. Compare the period, campaign, company and response limit before you treat a difference as missing feedback.
+
+## Read one company's responses
+
+This is for MSP staff.
+
+<Steps>
+  <Step title="Open the company table">
+    On the dashboard, find **CSAT by Company**.
+  </Step>
+  <Step title="Select a company">
+    Click a company row. A panel opens with that company's newest responses, up to 50, and a summary for the dashboard period.
+  </Step>
+  <Step title="Close the panel">
+    Close it to return to the table.
+  </Step>
+</Steps>
 
 ## Export responses
 
-1. Open the overall or campaign dashboard you want to export.
-2. Confirm the company selection if your account can change it.
-3. Select **Export CSV**.
-4. Open the downloaded CSV and check its response dates and scope.
+<Steps>
+  <Step title="Open the dashboard">
+    Open the overall dashboard or the campaign dashboard you want to export.
+  </Step>
+  <Step title="Check the company selection">
+    If your account can change the company, choose it now. The export follows the selection.
+  </Step>
+  <Step title="Click Export CSV">
+    Click **Export CSV** in the page header. Your browser downloads a file.
+  </Step>
+  <Step title="Check the file">
+    Open the CSV and check the response dates and scope.
+  </Step>
+</Steps>
 
-The dashboard export uses a fixed set of fields, including rating, scale, normalized score, source, company identifier, respondent name/email, ticket information, assigned technician identifier, and feedback text where available. It fetches matching records across pages, not only the recent rows currently visible. The default export period is 90 days even when the dashboard uses a different period.
+The export has a fixed set of columns. They include the rating, scale, normalized score, source, company, respondent name and email, ticket details, the assigned technician and the feedback text when there is any. It covers every matching record, not only the rows you can see. The default period is 90 days, even when the dashboard uses a different period.
 
-If the download fails or is interrupted, check the browser's download status before using the file as a complete report. Ask the MSP about an unavailable export or a different reporting period.
+If the download fails or stops, check your browser's download status before you use the file as a complete report.
 
-## MSP: inspect a company's recent responses
+## Import HaloPSA and Autotask satisfaction ratings
 
-In **CSAT by Company**, select a company to open its response panel. The summary at the top refers to the dashboard period; the list contains up to 50 newest available responses. Close the panel to return to the comparison table.
+MSPortal can import HaloPSA native CSAT feedback and Autotask native survey results. They show in this dashboard, in custom dashboard widgets, in report blocks and in CSV exports. You can keep collecting feedback through the PSA's own survey. Simplesat is not required.
 
-A contact-history link opens feedback for a specified email address and shows up to 100 latest accessible records, including original rating, date, comment, source, and ticket information. It is a separate view and does not mean all historical responses fit on the page.
+MSP staff set this up in the PSA integration:
+
+1. Open the PSA integration's **Sync** settings and turn on **Import satisfaction ratings**. It is off by default.
+2. Give the integration read access to satisfaction data in the PSA.
+3. For Halo, choose the matching **Rating scale**. Autotask surveys are always rated 1 to 5.
+4. Make sure companies are linked and related tickets are synchronized. Feedback appears in company-scoped results only after that.
+
+Imported surveys are named **Halo PSA satisfaction** and **Autotask PSA satisfaction**. Autotask responses carry ratings only, because Autotask does not expose free-text answers.
+
+Follow [Halo native CSAT setup](/user-guides/integrations/enable-halo-integration#import-halopsa-native-csat-for-dashboards-and-reports) or [Autotask native CSAT setup](/user-guides/integrations/enable-autotask-integration#import-autotask-native-csat-for-dashboards-and-reports) for the full steps. Company users should ask their MSP to check the import and CSAT access if responses are missing.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| You can open Surveys but not CSAT | CSAT needs **View CSAT dashboards** on your role and CSAT must be available. Ask your MSP. |
+| The dashboard shows dashes | Check the period, the company selection and that responses exist and are mapped to a company. |
+| Imported ratings are missing | Check that **Import satisfaction ratings** is on, companies are linked and tickets are synced. |
+| Recent Responses shows older dates | It lists the newest ratings and is not limited to the summary period. |
+| The CSV has different dates than the dashboard | **Export CSV** defaults to 90 days. |
+| Comments or names are hidden | Your MSP turned off **Show written feedback** or **Show respondent details**. |
+| The company table is missing | It is an MSP view. Company users see their own company only. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why can I open Surveys but not CSAT?">
-    CSAT has its own availability and role permission. Ask your MSP to check CSAT access and the connected feedback sources. Company administrators do not assign portal permissions themselves.
-  </Accordion>
   <Accordion title="Is CSAT the average star rating?">
-    No. It is the percentage of included responses classified as satisfied. The individual response retains its original rating and scale.
+    No. It is the percentage of responses scored satisfied. Each response keeps its original rating and scale.
   </Accordion>
-  <Accordion title="Why don't Satisfied and Dissatisfied add up to Responses?">
-    Neutral responses also contribute to the total. Check Score Distribution for all three categories.
+  <Accordion title="Why do Satisfied and Dissatisfied not add up to Responses?">
+    Neutral responses also count in the total. **Score Distribution** shows all three groups.
   </Accordion>
-  <Accordion title="Why does Recent Responses include dates outside the summary period?">
-    The summary uses the configured number of days, while Recent Responses retrieves a limited number of the newest ratings without the same period filter.
+  <Accordion title="Does Export CSV match the dashboard period?">
+    No. It defaults to the last 90 days. Check the dates in the file.
   </Accordion>
-  <Accordion title="Does Export CSV match the dashboard period automatically?">
-    No. The dashboard export defaults to the last 90 days. Check dates in the file, especially when the dashboard period is different.
+  <Accordion title="Does hiding respondent names remove them from the CSV?">
+    No. Display settings do not change what an authorized export contains.
   </Accordion>
-  <Accordion title="Does hiding respondent names remove them from CSV exports?">
-    No. Dashboard presentation settings are separate from access to exported fields. Authorized exports can include names, email addresses, and comments when stored.
-  </Accordion>
-  <Accordion title="Why can't Company users see the company comparison table?">
-    The cross-company table is an MSP view. Company access is scoped to the information their MSP makes available to them.
-  </Accordion>
-  <Accordion title="Does opening feedback send a reply or publish it?">
-    No. Reading the dashboard is separate from responding to the contact, posting a public review, or publishing a testimonial.
+  <Accordion title="Does opening feedback reply to the client or publish it?">
+    No. Reading the dashboard does not send a reply, post a public review or publish a testimonial.
   </Accordion>
 </AccordionGroup>
 

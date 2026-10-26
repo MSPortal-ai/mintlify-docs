@@ -4,55 +4,102 @@ description: 'Review your company’s Microsoft score, control status and availa
 icon: 'shield-check'
 ---
 
-Open **Cloud > Posture > Secure Score** to review the latest stored Microsoft security score and recommendations for your company. From the multi-company Posture overview, opening a Microsoft row also opens that company's Secure Score.
+Microsoft Secure Score rates how well a company's Microsoft 365 tenant follows Microsoft's security recommendations. Open **Cloud > Posture > Secure Score** to read the latest stored score and its recommendations. From the multi-company **Posture** overview, opening a Microsoft row also opens that company's Secure Score. This guide is for company users with Microsoft 365 read access and for MSP staff.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. Company users ask their MSP to change permissions or security settings.
+## Before you start
 
-## Open the right company
+- Your role has Microsoft 365 read access.
+- The company has a connected Microsoft 365 tenant and a synced score. MSP staff connect tenants under [Connecting companies to Microsoft 365](/user-guides/microsoft-365/connecting-companies).
+- Company users ask their MSP to change permissions or security settings.
 
-1. Open **Cloud**, then **Posture**, then **Secure Score** when available.
-2. Check the company in the top bar. MSP staff should select one company before reviewing its score or planning work.
-3. Read the summary, then use **Needs attention**, **Addressed** or **All** to choose controls.
-4. Click a control's **Title** to read its detail panel.
-5. Company users can [start with the Home AI Assistant](/user-guides/ticketing/open-a-ticket) to request help. Include the company, control title and concern.
+## Open the score for a company
 
-An empty page can mean no stored score is available for the selected scope. It does not mean the company passed every security check. Ask the MSP to check the connection and synchronization.
+<Steps>
+  <Step title="Open Secure Score">
+    Go to **Cloud > Posture**, then choose **Secure Score**.
+  </Step>
+  <Step title="Check the company">
+    Look at the company selector in the top bar. MSP staff should select one company before they review a score or plan work.
+  </Step>
+  <Step title="Read the summary">
+    Read the cards at the top. See the table below.
+  </Step>
+  <Step title="Choose controls">
+    Select **Needs attention**, **Addressed** or **All**, then click a control's **Title** to read its detail panel.
+  </Step>
+  <Step title="Ask for help (company users)">
+    [Start with the Home AI Assistant](/user-guides/ticketing/open-a-ticket). Include the company, the control title and your concern.
+  </Step>
+</Steps>
+
+An empty page can mean no stored score exists for the selected companies. It does not mean the company passed every check. Ask the MSP to check the connection and sync.
 
 ## Read the summary
 
 | Card | What it tells you |
 | --- | --- |
 | **Secure Score** | Stored points achieved out of available points. |
-| **Score Percentage** | Overall score rounded to a whole percentage. |
-| **Industry Comparison** | Available Microsoft comparison data. The current reader selects the all-tenant comparison when supplied; do not assume it matches your industry or company size. A dash means no usable comparison is displayed. |
-| **30-Day Trend** | A comparison using up to 30 stored samples. Samples are not guaranteed to cover 30 consecutive days. See the current limitation below. |
-| **Category cards** | Points and percentages for available categories such as Apps, Data and Identity. Only categories present in the loaded data appear. |
+| **Score Percentage** | The overall score as a whole percentage. |
+| **Industry Comparison** | Microsoft's average for all tenants, with your difference from it. It is not matched to your industry or company size. A dash means no comparison is available. |
+| **30-Day Trend** | The change in points between the oldest and newest stored scores in the last 30 days, with its percentage. It shows 0 when fewer than two scores fall in that window. |
+| **Category cards** | Points and percentages for categories such as Apps, Data and Identity. Only categories in the loaded data appear. |
 
-<Warning>
-The current **30-Day Trend** can display the change with its direction reversed. Do not use its plus/minus sign to conclude that security improved or worsened. Ask your MSP to compare dated source scores until this is corrected.
-</Warning>
-
-The summary is separate from the filtered controls table. Changing a table filter does not recalculate these cards. Category totals and the overall score can use different synchronized datasets; their totals need not match. A score is configuration evidence, not a guarantee of security or proof of an incident.
+The summary is separate from the controls table. Changing a table filter does not recalculate these cards. Category totals and the overall score can come from different synced datasets, so their totals need not match. A score is configuration evidence. It does not guarantee security or show that an incident happened.
 
 ## Choose a control view
 
-<Frame caption="Example counts depend on the company and synchronized controls.">
+<Frame caption="Example counts depend on the company and synced controls.">
   <img src="/images/product/secure-score-view-controls.png" alt="Secure Score Needs attention, Addressed and All views." width="556" height="78" />
 </Frame>
 
 | View | Included statuses |
 | --- | --- |
-| **Needs attention** | To address, Planned and Unknown. This is the initial view. |
+| **Needs attention** | To address, Planned and Unknown. This is the starting view. |
 | **Addressed** | Risk accepted, Resolved externally, Reviewed and Completed. |
 | **All** | Both groups. |
 
-**Addressed does not mean Completed.** Read each status and its supporting detail. Planning work in MSPortal does not itself update Microsoft's control status. Switching views clears checked rows and can close a detail panel if that control is outside the new view.
+**Addressed does not mean Completed.** Read each control's status. Planning work in MSPortal does not change Microsoft's control status. Switching views clears checked rows and can close a detail panel when its control is outside the new view.
 
-## Understand the columns
+## Read the columns
 
-**Title** opens the control. **Category** and **Service** describe its area. **Max Points** is its maximum value, not the remaining score improvement. **Status** reflects the available Microsoft state, with a score-based fallback when no specific state is supplied. Unrecognized states may retain their provider wording and belong to the Unknown filter group.
+- **Title** opens the control.
+- **Category** and **Service** describe its area.
+- **Max Points** is the control's maximum value, not the score you can still gain.
+- **Status** is Microsoft's state for the control, with a score-based fallback when none is supplied. An unrecognized state can keep Microsoft's wording and counts as Unknown.
+- **Severity** comes from the recommendation tier: Core is Critical, Advanced is High, Defense in depth is Medium, and an unknown tier is Informational. It does not show an active threat.
+- **Planner** appears when you have Planner access and opens linked work. A blank cell does not show that nobody planned similar work.
 
-**Severity** is derived from the recommendation tier: Core is Critical, Advanced is High, Defense in depth is Medium, and an unrecognized tier is Informational. It does not prove an active threat. The **Planner** column appears with appropriate Planner access and can open linked work. A blank cell does not prove that nobody has planned similar work.
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The page is empty | Check the company selector. Ask your MSP to check the Microsoft 365 connection and sync. |
+| A control is not in the table | Switch from **Needs attention** to **All**, then check the column filters. |
+| **Industry Comparison** shows a dash | Microsoft supplied no comparison data. |
+| The summary cards do not change when you filter | They summarize the stored score, not the filtered table. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Where is Microsoft Secure Score?">
+    Open **Cloud > Posture > Secure Score**, or open a Microsoft row in the multi-company Posture overview. The old Microsoft 365 entry is no longer in the sidebar.
+  </Accordion>
+  <Accordion title="Does Addressed mean every recommendation was completed?">
+    No. Addressed also includes Risk accepted, Resolved externally and Reviewed. Check each status.
+  </Accordion>
+  <Accordion title="Why is a Planned control still under Needs attention?">
+    Planned counts as needing attention. Creating a Planner item does not change Microsoft's state or complete the control.
+  </Accordion>
+  <Accordion title="Does Industry Comparison cover companies in my industry?">
+    No. It uses Microsoft's all-tenant average.
+  </Accordion>
+  <Accordion title="Does Critical mean an attack was detected?">
+    No. Severity comes from the recommendation tier. Review the recommendation with your MSP.
+  </Accordion>
+  <Accordion title="Can I change these settings myself?">
+    Ask your MSP. Company users start with the Home AI Assistant. Viewing a score does not apply a change.
+  </Accordion>
+</AccordionGroup>
 
 ## Related guides
 
@@ -61,32 +108,3 @@ The summary is separate from the filtered controls table. Changing a table filte
 - [Export Secure Score controls](/user-guides/microsoft-365/export-secure-score)
 - [Plan work from Secure Score](/user-guides/microsoft-365/plan-secure-score-work)
 - [Read cloud security posture](/user-guides/cloud/posture)
-
-## FAQs
-
-<AccordionGroup>
-  <Accordion title="Where is Microsoft Secure Score now?">
-    Open Cloud > Posture > Secure Score, or open a Microsoft row in the multi-company Posture overview. The older Microsoft 365 entry is not the current sidebar path.
-  </Accordion>
-  <Accordion title="Does Addressed mean every recommendation was completed?">
-    No. Addressed also includes Risk accepted, Resolved externally and Reviewed. Check the individual status.
-  </Accordion>
-  <Accordion title="Why is a Planned control still under Needs attention?">
-    Planned is an attention status. Creating an MSPortal Planner item does not automatically change Microsoft’s state or complete the control.
-  </Accordion>
-  <Accordion title="Can I trust the direction shown by 30-Day Trend?">
-    Not currently. Its sign can be reversed. Ask the MSP to compare dated source scores instead of relying on the sign.
-  </Accordion>
-  <Accordion title="Does Industry Comparison represent companies in my industry?">
-    Do not assume that. The current reader uses available all-tenant comparison data. Missing comparison data displays a dash.
-  </Accordion>
-  <Accordion title="Why do the summary cards stay the same after filtering?">
-    They summarize the stored score independently of the controls table. Filters narrow controls, not the summary score.
-  </Accordion>
-  <Accordion title="Does Critical mean an attack was detected?">
-    No. Severity comes from the recommendation tier. Review the recommendation and supporting evidence with the MSP.
-  </Accordion>
-  <Accordion title="Can Company administrators change these settings or their own permissions?">
-    Ask the MSP to manage access and security changes. Start with the Home AI Assistant for a support request; viewing a score does not authorize or apply a change.
-  </Accordion>
-</AccordionGroup>

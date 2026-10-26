@@ -1,71 +1,84 @@
 ---
 title: 'Find and filter posture snapshots'
-description: 'Narrow the portfolio by company, provider and score band, then open the correct detail view.'
+description: 'Narrow the portfolio by company, provider, and score band, then open the right detail view.'
 icon: 'filter'
 ---
 
-Use the **Cloud > Posture** overview when reviewing Global View or multiple companies. With exactly one company selected in the top bar, the page shows details directly and these list filters are absent.
+Use the column filters on the **Cloud > Posture** overview to find companies by score. This page is for MSP staff and company users who see more than one company.
 
-**Audience:** Company users whose permitted scope includes a posture list and MSP staff reviewing companies. Microsoft 365 read access is required.
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- The overview table appears only when more than one company is selected in the top bar. With one company selected, the page shows that company's details directly and has no filters.
+- The table shows 20 snapshots per page.
 
 ## Narrow the overview
 
-1. Confirm the top-bar company scope.
-2. Use **Company** to select companies within that scope. Search within its option popover if needed; selecting a Company column filter keeps the overview layout.
-3. Use **Provider** when shown. Click the checkbox beside Microsoft 365 or Google Workspace and wait for the rows to update.
-4. Open **Secure score** and choose **80% and above**, **50-79%**, or **Below 50%**. **All** clears that field.
-5. Wait for the matching count. Use **Previous** and **Next** for additional pages of up to 20 snapshots.
+<Steps>
+  <Step title="Open Cloud > Posture">
+    Click **Cloud** in the sidebar. The **Posture** tab opens first. Select **Global View** or **Assigned Companies** in the top bar.
+  </Step>
+  <Step title="Pick companies">
+    Open the filter under the **Company** column heading. Search for a company, then check the companies you want. Checking a company here keeps the overview table.
+  </Step>
+  <Step title="Pick a provider">
+    If a **Provider** column is shown, open its filter and check **Microsoft 365** or **Google Workspace**.
+  </Step>
+  <Step title="Pick a score band">
+    Open the filter under the **Secure score** column heading and choose **80% and above**, **50-79%**, or **Below 50%**. Choose **All** to remove the filter.
 
-<Frame caption="Score bands narrow the stored percentages. Identify the provider before interpreting a band's meaning.">
-  <img src="/images/product/cloud-posture-score-options.png" alt="Secure score filter choices All, 80% and above, 50-79%, and Below 50%." width="474" height="268" />
-</Frame>
+    <Frame caption="Score bands narrow the stored percentages. Check the provider before you compare scores.">
+      <img src="/images/product/cloud-posture-score-options.png" alt="Secure score filter choices All, 80% and above, 50-79%, and Below 50%." width="474" height="268" />
+    </Frame>
+  </Step>
+  <Step title="Read the results">
+    The table reloads from page 1. Use the page controls under the table to see more.
+  </Step>
+</Steps>
 
-Selections within Company or Provider are alternatives; different active fields must all match. Filters apply across list pages and return to page 1. The Provider column is based on the loaded results and can disappear after narrowing to one provider. **Clear Filters** restores table filters, including an entry-link provider, while keeping top-bar scope and access limits.
+Filters in different columns must all match. Within **Company** or **Provider**, a row matches any checked option. The **Provider** column disappears when the results hold only one provider. **Clear Filters** removes the column filters. It does not change the company selector or your access.
 
-The displayed score is rounded to a whole percentage, while filtering uses a finer percentage. A value near a band boundary can therefore display 50% or 80% while matching the preceding band. Confirm the points in detail before treating this as an inconsistent score.
+The table shows the score as a whole percentage, but the band filter uses the exact value. A score that shows 80% can sit in the **50-79%** band. Open the details to see the exact points.
 
-## Open the result
+## Open a result
 
-- Click a **Google Workspace** row for the calculated-checks dialog. Close it to return to the list.
-- Click a **Microsoft 365** row or its score to open Secure Score for that company.
-- Click an available **MFA**, **Domains** or **Devices** percentage to open that company's Current Posture.
+- Click a **Google Workspace** row to open its checks in a dialog. Close it to return to the list.
+- Click a **Microsoft 365** row, or its score bar, to open Secure Score for that company.
+- Click an **MFA**, **Domains**, or **Devices** percentage to open that company's Current Posture.
 
-Company selection in the top bar changes the overall scope; a Company table filter only narrows the list. Confirm the company again when entering another view.
+## What the overview cannot do
 
-## Recover missing results
+- It has no filter for **Snapshot date**, **Checks**, **Last synced**, **MFA**, **Domains**, or **Devices**.
+- It cannot be sorted and has no CSV export.
+- **Columns > Save Changes** only changes which columns you see.
 
-Use **Clear Filters**, confirm the top-bar company selection, and reopen **Cloud > Posture** from navigation if results are still unexpectedly narrow. A bookmarked company-name search can remain active even after table filters are cleared; the current overview has no general search box to edit that constraint.
+## Troubleshooting
 
-If records remain absent, ask your MSP to check read access, company mapping, enabled posture synchronization and whether a snapshot exists. An empty list does not prove that the company has no security issues. A previous snapshot can remain visible when a new collection is delayed.
+| Problem | What to do |
+| --- | --- |
+| There are no filters | One company is selected. Select **Global View** or **Assigned Companies**. |
+| You see **No daily cloud posture snapshots match these filters.** | Click **Clear Filters** and check the company selector. |
+| The **Provider** column disappeared | Only one provider is left in the results. Click **Clear Filters** to bring it back. |
+| A company is missing | It has no stored snapshot. Ask your MSP to check the integration, the company mapping, and **Daily security posture** for Google Workspace. |
+| The results stay narrow after you clear filters | Open **Cloud > Posture** again from the sidebar and check the company selector. A link that carried a search term can keep it. |
 
-There are no overview filters for Snapshot date, Checks, Last synced or the optional MFA/Domains/Devices measures. The table has no column sorting, CSV export or bulk remediation action. **Columns** changes visible fields after **Save Changes**; it does not change source data.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why are there no filters when I select one company?">
-    A single top-bar company opens details directly. Filters and pagination belong to the multi-company overview.
+    One company opens its details directly. Filters belong to the overview table.
   </Accordion>
-  <Accordion title="Can I search all posture fields from one box?">
-    No. Use the Company option search and the Company, Provider and Secure score column filters. The current overview has no general search box.
+  <Accordion title="Can I search every posture field from one box?">
+    No. Use the **Company**, **Provider**, and **Secure score** filters.
   </Accordion>
-  <Accordion title="Why did the Provider column disappear after filtering?">
-    It uses providers present in the loaded results and can disappear when only one remains. Clear Filters restores table filtering; top-bar scope still applies.
+  <Accordion title="Why did a score of 80% land in the 50-79% band?">
+    The table rounds the score. The filter uses the exact value, so 79.6 shows as 80% but counts as **50-79%**.
   </Accordion>
-  <Accordion title="Why can a displayed 80% score appear in the 50-79% band?">
-    Display rounds to a whole percentage while the filter uses finer precision. For example, a score just below 80 can display 80%. Review the points in detail.
+  <Accordion title="Does a Company filter open the single-company layout?">
+    No. Only selecting exactly one company in the top bar does that.
   </Accordion>
-  <Accordion title="Does Clear Filters remove a bookmarked company-name search?">
-    Not necessarily. A search carried by the entry link remains a separate constraint. Reopen Cloud > Posture from navigation and confirm the company scope.
-  </Accordion>
-  <Accordion title="Does a Company column filter open the single-company detail layout?">
-    No. Only choosing exactly one company in the top bar changes that layout. The column filter narrows the overview rows.
-  </Accordion>
-  <Accordion title="Can I export or sort the posture overview?">
-    The current overview offers neither CSV export nor column sorting. Use the available filters and detail views.
-  </Accordion>
-  <Accordion title="Does filtering the overview change provider settings?">
-    No. Filters only choose the snapshots displayed. They do not synchronize, remediate or change security configuration.
+  <Accordion title="Can I export or sort the overview?">
+    No. Use the filters and the detail views.
   </Accordion>
 </AccordionGroup>
 

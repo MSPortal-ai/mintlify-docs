@@ -1,93 +1,226 @@
 ---
 title: 'Configure Kaseya SaaS Protection Integration'
-description: 'Connect Kaseya SaaS Protection and map Microsoft 365 backup reporting to companies'
-icon: 'plug'
+description: 'Connect Kaseya SaaS Protection (formerly Backupify) to monitor Microsoft 365 backup health across your clients'
+icon: 'database'
 ---
 
-Connect **Kaseya SaaS Protection** to report Microsoft 365 backup inventory and health. The wizard uses **Connect → Configure Sync → Map Domains → Status**.
+This guide walks you through connecting Kaseya SaaS Protection (formerly Backupify / Datto SaaS Protection) to MSPortal.ai so you can monitor Microsoft 365 backup health, seats, and coverage trends across all your clients.
 
-## Before you start
+## Overview
 
-This is an **MSP staff** task requiring integration-management permission and authorized vendor credentials. This provider is available only when enabled for your MSP tenant. If its setup page is unavailable, check availability with your MSPortal administrator. Company users do not configure this connection.
+By integrating Kaseya SaaS Protection with MSPortal.ai, you can:
 
-Use the **Public API key** and **Secret API key** for Kaseya SaaS Protection, formerly Backupify. These are separate from Datto RMM credentials. Obtain a pair from the vendor API-key administration for your authorized account.
+- Monitor 24-hour backup coverage for Exchange, OneDrive, SharePoint, and Teams per client
+- Track protected seats (users, shared mailboxes, sites, and Teams)
+- See daily backup success trends across your customer base
+- Include SaaS Protection health in client reports
 
-## Connect and save credentials
+<Note>
+Kaseya SaaS Protection is currently a pilot integration. If it is not available in **Settings > Integrations**, contact support@msportal.ai.
+</Note>
 
-1. Open **Settings > Integrations**, find **Kaseya SaaS Protection**, and open its setup action. For an established connection, choose **Configure** on that connection.
-2. Enter the credential pair and select **Test Connection**.
-3. Review the result. A successful API response can still return no accessible domains; confirm the account has the intended scope.
-4. Select **Create Integration** to save a new connection. On an existing connection, use **Save credentials** after testing changed values.
+## Prerequisites
 
-The test and save are separate. Changing a field invalidates the prior test result. An existing saved connection indicator does not mean a new live test just ran.
+- A Kaseya SaaS Protection account with Datto Partner Portal access
+- MSPortal.ai integration management permission
+- MSPortal companies to map to your SaaS Protection domains
 
-<Frame caption="MSP example: connection form before credentials are submitted.">
-  <img src="/images/product/kaseya-saas-protection-setup-connection.png" alt="Kaseya Saas Protection connection form with blank credential fields and test and save controls" width="1344" height="768" />
-</Frame>
+## Part 1: Get Your API Keys
 
-## Choose the data to synchronize
+<Steps>
+  <Step title="Open the Datto Partner Portal">
+    Log in to the Datto Partner Portal.
+  </Step>
+  <Step title="Navigate to API Keys">
+    Go to **Admin > Integrations > API Keys**.
+  </Step>
+  <Step title="Copy Both Keys">
+    Copy the **Public Key** and the **Secret Key**. MSPortal stores both only in Vault.
+  </Step>
+</Steps>
 
-**Customer domains** are always discovered for mapping. Choose **Seat inventory** and **Backup health and history**, then select **Save sync settings**. Detailed data is fetched for domains linked to MSPortal companies.
+## Part 2: Connect in MSPortal
 
-Creating a connection, saving replacement credentials or saving sync settings can request background synchronization. Check its result rather than treating the save as proof that all data is ready.
+Go to **Settings > Integrations**, open the **Directory** tab, find **Kaseya SaaS Protection**, and select **Connect**. If you already have a connection, open it from the **Active** tab with **Open** instead.
 
-Changing the switches is a draft until **Save sync settings** succeeds. Save this step before navigating onward; the mapping save is a separate operation.
+The connection page lists its tasks in the **Setup guide**. Under **Setup** you will find **Connect**, **Choose data**, **Import or match companies**, and **Review**. Under **Manage** you will find **Overview** and **Sync activity**. Select a task to open it.
 
-## Map domains to companies
+### Connect
 
-1. Open **Map Domains** and review the discovered names and domains.
-2. Choose the existing MSPortal company for each intended row. **Quick Match** provides suggestions to review; it does not establish that the company is correct.
-3. Check both selected imports and pending links, then use **Import Selected** to apply them. The wizard also attempts to save pending mappings before leaving the mapping step.
-4. Verify the saved company association before relying on company-scoped reporting.
+<Steps>
+  <Step title="Enter Your Keys">
+    Enter your keys in the **Public API key** and **Secret API key** fields. Credentials are stored in the vault and never shown again.
 
-Removing a saved link takes effect immediately. Creating a company on the mapping screen creates it immediately, while its link is pending until saved. Reuse existing companies where appropriate. Leaving the mapping step can start a detailed background sync.
+    <Frame>
+      <img src="/images/product/kaseya-saas-protection-setup-connection.png" alt="Kaseya SaaS Protection connection form with blank credential fields and test and save controls" width="1344" height="768" />
+    </Frame>
+  </Step>
+  <Step title="Test the Connection">
+    Select **Test connection**. On success you'll see a confirmation such as "The API accepted these credentials and returned [n] accessible domains." A successful test can still return no accessible domains; if so, confirm the keys have access to the customers you expect.
 
-## Read status and backup health
+    If the test fails:
+    - A rejected key message means the public or secret API key is incorrect
+    - A rate limiting message means Kaseya is throttling connection tests; try again shortly
+    - A timeout message means the Kaseya API did not respond; try again in a moment
+  </Step>
+  <Step title="Save the Connection">
+    Select **Save and continue**. The first sync starts automatically.
 
-In **Status**, review mapped domains, protected seats or users, services backed up, workload summaries and the last-sync value. If **Backup data is still preparing** appears, check the mapping and first detailed sync before interpreting missing data as healthy.
+    <Note>
+      **Test connection** does not save anything. If you change a key after testing, select **Test again** before you save.
+    </Note>
+  </Step>
+</Steps>
 
-Use **View backup health** to continue to the Backup module, or **Manage mappings** to return to company mapping. **Complete Setup** exits the wizard; it is not a guarantee that all workloads have finished synchronizing.
+### Choose data
 
-The provider reports backup success at workload level. MSPortal can show protection states for users, shared mailboxes, sites and Teams, but a missed workload backup does not identify the particular active resource that caused it. Use the provider’s reporting for resource-level investigation.
+**Choose data** controls what MSPortal fetches. Customer domains are always discovered for mapping; detailed data is fetched only for domains linked to an MSPortal company.
 
-## Maintain or disconnect
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Customer domains** | Required for company mapping and domain-level backup reporting | Always on |
+| **Seat inventory** | Sync protected users, shared mailboxes, sites, and Teams seats | On |
+| **Backup health and history** | Sync Exchange, OneDrive, SharePoint, and Teams status plus the rolling backup trend | On |
 
-Reopen the specific connection to review status or replace credentials. Test the changed values and use **Save credentials**. Do not regenerate vendor credentials simply to retry a page load.
+Each switch saves as soon as you change it and starts a fresh sync. Wait for **Saving…** to clear before you leave the task. This task is optional; both datasets are on for a new connection.
 
-To remove the connection, use its delete/disconnect control, read the named confirmation and proceed only when you intend to remove the stored connection and associated synchronized data. Removing MSPortal’s connection does not revoke the vendor credential itself.
+<Warning>
+**API reporting limitations**: MSPortal can show protection states for users, shared mailboxes, sites, and Teams. Kaseya's REST API reports backup success at the workload level and does not identify which individual active resource caused a missed backup. Use Kaseya SaaS Protection reporting for resource-level details.
+</Warning>
+
+### Import or match companies
+
+Link the SaaS Protection domains you want to report on to MSPortal companies. The workspace is titled **Import or match Kaseya SaaS Protection domains** and shows each domain's **Microsoft 365 domain**, **Seats**, and **24h backup** percentage.
+
+<Steps>
+  <Step title="Wait for Domains">
+    Domain discovery normally completes in less than a minute. If no domains appear, select **Sync domains** in the empty list or **Run sync** in the connection header, then check the result in **Sync activity**.
+  </Step>
+  <Step title="Review Suggestions">
+    Open **Suggested** to review proposed matches. Select **Accept** to save a match, or **Change** to pick a different company. **Accept N strong matches** accepts every suggestion with 90% confidence or more at once.
+  </Step>
+  <Step title="Match Remaining Domains">
+    In **Import**, the view the workspace opens on, choose a company for each remaining domain. If the company does not exist yet, select **Import company**. MSPortal creates the company right away, so check for an existing match first. Select **Ignore** for domains you don't want to report on; you can **Restore** them later from **Ignored**.
+  </Step>
+  <Step title="Check Your Matches">
+    Review **Matched**. Matches save as you apply them and start a detailed sync for the matched domains. **Remove match** takes effect immediately.
+  </Step>
+</Steps>
+
+<Info>
+Only matched domains get detailed seat and backup health data. Unmatched domains appear for matching only. Matching does not create a customer in Kaseya or start a backup job.
+</Info>
+
+### Review
+
+Open **Review** and select **Finish setup** once the required tasks are done. Finishing setup does not mean every workload has synced; check **Sync activity** and the backup health page. To change what counts as done, select **Reopen setup**.
+
+## Sync Schedule
+
+Matched domains sync automatically **every hour**. Syncs also run when you first connect, when you save new keys, when you change a **Choose data** switch, and after you match domains. Backup trend history is retained on a rolling window of roughly 45 days.
+
+## The SaaS Protection Health Page
+
+Once the integration is active, a **SaaS Protection** tab appears in the **Backup** module. It shows Kaseya backup health across Microsoft 365 workloads, scoped to your current company selection.
+
+### Health States
+
+| State | Meaning |
+|-------|---------|
+| **Healthy** | 100% of active services backed up in the last 24 hours, none in initial backup |
+| **Needs attention** | Coverage between 90% and 100% |
+| **Critical** | Coverage below 90% |
+| **No data** | No active services reported |
+
+### Page Sections
+
+- **Overall health summary**: Aggregate status, customers in scope, last synced time, and tiles for **Backed up in the last 24 hours**, **Services in initial backup**, and **Last 100% successful backup**.
+- **Workload health**: Four cards for Exchange, OneDrive, SharePoint, and Teams showing current 24-hour protection coverage.
+- **Backup result trend**: A daily successful-service coverage chart with one line per workload, switchable between **10 days** and **30 days**.
+- **Customer backup health**: A table of your portal companies and their mapped Kaseya domains, with per-workload ratios, initial-backup counts, and the last full success date.
+
+### Reporting
+
+Three SaaS Protection blocks are available in the report builder: health summary, trend, and customer table, so you can include backup coverage in client reports.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Connection test fails | Correct provider credential type, matching pair, vendor access and reported error. |
-| No domains appear | The credential’s accessible customer scope and discovery result. |
-| Backup data is still preparing | Saved company links, enabled datasets, first detailed sync and any recorded error. |
-| A workload is missing | Provider support, enabled data options and current source coverage. |
-| A change did not persist | Use Save credentials or Save sync settings for the corresponding form; mapping has its own submission. |
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify both keys were copied fully from **Admin > Integrations > API Keys** in the Datto Partner Portal, and read the reported error |
+| No domains appear | Check which customers the keys can access, then use **Run sync** and check **Sync activity** |
+| No SaaS Protection tab in Backup | The tab appears only after the integration is connected |
+| "No mapped SaaS Protection customers" | Match Kaseya domains to portal companies in **Import or match companies** |
+| Backup data still preparing | Match a domain, check that the datasets are on in **Choose data**, and allow the first detailed sync to complete |
+| Missing resource-level detail | Kaseya's API reports at the workload level; use Kaseya SaaS Protection's own reporting for per-resource details |
+| A change did not persist | Keys save only with **Save and continue** or **Save changes**. Switches and matches save when applied; check for an error message |
 
-## Frequently asked questions
+## Managing Your Integration
+
+After setup, open the connection from the **Active** tab in **Settings > Integrations**.
+
+| Action | Description |
+|--------|-------------|
+| **Overview** | Check the connection's status and anything that needs attention |
+| **Sync activity** | Review recent syncs and their results |
+| **Run sync** | In the connection header. Start a fresh sync of all matched domains |
+| **Rename** / **Disconnect…** | Under **More actions** in the connection header |
+
+**Disconnect…** removes the stored credentials, the matches between Kaseya domains and companies, and synced data. This cannot be undone. It does not revoke the keys in the Datto Partner Portal.
+
+### Replacing Your API Keys
+
+<Steps>
+  <Step title="Open Connect">
+    Open the Kaseya SaaS Protection connection and select **Connect** in the **Setup guide**.
+  </Step>
+  <Step title="Enter and Test the New Keys">
+    Enter the new **Public API key** and **Secret API key**, then select **Test connection**.
+  </Step>
+  <Step title="Save the Keys">
+    Select **Save changes**. MSPortal stores the new keys and starts a fresh sync.
+  </Step>
+</Steps>
+
+Do not regenerate keys in the Datto Partner Portal just to retry a page that failed to load.
+
+## Frequently Asked Questions
 
 <AccordionGroup>
-  <Accordion title="Does Test Connection save the credentials?">
-    No. Use **Create Integration** for a new connection or **Save credentials** for a tested replacement.
+  <Accordion title="Does Test connection save the keys?">
+    No. Select **Save and continue** for a new connection or **Save changes** for replacement keys.
   </Accordion>
   <Accordion title="Does changing a sync switch save immediately?">
-    No. Select **Save sync settings** before leaving that form.
+    Yes. Each switch in **Choose data** saves when changed. Wait for the save to finish.
   </Accordion>
-  <Accordion title="Are Quick Match suggestions already saved?">
-    No. Review the companies and apply the pending links. A saved unlink is an immediate change.
+  <Accordion title="Are suggested matches already saved?">
+    No. Review each suggestion, then select **Accept** to save the match. Removing a saved match also takes effect immediately.
   </Accordion>
-  <Accordion title="Can I restore a backup from this setup wizard?">
-    No. This wizard configures reporting. Perform recovery in the backup provider.
+  <Accordion title="Can I restore a backup from this connection page?">
+    No. This connection configures reporting. Perform recovery in Kaseya SaaS Protection.
   </Accordion>
   <Accordion title="Does missing backup data mean everything is healthy?">
-    No. Check mapping, source coverage and sync errors before drawing a conclusion. The provider reports backup success at workload level. MSPortal can show protection states for users, shared mailboxes, sites and Teams, but a missed workload backup does not identify the particular active resource that caused it. Use the provider’s reporting for resource-level investigation.
+    No. Check company matches, the datasets in **Choose data**, and sync errors before drawing a conclusion. A missed workload backup does not identify the particular active resource that caused it. Use Kaseya SaaS Protection reporting for resource-level investigation.
   </Accordion>
 </AccordionGroup>
 
-## Related guides
+## Security & Privacy
 
-- [Backup health](/user-guides/backup/read-microsoft-365-backups)
-- [SaaS backup reporting](/user-guides/backup/read-saas-backup-health)
+- **Credential storage**: Your API keys are encrypted in Supabase Vault and never exposed in logs or responses
+- **Disconnecting**: Removing the integration deletes the connection and its stored Vault credentials; this cannot be undone. It does not revoke the keys in the Datto Partner Portal.
+
+## Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Backup" icon="shield-check" href="/user-guides/backup/index">
+    Monitor backup protection across devices and Microsoft 365
+  </Card>
+  <Card title="Reporting" icon="chart-bar" href="/user-guides/reporting/index">
+    Include backup health in client reports
+  </Card>
+</CardGroup>
+
+- [Import or match companies](/user-guides/integrations/import-companies)
+- [Microsoft 365 backups](/user-guides/backup/read-microsoft-365-backups)
+- [SaaS backup health](/user-guides/backup/read-saas-backup-health)
 - [Company mapping](/user-guides/settings/integration-company-mapping)

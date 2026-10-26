@@ -1,72 +1,105 @@
 ---
 title: "Find device backups"
-description: "Filter Cove, Acronis, and NinjaOne records and interpret backup status, dates, and storage."
+description: "Filter device backup records and read their status, last backup date and storage."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access and device-backup data in their permitted scope.
+Backup > Devices lists backed-up devices, workloads and appliance assets from Cove, Acronis, NinjaOne, Datto Backup and Slide Backup. MSP staff and company users with Backup read access can use it.
+
+## Before you start
+
+- You have Backup read access.
+- A device-backup provider has reported data for your companies. The **Devices** tab is hidden until it has.
+- The company selector at the top shows the company you want.
 
 ## Find a device
 
-1. Open **Backup > Devices**.
-2. Confirm the company selection. MSP staff should select the company before investigating one client's device.
-3. Use the Device column filter to find a device by name. Use **Provider** or **Status** to narrow the results.
-4. Review **Type**, **Status**, **Protected Size**, and **Last Backup** when shown.
-5. Use pagination to review further results.
+<Steps>
+  <Step title="Open Devices">
+    Go to **Backup > Devices**.
+  </Step>
+  <Step title="Check the company">
+    Confirm the company selector. MSP staff should select the company before they look into one client's device.
+  </Step>
+  <Step title="Filter the list">
+    Use the **Device** filter to search by name. Use **Status** to narrow by result. MSP staff also get a **Provider** filter when more than one provider is connected.
+  </Step>
+  <Step title="Read the row">
+    Check **Type**, **Status**, **Last Backup** and the storage columns.
+  </Step>
+  <Step title="Page through results">
+    The list shows 25 rows per page. Use the pager for more.
+  </Step>
+</Steps>
 
-The default status filter includes Success, Failed, Warning, Completed, and InProcess. **Not Configured** records are excluded initially. To investigate them, explicitly choose Not Configured in the Status filter. Clearing filters restores the default configured-status selection; it does not necessarily show every status.
+The default **Status** filter shows Success, Completed, Ok, Warning, InProcess, Failed, Error, Critical and Paused. **Not Configured** rows are hidden at first. To see them, choose **Not Configured** in **Status**. Clearing the filter returns to the default set, not to every status.
 
-The Devices tab itself may be absent when there are no records matching its availability rules. If all expected records are unconfigured, ask your MSP to inspect the provider and company mapping rather than concluding that there are no devices.
+If every expected device is unconfigured, ask your MSP to check the provider and company mapping instead of concluding that you have no devices.
 
 ## Open Devices from the dashboard
 
-Selecting a tile, status segment, or bar on the [Backup Dashboard](/user-guides/backup/read-dashboard) opens Devices with filters already applied. A provider card sets the **Provider** filter to that provider. A status tile or segment also sets the **Status** filter, for example Warning and InProcess for **Needs attention**. The filters come from the page address, so you can bookmark or share a filtered view.
-
-Change or clear the filters in the table to widen the list. Clearing the Status filter returns to the default configured statuses.
+Selecting a tile, a status segment or a bar on the [Backup Dashboard](/user-guides/backup/read-dashboard) opens Devices with filters already set. A provider card sets **Provider**. A status tile or segment also sets **Status**, for example Warning and InProcess for **Needs attention**. The filters live in the page address, so you can bookmark or share a filtered view. Change or clear them in the table to widen the list.
 
 ## Read the columns
 
 | Column | Meaning |
 | --- | --- |
-| **Device** | The provider's device or resource name. An Acronis usage summary can represent several workloads rather than one endpoint. |
-| **Company** | The mapped portal company. |
-| **Provider** | Cove, Acronis, or NinjaOne. |
-| **Type** | The reported backup plugin, resource type, or backup type. |
-| **Status** | The imported result. Not Configured means the source reports no backup configuration; Unknown means a status is unavailable. |
-| **Protected Size** | Reported storage for that row. Missing or zero storage is not proof of protection. |
-| **Last Backup** | The available backup date. Never or a dash does not establish a successful backup. |
+| **Device** | The provider's device or resource name. Datto Backup and Slide Backup rows also name the appliance under it. An Acronis usage row can stand for several workloads. |
+| **Company** | The mapped company. |
+| **Provider** | Cove, Acronis, NinjaOne, Datto Backup or Slide Backup. MSP staff see it only when several providers are connected. |
+| **Type** | The reported backup plugin, resource type or backup type. |
+| **Status** | The imported result. **Not Configured** means the source reports no backup setup. **Paused** means an MSP stopped the backup on purpose. **Unknown** means no status. |
+| **Last Backup** | The latest backup date. Shown when Cove, Acronis, Datto Backup or Slide Backup is connected. **Never** or a dash is not a successful backup. |
+| **Protected data** | Data selected for backup in the latest session. Cove and Slide Backup only. Hidden by default. |
+| **Used storage** | Storage used after compression and deduplication, including retained backups. Cove reports an **Account total** across all workloads. Datto Backup and Slide Backup report an **Appliance total**. |
 
-Last Backup is shown when Cove or Acronis is active. A NinjaOne-only list can omit that column; open NinjaOne details for available Last Success, Last Failure, and Last Synced dates.
+Select the column toggle above the table to show or hide columns. Missing or zero storage is not proof of protection. Read the status and date together, not the badge color alone.
 
-Provider status text can differ. Read the value and date together instead of relying only on badge color.
+## Multi-company selections
 
-## Open details
+Some providers cannot be narrowed to a selection of several companies. MSPortal leaves their devices out and shows a note naming them. Select one company, or **Global View**, to see them. Company users see the note as "Some backup".
 
-- Select an **Acronis** device row to open its activity panel.
-- Select a **NinjaOne** row to open its storage and timestamp details.
-- **Cove** device rows currently do not open a device detail panel from this table.
+## Open a device's details
+
+Select a row to open its panel. Cove device rows do not open a panel.
+
+| Provider | What opens |
+| --- | --- |
+| Acronis | Backup activity |
+| NinjaOne | Storage and timestamps |
+| Datto Backup | Asset status, snapshots and backup history |
+| Slide Backup | Asset status, recovery points and backup history |
 
 See [Read backup details](/user-guides/backup/read-backup-details).
 
-## Search limits and missing results
+## Troubleshooting
 
-The list uses server pagination. In a combined-provider view, each provider is queried separately, so page size and totals can behave differently from a single-provider list. Select one provider when checking completeness. Device name, Status, and Provider are the supported server filters; use the main company selector to scope a company.
-
-If no records appear, check the default status filter and company selection, then ask the MSP to verify the integration. A provider read failure can appear as an empty or partial result. These tables do not provide a Backup CSV export action.
+| Problem | What to do |
+| --- | --- |
+| No devices appear | Check the company selector and the default **Status** filter. Then ask your MSP to check the integration and mapping. A provider read failure can show an empty list. |
+| A provider's devices are missing | You may have several companies selected. Select one company or **Global View**. |
+| **Last Backup** is missing | NinjaOne-only lists have no **Last Backup** column. Open the NinjaOne row for **Last Success**, **Last Failure** and **Last Synced**. |
+| You need an export | The Backup tables have no CSV export. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Why did Clear filters hide Not Configured devices?">
-    The page restores its default configured-status filter. Choose Not Configured explicitly to inspect those records.
+    Clearing the filters restores the default status set. Choose **Not Configured** to see those rows.
   </Accordion>
   <Accordion title="Does one row always mean one physical device?">
-    No. Some Acronis usage rows summarize several workloads. Read the Device and Type labels before comparing the row count with an endpoint inventory.
+    No. Some Acronis usage rows summarize several workloads, and Datto Backup and Slide Backup rows are protected systems on an appliance. Read **Device** and **Type** before you compare row counts with an inventory.
   </Accordion>
-  <Accordion title="Can I start a backup by selecting a row?">
-    No. Supported rows open read-only report details. Starting a backup or changing its configuration is a separate provider workflow handled by authorized staff.
+  <Accordion title="Can I start a backup from a row?">
+    No. Rows open read-only details. Starting or changing a backup is a provider task for authorized MSP staff.
   </Accordion>
-  <Accordion title="Why is Last Backup missing?">
-    The list can omit that column for NinjaOne-only data. Open the NinjaOne detail panel for available timestamps; a missing timestamp is not a success result.
+  <Accordion title="Why do company users not see a Provider column?">
+    Company users see their MSP's managed service, not the vendor behind it.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Read the Backup Dashboard](/user-guides/backup/read-dashboard)
+- [Read backup details](/user-guides/backup/read-backup-details)
+- [Backup overview](/user-guides/backup/index)

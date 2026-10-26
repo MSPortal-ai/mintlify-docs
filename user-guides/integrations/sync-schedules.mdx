@@ -6,12 +6,26 @@ description: How often MSPortal.ai refreshes data from each connected integratio
 MSPortal.ai keeps your data current by syncing automatically from every connected integration on a regular schedule. Higher-volume data that changes often (like tickets) refreshes frequently, while reference data that rarely changes (like product catalogs) refreshes once a day. Syncs are deliberately staggered throughout the day to keep the platform fast and responsive.
 
 <Info>
-All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may be adjusted over time as we tune performance. These are configured scheduling cadences, not freshness guarantees or completion deadlines. Enabled datasets, queueing, provider limits and failures affect actual completion.
+All scheduled times below are in **UTC**. Frequencies are accurate as of the latest release and may change as we tune performance. A run can start later than its interval because of queueing, provider limits, turned-off datasets or errors.
 </Info>
 
 ## Need data updated right now?
 
-Open **Settings > Integrations** and use the supported sync action for the provider and dataset you need. Labels and scope differ: **Resync**, **Sync now**, **Quick Sync** and reference-data synchronization are not interchangeable. A request queues work; check the resulting timestamp and error before using the data. **Clear & Resync** is a destructive portal-data rebuild, not the default way to get a recent update.
+<Steps>
+  <Step title="Open Integrations">
+    Go to **Settings > Integrations** and find the integration you need.
+  </Step>
+  <Step title="Request a sync">
+    Use the sync action for the data you need. The integration card has a **Resync** icon, and some setup pages offer **Sync now** or **Quick Sync**. These refresh different sets of data, so read the action before you use it.
+  </Step>
+  <Step title="Check the result">
+    A request queues background work. Check the last synced time and any error before you rely on the data.
+  </Step>
+</Steps>
+
+<Warning>
+**Clear & Resync** removes the portal's data for that integration and rebuilds it. Do not use it to get a recent update. See [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations).
+</Warning>
 
 ## Microsoft 365
 
@@ -105,30 +119,39 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Assets | Every 4 hours |
     | Reference data | Daily |
 
-    About once a day, an Assets sync reads every asset and removes devices whose Syncro asset is confirmed deleted, unless another integration still reports them. The other Assets syncs only pick up changes.
+    At most once every 20 hours, an asset sync reads every asset and removes devices Syncro no longer lists for your linked customers, unless another integration still reports them. The other asset syncs pick up only changes.
   </Accordion>
 </AccordionGroup>
 
 ## RMM integrations
 
 <AccordionGroup>
+  <Accordion title="ConnectWise Asio software inventory">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Software inventory | Daily at 04:00 UTC |
+  </Accordion>
+
   <Accordion title="Datto RMM">
     | Data Type | Frequency |
     |-----------|-----------|
-    | Software inventory | Every 30 minutes |
+    | Software inventory | Daily at 04:30 UTC |
     | Device enrichment | Every hour |
     | Devices | Every 2 hours |
     | Sites | Every 2 hours |
   </Accordion>
 
   <Accordion title="NinjaOne">
+    <Note>NinjaOne software synchronization runs daily at 04:30 UTC when Software is enabled; changed settings, company mappings, and device imports also queue software work.</Note>
+
     | Data Type | Frequency |
     |-----------|-----------|
     | Organizations | Daily |
     | Devices | Daily |
     | Backups | Daily |
+    | Software inventory | Daily, 04:30 UTC |
 
-    Each Devices sync also removes devices NinjaOne no longer reports, unless another integration still reports them.
+    Each device sync also removes devices that NinjaOne no longer reports for a mapped organization. A device that another connected integration still reports, such as Huntress, stays in the inventory under that integration instead. Remove the agent in that product to retire the device everywhere.
   </Accordion>
 
   <Accordion title="UniFi Console">
@@ -139,7 +162,7 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Networks | Every 6 hours |
     | Device auto-import | After each sync, when enabled |
 
-    Each Devices sync also removes devices a site no longer lists, unless another integration still reports them. If any site could not be read, that sync removes nothing. A site that returned no devices keeps its devices, and the devices of a site UniFi stops listing are removed after a week.
+    Each device sync also removes devices a site no longer lists, unless another integration still reports them. A site missing from UniFi for 7 days has its devices removed too.
   </Accordion>
 
   <Accordion title="ConnectWise Asio (RMM)">
@@ -178,7 +201,20 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     |-----------|-----------|
     | Devices | Daily |
 
-    Each Devices sync also removes devices a mapped organization no longer lists, unless another integration still reports them. If any organization could not be read in full, that sync removes nothing.
+    Each device sync also removes devices a mapped organization no longer lists, unless another integration still reports them.
+  </Accordion>
+
+  <Accordion title="Action1 (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Organizations, endpoints, patch status and vulnerabilities | Daily at 04:20 UTC |
+    | Software inventory | Daily at 06:40 UTC |
+  </Accordion>
+
+  <Accordion title="Fortinet (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | FortiGate Cloud groups, FortiGates and renewal dates | Daily at 05:35 UTC |
   </Accordion>
 </AccordionGroup>
 
@@ -221,7 +257,38 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Security | Daily |
     | Summary reports | Daily |
 
-    With **Retire agents that stop checking in** set, each Agents sync also removes agents idle longer than the chosen threshold.
+    Each agent sync removes agents that Huntress no longer returns, and can also retire agents that have not checked in for a chosen number of days (**Retire agents that stop checking in** under **Agent import**). A device another integration still reports stays and only loses its Huntress link.
+  </Accordion>
+
+  <Accordion title="Bitdefender GravityZone (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Companies and endpoints | Every 4 hours |
+  </Accordion>
+
+  <Accordion title="Petra Security (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Tenants, incidents and posture reports | Every 2 hours |
+    | Failed sign-in attacks | About once a day per tenant |
+  </Accordion>
+
+  <Accordion title="RoboShadow (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Organizations, devices and vulnerabilities | Daily at 04:15 UTC |
+  </Accordion>
+
+  <Accordion title="Cyrisma (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Tenants, assets and vulnerabilities | Daily at 04:25 UTC |
+  </Accordion>
+
+  <Accordion title="ScoutDNS (Beta)">
+    | Data Type | Frequency |
+    |-----------|-----------|
+    | Organizations, sites, networks and 30-day stats | Daily at 06:25 UTC |
   </Accordion>
 </AccordionGroup>
 
@@ -300,33 +367,46 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
 
 ## I made a change in my source system and it's not showing up
 
-Identify the dataset and correct connection first. Check enabled scope, company mapping, the latest successful dataset timestamp and any error. A successful ticket sync does not refresh every reference list or financial dataset. After a manual request, wait for its result; refreshing the browser does not force the provider to synchronize.
+<Steps>
+  <Step title="Find the data area">
+    Note which data is stale (tickets, users, a reference list) and which integration it comes from.
+  </Step>
+  <Step title="Check scope and mapping">
+    Confirm that data area is turned on for the integration and the record's company is mapped.
+  </Step>
+  <Step title="Compare the schedule">
+    Find the data area in the tables above. A ticket sync does not refresh reference lists or financial data, which run on their own schedules.
+  </Step>
+  <Step title="Request a sync">
+    Use the sync action from **Need data updated right now?**, then check the last synced time and any error. Refreshing your browser does not start a provider sync.
+  </Step>
+</Steps>
 
 
-## Questions and troubleshooting
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Is the scheduled interval a guaranteed maximum delay?">
-    No. It describes when work is eligible or requested. Queueing, provider limits, disabled datasets and errors can delay completion. Use successful dataset timestamps as evidence of freshness.
+  <Accordion title="Is the interval a guaranteed maximum delay?">
+    No. It is how often the work is scheduled. Queueing, provider limits, turned-off datasets and errors can delay it. Use the last successful sync time to judge freshness.
   </Accordion>
-  <Accordion title="Will the card’s Resync update every dataset?">
-    Provider actions differ. Read the action and provider guide to confirm whether it refreshes tickets, reference data or a broader dataset set.
+  <Accordion title="Does the card's Resync update every dataset?">
+    No. What each sync action covers differs by integration. See the integration's guide.
   </Accordion>
   <Accordion title="Why did a new ticket status not appear after Quick Sync?">
-    Quick Sync can refresh tickets while statuses and routing options come from a separate reference-data synchronization. Check the relevant metadata sync and saved provider scope.
+    Quick Sync refreshes tickets. Statuses and routing options come from a separate reference-data sync that runs daily.
   </Accordion>
-  <Accordion title="Does refreshing the browser request a provider sync?">
-    No. It reloads portal data. Use a supported synchronization action when you intend background provider work.
+  <Accordion title="Does refreshing the browser request a sync?">
+    No. It only reloads what MSPortal already has.
   </Accordion>
-  <Accordion title="Should I use Clear and Resync for every stale record?">
-    No. That action removes portal data before rebuilding it. First check scope, mapping and errors and try the appropriate normal sync.
+  <Accordion title="Should I use Clear & Resync for stale records?">
+    No. It removes portal data before it rebuilds it. Check scope, mapping and errors first, then use a normal sync.
   </Accordion>
-  <Accordion title="What should I report when a requested sync remains stale?">
-    Provide the provider, dataset, affected company, last successful timestamp and visible error. Do not include client secrets or assume a queued request completed.
+  <Accordion title="What should I send to support if a sync stays stale?">
+    Send the integration, data area, affected company, last successful sync time and any visible error. Never include API secrets.
   </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
 - [Integrations FAQ](/user-guides/integrations/faq) - Troubleshooting common sync issues
 - [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations) - How to perform a full data resync

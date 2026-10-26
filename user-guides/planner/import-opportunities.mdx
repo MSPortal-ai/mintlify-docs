@@ -4,118 +4,131 @@ description: 'Select synchronized opportunities, map their statuses and verify t
 icon: 'file-import'
 ---
 
-**Audience:** MSP staff with **Manage Planner**. The Import button is available when a supported **Halo**, **ConnectWise** or **Autotask** integration is connected. Company users do not configure PSA connections or import mappings.
+Turn PSA opportunities that MSPortal has already synchronized into Planner items. This guide is for MSP staff. Company users do not import opportunities or set import mappings.
 
-## Before importing
+## Before you start
 
-The dialog reads opportunities already synchronized into MSPortal. Check that the source opportunity is mapped to the correct company and that opportunity synchronization is enabled for your PSA connection.
+- You need **Manage Planner** and a connected **Halo**, **ConnectWise** or **Autotask** integration. **Import** does not appear without both.
+- Opportunity sync must be on for the PSA connection, and each opportunity must be mapped to the right company. The dialog reads opportunities already synced into MSPortal. It does not upload a spreadsheet.
+- Imported items are visible to company users by default. The dialog has no visibility switch, so import only work that is ready to share. A company user still needs company scope and Planner access to see an item.
+- **Import** is separate from templates, Apply to Companies and **Relationships > Create**, which creates a new opportunity in the PSA.
 
-**Newly imported items are client-visible by default.** The import dialog does not offer a visibility switch. Import only work that is ready to be available to authorized Company users, then review **Visible to clients** in the created item. A visible item still requires the user's company scope and Planner permissions.
+## Import opportunities
 
-This Import action creates Planner items from PSA opportunities. It is separate from creating reusable templates, applying templates to companies or creating a new opportunity in the PSA.
+<Steps>
+  <Step title="Open Import">
+    On any Planner page, set the company selector and click **Import** in the page header. The **Import opportunities** dialog opens.
+  </Step>
+  <Step title="Search">
+    Type in **Search by summary or ID**.
+  </Step>
+  <Step title="Check the date range">
+    **Due date range** starts with the past year through today. Widen it, or click its clear (X) button, to include older or future opportunities. The range filters on the opportunity's target date, or its deadline when there is no target date. It is not a creation date. Opportunities with neither date always stay in the list.
+  </Step>
+  <Step title="Review Hide already imported">
+    It is ticked by default. Untick it to see opportunities you imported before. They show an **Imported** badge and cannot be selected again.
+  </Step>
+  <Step title="Select the opportunities">
+    Check each row's company, provider, value and due date, then tick the ones you want. The count shows beside **Select all**. **Select all** ticks the eligible rows on the current page, up to 200.
+  </Step>
+  <Step title="Map the statuses">
+    Under **Status mapping**, choose the Planner status for each opportunity category.
 
-## Find and select opportunities
+    | Opportunity category | Default Planner status |
+    | --- | --- |
+    | **Open** | Not Started |
+    | **Won** | Completed |
+    | **Lost** | Cancelled |
 
-1. Open **Planner > List View**, check the company selector, then choose **Import** in the header.
-2. In **Import opportunities**, search by the opportunity's **summary or ID**.
-3. Review the **Due date range**. It starts with the past year through today. Widen it or use its **Clear** cross for older or future-dated opportunities.
-4. Review **Hide already imported**, which is selected by default. Turn it off to inspect existing imported entries; they show **Imported** and cannot be selected again here.
-5. Check each row's company, provider, value and due date. Select the intended checkboxes and review the selected count.
+    Each list offers **Not Started**, **In Progress**, **Completed**, **On Hold**, **Cancelled** and **Pending Approval**. A row can show your PSA's own status name. The mapping works on the Open, Won and Lost category.
 
-The date filter uses the opportunity's target date, falling back to its deadline. Opportunities with neither date remain eligible even when a date range is selected. This is not a creation-date filter.
+    <Frame caption="Planner status choices for an import mapping. The mapping sets the new Planner item's status. It does not change the PSA opportunity.">
+      <img src="/images/product/planner-import-status-options.png" alt="Available Planner statuses in the opportunity import mapping." width="312" height="396" />
+    </Frame>
+  </Step>
+  <Step title="Click Import N opportunities">
+    Wait for the result. Messages report how many were imported and how many were skipped. Skipped rows may already be imported or may have no company mapped.
+  </Step>
+  <Step title="Verify the new items">
+    Open **Planner Menu > List View** and check each new item's company, title, description, status, due date, cost and visibility. Open **Relationships** to see the linked opportunity.
+  </Step>
+</Steps>
 
-**Select all** selects eligible rows on the current import page, up to 200 opportunities. **Next** and **Previous** change the page; they do not accumulate selections. Changing search, dates, company scope or Hide already imported also clears selection. Wait for loading and search to settle before importing.
+These mapping choices apply to this import only. Closing the dialog resets them to the defaults. They are not the integration's ongoing status mappings.
 
-## Map the initial Planner statuses
+**Next** and **Previous** move between pages of 200 opportunities. Changing page, search, dates, company selection or **Hide already imported** clears your ticks, so tick again after the new results load. Wait for the search to settle before you import.
 
-Choose the Planner status to use for each source category:
+**Cancel** before you click Import closes the dialog and discards your choices. Once Import has started, wait for the result before you try again.
 
-| Opportunity category | Default Planner status |
-| --- | --- |
-| Open | Not Started |
-| Won | Completed |
-| Lost | Cancelled |
+## What the new item contains
 
-Each mapping offers **Not Started**, **In Progress**, **Completed**, **On Hold**, **Cancelled** and **Pending Approval**. The row may display a provider-specific status label; the mapping operates on its Open/Won/Lost category.
+- **Title** is the opportunity summary, or "Opportunity" plus its ID when there is no summary.
+- **Description** is the opportunity's details.
+- **Due Date** is the target date, or the deadline when there is no target date.
+- **Costs** is one One-time row with the adjusted opportunity value, or 0 when there is none.
+- **Status** comes from your mapping.
 
-<Frame caption="Planner status choices for an import mapping. The mapping changes the new Planner item, not the opportunity in the PSA.">
-  <img src="/images/product/planner-import-status-options.png" alt="Available Planner statuses in the opportunity import mapping." width="312" height="396" />
-</Frame>
+A new item does not prove that the commercial details are complete or approved.
 
-These choices apply to this import. Closing the dialog resets them to the defaults. They do not save the integration's ongoing status synchronization rules.
+## Later PSA updates
 
-## Import and verify
+Imported items stay linked to the opportunity. Later syncs can overwrite the Planner fields your integration is set to refresh. By default those are Title, Description, Due Date and Cost Estimate. The integration's **Linked planner item refresh** settings can add Public notes, Start date, Estimated hours, Probability, Status and Planner type, and can map PSA statuses and types to Planner values.
 
-1. Check the selected count and all three status mappings.
-2. Choose **Import N opportunities**. Selecting rows or changing mappings alone does not create items.
-3. Wait for the result. Read created and skipped messages separately; some records may already have been imported or lack a company mapping.
-4. Find the created items in List View. Check company, title, description, status, due date, cost and client visibility.
-5. Open **Relationships** to review the linked opportunity.
+Turning off **Auto-import opportunities into the Planner** stops new items from being created. It does not stop linked items from refreshing. Ask the integration administrator to check **Opportunity Settings** if a value changes back after you edit it.
 
-The initial title comes from the opportunity summary, with a fallback opportunity title if absent. Description comes from its details; due date comes from target date or deadline. Its adjusted opportunity value becomes a one-time cost estimate, using zero when no value is present. A created item does not prove the commercial information is complete or approved.
-
-**Cancel** before Import abandons the dialog choices. After Import starts, closing the dialog is not a reliable way to cancel a request already running. Verify the outcome before retrying.
-
-## Understand later PSA updates
-
-Imported items stay linked for PSA-managed refresh. Later synchronization can overwrite configured Planner fields from the opportunity. The default refresh fields are title, description, due date and cost estimate; integration settings can select additional fields and status/type mappings.
-
-Turning off automatic creation of new Planner items does not by itself stop refresh of existing linked items. The mappings in this import dialog are separate from those ongoing integration settings. Ask the integration administrator to check the connection's Opportunity Settings when a Planner value changes again after manual editing.
-
-The import does not edit, accept or close the source opportunity. To attach an existing Planner item without creating a new one, use [Link supporting records](/user-guides/planner/link-supporting-records). A manual link and a PSA-managed import are different; do not assume a manual link will make an opportunity appear as Imported here.
+Import does not edit, accept or close the opportunity in the PSA. To attach an existing Planner item to an opportunity without making a new item, see [Link supporting records to Planner items](/user-guides/planner/link-supporting-records). A manual link is not the same as a PSA-managed import, and it does not show as **Imported** here.
 
 ## Troubleshooting
 
-| Problem | What to check |
+| Problem | What to do |
 | --- | --- |
-| Import button is absent | Manage Planner permission and a connected Halo, ConnectWise or Autotask integration. |
-| Expected opportunity is missing | Company mapping/scope, opportunity sync, summary/ID search, due-date range and Hide already imported. |
-| Undated opportunity appears inside a date range | Undated records intentionally remain eligible. |
-| Imported row is disabled | It already has a PSA-managed Planner link. Find that item rather than importing again. |
-| Selection disappeared | Search/filter/page/scope changes reset it. Reselect after the new results load. |
-| Some items were skipped | Review each result and company mapping; verify existing Planner items before retrying. |
-| Next opens an empty page | Return with Previous or narrow the search; a full prior page can offer Next without proving another match exists. |
-| A field changes back later | Review ongoing PSA field-sync configuration with the integration administrator. |
+| **Import** is missing | You need Manage Planner and a connected Halo, ConnectWise or Autotask integration. |
+| An opportunity is missing | Check its company mapping, that opportunity sync is on, the search text, the due date range and **Hide already imported**. |
+| An undated opportunity shows inside a date range | Opportunities with no dates always stay in the list. |
+| A row is grayed out | It already has a PSA-managed Planner link. Find that item instead. |
+| Your ticks disappeared | A search, filter, page or company change reset them. Tick again. |
+| Some opportunities were skipped | Read the messages. Check the company mapping and look for the existing Planner item before you retry. |
+| **Next** opens an empty page | The last page held exactly 200 rows. Click **Previous** or narrow the search. |
+| A field changed back later | Check **Linked planner item refresh** in the PSA integration's **Opportunity Settings**. |
 
-Related: [Understand PSA-linked Planner work](/user-guides/planner/understand-psa-linked-items), [read item details](/user-guides/planner/read-item-details), [archive or delete items](/user-guides/planner/archive-restore-delete).
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Which providers can I import Planner opportunities from?">
-    Halo, ConnectWise and Autotask. You need Manage Planner and a supported connected integration; the opportunities must already be synchronized into MSPortal.
+  <Accordion title="Which providers can I import from?">
+    Halo, ConnectWise and Autotask.
   </Accordion>
   <Accordion title="Is Import a spreadsheet upload?">
-    This Planner Import dialog selects synchronized PSA opportunities. It does not upload a spreadsheet.
+    No. It selects opportunities already synced from your PSA.
   </Accordion>
   <Accordion title="Why can I not find an older opportunity?">
-    The default due-date range is the past year through today. Widen or clear it, then check company scope, search and Hide already imported.
+    The date range starts at one year ago. Widen or clear it, then check the company selector, the search and **Hide already imported**.
   </Accordion>
-  <Accordion title="Does the date range exclude opportunities with no date?">
-    No. Opportunities without both target date and deadline stay eligible. The range filters due dates, not creation dates.
+  <Accordion title="Does the date range hide opportunities with no date?">
+    No. They always stay in the list.
   </Accordion>
   <Accordion title="Does Select all include later pages?">
-    No. It selects eligible opportunities on the current import page, up to 200. Changing page clears selection.
+    No. It selects the current page, up to 200 rows.
   </Accordion>
-  <Accordion title="Do status mappings change the source PSA opportunity?">
-    No. They choose the initial Planner status. Ongoing synchronization mappings are configured separately in the integration.
+  <Accordion title="Do status mappings change the PSA opportunity?">
+    No. They set the new Planner item's status only.
   </Accordion>
-  <Accordion title="Does Cancel remove an opportunity I already imported?">
-    No. Cancel before Import abandons dialog choices. After submission, verify the result; remove the created Planner item through its own workflow if appropriate.
-  </Accordion>
-  <Accordion title="Are new imported items hidden from Company users?">
-    No. They are client-visible by default, subject to company access and Planner permissions. The import dialog has no visibility switch; review the created item.
+  <Accordion title="Are imported items hidden from company users?">
+    No. They are visible by default, within company access and Planner permissions. Check each new item.
   </Accordion>
   <Accordion title="Why is an opportunity marked Imported?">
-    It already has a PSA-managed Planner link. Show it by turning off Hide already imported; it cannot be selected again here.
+    It already has a PSA-managed Planner link. It cannot be selected again.
   </Accordion>
-  <Accordion title="Does linking an opportunity manually count as importing it?">
-    Not necessarily. The Imported marker tracks PSA-managed import links. Check for existing related work before creating another Planner item.
-  </Accordion>
-  <Accordion title="Will disabling automatic import stop all PSA updates?">
-    No. That setting controls creation of new items. Existing linked items can still refresh according to the configured field-sync policy.
+  <Accordion title="Does linking an opportunity by hand count as importing it?">
+    No. **Imported** tracks PSA-managed imports only.
   </Accordion>
   <Accordion title="Can an import partly succeed?">
-    Yes. Read created and skipped counts separately and check the actual Planner items. Do not rerun the whole selection on the assumption that nothing saved.
+    Yes. Read the imported and skipped messages and check List View before you rerun.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Understand PSA-linked Planner work](/user-guides/planner/understand-psa-linked-items)
+- [Link supporting records to Planner items](/user-guides/planner/link-supporting-records)
+- [Archive, restore or delete Planner items](/user-guides/planner/archive-restore-delete)
+- [Planner overview](/user-guides/planner/index)

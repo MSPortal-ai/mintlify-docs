@@ -1,74 +1,93 @@
 ---
 title: 'Manage client group visibility'
-description: 'Control which synchronized groups Company users can see and select in ticket forms, without changing provider membership.'
+description: 'Control which synced groups company users can see and pick in ticket forms, without changing provider membership.'
 icon: 'eye-slash'
 ---
 
-Use **Cloud > Groups** to control client visibility of synchronized groups. **Client visible** affects Company readers and Company ticket-form group choices; MSP readers continue to see hidden groups.
+Use the **Client visible** switch and the **Hide all security groups** button on **Cloud > Groups** to hide groups from your clients. This page is for MSP staff. Company users should ask their MSP for visibility changes.
 
-**Audience:** MSP staff with Microsoft 365 write or management access. Company users should ask their MSP for visibility changes. This guide describes the MSP workflow; availability follows the assigned permissions.
+## Before you start
+
+- You need Cloud write or manage access (the **Cloud** resource with **Write** or **Manage** in the role editor). Without it, the **Client visible** column and the **Hide all security groups** button do not appear.
+- Hiding a group changes what clients see in MSPortal. It does not delete the group, remove members, or change access in Microsoft 365 or Google Workspace.
+- MSP staff always see hidden groups, so your own view does not show what clients see.
+- New groups start visible. Later syncs keep your visibility choices.
 
 ## Hide or show one group
 
-1. Open **Cloud > Groups** and confirm the company scope.
-2. Find the exact group; check its company, email and type before changing it.
-3. In **Client visible**, turn the switch off to mark it **Hidden**, or on to mark it **Visible**.
-4. Wait for the update to finish and verify the resulting state. The switch saves immediately; there is no separate Save button or confirmation dialog for this change.
-5. Review the relevant Company experience and ticket-form options after the update. An MSP session still sees hidden groups, so it cannot demonstrate what the client sees.
+<Steps>
+  <Step title="Open Cloud > Groups">
+    Click **Cloud** in the sidebar, then click the **Groups** tab. Check the company selector in the top bar.
+  </Step>
+  <Step title="Find the group">
+    Use the filters under the column headings. Check the company, email, and type before you change anything.
+  </Step>
+  <Step title="Flip the Client visible switch">
+    In the **Client visible** column, turn the switch off to mark the group **Hidden**. Turn it on to mark it **Visible**. The change saves right away. There is no Save button.
+  </Step>
+  <Step title="Check the result">
+    The label next to the switch changes to **Hidden** or **Visible**. If you see **Could not update group visibility**, check the label, then try again.
+  </Step>
+</Steps>
 
-If the column was hidden through Columns, show it and save that preference first. Read-only accounts do not receive visibility write controls. A failed update displays **Could not update group visibility**; check the resulting state before retrying.
+If you do not see the **Client visible** column, click **Columns**, turn it on, and click **Save Changes**.
 
-Hiding changes portal visibility. It does not delete the provider group, disable accounts, remove memberships, or revoke access to provider resources. Group synchronization preserves an existing visibility choice; newly synchronized groups start visible until curated.
+## Hide all security groups at once
 
-## Hide security groups in bulk
+<Steps>
+  <Step title="Set the company scope">
+    Use the company selector in the top bar to choose the companies to change. **Global View** applies to every company you can access.
+  </Step>
+  <Step title="Click Hide all security groups">
+    Click **Hide all security groups** above the table. It runs right away with no confirmation.
 
-1. Use the **top-bar company selector** to choose the companies whose groups should change. A broad Global View can affect every permitted company.
-2. Confirm that **all Security and Mail-enabled security groups in that scope** should be hidden from Company users.
-3. Click **Hide all security groups**. It runs immediately, without a confirmation dialog.
-4. Wait for the completion notification, then verify the affected groups. A zero count can mean no groups needed a visibility change.
-
-<Frame caption="This bulk action uses the top-bar company scope and saves immediately.">
-  <img src="/images/product/cloud-groups-hide-security-control.png" alt="Hide all security groups button in Cloud Groups." width="354" height="64" />
-</Frame>
+    <Frame caption="The button uses the company selector in the top bar.">
+      <img src="/images/product/cloud-groups-hide-security-control.png" alt="Hide all security groups button in Cloud Groups." width="354" height="64" />
+    </Frame>
+  </Step>
+  <Step title="Check the result">
+    A message tells you how many groups were hidden from clients. A count of 0 means every group in scope was already hidden.
+  </Step>
+</Steps>
 
 <Warning>
-The bulk action ignores table filters and pagination, including the Company column filter. A name search, a Google-only provider filter, or an empty filtered list does not limit it. Use the top-bar company selector to set its scope. There is no bulk Undo or Show all button here; restore a group with its individual Client visible switch.
+This button hides every **Security** and **Mail-enabled security** group in the selected companies, on every page. Table filters, the page you are on, and the **Company** column filter do not narrow it. It does not hide Google groups, Microsoft 365 groups, or Distribution groups. There is no bulk undo. To bring a group back, turn on its own **Client visible** switch.
 </Warning>
 
-This button targets **Security** and **Mail-enabled security** classifications. It does not hide Google groups, Microsoft 365 groups, or Distribution groups merely because they are currently visible in the table.
+## How visibility affects ticket forms
 
-## How visibility and ticket templates combine
+The Cloud Group field on ticket forms lists groups for the selected company. For company users it shows only groups marked **Visible**. The field's own provider and group type settings narrow the list further, so a **Visible** group can still be missing from a form. A group hidden after someone picked it no longer shows its name to company users.
 
-A Company's ticket-form group picker combines the selected company, client visibility, and the field's provider/type configuration. Making a group Visible does not force it into every template. A hidden group is omitted from Company picker searches and no longer resolves as a selected group label for Company users. MSP readers can still see the hidden group.
+This is a presentation control. For real membership or access changes, use Microsoft 365 or Google Workspace.
 
-Treat this as client presentation control, not as a provider security control. For actual membership or access changes, use your provider administration workflow and verify the result there.
+## Troubleshooting
 
-## FAQs
+| Problem | What to do |
+| --- | --- |
+| The **Client visible** column is missing | Your role does not have Cloud write or manage access, or the column is hidden. Check **Columns**. |
+| **Hide all security groups** is missing | Your role does not have Cloud write or manage access. |
+| You see **Could not update group visibility** | Check the switch label for the real state, then try again. If it keeps failing, tell your administrator. |
+| You can still see a group you hid | MSP staff always see hidden groups. |
+| A **Visible** group is missing from a ticket form | Check the form field's provider and type settings, the selected company, and the last sync. |
+| The bulk button hid more than expected | It uses the company selector, not the table filters. Turn **Client visible** back on for any group that should stay visible. |
+
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does hiding a group delete it or remove members?">
-    No. It changes client visibility in MSPortal. Provider group existence, membership and resource access are unchanged.
+  <Accordion title="Does hiding a group delete it or remove its members?">
+    No. Only MSPortal client visibility changes.
   </Accordion>
-  <Accordion title="Why can I still see a group after hiding it?">
-    MSP readers continue to see hidden groups. Check the Client visible state and verify the actual Company experience separately.
-  </Accordion>
-  <Accordion title="Do I need to press Save after changing Client visible?">
-    No. The switch saves immediately. Save Changes in Columns is a separate preference operation.
+  <Accordion title="Do I need to click Save after changing Client visible?">
+    No. The switch saves immediately. **Save Changes** in the **Columns** panel only saves which columns you see.
   </Accordion>
   <Accordion title="Does Hide all security groups respect my table filters?">
-    No. It uses the top-bar company scope across pages and ignores table filters, including the Company column filter.
-  </Accordion>
-  <Accordion title="Which group types does the bulk button hide?">
-    Security and Mail-enabled security. It does not target Google group, Microsoft 365, or Distribution classifications.
+    No. It uses the company selector in the top bar and covers every page.
   </Accordion>
   <Accordion title="How do I undo a bulk hide?">
-    There is no bulk Undo or Show all control. Find each group that should be visible and turn its Client visible switch on.
+    Turn on **Client visible** for each group that should be visible. There is no bulk undo.
   </Accordion>
-  <Accordion title="Will the next group synchronization undo my visibility choices?">
-    Existing visibility choices are preserved by synchronization. Newly imported groups start visible and may need curation.
-  </Accordion>
-  <Accordion title="Why is a Visible group still missing from a ticket form?">
-    The template can restrict provider and group type, and the picker follows the selected company. Check those settings, mapping and synchronization as well as client visibility.
+  <Accordion title="Will the next sync undo my choices?">
+    No. Syncs keep existing visibility settings. Newly imported groups start visible.
   </Accordion>
 </AccordionGroup>
 

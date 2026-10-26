@@ -4,94 +4,134 @@ description: 'Review Microsoft 365, Google Workspace, and Adobe license counts, 
 icon: 'id-card'
 ---
 
-Open **Cloud > Licenses** to review the license records synchronized for your company. The inventory supports **Microsoft 365**, **Google Workspace**, and **Adobe**; the rows you see depend on connected services and your access.
+Use **Cloud > Licenses** to see how many licenses each company has, how many are assigned, and when they renew. This page is for MSP staff and company users. It covers Microsoft 365, Google Workspace, and Adobe.
 
-**Audience:** Company users with access to the relevant cloud data and MSP staff. Company users should ask their MSP to change access, assignments, or subscriptions.
+## Before you start
 
-## Open your license inventory
+- Microsoft 365 and Google Workspace rows need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- Adobe rows need Storefront read access. A user with only Storefront read access sees the **Licenses** tab and no other Cloud tab.
+- Each provider must be connected in **Settings > Integrations**, and each company must be mapped.
+- The rows are synced data. They are not a live billing statement.
 
-1. Open **Cloud**, then select the **Licenses** header tab.
-2. If you can choose companies, select the company you want to review in the top bar.
-3. Keep the **Licenses** view selected below the summary. Use the **License** column filter to find a name or SKU code.
-4. Review **Assigned**, **Purchased**, **Available**, and **Renews / Expires**. Check **Last synced** through **Columns** when freshness matters.
+## Open the license list
 
-<Frame caption="MSP view controls. The assignment breakdowns require access to Microsoft 365 and Google Workspace data.">
-  <img src="/images/product/cloud-license-list-domain-views.png" alt="Cloud license view controls with Licenses selected and By domain." width="464" height="70" />
-</Frame>
+<Steps>
+  <Step title="Open Cloud > Licenses">
+    Click **Cloud** in the sidebar, then click the **Licenses** tab.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. MSP staff can pick one company, **Global View**, or **Assigned Companies** if their access is limited.
 
-**Hide free & trial** and **Hide large allocations** start enabled. A missing row may be hidden by these switches. See [Find, filter, and export licenses](/user-guides/cloud/filter-licenses).
+    <Frame caption="The Licenses view is selected by default. By domain, By office, and By combination need Cloud read access.">
+      <img src="/images/product/cloud-license-list-domain-views.png" alt="Cloud license view controls with Licenses selected and By domain." width="464" height="70" />
+    </Frame>
+  </Step>
+  <Step title="Read the summary">
+    The row above the table shows **Licenses**, **Purchased**, **Assigned**, **Available**, and **Utilization**.
+  </Step>
+  <Step title="Find a license">
+    Type a name or SKU code in the filter box under the **License** column heading. See [Find, filter, and export licenses](/user-guides/cloud/filter-licenses).
+  </Step>
+  <Step title="Check the numbers">
+    Read **Assigned**, **Purchased**, **Available**, **Utilization**, and **Renews / Expires**. To see how fresh the data is, show **Last synced** with **Columns > Save Changes**.
+  </Step>
+</Steps>
 
-## Understand each provider
+**Hide free & trial** and **Hide large allocations** start turned on, so a license you expect can be missing. Turn them off to see everything.
 
-| Provider | What the inventory reports | Assigned-user panel |
+## See who holds a license
+
+<Steps>
+  <Step title="Select one company">
+    Pick one company in the top bar.
+  </Step>
+  <Step title="Click a license row">
+    Click a Microsoft 365 or Google Workspace row. A panel opens with the counts and an **Assigned users** list showing **Name**, **Email**, and **Status**.
+  </Step>
+  <Step title="Close the panel">
+    Close the panel when you are done. See [View license assignments and combinations](/user-guides/cloud/view-license-assignments).
+  </Step>
+</Steps>
+
+Adobe rows do not open this panel.
+
+## What each provider reports
+
+| Provider | What the row shows | Click a row |
 | --- | --- | --- |
-| **Microsoft 365** | Synchronized assigned and purchased seats, available seats, and utilization. Renewal and trial information appear when subscription data is available. | Click a row to review synchronized users. |
-| **Google Workspace** | Distinct assigned users for each product and SKU. Purchased capacity is not supplied by this assignment dataset. | Click a row to review synchronized users. |
-| **Adobe** | Synchronized subscription usage, purchased quantity, available quantity, status, and renewal date. | Adobe rows do not open an assigned-user panel. |
+| **Microsoft 365** | Assigned, purchased, available, and utilization. **Renews / Expires** and a **Trial** badge show when subscription data is available. | Opens the assigned users. |
+| **Google Workspace** | The number of distinct users holding each product and SKU. Google does not send purchased seat counts, so **Purchased**, **Available**, and **Utilization** show **Unavailable**. | Opens the assigned users. |
+| **Adobe** | Used quantity as **Assigned**, current quantity as **Purchased**, status, and renewal date. | Does nothing. |
 
-Google's capacity columns show **Unavailable**, not zero. In its detail panel those counts use a dash. Verify purchased Google seats with your MSP or provider subscription records.
+Hover over **Unavailable** to read why. It is not zero.
 
-<Note>
-These are synchronized records, not a live billing statement. A license assignment does not prove recent use of the application or establish the price being charged.
-</Note>
+## What each column shows
 
-## Read the table and summary
-
-| Field | Meaning |
+| Column | What it shows |
 | --- | --- |
-| **License** | Friendly name and SKU code. **Show SKU** places the code first. |
-| **Provider / Company** | Service and company associated with the row. The Provider column is omitted when only one provider is available; Company is omitted when scoped to one company. |
-| **Product** | Product family reported for the license. |
-| **Assigned** | Recorded assignments or subscription usage. A person with several licenses contributes to several rows. |
-| **Purchased** | Known purchased capacity. |
-| **Available** | Known purchased seats minus assigned seats, with a minimum of zero. |
-| **Utilization** | Rounded assigned-to-purchased percentage, capped at 100%. It needs a positive known purchased count. |
-| **Renews / Expires** | Recorded renewal date, when available. Microsoft rows use the earliest available renewal date for that SKU and may show a **Trial** badge. |
-| **Status** | Provider-reported status; available through **Columns**. |
-| **Last synced** | When this license record was synchronized; available through **Columns**. |
+| **License** | The license name with its SKU code underneath. Turn on **Show SKU** to put the code first. |
+| **Provider** and **Company** | The source and the company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
+| **Product** | The product family. |
+| **Assigned** | Users holding the license, or used quantity for Adobe. A person with several licenses counts once on each license. |
+| **Purchased** | The purchased seat count, when the provider reports one. |
+| **Available** | Purchased minus assigned, never below zero. |
+| **Utilization** | Assigned divided by purchased as a percentage, capped at 100%. Shown only when the purchased count is known and above zero. |
+| **Renews / Expires** | The renewal date. A **Trial** badge shows for trial subscriptions. Microsoft rows use the earliest renewal date for that SKU. |
+| **Status** | Hidden by default. The status the provider reports. |
+| **Last synced** | Hidden by default. When the row last synced. |
 
-The summary counts matching license records across list pages, not unique people. **Licenses** can include the same SKU at several companies. **Assigned** includes Google assignments, while **Purchased** and **Available** exclude licenses with unknown capacity.
+The summary counts every matching license row on every page, not unique people. **Assigned** includes Google licenses. **Purchased**, **Available**, and **Utilization** leave out licenses with no known seat count. A note under the summary says how many were left out.
 
-<Tip>
-For a capacity review, select one company and one provider. Use the individual row counts. A combined Microsoft/Google summary percentage can be misleading because its assignment total includes Google while its purchased total does not. A 100% bar also cannot show whether assignments exceed purchased capacity; compare the numbers.
-</Tip>
+The summary disappears while a **License**, **Product**, or **Status** column filter is active. Clear those filters to bring it back. The company selector, the **Provider** filter, and the **Hide free & trial**, **Hide large allocations**, and **Only unused seats** switches change the summary.
 
-The summary disappears when you apply a **License**, **Product**, or **Status** column filter. Clear those filters to see it again. Company, provider, and the three inventory switches update the summary; changing display order with **Show SKU** does not change totals.
+## Add Microsoft 365 licenses to a meeting or the planner
 
-## Access and next actions
+MSP staff with Calendar write access or Planner write access see checkboxes on Microsoft 365 license rows.
 
-Your MSP controls your role and company access. Microsoft 365 and Google Workspace license rows require **Read Microsoft 365** access. Adobe rows require **Read Storefront** access. A user with only Adobe access can see the license inventory without the other Cloud tabs or assignment breakdowns.
+<Steps>
+  <Step title="Select the rows">
+    Check one or more Microsoft 365 license rows. Google Workspace and Adobe rows cannot be checked.
+  </Step>
+  <Step title="Open Actions">
+    Click **Actions** above the table.
+  </Step>
+  <Step title="Choose Add to meeting or Add to planner">
+    Choose **Add to meeting** or **Add to planner** and finish the dialog that opens.
+  </Step>
+</Steps>
 
-This page does not assign, remove, purchase, or cancel licenses. Company users can [open a support ticket](/user-guides/ticketing/open-a-ticket) to request a change, or use the [Storefront](/user-guides/storefront/index) where their MSP has enabled the appropriate purchase workflow.
+## Troubleshooting
 
-MSP staff can review connected services in **Settings > Integrations**. Check the relevant company mapping and synchronization status before interpreting missing or stale data. This inventory has no **Sync now** button, and simply switching away and back may reuse cached results.
+| Problem | What to do |
+| --- | --- |
+| The **Licenses** tab is missing | Your role has neither Cloud read nor Storefront read access. Ask your MSP. |
+| A license is missing | Turn off **Hide free & trial** and **Hide large allocations**, then clear the column filters and check the company selector. |
+| **Purchased** says **Unavailable** | Expected for Google Workspace. Check the seat count with your MSP or in the Google subscription. |
+| The summary is missing | A **License**, **Product**, or **Status** filter is active. Clear it. |
+| **By domain**, **By office**, and **By combination** are missing | Those views need Cloud read access. Storefront read access alone shows the **Licenses** view only. |
+| An Adobe row does not open | Adobe rows have no assigned users panel. |
+| The data looks old | Show **Last synced**. Ask your MSP to check the integration if it is out of date. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Cloud Licenses support Adobe as well as Microsoft and Google?">
-    Yes. Adobe subscription rows appear when Adobe data is synchronized and your role has Storefront read access. Adobe does not provide the assigned-user drill-down used by Microsoft and Google here.
-  </Accordion>
   <Accordion title="Why does Google show Unavailable for Purchased and Available?">
-    The Google assignment dataset reports users holding licenses but does not provide purchased seat capacity. Unavailable is not zero. Ask your MSP to check the subscription records for purchased quantities.
+    Google reports who holds each license but not how many seats were bought. **Unavailable** is not zero. Ask your MSP to check the Google subscription.
   </Accordion>
-  <Accordion title="Does Assigned tell me how many people use the software regularly?">
-    No. It reports synchronized assignments or usage quantities, not application sign-in activity. One person with several licenses is counted on each applicable license row.
+  <Accordion title="Does Assigned show how many people use the software?">
+    No. It shows assignments, not sign-in activity.
   </Accordion>
   <Accordion title="Does 100% utilization mean I have exactly enough seats?">
-    Not necessarily. The displayed row percentage is capped at 100%, and the combined summary can include assignments whose capacity is unknown. Select one company and provider, compare Assigned with Purchased, and confirm with your MSP before making a purchase decision.
+    Not always. The percentage is capped at 100%. Compare **Assigned** with **Purchased** to see how far over you are.
   </Accordion>
-  <Accordion title="Why can I see Adobe licenses but not Cloud Users or By domain?">
-    Adobe inventory access uses the Storefront read permission. The other Cloud tabs and Microsoft/Google assignment breakdowns require Microsoft 365 read access. Ask your MSP if you need additional access.
+  <Accordion title="Why can I see Adobe licenses but not the other Cloud tabs?">
+    Adobe uses Storefront read access. The other tabs need Cloud read access.
   </Accordion>
-  <Accordion title="Why is the renewal date blank, or different from another subscription?">
-    A date appears only when synchronized subscription data supplies it. A Microsoft SKU can combine subscriptions and show the earliest available renewal date; Google assignment rows do not supply renewal dates here. Check the subscription record before arranging a renewal.
+  <Accordion title="Why is the renewal date blank?">
+    Google rows never carry a renewal date. For Microsoft 365 and Adobe, the date appears only when the provider sends it.
   </Accordion>
-  <Accordion title="Can I remove a license or change its quantity here?">
-    No. Cloud Licenses is an inventory and review page. Request the change through your MSP, or use an enabled Storefront workflow. Selecting a row or changing a filter does not change the subscription.
-  </Accordion>
-  <Accordion title="Why do the summary cards disappear after searching for a license?">
-    The summary is hidden when a License, Product, or Status column filter is active. Clear those filters to restore it; the table remains filtered independently.
+  <Accordion title="Can I change or cancel a license here?">
+    No. Company users can [open a ticket](/user-guides/ticketing/open-a-ticket) or use the [Storefront](/user-guides/storefront/index) if your MSP has turned it on. MSP staff change licenses in the provider.
   </Accordion>
 </AccordionGroup>
 

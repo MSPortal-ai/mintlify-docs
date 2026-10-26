@@ -4,70 +4,88 @@ description: "Turn eligible Planner estimates into reusable company budget produ
 icon: box
 ---
 
-**Audience:** MSP staff and Company users whose MSP grants budget editing access for the relevant company. Your MSP manages permissions.
+Use **Import from Planner** on the Products page to turn Planner cost estimates into reusable catalog products. This is different from adding a Planner item's costs straight to a budget, and from syncing a forecast. It is for MSP staff and for company users whose MSP has given them budget write access.
 
-Use **Budgets Menu > Products > Import from Planner** to create catalog products. This is different from importing Planner cost components directly into a budget or syncing a forecast.
+## Before you start
 
-## Import eligible items
+- You need the **write_budgets** or **manage_budgets** permission.
+- Pick the company in the top bar first, so similar plans from different clients are easy to tell apart.
+- The Planner item needs a cost estimate above zero.
+
+## Import Planner items as products
 
 <Steps>
-  <Step title="Choose the company">
-    Check the company selector before opening **Import from Planner**. For MSP staff, choosing one company helps distinguish similarly named plans from different clients.
+  <Step title="Open Products">
+    Click **Budgets**, then **Budgets Menu**, then **Products**.
   </Step>
-  <Step title="Find the planning item">
-    In **Import Products from Planner**, search by title or category. Review Title, Category, Cost, Recurrence and Due date.
+  <Step title="Click Import from Planner">
+    Click **Import from Planner** at the top right. The **Import Products from Planner** dialog opens.
   </Step>
-  <Step title="Select the intended items">
-    Tick the items you want to turn into products. Check the selection count before importing. Searching can hide selected items without clearing their selection; do not treat the visible filtered list as the entire selection.
+  <Step title="Find the item">
+    Type in **Search planner items...** to match a title or category. The table shows **Title**, **Category**, **Cost**, **Recurrence** and **Due**.
   </Step>
-  <Step title="Import and check the catalog">
-    Choose **Import Selected (count)** and wait for the result. This saves catalog products immediately; there is no later page Save. Refresh the catalog and verify the names, categories, prices and recurrence.
+  <Step title="Tick the items">
+    Tick each item you want, or tick the header box to select every item in the current list. Check the count on the button. Searching can hide ticked items without unticking them, so clear any you do not want before you import.
+  </Step>
+  <Step title="Import">
+    Click **Import Selected (N)**. A message such as **Imported 2 products from planner.** appears. The products are saved at once. There is no page-level **Save**.
+  </Step>
+  <Step title="Check the catalog">
+    The new products appear on the Products page. Check the names, categories, prices and recurrence.
   </Step>
 </Steps>
 
-## Which Planner items appear?
+## Which Planner items appear
 
-The picker uses accessible items with a positive overall cost estimate, excludes archived and Cancelled items, and hides items already linked to a budget product. Completed items can appear. It is not limited to a budget fiscal year, and a due date is not required for this catalog import.
+The list shows Planner items you can access that have a cost estimate above zero. It leaves out archived items, Cancelled items and items that already have a linked product. Completed items can appear. It does not depend on a fiscal year, and an item does not need a due date.
 
-The search matches title or category, not every displayed field. If an expected item is absent, check company scope, its overall cost estimate, archived/cancelled state and whether it was already imported. After a loading error, an empty picker does not establish that no eligible items exist.
+If an item is missing, check the company, its cost estimate, its archived or Cancelled status, and whether it was imported before. If the dialog says **No planner items available to import.** after an error, do not assume there are none. Close it and try again.
 
 ## What the product contains
 
-The product uses the Planner title, category, description, overall estimate and recurrence. It keeps the Planner item's company association. The import does not split separate child cost components into individual products and does not copy a due date into a billing schedule.
+| Planner item | Product |
+| --- | --- |
+| Title | Name |
+| Category | Category |
+| Description | Description |
+| Cost estimate | Unit Price |
+| Cost type (one-time, monthly or annual) | Recurrence |
+| Company | Company. An item with no company makes a shared product. |
 
-Review the resulting price and category before adding it to a budget. If the plan's detailed cost components differ from its overall estimate, use the appropriate amount for your purpose.
-
-The link prevents the same Planner item being imported again while a linked product exists. It is not ongoing synchronization: changing the planning estimate does not by itself refresh the catalog product. Edit the product separately when its reusable cost needs updating.
+The import does not split a Planner item's separate cost lines into several products, and it does not copy the due date into a billing schedule. The product is linked to the Planner item so the same item cannot be imported twice. It is not kept in sync. If the estimate changes, edit the product yourself.
 
 ## Add the cost to a budget
 
-Importing here creates reusable products; it does not add budget lines. Use [Add Planner, goal and product costs](/user-guides/budgets/import-planning-and-products) in a budget editor to add costs and Save that budget. For category/year projections, see [Sync a forecast](/user-guides/budgets/sync-budget-forecast).
+Importing here makes reusable products. It does not add budget lines. To put a cost in a budget, use the **Products & Services** panel in the budget editor. See [Add Planner, goal and product costs to a budget](/user-guides/budgets/import-planning-and-products). For yearly projections, see [Sync a forecast](/user-guides/budgets/sync-budget-forecast).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A Planner item is missing | Check the company, a cost estimate above zero, archived or Cancelled status, and whether it was already imported. |
+| **Failed to import from planner.** | Try again. Ask your MSP admin if it keeps failing. |
+| The count looks wrong after a search | Ticked items stay ticked when hidden. Clear the ones you do not want. |
+| A product has the wrong price | Edit it. See [Create and edit budget products](/user-guides/budgets/manage-products). |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="How do I turn a Planner estimate into a reusable product?">
-    Open Budgets Menu > Products > Import from Planner, check company scope, select an eligible item and choose Import Selected. Verify the resulting catalog product.
-  </Accordion>
-  <Accordion title="Why is a Planner item missing from the product import?">
-    Check company access, a positive overall cost estimate, archived or Cancelled status, and whether a linked catalog product already exists.
-  </Accordion>
   <Accordion title="Can Completed Planner items become products?">
-    Yes. This picker excludes archived and Cancelled items but can include Completed items with a positive overall estimate.
+    Yes, if the estimate is above zero. Archived and Cancelled items cannot.
   </Accordion>
-  <Accordion title="Does this import split the separate costs on a Planner item?">
-    No. It creates a product from the item’s overall estimate and recurrence. Use the budget editor’s Planner import when you need its separate cost components.
+  <Accordion title="Does this split a Planner item's separate costs?">
+    No. It uses the overall estimate and cost type. Use the budget editor's Planner panel for separate cost lines.
   </Accordion>
-  <Accordion title="Do I need to save the Products page after importing?">
-    No. Import Selected saves the catalog products immediately. Adding those products to a budget still requires the separate budget editing workflow.
+  <Accordion title="Do I need to save the Products page?">
+    No. **Import Selected** saves at once.
   </Accordion>
-  <Accordion title="Does changing a Planner estimate refresh an imported product?">
-    No automatic refresh is provided by this import. Review and edit the catalog product separately when the reusable price changes.
-  </Accordion>
-  <Accordion title="Does searching clear my selected Planner items?">
-    No. Selected items can be hidden by the search. Review and clear unwanted selections before importing.
-  </Accordion>
-  <Accordion title="Does the Planner due date set when a product bills?">
-    No. The catalog import does not create a dated billing schedule. Check the start, recurrence and term when adding the cost to a budget.
+  <Accordion title="Does a changed Planner estimate update the product?">
+    No. Edit the product when the price changes.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Find and understand budget products](/user-guides/budgets/read-product-catalog)
+- [Create and edit budget products](/user-guides/budgets/manage-products)
+- [Add Planner, goal and product costs to a budget](/user-guides/budgets/import-planning-and-products)

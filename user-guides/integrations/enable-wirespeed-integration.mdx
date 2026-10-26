@@ -4,24 +4,36 @@ description: 'Connect a Wirespeed Team API key, map teams to companies and revie
 icon: 'shield-halved'
 ---
 
-<Note>
-Branch preview for the 2026-09-25 release. Wirespeed setup is not yet generally available. The screenshot shows the unreleased branch UI.
-</Note>
+Connect Wirespeed to bring security cases, recent detections and endpoints into MSPortal. This guide is for MSP staff. Setup has three steps: **Connect**, **Map teams** and **Review data**. Wirespeed is labeled **Beta** on the Integrations page.
 
-Connect Wirespeed to bring security cases, recent detections and endpoints into MSPortal. Setup has three steps: **Connect**, **Map teams** and **Review data**. Setup requires MSP integration management permission. Mapping changes also require company-mapping write access.
+## Before you start
 
-Wirespeed is labeled **Beta** on the Integrations page.
+- You need permission to manage integrations. Mapping changes also need company-mapping write access.
+- You need a Wirespeed account where you can create Team API keys.
+- Your MSPortal companies already exist, so you can map each Wirespeed team to one.
 
-## Prepare the API key
+MSPortal only reads from Wirespeed. It does not create tickets, import devices into your PSA or run containment or remediation actions.
 
-Create a **Viewer Team API key** in Wirespeed. The key type decides which teams MSPortal can see:
+## Create the API key in Wirespeed
+
+<Steps>
+  <Step title="Open Team API Keys">
+    In Wirespeed, go to **Settings > Team > Team API Keys**.
+  </Step>
+  <Step title="Create a Viewer key">
+    Create a key named **MSPortal** with the **Viewer** role and an expiration that suits you.
+  </Step>
+  <Step title="Copy the token">
+    Copy the token now. Wirespeed shows it only once.
+  </Step>
+</Steps>
+
+The type of key decides which teams MSPortal can see.
 
 | Key | What MSPortal discovers |
 | --- | --- |
 | Service provider key | Every managed team the provider account can reach. |
 | Customer key | Only that customer's own team. |
-
-MSPortal only reads from Wirespeed. It does not create tickets, import devices into your PSA or run containment or remediation actions.
 
 ## Connect
 
@@ -31,6 +43,8 @@ MSPortal only reads from Wirespeed. It does not create tickets, import devices i
   </Step>
   <Step title="Enter the key">
     On **Connect**, paste the key into **API Key**.
+
+    <img src="/images/product/wirespeed-connect-branch-preview.png" alt="Wirespeed Connect step with the API Key field, Test Connection and Create Integration" width="1450" height="870" />
   </Step>
   <Step title="Test the key">
     Select **Test Connection** and wait for **Connection verified**. **Create Integration** stays disabled until the test succeeds. Editing the key clears the verified state, so test again after any change.
@@ -40,21 +54,25 @@ MSPortal only reads from Wirespeed. It does not create tickets, import devices i
   </Step>
 </Steps>
 
-<img src="/images/product/wirespeed-connect-branch-preview.png" alt="Branch preview: Wirespeed Connect step with the API Key field, Test Connection and Create Integration" width="1450" height="870" />
-
 To replace the key on an existing connection, open it from **Settings > Integrations**, enter the new key on **Connect**, select **Test Connection**, then **Update API Key**.
 
 ## Map teams
 
-**Map teams** lists the Wirespeed teams discovered by the key. Link each team to the MSPortal company it protects.
-
-- Use **Quick Match** to propose matches by name. Proposals are saved only after you review them.
-- Choose a company for any remaining team, or create a new company from the picker.
-- Save pending links with **Import Selected**. Moving on with **Next** saves pending links and starts a sync when mappings changed.
+<Steps>
+  <Step title="Open Map teams">
+    The page lists the Wirespeed teams the key can see.
+  </Step>
+  <Step title="Match teams to companies">
+    Select **Quick Match** to propose matches by name, then review them. For any remaining team, choose a company from the picker, or create a new company there.
+  </Step>
+  <Step title="Save the links">
+    Select **Import Selected** to save pending links. Selecting **Next** also saves them and starts a sync when mappings changed.
+  </Step>
+</Steps>
 
 ## Review data
 
-**Review data** shows **Synced Data** for three datasets:
+On **Review data**, check **Synced Data** for three datasets:
 
 | Dataset | Coverage |
 | --- | --- |

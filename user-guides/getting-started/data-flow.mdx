@@ -1,62 +1,165 @@
 ---
 title: "How data moves through MSPortal"
-description: "Understand synchronized provider data, native planning records and deliberate provider actions."
-icon: "book-open"
+description: "See how integration data and assessments become goals, Planner items, budgets, meetings, and reports."
+icon: "diagram-project"
 ---
 
-**Audience:** MSP staff planning a client workflow. MSPortal combines synchronized provider information with records your team creates and maintains. The connections below describe possible workflows; they are not a promise that one record automatically creates every downstream record.
+This page maps how information moves through MSPortal, so you know which module to open next. It is for MSP staff planning a client workflow. The map shows possible flows. One record does not automatically create every downstream record, so you choose each next step.
 
-## Start with the source and company mapping
+## The diagram
 
-Provider integrations bring supported data into MSPortal. Which records arrive depends on the connection, provider permissions, selected scope, synchronization and company mappings. A saved connection or a successful test is not proof that the latest data has arrived.
+<Frame>
+  <img src="/images/getting-started/data-flow-diagram.svg" alt="MSPortal proactive data flow architecture" />
+</Frame>
 
-Native records, such as a goal or Planner item, can also be created directly in MSPortal. They do not require every provider to be connected.
+The diagram shows the proactive side of MSPortal. PSA tickets and projects take a separate path to reporting, shown on the right.
 
-## Move from evidence to a plan
+| Marker | Meaning |
+| --- | --- |
+| Gray block with plug icon | Integration. An external system MSPortal syncs from (PSA, RMM, Microsoft 365, backup and security) |
+| White block | MSPortal module built on the integration data |
+| Dashed amber block | Reactive data. PSA projects and tickets that go straight to reporting |
+| Solid teal arrow | Primary flow |
+| Gray arrow | Supporting data feed |
+| Dashed amber arrow | Reactive PSA data routed to reports and MSP Tools |
+| Dashed teal arrow | Writeback. A record MSPortal creates or updates in the source system |
+| Teal circle badge | Item appears in Reports and Dashboards |
+| Amber circle badge | Item can be added to a meeting agenda |
 
-| Work | What to review | Deliberate next step |
-| --- | --- | --- |
-| Surveys and assessments | Responses, findings and their date | Create or update the relevant goals or remediation work |
-| Devices, cloud and protection data | Source freshness and the mapped company | Investigate the finding and link supporting records where the editor supports it |
-| Goals and compliance work | Intended outcome, evidence and ownership | Create or link Planner items for the work you decide to pursue |
-| Planner | Scope, dates, status, costs and relationships | Include the intended items in the budget or client discussion |
-| Budgets | Included rows, assumptions, overrides and totals | Review the resulting plan and any separate approval workflow |
-| Calendar and reporting | Selected company, period, content and filters | Prepare the meeting or report, inspect the result, then share through the intended workflow |
+## Read the diagram by stage
 
-Saving a source record, linking a record and copying values into another record are different operations. For example, a later template edit does not automatically prove that existing applied Planner items changed. Check the relevant guide before expecting an automatic refresh or cascade.
+<CardGroup cols={2}>
+  <Card title="Onboarding" icon="rocket">
+    Kickoff intake and client setup. The Onboarding Portal links to a project and pulls survey responses in for the first engagement.
+  </Card>
+  <Card title="Stage 0: Integrations" icon="plug">
+    Microsoft 365, RMM, backup and security, and your PSA connect once and keep feeding the pipeline.
+  </Card>
+  <Card title="Stage 1: Collect" icon="inbox">
+    Surveys, Microsoft 365, backup and security, Devices, and Standards bring data in. Each is its own module with its own views and filters.
+  </Card>
+  <Card title="Stage 2: Refine" icon="filter">
+    Goals capture what the client wants to achieve. Compliance scores controls against frameworks. Both feed the Planner.
+  </Card>
+  <Card title="Stage 3: Plan" icon="list-check">
+    The Planner holds the roadmap. Each item has a title, status, priority, dates, estimated hours and cost, linked devices, a linked source, an assignee, and a company.
+  </Card>
+  <Card title="Stage 4: Budget" icon="calculator">
+    Budgets roll labor up from Planner hours and projects and products up from Planner cost estimates. A forecast projects the budget forward.
+  </Card>
+  <Card title="Stage 5: Present" icon="presentation-screen">
+    Meetings are the live client-facing output. Reports and Dashboards is the single reporting surface, in three formats: block-based reports, dashboards, and narrative reports.
+  </Card>
+  <Card title="Reactive rail" icon="ticket">
+    PSA projects and tickets flow to Reports and Dashboards without passing through the Planner. Ticket Trends and Financial Reporting roll up into Client Health.
+  </Card>
+</CardGroup>
 
-## Keep operational work distinct
+## Plan a client workflow from evidence to presentation
 
-PSA tickets and projects can be viewed and reported on without becoming Planner items. Planner supports client roadmapping; it does not turn every operational ticket into planned work. Creating a Planner item or entering an estimate does not by itself issue a quote, approve expenditure or create a PSA project.
+<Steps>
+  <Step title="Collect the evidence">
+    Complete a survey, connect Microsoft 365, and import devices from your RMM. See [Surveys](/user-guides/surveys/index), [Microsoft 365](/user-guides/microsoft-365/index), and [Devices](/user-guides/devices/index).
+  </Step>
+  <Step title="Turn findings into goals">
+    Create goals from survey responses, or add them by hand. Review compliance failures and Secure Score recommendations. See [Goals](/user-guides/goals/index) and [Compliance](/user-guides/compliance/index).
+  </Step>
+  <Step title="Add Planner items">
+    Create Planner items from goals, compliance findings, and standards gaps. Attach devices, then set hours and costs. See [Planner](/user-guides/planner/index).
+  </Step>
+  <Step title="Roll costs into a budget">
+    Add the Planner items you intend to pursue to a budget and review the forecast. See [Budgets](/user-guides/budgets/index).
+  </Step>
+  <Step title="Present to the client">
+    Build a QBR agenda from goals, Planner items, compliance, and budgets. Present it live, then send a report. See [Meetings](/user-guides/calendar/meetings) and [Presenting meetings](/user-guides/calendar/presenting).
+  </Step>
+  <Step title="Repeat each quarter">
+    Send a follow-up survey, close finished Planner items, and open new goals.
+  </Step>
+</Steps>
 
-## Understand provider actions
+Before you present, check the company and provider instance, the latest sync result, the report filters and date range, and who can see the result. An MSP preview does not prove a company user sees the same thing.
 
-Opening a synchronized record is different from an action that creates or updates something in the provider. Treat actions such as creating a ticket or project, changing a provider field or requesting a sync according to that provider’s guide and the action shown.
+## What the Planner is for
 
-Do not assume all integrations support the same writeback, that device fields always update the PSA, or that completing an onboarding task always creates a provider project. Check the configured workflow and verify its result before relying on the external record.
+The Planner is your roadmap for each client. A vCIO or account manager lays out the next several years of IT work in plain, estimated form, so the client can react to it before anyone writes a formal quote.
 
-## Check freshness before presenting
+- **Estimates, not quotes.** Hours and costs on Planner items are directional. They feed [Budgets](/user-guides/budgets/index) and the forecast. A Planner estimate does not issue a quote, approve spending, or create a PSA project.
+- **Years in advance.** Add work well ahead of time, such as a firewall refresh or a server upgrade.
+- **Owned by the account owner.** Technicians work in the PSA. The Planner is the account strategy layer above it.
+- **Traceable.** A linked source on each item shows which goal, control, standard, or survey put it on the roadmap.
 
-1. Confirm the correct company and provider instance.
-2. Check source timestamps and the latest synchronization result where available.
-3. Review record links, report filters and the selected date range.
-4. Inspect the rendered report or meeting view. Empty data, a missing mapping and a healthy result are different states.
-5. Verify audience visibility before sharing. An MSP preview does not prove the Company audience sees the same result.
+PSA tickets and projects are not Planner items. They show up in reports without passing through the Planner.
+
+## The unified reporting surface
+
+Reports and Dashboards pulls from the proactive pipeline and from PSA data. It offers three formats.
+
+<CardGroup cols={3}>
+  <Card title="Block-based reports" icon="grid-2">
+    A widget grid. Build it once as a template and reuse it across clients.
+  </Card>
+  <Card title="Dashboards" icon="chart-line">
+    Live metrics. Use them in a meeting or the client portal.
+  </Card>
+  <Card title="Narrative reports" icon="file-lines">
+    Long-form QBRs and executive summaries built from the same data.
+  </Card>
+</CardGroup>
+
+See [Reporting](/user-guides/reporting/index).
+
+## Writebacks to your source systems
+
+Some actions create or update something in a connected system. They appear as dashed teal arrows in the diagram.
+
+- **Onboarding to projects.** An onboarding portal links to a project. Depending on your setup, that is an MSPortal project or a project in your PSA.
+- **Devices to your PSA and documentation tool.** Warranty dates can write back to Autotask, ConnectWise, and Halo assets and to IT Glue configurations.
+
+Writeback depends on the provider and the action. Do not assume every integration writes back, or that every device field updates your PSA. Check the provider's guide and verify the result in the external system.
+
+## MSP Tools: your cross-client view
+
+Everything in the MSP Tools column is for your staff, not your clients. It is how you look across every client at once.
+
+<CardGroup cols={2}>
+  <Card title="Ticket Trends" icon="chart-line" href="/user-guides/msp-tools/ticket-trends">
+    Weekly, per-company, and per-category ticket analytics from your PSA.
+  </Card>
+  <Card title="Financial Reporting" icon="dollar-sign" href="/user-guides/msp-tools/financial-reporting">
+    Revenue efficiency, seat pricing, and support cost per client.
+  </Card>
+  <Card title="Client Health" icon="heart-pulse" href="/user-guides/msp-tools/client-health">
+    A portfolio view that scores every client from trend and financial signals.
+  </Card>
+  <Card title="Standards" icon="toolbox" href="/user-guides/msp-tools/standards">
+    Your reference catalog of standard products and how each client's stack compares.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| Data in a report is older than the provider | Check the latest successful sync, the company mapping, the report period, and the filters. Opening a report does not request fresh provider data. |
+| A finding did not create a Planner item | Findings do not create Planner items automatically. Use the creation or linking action in the module. |
+| A record is missing for one company | Check the company mapping in **Settings > Integrations** and confirm the sync finished. |
+| A provider record did not update after a change | Writeback is provider- and action-specific. Check the provider guide, then the external record. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does every finding automatically create a Planner item?">
-    No. Review the finding and use the supported creation or linking workflow. The data-flow guide describes possible relationships, not an automatic pipeline.
+    No. Review the finding, then use the supported create or link action.
   </Accordion>
   <Accordion title="Does a Planner estimate create a quote or approve spending?">
-    No. Quoting, budget approval and provider project creation are separate workflows with their own actions and permissions.
-  </Accordion>
-  <Accordion title="Why can a report show older information than the provider?">
-    Check the latest successful synchronization, company mapping, report period and filters. Opening the report does not guarantee a fresh provider request.
+    No. Quoting, budget approval, and PSA project creation are separate workflows.
   </Accordion>
   <Accordion title="Does every integration write changes back to its source?">
-    No. Writeback is provider- and action-specific. Consult the provider guide and verify the external result before relying on it.
+    No. Writeback depends on the provider and the action.
+  </Accordion>
+  <Accordion title="Do PSA tickets appear in the Planner?">
+    No. Tickets and projects flow to reporting without becoming Planner items.
   </Accordion>
 </AccordionGroup>
 

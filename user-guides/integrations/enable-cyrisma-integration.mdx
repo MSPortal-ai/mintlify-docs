@@ -1,0 +1,115 @@
+---
+title: "Configure Cyrisma Integration"
+description: "Connect Cyrisma with a read-only API key, match Cyrisma tenants to companies, and review posture grades and vulnerabilities."
+icon: "plug"
+---
+
+<Note>
+Cyrisma is in **Beta** and shows a **Beta** badge in **Settings › Integrations › Directory**. If Cyrisma does not appear in the Directory for your workspace, contact support@msportal.ai.
+</Note>
+
+Cyrisma brings your clients' vulnerability posture into MSPortal: each Cyrisma tenant's overall, vulnerability and secure baseline grades, its assets, and its open CVEs. This setup is for **MSP staff with integration management access**.
+
+MSPortal only reads from Cyrisma. It asks for a read-only token and never changes anything in Cyrisma.
+
+## What the integration covers
+
+- **Covered:** every Cyrisma tenant the API key can reach, with its grades and counts of assets and open findings. For each tenant you match to a company, MSPortal also syncs its assets and open CVEs, and the daily count of findings remediated.
+- **Not covered:** Cyrisma assets are not added to **Devices**. Cyrisma never creates devices in MSPortal. Cyrisma findings have no resolved history in MSPortal, so the **Resolved** status on **Security › Vulnerabilities** lists Cork findings only.
+
+## Before you start
+
+You need:
+
+- **Admin access to Cyrisma**, so you can create an API key under **Settings › API Keys**.
+- **Your Cyrisma instance URL.** This is the address you sign in to Cyrisma at, such as `https://cc123456.cyrisma.com`. The key works only on the instance that issued it.
+- **Integration management access in MSPortal.**
+
+## Create a read-only API key in Cyrisma
+
+1. In Cyrisma, open **Settings › API Keys** and choose **Create**.
+2. Name the key **MSPortal** and choose the **Read** access level.
+3. Turn on **Applies to sub-organizations**, so the key reaches every client tenant you want MSPortal to report on. A tenant the key cannot reach does not appear in MSPortal.
+4. Copy the **client ID** and **client secret** right away. Cyrisma shows the secret only once. If you lose it, create a new key.
+
+See [Cyrisma's Partner API authentication guide](https://docs.cyrisma.com/api/partner-api/authentication).
+
+## Connect
+
+1. Open **Settings › Integrations**, choose **Directory**, find **Cyrisma**, and choose **Connect**.
+2. Enter your **Instance URL**. It must be a `cyrisma.com` address such as `https://cc123456.cyrisma.com`. If you leave out `https://`, MSPortal adds it. A port, a path or sign-in details in the address are not accepted.
+3. Enter the **Client ID** and **Client secret** from the key you created.
+4. Choose **Test connection**. A successful test shows **Connection verified** and how many tenants the key can reach, for example "Key verified. It can reach 12 tenants." If that number is lower than you expect, check that **Applies to sub-organizations** is on.
+5. Choose **Save and continue**. MSPortal stores the key in its vault and starts the first sync, which lists your Cyrisma tenants.
+
+<Note>
+MSPortal never shows the saved secret again. To change the key later, open the connection page, choose **Update** next to **Credentials**, enter the new values, and test again. If you change the instance URL, enter the client secret again.
+</Note>
+
+## Match tenants to companies
+
+After the first sync, the **Import or match tenants** step lists your Cyrisma tenants. Link each one to its MSPortal company.
+
+- **Quick match:** MSPortal suggests a company for each tenant from its name. Review the suggestions on the **Suggested** list, then choose **Accept**, or choose **Change** to pick another company.
+- **Bulk map:** choose **Accept strong matches** to accept every suggestion with 90% confidence or more in one step. You can untick any pair you want to review yourself first.
+- **Import company:** creates an MSPortal company from a tenant that has no match.
+- **Ignore:** hides a tenant that is not a client's. Choose **Restore** to bring it back.
+
+Each row shows the tenant's kind, status, asset count, open findings and overall grade, so you can tell tenants apart.
+
+Only matched tenants sync assets and CVEs. An unmatched tenant keeps its grades and counts, but its assets and findings are not read. MSPortal queues a sync when you save matches, so a newly matched tenant's data arrives without a manual run. Changing a match moves that tenant's assets and findings to the new company. Removing a match removes them.
+
+When every tenant you want is matched, choose **Continue**, then **Finish setup** on the **Review** step.
+
+<Note>
+A tenant Cyrisma has marked as deleted is listed for matching only while a match for it already exists, and it is not synced.
+</Note>
+
+## Sync and activity
+
+Cyrisma syncs daily at 04:25 UTC. Each run reads your tenants and their grades, then the assets and open CVEs of every matched tenant, and finishes with each matched tenant's daily remediation counts.
+
+To sync now, choose **Run sync** on the connection page or on the integration's row. You need integration management access, and the connection must be active.
+
+Open the **Sync activity** tab to see how the connection is doing. It lists three datasets, each marked **Completed** or **Not run yet**.
+
+| Dataset | What it covers |
+| --- | --- |
+| **Tenants** | Cyrisma tenants with their grades and counts. |
+| **Assets** | Assets of matched tenants. |
+| **Vulnerabilities** | Open CVEs of matched tenants. |
+
+The tab also shows when syncing is paused, with a **Reactivate** button, and the error from the last failed run. If Cyrisma refuses one tenant, MSPortal skips that tenant, keeps what it already stored, and syncs the rest.
+
+## Where the data appears
+
+- **Security › Dashboard:** the **Cyrisma vulnerability posture** card shows the average score (or the **Overall grade** when one company is selected), clients graded, assets scanned, distinct CVEs, open findings by severity, a daily chart of findings remediated, and the companies with the lowest grades. The summary tiles add **Critical findings**, **Known exploited CVEs** and **Remediated (30 days)**. The card needs at least one tenant matched to a company in your selection. See [Read the Security Dashboard](/user-guides/security/read-dashboard).
+- **Security › Vulnerabilities:** Cyrisma findings appear with the source **Cyrisma**, one row per CVE for each matched company. **Device** shows a sample of the affected assets, or how many there are, and **Software** shows what causes the CVE. Cyrisma has no priority, so **Priority** shows a dash. See [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities).
+- **Reports and dashboards:** add the **Cyrisma Security Posture** block. It shows the client's overall grade (or the average score across several clients), open findings by severity, known exploited CVEs, findings remediated in 30 days, grades by client with the worst first, and the highest-impact CVEs. It reflects the latest sync, not the report period. Viewers need Security read access.
+- **AI reports:** security reports include Cyrisma posture and vulnerability data.
+- **MCP:** use `list_vulnerabilities` with the Cyrisma provider, or `get_security_summary` for Cyrisma totals.
+
+The grades are Cyrisma's own letters. MSPortal does not calculate them.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| **Enter your Cyrisma instance address** | Use your own instance address, such as `https://cc123456.cyrisma.com`, with no port or path. Only `cyrisma.com` addresses are accepted. |
+| **Cyrisma rejected this API key** | Check the instance URL, client ID and client secret, and that the key has the **Read** access level. If you no longer have the secret, create a new key. |
+| **Cyrisma refused the request** | Check that the key's access level is **Read** and that **Applies to sub-organizations** is on for the client instances you want to report on. |
+| **Cyrisma is rate limiting this key** | Wait a few minutes and test again. |
+| A tenant you expect is missing | The key cannot reach it. Check that **Applies to sub-organizations** is on for the key, then choose **Run sync**. |
+| A company shows no Cyrisma data | Check that its tenant is matched and not ignored, run a sync, and check the company selector. The **Assets** and **Vulnerabilities** datasets stay **Not run yet** until at least one tenant is matched. |
+| The Cyrisma card or block is empty | No Cyrisma tenant is matched to a company in your selection. Match tenants in the Cyrisma integration settings. |
+| Syncing is paused | Open **Sync activity** and choose **Reactivate**. A paused connection also disables **Run sync**. |
+
+To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored key, the tenant matches and the data synced from Cyrisma. It changes nothing in Cyrisma. Delete the API key in Cyrisma when you no longer need it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Integration sync schedules](/user-guides/integrations/sync-schedules)
+- [Read the Security Dashboard](/user-guides/security/read-dashboard)
+- [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities)
+- [Security](/user-guides/security/index)

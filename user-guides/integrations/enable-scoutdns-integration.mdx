@@ -1,0 +1,73 @@
+---
+title: "Configure ScoutDNS Integration"
+description: "Connect ScoutDNS with an API key, match organizations to companies, and review DNS filtering activity."
+icon: "plug"
+---
+
+<Note>
+ScoutDNS is in **Beta**. It is available to every tenant and shows a **Beta** badge on the **Directory** tab of **Settings › Integrations**. If something does not match your ScoutDNS account, contact support@msportal.ai.
+</Note>
+
+ScoutDNS brings your clients' DNS filtering into MSPortal: each ScoutDNS organization's sites, networks and roaming clients, and its last 30 days of DNS requests, blocked requests, blocked threats and most-blocked categories. This setup is for **MSP staff with integration management access**.
+
+MSPortal only reads from ScoutDNS. It never changes policies, sites, networks or roaming clients.
+
+## What the integration covers
+
+- **Covered:** ScoutDNS organizations, their sites and networks, roaming client counts, and 30-day totals for requests, blocked requests, threats and the top blocked categories.
+- **Not covered:** individual DNS queries, individual threat events, per-domain traffic and filtering policies. Totals always cover the last 30 days, whatever the report period.
+
+## Before you connect
+
+1. In ScoutDNS, open **Settings › API Keys** and choose **New API Key**.
+2. Describe it as MSPortal and save.
+3. Use **Copy** in the **API Key** column. Copy the API Key, not the Key ID shown beside it.
+
+ScoutDNS keys cannot be limited to read access. MSPortal only calls ScoutDNS read endpoints. If ScoutDNS says API access is not part of your subscription, contact ScoutDNS support. See [ScoutDNS's API access guide](https://www.scoutdns.com/docs/api-access).
+
+Keep each client in its own ScoutDNS organization. MSPortal matches organizations to companies, and the sites and roaming client profiles assigned to an organization follow it.
+
+## Connect
+
+1. Open **Settings › Integrations**, choose **Directory**, find **ScoutDNS**, and choose **Connect**.
+2. Paste the key into **API key**.
+3. Choose **Test connection**. A successful test shows how many organizations the account has. A rejected key shows ScoutDNS's reason.
+4. Choose **Save and continue**. MSPortal saves the key in the vault and starts the first sync.
+
+## Match organizations to companies
+
+Open **Import or match companies**. Link each ScoutDNS organization to its MSPortal company: accept the suggestion, choose another company, or use **Import** to create one. **Accept N strong matches** accepts every suggestion at 90% confidence or more after you review them. **Ignore** hides an organization that is not a client's, and you can restore it later.
+
+A change to a match takes effect right away; nothing needs to sync again.
+
+When the matches look right, open **Review** and choose **Finish setup**.
+
+## Where the data appears
+
+- **Security › DNS Filtering:** the summary tiles add every connected DNS filtering provider: **Organizations**, **Roaming clients**, **DNS requests**, **Blocked** and **Threats blocked**. The organizations table shows each organization's **Company**, **Sites**, **Networks** active in the last hour, **Roaming clients** online, **Requests (30d)**, **Blocked (30d)**, **Threats (30d)** and **Top blocked categories**. With DNSFilter also connected, choose a provider in the page header to narrow the page, and the table is named **ScoutDNS organizations**.
+- **Reports:** add the **DNS Filtering Overview** block. It shows blocked requests and their share, DNS requests, threats blocked, protected roaming clients and sites, and the top blocked categories. Its counts cover the last 30 days, not the report period.
+- **AI reports:** security reports include DNS filtering, labeled as the last 30 days.
+- **Assistant and MCP:** ask about DNS filtering, or use `get_dns_filtering_summary`.
+
+ScoutDNS does not report individual threat events, so threat event counts for the last 7 days, the DNS traffic chart and the threat and top domain lists come from DNSFilter only.
+
+## Sync and troubleshooting
+
+ScoutDNS syncs daily. To sync now, choose **Run sync** on the connection page or on the integration's row.
+
+- **ScoutDNS rejected this API key:** you may have copied the Key ID. Copy the API Key with its Copy button, and check that the key has not been deleted.
+- **ScoutDNS API access is not available on this subscription:** contact ScoutDNS support to enable API access.
+- **ScoutDNS is rate limiting this key:** wait a few minutes and try again.
+- **No organizations to match:** create organizations in ScoutDNS and assign their sites and roaming client profiles, then run a sync.
+- **An organization's numbers did not change:** when ScoutDNS returns no stats for an organization, MSPortal keeps the previous numbers until the next successful read.
+
+To replace the key, open **Connect** on the connection page, paste the new key, choose **Test connection**, then **Save changes**.
+
+To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored key, the organization matches and the data synced from ScoutDNS. It changes nothing in ScoutDNS; revoke the key there when you no longer need it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Security](/user-guides/security/index)
+- [Map and import companies](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)

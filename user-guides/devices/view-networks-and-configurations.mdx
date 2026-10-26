@@ -1,93 +1,108 @@
 ---
 title: 'View networks and configurations'
-description: 'Read the optional Networks and Configurations tabs, investigate missing data, and understand which actions belong to the MSP.'
+description: 'Read the Networks and Configurations tabs on the Devices page, and link a collector to a location.'
 icon: 'network-wired'
 ---
 
-The **Devices** area can include **Networks** and **Configurations** alongside the device inventory. These tabs depend on your portal's integrations, the selected company scope, and the available data.
+The **Devices** page can show **Networks** and **Configurations** tabs next to the device inventory. This guide is for company users and MSP staff who need to read them. MSP staff can also link a collector to a company location.
 
-<Note>
-For Company users and MSP staff with access to Devices. The MSP configures integrations and company mappings. Company users can read available information but do not manage collector location links or open MSP-only provider shortcuts.
-</Note>
+## Before you start
+
+- **Networks** appears when your MSP has connected Domotz.
+- **Configurations** appears when your MSP has connected IT Glue and there are IT Glue configurations in your company selection that are not linked to a device.
+- You need access to Devices and to the company.
+- Your MSP sets up integrations and company mappings. Company users can read these tabs but cannot change links.
 
 ## Check site networks
 
 <Steps>
-  <Step title="Open Networks">
-    Select **Devices > Networks**. This tab is available when the portal uses Domotz.
+  <Step title="Open Devices > Networks">
+    Click **Devices** in the sidebar, then the **Networks** tab.
   </Step>
   <Step title="Find the site">
-    Confirm the company scope. Use available table filters to find the **Site**, **Company**, or **Location** you need. Review the site name together with its organization.
+    Check the company selector. Use the table filters to find the **Site**, **Company**, or **Location** you want.
   </Step>
   <Step title="Read the measurements">
-    Check **Download**, **Upload**, **Uptime**, **Devices online**, and **Last synced**. A dash means a measurement is unavailable, not zero.
+    Check **ISP**, **Download**, **Upload**, **Uptime**, **Devices online**, **Networks / VLANs**, and **Last synced**. A dash means the value is not available. It does not mean zero. A download average can appear under the latest value.
   </Step>
-  <Step title="Review reported issues">
-    Use **Issues** to distinguish **Healthy** from **Has issues**. Where an issue-count tooltip is available, it breaks down IP conflicts, failing TCP sensors, active alerts, and devices with packet loss.
+  <Step title="Read the Issues column">
+    **Healthy** means no issues were counted. **Has issues** means some were. Point at the issue count to see a breakdown of **IP conflicts**, **Failing TCP sensors**, **Active alerts**, and **Devices with packet loss**.
   </Step>
-  <Step title="Open the inventory">
-    Select the **Devices online** count to open the device inventory for the company and linked location. If no location is linked, the destination is scoped to the company.
+  <Step title="Open the devices at the site">
+    Click the **Devices online** count. The inventory opens for the linked location, or for the company when no location is linked.
   </Step>
 </Steps>
 
-The row's **Download** and **Upload** values are reported network measurements; opening this page does not run a speed test from your browser. A download average may appear below the latest value. **Networks / VLANs** shows the available network and VLAN counts.
+Download and upload values are reported by Domotz. Opening the page does not run a speed test from your browser. **Healthy** only covers the issue types listed above, so check **Last synced** and tell your provider about readings that look wrong.
 
-**Healthy** means the displayed issue categories have no counted issues in the available data. It is not a complete security assessment or a guarantee of current connectivity. Check **Last synced** and report unexpected readings to your provider.
+## Link a collector to a location (MSP staff)
 
-### Link a collector to a location — MSP staff
+You need manage access to Devices.
 
-MSP staff with device-management permission and available editing access can select **Edit** in the **Location** column, then choose an existing company location. Selecting a location saves the link immediately; there is no separate page-level Save. **Remove link**, when available, saves the unlinking immediately.
+<Steps>
+  <Step title="Click Edit in the Location column">
+    Find the site row and click **Edit** in its **Location** cell.
+  </Step>
+  <Step title="Choose a location">
+    Search and pick one of the company's locations. The link saves as soon as you pick it. There is no Save button.
+  </Step>
+  <Step title="Remove a link if needed">
+    Open the same picker and choose **Remove link**. This also saves right away.
+  </Step>
+</Steps>
 
-Canceling the picker before choosing an option makes no new selection. If a location is missing, the MSP should review company mapping and available locations. Company users request these changes from their provider.
+If you close the picker without choosing, nothing changes. If the company has no locations, add them first. Company users ask their provider to change a link. If the picker says **Map to a company first**, the collector is not mapped to a company yet.
 
 ## Read IT Glue configurations
 
-1. Open **Devices > Configurations** when the tab is available.
-2. Confirm the selected company scope and use the **Name** filter to find a configuration. A Company filter is available in a view spanning multiple companies.
-3. Review **Type**, **Hostname**, **Primary IP**, **Serial Number**, and **Updated**. Use the column selector for additional available fields such as manufacturer, model, and location.
-4. Use pagination to continue through matching configurations.
+<Steps>
+  <Step title="Open Devices > Configurations">
+    Click **Devices**, then the **Configurations** tab.
+  </Step>
+  <Step title="Find a configuration">
+    Check the company selector, then filter by **Name**. A **Company** filter is available when you select several companies.
+  </Step>
+  <Step title="Read the columns">
+    Review **Type**, **Hostname**, **Primary IP**, **Serial Number**, and **Updated**. Use the column selector for more fields, such as **Manufacturer**, **Model**, and **Location**.
+  </Step>
+  <Step title="Page through the results">
+    Use the pagination controls at the bottom of the table.
+  </Step>
+</Steps>
 
-This tab lists IT Glue configurations that have not resolved to an existing device. It is not a second complete copy of the device inventory. For a configuration already linked to a device, open that device's **IT Glue** tab instead.
+This tab only lists IT Glue configurations that are **not linked** to a device, so it is not a full copy of the inventory. For a configuration that is linked, open the device and use its **IT Glue** tab. MSP staff can open a configuration's IT Glue link when one exists. Company users see the name as text. The tab has no edit or import button.
 
-MSP staff can open a configuration's source link when one is supplied. Company users see its name as text; provider administration remains with the MSP. The list itself has no configuration-editing or device-import action.
+## Troubleshooting
 
-## Missing tabs or results
-
-| Situation | What to check |
+| Problem | What to do |
 | --- | --- |
-| No **Networks** tab | Whether Domotz is connected for the portal |
-| No network rows | Company scope and whether collectors are mapped to that company |
-| **Could not load network data** | A loading failure; retry or ask the provider, rather than treating it as an empty network |
-| No **Configurations** tab | IT Glue availability and whether there are unlinked configurations in the current company scope |
-| A configuration is absent | Filters, scope, synchronization, and whether it is already linked to a device |
-| No **Duplicates** tab | Duplicate merging is an MSP staff action requiring device-management permission |
+| No **Networks** tab | Ask your MSP to check that Domotz is connected. |
+| No network rows | Check the company selector and that collectors are mapped to the company. |
+| **Could not load network data** | This is a loading error, not an empty network. Reload, or ask your provider. |
+| No **Configurations** tab | IT Glue may not be connected, or every configuration in this company selection is already linked to a device. |
+| A configuration is missing | Check filters and the company selector, then check whether it is already linked to a device. |
+| No **Duplicates** tab | Only MSP staff with manage access to Devices see it. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Why does another user have more tabs than I do?">
-    Tabs depend on integrations, data, company scope, and permissions. Duplicates is restricted to MSP staff with device-management access. Ask your provider to review your intended access.
+  <Accordion title="Why does another user see more tabs?">
+    Tabs depend on integrations, data, company selection, and permissions. **Duplicates** is for MSP staff with manage access to Devices.
   </Accordion>
-  <Accordion title="Does opening Networks test my current internet speed?">
-    No. It displays measurements reported through Domotz. Check the reported values and synchronization date.
+  <Accordion title="Does opening Networks test my internet speed?">
+    No. It shows speeds reported through Domotz.
   </Accordion>
-  <Accordion title="Does Healthy mean the site has no possible problems?">
-    No. It means no issues are counted in the displayed categories for the available data. It does not establish that every service or security control has been checked.
+  <Accordion title="Does Healthy mean the site has no problems?">
+    No. It means none of the listed issue types were counted in the available data.
   </Accordion>
-  <Accordion title="Why does Devices online open all devices at the company?">
-    The link uses a location filter when a location is linked. Without that link, it opens the company inventory. The MSP can review the collector's location mapping.
+  <Accordion title="Why does Devices online open the whole company?">
+    The collector is not linked to a location. Your MSP can link it.
   </Accordion>
-  <Accordion title="Can a Company administrator change a collector's location?">
-    No. The location editor is for authorized MSP staff. Request the mapping change from your provider.
-  </Accordion>
-  <Accordion title="Does the MSP need to click Save after choosing a location?">
-    No. Choosing a location or Remove link saves immediately. Wait for the result and verify the row.
+  <Accordion title="Can a company admin change a collector's location?">
+    No. Only MSP staff can. Ask your provider.
   </Accordion>
   <Accordion title="Why is a linked device missing from Configurations?">
-    This list requests configurations that are not linked to an existing device. Open the device's IT Glue tab to inspect its linked documentation.
-  </Accordion>
-  <Accordion title="Can I edit or import a configuration from this list?">
-    The list is for reviewing configuration information. It does not provide an edit or import action. Ask the MSP about source corrections, integration mappings, and device imports.
+    The tab only lists configurations that are not linked. Open the device and check its **IT Glue** tab.
   </Accordion>
 </AccordionGroup>
 
@@ -95,4 +110,4 @@ MSP staff can open a configuration's source link when one is supplied. Company u
 
 - [Find and export devices](/user-guides/devices/find-devices)
 - [Understand device details](/user-guides/devices/understand-device-details)
-- [Device inventory and management](/user-guides/devices/index)
+- [Devices](/user-guides/devices/index)

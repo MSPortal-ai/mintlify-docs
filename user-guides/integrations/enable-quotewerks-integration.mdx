@@ -1,129 +1,270 @@
 ---
-title: 'Connect and manage QuoteWerks'
-description: 'Connect QuoteWerks Web, configure QuoteValet links, save settings, and start quote synchronization.'
+title: 'Configure QuoteWerks Integration'
+description: 'Connect QuoteWerks Web to MSPortal.ai to sync quotes, customers, and line items'
 icon: 'file-invoice-dollar'
 ---
 
-Connect **QuoteWerks Web** through **Settings > Integrations**. Its wizard has three steps: **Connect**, **Map**, and **Complete**. Map customers to the correct portal companies before checking their quotes.
+This guide walks you through connecting QuoteWerks Web to MSPortal.ai. Setup happens on the QuoteWerks connection page, where the **Setup guide** lists three tasks: **Connect**, **Import or match companies** and **Review**. Map customers to the correct portal companies before checking their quotes. See [Connect and manage integrations](/user-guides/integrations/index#connect-match-and-verify) for the shared connection tasks.
 
-**Audience:** MSP staff with integration-management access. Company users read quotes and ask their MSP to repair connections, mappings, or permissions.
+## Overview
 
-## Before you start
+QuoteWerks is a quoting and proposal platform used by MSPs to create and deliver sales quotes. By integrating QuoteWerks with MSPortal.ai, you can:
 
-Ask your QuoteWerks Web administrator for an API key with the required **MasterRights** access and the correct API base URL. This integration uses the QuoteWerks Web API; a QuoteWerks Desktop installation alone is not sufficient. The default API base URL is `https://qwwapi.quotewerks.com`. Use your approved API endpoint, not the QuoteWerks browser sign-in page. The [QuoteWerks Web API reference](https://qwwapi.quotewerks.com/docs) is available for your administrator.
+- View QuoteWerks quotes, including line items, on the MSPortal **Quotes** page
+- Map QuoteWerks customers to your MSPortal companies for a unified view
+- Optionally surface customer-facing QuoteValet links directly on each quote
 
-You need **manage_settings_integrations** permission to connect, test, save settings, sync, or delete the integration. Customer mapping and company creation have their own access requirements. Prefer existing portal companies when mapping; a new company is a separate portal record.
+## Prerequisites
 
-If you use QuoteValet, have a customer-facing quote link for the intended QuoteValet account ready. It is optional for quote synchronization. Keep API keys and private customer links out of screenshots and support messages.
+Before you begin, ensure you have:
 
-## Connect QuoteWerks Web
+- An active QuoteWerks Web account with access to Setup options. This integration supports QuoteWerks Web only, not QuoteWerks Desktop.
+- A QuoteWerks Web user with **MasterRights** to create the API key
+- Admin access to MSPortal.ai with the **manage_settings_integrations** permission
+- Companies already set up in MSPortal (from your PSA integration or manually created), or permission to import new companies while matching
+
+---
+
+## Part 1: Create an API Key in QuoteWerks
 
 <Steps>
-  <Step title="Open the connection wizard">
-    Open **Settings > Integrations**, find **QuoteWerks**, and select **Connect** for a new connection. For an existing connection, use its **Manage** or **Configure** action.
+  <Step title="Log into QuoteWerks Web">
+    Open your QuoteWerks Web instance in the browser, for example `https://na.quotewerks.com/`.
   </Step>
-  <Step title="Enter the connection fields">
-    In **Connect**, check **Base URL** and paste the raw key into **API Key**. Do not include a header name such as `X-API-Key:` or a `Bearer` prefix. The eye control shows or hides what you have entered.
+
+  <Step title="Open the API Settings">
+    Go to **Setup > Options > Zapier and API**.
   </Step>
-  <Step title="Optionally add QuoteValet">
-    Paste a valid customer-facing link for the intended account into **QuoteValet link**. This provides the account information needed to build links for quotes that have a QuoteValet document association. It does not create or publish a QuoteValet document.
+
+  <Step title="Create a New Key">
+    Click **Create a New Key** and name it `MSPortal` so you can identify its purpose later.
   </Step>
-  <Step title="Test the connection">
-    Select **Test Connection** and wait for the result. A successful test may show user, account, or table information. It verifies API access; it does not save the form or prove that quotes have imported.
-  </Step>
-  <Step title="Save the connection">
-    Select **Connect QuoteWerks**. Wait for success before continuing. Saving tests the connection again, stores the connection settings, and starts a background customer sync for mapping. It does not start the quote import.
-  </Step>
-  <Step title="Map customers and start quotes">
-    Open **Map**, follow [Map QuoteWerks customers](/user-guides/integrations/map-quotewerks-customers), and verify the relevant rows show **Saved**. Then continue to **Complete**.
+
+  <Step title="Copy the API Key">
+    Click on the API key to copy it. Copy only the key value, without an `X-API-Key:` or `Bearer` prefix. It should look like this:
+
+    ```
+    qww_live_0a1BcDeF2gHiJkLmN3oPqRsT4uVwXyZ5aBcDeF6gHiJ
+    ```
+
+    <Warning>
+      Treat this key like a password. Anyone with the key can read your QuoteWerks data.
+    </Warning>
   </Step>
 </Steps>
 
-## Start the quote import
+---
 
-1. In **Complete**, select **Start quote sync**.
-2. Wait for the started message, then use **Open Quotes** or open **Quotes** later.
-3. Allow the background job to finish. Check a known quote, its company, number, line items, and totals.
-4. Use **Complete Setup** when finished.
+## Part 2: Connect QuoteWerks in MSPortal
 
-**Complete Setup** leaves the wizard; it does not itself start the quote import. A ready message or a completed wizard step does not prove that every customer is mapped or every quote imported.
+### Open the connection page
 
-Active connections are scheduled to refresh customers daily and quotes every four hours. These are background schedules, not immediate delivery guarantees. A manual sync also does not guarantee every historical quote will be included. If an older quote remains absent, ask MSPortal support to investigate its import window rather than repeatedly assuming the request imported all history.
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal, go to **Settings > Integrations**.
+  </Step>
 
-## Update credentials and QuoteValet settings
+  <Step title="Start Setup">
+    On the **Directory** tab, find **QuoteWerks** and select **Connect**. If you already have a QuoteWerks connection, open it from the **Active** tab instead.
+  </Step>
+</Steps>
 
-Open the saved connection and return to **Connect**. The saved API key is not displayed. Leaving **API Key** blank keeps the stored key; the eye control does not reveal that stored secret.
+---
 
-- To replace the key, enter the new key and select **Update credentials**.
-- To save the base URL or optional QuoteValet link using the stored key, select **Save settings**.
-- A blank QuoteValet input preserves an already configured link. It is not a remove-link control.
-- Wait for success before changing steps. **Next** and the step headings do not save unsaved Connect fields.
+### Task 1: Connect
 
-<img src="/images/product/quotewerks-connection-actions.png" alt="Test Connection and Save settings actions for an existing QuoteWerks connection." width="540" height="92" />
+<Steps>
+  <Step title="Confirm the Base URL">
+    The **Base URL** field is prefilled with the QuoteWerks Web cloud default (`https://qwwapi.quotewerks.com`). Most users can leave it as is. If you run a self-hosted QuoteWerks Web instance, replace it with your instance's API URL.
+  </Step>
 
-*Existing MSP connection. Test Connection checks access; Save settings persists changes and requests customer synchronization.*
+  <Step title="Paste Your API Key">
+    Paste the API key you copied from QuoteWerks into the **API Key** field.
+  </Step>
 
-Saving settings can contact QuoteWerks and request a customer sync even when the API key field is blank. It is not merely a local display preference. If multiple QuoteWerks connections are listed, ask MSPortal support to confirm the intended connection before changing credentials or adding another account.
+  <Step title="Add a QuoteValet Link (Optional)">
+    If you use QuoteValet to deliver quotes to customers, paste any QuoteValet quote link into the **QuoteValet link (optional)** field. MSPortal extracts your QuoteValet account id from the link and uses it to build customer-facing quote links on the Quotes page.
 
-## Remove the integration
+    <Note>
+      You can skip this field and add it later. It only affects whether QuoteValet links appear on quotes; the quote sync works without it.
+    </Note>
+  </Step>
 
-Use **Delete** in the existing wizard footer and read the confirmation. **Cancel** keeps the connection; **Delete Integration** confirms removal. Removal deletes the MSPortal connection and its synchronized QuoteWerks data and attempts to remove the stored credential. It does not delete the original QuoteWerks quotes or the portal companies you mapped to.
+  <Step title="Test Connection">
+    Select **Test connection**. You must test before you can save. On success, MSPortal shows **Connection verified** and the QuoteWerks user the key authenticates as. Testing does not save anything and does not import quotes.
 
-Do not delete the integration to clear one incorrect customer mapping. Use the row-level mapping controls instead. Reconnecting a deleted integration requires credentials and another import.
+    If the connection fails:
+    - Check that the API key is copied exactly, with no extra spaces
+    - Verify the key is still active under **Setup > Options > Zapier and API** in QuoteWerks
+  </Step>
 
-## Frequently asked questions
+  <Step title="Save and Continue">
+    Select **Save and continue**. MSPortal tests the key again, saves the connection, and starts a background customer sync for the matching task.
+
+    <Info>
+      Credentials are stored in the vault and never shown again. They are only used by server-side sync jobs.
+    </Info>
+  </Step>
+</Steps>
+
+---
+
+### Task 2: Import or match companies
+
+Match your QuoteWerks customers to MSPortal companies. This determines which company each quote is attached to in MSPortal. The workspace is titled **Import or match QuoteWerks customers**.
+
+<Steps>
+  <Step title="Wait for the Customer Sync">
+    After connecting, MSPortal fetches your customers from QuoteWerks. This may take a few moments depending on the size of your account. If no customers have arrived yet, select **Sync customers**.
+  </Step>
+
+  <Step title="Accept Strong Matches">
+    The workspace opens on the **Import** view, which lists every customer that still needs a company, with a suggestion where MSPortal found one. **Suggested** narrows the list to suggestions. Select **Accept N strong matches** to review and accept every suggestion with 90% confidence or more, or select **Accept** on a single row. Each accepted match saves immediately.
+  </Step>
+
+  <Step title="Match or Import the Rest">
+    In the **Import** view, select **Choose company…** to pick the correct MSPortal company for a customer without a suggestion, or select **Import** on the row to create a new portal company from the customer. Use **Ignore** for customers you never want matched.
+  </Step>
+
+  <Step title="Continue">
+    Select **Continue to Review**. For more detail, see [Map QuoteWerks customers](/user-guides/integrations/map-quotewerks-customers).
+  </Step>
+</Steps>
+
+<Note>
+  Quotes only appear in MSPortal for customers that are matched to a company. You can return to this task at any time to match newly added customers.
+</Note>
+
+---
+
+### Task 3: Review
+
+<Steps>
+  <Step title="Check Each Task">
+    **Review** lists each setup task with its status and how many customers are matched.
+  </Step>
+
+  <Step title="Finish Setup">
+    Select **Finish setup**. This records that setup is complete. It does not start a quote sync on its own.
+  </Step>
+
+  <Step title="Start the Quote Sync">
+    In the connection page header, select **Run sync**, then **Quotes** (or **All data**) to pull your QuoteWerks quote headers and line items into MSPortal. Check **Sync activity**, then open **Quotes** and check a known quote's company, number, line items and totals.
+  </Step>
+</Steps>
+
+<Info>
+  After setup, QuoteWerks syncs automatically in the background. Quotes refresh every 4 hours and customers refresh daily (02:30 UTC). Historical import windows and provider data can limit results. Ask support to investigate a missing older quote rather than assuming a manual sync imports all history.
+</Info>
+
+---
+
+## What Gets Synced
+
+| Data Type | Direction | Description |
+|-----------|-----------|-------------|
+| Customers | QuoteWerks → MSPortal | Customer records for mapping to MSPortal companies |
+| Quotes | QuoteWerks → MSPortal | Quote headers shown on the Quotes page |
+| Line Items | QuoteWerks → MSPortal | Products and services on each quote |
+
+---
+
+## Managing Your Integration
+
+After setup, open your QuoteWerks connection from the **Active** tab in **Settings > Integrations**. Use the **Setup guide** to return to any task, and the header for these actions:
+
+| Action | Description |
+|--------|-------------|
+| **Run sync** | Start a sync for **All data**, **Customers** or **Quotes** |
+| **More actions > Rename** | Give the connection a nickname |
+| **More actions > Disconnect…** | Remove the stored credentials, the matches between QuoteWerks customers and your companies, and the synced QuoteWerks data |
+
+If you have more than one QuoteWerks connection, confirm you have the intended one open before changing credentials.
+
+### Rotating the API Key
+
+If you need to replace the API key, create a new key in QuoteWerks under **Setup > Options > Zapier and API**. Then open **Connect** on the connection, type the new key into **API Key**, select **Test connection**, then **Save changes**. Leaving the stored key unchanged keeps it.
+
+### Changing the Base URL or QuoteValet Link
+
+<Steps>
+  <Step title="Open Connect">
+    Open your QuoteWerks connection and select **Connect** in the **Setup guide**. The stored API key is not shown.
+  </Step>
+  <Step title="Edit the Settings">
+    Change the **Base URL** or paste a new link into **QuoteValet link (optional)**. Changing the **Base URL** asks for the API key again, because a stored key is only sent to the URL it was saved with. A blank QuoteValet field keeps the existing QuoteValet setting; it does not remove it.
+  </Step>
+  <Step title="Save Changes">
+    Select **Test connection**, then **Save changes**, and wait for the success message before you leave. Testing alone does not save. Saving tests the connection again and starts a customer sync.
+  </Step>
+</Steps>
+
+### Disconnecting the Integration
+
+Select **More actions > Disconnect…** and confirm. This removes the stored credentials, the customer matches and the synced QuoteWerks data from MSPortal. It cannot be undone. It does not delete quotes in QuoteWerks or the MSPortal companies you matched to. To fix a single wrong match, change it in **Import or match companies** instead of disconnecting.
+
+---
+
+## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Does this connect QuoteWerks Desktop?">
-    This integration uses QuoteWerks Web and its API. A Desktop installation alone is not sufficient; ask your QuoteWerks administrator about Web API access.
+  <Accordion title="Connection test fails">
+    **Causes:**
+    - The API key was copied incorrectly or has extra whitespace
+    - The key includes an `X-API-Key:` or `Bearer` prefix
+    - The key was deleted or regenerated in QuoteWerks
+    - The QuoteWerks Web user does not have **MasterRights**, or the key is from QuoteWerks Desktop
+
+    **Solutions:**
+    1. Copy the key again by clicking on it in **Setup > Options > Zapier and API**
+    2. Create a new key named `MSPortal` and enter it on the **Connect** task
   </Accordion>
-  <Accordion title="Which API base URL should I enter?">
-    Use the approved QuoteWerks Web API endpoint. The default is https://qwwapi.quotewerks.com. Do not use the browser sign-in page as the API base URL.
+
+  <Accordion title="No customers appear in the matching task">
+    **Causes:**
+    - The initial customer sync is still in progress
+
+    **Solutions:**
+    1. Wait a few minutes, or select **Sync customers** and wait for new customers to arrive
+    2. Verify the connection test passes on the **Connect** task
   </Accordion>
-  <Accordion title="Which QuoteWerks API permission is required?">
-    The connection requires a QuoteWerks Web API key with MasterRights access. Ask your QuoteWerks administrator to supply an appropriate key.
+
+  <Accordion title="Quotes are missing from the Quotes page">
+    **Causes:**
+    - The customer on the quote is not matched to an MSPortal company
+    - No quote sync has run yet
+
+    **Solutions:**
+    1. Open **Import or match companies** and match the customer to a company
+    2. Select **Run sync > Quotes**, or wait for the background sync, which refreshes quotes every 4 hours
+    3. See [Troubleshoot QuoteWerks quotes](/user-guides/quotes/troubleshoot-quotewerks-quotes) for more checks
   </Accordion>
-  <Accordion title="Does Test Connection save my API key?">
-    No. Test Connection checks API access without saving. Use Connect QuoteWerks, Update credentials, or Save settings to persist the intended change.
+
+  <Accordion title="QuoteValet links do not appear on quotes">
+    **Causes:**
+    - No QuoteValet link was provided during setup
+
+    **Solutions:**
+    1. Open **Connect**, paste any QuoteValet quote link into the **QuoteValet link (optional)** field, then select **Test connection** and **Save changes**
   </Accordion>
-  <Accordion title="Does a successful test prove all quotes imported?">
-    No. The test checks API access. Map customers, explicitly start quote sync, and inspect actual quote and line-item results.
+
+  <Accordion title="Does Finish setup confirm quote synchronization?">
+    No. **Finish setup** records that setup is complete. Use **Run sync** and inspect the resulting quotes and **Sync activity**.
   </Accordion>
-  <Accordion title="Why is the saved API Key field blank?">
-    The form does not display the stored API key. Leaving the field blank preserves it; the eye control only reveals text you enter now.
-  </Accordion>
-  <Accordion title="Does Next save changes on Connect?">
-    No. Use Connect QuoteWerks, Update credentials, or Save settings and wait for success before switching steps. Unsaved Connect fields can be discarded when navigating away.
-  </Accordion>
-  <Accordion title="Does Save settings also request synchronization?">
-    Yes. It tests and saves the connection and requests customer synchronization, even when using the stored key. Start quote sync separately in Complete.
-  </Accordion>
-  <Accordion title="Do I need QuoteValet to synchronize quotes?">
-    No. QuoteValet configuration is optional and supports customer-facing document links. Quote headers and line items can synchronize without it.
-  </Accordion>
-  <Accordion title="Does leaving QuoteValet link blank remove its configuration?">
-    No. A blank field preserves the existing QuoteValet configuration. The field is not a remove-link control.
-  </Accordion>
-  <Accordion title="Does Complete Setup start quote synchronization?">
-    No. Use Start quote sync explicitly. Complete Setup leaves the wizard; a ready message does not prove import or mapping success.
-  </Accordion>
-  <Accordion title="Will a manual sync include all historical quotes?">
-    Not necessarily. Historical import windows and provider data can limit results. Ask MSPortal support to investigate a missing older quote rather than assuming a manual request imported every year.
-  </Accordion>
-  <Accordion title="Can a Company administrator change QuoteWerks credentials?">
+
+  <Accordion title="Can a company user change QuoteWerks credentials?">
     No. Company users ask their MSP to manage the integration. The MSP also handles user permissions and company access.
-  </Accordion>
-  <Accordion title="Can I safely configure a second independent QuoteWerks account?">
-    If you need multiple QuoteWerks accounts or see multiple connections, ask MSPortal support to confirm the intended connection before changing credentials. Do not assume another setup entry creates an independent account.
-  </Accordion>
-  <Accordion title="Does deleting the integration delete the quotes in QuoteWerks?">
-    No. Removal affects the MSPortal connection and synchronized data, not the original provider quotes or mapped portal companies. A later reconnect requires another import.
   </Accordion>
 </AccordionGroup>
 
-## Related guides
+---
 
-- [Map QuoteWerks customers](/user-guides/integrations/map-quotewerks-customers)
-- [Troubleshoot QuoteWerks quotes](/user-guides/quotes/troubleshoot-quotewerks-quotes)
-- [Download quote documents](/user-guides/quotes/download-quotes)
-- [Manage Company quote access](/user-guides/quotes/manage-company-access)
+## Related Resources
+
+- [Map QuoteWerks Customers](/user-guides/integrations/map-quotewerks-customers) - Match customers to companies
+- [Troubleshoot QuoteWerks Quotes](/user-guides/quotes/troubleshoot-quotewerks-quotes) - Fix missing or wrong quotes
+- [Download quote documents](/user-guides/quotes/download-quotes) - Get quote documents or export the quote list
+- [Control company quote access](/user-guides/quotes/manage-company-access) - Set which quotes company users can see
+- [Sync Schedules](/user-guides/integrations/sync-schedules) - When each integration syncs
+- [Import Companies](/user-guides/integrations/import-companies) - General company import guide
+- [Integrations Overview](/user-guides/integrations/index) - Browse all available integrations

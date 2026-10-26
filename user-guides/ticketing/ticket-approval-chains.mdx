@@ -1,0 +1,97 @@
+---
+title: 'Ticket approval chains'
+description: 'Require sign-off from a client company before work starts on requests from chosen ticket templates: hold the request in MSPortal, or create the ticket right away in a waiting status.'
+icon: 'list-check'
+---
+
+An approval chain makes requests from chosen ticket templates wait for the client's approvers to sign off, one step at a time. You choose who needs approval, how the request waits, and what happens when it is rejected.
+
+**Audience:** MSP staff with permission to change ticket settings. Approvers are always contacts of the client company the request comes from.
+
+## How a request moves through a chain
+
+<Steps>
+  <Step title="The request waits">
+    A person submits a template the chain covers. MSPortal creates an approval request and opens it for them on the **Approvals** page. Depending on the chain, the PSA ticket is created later or right away (see below).
+  </Step>
+  <Step title="Each step approves in order">
+    The first step's approvers get an email and an in-app notification. When enough of them approve, the next step starts. One rejection ends the request.
+  </Step>
+  <Step title="The ticket is created or moved">
+    After the last step approves, MSPortal creates the ticket in your PSA, or moves the ticket it already created to the approved status. The requester is told the outcome either way, and the ticket carries a note saying who decided.
+  </Step>
+</Steps>
+
+<Note>
+For companies whose tickets go to HaloPSA, requests are not held in MSPortal. Halo's own approval processes apply instead.
+</Note>
+
+## Two ways a request can wait
+
+| Setting | What happens | Choose it when |
+| --- | --- | --- |
+| **Hold in MSPortal** | Nothing reaches your PSA until the last step approves. MSPortal then creates the ticket exactly as it would have at submission. | Rejected requests should never appear in the PSA. |
+| **Create the ticket right away** | The ticket is created at submission in a **Waiting status** you pick (for example "Waiting customer approval"). When the request is decided, the ticket moves to the **Approved status** or the **Not approved status** you pick, and gets a note with who decided, their reason, and a link to the request. | You want the PSA to see every request the moment it is made, for reporting on what staff ask for even when their company says no. |
+
+With **Create the ticket right away**, you choose the statuses per PSA (and per board for ConnectWise). Leave **Approved status** or **Not approved status** on **Keep status** to add only the note. The Approval section on the ticket shows that it is waiting, who must approve, and what was decided.
+
+## Create an approval chain
+
+<Steps>
+  <Step title="Open the Approvals tab">
+    Go to **Settings > Tickets** and select **Approvals**. The table lists the built-in **Ticket change requests** rule and your chains; the **?** in its header explains how chains work. Select **New approval chain**.
+  </Step>
+  <Step title="Choose the templates and who it applies to">
+    Enter a name and choose one or more **Templates**. Requests from branches of those templates wait too.
+
+    Leave **Company** as **Every company**, or choose one company. With one company you can also choose a **Site** so the chain applies only to people at that site. A site chain wins over a company chain, and a company chain wins over an every-company chain.
+  </Step>
+  <Step title="Add the steps">
+    For each step, choose who approves it:
+
+    | Approved by | Who can approve |
+    | --- | --- |
+    | **Named people** | The contacts you pick. Needs a chain for one company. |
+    | **Holders of a company role** | Every active contact of the requester's company with that role. Turn on **Only people at the requester's site** to narrow it to the requester's site when they have one. |
+
+    Set **Approvals needed**, and optionally **Remind after** and **Expire after**. An expired step ends the request. The requester never approves their own request.
+  </Step>
+  <Step title="Decide who needs approval">
+    Under **Who needs approval**, keep **Everyone**, or limit the chain by the company roles the requester holds:
+
+    | Rule | Effect |
+    | --- | --- |
+    | **Everyone** | Every request from the templates waits. |
+    | **Only people with these roles** | Only requests from holders of the chosen roles wait. |
+    | **Everyone except people with these roles** | Holders of the chosen roles (for example Manager or Admin) submit directly; everyone else waits. |
+
+    A requester the chain does not apply to falls through to the next wider chain, if there is one.
+  </Step>
+  <Step title="Choose how the request waits">
+    Under **How the request waits**, keep **Hold in MSPortal** or choose **Create the ticket right away** and pick the waiting, approved and not approved statuses for each PSA board.
+  </Step>
+  <Step title="Choose what a rejection can do">
+    Under **When a request is rejected**, turn on **Let approvers forward the request by email** if approvers may email the full request to themselves. Add up to five fixed addresses (for example the company's internal IT mailbox) to offer those too. The approver chooses the addresses when they reject.
+  </Step>
+  <Step title="Save">
+    Select **Create chain**. Only one chain that is on can cover a template for the same company and site; the editor names the chain that already does.
+  </Step>
+</Steps>
+
+Turning a chain off or deleting it stops holding new requests. Requests already waiting keep their approvers and their settings.
+
+## Decide for the approvers
+
+MSP staff who can update tickets can open any request on **Approvals > All requests** and select **Approve for the approvers** or **Reject for the approvers**. A reason is required. The decision settles every remaining step and is recorded as an MSP override that the requester and approvers can read. When rejecting, staff can forward the request too if the chain allows it.
+
+Decisions can't be made while you are impersonating someone. Stop impersonating and decide for the approvers instead.
+
+## Audit trail
+
+Every request keeps its history in MSPortal: who asked, each step, each decision with its note, where a rejection was forwarded, and what happened in the PSA. With **Create the ticket right away**, the PSA ticket also gets an internal note for every outcome (approved, not approved, expired or withdrawn) with the decider, their reason, the new status and a link to the request.
+
+## When the PSA write fails
+
+If the PSA refuses the ticket after approval, or refuses the status change or note, the request shows **Ticket not created** or **Ticket not updated** with the reason. Fix the cause (for example a mapping the PSA requires) and select **Create the ticket again** or **Update the ticket again** on the request.
+
+Related: [Approve a request](/user-guides/ticketing/approve-a-request), [Change management](/user-guides/ticketing/change-management).

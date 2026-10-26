@@ -1,0 +1,67 @@
+---
+title: Industry trends and software standardization
+description: Show a client's industry trends and standard applications, and compare its line-of-business software with your other clients in the same industry
+icon: industry
+---
+
+Two report blocks describe a client's industry. **Industry Trends** shows the trends, standard applications, compliance frameworks and IT priorities for that industry, and how many of your clients already run each standard application. **Industry Software Standardization** lists the line-of-business (LOB) applications your clients in that industry run, how many clients share each one, and where one client differs from its peers. The same facts are available to the AI assistant and MCP clients through `get_industry_overview` and `get_industry_insights`.
+
+## Before you start
+
+- The **Industry insights** feature must be on for your organization. It is on by default.
+- You need read access to **Devices** and **Company settings**. Company users do not see these blocks.
+- Each client needs an industry. The blocks use the client's industry sector when it is set, and otherwise read it from the free-text **Industry** field on the company (for example "Healthcare - SNF" or "Legal"). Clients without an industry are left out of every comparison. Use the companies AI assistant in **Settings > Companies** to classify clients in bulk.
+- Peer comparisons need software inventory from an RMM that syncs installed software (Datto RMM, NinjaOne, Action1 or ConnectWise RMM). A client without inventory counts as a peer but not toward adoption.
+- Peers are always every active client of yours in the industry, whatever the company selector holds. The selector only decides which client the block describes.
+- Industry profiles are generated weekly. A new industry shows **not generated yet** until the next run.
+
+## Add the blocks to a report
+
+<Steps>
+  <Step title="Open the block palette">
+    Edit a report or dashboard and open the block palette. Both blocks sit in the **Data** category.
+  </Step>
+  <Step title="Choose the industry">
+    Open the block's menu. **Industry** defaults to **From the clients in scope**: with one client selected the block shows that client's industry; with several it uses the sector with the most clients. Pick a sector to fix it, and a **Vertical** to narrow the peer group, or leave **Whole sector**.
+  </Step>
+  <Step title="Size the block">
+    Small sizes show the top trend or the most shared application. Two columns by four rows or larger show the summary, trends, standard applications and the peer comparison. The standardization block's menu also sets **Applications shown**.
+  </Step>
+</Steps>
+
+## Read the Industry Trends block
+
+- **Overview** is a short description of the industry's technology landscape.
+- **Trends** carry a horizon pill: **Now**, **1-2 years** or **3-5 years**. Larger sizes add what each trend means for IT.
+- **Standard applications** list the products businesses in the industry commonly run, with **Dominant**, **Common** or **Emerging** market adoption. The figure on the right, for example **4 of 6 peers**, counts your clients in that industry whose software inventory contains the application. **Not seen** means none of your clients runs it.
+- The footer gives the profile's generation date. The profile is general industry knowledge, not client data, and refreshes every 90 days.
+
+## Read the Industry Software Standardization block
+
+The block groups installed products into application families, so "QuickBooks Premier 2022" and "QuickBooks Enterprise" count as one QuickBooks family. A product counts as line-of-business the same way the Software page shows it: your LOB override first, otherwise the shared software assessment's answer when Software assessments are on for your organization. Key applications count as well. Ignored products and products with the override turned off never count.
+
+| Pill | Meaning |
+| --- | --- |
+| **Standard** | 75% or more of the peers with inventory run it |
+| **Common** | 40% to 74% of the peers with inventory run it |
+| **Occasional** | Fewer than 40% |
+
+The caption under the title states how many clients are in the industry and how many have software inventory; that second figure is the denominator for every share.
+
+With one client in scope the block adds three groups:
+
+- **Peer standards not installed**: applications at least half of the other clients run (and at least two of them) that this client does not.
+- **Peer standards in place**: those the client already has.
+- **Only this client**: line-of-business applications no peer runs.
+
+With several clients in scope the wide and large sizes list the peer clients with the number of line-of-business applications each one runs.
+
+## Ask the assistant
+
+The assistant answers questions such as "Which industries do we serve?", "What do our legal clients standardize on?" or "What is this client missing compared with its peers?" using the same data. Peer figures only ever cover your own clients, never other MSPs.
+
+## Related guides
+
+- [Software inventory](/user-guides/devices/track-software)
+- [Client benchmarks and reporting blocks](/user-guides/reporting/index)
+- [MCP tools reference](/user-guides/mcp-server/tools-reference)

@@ -24,7 +24,7 @@ MSPortal publishes recurring calendar series. It does **not** create a separate 
 | **Yearly** | One recurring series that repeats every year |
 
 <Note>
-A twice-monthly booking produces two series—and therefore two initial calendar invitations—because each selected week of the month is represented by its own recurring series. Every other cadence produces one series and one initial invitation per participant.
+A twice-monthly booking produces two series, and so two initial calendar invitations, because each selected week of the month is represented by its own recurring series. Every other cadence produces one series and one initial invitation per participant.
 </Note>
 
 The series have no automatic end date. MSPortal checks occurrences in the next 12 months when the booking is confirmed, while the recurring series continues beyond that window. Later occurrences are not automatically checked or monitored for new conflicts.
@@ -40,7 +40,7 @@ The host's available calendar delivery method determines how the series is publi
 | **Microsoft 365 / Outlook** | MSPortal creates one Outlook recurring event per series in the host's calendar. Outlook sends the invitations and any later updates. |
 | **Email calendar invitations** | MSPortal creates the same recurring schedule in its calendar and emails each participant a recurrence-aware ICS invitation per series. Microsoft Teams is not available in this mode. |
 
-## Prerequisites
+## Before you start
 
 - The Recurring Meetings feature must be enabled for your tenant.
 - To open **Calendar > Recurring Meetings**, you must be an MSP tenant user with **Manage Meetings** or **Manage Calendar** permission. The page is unavailable while impersonating another user.
@@ -91,7 +91,7 @@ If your host settings show **Email calendar invites**, availability comes from y
     Go to **Settings > Companies**, open the company, and select the **Defaults** tab.
   </Step>
   <Step title="Choose the Meeting Cadence">
-    In **Recurring meeting defaults**, configure **Business Review** and/or **Compliance Review**.
+    On the **Recurring meeting defaults** sub-tab, configure **Business Review** and/or **Compliance Review**.
 
     Business reviews support twice-monthly, monthly, quarterly, twice-yearly, and yearly cadences. Compliance reviews also support weekly meetings.
   </Step>
@@ -102,11 +102,24 @@ If your host settings show **Email calendar invites**, availability comes from y
     Microsoft Teams requires a host with Microsoft 365 calendar access. Hosts using email calendar invitations cannot publish a Teams meeting.
     </Warning>
   </Step>
+  <Step title="Optionally Choose a Target Month or Quarter">
+    For **Quarterly** or **Yearly** meetings, choose **Target month or quarter** directly below the cadence. Choose a month or a quarter such as **Q3**. A quarter allows the first matching date anywhere in its three months. Choose **Next matching occurrence** to use the next matching date without a target period. Other cadences do not offer this control.
+
+    The target applies to new bookings after you save the defaults. Existing recurring bookings keep their stored dates. A distant target can offer choices whose availability has not yet been checked; MSPortal checks availability before confirmation.
+
+    <Frame caption="Quarterly with Q3 selected beneath Cadence. Draft changes were not saved.">
+      <img src="/images/product/meeting-target-period-desktop.png" alt="MSP staff company defaults with an optional target month or quarter set to Q3" width="2880" height="1920" />
+    </Frame>
+
+    <Frame caption="The same target period on a phone.">
+      <img src="/images/product/meeting-target-period-phone.png" alt="Phone layout showing Q3 beneath the Quarterly cadence in company recurring meeting defaults" width="780" height="1688" />
+    </Frame>
+  </Step>
   <Step title="Optionally Suggest a Schedule">
     Turn on **Suggest a schedule** to prefill a weekday, week of the month or week pair, and time. The client can still choose another recommended schedule when booking.
   </Step>
   <Step title="Save the Defaults">
-    Click **Save meeting defaults**. This makes the company and meeting type eligible for a booking link; it does not create a meeting.
+    Click **Save Defaults** at the top of **Company Defaults**. This makes the company and meeting type eligible for a booking link; it does not create a meeting.
   </Step>
 </Steps>
 
@@ -117,7 +130,7 @@ If your host settings show **Email calendar invites**, availability comes from y
     Return to **Calendar > Recurring Meetings**. In **Recurring Meeting Schedules**, find the company's Business Review or Compliance Review row.
   </Step>
   <Step title="Preview the Client Experience">
-    Click the **Preview** eye, choose a host, and open the preview. Preview mode uses the selected company's cadence, meeting settings, and recommended availability, but cannot create a booking.
+    Click the **Preview** eye, choose a host, and open the preview. Preview mode uses the selected company's cadence, meeting settings, and recommended availability, but cannot create a booking. Use the back arrow beside the page title to return to Recurring Meetings.
   </Step>
   <Step title="Copy the Link">
     Open the row's actions menu, select **Copy**, choose an active host, and click **Copy link**.
@@ -130,6 +143,39 @@ If your host settings show **Email calendar invites**, availability comes from y
 <Tip>
 Choose the host carefully. Selecting a different host later creates a different company-specific booking link.
 </Tip>
+
+## Plan Business Reviews Across the Year
+
+Open **Calendar > Recurring Meetings** and select the **Review plan** tab to see every client's business reviews for a year. Each row is a client with a business review cadence or a business review meeting that year, and each column is a month. Clients without a cadence show **No business review cadence**. The plan follows the company selector, so choosing one company shows only that client.
+
+| Mark | Meaning |
+|------|---------|
+| **Held** | A business review meeting took place that month |
+| **Booked** | A business review meeting is scheduled that month |
+| **Due** | The client's cadence puts a review in that month and none is held or booked yet |
+| **Overdue** | A due month has passed without a review |
+
+Due months come from the client's **Target month or quarter** first. Without a target, they count forward from the client's last business review. Monthly and semi-monthly clients are due every month. A review held or booked one month early or late still covers a quarterly, half-yearly or yearly due month. Clients that need a target to be planned say **Set a target to plan**.
+
+**Reviews per month** totals each column. Darker months hold more reviews, and a flame marks months that are clearly busier than average. Use the **Previous year** and **Next year** arrows beside the year to plan another year.
+
+Click a client's name to open its recurring meeting defaults, where you can set its **Target month or quarter** by hand. See **Configure a Company's Meeting Defaults** above.
+
+### Suggest Target Months
+
+<Steps>
+  <Step title="Open Suggest targets">
+    Click **Suggest targets**. The button is available when at least one client in the plan has a Quarterly or Yearly business review cadence. MSPortal proposes a target month for each Quarterly and Yearly client without one, spreading quarterly clients across the first, second and third month of the quarter and yearly clients across the year. Existing targets count as fixed.
+  </Step>
+  <Step title="Review the Changes">
+    Each row shows the client's current target and the proposed one, and the dialog shows the busiest month now and after the changes. Turn on **Re-plan clients that already have a target** to rebalance every Quarterly and Yearly client. Clear the checkbox for any client you want to leave unchanged.
+  </Step>
+  <Step title="Apply">
+    Click **Apply N targets**. Each client's target is saved in its recurring meeting defaults, and the plan updates. Other defaults such as the preferred weekday, time, duration and Teams setting stay as they were. If a client's defaults changed while the dialog was open, that client is skipped; reload the plan and try again.
+  </Step>
+</Steps>
+
+To remove a target, click the **X** beside the client's name in the plan, or clear it in the client's recurring meeting defaults. Targets only shape new bookings; existing recurring bookings keep their dates.
 
 ## What the Client Chooses
 
@@ -196,6 +242,29 @@ Click **Cancel recurring meeting** and confirm the action. MSPortal cancels ever
 
 If the booking shows a failed or partial-failure status, the host can use **Retry Outlook publication** or the available retry action to resume calendar delivery.
 
+## Link an existing Outlook recurring meeting
+
+If a company already has a recurring Outlook meeting, link it to the schedule instead of booking a new one.
+
+<Steps>
+  <Step title="Open the row menu">
+    In **Recurring Meeting Schedules**, open the **...** menu on the company's row.
+  </Step>
+  <Step title="Choose Link Outlook meeting">
+    For a twice-monthly schedule, there is one option for the first series and one for the second.
+  </Step>
+  <Step title="Select the Outlook meeting">
+    Pick from **Select an Outlook meeting**. The list includes series with no end date and series that end on a date or after a number of occurrences, as long as at least one occurrence is still ahead. If the list says **No eligible Outlook meetings**, the company has no recurring Outlook meeting that can be linked.
+  </Step>
+  <Step title="Click Link meeting">
+    **Outlook meeting linked** confirms it. The row then shows **Linked to Outlook**.
+  </Step>
+</Steps>
+
+From the same menu you can choose **View in Outlook**, **Change linked meeting** or **Unlink meeting**. Unlinking keeps the meeting in Outlook. A row can also show **Needs another Outlook series**, **Link needs attention**, **Outlook sync issue**, **Schedule does not match**, **Meeting cancelled** or **Series ended** when the link needs a look.
+
+**Series ended** means the linked series has no occurrences left. Choose **Change linked meeting** to link the series that replaces it, or **Unlink meeting** to book a new schedule.
+
 ## Notifications
 
 MSPortal sends lifecycle emails to the host and booking owner when applicable:
@@ -225,7 +294,7 @@ Outlook hosts receive calendar invitations through Outlook. Email-invitation hos
 | **A future conflict appears after confirmation** | Only the next 12 months are checked at confirmation time. Later occurrences and newly added conflicts are not monitored automatically. Reschedule the affected occurrence when needed. |
 
 
-## Questions and troubleshooting
+## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does copying or previewing a booking link create meetings?">
@@ -257,7 +326,7 @@ Outlook hosts receive calendar invitations through Outlook. Email-invitation hos
   </Accordion>
 </AccordionGroup>
 
-## Related Resources
+## Related guides
 
 <CardGroup cols={2}>
   <Card title="Calendar" icon="calendar" href="/user-guides/calendar/index">
@@ -270,3 +339,17 @@ Outlook hosts receive calendar invitations through Outlook. Email-invitation hos
     Manage client company configuration and defaults
   </Card>
 </CardGroup>
+
+
+## Booking demo navigation
+
+<Note>The **Demo booking** and client previews use the standard back arrow beside the Recurring Meetings page title. The demo uses sample availability and does not create meetings or send invitations.</Note>
+
+<Tabs>
+<Tab title="Desktop">
+<Frame caption="Back arrow beside the page title, above the demo notice."><img src="/images/product/back-nav-bookingdesktop-preview.png" alt="Back arrow beside the page title on desktop" width={1280} height={853} /></Frame>
+</Tab>
+<Tab title="Phone">
+<Frame caption="Back arrow beside the page title, above the demo notice."><img src="/images/product/back-nav-bookingmobile-preview.png" alt="Back arrow beside the page title on phone" width={390} height={844} /></Frame>
+</Tab>
+</Tabs>

@@ -1,83 +1,101 @@
 ---
-title: 'Control Company quote access'
-description: 'MSP guide to configuring Company-role quote permission, visibility, and allowed statuses.'
+title: 'Control company quote access'
+description: 'Set which quotes company users can see, by contact and by stage, in their company role.'
 icon: 'user-shield'
 ---
 
-MSP staff control Company quote access through the user’s Company permission role. In **Settings > Users & Roles > Roles**, edit the appropriate **Company Role** and configure **Quotes**.
+Use the **Quotes** row in a company role to control which quotes the users with that role can see. This page is for MSP staff. Company administrators ask their MSP to change quote access.
 
-Company administrators ask their MSP for access changes. They do not manage these role settings themselves.
+## Before you start
 
-## Before you change a role
+- You need permission to edit roles in **Settings > Users & Roles**.
+- Editing a role changes access for every user who has it. If only one person needs a different policy, duplicate the role and [assign the new role to that user](/user-guides/settings/change-company-user-permissions).
+- The quote controls appear only on company roles, and only when the role has **Read** or **Manage** access to **Quotes**.
+- Access never goes beyond the user's company access. These settings only narrow it.
 
-You need permission to edit the relevant Company role, with an active subscription that allows the change. Confirm which users share the role: editing it changes access for those users, not just the person who reported a problem.
-
-If only one person needs a different policy, create or duplicate an appropriate Company role and [assign that permissions group to the user](/user-guides/settings/change-company-user-permissions).
-
-## Configure quote visibility
+## Set quote visibility and statuses
 
 <Steps>
-  <Step title="Open the Company role">
-    Go to **Settings > Users & Roles > Roles**, find the role under **Company Roles**, and open its editor.
+  <Step title="Open the company role">
+    Go to **Settings > Users & Roles > Roles**. Under **Company Roles**, find the role and open its editor.
   </Step>
   <Step title="Allow reading Quotes">
-    Find **Quotes** in the permission matrix and enable the appropriate read permission. The additional quote access controls appear when the Company role can read Quotes.
+    In the permission matrix, find **Quotes** and turn on **Read**. The **Visibility** and **Statuses** controls appear under the **Quotes** row.
   </Step>
   <Step title="Choose Visibility">
-    Select **All quotes**, **Mine only**, or **My site**. Use the table below to choose the intended policy.
+    Open **Visibility** and pick **All quotes**, **Mine only**, or **My site**. See the table below.
   </Step>
   <Step title="Choose Statuses">
-    Leave **Statuses** empty for **All statuses**, or select the provider statuses this role may see. A restricted list excludes quotes whose stage is missing or does not match an allowed status.
+    Leave **Statuses** empty to show **All statuses**, or pick the stages this role may see. A restricted role does not see a quote whose stage is blank or not in the list.
   </Step>
-  <Step title="Save and verify">
-    Review the other role settings, select the editor’s save action, and wait for the result. Reopen the role to confirm the saved values, then verify the intended Company user’s Quotes access.
-
-    If the session still reflects old access, have the user sign out and back in. If saving reports an error, reopen the role and check each setting before retrying; some parts of a role update can already have saved.
+  <Step title="Save and check">
+    Review the rest of the role, then click **Update Role**. Reopen the role to confirm the saved values. Then check the Quotes list as a user with that role. If the user still sees old access, ask them to sign out and back in.
   </Step>
 </Steps>
 
-| Visibility | Which quotes it permits within the user’s company access |
+| Visibility | Which quotes the user can see |
 | --- | --- |
-| **All quotes** | Accessible company quotes, subject to the role’s allowed statuses. |
-| **Mine only** | Quotes whose billing contact’s full name matches the user’s full name. This is not the quote owner field. |
-| **My site** | Quotes whose billing contact matches the user or another portal user at the same company and location. Without an assigned company or location, it falls back to Mine only. |
+| **All quotes** | Every quote in the user's company access, within the allowed statuses. |
+| **Mine only** | Quotes where the billing contact's full name matches the user's full name. This is not the quote owner. |
+| **My site** | Quotes for the user, and for other portal users at the same company and location. Without a company or location, it works like **Mine only**. |
 
-A visibility setting does not broaden company access or enable a missing integration. The same role restrictions apply to internal quote detail links and the portal’s Salesbuildr PDF request.
+The same rules apply to the quote detail page and the Salesbuildr PDF.
 
-## Diagnose a missing quote
+## Find out why a quote is missing
 
-Check the Company user’s actual permissions group, quote read permission, company and location assignments, full name, and the quote’s billing-contact name. Name differences can prevent a Mine only or My site match. Check the role’s allowed statuses as well as the list’s temporary filters.
+<Steps>
+  <Step title="Check the user's role">
+    Open the user and confirm which company role they have.
+  </Step>
+  <Step title="Check Quotes access">
+    Open the role and confirm **Quotes** has **Read** access, and see which **Visibility** and **Statuses** are set.
+  </Step>
+  <Step title="Check the names">
+    For **Mine only** and **My site**, compare the user's full name with the quote's billing contact name. A spelling difference stops the match.
+  </Step>
+  <Step title="Check the stage">
+    If **Statuses** is set, check that the quote's stage is in the list. Use the stage names the provider uses.
+  </Step>
+  <Step title="Check the company">
+    Check that the quote is mapped to the user's company. See [Troubleshoot missing Quoter quotes and company links](/user-guides/quotes/troubleshoot-quoter-quotes).
+  </Step>
+</Steps>
 
-For a status restriction, select the provider’s actual stage values. Removing the last selected status returns the role to all statuses; it does not hide all quotes. To remove quote access, remove the appropriate Quotes permission instead.
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Visibility** and **Statuses** are missing | Open a company role, and turn on **Read** for **Quotes**. |
+| The statuses list is empty | You see **No quote statuses found** until quotes have synced from a provider. |
+| A user still sees old quotes | Ask them to sign out and back in. |
+| A user lost every quote after you picked statuses | None of their quotes has a stage in the list. Check the stage names. |
+| Saving shows an error | Reopen the role and check each setting before you try again. Part of a role update may already have saved. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Mine only use the quote owner?">
-    No. It compares the billing contact’s full name with the Company user’s full name.
+    No. It compares the billing contact's full name with the user's full name.
   </Accordion>
   <Accordion title="What if the user has no location?">
-    My site falls back to Mine only when the user lacks the company or location assignment needed for site matching.
+    **My site** then works like **Mine only**.
   </Accordion>
-  <Accordion title="Does All quotes show other companies’ quotes?">
-    No. Company access still applies, together with any configured status restriction.
+  <Accordion title="Does All quotes show other companies' quotes?">
+    No. Company access still applies.
   </Accordion>
   <Accordion title="What does clearing Statuses do?">
-    It allows all statuses within the user’s other access restrictions. An empty selection does not deny all quotes.
+    It allows every status. An empty list does not hide all quotes. To remove quote access, turn off **Read** for **Quotes**.
   </Accordion>
-  <Accordion title="Why do unclassified quotes disappear after I select statuses?">
-    A quote without a matching stage is excluded when a status restriction is set. Check the provider’s data and the intended policy.
-  </Accordion>
-  <Accordion title="Does changing the dropdown save immediately?">
-    No. Review the role and use its save action. Reopen the editor to verify what was saved.
+  <Accordion title="Does changing Visibility save right away?">
+    No. Click **Update Role** to save.
   </Accordion>
   <Accordion title="Can I change one person without changing everyone on the role?">
-    Assign a different suitable role to that person, or create a separate role. Editing a shared role affects its assigned users.
+    Give that person a different role, or create a new one.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
 - [Create or edit a permission role](/user-guides/getting-started/how-to-create-a-new-user-role)
-- [Change a Company user’s permissions](/user-guides/settings/change-company-user-permissions)
+- [Change a company user's permissions](/user-guides/settings/change-company-user-permissions)
 - [Find and open a quote](/user-guides/quotes/view-quotes)

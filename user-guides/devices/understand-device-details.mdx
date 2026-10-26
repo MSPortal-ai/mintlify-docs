@@ -1,6 +1,6 @@
 ---
 title: 'Understand device details'
-description: 'Read hardware, security, network, warranty, and integration information without confusing missing data with a healthy device.'
+description: 'Read hardware, security, network, warranty, purchase, Intune, and integration information without confusing missing data with a healthy device.'
 icon: 'computer'
 ---
 
@@ -25,10 +25,37 @@ For Company users and MSP staff with access to the device. Provider portal and r
 | Battery | Available charge, charging, and cycle information |
 | User | Reported current or last user details, where supplied |
 | System | Available uptime, boot, operating-system build, agent, and reboot information |
-| Warranty | Recorded start/end dates and the remaining-days or expired indicator |
+| Warranty and purchase | **Purchase Date** with where it came from, recorded warranty start/end dates, and the remaining-days or expired indicator |
+| Microsoft Entra ID and Intune | Join type, compliance, ownership, primary user, and Intune check-in details from CIPP |
 | Custom fields | Additional fields configured and made visible to your account |
 
 A protection badge or recent inventory entry does not by itself establish that every security control is healthy. Use the relevant reported evidence and ask your provider about missing or unexpected values.
+
+## Purchase date and device age
+
+**Purchase Date** appears in the Overview when one is recorded. The line under it shows where the date came from: **Entered manually**, or **From** followed by the source, such as ConnectWise PSA, Autotask, Halo PSA, IT Glue or ConnectWise RMM. Apple and Dell warranty lookups can also supply it.
+
+A date entered on the device is kept when syncs run. Clear it to use the date from your PSA or IT Glue again. See [Add and edit device records](/user-guides/devices/add-and-edit-devices#set-a-purchase-date).
+
+**Device Age** counts the years since the purchase date. When no purchase date is recorded, it counts from **Warranty Start**. A device with neither date has no age.
+
+## Review Microsoft Entra ID and Intune details
+
+When your MSP connects CIPP and the device has a matching Intune record, the Overview shows a **Microsoft Entra ID and Intune** section. It can include:
+
+| Field | What it shows |
+| --- | --- |
+| **Join type** | **Entra joined**, **Hybrid joined** or **Entra registered** |
+| **Compliance** | The Intune compliance state, such as **Compliant**, **Not compliant** or **In grace period** |
+| **Ownership** | **Corporate** or **Personal** |
+| **Primary user** | The device's primary Intune user |
+| **Operating system** and **Management agent** | As reported by Intune |
+| **Last Intune check-in** and **Enrolled** | When the device last checked in with Intune and when it enrolled |
+| **Entra device ID** and **Intune device ID** | The Microsoft identifiers for the device |
+| **Encrypted** | Whether Intune reports the device as encrypted |
+| **Last synced from CIPP** | When the portal last received this data |
+
+The note under the section gives the device name Intune reports, which can differ from the RMM name. The section is absent when CIPP has no Intune record for the device; that is not a compliance result. Intune devices that no RMM agent reports are listed in **Devices > Not in RMM**; see [Find Intune devices missing from your RMM](/user-guides/devices/find-devices#find-intune-devices-missing-from-your-rmm).
 
 ## Understand the IP location section
 
@@ -39,10 +66,10 @@ A protection badge or recent inventory entry does not by itself establish that e
 - **Find approximate location** runs the available lookup; it can contact the configured location service.
 - **Open map** opens the approximate coordinates on an external map.
 
-If no external IP is reported, the panel explains that a lookup is unavailable. Typing an internal address into a device record does not supply a verified external location.
+If no external IP is reported, the **IP location** section is hidden. Typing an internal address into a device record does not supply a verified external location.
 
-<Frame caption="The location section explains when the integration has not reported an external IP.">
-  <img src="/images/product/device-missing-public-ip.png" alt="IP location section showing that no external IP has been reported" width="1118" height="180" />
+<Frame caption="This Demo device has no Software tab or IP location section because those details are unavailable.">
+  <img src="/images/product/ninja-empty-device-preview-desktop.png" alt="Demo device Overview with only Overview and Edit tabs and no IP location section" width="2880" height="1920" />
 </Frame>
 
 The result is approximate, not GPS tracking or a street address. A VPN, shared office connection, or internet provider can make several devices appear in the same place. See [find an approximate IP location](/user-guides/devices/ip-location) and [understand location results](/user-guides/devices/ip-location-accuracy-and-privacy).
@@ -52,12 +79,39 @@ The result is approximate, not GPS tracking or a street address. A VPN, shared o
 The detail panel can also offer:
 
 - **Cork** or **Liongard**, when the device has corresponding integration data.
-- **IT Glue**, when the portal has that integration. An unlinked device can show that it is not documented in IT Glue.
+- **IT Glue**, when the portal has an active integration and this device has an IT Glue mapping.
+- **Software**, for MSP staff with device-read access when software inventory is enabled and installed inventory has been confirmed for this device. Review installed versions and lifecycle warnings. **Urgent** and **High** update priorities appear only when the separate **Software assessments** flag is enabled; see [Software inventory](/user-guides/devices/track-software).
 - **Edit**, when your account has device-management permission.
 
 These tabs have separate purposes. A missing integration tab is not a finding that the device is unprotected or undocumented in every system. Ask the MSP to check integration availability, mapping, synchronization, and your access.
 
+<Note>Supported device resync controls sit beside the close button. Software inventory is available to MSP staff when enabled for the tenant.</Note>
+
+<Frame caption="Device software with the resync action beside the close button.">
+  <img src="/images/product/pr1601-device-software-desktop.png" alt="Device software with the resync action beside the close button" width="1440" height="960" />
+</Frame>
+
 MSP staff may also see **Portal**, **Remote**, or provider-named shortcuts in the header. These open another service and can require separate access. They do not grant Company users remote control.
+
+## Review installed software
+
+<Note>
+These screenshots show the MSP staff view using Demo inventory; Company users do not receive the Software tab.
+</Note>
+
+With software inventory enabled and device-read access, **Software** appears after installed inventory is confirmed for this device. It stays hidden while that first read is pending, when the read fails, or when the device has no installed inventory. Missing software data is not proof that the device has no applications installed.
+
+Select **Software** to review application names, versions, publishers, and the available lifecycle status. Use **Search software** or **Needs attention only** to narrow the list. A search with no matches keeps the tab and filters available, so you can clear the filter and continue.
+
+If the inventory disappears while you are viewing Software, the panel returns to **Overview**. When inventory becomes available again, Overview stays selected until you select Software yourself.
+
+<Frame caption="The device Software list on desktop.">
+  <img src="/images/product/ninja-software-preview-desktop.png" alt="Installed applications with software search and the Needs attention only control" width="2880" height="1920" />
+</Frame>
+
+<Frame caption="The same Software controls and list on a phone.">
+  <img src="/images/product/ninja-software-preview-mobile.png" alt="Phone layout of the device Software tab with search, filter, and installed applications" width="780" height="1688" style={{ maxWidth: "390px", width: "100%" }} />
+</Frame>
 
 ## Report a problem with the record
 
@@ -80,6 +134,9 @@ If a section fails to load, close and reopen the device after the inventory has 
   <Accordion title="Why does the device name differ from the inventory name?">
     Some integrations supply a friendly display name. The panel can show that name together with the underlying device name so you can identify the same record.
   </Accordion>
+  <Accordion title="Why does Device Age differ from the warranty start?">
+    Device Age counts from the purchase date when one is recorded, and from the warranty start only when there is no purchase date.
+  </Accordion>
   <Accordion title="Does a missing warranty date mean it expired?">
     No. It means no date is available in the record. Ask your provider to confirm coverage.
   </Accordion>
@@ -89,8 +146,8 @@ If a section fails to load, close and reopen the device after the inventory has 
   <Accordion title="Is IP location live GPS tracking?">
     No. It estimates the location of the internet exit point associated with a reported external IP. Check both observation and lookup dates.
   </Accordion>
-  <Accordion title="Why can I see IT Glue even when this device is not linked?">
-    The tab can be available because the portal uses IT Glue. It can show that this particular device has no linked configuration; that is different from the integration being absent.
+  <Accordion title="Why is IT Glue missing for this device?">
+    The tab requires an active IT Glue integration and an IT Glue mapping for this device. Ask the MSP to check the saved mapping and your access.
   </Accordion>
   <Accordion title="Does closing the Edit panel prove my changes were saved?">
     No. Check any error message, reopen the device, and verify the intended values. A closed panel alone is not confirmation of a successful update.

@@ -1,86 +1,282 @@
 ---
-title: "Configure DNSimple Integration"
-description: "Connect an account, map domains, and distinguish saved credentials from background synchronization."
-icon: "plug"
+title: 'Configure DNSimple Integration'
+description: 'Connect DNSimple to MSPortal.ai to track managed domains, expirations, and renewal alerts'
+icon: 'globe'
 ---
 
-DNSimple brings domain inventory and renewal information into MSPortal. This setup is for **MSP staff with integration management access**. Company users use the domain information their IT provider makes available; they do not configure this connection.
+This guide walks you through connecting your DNSimple account to MSPortal.ai using our streamlined setup wizard.
 
-## Before you connect
+## Overview
 
-Use an account API token for the DNSimple account that owns the domains. Follow [DNSimple’s current token instructions](https://support.dnsimple.com/articles/api-access-token/): open the account’s **API & Access** page and generate an account token. The MSPortal form may still call this **Account → Access Tokens**. Copy the token securely when it is shown. The wizard uses the production DNSimple service.
+DNSimple is a domain registration and DNS management service. By integrating DNSimple with MSPortal.ai, you can:
 
-## Connect and save
+- Keep an up-to-date inventory of every domain registered or hosted in your DNSimple account
+- Map each domain to the MSPortal company it belongs to
+- Track expiration dates, auto-renew status, and registration details
+- Show domain renewals in client reports with the DNSimple Domains reporting block
+- Build automation rules that alert you before a domain expires
 
-1. Open **Settings > Integrations**, find **DNSimple**, and open its setup.
-2. On **Connect**, enter the **Account API Token**.
-3. Use **Test connection** to check the entered token. A successful test does not save a new integration.
-4. Choose **Save and connect**. This checks the token again, saves the connection, and requests an initial background domain sync.
-5. After saving succeeds, choose **Next** to open **Map**. There is no guaranteed completion time for the background import.
+## Prerequisites
 
-<img src="/images/product/dnsimple-setup-controls.png" alt="Blank DNSimple account-token form with separate Test connection and Save and connect controls." width="1152" height="564" />
+- Active DNSimple account
+- DNSimple Account API token
+- MSPortal.ai account with integration management permissions
 
-## Map domains to existing companies
+## Part 1: Generate a DNSimple API Token
 
-Wait for imported domains to appear. If the empty mapping view offers **Sync Domains**, use it to request an inventory sync, then allow time for results.
+Before connecting to MSPortal.ai, you need an Account API token from DNSimple.
 
-Choose an existing company for each domain, or use **Quick Match** and review its suggestions before applying them. These choices are pending links. **Import Selected** applies pending links; **Next** also attempts to save pending changes before leaving Map and requests another sync. Review all pending links before applying: a table filter does not make unrelated pending choices disappear.
+<Steps>
+  <Step title="Log into DNSimple">
+    Access your account at [dnsimple.com](https://dnsimple.com).
+  </Step>
 
-DNSimple mapping does **not** create companies from domain names. Create the company separately if it is missing. Removing a saved mapping is immediate; clearing an unsaved suggestion only clears that pending choice.
+  <Step title="Open Access Tokens">
+    Go to your account page and open **Account > Access Tokens**.
 
-Where available, **Ignore** removes an unmapped domain from the mapping backlog, and **Restore** brings it back. Both save immediately. Remove an existing or pending company link before ignoring a domain. Ignoring is a mapping decision, not a domain deletion or a DNS change.
+    <Tip>
+      Use an **account** token, not a user token. Account-scoped tokens are recommended, with one account per integration. If you manage multiple DNSimple accounts, connect the account that holds the domains you want to track.
+    </Tip>
+  </Step>
 
-## Complete and check results
+  <Step title="Create the Token">
+    Click to add a new access token and give it a recognizable name, such as `MSPortal Integration`.
+  </Step>
 
-On **Complete**, **Run full sync** requests a background inventory refresh. A successful request or **All set** message is not proof that every domain is imported or mapped. **Complete setup** finishes the wizard; it does not wait for the sync to finish.
+  <Step title="Copy the Token">
+    Copy the token immediately.
 
-The configured daily refresh is 06:30 UTC. Actual execution and freshness depend on a working connection and successful background runs. Sync reconciles domains removed from the DNSimple account as well as current domains. Review the resulting inventory and company links after an account change or transfer.
+    <Warning>
+      **Store the token securely!** DNSimple only shows it once. If you lose it, create a new token.
+    </Warning>
+  </Step>
+</Steps>
 
-Open **Map companies** from Integrations to revisit links. Use [Cloud Domains](/user-guides/cloud/domains) to read available domain information and [domain renewals](/user-guides/cloud/review-domain-renewals) for interpretation. Hosted DNS-only domains may lack registration expiry information. Missing expiry is not a successful renewal check.
+---
 
-## Update or remove the connection
+## Part 2: MSPortal Setup Wizard
 
-Reopen setup and return to **Connect**. Leaving the token blank retains the saved token. **Test connection** with a blank field tests that saved token. To rotate it, enter the replacement, test it, and choose **Update credentials**. **Next** is not a credential save.
+MSPortal.ai provides a guided 3-step wizard to connect DNSimple and map your domains.
 
-Use a replacement token for the same account when rotating credentials. A token for another account changes the inventory being synchronized; review that change deliberately rather than treating it as a routine rotation.
+### Starting the Wizard
 
-**Delete** opens a confirmation to remove the MSPortal connection. This does not delete domains or DNS records in DNSimple. Review downstream use of imported data before disconnecting.
+<Steps>
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings > Integrations**.
+  </Step>
+
+  <Step title="Find DNSimple">
+    Locate the **DNSimple** row in the list of available integrations.
+  </Step>
+
+  <Step title="Start Setup">
+    Click **Connect** to launch the setup wizard.
+  </Step>
+</Steps>
+
+---
+
+### Step 1: Connect
+
+Enter your DNSimple Account API token to establish the connection.
+
+<Steps>
+  <Step title="Enter the Token">
+    Paste your token into the **Account API Token** field. Use the eye icon to show or hide the value while you paste.
+
+    <Frame>
+      <img src="/images/product/dnsimple-setup-controls.png" alt="Blank DNSimple account-token form with separate Test connection and Save and connect controls." width="1152" height="564" />
+    </Frame>
+
+    <Note>
+      Your token is stored securely using Supabase Vault encryption. It is never exposed in logs or API responses.
+    </Note>
+  </Step>
+
+  <Step title="Test the Connection">
+    Click **Test connection**.
+
+    When the test passes, you'll see a "Connection works" confirmation showing the authenticated account email and account number.
+
+    If the test fails:
+    - Verify you copied the full token without extra spaces
+    - Confirm the token is an account token and has not been revoked
+  </Step>
+
+  <Step title="Save and Connect">
+    Click **Save and connect** to create the integration. MSPortal checks the token again, saves it, and starts an initial domain sync in the background.
+
+    <Note>
+      **Test connection** does not save anything. Only **Save and connect** creates the integration.
+    </Note>
+  </Step>
+
+  <Step title="Continue to Mapping">
+    Click **Next** to open the **Map Domains** step.
+  </Step>
+</Steps>
+
+---
+
+### Step 2: Map Domains
+
+Map DNSimple domains to your MSPortal companies. Mapped domains are what power reporting and renewal alerts for each client.
+
+<Steps>
+  <Step title="Wait for Domains to Appear">
+    The initial sync usually completes in under a minute. If no domains are listed yet, click **Sync Domains** to fetch them from your DNSimple account.
+  </Step>
+
+  <Step title="Use Quick Match">
+    Click **Quick Match** to automatically match domains to MSPortal companies based on name similarity. Review the suggested matches and adjust as needed.
+  </Step>
+
+  <Step title="Map Manually">
+    For domains that were not matched automatically:
+
+    1. Find the domain in the list
+    2. Click the **Select company...** dropdown in the **Mapped** column
+    3. Search for and select the correct MSPortal company
+
+    <Note>
+      Domains can only be linked to companies that already exist. The mapping step does not create new companies, because a domain represents an asset of a client, not the client itself.
+    </Note>
+  </Step>
+
+  <Step title="Ignore Domains You Don't Need">
+    Click **Ignore** on an unmapped domain to remove it from the mapping backlog. Click **Restore** to bring it back. Both save immediately. Ignoring a domain does not delete it or change anything in DNSimple.
+  </Step>
+
+  <Step title="Apply Your Mappings">
+    New matches show as **Pending** until you save them. Click **Import Selected** to save, then click **Next** to continue. **Next** also saves any pending mappings and starts another domain sync.
+
+    Removing a saved mapping takes effect immediately.
+  </Step>
+</Steps>
+
+---
+
+### Step 3: Complete
+
+Confirm the integration and run the first full sync.
+
+<Steps>
+  <Step title="Run a Full Sync">
+    Click **Run full sync** to refresh the domain inventory. A full sync also purges any domains that have been transferred out of your DNSimple account since the last sync.
+  </Step>
+
+  <Step title="Complete Setup">
+    Click **Complete setup** to finish the wizard and return to the Integrations page.
+
+    You can revisit your mappings at any time under **Settings > Integrations > Company Mapping**.
+  </Step>
+</Steps>
+
+---
+
+## What Gets Synced
+
+The DNSimple integration keeps one record per domain in your account:
+
+- Domain name
+- State: registered, or hosted (DNS only)
+- Expiration date (registered domains)
+- Registration date
+- Auto-renew status
+- Private WHOIS status
+
+Domains mapped to a company are also recorded as that company's domains, and appear in:
+
+- The **DNSimple Domains** reporting block, showing renewal dates and auto-renew status
+- Automation rules built on the **DNSimple Domain** entity, for example an alert 30 days before a domain expires
+
+---
+
+## Synchronization Schedule
+
+After initial setup, data syncs automatically:
+
+| Data Type | Sync Frequency |
+|-----------|----------------|
+| Domains | Daily at 6:30 AM UTC |
+
+The daily sync refreshes every domain's details and removes domains that no longer exist in your DNSimple account.
+
+<Note>
+You can trigger a manual sync at any time from the wizard's Complete step with **Run full sync**, which is useful right after registering or transferring domains in DNSimple.
+</Note>
+
+---
+
+## Managing Your Integration
+
+After setup, manage your integration from **Settings > Integrations**:
+
+| Action | Description |
+|--------|-------------|
+| **Manage** | Re-open the wizard to rotate the token, adjust mappings, or run a sync |
+| **Company Mapping** | Manage domain-to-company links under Settings > Integrations > Company Mapping |
+| **Delete** | Remove the integration (available in the wizard footer); stored credentials and synced domain records are deleted. Domains and DNS records in DNSimple are not touched |
+
+### Rotating Your API Token
+
+<Steps>
+  <Step title="Open the Integration">
+    Go to **Settings > Integrations** and click **Manage** on the DNSimple row.
+  </Step>
+  <Step title="Enter the New Token">
+    On the Connect step, paste the new token. Leaving the field blank keeps the current token.
+  </Step>
+  <Step title="Test and Update">
+    Click **Test connection** to verify, then **Update credentials** to save. Clicking **Next** does not save a new token.
+  </Step>
+</Steps>
+
+<Warning>
+  Use a token for the same DNSimple account. A token for a different account changes which domains sync.
+</Warning>
+
+---
 
 ## Troubleshooting
 
-- **Test fails:** check the account, token validity and token access. Do not paste credentials into support screenshots.
-- **Connected but empty:** connection save and domain sync are separate results. Check the sync outcome and account before repeatedly reconnecting.
-- **Wrong company:** correct the mapping, apply it, then check the updated domain view.
-- **Old domain remains:** allow a successful full inventory refresh; a sync-start toast alone is insufficient.
+| Issue | Solution |
+|-------|----------|
+| Connection test fails | Verify the token is an account token, copied fully, and not revoked in DNSimple |
+| No domains appear on the Map step | Click **Sync Domains** and wait a moment; the inventory sync usually completes in under a minute |
+| A domain is missing an expiration date | Hosted (DNS-only) domains have no registration to expire; only registered domains carry expiration dates |
+| Renewal data not showing for a client | Confirm the domain is mapped to that company on the Map step or the Company Mapping page |
+| A transferred-out domain still shows | Run a full sync; it purges domains that left your DNSimple account |
 
-## Frequently asked questions
+---
 
-<AccordionGroup>
-  <Accordion title="Does Test connection save DNSimple?">
-    No. Use Save and connect for a new connection or Update credentials for a replacement token.
-  </Accordion>
-  <Accordion title="Does Save and connect open Map automatically?">
-    After the save succeeds, choose Next. The initial sync runs separately in the background.
-  </Accordion>
-  <Accordion title="Can a DNSimple domain create a company?">
-    No. This mapping workflow links domains to existing companies.
-  </Accordion>
-  <Accordion title="When do domain mappings save?">
-    Import Selected applies pending links; Next attempts to save pending changes before leaving Map. Removing a saved link is immediate.
-  </Accordion>
-  <Accordion title="Does Ignore delete a domain?">
-    No. It immediately hides an unmapped domain from the mapping backlog. Restore reverses that choice.
-  </Accordion>
-  <Accordion title="Does Complete setup prove synchronization finished?">
-    No. Check the resulting inventory and mappings; completion and sync-start messages do not establish background success.
-  </Accordion>
-  <Accordion title="How do I rotate the DNSimple token?">
-    Enter and test the new token, then use Update credentials. A blank field retains the saved token; Next does not save a typed replacement.
-  </Accordion>
-</AccordionGroup>
+## Security & Privacy
 
-## Related guides
+- **Token Storage**: Your DNSimple token is encrypted using Supabase Vault and never exposed in logs or responses
+- **Data Isolation**: All synced data is tenant-isolated and only visible to your organization
+- **Read-Only Access**: MSPortal only reads domain information; it never changes your DNSimple domains or DNS records
 
-- [Integrations settings](/user-guides/settings/integrations)
-- [Company Mapping](/user-guides/settings/integration-company-mapping)
-- [Integration directory](/user-guides/integrations/index)
+---
+
+## Next Steps
+
+After setting up the DNSimple integration:
+
+<CardGroup cols={2}>
+  <Card title="Build Reports" icon="chart-bar" href="/user-guides/reporting/index">
+    Add the DNSimple Domains block to client reports
+  </Card>
+  <Card title="Automation Rules" icon="bolt" href="/user-guides/settings/automation/index">
+    Alert your team before domains expire
+  </Card>
+  <Card title="Company Mapping" icon="building" href="/user-guides/settings/integration-company-mapping">
+    Manage domain-to-company links after setup
+  </Card>
+  <Card title="Other Integrations" icon="plug" href="/user-guides/integrations/index">
+    Explore additional integration options
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+For assistance with the DNSimple integration, contact support@msportal.ai.

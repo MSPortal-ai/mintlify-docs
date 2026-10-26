@@ -5,42 +5,98 @@ description: "Configure delivery, visibility and available request templates for
 icon: "sliders"
 ---
 
-**Audience:** MSP staff with Ticket settings access. The client-ticketing launch track separates delivery, visibility and request templates. It is not limited to a PSA status-mapping checklist.
+Set up where client requests go, what clients can see, and which request forms they can use. This page is for MSP staff with Ticket settings access. Launch Center's **Set up tickets** step has **Statuses**, **Delivery** and **Display groups** tabs. Request templates are an item in the **Portal checklist**.
 
-## Configure ticket delivery
+## Before you start
 
-1. Open the ticket-delivery step in **Launch Center**, or **Settings > Tickets**.
-2. Review the ticket creation method and its destination. For email delivery, configure the receiving address or the fallback used by that method.
-3. For PSA delivery, verify the selected PSA connection and configure the fallback email address.
-4. Save using the displayed settings action and wait for the result. Check delivery separately with the intended request workflow before rollout.
+- You need write or manage access to Ticket settings in **Settings > Tickets**. Without it, the **Delivery** and **Display groups** tabs offer **Open ticket settings** instead.
+- To deliver tickets to your PSA, connect it first. See [PSA connection](/user-guides/getting-started/onboarding/psa-setup). **Set up tickets** opens after **Connect your PSA**.
+- Your rollout companies must exist.
+- Have a monitored email address for fallback delivery.
 
-A readiness pass checks configuration evidence; it does not prove a test message arrived or a PSA created a ticket.
+## Set ticket statuses
 
-## Review visibility
+On the **Statuses** tab, choose which PSA statuses close and resolve a ticket. When your PSA sets up inside Launch Center, this is the connection's **Configure tickets** task. See [PSA connection](/user-guides/getting-started/onboarding/psa-setup) for its fields.
 
-Open the ticket-visibility step and review display groups for the primary PSA. Configure access for the intended Company groups and supported ticket categories. Do not assume a single fixed set of four status categories applies to every provider.
+## Set up ticket delivery
+
+<Steps>
+  <Step title="Open the tab">
+    In **Launch Center**, open **Set up tickets** and click the **Delivery** tab. It shows the **Ticket Delivery & Defaults** card from **Settings > Tickets > General**.
+  </Step>
+  <Step title="Choose the delivery method">
+    Set **Delivery Method** to **PSA Integration** to create tickets in your PSA, or **Email (SMTP)** to send them to an email address. The change saves right away.
+  </Step>
+  <Step title="Set the destination">
+    For PSA delivery, choose the **PSA Integration**, then enter a **Fallback Email Address** that gets the ticket if the PSA connection fails. For email delivery, enter the **Email Address (for email delivery)**. Each field saves when you click out of it.
+  </Step>
+  <Step title="Set the ticket defaults">
+    Under **Ticket Defaults**, pick the routing values for your PSA, such as board or queue, priority, status, and type. Click **Save Defaults**.
+  </Step>
+  <Step title="Test it">
+    Submit a test request and confirm it reaches the right place with the right defaults. A finished step does not prove a message arrived.
+  </Step>
+</Steps>
+
+**Set up tickets** turns done when delivery has a valid destination and the PSA's ticket configuration is done. For email delivery, that means a configured email address. For PSA delivery, it needs an active selected PSA. If the selected PSA is later disabled or paused, the step needs attention. See [Ticket settings](/user-guides/settings/tickets) for every card.
+
+## Review ticket visibility
+
+<Steps>
+  <Step title="Open the tab">
+    Click the **Display groups** tab. If you see **Choose your PSA for tickets first**, select the PSA on the **Delivery** tab. Display groups apply to your selected PSA.
+  </Step>
+  <Step title="Create a display group">
+    Click **Create Group**. Enter a **Group Name**, choose **Ticket Visibility** (**All Tickets**, **Same Location Only**, or **Own Tickets Only**), assign the client roles, and choose the boards, ticket types, fields, and the statuses portal users may set. Save the group.
+  </Step>
+  <Step title="Test with client roles">
+    Check a limited user and a client administrator against real tickets. Look at internal notes, closed work, and the statuses they can set. Do not assume one fixed set of status categories applies to every provider.
+  </Step>
+</Steps>
 
 ## Make a request template available
 
-Open the template step and review an appropriate enabled template. Confirm company scope, audience visibility and any company-specific enablement override. A template available only to staff does not satisfy the client request requirement.
+<Steps>
+  <Step title="Open the templates">
+    In **Launch Center**, open **Portal checklist** and click **Open settings** on **Ticket request templates**. It opens **Settings > Tickets > Templates** in a new tab.
+  </Step>
+  <Step title="Create or pick a template">
+    Create a template, or open an existing one. Follow [How to create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template) for each field. Keep the switch labelled **Template is active and available for use** on.
+  </Step>
+  <Step title="Choose who can use it">
+    Open **Company Visibility** in the template. Turn the template on for your rollout companies. Under **Role Access**, check that client roles can use it. A template that only staff can see is not available to clients.
+  </Step>
+  <Step title="Save">
+    Save the template.
+  </Step>
+  <Step title="Submit it as a client">
+    Sign in as a client, or use your approved review process. Open Home or **Tickets**, pick the template, and send a request. A draft is not a submitted ticket.
+  </Step>
+</Steps>
 
-Every rollout company needs an enabled, client-available template that applies to it. A global template can cover companies only where the effective settings allow it. Follow [create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template) for authoring and save details.
+The checklist item counts enabled request templates and ticks itself once there is at least one. That count does not check each company. Every rollout company needs an enabled client-visible template that applies to it. A company-wide template covers a company only where it is not switched off for that company.
 
-## Verify the client path
+## Troubleshooting
 
-Review the actual Company role's ability to start a request from Home or Tickets, choose an available template and reach the review/submission flow. A draft is not a submitted ticket. If readiness is blocked, distinguish missing delivery configuration from missing visibility or template evidence instead of changing all three at once.
+| Problem | What to do |
+| --- | --- |
+| **Set up tickets** stays **To do** | Check the **Delivery Method**, and that the matching email address is filled in. For PSA delivery, check that the selected PSA is active and its ticket configuration is done. |
+| **Choose your PSA for tickets first** | Select the PSA under **PSA Integration** on the **Delivery** tab. |
+| A company has no template | Open the template's **Company Visibility** and turn it on for that company. Check **Role Access**. |
+| A client cannot start a request | Check the client role's access, the template's visibility, and **Company Visibility**. |
+| You changed three things and cannot tell which fixed it | Change one thing at a time and test again. |
 
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does client ticketing require a PSA?">
-    The delivery configuration supports email and PSA paths. Configure the selected method and its required destination or fallback.
+  <Accordion title="Does client ticketing need a PSA?">
+    No. Delivery supports email and PSA. Set the method and its destination.
   </Accordion>
-  <Accordion title="Does a delivery readiness pass prove a ticket was received?">
-    No. It checks stored configuration; verify actual delivery separately.
+  <Accordion title="Does a finished step prove a ticket arrived?">
+    No. It checks stored settings. Send a test request.
   </Accordion>
-  <Accordion title="Does a staff-only template satisfy client readiness?">
-    No. Each rollout company needs an enabled template with applicable client visibility and effective company settings.
+  <Accordion title="Does a staff-only template count?">
+    No. Each rollout company needs a client-visible template that is enabled for it.
   </Accordion>
 </AccordionGroup>
 

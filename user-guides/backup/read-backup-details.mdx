@@ -1,77 +1,150 @@
 ---
 title: "Read backup activity and device details"
-description: "Read backup activity, device details, and the Datto and Dropsuite history branch preview."
+description: "Open the side panel for one backup record and read its activity, history, storage and verification results."
 icon: shield-halved
 ---
 
-**Audience:** Company users and MSP staff with Backup read access and access to the relevant resource.
+Selecting a row in Backup opens a side panel with that record's detail. What the panel shows depends on the provider. MSP staff and company users with Backup read access can use it, for the records in their company scope.
+
+## Before you start
+
+- You have Backup read access and the record is inside your selected companies.
+- Panels are read-only. They never start a backup, change a plan, resolve an alert or restore data.
 
 ## Read Acronis activity
 
-1. Open **Backup > Devices**, or select **Acronis** under **Backup > Microsoft 365**.
-2. Find the device, mailbox, drive, site, or team.
-3. Select its row to open the side panel.
-4. Confirm the resource and company in the panel header.
-5. Review the activity cards and use the arrow controls when more activity pages are available.
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Devices**, or choose **Acronis** under **Backup > Microsoft 365**, then select the device, mailbox, drive, site or team.
+  </Step>
+  <Step title="Confirm the resource">
+    Check the resource name and company at the top of the panel.
+  </Step>
+  <Step title="Read the activity cards">
+    Each card can show the operation, policy, resource name, result, how long ago it finished and how long it took. Results read **OK**, **Failed**, **Warning** or **Running**. Other provider values appear unchanged.
+  </Step>
+  <Step title="Page through activity">
+    The panel shows 15 activities per page. Use the arrows when more pages exist. Go back to page 1 when you open another resource.
+  </Step>
+</Steps>
 
-Each page shows up to 15 activities. A card can include the operation, policy, resource name, result, completion age, and duration. Result labels include **OK**, **Failed**, **Warning**, and **Running**; other provider values can appear unchanged.
+Read the operation as well as the result. An OK discovery, retention cleanup, scan or deletion does not mean a backup completed. A card shows up to four nonzero result details, such as items, folders, files or channels. It is a summary, not a full log.
 
-The operation matters. An OK discovery, retention, scan, or deletion activity is not evidence that a backup completed. The result summary shows up to four available nonzero details, such as items, folders, files, or channels. It is not a full log or backup-content listing.
+If the panel is empty, confirm you opened an Acronis resource and check the page number. An empty panel does not prove no backup has ever run.
 
-If the panel is empty, confirm that you opened an Acronis resource and check the page number. Return to the first activity page when moving between resources. Missing activity can also reflect a loading or resource-matching problem; it does not prove no backup has ever run.
+## Read Cove Microsoft 365 history
+
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Microsoft 365**, choose **Cove** if a selector appears, and select a mailbox, drive, site or team.
+  </Step>
+  <Step title="Read the daily status">
+    The panel is titled **Backup history** and covers the last 28 days. **Daily backup status** shows each day for the workload.
+  </Step>
+  <Step title="Read the runs">
+    Each run shows its status plus **Started**, **Completed**, **Protected data**, **Processed size** and **Errors**. Use **Previous** and **Next** to page. A note says when only the most recent runs are shown.
+  </Step>
+</Steps>
+
+If the panel says history will appear after the next Cove sync, wait for that sync. **History updated** shows when it last refreshed.
 
 ## Read NinjaOne details
 
-1. Open **Backup > Devices** and find a NinjaOne row.
-2. Select the row to open its details.
-3. Review **Status**, **Total Storage**, and the available storage breakdowns.
-4. Under **Details**, compare **Last Success**, **Last Failure**, and **Last Synced** when supplied.
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Devices** and select a NinjaOne row.
+  </Step>
+  <Step title="Read the storage">
+    Check **Status** and **Total Storage**. Storage can split into **Cloud**, **Local** and **Revisions**, with breakdowns such as File/Folder, Image, Image v2, Network Share, and Current, Previous and Deleted revisions.
+  </Step>
+  <Step title="Compare the dates">
+    Under **Details**, compare **Last Success**, **Last Failure** and **Last Synced**.
+  </Step>
+</Steps>
 
-Storage can be split into **Cloud**, **Local**, and **Revisions**. Available breakdowns include File/Folder, Image, Image v2, Network Share, and Current/Previous/Deleted revisions. Sections and values appear only when reported with data; missing storage is not proof that a backup succeeded.
+Sections appear only when NinjaOne reports data for them. **Last Synced** is when MSPortal last imported the record. It is not a backup time, so a newer sync does not mean a newer successful backup.
 
-Last Synced refers to the portal's imported record. Last Success and Last Failure refer to backup outcomes. A newer sync timestamp does not mean a newer successful backup.
+## Read Datto Backup details
 
-## Branch preview: Datto and Dropsuite history
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Devices** and select a Datto Backup row.
+  </Step>
+  <Step title="Read the summary">
+    The panel shows the asset's status (**Protected**, **Needs attention**, **Last backup failed** or **No backup yet**) with **Last snapshot**, **Latest offsite copy**, **Local recovery points**, **Screenshot verification**, **Volumes** and **Operating system**. A note appears when backups are paused.
+  </Step>
+  <Step title="Read the history">
+    **Recent backups** summarizes the latest attempts, and the **Timeline** lists each one as **Successful**, **Failed** or **Verification failed**, with any reported errors. A successful backup can still carry a verification warning.
+  </Step>
+</Steps>
 
-<Note>
-  This section previews PR #1497 and is not a confirmation of production availability. The images render the branch's detail components with illustrative data. Authenticated navigation, live provider data, and pagination interactions still require verification after release.
-</Note>
+Backup history fills in after the next Datto sync. **Last synced** shows import freshness, not a new backup.
 
-### Datto backup details
+## Read Slide Backup details
 
-The preview brings the asset's current status together with **Last snapshot**, **Latest offsite copy**, **Local recovery points**, **Screenshot verification**, **Volumes**, and **Operating system**. Missing provider values remain distinguishable from reported success.
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Devices** and select a Slide Backup row.
+  </Step>
+  <Step title="Read the summary">
+    The panel shows the asset's status, **Open alerts**, **Last recovery point**, **Latest cloud copy**, **Backup schedule**, **Local retention**, **Boot verification**, **File system verification**, **Protected volumes**, **Operating system**, **IP addresses** and **Agent last seen**. Notes appear when backups are paused or the encryption key is sealed.
+  </Step>
+  <Step title="Read the appliance">
+    The **Slide appliance** section shows its name, model, serial number, service plan, software version, warranty expiry, storage and protected data.
+  </Step>
+  <Step title="Read the history">
+    **Recent backups** lists each run as **Successful**, **Failed**, **Canceled** or **In progress**, with boot, file system and service verification results.
+  </Step>
+</Steps>
 
-**Recent backups** summarizes the imported attempts. The **Timeline** distinguishes **Successful**, **Failed**, and **Verification failed**, and shows supplied errors alongside the affected attempt. A successful backup can still have a verification warning. **Last synced** describes import freshness, not the time of a new backup.
+## Read NinjaOne SaaS Backup history
 
-### Dropsuite history
+<Steps>
+  <Step title="Open the row">
+    Go to **Backup > Microsoft 365**, choose **NinjaOne SaaS Backup** and select a record.
+  </Step>
+  <Step title="Read the summary">
+    The panel shows the account's state (**Backing up**, **Backing up with errors**, **Never backed up** or **Deactivated**), **Last backup**, **Workload**, **Messages** or **Files**, and **Storage**.
+  </Step>
+  <Step title="Read recent changes">
+    **Recent changes** is a timeline of what MSPortal saw change, such as **Errors reported**, **Errors cleared**, **Backup completed**, **Deactivated**, **Reactivated** or **First recorded**.
+  </Step>
+</Steps>
 
-The preview shows the resource's current state, **Last backup**, workload, item count, and storage. **Recent changes** and the **Timeline** describe changes observed by MSPortal, including **Errors reported**, **Errors cleared**, and **First recorded**. These are observations collected during syncs; they are not a complete provider job log. The oldest entry shown is not necessarily the first backup the provider performed.
+MSPortal records an entry each time a sync sees the account change. This is not the provider's job log, and the oldest entry is not necessarily the first backup.
 
-<Frame caption="Branch preview with illustrative data: Datto history (left) and Dropsuite observed changes (right).">
-  <img src="/images/product/backup-history-branch-preview.png" alt="Datto and Dropsuite detail components with status summaries, recent history strips, and error timelines using illustrative data" width="1440" height="1156" />
+<Frame caption="Example detail panels with illustrative data: Datto Backup history (left) and NinjaOne SaaS Backup recent changes (right).">
+  <img src="/images/product/backup-history-branch-preview.png" alt="Datto Backup and NinjaOne SaaS Backup detail panels with status summaries, recent history strips and error timelines using illustrative data" width="1440" height="1156" />
 </Frame>
 
-After release, verify both panels with the shared Demo account, capture the actual workflows on desktop and mobile, replace this fixture preview, and reconcile the instructions before removing the preview label.
+## Troubleshooting
 
-## Provider limits
-
-Cove device rows do not open these detail panels. The Microsoft 365 row-opening panel currently queries Acronis activity, so an empty panel opened from a Cove row is not a reliable Cove history result.
-
-Neither panel starts a backup, changes a plan, resolves an alert, or restores data. Ask your MSP for those tasks through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket).
+| Problem | What to do |
+| --- | --- |
+| Cove device rows do not open a panel | Expected. Cove Microsoft 365 rows open the history panel instead. |
+| The panel says the item is not available | The record is outside your selected company scope. Change the company selector. |
+| **Backup details could not be loaded** | Try again. If it stays, ask your MSP to check the integration. |
+| History is empty | Wait for the provider's next sync. Empty history does not prove no backup has run. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does OK always mean a successful backup?">
-    Read the operation type. OK can describe other activities, including discovery or retention cleanup.
+    No. Read the operation type. OK can describe discovery or retention cleanup too.
   </Accordion>
   <Accordion title="Why are only a few result counts shown?">
-    The activity card displays up to four nonzero result-summary entries. It is a summary, not the complete provider log.
+    A card shows up to four nonzero result entries. It is a summary of that activity.
   </Accordion>
-  <Accordion title="Why is the next resource empty after paging through activity?">
-    Check the current page and return to page one. If it remains empty, ask the MSP to check resource matching and the provider's activity record.
+  <Accordion title="Does Last Synced mean the device just backed up?">
+    No. It shows when MSPortal imported the record. Check the last success and the reported status separately.
   </Accordion>
-  <Accordion title="Does NinjaOne Last Synced mean the device just backed up?">
-    No. It records imported-data freshness. Check Last Success and the reported status separately.
+  <Accordion title="Can I restore from a panel?">
+    No. Ask your MSP through the Home AI Assistant, as described in [Open a ticket](/user-guides/ticketing/open-a-ticket).
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Find device backups](/user-guides/backup/find-device-backups)
+- [Read Microsoft 365 backups](/user-guides/backup/read-microsoft-365-backups)
+- [Backup overview](/user-guides/backup/index)

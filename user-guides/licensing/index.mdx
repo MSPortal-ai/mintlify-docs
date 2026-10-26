@@ -1,209 +1,154 @@
 ---
 title: 'Licensing'
-description: 'Manage software subscriptions, approval workflows, and client self-service through Pax8'
+description: 'Set the approver role, self-service rules, and catalog visibility for Pax8 and Sherweb under Settings > Storefront.'
 icon: 'key'
 ---
 
-The Licensing module connects MSPortal.ai to your [Pax8](https://www.pax8.com) distributor account, giving you centralized control over software subscriptions, product catalogs, and client self-service license management. MSPs can configure approval workflows, control which products clients can see, and set per-subscription rules for self-service quantity changes.
-
-<Note>
-  The Licensing module requires an active Pax8 integration. See [Set Up Pax8 Integration](/user-guides/licensing/setup) to get started.
-</Note>
+Use **Settings > Storefront** to control what your clients can see in the Storefront and which subscriptions they can ask to change. This page is for MSP staff with Manage access to the **Storefront** resource.
 
 <Info>
-  Looking for license counts or assignments? Open **Cloud > Licenses** and use [Read cloud license usage](/user-guides/cloud/licenses). The former `/licensing` inventory route now opens Cloud Licenses; it supports Microsoft 365, Google Workspace, and Adobe according to your connections and access. The Pax8 settings described below are separate from that inventory.
+  Looking for license counts or who holds a license? Open **Cloud > Licenses** and read [Read cloud license usage](/user-guides/cloud/licenses). The old `/licensing` page now opens Cloud Licenses.
 </Info>
 
-## Key Features
+## Before you start
 
-<CardGroup cols={2}>
-  <Card title="Approval Workflows" icon="check-double">
-    Control when license quantity changes require MSP approval, with auto-approve thresholds and vendor overrides.
-  </Card>
-  <Card title="Product Catalog" icon="store">
-    Manage which Pax8 products are visible and featured in the client self-service portal.
-  </Card>
-  <Card title="Self-Service Rules" icon="sliders">
-    Set per-subscription rules for quantity changes, including min/max limits and approval requirements.
-  </Card>
-  <Card title="Automatic Sync" icon="rotate">
-    Subscriptions, products, and companies sync automatically from Pax8 on a regular schedule.
-  </Card>
-</CardGroup>
+- Connect Pax8, Sherweb, or both in **Settings > Integrations**. Without one, **Settings > Storefront** shows **No Storefront Integration** with a link to **Integrations**. See [Set Up Pax8 for Subscriptions and Storefront](/user-guides/licensing/setup).
+- Map each distributor company to an MSPortal company. Only mapped companies appear.
+- You need Manage access to the **Storefront** resource (in the role editor, **Storefront** with **Manage** access) to change anything. Users with only settings read or write access can open the page but cannot save.
+- The self-service rules and the **Apply to All** button are for Pax8. Sherweb has no per-subscription rules. Sherweb requests always start as **Pending approval**.
+- The page has two tabs, **Self-Service** and **Catalog**.
 
----
+## Choose who is notified about requests
 
-## Prerequisites
+<Steps>
+  <Step title="Open Settings > Storefront">
+    Click **Settings** in the sidebar, then **Storefront**. The **Self-Service** tab opens first.
+  </Step>
+  <Step title="Open the Approver Role list">
+    In the **Request Approvals** card, open the **Approver Role** list.
+  </Step>
+  <Step title="Choose a role">
+    Pick a company role, or **No role set**. The change saves right away and a message reads **Approver role saved**.
+  </Step>
+</Steps>
 
-- An active [Pax8](https://www.pax8.com) partner account
-- The **Pax8 integration** configured in MSPortal.ai (see [Set Up Pax8 Integration](/user-guides/licensing/setup))
-- The **manage_licensing** permission to configure settings
-- At least one Pax8 company mapped to an MSPortal company
+Members of this role, for the requesting company, are notified of every new request. They can also approve or reject it. Primary admins are always notified. The role applies to both Pax8 and Sherweb.
 
----
+## Set self-service defaults (Pax8)
 
-## Licensing Settings
+<Steps>
+  <Step title="Open the Self-Service tab">
+    Go to **Settings > Storefront > Self-Service**.
+  </Step>
+  <Step title="Set the defaults">
+    Turn **Allow Self-Service by Default** on or off. Enter **Min Qty** (at least 1) and **Max Qty**. Leave **Max Qty** empty for no limit.
+  </Step>
+  <Step title="Save">
+    Click **Save Defaults**. A message reads **Global settings saved**. The defaults apply to subscriptions that sync in after this point. They do not change subscriptions you already have.
+  </Step>
+  <Step title="Optional: apply to every active subscription">
+    Click **Apply to All** to copy these three values onto every active Pax8 subscription. It also sets **Approval** to **Required** on all of them. This overwrites the rules you set on individual subscriptions.
+  </Step>
+</Steps>
 
-Navigate to **Settings > Licensing** to access three configuration tabs: **Approval**, **Catalog**, and **Self-Service**.
+New subscriptions start with **Approval** set to **Required** unless a vendor override or a saved default says otherwise.
 
-<Info>
-  All three tabs require an active Pax8 integration. If no integration is connected, you'll see a prompt to set one up in **Settings > Integrations**.
-</Info>
+## Set rules for one subscription (Pax8)
 
----
+<Steps>
+  <Step title="Find the subscription">
+    On the **Self-Service** tab, scroll to **Subscription-Level Settings**. Use the filters under **Product**, **Company**, **Self-Service**, and **Approval** to find it. The table shows 25 subscriptions per page.
+  </Step>
+  <Step title="Open Edit Self-Service Settings">
+    Click the row, or click the **...** menu and choose **Edit Settings**.
+  </Step>
+  <Step title="Set the rules">
+    Turn **Allow Quantity Changes** on to let clients request changes. Turn **Require Approval** on to hold changes for review. Enter **Minimum Quantity** and **Maximum Quantity**. **Require Approval** and the limits are unavailable while **Allow Quantity Changes** is off.
+  </Step>
+  <Step title="Save">
+    Click **Save Settings**. A message reads **Subscription settings saved**.
+  </Step>
+</Steps>
 
-### Approval Settings
+The dialog shows the current quantity so you can pick sensible limits. The row menu also has **Change Quantity** for subscriptions that allow changes. It sends a request like a client would.
 
-The Approval tab controls when license quantity changes require your review before they take effect.
+| Column | What it shows |
+| --- | --- |
+| **Product** | The product and vendor. |
+| **Company** | The mapped company, or **Unmapped**. |
+| **Qty** | The current quantity. |
+| **Self-Service** | **Enabled** or **Disabled**. |
+| **Approval** | **Required** or **Auto**. |
+| **Limits** | The minimum and maximum, or **No max**. |
 
-#### Global Approval Setting
+## Choose which products clients see
 
-Toggle **Require Approval by Default** to control whether all quantity change requests need MSP approval before processing.
+<Steps>
+  <Step title="Open the Catalog tab">
+    Go to **Settings > Storefront** and click **Catalog**. Pax8 and Sherweb each get their own table when both are connected.
+  </Step>
+  <Step title="Find the product">
+    Type in the filter under **Product**, or use the filters under **Vendor**, **Category**, **Visible**, and **Featured**. The table shows 20 products per page.
+  </Step>
+  <Step title="Show or hide it">
+    Turn the **Visible** switch on to show the product to clients, or off to hide it. Hidden products never appear in the client catalog. Existing subscriptions are not cancelled.
+  </Step>
+  <Step title="Feature it">
+    Turn the **Featured** switch on to put the product at the top of the client catalog. The switch is unavailable while the product is hidden.
+  </Step>
+</Steps>
 
-- **Enabled**: All client-initiated quantity changes are held for your approval
-- **Disabled**: Changes are applied automatically (subject to threshold rules)
+To change many products at once, check the boxes in the first column. A bulk **Actions** menu appears with **Show Selected**, **Hide Selected**, **Feature Selected**, and **Unfeature Selected**. The header checkbox can select every product that matches your filters.
 
-#### Auto-Approve Threshold
+The Pax8 table shows **Product**, **Vendor**, **Category**, **Retail Price**, **Visible**, and **Featured**. The Sherweb table shows **Product**, **SKU**, **Visible**, and **Featured**.
 
-Set a percentage threshold that determines when changes are auto-approved versus held for review.
+## Approve client requests
 
-| Threshold | Behavior |
-|-----------|----------|
-| **50%** | A change from 10 to 15 licenses (50% increase) auto-approves. A change from 10 to 16+ requires approval. |
-| **25%** | Only small changes (up to 25% of current quantity) auto-approve |
-| **0%** | All changes require manual approval |
+Requests appear on **Storefront > Requests**. See [Review requests (MSP staff)](/user-guides/storefront/index) for the full steps. Approving a request does not change the subscription. You still make the change with the distributor, then mark the request fulfilled after the next sync confirms it.
 
-<Tip>
-  Start with a conservative threshold (e.g., 25%) and adjust based on your comfort level with automatic changes.
-</Tip>
+## How data syncs
 
-#### Vendor-Specific Overrides
+- Pax8 data syncs automatically once a day, at 06:00 UTC. Sherweb syncs once a day at 07:00 UTC.
+- Products are refreshed about once a week on the schedule. A manual sync refreshes them right away.
+- Only subscriptions for mapped companies are imported.
+- To refresh sooner, run **Sync Subscriptions** on the **Complete** step of the Pax8 setup, or click **Sync product catalog** on the Pax8 integration in **Settings > Integrations**.
 
-Click vendor badges to mark specific vendors that **always require approval**, regardless of the global setting or threshold. This is useful for high-value or sensitive products.
+## Troubleshooting
 
-For example, you might allow auto-approval for most products but always require approval for Microsoft 365 license changes.
+| Problem | What to do |
+| --- | --- |
+| **Storefront** is missing from **Settings** | Your role does not have Storefront settings access, or the Storefront feature is off. Ask an administrator. |
+| You see **No Storefront Integration** | Connect Pax8 or Sherweb in **Settings > Integrations**. |
+| You see **No Products Found** | Products appear after the next Pax8 sync. Run a sync from **Settings > Integrations**. |
+| You see **No Active Subscriptions** | Subscriptions appear after the next sync. Check the company mappings. |
+| A save fails | You need Manage access to the **Storefront** resource. |
+| A client cannot change a quantity | Check that **Allow Quantity Changes** is on for the subscription and that the new quantity is inside the limits. |
+| A product is missing from the client catalog | Check that **Visible** is on and the company is mapped. |
+| **Featured** is unavailable | Turn **Visible** on first. |
 
----
+## Frequently asked questions
 
-### Catalog Settings
+<AccordionGroup>
+  <Accordion title="Where did the Approval tab and the approval threshold go?">
+    **Settings > Storefront** has two tabs, **Self-Service** and **Catalog**. Approval is set per subscription with **Require Approval**, and the **Approver Role** decides who is notified and can approve.
+  </Accordion>
+  <Accordion title="Does hiding a product cancel subscriptions?">
+    No. It only removes the product from the client catalog.
+  </Accordion>
+  <Accordion title="Do the defaults change my existing subscriptions?">
+    No. They apply to new subscriptions. Use **Apply to All** to overwrite existing ones.
+  </Accordion>
+  <Accordion title="Does approving a request change the quantity in Pax8?">
+    No. You make the change in Pax8, then mark the request fulfilled after the next sync.
+  </Accordion>
+  <Accordion title="Who can see prices?">
+    MSP staff with Manage access to the **Storefront** resource. Company users do not see prices on Pax8 rows.
+  </Accordion>
+</AccordionGroup>
 
-The Catalog tab controls which Pax8 products are visible to clients in the self-service portal and which products appear as featured.
+## Related guides
 
-#### Product Table
-
-The table lists all synced Pax8 products with the following columns:
-
-| Column | Description |
-|--------|-------------|
-| **Product Name** | The product name from Pax8 |
-| **Vendor** | The software vendor |
-| **Category** | Product category |
-| **Retail Price** | Listed retail price |
-| **Visible** | Toggle to show/hide the product from clients |
-| **Featured** | Star icon to mark a product as featured (appears first in self-service) |
-
-#### Managing Visibility
-
-- **Show/Hide individually**: Toggle the visibility switch on any product row
-- **Bulk actions**: Select multiple products using checkboxes, then use the bulk action dropdown to **Show**, **Hide**, **Feature**, or **Unfeature** selected products
-- **Filter**: Use the vendor, category, and visibility filters to find specific products
-- **Search**: Search by product name
-
-<Warning>
-  Hidden products are not visible to clients in the self-service portal. Hiding a product does not cancel existing subscriptions for that product.
-</Warning>
-
-#### Featured Products
-
-Mark products as **Featured** to highlight them at the top of the client self-service catalog. Use this for products you want to promote or that clients frequently request.
-
----
-
-### Self-Service Settings
-
-The Self-Service tab controls what clients can do with their subscriptions without contacting your team.
-
-#### Global Defaults
-
-| Setting | Description |
-|---------|-------------|
-| **Allow Self-Service by Default** | Whether clients can request quantity changes on subscriptions |
-| **Default Min Quantity** | Minimum number of licenses a client can reduce to |
-| **Default Max Quantity** | Maximum number of licenses a client can increase to |
-
-#### Per-Subscription Rules
-
-Override global defaults for individual subscriptions by clicking on a subscription in the table:
-
-| Setting | Description |
-|---------|-------------|
-| **Allow Quantity Changes** | Enable or disable self-service for this specific subscription |
-| **Require Approval** | Whether changes to this subscription always need MSP approval |
-| **Min Quantity** | Minimum license count for this subscription |
-| **Max Quantity** | Maximum license count for this subscription |
-
-The edit dialog shows the current quantity for reference, helping you set appropriate min/max limits.
-
-<Tip>
-  Use the search bar to quickly find subscriptions by product name, vendor, or company.
-</Tip>
-
----
-
-## How Sync Works
-
-After Pax8 is connected, data syncs automatically:
-
-| Data Type | Sync Frequency |
-|-----------|----------------|
-| **Companies** | Every 4 hours |
-| **Subscriptions** | Hourly |
-| **Products** | Daily (3 AM) |
-| **Azure Usage** | Daily (4 AM) |
-
-<Note>
-  Only subscriptions belonging to **mapped companies** are synced. If a Pax8 company isn't mapped to an MSPortal company, its subscriptions won't appear in the Licensing module.
-</Note>
-
-You can trigger a manual sync at any time from **Settings > Integrations** on the Pax8 card.
-
----
-
-## Client Self-Service Experience
-
-When self-service is enabled, clients can view their active subscriptions and request quantity changes:
-
-1. Client navigates to the Licensing section
-2. They see their active subscriptions with product name, vendor, and current quantity
-3. For subscriptions where self-service is allowed, a **Request Change** option is available
-4. Client enters their desired quantity (validated against min/max limits)
-5. Depending on your configuration:
-   - **Auto-approved**: Change applies immediately
-   - **Pending approval**: Request is submitted for MSP review
-
----
-
-## Approving Requests
-
-When a client submits a quantity change that requires approval:
-
-1. The request appears in the Licensing module with a **Pending** status
-2. Review the request details: company, product, current quantity, requested quantity
-3. **Approve** to apply the change (synced to Pax8 automatically) or **Reject** with an optional reason
-4. The client is notified of the outcome
-
----
-
-## Permissions
-
-| Permission | Access |
-|------------|--------|
-| **manage_licensing** | Full access: configure approval, catalog, self-service settings; approve/reject requests; trigger syncs |
-| **write_licensing** | Client-level: request quantity changes on allowed subscriptions |
-
----
-
-## Related Guides
-
-- [Set Up Pax8 Integration](/user-guides/licensing/setup) - Connect your Pax8 account to MSPortal.ai
-- [Integrations Overview](/user-guides/integrations/index) - General integration management
+- [Set Up Pax8 for Subscriptions and Storefront](/user-guides/licensing/setup)
+- [Storefront](/user-guides/storefront/index)
+- [Read cloud license usage](/user-guides/cloud/licenses)
+- [Integrations overview](/user-guides/integrations/index)

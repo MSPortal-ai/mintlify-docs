@@ -4,88 +4,121 @@ description: 'Review Microsoft and Google identities, account status, recorded s
 icon: 'users'
 ---
 
-Open **Cloud > Users** to review synchronized Microsoft 365 and Google Workspace accounts available to you. These are cloud-service identities; appearing here does not give someone an MSPortal login or a portal role.
+Use **Cloud > Users** to see the Microsoft 365 and Google Workspace accounts synced for your companies. This page is for MSP staff and company users. A row here is a cloud identity. It does not give anyone an MSPortal login or role.
 
-**Audience:** Company users with Microsoft 365 read access and MSP staff. Your MSP manages access and account changes. Adobe-only license access does not include Cloud Users.
+## Before you start
 
-## Open and read an account
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). Adobe-only license access (Storefront read) does not include the Users tab.
+- Microsoft 365 or Google Workspace must be connected for the company in **Settings > Integrations**.
+- Company users see only their own company.
 
-1. Open **Cloud**, then select the **Users** header tab.
-2. Check the company selector in the top bar. If you can choose companies, narrow it to the company you are reviewing.
-3. Find the account with the **Name** or **Email** column's **Filter...** field.
-4. Check **Provider**, **Company**, and **Status** before interpreting the record. The page starts with **Status = Enabled**; [show disabled accounts](/user-guides/cloud/find-users) when needed.
-5. Scroll the table horizontally to reach **2-step verification** and **Licenses** when they are off screen.
+## Read an account
 
-Rows are for reading. Cloud Users does not have an account-edit form, password-reset action, or license-assignment action.
+<Steps>
+  <Step title="Open Cloud > Users">
+    Click **Cloud** in the sidebar, then click the **Users** tab.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. MSP staff can pick one company, **Global View**, or **Assigned Companies** if their access is limited.
+  </Step>
+  <Step title="Find the person">
+    Type in the filter box under the **Name** or **Email** column heading. See [Find and filter cloud users](/user-guides/cloud/find-users) for every filter.
+  </Step>
+  <Step title="Check Status first">
+    The **Status** filter starts on **Enabled**, so disabled accounts are hidden. Open the filter and choose **Disabled** or **All** to include them.
+  </Step>
+  <Step title="Scroll to the right columns">
+    Scroll the table sideways to reach **2-step verification** and **Licenses**. Hover over the license badges to see the full list.
+  </Step>
+</Steps>
 
-## Understand the fields
+The page is read only. It has no edit, password reset, or license assignment actions.
 
-| Field | What it shows |
+## Show more columns
+
+<Steps>
+  <Step title="Open the column list">
+    Click **Columns** above the table.
+  </Step>
+  <Step title="Turn on the columns you want">
+    Check the columns to show, such as **Department**, **Job title**, **License count**, **Last login**, and **Last synced**. Drag a column to change its order.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes**. Click **Cancel** to discard your changes.
+
+    <Frame caption="Your column choices apply only after you click Save Changes.">
+      <img src="/images/product/cloud-users-save-columns.png" alt="Save Changes button in the Cloud Users column preferences panel." width="248" height="80" />
+    </Frame>
+  </Step>
+</Steps>
+
+## What each column shows
+
+| Column | What it shows |
 | --- | --- |
-| **Name / Email** | Synchronized display name and email. A missing display name can fall back to an email or sign-in name. |
-| **Provider / Company** | The source service and mapped company. Provider is omitted for a single-provider scope; Company is omitted when the top bar is scoped to one company. |
-| **Office** | Recorded location, or **No office** when absent. This does not establish whether someone works remotely. |
-| **Department / Job title** | Directory attributes, available through **Columns**. Job title is a separate column. |
-| **Status** | **Disabled** when the stored enabled flag is false; otherwise the display uses **Enabled**. |
-| **Account type** | Member/Guest-style directory type where the current scope has more than one type. A recorded Google administrator flag can display **Administrator** in this column. |
-| **2-step verification** | Recorded Google enrollment/enforcement flags; Microsoft rows show **Not available**. |
-| **Licenses** | One friendly license name and **+N more** when there are additional names. Hover or keyboard-focus the license badges to read the full list. |
-| **License count** | Number of distinct recorded SKU codes, available through **Columns**. |
-| **Last login / Last synced** | Available sign-in and synchronization dates. Both can be shown through **Columns**. |
+| **Name** and **Email** | The synced display name and email. When there is no email, the sign-in name is shown. |
+| **Provider** and **Company** | The source service and mapped company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
+| **Office** | The recorded office, or **No office**. |
+| **Department** and **Job title** | Directory fields. Hidden by default. |
+| **Account type** | **Administrator**, **Member**, or **Guest**. Shown only when the users in scope have more than one account type. |
+| **Status** | **Enabled** or **Disabled**. |
+| **2-step verification** | Google accounts show **Enforced**, **Enrolled**, or **Not enrolled**. Microsoft accounts show **Not available**. |
+| **Licenses** | The first license name, plus **+N more** when there are others. Shows **No licenses** when none are attached. |
+| **License count** | The number of licenses attached. Hidden by default. |
+| **Last login** and **Last synced** | The last sign-in and the last sync from the provider. Hidden by default. |
 
-## Show additional columns
+## Read security and license information
 
-1. Click **Columns** above the table.
-2. Select the columns you need. You can also drag their handles to change column order.
-3. Click **Save Changes** to apply your column preferences. **Cancel** or closing the panel discards unsaved choices.
-4. **Reset** restores the panel's default selections and order; click **Save Changes** to apply that reset.
+- **Enforced** means the Google admin requires 2-step verification. **Enrolled** means the user set it up. **Not enrolled** shows when neither flag is set, including when Google sent no data.
+- **Not available** on a Microsoft row does not mean MFA is off. Microsoft MFA coverage is on [Cloud posture](/user-guides/cloud/posture).
+- **Administrator** appears only for Google administrators, and only when the **Account type** column is shown. Microsoft administrator roles are not shown here.
+- **No licenses** means no license is attached to the synced record. It does not show whether the person pays for or uses an app elsewhere.
+- **Enabled** is a synced status. It does not prove a successful sign-in today. Check **Last login** and **Last synced**.
 
-<Frame caption="Apply column choices with Save Changes; selecting a field in the panel alone does not save it.">
-  <img src="/images/product/cloud-users-save-columns.png" alt="Save Changes button in the Cloud Users column preferences panel." width="248" height="80" />
-</Frame>
+Cloud identities are separate from [MSPortal user permissions](/user-guides/settings/change-company-user-permissions).
 
-Columns that are not applicable to the current scope, such as Account type when every record has the same type, cannot be forced into view through this panel.
+## Ask for an account change
 
-## Interpret account and security information carefully
+<Steps>
+  <Step title="Company users: open a ticket">
+    [Open a ticket](/user-guides/ticketing/open-a-ticket) with the company, provider, account, and the change you need.
+  </Step>
+  <Step title="MSP staff: make the change in the provider">
+    Disable accounts, change licenses, and reset passwords in Microsoft 365 or Google Workspace. The change shows here after the next sync.
+  </Step>
+</Steps>
 
-**Enabled** is a stored status, not proof of a successful sign-in today. **No licenses** means no license names are attached to this synchronized record; it does not prove that the person has no subscriptions, costs, or application access elsewhere. Check **Last synced** and ask your MSP to investigate discrepancies.
+## Troubleshooting
 
-For Google, **Enforced** takes precedence when the stored enforcement flag is true. Otherwise a true enrollment flag shows **Enrolled**. **Not enrolled** is the fallback when neither flag is true, including when data is incomplete. Confirm the provider's current settings with your MSP before treating that label as a security finding.
+| Problem | What to do |
+| --- | --- |
+| The **Users** tab is missing | Your role does not have Cloud read access. Ask your MSP to add it. |
+| You see **No cloud users match these filters.** | Set **Status** to **All**, click **Clear Filters**, and check the company selector. |
+| A new user is missing | The page shows synced data. Wait for the next sync, and check **Last synced** on other rows. |
+| **2-step verification** says **Not available** | Expected for Microsoft 365 accounts. |
+| **Account type** is missing | Every user in scope has the same account type, so the column is hidden. |
+| You see **You do not have access to this Cloud data.** | Your role lacks Cloud read access. |
 
-For Microsoft, **Not available** in this column does not mean MFA is disabled. Use the appropriate [Cloud posture information](/user-guides/cloud/posture) and ask your MSP to check the provider settings.
-
-**Account type** is not a complete administrator audit. Microsoft rows do not identify administrator roles here, Google admin labels can be absent when the whole column is omitted, and the type filter uses directory types rather than a dedicated Administrator filter. These values are separate from [MSPortal user permissions](/user-guides/settings/change-company-user-permissions).
-
-## Request an account change
-
-Company users should [open a ticket from the Home AI Assistant](/user-guides/ticketing/open-a-ticket) and include the company, provider, account, and requested change. Your MSP handles disabling accounts, assignment changes, and provider administration. A missing or disabled row alone does not confirm that every offboarding step is complete.
-
-## FAQs
+## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does a Cloud Users row mean that person can sign in to MSPortal?">
-    No. It represents a synchronized Microsoft or Google identity. MSPortal logins, roles, and company access are managed separately by your MSP.
+  <Accordion title="Does a row here mean the person can sign in to MSPortal?">
+    No. MSPortal logins, roles, and company access are managed separately.
   </Accordion>
-  <Accordion title="Can a Company administrator disable users or reset passwords here?">
-    No. Cloud Users is a reading page. Ask your MSP through a support ticket to make the account change.
+  <Accordion title="Can I disable a user or reset a password here?">
+    No. This page is read only. MSP staff make account changes in the provider.
   </Accordion>
   <Accordion title="Why does the same person appear more than once?">
-    Records can represent separate provider accounts, sign-in identities, or company mappings. Compare Provider, Company, and Email before deciding that a record is a duplicate.
+    A person can have separate accounts in different providers or companies. Compare **Provider**, **Company**, and **Email**.
   </Accordion>
-  <Accordion title="Does No licenses mean the account has no cost or access?">
-    No. It means no license names are attached to this synchronized row. It does not measure billing, recent software use, or access through other accounts. Ask your MSP to check the underlying assignment data.
+  <Accordion title="How do I see all the licenses behind +N more?">
+    Hover over the license badges. You can also show **License count**, or [export the users](/user-guides/cloud/export-users) to get every license name.
   </Accordion>
-  <Accordion title="How can I see all the license names behind +N more?">
-    Hover or keyboard-focus the license badge area. The tooltip lists all recorded names. The CSV also includes the full name list, and License count can be shown through Columns.
+  <Accordion title="Does Not enrolled prove 2-step verification is off?">
+    Not always. It shows when neither flag is set, which includes missing data. Check **Last synced** and confirm in Google Workspace.
   </Accordion>
-  <Accordion title="Does Not available mean Microsoft MFA is turned off?">
-    No. This per-user column does not report Microsoft MFA state. Review the relevant posture information and have your MSP confirm current settings.
-  </Accordion>
-  <Accordion title="Does Google's Not enrolled label prove that 2-step verification is absent?">
-    Not by itself. The label is used when neither stored flag is true, which can include incomplete data. Check synchronization and ask your MSP to confirm the provider state.
-  </Accordion>
-  <Accordion title="Can I use Account type to list every administrator?">
-    No. It is primarily a directory Member/Guest-type field. It does not enumerate Microsoft administrator roles and may be omitted for a single-type scope, including Google-only scopes. Your MSP should verify administrator roles in the relevant provider.
+  <Accordion title="Can I list every administrator with Account type?">
+    No. Microsoft administrator roles are not shown, and the column is hidden when all users share one type.
   </Accordion>
 </AccordionGroup>
 

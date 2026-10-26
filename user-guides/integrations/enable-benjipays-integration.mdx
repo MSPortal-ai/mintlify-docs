@@ -1,99 +1,250 @@
 ---
-title: "Configure BenjiPays Integration"
-description: "Configure the invoice payment link, preview sample values, and save or disconnect it."
-icon: "plug"
+title: 'Configure Benji Pays Integration'
+description: 'Add a Pay Now button to unpaid invoices and let clients open their Benji Pays billing portal with their MSPortal login'
+icon: 'credit-card'
 ---
 
-BenjiPays setup adds a payment link to eligible unpaid invoice rows. MSPortal substitutes the invoice number and amount due into your template; payment happens on the destination website.
+The Benji Pays integration can give your clients two things on the **Invoices** page. Set up either one, or both:
 
-This guide is for **MSP staff with access to Integrations settings**. Changing or disconnecting the template requires integration management permission. Company users can use available invoice payment links, but do not administer this setup.
+| Feature | What your clients see | What you copy from Benji Pays |
+|---------|----------------------|-------------------------------|
+| **Pay Now button** | A button on every unpaid invoice that opens a pre-filled Benji Pays checkout | One payment link, from the Benji Pays payment links page |
+| **Billing portal sign-on** | An **Open billing portal** button that signs them in to Benji Pays with their MSPortal login | Five values from a Benji Pays **SSO Configuration**. No payment link is used. |
 
-## Prepare the payment link
+When you connect, you choose what clients get: **Pay Now button and billing portal sign-in**, **Pay Now button only**, or **Billing portal sign-in only**. You can turn either feature on or off later.
 
-Obtain your merchant’s link through **Settings > Custom Payment Links** in Benji Pays, following its [custom payment link guide](https://support.benjipays.com/support/solutions/articles/150000181442-custom-payment-links-for-any-psa-or-erp-crm). Keep the merchant URL and any issued link parameters. Use MSPortal’s exact, case-sensitive placeholders for the invoice and amount values:
+<Tip>
+  **Which link do I copy?** For the Pay Now button, copy one **Default** link from the **PSA/ERP and other 3rd Party Payment Links** section, then swap in MSPortal's two placeholders ([Part 1](#part-1-pay-now-build-your-payment-link)). For billing portal sign-on, you don't copy any link from the payment links page. Those values come from **SSO Configuration** in Benji Pays ([Part 2](#part-2-billing-portal-sign-on-create-an-sso-configuration)).
+</Tip>
 
-- `[INVOICENUMBER]`
-- `[AMOUNTDUE]`
+## Prerequisites
 
-The URL must use `https://` and a `benjipays.com` or `benjipays.io` address, including their subdomains. Other systems’ placeholder names must be replaced with the two MSPortal placeholders above.
+- An active Benji Pays merchant account
+- An MSPortal user with the **Manage Integrations** permission
+- For the Pay Now button: at least one PSA integration (ConnectWise, Autotask, or Halo PSA) syncing invoices. Without invoices there is nowhere to show Pay Now buttons.
+- For billing portal sign-on: each client's MSPortal email must belong to their Benji Pays billing account, because Benji Pays matches clients by email.
 
-You also need invoice data available in MSPortal and the corresponding invoice/accounting data available to your BenjiPays merchant. This setup has no API credential form or invoice synchronization step.
+Do Part 1, Part 2, or both in Benji Pays, then connect in MSPortal (Part 3).
 
-## Configure and save
+## Part 1 (Pay Now): Build your payment link
 
-1. Open **Settings > Integrations**, find **BenjiPays**, and open its setup.
-2. Paste the URL into **Payment link template**.
-3. Optionally change **Button label**, up to 40 characters. The default is **Pay Now**.
-4. Inspect **Live preview**. It uses sample invoice **INV-1024** and amount **499.00**, even before saving.
-5. Choose **Save & enable** for initial setup, or **Save changes** when editing. Wait for the save result, then reopen Invoices to check the available payment buttons.
+Skip this part if clients will get billing portal sign-on only.
 
-<Warning>
-The preview button opens the actual configured external URL with sample values. It is not a payment sandbox or a validation-only control. Inspect the generated URL first; do not submit a payment as a documentation or setup check.
-</Warning>
+Benji Pays doesn't show a link made for MSPortal. You copy a link made for a PSA and replace its two placeholders with MSPortal's.
 
-Editing fields changes the draft and preview. It does not persist the configuration until Save succeeds. **Cancel** leaves the form without saving that draft.
+<Steps>
+  <Step title="Open the payment links page in Benji Pays">
+    Sign in to Benji Pays and open the custom payment links page from **Settings**. Depending on your account it may be titled **QuickBooks Custom Payment Links**. Benji Pays' own guide is [Custom Payment Links for any PSA or ERP/CRM](https://support.benjipays.com/support/solutions/articles/150000181442-custom-payment-links-for-any-psa-or-erp-crm).
+  </Step>
 
-<img src="/images/product/benjipays-setup-controls.png" alt="Unsaved BenjiPays form showing the built-in example template and required invoice and amount tokens." width="1404" height="260" />
+  <Step title="Skip the QuickBooks and Gateway Specific sections">
+    The page opens with **QuickBooks Online Payment Link Templates** and **Gateway Specific Links**. Those links are for QuickBooks invoice emails. Don't use them for MSPortal.
+  </Step>
 
-MSP example: this is the built-in placeholder, not a saved merchant payment link.
+  <Step title="Copy a Default link">
+    Scroll to **PSA/ERP and other 3rd Party Payment Links**. Each PSA (HaloPSA, ConnectWise, Autotask, Syncro and others) has a row labelled **Default**. Click **Copy** on the **Default** row of any PSA. They all open the same checkout; only the placeholder names differ.
 
-## Understand invoice buttons
+    The other rows, such as **Benji Payments (Bank)** or **Benji Payments (CC) (Surcharging Enabled)**, send clients to one payment method only. Use one of those instead of **Default** only if you want to limit how clients can pay.
+  </Step>
 
-The same saved template and label apply across the tenant. Invoice access still depends on the user’s permissions and company scope.
+  <Step title="Replace the two placeholders">
+    Paste the link into a text editor. Every Benji Pays link has an `invoiceNumber=` value and a `transactionAmount=` value. Replace each value with MSPortal's placeholder, exactly as written, square brackets included:
 
-Voided or cancelled invoices do not receive a button. Otherwise, a positive available balance makes an invoice eligible. When no balance is available, the portal falls back to a positive invoice total unless the invoice is closed. The link uses the invoice number, with an external identifier as a fallback, and formats the amount to two decimal places.
+    | Replace the value after | With |
+    |-------------------------|------|
+    | `invoiceNumber=` | `[INVOICENUMBER]` |
+    | `transactionAmount=` | `[AMOUNTDUE]` |
 
-The button opens the destination in a new tab. Opening it does not mark an invoice paid. Amounts reflect the invoice data currently available in MSPortal and can lag payment activity. Check the invoice/accounting synchronization when a balance looks stale.
+    For example, the ConnectWise **Default** link
 
-BenjiPays merchant rules also matter. Its optional [amount-matching rule](https://support.benjipays.com/support/solutions/articles/150000185669-require-transaction-amount-on-pay-now-invoice-links-to-match-the-invoice-s-total) checks against the invoice total. MSPortal supplies the outstanding amount when available, so review compatibility for partially paid invoices rather than assuming every generated link will be accepted.
+    ```
+    https://billing.yourmsp.com/portal/pay/?invoiceNumber=[invnumber]&transactionAmount=[invamount]
+    ```
 
-## Change or disconnect
+    becomes
 
-Reopen setup, edit the template or label, and choose **Save changes**. The **Active** badge represents a saved configuration, not a successful checkout test.
+    ```
+    https://billing.yourmsp.com/portal/pay/?invoiceNumber=[INVOICENUMBER]&transactionAmount=[AMOUNTDUE]
+    ```
 
-Choose **Disconnect**, then confirm, to remove the MSPortal payment-link configuration. Reopen Invoices to verify the buttons disappear. This does not cancel the BenjiPays merchant account, remove invoices, or reverse payments.
+    Keep everything else as Benji Pays shows it, including the address at the start. It may be your `yourshop.benjipays.com` address or your own billing domain, such as `billing.yourmsp.com`. Both work.
+
+    <Warning>
+      The placeholders are case-sensitive. `[invoicenumber]`, `{invoice}` or `[INVOICE_NUMBER]` won't work, and MSPortal won't save the link until both `[INVOICENUMBER]` and `[AMOUNTDUE]` are present.
+    </Warning>
+  </Step>
+</Steps>
+
+## Part 2 (Billing portal sign-on): Create an SSO configuration
+
+Skip this part if clients will get the Pay Now button only.
+
+Billing portal sign-on adds an **Open billing portal** button to **Invoices** for your clients. It signs them in to your Benji Pays customer portal as themselves, using their MSPortal login, so they don't need a Benji Pays password. This part doesn't use any link from the payment links page.
+
+<Steps>
+  <Step title="Create a JWT SSO configuration in Benji Pays">
+    In Benji Pays, go to **Settings** > **Customer Portal Settings** > **SSO Configuration**, click **Add Configuration**, and choose **JWT**. Fill in:
+
+    - **Description**: a name you'll recognize, for example `MSPortal`.
+    - **Remote Login URL**: your MSPortal client portal address followed by `/invoices`, for example `https://portal.yourmsp.com/invoices`. Benji Pays sends clients here to sign in, and back here with a message if sign-in fails.
+    - **ISS**: an issuer name, for example `msportal`.
+    - **Login Button Text**: the text Benji Pays shows on its own login page.
+
+    Save the configuration. Benji Pays then shows **AUDIENCE**, **ISSUER (ISS)**, **CLIENTID**, **CLIENTSECRET**, and a **Login Redirect URL** ending in `/callbackjwt`. Keep this page open. Benji Pays' own walkthrough is [Customer Portal SSO via JWT](https://support.benjipays.com/support/solutions/articles/150000196355-customer-portal-sso-via-jwt).
+  </Step>
+</Steps>
+
+## Part 3: Connect BenjiPays in MSPortal
+
+<Steps>
+  <Step title="Open the BenjiPays setup">
+    In MSPortal, go to **Settings** > **Integrations**. Use the **Payments** filter or scroll to find **BenjiPays**, then click **Connect**.
+  </Step>
+
+  <Step title="Choose what clients get">
+    Under **What should clients get?**, choose one:
+
+    | Choice | What the form asks for |
+    |--------|------------------------|
+    | **Pay Now button and billing portal sign-in** (default) | The payment link from Part 1 and the sign-on values from Part 2 |
+    | **Pay Now button only** | The payment link from Part 1 |
+    | **Billing portal sign-in only** | The sign-on values from Part 2. No payment link is needed. |
+
+    The fields below follow your choice.
+
+    <img src="/images/product/benjipays-connect-choice.png" alt="The What should clients get? menu on the BenjiPays Connect form, with Pay Now button and billing portal sign-in, Pay Now button only, and Billing portal sign-in only" width="1200" height="590" />
+  </Step>
+
+  <Step title="Paste the payment link (Pay Now)">
+    Paste the link you built in Part 1 into **Payment link template**. MSPortal checks the link as you type and again when you save:
+
+    | Problem | Fix |
+    |---------|-----|
+    | Not a valid URL | Re-copy the link from Benji Pays |
+    | Missing `[INVOICENUMBER]` or `[AMOUNTDUE]` | Replace the PSA's placeholder values as shown in Part 1 |
+    | Doesn't start with `https://` | Benji Pays links always use `https://`. Re-copy the link. |
+    | Not a public web address, such as `localhost` or an IP address | Use the address Benji Pays shows on the payment links page |
+  </Step>
+
+  <Step title="Enter the sign-on values (billing portal sign-on)">
+    Copy these from the Benji Pays SSO configuration you saved in Part 2:
+
+    | MSPortal field | Benji Pays value |
+    |----------------|------------------|
+    | **Callback URL** | **Login Redirect URL**, for example `https://yourshop.benjipays.com/callbackjwt`, or `https://billing.yourmsp.com/callbackjwt` if your portal uses your own domain |
+    | **Issuer** | **ISSUER (ISS)** |
+    | **Audience** | **AUDIENCE** |
+    | **Client ID** | **CLIENTID** |
+    | **Client secret** | **CLIENTSECRET** |
+
+    Copy **Callback URL** exactly as Benji Pays shows it. It must start with `https://` and end in `/callbackjwt`, with nothing after it.
+
+    The client secret must be at least 16 characters. MSPortal stores it encrypted and never shows it again. When you edit these settings later, leave **Client secret** as it is to keep the saved secret.
+  </Step>
+
+  <Step title="Save and continue">
+    Click **Save and continue**. BenjiPays shows as **Connected** in **Settings** > **Integrations**, and what you chose appears on the **Invoices** page straight away. Saving with sign-on chosen turns sign-on on. MSPortal then opens **Configure BenjiPays**.
+  </Step>
+</Steps>
+
+## Part 4: Finish in Configure BenjiPays
+
+**Configure BenjiPays** has a section for each feature. Use the one for each feature you chose.
+
+<Steps>
+  <Step title="(Pay Now) Rename the button and check the preview">
+    Under **Pay Now button**, **Button label** sets the text on the button. The default is **Pay Now**. You can use up to 40 characters, for example "Pay Online". Click **Save Pay Now settings**.
+
+    **Live preview** shows the button and the link it would open for a sample invoice (invoice `INV-1024`, amount `499.00`). Click it to check Benji Pays opens the checkout.
+
+    <img src="/images/product/benjipays-configure.png" alt="The Pay Now button section of Configure BenjiPays, with the Show the Pay Now button on unpaid invoices switch, Payment link template, Button label, Live preview and Save Pay Now settings" width="1964" height="985" />
+
+    <Warning>
+      The preview opens your real Benji Pays checkout, not a sandbox. Check the page loads, but don't submit a payment.
+    </Warning>
+  </Step>
+
+  <Step title="(Billing portal sign-on) Check it as a client">
+    Sign in as a client whose email is on a Benji Pays billing account, open **Invoices**, and click **Open billing portal**. The client lands in their Benji Pays portal without entering a Benji Pays password.
+
+    The sign-on settings are under **Billing portal single sign-on**, with an **Enable billing portal sign-in** switch and **Save portal settings**, which saves only the portal settings.
+
+    <img src="/images/product/benjipays-portal-sso-settings.png" alt="Billing portal single sign-on settings with the Enable billing portal sign-in switch, Callback URL, Issuer, Audience, Client ID and Client secret fields, and the Save portal settings button" width="1900" height="1076" />
+  </Step>
+</Steps>
+
+<Note>
+  Only clients see **Open billing portal**. MSP staff don't, and neither does anyone impersonating a client, because the portal always signs in the person who clicks. Clients whose MSPortal email isn't confirmed yet are asked by Benji Pays to verify it the first time.
+</Note>
+
+## Turning features on or off
+
+Go to **Settings** > **Integrations**, open **BenjiPays**, and in the **Setup guide** choose **Configure BenjiPays**.
+
+- **Pay Now button**: use **Show the Pay Now button on unpaid invoices**, then click **Save Pay Now settings**. Turning it off removes the payment link and button label; billing portal sign-on keeps working.
+- **Billing portal sign-on**: use **Enable billing portal sign-in**, then click **Save portal settings**. Turning it off removes **Open billing portal** from **Invoices** straight away, and MSPortal refuses portal sign-in until you turn it back on. MSPortal keeps the saved values and client secret, so turning it back on doesn't need them again. Pay Now buttons aren't affected.
+
+To switch between both features, Pay Now only and sign-on only in one step, change **What should clients get?** in **Connect** and click **Save changes**.
+
+If both features are off, **Configure BenjiPays** shows **Clients see nothing from BenjiPays**. Turn one back on, or click **Disconnect BenjiPays** if you no longer use it.
+
+## How Pay Now buttons work
+
+- The button appears only when the invoice has a balance above zero. Voided, cancelled and fully paid invoices don't get one. If your PSA reports no balance, MSPortal uses the invoice total instead, unless the invoice is closed.
+- Clicking it opens your Benji Pays checkout in a new tab with the invoice number and balance filled in. The amount is a plain number with two decimals, such as `499.00`.
+- Clicking it doesn't mark the invoice paid in MSPortal. The status updates after your PSA's next invoice sync.
+- Every client sees the same button label.
+
+<Info>
+  The balance comes from your PSA's invoice sync. If a payment hasn't posted in your PSA yet, the button uses the older balance. Run your PSA's invoice sync if amounts look wrong.
+</Info>
+
+## Disconnecting
+
+1. Go to **Settings** > **Integrations** and open **BenjiPays**.
+2. Open **More actions** in the connection header and choose **Disconnect…**.
+3. Click **Disconnect** in the **Disconnect BenjiPays?** dialog, or **Cancel** to keep it.
+
+Disconnecting removes the Pay Now buttons and the **Open billing portal** button straight away, and deletes the saved client secret. Your Benji Pays account isn't touched. To reconnect, choose what clients get again and re-enter the payment link or sign-on values.
 
 ## Troubleshooting
 
-- **Save is disabled:** check the URL, both exact placeholders, label length, and your management access.
-- **The preview works but Save fails:** the server additionally requires HTTPS and an allowed BenjiPays hostname. A clickable draft preview is not proof of accepted configuration.
-- **No invoice button:** check invoice access, saved configuration, available invoice data, balance/status and whether the payment column is visible.
-- **Wrong invoice or amount:** compare the source invoice number and current balance with the merchant/accounting records. Do not repeatedly submit a payment.
-- **Destination rejects the link:** check the merchant URL, invoice availability and merchant payment-link rules with the provider.
+| Issue | Solution |
+|-------|----------|
+| No link on the Benji Pays page contains `[INVOICENUMBER]` | That's expected. Copy a **Default** link and replace its placeholder values, as in [Part 1](#part-1-pay-now-build-your-payment-link). |
+| "Payment link must include the [INVOICENUMBER] placeholder" | Replace the value after `invoiceNumber=` with `[INVOICENUMBER]`, brackets and capitals included. |
+| "Payment link must include the [AMOUNTDUE] placeholder" | Replace the value after `transactionAmount=` with `[AMOUNTDUE]`, brackets and capitals included. |
+| "Payment link must point to a public web address" | The link points at `localhost`, an IP address, or a single-word host name. Re-copy the link from Benji Pays. |
+| "Payment link must use https://" | Benji Pays links always use `https://`. Re-copy the link. |
+| Pay Now buttons not showing on **Invoices** | Check BenjiPays shows as **Connected** in **Settings** > **Integrations**, that **Show the Pay Now button on unpaid invoices** is on in **Configure BenjiPays**, and that the invoice has a balance above zero and isn't voided. Refresh **Invoices**. |
+| Pay Now opens with the wrong amount | Your PSA's invoice balance is out of date. Run an invoice sync from your PSA integration. |
+| Benji Pays says the invoice isn't found | The invoice number from your PSA doesn't exist in Benji Pays yet. Create the transaction in Benji Pays first. |
+| "Clients see nothing from BenjiPays" | The Pay Now button and billing portal sign-on are both off. Turn one on in **Configure BenjiPays**, or disconnect BenjiPays. |
+| "Use your BenjiPays payment link: an https:// address that includes [INVOICENUMBER] and [AMOUNTDUE]." | Build the link as in [Part 1](#part-1-pay-now-build-your-payment-link), then paste it again. |
+| "Use the HTTPS callback URL from BenjiPays. It ends in /callbackjwt." | Copy the **Login Redirect URL** from Benji Pays exactly, with nothing after `/callbackjwt`. |
+| "The client secret must be at least 16 characters" | Re-copy **CLIENTSECRET** from the Benji Pays SSO configuration in full. |
+| **Save portal settings** stays greyed out | Fill in every field. **Callback URL** must be the **Login Redirect URL** from Benji Pays: `https://`, ending in `/callbackjwt`, with nothing after it. The first time you enable sign-in, **Client secret** is required. |
+| No **Open billing portal** button for a client | Check **Enable billing portal sign-in** is on and saved in **Configure BenjiPays**. The button shows only for clients signed in as themselves, never for MSP staff or while impersonating. |
+| Client sees "Your email is not linked to a BenjiPays billing account" | Benji Pays has no billing account with that client's MSPortal email. Add the email to the client's billing account in Benji Pays. |
+| Client sees "Your billing account is disabled" | The account is disabled in Benji Pays. Re-enable it there. |
+| Client sees "BenjiPays requires email verification" | The client follows the verification email from Benji Pays, then clicks **Open billing portal** again. |
+| Client sees "Unable to open your billing portal" | Re-copy **Callback URL**, **Issuer**, **Audience**, **Client ID** and **Client secret** from the Benji Pays SSO configuration, then click **Save portal settings**. |
 
-See [Pay an invoice](/user-guides/invoices/pay-an-invoice) for the client workflow.
+## Permissions
 
-## Frequently asked questions
+| Action | Permission required |
+|--------|---------------------|
+| View the BenjiPays setup | `read_settings_integrations` (Integrations settings access) |
+| Save, change, turn features on or off, or disconnect BenjiPays | `manage_settings_integrations` |
+| See Pay Now buttons on **Invoices** | `read_invoices` |
+| Open the billing portal from **Invoices** | A client account with `read_invoices`, signed in as themselves |
 
-<AccordionGroup>
-  <Accordion title="Who can configure BenjiPays?">
-    MSP staff with Integrations settings access can open setup; saving and disconnecting require integration management permission. Company invoice access does not grant setup access.
-  </Accordion>
-  <Accordion title="Does BenjiPays setup synchronize invoices?">
-    No. It saves a tenant-wide payment-link template; invoice data comes from the portal’s invoice sources.
-  </Accordion>
-  <Accordion title="Which placeholders are required?">
-    Use the exact case-sensitive [INVOICENUMBER] and [AMOUNTDUE] placeholders in an HTTPS BenjiPays URL.
-  </Accordion>
-  <Accordion title="Is Live preview a sandbox?">
-    No. It opens the configured external destination with sample values, even for an unsaved draft.
-  </Accordion>
-  <Accordion title="Does the Active badge prove payments work?">
-    No. It indicates saved configuration. Invoice availability, current balances and merchant rules still determine whether checkout works.
-  </Accordion>
-  <Accordion title="Does clicking Pay Now mark an invoice paid?">
-    No. It opens the payment website. Payment and subsequent invoice updates are separate.
-  </Accordion>
-  <Accordion title="Can I set a different merchant link per company here?">
-    No. This setup saves one tenant-wide template and button label.
-  </Accordion>
-  <Accordion title="What does Disconnect remove?">
-    It removes the portal payment-link configuration. It does not cancel the merchant account or reverse payments.
-  </Accordion>
-</AccordionGroup>
+Anyone who can view invoices can see the saved payment link, because it's the link behind the Pay Now button. Users without `manage_settings_integrations` see the setup as read-only.
 
-## Related guides
+## Related resources
 
-- [Integrations settings](/user-guides/settings/integrations)
-- [Company Mapping](/user-guides/settings/integration-company-mapping)
-- [Integration directory](/user-guides/integrations/index)
+- [Invoices](/user-guides/invoices/index): where the Pay Now buttons appear
+- [Use an invoice payment link](/user-guides/invoices/pay-an-invoice): how clients pay and open their billing portal
+- [ConnectWise Integration](/user-guides/integrations/enable-connectwise-integration): source of invoice data
+- [Autotask Integration](/user-guides/integrations/enable-autotask-integration): source of invoice data
+- [Halo PSA Integration](/user-guides/integrations/enable-halo-integration): source of invoice data

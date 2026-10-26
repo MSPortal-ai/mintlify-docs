@@ -1,3 +1,5 @@
+Read `AGENTS.md` before editing or running git commands; it owns this repository's workflow.
+
 - Make assumptions - always ask for clarification
 
 ## Product screenshots, GIFs and test account

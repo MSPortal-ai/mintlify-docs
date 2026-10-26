@@ -4,90 +4,105 @@ description: "MSP instructions for importing synchronized provider products or l
 icon: box
 ---
 
-**Audience:** MSP staff with budget editing permission. The integration catalog reader is restricted to MSP users. Company users should ask their MSP to import or link the products they need, even if an import button is visible.
+Use **Import from Integrations** to turn products your connected PSA or other integrations have already synced into MSPortal into budget catalog products. You can create a new product or link the source to a product you already have. This guide is for MSP staff with budget write access. Company users cannot read the integration product list. They should ask their MSP to import or link products for them, even if the button is visible.
 
-This workflow reads products already synchronized into MSPortal by a supported integration. It does not place an order or edit a product in the provider. The available catalog depends on the connected provider and its completed product synchronization; connecting an integration alone does not guarantee product rows.
+This does not place an order or change a product in the provider. The list only holds products your integration has synced. Connecting an integration does not guarantee there are products to import.
 
-## Find source products
+## Before you start
 
-1. Open **Budgets > Budgets Menu > Products**.
-2. Choose **Import from Integrations**.
-3. Use **Search products...** to search names, SKUs and categories. Choose **Show Unimported Only** to hide sources already linked to a budget product; **Show All** brings them back.
-4. Review the currently loaded page. The dialog loads fifty source products per page. This is an MSP-wide integration list; selecting one company in the portal does not filter this source picker to that company.
-
-The table shows Name, SKU, Category, Price and Linked Product. Already imported rows are disabled and display their linked product. Check the price with the source when necessary: a dash can represent a missing or zero price, and it does not guarantee that an item is free.
+- You need the **write_budgets** or **manage_budgets** permission and an MSP staff account.
+- An integration with a finished product sync.
+- The list covers the whole MSP. Selecting a company in the top bar does not filter it.
 
 ## Create new catalog products
 
 <Steps>
-  <Step title="Select source rows on the current page">
-    Tick the intended unimported products. The header checkbox selects unimported rows on this page. Work one page at a time, keeping the same search and filter until the import completes.
+  <Step title="Open the import">
+    Click **Budgets**, then **Budgets Menu**, then **Products**. Click **Import from Integrations**. The **Import Products from Integrations** dialog opens.
+  </Step>
+  <Step title="Find the source products">
+    Type in **Search products...** to match names, SKUs and categories. Click **Show Unimported Only** to hide products already linked to a budget product. The button changes to **Show All**. The dialog loads 50 products per page.
+  </Step>
+  <Step title="Tick the products">
+    Tick each product to import. The header box selects every unimported row on the current page. Work one page at a time, and keep the same search and filter until you finish. Rows that are already imported are disabled and show their linked product.
   </Step>
   <Step title="Keep Create New">
-    Selected rows show **Create New** in Linked Product. Leave this choice when you want a separate budget catalog record for the source product.
+    A ticked row shows **Create New** in the **Linked Product** column. Keep it to make a separate catalog product.
   </Step>
-  <Step title="Review and import">
-    Check each selected row and choose **Import Selected (count)**. Wait for the result. The catalog records save immediately; no later Products page Save is required.
+  <Step title="Import">
+    Click **Import Selected (N)**. A message such as **Successfully imported 3 products.** appears. The products are saved at once.
   </Step>
-  <Step title="Verify the new product">
-    Refresh Products and review the imported price, category and recurrence before adding it to a budget. A source without a price can create a zero-price product.
+  <Step title="Check the new products">
+    Open the Products page and check the price, category and recurrence before you use a product in a budget. A source with no price makes a zero-price product.
   </Step>
 </Steps>
 
-New products inherit source name, SKU, category, vendor, price, group and company association where supplied. Billing recurrence is derived from the synchronized source; supported semiannual billing becomes Custom every six months. Missing or unrecognized billing data may fall back to Monthly for a recurring source or One-time otherwise. Verify the result rather than assuming the provider data is complete.
+The table shows **Name**, **SKU**, **Category**, **Price** and **Linked Product**. A dash in **Price** means the price is missing or zero.
+
+New products take the source name, SKU, category, vendor, price, group and company where the source has them. The recurrence comes from the synced billing period. A semiannual period becomes Custom every 6 months. A source with no clear period becomes Monthly if it is flagged as recurring, and One-time if not. A source setup price and unit are kept with the product. Check the result instead of assuming the provider data is complete.
 
 ## Link a source to an existing product
 
-1. Select the unimported source row.
-2. Open **Create New** in that row's **Linked Product** column.
-3. Search for and choose the correct existing budget product. Only products without an existing integration link are offered.
-4. Choose **Import Selected (count)**, then verify the link by reopening the import dialog with Show All.
+<Steps>
+  <Step title="Tick the source row">
+    Tick an unimported source product.
+  </Step>
+  <Step title="Open the link list">
+    Click **Create New** in that row's **Linked Product** column.
+  </Step>
+  <Step title="Pick the existing product">
+    Search and pick the budget product. Only products without an integration link are listed.
+  </Step>
+  <Step title="Import">
+    Click **Import Selected (N)**. Then reopen the dialog with **Show All** to see the link.
+  </Step>
+</Steps>
 
-Linking attaches the source reference to the existing catalog product. It does **not** replace that product's name, price, category or recurrence with the provider's values. Use [Edit Product](/user-guides/budgets/manage-products) to review those values separately. Select each existing target for only one source row in a batch.
+Linking attaches the source reference to your product. It does not copy the provider's name, price, category or recurrence onto it. Edit the product yourself if those need to change. See [Create and edit budget products](/user-guides/budgets/manage-products). Pick each existing product for only one source row in a batch.
 
-## Selection and retry limits
+## Selection limits
 
 <Note>
-Import one loaded page at a time. Changing page, search or Show Unimported Only can leave the button count showing selections that are no longer loaded. The current submission includes only selected source records on the loaded page. To restart clearly, Cancel and reopen the dialog, then make the intended selection again.
+Import one loaded page at a time. If you change the page, the search or **Show Unimported Only**, the button count can still include earlier ticks. To start clean, click **Cancel**, reopen the dialog and tick the products again.
 </Note>
 
-The header checkbox replaces the selection with the unimported rows on the current page; it does not accumulate every page. Cancel closes this dialog and clears its selection.
+The header checkbox selects the unimported rows on the current page only. **Cancel** closes the dialog and clears the ticks.
 
-An error can occur after some links have already saved. Reopen the dialog and check which records are now linked before retrying; do not assume the whole batch was rolled back. Already linked rows are not a refresh-price operation, and there is no unlink control in this dialog.
+An error can happen after some links are already saved. Reopen the dialog and see which products are now linked before you retry. There is no way to unlink a product in this dialog.
 
-Related: [Read the catalog](/user-guides/budgets/read-product-catalog), [Create and edit products](/user-guides/budgets/manage-products), [Add products to a budget](/user-guides/budgets/import-planning-and-products).
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **No products found.** | Check that the integration has finished its product sync, and clear the search. |
+| **Failed to load products** | Close the dialog and try again. |
+| **None of the selected products can be imported.** | Reopen the dialog and tick unimported rows again. |
+| **Failed to import products** | Reopen the dialog and check which products are linked before you retry. |
+| A row is disabled | It is already linked to a budget product. Click **Show All** to see which one. |
+| The button is visible but nothing loads (company user) | Integration products are for MSP staff only. Ask your MSP. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Can Company users import products from integrations?">
-    The integration source reader is restricted to MSP users. Company users should ask their MSP to import or link products, even if a button is visible.
+  <Accordion title="Does selecting a company filter the picker?">
+    No. The picker reads the MSP's whole integration catalog. Check each product's company before you import.
   </Accordion>
-  <Accordion title="Does selecting a company filter the integration product picker?">
-    No. This picker reads the MSP integration catalog rather than filtering by the portal’s selected company. Review source and target association before importing.
+  <Accordion title="What is the difference between Create New and linking?">
+    **Create New** makes a new catalog product from the source. Linking attaches the source to a product you already have and leaves its fields alone.
   </Accordion>
-  <Accordion title="What is the difference between Create New and linking a product?">
-    Create New saves a new catalog record from the source. Linking attaches the source reference to an existing product without replacing its current fields or price.
+  <Accordion title="Does linking update the product's price?">
+    No. Edit the product separately.
   </Accordion>
-  <Accordion title="Does linking update the existing product price?">
-    No. Review and edit the budget product separately if its name, price, category or recurrence needs changing.
+  <Accordion title="Can I select across several pages?">
+    No. Import one page at a time.
   </Accordion>
-  <Accordion title="Why is a source row disabled?">
-    It is already linked to a budget product. Show All displays its linked product; Show Unimported Only hides it.
-  </Accordion>
-  <Accordion title="Can I select products across several import pages?">
-    Use one loaded page per import. The count can retain selections from other pages or searches, but submission includes only selected records on the currently loaded page.
-  </Accordion>
-  <Accordion title="Does a dash in Price mean a free product?">
-    Not necessarily. Missing and zero prices can both display a dash. Verify the intended price before using the imported catalog product.
-  </Accordion>
-  <Accordion title="Does importing write products back to my provider?">
-    No. It creates or links MSPortal budget catalog records from synchronized data. It does not place an order or update the provider’s product.
-  </Accordion>
-  <Accordion title="Should I repeat the whole import after an error?">
-    First reopen the dialog and inspect the links. Earlier links may have saved before a later error; retry only what remains necessary.
-  </Accordion>
-  <Accordion title="Can I refresh prices or remove links in this dialog?">
-    The dialog does not provide a price-refresh or unlink control for already linked records. Edit catalog values separately and ask the MSP to review an incorrect link.
+  <Accordion title="Does importing change my provider?">
+    No. It only creates or links MSPortal catalog records.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Find and understand budget products](/user-guides/budgets/read-product-catalog)
+- [Create and edit budget products](/user-guides/budgets/manage-products)
+- [Add Planner, goal and product costs to a budget](/user-guides/budgets/import-planning-and-products)

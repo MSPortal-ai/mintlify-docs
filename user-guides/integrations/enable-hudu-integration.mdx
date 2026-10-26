@@ -1,117 +1,361 @@
 ---
 title: 'Configure Hudu Integration'
-description: 'Connect Hudu, choose content, configure password sharing and understand optional writeback.'
-icon: 'shield-halved'
+description: 'Connect your Hudu instance to MSPortal.ai to sync documentation, assets, passwords, and procedures'
+icon: 'book'
 ---
 
 Connect Hudu to synchronize company documentation, assets and procedures. Password sharing, Magic Dash and warranty writeback are separate choices. This setup is for **MSP staff with integration management permission**; publishing content to Company users also requires the appropriate Documentation settings access.
 
-## Before you start
+## Overview
 
-MSPortal permits one active documentation platform: **Hudu or IT Glue**. Review an existing connection before replacing it; deleting a working connection removes its synchronized data and credentials.
+Hudu is an IT documentation platform that helps MSPs organize knowledge bases, asset information, passwords, and procedures. By integrating Hudu with MSPortal.ai, you can:
 
-Have a publicly reachable HTTPS Hudu instance URL and an API key scoped to the companies and resources you need. In Hudu, an admin can create a key under **Admin > API Keys**. Password access and company scope are key-level choices. See [Hudu REST API setup](https://support.hudu.com/hc/en-us/articles/11422780787735-REST-API). A Magic Dash-only key is not sufficient for the full documentation integration.
+- Access Hudu documentation, articles, and procedures directly from MSPortal
+- Browse and reveal passwords securely without leaving MSPortal
+- Map Hudu companies to your MSPortal companies for unified data access
+- Push compliance data from MSPortal to Hudu Magic Dash
+- Write MSPortal warranty dates back to Hudu assets
 
-## Connect and map
+The Hudu connection page lists its tasks in the **Setup guide**: **Connect**, **Choose data**, **Import or match companies**, **Configure warranty**, **Configure Magic Dash** and **Review**. **Choose data** contains articles, procedures, password sharing and asset layouts. **Configure warranty** and **Configure Magic Dash** hold the outbound features that write to Hudu.
+
+<Frame caption="MSP staff in the Demo tenant.">
+  <img src="/images/product/integrations-choose-data-hudu-preview.png" alt="Hudu Choose data contains articles, procedures, password metadata and asset layouts, with Configure warranty and Configure Magic Dash in the setup guide." width="1280" height="853" />
+</Frame>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Active Hudu account with administrative access
+- MSPortal.ai account with integration management permissions
+- Companies already set up in MSPortal (from your PSA integration or manually created)
+
+<Warning>
+Only one documentation integration can be active at a time. If you already have IT Glue connected, you must remove it before setting up Hudu. Go to **Settings > Integrations**, open the IT Glue connection, and choose **More actions > Disconnect…** first.
+</Warning>
+
+<Note>
+The Hudu integration maps companies to existing companies in MSPortal. Import your companies from your PSA integration first, or create them manually before setting up Hudu.
+</Note>
+
+---
+
+## Part 1: Generate API Credentials in Hudu
+
+Before connecting to MSPortal, you need to create an API key in your Hudu instance.
 
 <Steps>
-  <Step title="Open Hudu setup">
-    Open **Settings > Integrations** and connect Hudu. Use **Configure** on a saved Hudu connection when maintaining it.
+  <Step title="Log into Hudu">
+    Access your Hudu instance at your organization's URL (e.g., `https://your-instance.huducloud.com`).
   </Step>
-  <Step title="Test the new connection">
-    On **Connect**, enter **Hudu Base URL**, such as `https://company.hudu.com`, without `/api/v1`. Enter **API Key** and select **Test Connection**. Review the result before continuing.
+
+  <Step title="Navigate to API Keys">
+    Go to **Admin > API Keys** from the main navigation. Depending on your Hudu version, this may also be under **Account Settings > API Keys**.
   </Step>
-  <Step title="Create the connection">
-    Select **Create Integration**, wait for success, then **Next**. Testing alone does not create it. Company discovery runs in the background.
+
+  <Step title="Create a New API Key">
+    Click **New API Key** and enter a descriptive name such as `MSPortal Integration`.
+
+    <Tip>
+      Use a descriptive name so you can easily identify this key's purpose later. Avoid generic names like "API Key 1".
+    </Tip>
   </Step>
-  <Step title="Map companies">
-    On **Map Companies**, review **Quick Match** proposals or select the intended MSPortal company manually. Save pending links with **Import Selected** or **Next**. Creating a missing MSPortal company saves it immediately, then stages its link. Removing an existing link saves immediately.
+
+  <Step title="Copy the API Key">
+    After creating the key, copy it immediately and store it in a secure location.
+
+    <Warning>
+      **Copy the API key now!** It will not be displayed again after you leave this page. If you lose the key, you will need to generate a new one.
+    </Warning>
+  </Step>
+
+  <Step title="Note Your Instance URL">
+    Make note of your full Hudu instance URL. This is the URL you use to access Hudu in your browser, for example:
+
+    | Format | Example |
+    |--------|---------|
+    | **Hudu Cloud** | `https://your-company.huducloud.com` |
+    | **Self-Hosted** | `https://hudu.yourcompany.com` |
   </Step>
 </Steps>
 
-<img src="/images/product/hudu-connection-fields.png" alt="Blank Hudu base URL and API key form before testing or creating a connection." width="1024" height="976" />
+### Required Information
 
-## Choose Documentation
+Before proceeding to MSPortal, ensure you have:
 
-Use **Knowledge Base Articles**, **Procedures** and the **Asset Layouts** switches to choose what synchronizes. Each change saves immediately. **Enable All** and **Disable All** affect all layouts for this connection, including layouts hidden by the search. Search narrows the list you see, not the scope of those bulk controls.
+| Information | Description |
+|-------------|-------------|
+| **Hudu Base URL** | Your full Hudu instance URL (e.g., `https://your-instance.huducloud.com`) |
+| **API Key** | The API key you just generated |
 
-**Next** from the mapping and configuration steps can request background content synchronization. A successful toggle or wizard completion does not prove that articles have arrived. Inspect the synchronized content and its freshness afterward.
+---
 
-The **Warranty Writeback** card has a separate draft and **Save warranty settings** button. Its switch does not follow the immediate-save behavior of the content switches. See [warranty writeback](/user-guides/integrations/documentation-warranty-writeback) before enabling it.
+## Part 2: Set up the connection in MSPortal
 
-## Configure Passwords
+Open **Settings > Integrations**, choose the **Directory** tab and select **Hudu**. To maintain a saved connection, open it from your active integrations.
 
-On **Passwords**, **Enable Password Sharing** saves immediately. It enables the integration's sharing feature and password-metadata synchronization. It does not grant every Company user access to every password.
+### Connect
 
-Review **Settings > Documentation > Passwords** for folder and role visibility, and check that the Hudu key permits password access. Password values are requested from the provider when an authorized reveal is used; a synchronized password entry does not prove that reveal will succeed. Use the [password reader](/user-guides/documentation/shared-passwords) for the user workflow.
+<Steps>
+  <Step title="Enter Your Hudu Base URL">
+    Enter the full URL of your Hudu instance in the **Hudu Base URL** field, such as `https://your-instance.huducloud.com`.
 
-## Decide whether to enable Magic Dash
+    <Note>
+      Include `https://` at the beginning. Do not include a trailing slash or `/api/v1`. The instance must be reachable from the internet over HTTPS.
+    </Note>
+  </Step>
 
-**Enable Magic Dash** saves immediately and requests a background push of available company compliance information to Hudu. It can start before **Complete Setup**. This changes Hudu; it is an optional outbound feature, separate from importing documentation.
+  <Step title="Enter Your API Key">
+    Paste your Hudu API key into the **API Key** field.
+  </Step>
 
-Review the mapped companies and inspect the actual Hudu result before relying on it. Do not assume every security, patching or training metric is included simply because the setup card lists examples. Turning the feature off stops future enabled pushes; it does not serve as an undo for content already written to Hudu.
+  <Step title="Test the connection">
+    Select **Test connection** to verify your credentials.
 
-## Share content and maintain credentials
+    If the connection fails:
+    - Verify your Hudu Base URL is correct and includes `https://`
+    - Check that your API key is copied exactly, with no extra spaces
+    - Ensure your Hudu account has API access enabled
+    - Confirm your Hudu instance is accessible from the internet (self-hosted instances behind a firewall may need configuration)
+  </Step>
 
-After synchronization, use **Settings > Documentation** to set the intended content and Company-role visibility. Connecting Hudu and enabling a layout do not by themselves complete client sharing. Some Hudu article-sharing actions also enable public sharing in Hudu; read the confirmation before proceeding.
+  <Step title="Save">
+    Select **Save and continue** after a successful test. Testing alone does not create the connection. MSPortal starts fetching your Hudu companies in the background.
 
-For key rotation, reopen **Connect**, enter the replacement and use **Update API Key**. The existing Base URL is locked. An update-success message confirms storage; run **Retest Connection** afterward to verify the saved key against Hudu. A retest on its own does not store a replacement.
+    <Info>
+      Your API key is stored securely using encrypted vault storage. It is never exposed in logs or API responses.
+    </Info>
+  </Step>
+</Steps>
 
-**Skip**, **Back** and **Complete Setup** are navigation controls, not an undo for settings already saved. The footer **Delete** confirmation disconnects the integration; it is not a way to revoke one client's content access.
+### Choose data
+
+In **Choose data**, choose what synchronizes from Hudu. Each switch saves as soon as you flip it. Turning a dataset off hides its dependent settings without clearing the saved choices.
+
+| Setting | Description |
+|---------|-------------|
+| **Knowledge Base Articles** | Knowledge base articles for each mapped company |
+| **Procedures** | Documented processes and runbooks |
+| **Enable Password Sharing** | Password names, usernames and URLs, so permitted users can reveal passwords. See [Password sharing](#password-sharing). |
+| **Asset Layouts** | Turn on asset sync to reveal the individual layout switches |
+
+MSPortal fetches your asset layouts from Hudu in real time. Each layout represents a category of assets (e.g., "Network Devices", "Software Licenses", "Cloud Services"). Toggle individual layouts, use the search box to find one, or use **Enable All** / **Disable All**.
+
+<Note>
+  **Enable All** and **Disable All** change every layout in the connection, including layouts the search box is hiding.
+</Note>
+
+Turning a type on starts a background sync, so content appears once that sync finishes. Use **Run sync** when fresh content is needed and check **Sync activity**. Check the synced content afterward rather than relying on the switch alone.
+
+#### Password sharing
+
+Before you turn on password sharing, be aware of how MSPortal handles Hudu passwords:
+
+- **Password values are never stored in MSPortal.** Only password names, usernames and URLs sync. Every time a user reveals a password, the value is fetched live from Hudu at that moment.
+- **Every password reveal is audit-logged.** MSPortal records which user viewed which password and when.
+- **Access requires permissions.** Users must have the `read_documentation_passwords` permission to reveal passwords.
+
+When **Enable Password Sharing** is on, users with the `read_documentation_passwords` permission can browse and reveal passwords for mapped companies. It does not grant every Company user access to every password. Your Hudu API key must also allow password access, or reveals fail. Turning the switch off removes the synced Hudu password details from MSPortal. It does not delete anything in Hudu.
+
+Per-company password folder visibility and role-based access are set in **Settings > Documentation > Passwords**.
+
+<Tip>
+  Use folder-level sharing to restrict access to sensitive credentials. For example, you might share a "General Access" folder while keeping "Domain Admin" passwords restricted.
+</Tip>
+
+<Warning>
+Password sharing gives MSPortal users access to credentials stored in Hudu. Ensure only appropriate users have the `read_documentation_passwords` permission in MSPortal.
+</Warning>
+
+### Import or match companies
+
+Map your Hudu companies to MSPortal companies. This determines which documentation, assets, and passwords are accessible for each company.
+
+1. Wait for the initial company sync. After the connection is saved, MSPortal fetches your companies from Hudu. This may take a few moments depending on the number of companies in your account.
+2. Review the suggested matches. MSPortal suggests a company when a Hudu company's `id_number` matches a PSA external company ID already imported into MSPortal, or when the names match ignoring case and whitespace.
+3. Accept a suggestion, choose another company in the row, or use **Import company** to create a portal company from it. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them.
+4. Choose **Ignore** for any Hudu company you never want to map. You can restore it later. **Remove match** unlinks a company.
+
+Each accepted match, unlink and import saves immediately. Check for duplicates before you import a company.
+
+<Warning>
+You must map at least one company to finish setup. Only documentation, assets, and passwords from mapped companies will be accessible in MSPortal.
+</Warning>
+
+### Configure warranty
+
+The **Warranty Writeback** card writes MSPortal warranty dates to Hudu assets.
+
+1. Turn on **Enable warranty writeback**
+2. For each MSPortal device type, pick the Hudu asset layout, then its **Serial number field**, **Warranty start field** and **Warranty expiration field**
+3. Click **Save warranty settings**
+
+Unlike the switches in **Choose data**, these settings do not save until you click **Save warranty settings**. Only assets with a unique serial number match inside the mapped company and layout are updated. See [Warranty Writeback](/user-guides/integrations/documentation-warranty-writeback) before you turn it on.
+
+### Configure Magic Dash
+
+Hudu Magic Dash allows external tools to push summary data into company dashboards. When enabled, MSPortal pushes compliance status, security metrics, and device health data into Hudu for each mapped company, so your team can see this information without leaving Hudu.
+
+Turn on **Enable Magic Dash** in **Configure Magic Dash**. The switch saves immediately and starts the first push right away, before you select **Finish setup**. After that, data updates automatically on a regular schedule. This changes Hudu, so review the companies and expected compliance content before enabling it.
+
+Turning Magic Dash off stops future pushes. It does not remove items already written to Hudu.
+
+<Note>
+Magic Dash and Warranty Writeback are the only parts of the Hudu integration where data flows from MSPortal to Hudu. All other data flows from Hudu into MSPortal.
+</Note>
+
+### Review and finish setup
+
+Open **Review** and select **Finish setup** once the required tasks are complete. Skipping or leaving a task does not undo its saved settings.
+
+---
+
+## What Gets Synced
+
+| Data Type | Direction | Description |
+|-----------|-----------|-------------|
+| Companies | Hudu → MSPortal | Company records for mapping purposes |
+| Knowledge Base Articles | Hudu → MSPortal | Knowledge base articles and documentation |
+| Asset Layouts | Hudu → MSPortal | Asset type definitions and their associated assets |
+| Passwords | Hudu → MSPortal | Names, usernames and URLs sync; values are live-fetched on reveal (never stored in MSPortal) |
+| Procedures | Hudu → MSPortal | Process documentation and runbooks |
+| Compliance Data | MSPortal → Hudu | Compliance check results pushed to Magic Dash |
+| Warranty Dates | MSPortal → Hudu | Written to mapped asset fields when Warranty Writeback is saved |
+
+<Info>
+Password values are unique in that they are never stored or cached in MSPortal. Each time a user reveals a password, it is fetched in real time from the Hudu API. This ensures passwords are always current and reduces the security risk of storing credentials in a second system.
+</Info>
+
+---
+
+## Maintain the connection
+
+Open the Hudu connection from **Settings > Integrations** and choose a task in the **Setup guide** to change its settings. **Run sync** in the connection header refreshes data from Hudu, and **Sync activity** shows each run's result.
+
+- **Rotate the API key:** open **Connect** and enter the new key. The **Hudu Base URL** stays locked. Select **Test connection**, then **Save changes**. A test on its own does not store the replacement. Leave the mask unchanged to keep the stored key.
+- **Map new companies:** as you onboard new clients in Hudu, open **Import or match companies**. New Hudu companies appear in the list for you to match or import.
+- **Disconnect:** open **More actions** and choose **Disconnect…**. The confirmation lists the stored credentials, company matches and synced data that will be removed. It is not a way to revoke one client's content access.
 
 ## Troubleshooting
 
-| Symptom | What to check |
-| --- | --- |
-| Another documentation platform is active | Review the existing Hudu or IT Glue connection before planning a replacement. |
-| Connection fails | Public HTTPS base URL without `/api/v1`, valid API key, and provider network restrictions. |
-| No layouts or companies | Key scope, company discovery and the correct connection. |
-| Content imported but Company users cannot see it | Documentation permissions, company mapping, and saved visibility rules. |
-| Password name appears but reveal fails | Provider password access and availability, plus portal sharing and role access. |
-| Magic Dash has no new result | Saved enablement, mapping, available compliance data and background sync outcome. |
-
-## Frequently asked questions
-
 <AccordionGroup>
-  <Accordion title="Can Hudu and IT Glue both be active documentation providers?">
-    MSPortal supports one active documentation platform. Review the existing connection before replacing it; deleting it removes synchronized data and credentials.
+  <Accordion title="Connection test fails">
+    **Causes:**
+    - Incorrect Hudu Base URL or API key
+    - Hudu instance is not reachable from the internet
+    - API key has been revoked or expired
+    - Self-hosted Hudu behind a firewall
+
+    **Solutions:**
+    1. Verify your Hudu Base URL includes `https://`, matches your browser URL exactly, and does not end in `/api/v1`
+    2. Check that the API key is copied correctly with no extra spaces
+    3. For self-hosted instances, ensure your Hudu server allows incoming API requests
+    4. Generate a new API key in Hudu if the current one may be invalid
   </Accordion>
-  <Accordion title="Does Test Connection save a new Hudu integration?">
-    No. Test it, then select **Create Integration** and wait for success.
+
+  <Accordion title="Does Test connection save a new Hudu integration?">
+    No. Test it, then select **Save and continue** and wait for success.
   </Accordion>
-  <Accordion title="Do Hudu content and layout switches save immediately?">
-    Yes. Each change saves immediately. **Enable All** and **Disable All** apply to all layouts for the connection, including search-hidden layouts.
+
+  <Accordion title="No companies appear in Import or match companies">
+    **Causes:**
+    - Initial sync still in progress
+    - API key lacks read permissions for companies
+
+    **Solutions:**
+    1. Wait a few minutes for the initial company sync to complete, then check **Sync activity**
+    2. Verify your API key has read access to companies in Hudu
+    3. Check that your Hudu instance has at least one company configured
   </Accordion>
-  <Accordion title="Does Hudu password sharing grant access to every password?">
-    No. Check provider key password access, portal permissions, company mapping and folder/role visibility in Documentation settings.
+
+  <Accordion title="Some companies have no suggested match">
+    **Causes:**
+    - Company names differ between Hudu and MSPortal
+    - Hudu companies do not have `id_number` values set
+
+    **Solutions:**
+    1. Choose the company in the row for companies with different names
+    2. Add `id_number` values to Hudu companies if you want ID-based matching
+    3. Ensure company names are consistent across both platforms where possible
   </Accordion>
-  <Accordion title="Does turning on Magic Dash wait until Complete Setup to write to Hudu?">
-    No. The switch saves immediately and requests the background push. Review the companies and expected compliance content before enabling it.
+
+  <Accordion title="Passwords are not accessible">
+    **Causes:**
+    - Password sharing not configured for the company
+    - User lacks the `read_documentation_passwords` permission
+    - Specific folders selected but the password is in a different folder
+    - The Hudu API key does not allow password access
+
+    **Solutions:**
+    1. Open **Choose data** and verify **Enable Password Sharing** is on
+    2. Check that the user has the `read_documentation_passwords` permission under **Settings > Users and Roles**
+    3. If using folder-level sharing, verify the correct folders are selected in **Settings > Documentation > Passwords**
+    4. Confirm the Hudu API key allows password access
   </Accordion>
-  <Accordion title="Does Update API Key prove the new Hudu key works?">
-    It confirms the credential update. Use **Retest Connection** afterward to verify the saved key against Hudu.
+
+  <Accordion title="Documentation or articles not appearing">
+    **Causes:**
+    - Content type (articles, assets, procedures) is toggled off
+    - Company is not mapped
+    - The sync has not finished
+
+    **Solutions:**
+    1. Open **Choose data** and enable the desired content types
+    2. Verify the relevant asset layouts are toggled on
+    3. Confirm the company is matched in **Import or match companies**
+    4. Check **Sync activity** for the latest run
+    5. If MSP staff see the content but company users do not, review sharing in **Settings > Documentation**
   </Accordion>
+
+  <Accordion title="Does enabling a Hudu asset layout publish it to Company users?">
+    No. Sync selection and client visibility are separate. Configure the intended company and role access in Documentation settings.
+  </Accordion>
+
+  <Accordion title="Compliance data not showing in Hudu Magic Dash">
+    **Causes:**
+    - Magic Dash not enabled
+    - Company mapping incomplete
+
+    **Solutions:**
+    1. Open **Configure Magic Dash** and turn on **Enable Magic Dash**
+    2. Verify the company is matched in **Import or match companies**
+    3. Confirm MSPortal has compliance data for that company to push
+  </Accordion>
+
   <Accordion title="Does Skip undo changes to Hudu setup?">
     No. Content, sharing and Magic Dash switches already saved remain saved. Warranty mappings have their own explicit save.
   </Accordion>
-  <Accordion title="Does enabling a Hudu asset layout publish it to Company users?">
-    Sync selection and client visibility are separate. Configure the intended company and role access in Documentation settings.
-  </Accordion>
 </AccordionGroup>
 
-## Related guides
+---
+
+## Best Practices
 
 <CardGroup cols={2}>
-  <Card title="Read documentation" icon="arrow-right" href="/user-guides/documentation/index">
-    Find synchronized and native content.
+  <Card title="Map Companies First" icon="building">
+    Complete company mapping before configuring documentation, passwords, or Magic Dash. All other features depend on accurate company mappings.
   </Card>
-  <Card title="Company mapping" icon="arrow-right" href="/user-guides/settings/integration-company-mapping">
-    Review linking and persistence.
+  <Card title="Accept Strong Matches" icon="wand-magic-sparkles">
+    Review the suggestions, use **Accept strong matches** for the confident ones, then match the rest by hand. It saves significant time for large environments.
   </Card>
-  <Card title="Warranty writeback" icon="arrow-right" href="/user-guides/integrations/documentation-warranty-writeback">
-    Configure deliberate provider updates.
+  <Card title="Restrict Password Access" icon="lock">
+    Use folder-level password sharing to limit which credentials are accessible. Only grant the `read_documentation_passwords` permission to users who need it.
   </Card>
-  <Card title="IT Glue setup" icon="arrow-right" href="/user-guides/integrations/enable-itglue-integration">
-    Review the alternative documentation provider.
+  <Card title="Audit Password Access" icon="clipboard-list">
+    Regularly review the audit log to monitor which users are accessing passwords. This helps maintain accountability and detect unusual access patterns.
+  </Card>
+  <Card title="Keep Names Consistent" icon="arrows-rotate">
+    Maintaining consistent company names between Hudu and your PSA makes suggested matches more accurate and reduces manual mapping effort.
   </Card>
 </CardGroup>
+
+---
+
+## Related Resources
+
+- [Import or match companies](/user-guides/integrations/import-companies) - General company import guide
+- [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) - Troubleshooting sync issues
+- [Users and Roles](/user-guides/settings/users-roles) - Managing permissions including password access
+- [Shared Passwords](/user-guides/documentation/shared-passwords) - How users find and reveal shared passwords
+- [Warranty Writeback](/user-guides/integrations/documentation-warranty-writeback) - Write warranty dates to Hudu assets
+- [Integrations Overview](/user-guides/integrations/index) - Browse all available integrations

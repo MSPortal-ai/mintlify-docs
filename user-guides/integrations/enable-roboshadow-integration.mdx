@@ -1,0 +1,64 @@
+---
+title: "Configure RoboShadow Integration"
+description: "Connect RoboShadow with an API refresh token, match organizations to companies, and review vulnerability findings."
+icon: "plug"
+---
+
+<Note>
+RoboShadow is in **Beta**. It is available to every tenant and shows a **Beta** badge in **Settings › Integrations › Directory**. If something does not match your RoboShadow account, contact support@msportal.ai.
+</Note>
+
+RoboShadow brings vulnerability findings from the RoboShadow agent into MSPortal: each CVE on each device, with its CVSS score, whether it is known to be exploited, and whether an application update fixes it. This setup is for **MSP staff with integration management access**.
+
+MSPortal only reads from RoboShadow. It never changes anything in RoboShadow and does not install updates.
+
+## What the integration covers
+
+- **Covered:** every RoboShadow organization the token's user can open, the Windows devices running the RoboShadow agent, and their open vulnerability findings.
+- **Not covered:** RoboShadow devices are not added to **Devices**; they are counted in the vulnerability report block. External vScanner scan results are not shown on a page. MSPortal does not keep a resolved history for RoboShadow findings, so the **Resolved** status on **Security › Vulnerabilities** lists Cork findings only.
+
+## Before you connect
+
+1. In RoboShadow, open **Reports › API Token** and create a token.
+2. Copy the refresh token RoboShadow shows. MSPortal exchanges it for a short-lived access token on every sync.
+3. Create the token as a user who can see your client organizations. MSPortal syncs every organization the token's user can open, and a read-only RoboShadow role is enough.
+
+See [RoboShadow's API documentation](https://development.roboshadow.com/api/api-docs/).
+
+## Connect
+
+1. Open **Settings › Integrations**, choose **Directory**, find **RoboShadow**, and choose **Connect**.
+2. Paste the token into **API refresh token**.
+3. Choose **Test connection**. A successful test shows how many organizations the token can read.
+4. Choose **Save and continue**. MSPortal saves the token in the vault and starts the first sync.
+
+## Match organizations to companies
+
+Open **Import or match companies**. Link each RoboShadow organization to its MSPortal company: accept the suggestion, choose another company, or use **Import company** to create one. **Accept strong matches** accepts every suggestion at 90% confidence or more after you review them. **Ignore** hides an organization that is not a client's, and you can restore it later.
+
+A change to a match takes effect right away and moves the organization's devices and findings to the new company; nothing needs to sync again. Findings appear only for matched organizations.
+
+## Where the data appears
+
+- **Security › Vulnerabilities:** RoboShadow findings appear with the source **RoboShadow**, with their CVE, software, company, **CVSS** and **Known Exploited** values. RoboShadow has no priority, so **Priority** shows a dash. See [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities).
+- **Reports:** add the **RoboShadow Vulnerability Exposure** block. It shows vulnerability findings and how many devices they affect, known exploited findings, findings with an update available, findings by severity (Critical, High, Medium and Low CVSS bands), and the most exposed devices. It reflects the latest sync, not the report period.
+- **AI reports:** security reports include RoboShadow vulnerability findings.
+- **MCP:** use `list_vulnerabilities` with the RoboShadow provider, or `get_security_summary` for RoboShadow totals.
+
+## Sync and troubleshooting
+
+RoboShadow syncs daily. To sync now, choose **Run sync** on the connection page or on the integration's row.
+
+- **RoboShadow rejected the API refresh token:** copy it again from **Reports › API Token** and check that it has not been revoked.
+- **The token's user can read no RoboShadow organisations:** create the token as a user with access to your client organizations.
+- **RoboShadow refused the request:** check that the token's user can read the organizations you want to sync.
+- **RoboShadow is rate limiting this token:** wait a few minutes and test again.
+- **No findings for a company:** check its organization match and the company selector.
+
+To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored token, the organization matches and the data synced from RoboShadow. It changes nothing in RoboShadow; revoke the token there when you no longer need it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities)
+- [Security](/user-guides/security/index)

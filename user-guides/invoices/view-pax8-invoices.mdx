@@ -1,74 +1,112 @@
 ---
 title: 'MSP: review Pax8 invoice charges'
-description: 'Inspect each mapped company’s share of Pax8 partner invoices and the latest draft-charge snapshot.'
+description: 'See each mapped company’s share of your Pax8 invoices, open the line items, and review draft charges.'
 icon: 'receipt'
 ---
 
-Open **Invoices > Pax8**. This tab is for MSP staff with invoice-read access and a connected Pax8 integration. Company users use the PSA invoice list; granting Company invoice access does not expose the Pax8 tab.
+This guide is for MSP staff. The **Pax8** tab on **Invoices** splits each Pax8 partner invoice into one row per mapped company, so you can see who is charged for what.
 
-## Understand the rows
+## Before you start
 
-Each row represents a **company's share of a Pax8 partner invoice**, based on the company's mapped invoice items. The same partner invoice can therefore appear for several companies.
+- Pax8 must be connected, and its companies mapped to MSPortal companies. See [Pax8 setup and company mapping](/user-guides/integrations/enable-pax8-integration).
+- Pax8 invoice sync must be turned on in the Pax8 integration settings. It is off by default and runs daily.
+- You need invoice-read access. Company users do not see this tab. They use the PSA invoice list.
 
-- **Subtotal** and **Total** show that row's company charges.
-- **Invoice Total**, available through column visibility, shows the whole partner invoice for context. It can repeat across company rows; do not add those repeated values as though they were separate invoices.
-- **Items** is the number of invoice items represented by the row.
-- **Reference**, **Status**, **Invoice Date**, and **Due Date** come from the synchronized invoice record.
+## Open the Pax8 tab
 
-Company mapping determines where charges appear. A company with no matching synchronized items can have an empty list even when other companies have charges on the same partner invoice.
+<Steps>
+  <Step title="Click Invoices in the sidebar">
+    A **PSA Invoices** tab and a **Pax8** tab appear when Pax8 is connected.
+  </Step>
+  <Step title="Click the Pax8 tab">
+    The page is titled **Pax8 Invoices**. If it says **No Pax8 invoices yet**, turn on invoice sync in the Pax8 settings. The **Open Pax8 settings** button takes you there.
+  </Step>
+  <Step title="Set the company selector">
+    The list follows your company selection.
+  </Step>
+</Steps>
+
+## Read the rows
+
+Each row is one company's share of a Pax8 partner invoice, based on that company's mapped invoice items. The same partner invoice can show on several rows, one for each company.
+
+| Column | What it shows |
+| --- | --- |
+| **Invoice Date** | Date of the Pax8 invoice. Click it to open the line items |
+| **Company** | The mapped company |
+| **Reference** | The Pax8 invoice reference |
+| **Status** | **Unpaid**, **Paid**, **Void**, **Carried**, **Nothing Due**, or **Credited** |
+| **Due Date** | Due date from the Pax8 invoice |
+| **Subtotal**, **Total** | This company's charges only |
+| **Invoice Total** | The whole partner invoice. Hidden until you turn it on in the column toggle. It repeats on every company row, so do not add those values together |
+| **Items** | How many invoice items are in this row. Click it to open the line items |
+
+A company with no mapped items can show an empty list even when others are charged on the same partner invoice.
 
 ## Find and inspect charges
 
-1. Select the intended company scope.
-2. Use the **Company**, **Status**, and **Invoice Date** filters to narrow the list.
-3. Sort using supported headings or move between pages. The initial order is invoice date descending.
-4. Select the invoice date or the **Items** count to open that row's line items.
-5. Review product/vendor, type, billing period, quantity, price, subtotal, tax, and total where available.
-6. Use the line-item table's filters, column visibility, and pages to inspect the loaded items, then close the dialog.
-
-The line-item dialog for an invoice row narrows to that row's company. It does not necessarily show every company's items from the partner invoice. **Term** and **Sales Tax** can be hidden initially; use the column control when needed.
+<Steps>
+  <Step title="Filter the list">
+    Use the **Invoice Date**, **Company**, and **Status** filters. The default order is invoice date, newest first.
+  </Step>
+  <Step title="Open the line items">
+    Click the invoice date or the **Items** count. The **Invoice line items** dialog opens for that row's company only.
+  </Step>
+  <Step title="Read the items">
+    Review **Product**, **Vendor**, **Type**, **Period**, **Qty**, **Price**, **Subtotal**, **Sales Tax**, and **Total**. **Term** and **Sales Tax** may be hidden at first. Use the column toggle to show them. Filters and pages work inside the dialog.
+  </Step>
+  <Step title="Close the dialog">
+    Close it when you are done.
+  </Step>
+</Steps>
 
 ## Review draft charges
 
-When draft items are available, a draft-charge card appears above the invoice list. It shows the available subtotals by currency and item count.
+When draft items exist, an **Upcoming draft charges** card appears above the list. It is a mid-month snapshot of charges that are not final yet. It shows subtotals by currency and the item count.
 
-Select **View draft items** to inspect the current draft snapshot. Draft charges are separate from finalized invoice rows and can change as the provider updates them.
+<Steps>
+  <Step title="Click View draft items">
+    The **Draft charges** panel opens with the current draft items.
+  </Step>
+  <Step title="Compare with care">
+    The card follows your company selection only. It ignores the table's **Invoice Date**, **Status**, and **Company** filters. Check your selection before comparing it with the filtered rows.
+  </Step>
+</Steps>
 
-The draft card follows the main company selection. It does not use the invoice table's date, status, or Company-column filter. Check that scope before comparing its amount with filtered invoice rows.
+Draft charges are not invoices and can change before final billing. If **View draft items** opens nothing, tell your administrator. That is not the same as having no draft items.
 
-If **View draft items** does not open a panel, report the page state to the MSP administrator. A button click without a visible panel is not evidence that the draft has no items.
+## What this tab does not do
 
-## Missing data and available actions
+It is a read-only view. It has no invoice editing, charge approval, payment, PDF download, or CSV export. Use Pax8 for those.
 
-Check [Pax8 setup and company mapping](/user-guides/integrations/enable-pax8-integration) when expected charges are missing. Confirm that invoice synchronization is enabled and has completed. Clear filters and check the selected company before interpreting an empty list.
+## Troubleshooting
 
-This tab is a synchronized read view. It does not offer invoice editing, charge approval, payment, PSA invoice-PDF download, or the PSA list's CSV export action. Use the appropriate provider workflow for those operations.
+| Problem | What to do |
+| --- | --- |
+| No Pax8 tab | Pax8 must be connected, and you must be MSP staff. |
+| **No Pax8 invoices yet** | Turn on invoice sync in the Pax8 settings and wait for the next daily sync. |
+| A company's list is empty | Check the company mapping, the company selector, and your filters. An empty list does not prove Pax8 has no charges for that company. |
+| The totals look doubled | **Invoice Total** repeats on every company row. Use **Total** for one company's share. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Can Company users view the Pax8 tab?">
-    No. It is restricted to MSP staff. Company invoice viewing takes place in the PSA invoice list.
+  <Accordion title="Can company users see the Pax8 tab?">
+    No. It is for MSP staff only.
   </Accordion>
   <Accordion title="Why does one partner invoice appear on several rows?">
-    Rows split the partner invoice into charges for mapped companies. Each company row can refer to the same partner invoice.
+    Each row is one company's share of it.
   </Accordion>
   <Accordion title="What is the difference between Total and Invoice Total?">
-    Total is the company row's charges. Invoice Total is the whole partner invoice and can repeat on several rows.
+    **Total** is the row company's charges. **Invoice Total** is the whole partner invoice.
   </Accordion>
-  <Accordion title="Where do I see the products behind a company charge?">
-    Select the invoice date or Items count. The dialog shows the selected row's company items with product, period, quantity, and available charge fields.
-  </Accordion>
-  <Accordion title="Do the invoice filters change the draft card?">
-    Only the main company scope is shared. The invoice table's status, date, and Company-column filters do not filter the draft snapshot.
-  </Accordion>
-  <Accordion title="Are draft charges finalized invoices?">
-    No. They are a separate synchronized draft snapshot and may change before final billing.
-  </Accordion>
-  <Accordion title="Why is a company's Pax8 invoice list empty?">
-    Check its mapping, synchronized invoice items, company scope, and filters. An empty list does not establish that the provider has no charges for the company.
-  </Accordion>
-  <Accordion title="Can I use Download PDFs or Pay Now on the Pax8 tab?">
-    Those PSA invoice-list actions are not offered here. Use the appropriate provider workflow for documents and payment.
+  <Accordion title="Are draft charges final?">
+    No. They are a separate snapshot and may change.
   </Accordion>
 </AccordionGroup>
+
+## Related guides
+
+- [Pax8 integration](/user-guides/integrations/enable-pax8-integration)
+- [Where invoice data comes from](/msp-guides/invoices/invoice-data-sources)
+- [Invoices overview](/user-guides/invoices/index)

@@ -4,94 +4,95 @@ description: 'Select recurring services from the company’s latest earlier budg
 icon: 'clock-rotate-left'
 ---
 
-Choose **Import > Import from previous year** in an editable budget to copy recurring costs from the same company's most recent earlier fiscal-year budget. Review the source shown in **Import recurring services**, choose the services, and save the target budget afterward.
+Use **Import > Import from previous year** to copy recurring costs from the same company's most recent earlier budget into the budget you are editing. This guide is for MSP staff and for company users whose MSP has given them budget edit access.
 
-**Audience:** MSP staff and Company users with budget editing access assigned by their MSP.
+## Before you start
 
-## Choose the source carefully
+- You need budget edit access (the **write_budgets** or **manage_budgets** permission).
+- The target budget must be Draft or Pending Approval and must belong to a company. Set its **Fiscal Year** and **Currency** before you import.
+- The company needs an earlier budget with recurring lines.
 
-The source is selected automatically. The portal chooses the highest fiscal year earlier than the target budget's year; if several budgets share that year, it uses the most recently updated one. This can be a Draft, Pending Approval, Approved or Archived budget. It is not limited to the immediately preceding calendar year or to approved plans.
+## Know which budget is the source
 
-There is no source-budget picker in this dialog. If the displayed source is not the plan you want, cancel. Consider an [Excel import](/user-guides/budgets/import-excel) or the [duplicate workflow](/user-guides/budgets/approving-and-locking-budgets) instead.
+The source is picked for you. MSPortal takes the highest fiscal year that is earlier than the target budget's year. If several budgets share that year, it takes the most recently updated one. It can be a Draft, Pending Approval, Approved or Archived budget. It does not have to be the year just before.
 
-<img src="/images/product/budget-import-menu.png" alt="Budget Import menu with Microsoft 365 licensing, Excel and previous year options." width="576" height="212" />
-
-*MSP example: choose Import from previous year. Available sources depend on access and integrations.*
+There is no source picker. If the source shown is not the one you want, click **Cancel**. Use an [Excel import](/user-guides/budgets/import-excel) or [duplicate the budget](/user-guides/budgets/duplicate-budget) instead.
 
 ## Import recurring services
 
 <Steps>
-  <Step title="Prepare the target budget">
-    Select the company and create or open an editable budget. Check **Fiscal Year** and **Currency** in Budget Details before opening Import.
+  <Step title="Open the target budget">
+    Open a Draft or Pending Approval budget with **Edit**, or start one with **Create New Budget**. Check **Fiscal Year** and **Currency** under **Budget Details**.
   </Step>
-  <Step title="Open the earlier-year import">
-    Choose **Import > Import from previous year**. Read the source budget title and year at the top of the dialog.
-  </Step>
-  <Step title="Review the selected services">
-    Available new recurring services start selected. Clear any you do not want, or use **Select all**. One-time lines are excluded. A description already present in the target is marked **Already in budget** and cannot be selected again.
+  <Step title="Open the import">
+    Click **Import**, then click **Import from previous year**. The **Import recurring services** dialog opens.
 
-    Review every service, including costs that may have been rejected in the source budget. Copying a row is not evidence that it should be funded again.
+    <img src="/images/product/budget-import-menu.png" alt="Budget Import menu with Microsoft 365 licensing, Excel and previous year options." width="576" height="212" />
   </Step>
-  <Step title="Import and adjust the proposed rows">
-    Choose **Import … services**. Review the new rows in the builder. They start with line status **Pending**, even if their source status was different.
+  <Step title="Read the source">
+    The dialog names the source budget and its year, for example **Recurring services from "IT Infrastructure 2025" (2025)**.
+  </Step>
+  <Step title="Choose the services">
+    New services start checked. Clear any you do not want, or click **Select all**. One-time lines are not listed. A line whose description is already in the target budget shows **Already in budget** and cannot be selected.
 
-    Check quantity, price, category, notes, recurrence, Start month and term. The target currency is applied without converting the numeric prices. Reconnect any Planner, goal or product associations you still need.
+    Rejected lines in the source are listed too. Decide again whether each one should be funded.
   </Step>
-  <Step title="Save and review the schedule">
-    Choose the header **Save**, wait for confirmation, reload the saved budget, and check **Monthly Breakdown**. Importing does not save the target or alter the source.
+  <Step title="Import">
+    Click **Import N services**. The dialog closes and the new rows appear in the editor.
+  </Step>
+  <Step title="Review the rows">
+    The new rows have **Pending** status, whatever their status was in the source. Check the quantity, price, category, notes, recurrence and start month. Prices are copied as numbers. They are not converted to the target currency.
+  </Step>
+  <Step title="Save">
+    Click **Save**, wait for **Budget saved successfully.**, then check **Monthly Breakdown**. Importing does not save the target and does not change the source budget.
   </Step>
 </Steps>
 
-## What carries forward?
+## What is copied
 
 | Copied | Not copied |
 | --- | --- |
-| Description, quantity and unit price | Source approval status; new lines are Pending |
-| Category and line notes | Source budget title, author, fiscal year and overall status |
-| Recurrence, Start month, custom interval and term | Source currency; the target currency is used without conversion |
-| Recurring lines, including previously rejected ones | One-time costs, monthly overrides, budget references and Planner/goal/product links |
+| Description, quantity and unit price | The line's source status (new lines are Pending) |
+| Category and line notes | Source title, author, fiscal year and budget status |
+| Recurrence, start month, custom interval and term | Source currency (the target currency is used) |
+| Recurring lines, including rejected ones | One-time lines, monthly overrides, and links to Planner items, goals or products |
 
-If the chosen source has no recurring services, the dialog stays empty. It does not continue searching through older budgets for a different source. A cost whose description says subscription can still be excluded if its stored recurrence is One-time.
+If the source has no recurring lines, the dialog says **No recurring services found in a previous budget for this company.** It does not look at older budgets.
 
 ## Troubleshooting
 
-| Problem | What to check |
+| Problem | What to do |
 | --- | --- |
-| No recurring services found | Company, target fiscal year, automatically chosen source and its stored recurrence values. |
-| Wrong source budget | Cancel and use another import or duplicate method; this dialog does not let you choose a different source. |
-| Already in budget | Check the target's existing description, ignoring case and leading/trailing spaces. Edit that line instead of copying it again. |
-| Import is disabled | Select at least one service that is not already in the target. |
-| A rejected cost reappears as Pending | Imported lines reset to Pending; review and reject or remove costs you do not want. |
-| Price uses an unexpected currency | Compare source and target currency. The import copies numbers, not converted values. |
-| Failed to load previous year services | Close the dialog, check access with your MSP and retry later. A loading failure does not prove that there are no costs. |
+| **No recurring services found in a previous budget for this company.** | Check the company, the target's fiscal year and the source's recurrence values. A line set to One-time is not listed. |
+| The source is the wrong budget | Cancel. Use an Excel import or a duplicate instead. |
+| A line shows **Already in budget** | The target already has a line with that description. Edit that line instead. |
+| The import button says **Import services** and is unavailable | Check at least one service. |
+| **Failed to load previous year services.** | Close the dialog and try again. Ask your MSP if it keeps failing. |
+| **Import** is unavailable | The budget is locked or has no company. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Where do I carry recurring services into next year's budget?">
-    Open the target company budget, set its fiscal year, and choose Import > Import from previous year. Review the source and selected services, import, then Save.
+  <Accordion title="Which earlier budget does MSPortal use?">
+    The highest earlier fiscal year for that company. In a tie, the most recently updated budget, whatever its status.
   </Accordion>
-  <Accordion title="Which earlier budget will the portal use?">
-    It uses the highest fiscal year earlier than the target. Within that year, it chooses the most recently updated budget, regardless of its overall status.
+  <Accordion title="Why is my subscription missing?">
+    Its recurrence is One-time in the source, or the source is not the budget you expected. One-time lines are never listed.
   </Accordion>
-  <Accordion title="Can I choose a specific source budget in this dialog?">
-    No. Check the automatically displayed source. Cancel and use an Excel import or duplicate workflow when you need a different plan.
+  <Accordion title="Are rejected services skipped?">
+    No. Every recurring line is listed. Imported rows start Pending, so review each one.
   </Accordion>
-  <Accordion title="Why is my subscription missing from the import?">
-    Check its stored recurrence in the selected source. One-time lines are excluded even if the description calls them subscriptions. Also check the company and source year.
+  <Accordion title="Do Planner links and monthly overrides carry over?">
+    No. Link the new lines again with **Link to Planner Item or Goal**.
   </Accordion>
-  <Accordion title="Will rejected services be excluded automatically?">
-    No. The source's recurring rows are not filtered by line approval status. Imported rows start Pending, so review every selected cost again.
-  </Accordion>
-  <Accordion title="Will Planner links and monthly overrides carry forward?">
-    No. The import copies recurring cost fields and billing settings, but not source links or monthly overrides. Review and add what the target plan needs.
-  </Accordion>
-  <Accordion title="Does this update the earlier budget?">
-    No. It adds proposed rows to the target editor. Save persists the target; the earlier source is unchanged.
-  </Accordion>
-  <Accordion title="Does the import skip existing services?">
-    A description already present in the target is disabled as Already in budget. This is a description check, not a comparison of prices or product identities; review the full selection for duplicate costs.
+  <Accordion title="Does this change the earlier budget?">
+    No. It only adds rows to the open editor.
   </Accordion>
 </AccordionGroup>
 
-Related: [Create a budget](/user-guides/budgets/create-and-edit-budgets), [Import Excel](/user-guides/budgets/import-excel), [Monthly Breakdown](/user-guides/budgets/read-monthly-breakdown).
+## Related guides
+
+- [Create and edit a company budget](/user-guides/budgets/create-and-edit-budgets)
+- [Import budget line items from Excel](/user-guides/budgets/import-excel)
+- [Duplicate a budget](/user-guides/budgets/duplicate-budget)
+- [Read a budget monthly breakdown](/user-guides/budgets/read-monthly-breakdown)

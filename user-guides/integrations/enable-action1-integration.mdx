@@ -1,0 +1,90 @@
+---
+title: "Configure Action1 Integration"
+description: "Connect Action1 with API credentials, match organizations to companies, and bring in endpoints, patch status, vulnerabilities and installed software."
+icon: "plug"
+---
+
+<Note>
+Action1 is in **Beta**. It is available to every tenant and shows a **Beta** badge in **Settings › Integrations › Directory**. If something does not match your Action1 account, contact support@msportal.ai.
+</Note>
+
+Action1 brings your clients' endpoints into MSPortal with their patch status, vulnerabilities and installed software. This setup is for **MSP staff with integration management access**.
+
+MSPortal only reads from Action1. It never deploys updates, runs scripts or reboots endpoints.
+
+## What the integration covers
+
+- **Covered:** Action1 organizations and their endpoints, missing updates and pending reboots, open vulnerabilities, and installed software.
+- **Not covered:** update deployment, automation and remote actions. Endpoints link to the devices other sources already report and add a device only when nothing matches, so an RMM that reports the same machine stays its main source. The device details have no Action1-specific section.
+
+## Before you connect
+
+1. In Action1, open **Configuration › API Credentials** and choose **Create API Credentials**.
+2. Use a role with the **View Endpoints** permission on every organization you want in MSPortal.
+3. Copy the **Client ID** and **Client Secret** before you close the dialog. Action1 shows the Client Secret only once.
+4. Note your data center from the address you use to sign in to Action1. Credentials work only on the data center that issued them.
+
+See [Action1's API credentials guide](https://www.action1.com/api-documentation/api-credentials/).
+
+## Connect
+
+1. Open **Settings › Integrations**, choose **Directory**, find **Action1**, and choose **Connect**.
+2. Choose the **Data center** that matches your Action1 console address:
+
+   | Data center | Console address |
+   | --- | --- |
+   | **North America** | app.action1.com |
+   | **North America 2** | app.na-2.action1.com |
+   | **Europe** | app.eu.action1.com |
+   | **United Kingdom** | app.uk.action1.com |
+   | **Australia** | app.au.action1.com |
+
+3. Enter the **Client ID** and **Client Secret**.
+4. Choose **Test connection**. A successful test shows how many organizations the credentials can read.
+5. Choose **Save and continue**. MSPortal saves the credentials in the vault and starts the first sync.
+
+## Match organizations to companies
+
+Open **Import or match companies**. Link each Action1 organization to its MSPortal company: accept the suggestion, choose another company, or use **Import company** to create one. **Import companies** creates companies for several unmatched organizations at once. **Ignore** hides an organization that is not a client's, and you can restore it later.
+
+Endpoints, patch status, vulnerabilities and software appear only for matched organizations.
+
+## Import devices
+
+Open **Import devices**. The **Endpoints and devices** page shows the last sync:
+
+| Row | What it counts |
+| --- | --- |
+| **Endpoints in matched organizations** | Endpoints whose Action1 organization is matched to a company. |
+| **Endpoints linked to devices** | Endpoints joined to an existing device or added as a new one. |
+| **Endpoints missing updates** | Endpoints missing at least one critical or other update. |
+| **Endpoints waiting for a reboot** | Endpoints with updates installed that have not restarted. |
+
+Map each endpoint type, such as Windows Server, Windows Workstation, Mac or Linux, to a device type so new devices get the right type. Each sync links an endpoint to the device another source already reports, by serial number, MAC address or hostname within its company. An endpoint with no match becomes a new device. Choose **Sync All Data** to sync now.
+
+## Where the data appears
+
+- **Devices:** Action1 endpoints link to existing devices or appear as new ones.
+- **Devices › Software:** installed software from Action1 joins the software inventory, with end-of-life and outdated status. See [Track installed software](/user-guides/devices/track-software).
+- **Security › Vulnerabilities:** Action1 findings appear with the source **Action1**, one row per endpoint and CVE. See [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities).
+- **Reports:** the **Patch Status** block counts endpoints missing updates as **Pending install** and endpoints waiting for a restart as **Reboot required**.
+- **Assistant and MCP:** ask about patch health, or use `get_device_patch_health` with the Action1 provider. Use `list_vulnerabilities` for Action1 findings.
+
+Patch counts older than three days are left out of patch health, so a missing count does not mean a device is patched.
+
+## Sync and troubleshooting
+
+Action1 syncs organizations, endpoints, patch status and vulnerabilities daily, and installed software in a separate daily run. To sync now, choose **Run sync** on the connection page and pick **All data**, **Full sync** or **Software**.
+
+- **Action1 rejected the Client ID or Client Secret:** check both values and that you chose the data center that issued them.
+- **The credentials can read no organizations:** give the credential's role the View Endpoints permission on your client organizations.
+- **An endpoint shows as a second device:** its serial number, MAC address and hostname did not match the existing device in the same company. Check that both are in the same company.
+- **No software for a device:** the software run follows the device links the full sync makes. Run **Software** after the endpoint is linked.
+
+To remove the connection, open **More actions** on the connection page and choose **Disconnect…**. This removes the stored credentials, the organization matches and the data synced from Action1. It changes nothing in Action1; delete the API credential there when you no longer need it.
+
+## Related guides
+
+- [Integration setup guides](/user-guides/integrations/index)
+- [Track installed software](/user-guides/devices/track-software)
+- [Find and read vulnerabilities](/user-guides/security/read-vulnerabilities)
