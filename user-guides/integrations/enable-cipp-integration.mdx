@@ -10,7 +10,7 @@ On the CIPP connection page, the **Setup guide** lists the same work as tasks: *
 
 Once connected, MSPortal synchronizes security, identity, email, Intune, and tenant configuration data from CIPP and presents it to your clients as the [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page.
 
-For every mapped tenant, CIPP also supplies Intune managed devices, Windows Autopilot devices and SharePoint storage quota. Intune details appear on matching [device records](/user-guides/devices/understand-device-details#review-microsoft-entra-id-and-intune-details), and Intune devices without an RMM agent are listed in **Devices > Not in RMM** (see [Find Intune devices missing from your RMM](/user-guides/devices/find-devices#find-intune-devices-missing-from-your-rmm)).
+For every mapped tenant, CIPP also supplies Intune managed devices, Windows Autopilot devices and SharePoint storage quota. Intune details appear on matching [device records](/user-guides/devices/understand-device-details#review-microsoft-entra-id-and-intune-details), and Intune devices that no other tool reports can be imported into **Devices** (see [Import Intune devices](#import-intune-devices)).
 
 <Note>
 CIPP is currently a **Pilot** integration available to selected tenants. If you don't see the CIPP card in **Settings > Integrations**, contact support@msportal.ai. The pilot secures and validates the API connection; data sync features build on this connection.
@@ -162,6 +162,24 @@ The **Data** step is your admin console for everything CIPP is syncing:
 - **Record explorer** to search and filter every synced record, including the full source payload from the CIPP API
 
 Use this view to confirm data is flowing, investigate a specific record, or check why a dataset has no data. Filter to the right company and dataset before you open a record, because some records show the full provider payload. This console is for your team; clients see the curated [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page instead.
+
+## Import Intune devices
+
+Each CIPP sync links every Intune device it can match to a device your RMM or PSA already reports, using the serial number, MAC address or name within the same company. The rest wait in the connection's **Import devices** task until you decide what to do with them.
+
+<Steps>
+  <Step title="Open the task">
+    In **Settings > Integrations**, open the CIPP connection and choose **Import devices**.
+  </Step>
+  <Step title="Map each type">
+    Intune devices are grouped by operating system: **Windows**, **macOS**, **iOS**, **iPadOS**, **Android**, **ChromeOS**, **Linux** or **Unknown**. Map each type you want to a device type, or ignore it.
+  </Step>
+  <Step title="Import">
+    Import a whole type, or select devices and import them. A device imports only when its Microsoft tenant is mapped to a company and its type is mapped. To add new Intune devices of a type on every sync, turn on that type's automatic import, for example **Import new Windows records automatically**.
+  </Step>
+</Steps>
+
+Imported devices appear in **Devices** with CIPP as their source. If your RMM later reports the same device, the RMM becomes its source. To list devices without an RMM agent, filter **Devices** by **Not in RMM**; see [Find devices missing from your RMM](/user-guides/devices/find-devices#find-devices-missing-from-your-rmm).
 
 ## Part 7: Import CIPP Standards into Compliance
 
