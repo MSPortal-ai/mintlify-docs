@@ -1,0 +1,145 @@
+---
+title: 'Configure HubSpot Integration'
+description: 'Connect HubSpot to MSPortal.ai to map CRM companies and add new-business deals to the revenue forecast'
+icon: 'handshake'
+---
+
+This guide walks you through connecting HubSpot to MSPortal.ai. Setup happens on the HubSpot connection page, where the **Setup guide** lists **Connect**, **Import or match companies**, the optional **Choose data** and **Review**. See [Connect and manage integrations](/user-guides/integrations/index#connect-match-and-verify) for the shared connection tasks.
+
+## Overview
+
+HubSpot is a CRM. MSPortal reads your HubSpot companies, deals and pipeline stages so you can:
+
+- Add open new-business deals to the **HubSpot** column of the [revenue forecast](/user-guides/msp-tools/financial-reporting#forecast-the-next-12-months), weighted by deal stage probability
+- Map HubSpot companies to your MSPortal companies, so a company's forecast includes its own deals
+
+The connection is read-only. MSPortal never changes anything in HubSpot.
+
+<Note>
+HubSpot is in beta. If the integration is not available in **Settings > Integrations**, contact support@msportal.ai.
+</Note>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- HubSpot access that lets you create a private app in your HubSpot account
+- Admin access to MSPortal.ai with the **manage_settings_integrations** permission
+- Companies already set up in MSPortal (from your PSA integration or created manually), or permission to import new companies while matching
+
+---
+
+## Part 1: Create a private app in HubSpot
+
+<Steps>
+  <Step title="Create the private app">
+    In your HubSpot account, create a private app named `MSPortal`.
+  </Step>
+  <Step title="Choose the scopes">
+    Give the app the `crm.objects.companies.read` and `crm.objects.deals.read` scopes. HubSpot adds the default `oauth` scope, which lets MSPortal verify the account.
+  </Step>
+  <Step title="Copy the access token">
+    Create the app and copy its access token to a secure location.
+
+    <Warning>
+      Treat this token like a password. Anyone with the token can read your HubSpot companies and deals.
+    </Warning>
+  </Step>
+</Steps>
+
+Each token belongs to one HubSpot account. To connect a second HubSpot account, create a private app in that account and add a separate connection.
+
+---
+
+## Part 2: Connect HubSpot in MSPortal
+
+### Task 1: Connect
+
+<Steps>
+  <Step title="Open the connection page">
+    In MSPortal, go to **Settings > Integrations**. On the **Directory** tab, find **HubSpot** and select **Connect**. To continue an existing connection, open it from the **Active** tab.
+  </Step>
+  <Step title="Enter the token">
+    Paste the token into **Private app access token**.
+  </Step>
+  <Step title="Test the connection">
+    Select **Test connection**. MSPortal verifies the token against your HubSpot account and shows **Connected to HubSpot account** with your HubSpot account ID. Testing does not save anything.
+  </Step>
+  <Step title="Save and continue">
+    Select **Save and continue**. MSPortal verifies the token again, stores it in the vault and starts the first sync in the background.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview on the Demo tenant: the Connect task for a new HubSpot connection.">
+  <img src="/images/product/settings-integrations-hubspot-new-connect-desktop.png" alt="Connect HubSpot page with the Setup guide listing Connect, Import or match companies, Choose data and Review, the Private app access token field, and the Before you start panel listing the required scopes" width="2880" height="1920" />
+</Frame>
+
+<Frame caption="Branch preview on the Demo tenant: the same Connect task on a phone.">
+  <img src="/images/product/settings-integrations-hubspot-new-connect-mobile.png" alt="Connect HubSpot page on a phone with the Setup guide menu, the Private app access token field and the Test connection and Save and continue buttons" width="780" height="1688" />
+</Frame>
+
+### Task 2: Import or match companies
+
+Link each HubSpot company to the matching MSPortal company.
+
+- The workspace opens on the **Import** view, which lists every HubSpot company that still needs a match. **Suggested** narrows it to proposed matches.
+- Select **Accept** on a correct suggestion, choose an existing company, or select **Import** on the row to create a new MSPortal company from the HubSpot record.
+- Each match saves immediately. There is no separate save step.
+
+Deals for unmapped HubSpot companies, such as new prospects, still count in the forecast when you view all companies. They do not appear in a single company's forecast. A deal is linked to a company only when HubSpot associates it with exactly one company.
+
+### Task 3 (optional): Choose data
+
+**Choose data** shows what MSPortal has synced:
+
+- **Companies**, **Mapped companies** and **Deals** counts
+- **Last complete sync**, or **Not synced yet**
+- **Sync All Data**, which starts a sync now. It needs integration manage permission.
+- **Open revenue forecast**, which opens the forecast on **MSP Tools > Client Success > Revenue Trends**
+
+The task is complete once a full sync has finished.
+
+### Task 4: Review
+
+Select **Finish setup** once the required tasks are complete.
+
+---
+
+## What gets synced
+
+| Data | Schedule | Notes |
+|------|----------|-------|
+| Companies | Hourly, plus after the connection is saved and from **Sync All Data** | Source list for company matching |
+| Deals and pipeline stages | Hourly, plus after the connection is saved and from **Sync All Data** | Used by the revenue forecast |
+
+The forecast uses open new-business deals in your tenant currency, counted once in their expected close month and weighted by their current stage probability. Deals with a missing amount, close date or stage, or in another currency, are left out rather than estimated. The **Assumptions** dialog on the forecast shows how many deals were included and left out.
+
+If a sync fails, MSPortal keeps the data from the last complete sync.
+
+## Managing the connection
+
+- Open your HubSpot connection from the **Active** tab in **Settings > Integrations**. Use the **Setup guide** to return to any task.
+- To replace the token, open **Connect**. The saved token is masked. Leave it unchanged to keep it, or paste a new token from the same HubSpot account. Select **Test connection**, then save. Saving starts a sync with the new token.
+- To rename the connection, select **More actions > Rename**.
+- To remove the integration, select **More actions > Disconnect…** and confirm. This removes the stored token and stops the hourly sync. It does not change anything in HubSpot.
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| The token is rejected | Check that the private app has the `crm.objects.companies.read` and `crm.objects.deals.read` scopes. Copy the token again without extra spaces, then select **Test connection**. |
+| **This token belongs to a different HubSpot account** | A connection stays tied to the HubSpot account it was created with. Add a separate connection for the other account. |
+| **The latest sync did not finish** | Previous data stays available. Select **Sync All Data** on **Choose data** to retry. |
+| A deal is missing from the forecast | Check that it is an open new-business deal with an amount, a close date and a stage in your tenant currency. For a company view, map its HubSpot company. |
+| A company's forecast shows no HubSpot deals | Map the HubSpot company in **Import or match companies**, then wait for the next hourly sync or select **Sync All Data**. |
+
+## Related resources
+
+<CardGroup cols={2}>
+  <Card title="Financial Reporting" icon="dollar-sign" href="/user-guides/msp-tools/financial-reporting#forecast-the-next-12-months">
+    Read the 12-month revenue forecast
+  </Card>
+  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+    Manage all MSPortal integrations
+  </Card>
+</CardGroup>

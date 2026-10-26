@@ -1,12 +1,12 @@
 ---
 title: 'Financial Reporting'
-description: 'Compare revenue with support effort and endpoints for each client, and review revenue trends across complete months.'
+description: 'Compare revenue with support effort and endpoints for each client, review revenue trends across complete months and forecast the next 12 months.'
 icon: 'dollar-sign'
 ---
 
 Financial Reporting shows each client's revenue next to the support effort and endpoints behind it. Each company gets a letter grade so you can find your best and weakest accounts quickly. It is for MSP staff.
 
-Financial Reporting lives in **MSP Tools > Client Success** as two tabs: **Financial** for the per-company table and **Revenue Trends** for monthly revenue history.
+Financial Reporting lives in **MSP Tools > Client Success** as two tabs: **Financial** for the per-company table and **Revenue Trends** for monthly revenue history and a 12-month revenue forecast.
 
 ## Before you start
 
@@ -152,6 +152,67 @@ Click a legend item to hide or show a series in the chart. This does not reclass
 
 Revenue Trends shows monthly revenue history. The **Financial** tab shows monthly-average metrics for the period you picked. A trend total for a window does not equal one company's monthly-average MRR.
 
+## Forecast the next 12 months
+
+The **Revenue forecast** section at the end of the **Revenue Trends** tab estimates revenue for the next 12 months. It adds three sources together:
+
+| Column | What it is |
+|---|---|
+| **Baseline** | The average monthly revenue of your recent complete months, repeated for each forecast month. |
+| **Planner** | Planned Planner work, weighted by its status. |
+| **HubSpot** | Open HubSpot new-business deals, weighted by their deal stage probability. |
+| **Total** | Baseline plus Planner plus HubSpot for the month. |
+
+The footer row, **12-month forecast**, totals each column across the 12 months. These are planning estimates, not booked revenue.
+
+<Frame caption="Branch preview with sample data: the Revenue forecast section, with the Historical baseline select and the Assumptions button in its header.">
+  <img src="/images/product/revenue-forecast-section-fixture-desktop.png" alt="Revenue forecast table with Baseline, Planner, HubSpot and Total columns for 12 months and a 12-month forecast footer row" width="1440" height="900" />
+</Frame>
+
+<Steps>
+  <Step title="Open the forecast">
+    On **MSP Tools > Client Success**, click the **Revenue Trends** tab and scroll to **Revenue forecast** at the end. Use the arrow beside the title to collapse or expand the section.
+  </Step>
+  <Step title="Check the company scope">
+    The forecast follows the company selector at the top of the app. HubSpot deals count for a company only when their HubSpot company is mapped to it. Deals for unmapped prospects appear only when you view all companies.
+  </Step>
+  <Step title="Choose the baseline">
+    Open **Historical baseline** and pick **3 months** or **6 months**. The default is 6 months.
+  </Step>
+  <Step title="Adjust the Planner probabilities">
+    Click **Assumptions**. Under **Planner probabilities**, set the percentage for **Not Started**, **Pending Approval**, **In Progress** and **On Hold** work, then click **Apply**.
+  </Step>
+  <Step title="Read the results">
+    Compare each month's **Total**, then the **12-month forecast** row. On a phone, each month shows as a card with the same four amounts.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview with sample data: the Forecast assumptions dialog, with Planner probabilities and the included and excluded counts.">
+  <img src="/images/product/revenue-forecast-assumptions-fixture-desktop.png" alt="Forecast assumptions dialog with Planner probability fields for Not Started, Pending Approval, In Progress and On Hold, an explanation of the method, and counts of included and excluded Planner items and HubSpot deals" width="1440" height="900" />
+</Frame>
+
+<Frame caption="Branch preview with sample data: on a phone, each forecast month is a card.">
+  <img src="/images/product/revenue-forecast-section-fixture-mobile.png" alt="Revenue forecast on a phone, with each month as a card showing Baseline, Planner, HubSpot and Total" width="390" height="900" />
+</Frame>
+
+<Frame caption="Branch preview with sample data: the Forecast assumptions dialog on a phone.">
+  <img src="/images/product/revenue-forecast-assumptions-fixture-mobile.png" alt="Forecast assumptions dialog on a phone with the four Planner probability fields and the Apply and Cancel buttons" width="390" height="900" />
+</Frame>
+
+### How the forecast is built
+
+- **Baseline** averages the revenue of the previous 3 or 6 complete months. Months with no revenue count as zero, so they lower the average. The current month is left out.
+- **Planner** amounts follow each item's scheduled dates and billing frequency: one-time, monthly or annual. Each amount is weighted by the probability for the item's status. Completed and cancelled work is always left out, and recurring work that has already started is not added again.
+- **HubSpot** counts open new-business deals once, in their expected close month, weighted by the probability of their current deal stage. Only deals in your tenant currency are included. Amounts are never converted or guessed.
+
+The **Forecast assumptions** dialog shows how many Planner items and HubSpot deals were included. It also counts the ones left out because a date, amount, new-business classification or currency is missing or unsupported.
+
+<Note>
+Planner probabilities change only your current view. They are not saved, and they do not change the forecast for anyone else. Reloading the page restores the defaults: 25% for **Not Started**, 50% for **Pending Approval**, 90% for **In Progress** and 0% for **On Hold**.
+</Note>
+
+To include HubSpot deals, connect HubSpot and map its companies. See [Configure HubSpot Integration](/user-guides/integrations/enable-hubspot-integration). The Planner column needs permission to read Planner.
+
 ## Troubleshooting
 
 | Problem | What to do |
@@ -162,6 +223,10 @@ Revenue Trends shows monthly revenue history. The **Financial** tab shows monthl
 | EHR shows a dash although revenue exists | The company has less than one support hour per month. Check support hours and the support boards in settings. |
 | Numbers differ from your PSA | Compare company mapping, period totals against monthly averages, revenue category rules, billing cadence and sync freshness. Open the linked values to see the records. |
 | Revenue Trends omits this month | It uses complete months only. Use the **Financial** tab with **Current Month** for the month in progress. |
+| **Baseline** and **Total** show a dash | There is no completed-month revenue to average. Planner and HubSpot estimates still show. Check your PSA sync and revenue categories. |
+| The **HubSpot** column is all zero | Connect HubSpot in **Settings > Integrations** and wait for a sync. For one company, map its HubSpot company. Click **Assumptions** to see how many deals were included or left out. |
+| The **Planner** column is all zero | Check that you can read Planner, and that the items have dates, amounts and an open status. Click **Assumptions** for the included and excluded counts. |
+| The page says **The forecast could not be loaded** | Reload the page. Revenue history above the forecast stays available. |
 | A settings change has not shown up | Saving starts a background recalculation. Wait a few minutes. Client Health updates on its own refresh. |
 
 ## Frequently asked questions
@@ -185,6 +250,12 @@ Revenue Trends shows monthly revenue history. The **Financial** tab shows monthl
   <Accordion title="Does Rolling 90-day average use the last 90 days?">
     No. It compares the latest three complete months with the three before.
   </Accordion>
+  <Accordion title="Does changing the Planner probabilities change the forecast for my team?">
+    No. The probabilities apply only to your current view and reset when you reload the page.
+  </Accordion>
+  <Accordion title="Why does a HubSpot deal not appear for a company?">
+    The deal's HubSpot company must be mapped to that MSPortal company. Unmapped prospects appear only when you view all companies. Deals that are not new business, have no amount or close date, or use another currency are left out.
+  </Accordion>
   <Accordion title="Does Licensed users count a person with two plans twice?">
     No. Each person counts once across the plans chosen in settings. Add-ons such as Copilot, Teams Phone or E5 Security never count.
   </Accordion>
@@ -199,3 +270,4 @@ Revenue Trends shows monthly revenue history. The **Financial** tab shows monthl
 - [Where Financial Reporting data comes from](/msp-guides/msp-tools/financial-reporting-data-sources)
 - [Client Health](/user-guides/msp-tools/client-health)
 - [Integration Company Mapping](/user-guides/settings/integration-company-mapping)
+- [Configure HubSpot Integration](/user-guides/integrations/enable-hubspot-integration)
