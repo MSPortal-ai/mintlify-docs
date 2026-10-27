@@ -1,24 +1,34 @@
 ---
 title: 'Connect Avanan and map customer tenants'
-description: 'Connect regional Avanan SmartAPI access and review email security coverage'
+description: 'Connect Check Point Harmony Email & Collaboration (Avanan) through the Infinity Portal or a legacy SmartAPI key and review email security coverage'
 icon: 'plug'
 ---
+
+Connect Check Point Harmony Email & Collaboration (formerly Avanan), map the customer tenants it can access, and review the resulting email security data. New connections use a Check Point Infinity Portal API key. Existing connections that use an Avanan portal SmartAPI key keep working.
 
 Open **Settings > Integrations**, find the provider in the directory, and open its setup. You need an MSP staff account with permission to manage integrations. Company users should ask their MSP to connect the service.
 
 ## Before you start
 
-Request an MSP SmartAPI key from Check Point or Avanan Support. Each key works only in its own region. Use a separate connection for each region where your managed tenants reside.
+Get a key from the portal you use:
+
+- **Check Point Infinity Portal** (recommended): sign in at [portal.checkpoint.com](https://portal.checkpoint.com), open **Global Settings > API Keys**, and create a key for the **Email & Collaboration** service. Copy its **Client ID** and **Secret Key**. The Secret Key is shown only once. Keys expire three months after creation unless you choose another date.
+- **Avanan portal (SmartAPI)**: request an MSP SmartAPI key from Check Point or Avanan Support. You receive an **Application ID** and a **Client Secret**.
+
+Each key works only in its own region. Use a separate connection for each region where your managed tenants reside.
 
 ## Set up the connection
 
-1. In **Connect**, choose **API region** and enter **Application ID (Client ID)** and **Client Secret**.
-2. Select **Test Connection** and review the customer tenant count returned by the test.
-3. Select **Create Integration**. For an existing connection, use **Update Credentials**.
-4. Continue to **Map tenants** and match each Avanan customer tenant to the company it protects. Review suggested matches before saving.
-5. In **Review data**, inspect mapped tenants, licensed users, threat events, and allow/block list entries. Setup can finish while synchronization continues.
+1. In **Connect**, choose the **Portal** that issued your key, then the **API region**.
+2. Enter the key's **Client ID** and **Secret Key**. For a SmartAPI key, enter the Application ID as the Client ID and the Client Secret as the Secret Key.
+3. Select **Test Connection** and review the customer tenant count returned by the test.
+4. Save the connection. For an existing connection, update its credentials instead.
+5. Continue to tenant mapping and match each customer tenant to the company it protects. Review suggested matches before saving.
+6. In the review step, inspect mapped tenants, licensed users, threat events, and allow/block list entries. Setup can finish while synchronization continues.
 
-The region cannot change after saving the connection. Add another connection to use a key from a different region.
+The portal and region cannot change after saving the connection. Add another connection to use a key from a different portal or region.
+
+When an Infinity Portal key cannot list MSP customer tenants, MSPortal lists one tenant for each customer the key can access, named by its domain. Package, seat and security awareness training details are then unavailable for those tenants.
 
 ## Verify the result
 
@@ -26,7 +36,7 @@ Use **View Email Security** to review the mapped data. **View SAT Coverage** sho
 
 ## Troubleshooting
 
-- **Test rejected:** confirm that the key is an MSP SmartAPI key for the selected region.
+- **Test rejected:** confirm the selected portal and region match the key. Infinity Portal keys need the Email & Collaboration service and expire; create a new key in the Infinity Portal and update the connection's credentials.
 - **A company has no data:** check its tenant mapping and the selected company scope.
 - **Sync needs attention:** fix the connection issue and use the available data-sync action; a partial failure does not mean all previously collected records disappeared.
 
