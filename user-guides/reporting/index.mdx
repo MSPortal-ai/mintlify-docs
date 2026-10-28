@@ -148,16 +148,129 @@ You can also start from a template on the **Templates** tab.
 
 Click **Report Settings** under the title to open the panel on the right.
 
+<Info>
+  **Branch preview:** The date-range instructions and screenshots below preview
+  an upcoming update. Your portal may still show separate quick-select controls
+  until the update is released.
+</Info>
+
 | Section | What you set |
 | --- | --- |
 | **Report Details** | **Type**, **Company** (in Global View), **Created By** and **Description**. For a parent company report you can also choose how child companies appear: parent only, merged, or grouped by company. |
-| **Date Range** | A **Custom Range**, or **Quick Select** presets: Today, Yesterday, Last 7 days, Last 30 days, This month, Last month, This quarter, Last quarter, Quarter to date, This year, Last year, Year to date and All time. |
+| **Date Range** | Open **Custom Range** to choose dates or use **Quick select** inside the calendar. See [Choose report dates](#choose-report-dates). |
 | **Display** | **Page** format (**Letter** or **A4**) and **Mode** (**Paged** or **Continuous**). **Show Grid** shows an alignment grid and **Show Cards** gives blocks card styling. |
 | **Applied Blocks** | A list of the blocks in the report. Click one to jump to it. |
 
 The title and version number are at the top of the builder. The version is a label you set. It does not give you a restore history. Use the undo and redo buttons for the current session. Report types come from your tenant. Manage them in **Settings > Reports** on the **Report types** tab.
 
 Compliance content works best in **Continuous** mode. The builder warns you and offers **Switch**.
+
+### Choose report dates
+
+In **Report Settings > Date Range**, open **Custom Range**. The calendar shows one month at a time. Enter a start and end date, select them in the calendar, or open **Quick select** at the top of the calendar. Use the month arrows to reach other dates.
+
+| Presets           | Choices                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------- |
+| Single days       | **Today**, **Yesterday**, **Tomorrow**                                                                   |
+| Rolling days      | **Last 7 days**, **Next 7 days**, **Last 30 days**, **Next 30 days**, **Last 90 days**, **Next 90 days** |
+| Rolling months    | **Last 6 months**, **Last 12 months**                                                                    |
+| Calendar weeks    | **This week**, **Last week**, **Next week**                                                              |
+| Calendar months   | **This month**, **Last month**, **Next month**, **Month to date**                                        |
+| Calendar quarters | **This quarter**, **Last quarter**, **Next quarter**, **Quarter to date**                                |
+| Calendar years    | **This year**, **Last year**, **Next year**, **Year to date**                                            |
+| Full history      | **All time**                                                                                             |
+
+**Next 7 days**, **Next 30 days** and **Next 90 days** include today. For example, **Next 7 days** runs from today through six days from today. **Next week**, **Next month**, **Next quarter** and **Next year** select the next complete calendar period.
+
+Check the dates, click **Apply** to close the calendar, then click **Save** in the report header and wait for **Saved**. A report-wide preset sets concrete start and end dates. Those dates stay the same when you reopen the saved report. To keep one block's period moving with the current date, use a [relative block range](#choose-dates-for-one-block).
+
+On a phone or short screen, scroll inside the calendar to reach the remaining dates. **Apply** and **Cancel** stay at the bottom of the calendar. If **Quick select** is open, press **Escape** to close its list first; the calendar stays open.
+
+The following branch previews show the same calendar in **Planner Table** settings, with loaded controls in MSPortal Demo.
+
+{/* Preview source: app branch t3/reporting-date-picker-layout, commit 0266eb6138636aff19b162aff2ae7f915f7fd1bd, docs/pr-previews/t3-reporting-date-picker-layout/. The six reporting-{calendar,presets,relative}-{desktop,mobile}.png captures are reused unchanged as images/product/reporting-{calendar,presets,relative}-{desktop,mobile}-preview.png below. Production follow-up remains open: after the app update is confirmed live, verify report-wide concrete dates and saved relative block ranges, recapture these six views in MSPortal Demo without development indicators, replace the same assets, reconcile the instructions, and remove the preview notice and captions. */}
+
+<Tabs>
+  <Tab title="Calendar on desktop">
+    <Frame caption="Branch preview: Planner Table's single-month calendar with Quick select inside it.">
+      <img
+        src="/images/product/reporting-calendar-desktop-preview.png"
+        alt="Planner Table settings with a January 2027 calendar, start and end date fields, Quick select, Apply and Cancel."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Calendar on phone">
+    <Frame caption="Branch preview: the calendar scrolls while Apply and Cancel stay visible on a phone.">
+      <img
+        src="/images/product/reporting-calendar-mobile-preview.png"
+        alt="Phone Planner Table settings with the compact calendar and visible Apply and Cancel buttons below the scrollable dates."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Presets on desktop">
+    <Frame caption="Branch preview: Quick select includes past and future periods.">
+      <img
+        src="/images/product/reporting-presets-desktop-preview.png"
+        alt="Quick select menu inside the Planner Table calendar, including Tomorrow, Next 7 days and Next 30 days."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Presets on phone">
+    <Frame caption="Branch preview: scroll the Quick select list for more periods on a phone.">
+      <img
+        src="/images/product/reporting-presets-mobile-preview.png"
+        alt="Phone Planner Table calendar with its Quick select list open and future day presets visible."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Choose dates for one block
+
+Open a block's gear. In **General**, **View**, **Block title** and **Header size** control its presentation; the fields wrap to fit a phone. Blocks that use dates also offer a **Date range** selector with the same relative presets listed above.
+
+| Choice                                                          | What happens                                                                                                                                                                     |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Use report date range**                                       | The block follows the report's dates. Choose this to clear a separate block range.                                                                                               |
+| A relative preset, such as **Next 30 days** or **Next quarter** | The block keeps the chosen period and calculates its dates when the report is rendered. The period continues to move after saving and reopening, including in scheduled reports. |
+| **Last N days (custom)**                                        | Set a rolling window of 1 to 1,825 days.                                                                                                                                         |
+| **Fixed date range**                                            | Pick concrete start and end dates. Quick select inside this fixed-range calendar is a shortcut for filling those dates; it does not make them relative.                          |
+| **All available data**                                          | Use the widest supported history for this block.                                                                                                                                            |
+
+**Planner Table**, and the older **Roadmap** block in saved reports, have their own **Date Range** calendar. Open **Quick select** inside that calendar to save a relative preset. For example, choosing **Next quarter** in October 2026 covers January 1–March 31, 2027. It remains **Next quarter** when saved and reloaded, so its dates move as time passes. Selecting specific dates keeps a fixed range. Existing reports with saved fixed dates still open with those dates. Clear the field with **X** to return to the report's range.
+
+After changing a block, close its settings, click **Save** in the report header and wait for **Saved**. A block with its own range can show a different period from the rest of the report. Check it before sharing or exporting. Blocks that show a current snapshot do not offer this date-range selector.
+
+<Tabs>
+  <Tab title="Block range on desktop">
+    <Frame caption="Branch preview: Completed Tickets by Week uses its own Next 30 days range.">
+      <img
+        src="/images/product/reporting-relative-desktop-preview.png"
+        alt="Completed Tickets by Week settings with Date range set to Next 30 days and a hint that the block uses its own range."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Block range on phone">
+    <Frame caption="Branch preview: General settings and the relative Date range selector wrap on a phone.">
+      <img
+        src="/images/product/reporting-relative-mobile-preview.png"
+        alt="Phone Completed Tickets by Week settings with readable View, Block title, Header size and Next 30 days controls."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ### Edit on a narrow screen
 
@@ -526,7 +639,7 @@ Select **Email domain checks** in the security provider filters to include the s
     No. It is a label. Use undo and redo for the current session and keep a copy before large changes.
   </Accordion>
   <Accordion title="Does changing the date range rewrite AI narrative?">
-    No. Data blocks follow the date range. Generated text does not change on its own, so regenerate it and check it matches the period.
+    No. Date-aware blocks follow the report's range unless they have their own range. Current-snapshot blocks keep showing the current state. Generated text does not change on its own, so regenerate it and check it matches the period.
   </Accordion>
   <Accordion title="Does a shared link give a client access?">
     No. The recipient needs access to the report and its company. A downloaded PDF is a separate copy, so choose who receives it.
