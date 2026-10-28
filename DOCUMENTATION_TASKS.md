@@ -262,11 +262,11 @@ For each documentation piece:
 
 ## HPE warranty history release follow-up (2026-10-28)
 
-Companion to [app PR #2368](https://github.com/MSPortal-ai/msportal-main/pull/2368), branch `t3/hpe-warranty-scraper`, reviewed app head `f99ecc4ef348b88e7315a289b31abf6a6dd66444`. Publication remains pending; this docs PR does not authorize a merge or rollout.
+Companion to [app PR #2368](https://github.com/MSPortal-ai/msportal-main/pull/2368), branch `t3/hpe-warranty-scraper`, reviewed app head `b9bf58400367376e7c9edd3a82358fba968d628b`. Publication remains pending; this docs PR does not authorize a merge or rollout.
 
 The existing Devices overview, find, details, and edit guides contain the preview coverage. A repository-wide search of device, warranty, and history mentions also covered integration writeback, inventory/report summaries, manufacturer normalization, and unrelated history guides. Their existing date-writeback and other workflows do not gain agreement-history controls in this change. The four updated guides already appear in both navigation audiences; no new guide or navigation entry is needed.
 
-The history screenshots reuse the reviewed genuine component renders from the app branch's `docs/pr-previews/t3-hpe-warranty-scraper/`. They use a synthetic Demo identity and supplied HPE sample coverage, not a production lookup or a real Demo save/reload. No account identifiers, credentials, or sample serial are included in this documentation.
+The history screenshots, captured at app head `f99ecc4`, remain accurate for the normal coverage state. The review fixes at `b9bf584` additionally cover open-ended active services and agreements without service details. The history screenshots reuse the reviewed genuine component renders from the app branch's `docs/pr-previews/t3-hpe-warranty-scraper/`. They use a synthetic Demo identity and supplied HPE sample coverage, not a production lookup or a real Demo save/reload. No account identifiers, credentials, or sample serial are included in this documentation.
 
 | Stable docs asset in `images/product/`     | Source PNG                             | Dimensions and use                                                                                                 |
 | ------------------------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -275,7 +275,7 @@ The history screenshots reuse the reviewed genuine component renders from the ap
 
 The app's reviewed empty, loading, error, and dark-mode captures remain in its PR evidence. The guide explains those states without adding repeated images.
 
-- [ ] After authorized app rollout and application of `20261028203020_device_warranty_history.sql`, verify a successful HPE lookup on MSPortal Demo through the normal application, then close/reopen and reload to confirm the saved history.
-- [ ] Verify device-read access and company scope, stored-history retention after a failed/empty refresh, stale-history hiding after an identity correction, and summary-date preservation in the live workflow. Reconcile the guide with the observed behavior.
+- [ ] After authorized app rollout and application of `20261028210453_device_warranty_history.sql`, verify a successful HPE lookup on MSPortal Demo through the normal application, then close/reopen and reload to confirm the saved history.
+- [ ] Verify device-read access and company scope, stored-history retention after failed/no-product responses, replacement by a matching product with no agreements, stale-history hiding after an identity correction, and summary-date preservation in the live workflow. Reconcile the guide with the observed behavior.
 - [ ] Capture and review production desktop/mobile images without developer indicators or sensitive identifiers. Replace the two stable assets above and remove branch-preview notices/captions only after production verification.
 - [ ] Keep this follow-up open until live verification and replacement captures are complete. Preview rendering and docs validation do not prove database persistence or production availability.
