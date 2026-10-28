@@ -327,7 +327,7 @@ Set up how Autotask tickets behave in MSPortal. Each change saves straight away.
   </Step>
 
   <Step title="Choose ticket statuses">
-    Under **Ticket statuses**, select the **Closed statuses** that mean a ticket is closed, and the **Status after a client comment**. Status choices appear once queues are chosen in **Choose data**; missing choices can mean the first metadata sync has not finished.
+    Under **Ticket statuses**, select the **Closed statuses** that mean a ticket is closed. Status choices appear once queues are chosen in **Choose data**; missing choices can mean the first metadata sync has not finished. To set a status after a company user replies, see [Set the status after a client comment](#set-the-status-after-a-client-comment).
   </Step>
 
   <Step title="Place statuses in resolution stages">
@@ -363,6 +363,79 @@ Set up how Autotask tickets behave in MSPortal. Each change saves straight away.
     See [Clear and Resync Integrations](/user-guides/integrations/clear-and-resync-integrations) before you use **Clear & Resync**.
   </Step>
 </Steps>
+
+---
+
+### Set the status after a client comment
+
+<Note>
+  **Branch preview:** These Autotask reply settings and screenshots describe an
+  unreleased update. They are not yet verified in production.
+</Note>
+
+Use this setting to move an Autotask ticket to a chosen status after a company user successfully saves a public note through MSPortal. MSP staff notes, internal notes and private notes do not trigger it.
+
+You need permission to manage integrations. The Autotask API user also needs permission to create ticket notes and update ticket status; the **Permissions** read checks alone do not prove those writes will succeed.
+
+<Steps>
+  <Step title="Open Configure tickets">
+    Go to **Settings > Integrations > Autotask PSA**, open the connection you want to change, and select **Configure tickets** in its setup guide.
+  </Step>
+  <Step title="Choose a reply status">
+    Under **Ticket statuses > Status after a client comment**, select an active status from this Autotask connection. Choose **None** to turn the automatic status update off.
+  </Step>
+  <Step title="Choose what happens on closed tickets">
+    **Replies on closed tickets** becomes available after you select a reply status.
+
+    | Choice | Result after a company user's public note |
+    | --- | --- |
+    | **Keep closed or resolved** (default) | Save the note and leave a closed or resolved ticket's status unchanged. |
+    | **Change to reply status** | Apply the selected reply status even when the ticket is closed or resolved. Choose an open reply status if you want replies to reopen tickets. |
+
+    Closed-ticket handling includes statuses marked closed in Autotask, your **Closed statuses**, and statuses placed in the **Resolved** resolution stage.
+
+  </Step>
+  <Step title="Wait for each change to save">
+    Each selection saves immediately. Resolve any save error before leaving, then reload to confirm the saved choices. To stop automatic status changes later, select **None**.
+  </Step>
+</Steps>
+
+The setting applies to this integration's tickets. Company overrides are not supported in this release. MSPortal writes only the reply status for this step; it does not write the assigned technician, queue or priority. Autotask workflows may react separately to the status change.
+
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Branch preview in MSPortal Demo: In Progress is an example reply status; closed or resolved tickets stay closed by default.">
+      <img
+        src="/images/product/autotask-reply-status-desktop-preview.png"
+        alt="Autotask Ticket statuses with In Progress selected after a client comment and Keep closed or resolved selected"
+        width="1968"
+        height="495"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="Branch preview in MSPortal Demo: the same reply settings on a phone.">
+      <img
+        src="/images/product/autotask-reply-status-mobile-preview.png"
+        alt="Phone view of Autotask reply status set to In Progress and closed-ticket handling set to Keep closed or resolved"
+        width="687"
+        height="474"
+        style={{ width: "100%", maxWidth: "390px", height: "auto" }}
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+{/* Preview media: lossless crops of autotask-settings-desktop.png (816,690,2784,1185) and autotask-settings-mobile.png (48,240,735,714) from app commit 54107e3e9d7ae3e5b279daced5fac3d53781b0ab, docs/pr-previews/t3-autotask-reply-status-setting/. These are live Demo settings captures, not external Autotask write verification. After release, verify the production workflow, recapture these two stable asset paths, reconcile the instructions and remove the preview labels. */}
+
+If the note saves but the status update fails, the portal and browser extension tell the company user that the note was saved and offer **Retry status update** when a retry is available. Retrying changes only the status and never posts another note. See [When a reply changes the ticket status](/user-guides/ticketing/follow-up-on-a-ticket#when-a-reply-changes-the-ticket-status).
+
+| Problem                                    | What to check                                                                                                                                                            |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| No reply statuses are available            | Check this connection's selected queues and metadata sync, then reload. The target must be an active status from this integration.                                       |
+| A staff note did not change the status     | Only company users' public notes trigger this setting.                                                                                                                   |
+| A closed ticket stayed closed              | **Keep closed or resolved** is the default. Select **Change to reply status** only if replies should apply the chosen status to closed tickets too.                      |
+| A note saved but its status did not update | Check the Autotask connection, API user's write access and whether the selected reply status is still active. Retry the status when offered; do not post the note again. |
 
 ---
 
