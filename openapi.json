@@ -21930,6 +21930,16 @@
           "users"
         ]
       },
+      "WithdrawBudgetApprovalRequest": {
+        "type": "object",
+        "properties": {
+          "expectedUpdatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The budget's updatedAt the client last read; 409 when it changed since"
+          }
+        }
+      },
       "MeetingAgendaItem": {
         "type": "object",
         "properties": {
@@ -29268,11 +29278,12 @@
               "type": "string",
               "format": "uuid"
             },
-            "minItems": 1,
-            "maxItems": 50,
-            "description": "Restrict the page to company (client portal) users in these permission-group roles (ids from visibility-roles). Omit to share with all company users in scope; MSP users always see the page."
+            "maxItems": 50
           }
-        }
+        },
+        "required": [
+          "roleIds"
+        ]
       },
       "SendBroadcastRequest": {
         "type": "object",
@@ -34943,6 +34954,16 @@
             "in": "path"
           }
         ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawBudgetApprovalRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Budget back in Draft",
@@ -45116,7 +45137,7 @@
     "/api/public/v1/surveys/{id}/responses": {
       "get": {
         "summary": "List survey responses",
-        "description": "Retrieve paginated responses for a specific survey, grouped by respondent.",
+        "description": "Retrieve paginated responses for a specific survey, grouped by respondent. Requires view_all_survey_answers or manage_surveys; company users read their own company's responses.",
         "tags": [
           "Surveys"
         ],
@@ -45557,7 +45578,7 @@
     "/api/public/v1/surveys/nps/responses": {
       "get": {
         "summary": "List NPS responses",
-        "description": "Retrieve paginated NPS responses with optional filters.",
+        "description": "Retrieve paginated NPS responses with optional filters. Requires view_all_survey_answers or manage_surveys; company users read their own company's responses.",
         "tags": [
           "NPS Surveys"
         ],
@@ -46542,10 +46563,15 @@
                       "items": {
                         "$ref": "#/components/schemas/NpsAnalytics"
                       }
+                    },
+                    "truncated": {
+                      "type": "boolean",
+                      "description": "true when the newest 200 periods were returned and older ones exist; narrow the filters"
                     }
                   },
                   "required": [
-                    "data"
+                    "data",
+                    "truncated"
                   ]
                 }
               }
@@ -68287,7 +68313,7 @@
     "/api/public/v1/documentation/pages/{id}/visibility": {
       "put": {
         "summary": "Set documentation page visibility",
-        "description": "Replace the visibility rules of a built-in page: restrict it to the given company permission-group roles or, with no roleIds, share it with all company users in scope. Existing rules are replaced, not merged; MSP users always see the page. Company users only change pages scoped to their own company.",
+        "description": "Replace the visibility rules of a built-in page: restrict it to the given company permission-group roles or, with an empty roleIds list, share it with all company users in scope. roleIds is required so a missing field never clears the rules by accident. Existing rules are replaced, not merged; MSP users always see the page. Company users only change pages scoped to their own company.",
         "tags": [
           "Documentation"
         ],
