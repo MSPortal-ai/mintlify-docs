@@ -122,7 +122,23 @@ The module scopes below are a summary. You do not need to grant every scope. Rea
 | `list_ticket_note_recipient_options` | `query_tickets` | Read | `read_tickets` | List the contacts of a ticket's company you can email a client-visible note to, ticket contact first. Pass their ids as ccContactIds on add_ticket_note. |
 | `list_ticket_status_options` | `query_tickets` | Read | `read_tickets` | List the valid PSA statuses for a ticket's integration. Use the returned externalId with update_ticket_status. ConnectWise statuses are board-scoped: prefer options whose boardExternalId matches the ticket's board. |
 | `list_tickets` | `query_tickets` | Read | `read_tickets` | List visible PSA tickets, including normalized dueDate and Autotask resolution fields when available. |
+| `retry_ticket_reply_status` (branch preview) | `manage_tickets` | Write (confirm) | `write_tickets_notes`, `write_tickets` | Retry only the configured Autotask status after a saved company-user public note. Pass the unchanged `statusUpdate.retry` receipt as `retry`. Never posts a new note or selects a different target status. |
 | `update_ticket_status` | `manage_tickets` | Write (confirm) | `write_tickets_status`, `write_tickets` | Stage or update a ticket's status in the client's PSA via its API. statusExternalId must come from list_ticket_status_options. |
+
+### Saved notes and Autotask reply status failures
+
+<Note>
+  **Branch preview:** The reply-status result and retry action describe an
+  unreleased update. Use the action schema returned by your connected server.
+</Note>
+
+After `add_ticket_note` commits, `posted: true` means the note was saved, even if `statusUpdate.success` is `false`. Do not call `add_ticket_note` again to recover from a status failure.
+
+When `statusUpdate.retry` is present, call `manage_tickets` with action `retry_ticket_reply_status` and the unchanged receipt in `request.arguments.retry`. Review and confirm that proposal using the [normal confirmation flow](#change-data-with-a-proposal). The receipt expires after 24 hours; the confirmation proposal has its own ten-minute expiry.
+
+Retry checks current ticket access and the integration's reply setting. It can skip the status change if the live ticket status or configured target changed, or the setting was disabled. The default closed-ticket policy still applies. Inspect the returned `statusUpdate` result; `noteSaved: true` confirms the existing note, not that the status changed.
+
+If no receipt is returned or it has expired, report that the note is saved and ask the IT provider to check the status. The [Autotask reply setting](/user-guides/integrations/enable-autotask-integration#set-the-status-after-a-client-comment) applies only to company users' public notes, not staff or internal notes.
 
 ## Ticket Templates
 

@@ -10,7 +10,8 @@ The Reporting module lets you build professional reports by combining data block
 
 - Click **Reporting** in the main navigation. Which tabs you see depends on your role.
 - Reports are company-specific. Pick a company in the company selector before you create one.
-- Creating reports needs **Write** or **Manage** access to Reporting. Scheduled, Approvals, Imports and Settings need **Manage**.
+- Creating reports needs **Write** or **Manage** access to Reporting. Scheduled, Approvals and Imports need **Manage**.
+- Report defaults, [brand packages](/user-guides/reporting/brand-packages) and report types live in **Settings > Reports**, which needs the **Report Settings** permission (**Read** to view, **Manage** to change). From **Reporting**, open the page actions menu and choose **Page settings**.
 
 | Tab | Who sees it |
 | --- | --- |
@@ -18,7 +19,7 @@ The Reporting module lets you build professional reports by combining data block
 | **Huntress** | Tenants with the Huntress integration. |
 | **Security Awareness** | Tenants with a Phin, BSN or CyberHoot integration. |
 | **Templates** | **Write** or **Manage**. |
-| **Scheduled**, **Approvals**, **Imports**, **Settings** | **Manage**. |
+| **Scheduled**, **Approvals**, **Imports** | **Manage**. |
 
 ## Read a report
 
@@ -143,20 +144,232 @@ The **Scheduled** list also shows 20 schedules per page. Use **Next** and **Prev
 
 You can also start from a template on the **Templates** tab.
 
+## Build and edit report blocks with AI
+
+<Note>
+  Branch preview: this section and its screenshots show the expanded AI block
+  settings on `t3/ai-report-block-fields`, verified in MSPortal Demo. They
+  describe pre-release behavior.
+</Note>
+
+Open the **Assistant** while you are in the report builder. Describe the blocks you want to add, or name an existing block and the settings you want to change. The assistant can configure the settings supported by that block, including its title, columns, filters, dates and display options. Available blocks and record choices follow your report's company scope, permissions and integrations.
+
+### Create a filtered block
+
+<Steps>
+  <Step title="Describe the block and period">
+    Include the block type, records, filters and columns. For example:
+
+    > Add a Planner Table titled Upcoming Projects for Project items with statuses Not Started or Pending Approval, covering the full current and next quarter. Show title, status and type.
+
+    **Current and next quarter** includes both complete calendar quarters. For a request made in October 2026, that is **October 1, 2026 through March 31, 2027**. Check the resolved dates in the proposal. A **Quarterly Roadmap** spanning those quarters uses separate blocks for Q4 2026 and Q1 2027 so each year shows only its requested quarter.
+
+  </Step>
+  <Step title="Review Configuration ready">
+    Check the proposed block, title, types, statuses, columns and date range. For the example above, **Types** should contain **Project** and **Statuses** should contain **Not Started** and **Pending Approval**. A title such as “Upcoming Projects” does not itself filter the records.
+
+    Choose **Discard** if the proposal is wrong, then refine your request. A chat response describing a change is still a proposal until you apply it.
+
+  </Step>
+  <Step title="Apply to draft">
+    Choose **Apply to draft** after reviewing the settings. When adding blocks to a report that already has content, review **How would you like to apply?**: **Append to existing** keeps the current blocks; **Replace existing** clears them and uses the proposed layout.
+  </Step>
+  <Step title="Check the result and save">
+    Inspect the block on the canvas and open its gear to check its settings. Click **Save**, wait for **Saved**, then reload to confirm the result. Applied changes are eligible for the builder's normal autosave; sending the prompt alone does not change the report.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Desktop proposal">
+    <Frame caption="Branch preview in MSPortal Demo: review Project, both statuses, columns and the full October–March period before applying.">
+      <img
+        src="/images/product/report-builder-ai-proposal-desktop-preview.png"
+        alt="AI proposal for an Upcoming Projects Planner Table with Project type, Not Started and Pending Approval statuses, title/status/type columns, October 2026 through March 2027 dates and Apply to draft."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Phone proposal">
+    <Frame caption="Branch preview in MSPortal Demo: scroll the phone review to inspect every setting and reach the apply controls.">
+      <img
+        src="/images/product/report-builder-ai-proposal-mobile-preview.png"
+        alt="Phone Assistant showing the proposed Planner Table filters, columns and October 2026 through March 2027 date range."
+        width="390"
+        height="844"
+        style={{ maxWidth: "390px", width: "100%" }}
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Change an existing block
+
+Name the block and request only the changes you need. For example:
+
+> Edit only the existing Upcoming Projects block: change its statuses to In Progress and hide its header icon. Keep its Project type, dates, columns, title, layout and all other settings.
+
+The review identifies **Upcoming Projects** and lists the changed settings: **Statuses: In Progress** and **Show Header Icon: No**. Applying a settings edit updates the existing block in place, preserving its other settings and layout. Review the proposal, choose **Apply to draft**, inspect the result, then save and check **Saved**. On a phone, scroll horizontally inside the report canvas to inspect the full block.
+
+<Tabs>
+  <Tab title="Desktop edit review">
+    <Frame caption="Branch preview in MSPortal Demo with synthetic project titles: the review lists only the requested status and header-icon changes.">
+      <img
+        src="/images/product/report-builder-ai-edit-review-desktop-preview.png"
+        alt="Configuration ready card for Upcoming Projects showing In Progress status, Show Header Icon set to No, and Discard and Apply to draft buttons."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Phone edit review">
+    <Frame caption="Branch preview in MSPortal Demo: inspect the changed fields in the phone review before applying.">
+      <img
+        src="/images/product/report-builder-ai-edit-review-mobile-preview.png"
+        alt="Phone Configuration ready card showing Upcoming Projects with In Progress status and Show Header Icon set to No."
+        width="390"
+        height="844"
+        style={{ maxWidth: "390px", width: "100%" }}
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Choose records and filters
+
+Ask for selectable records by name, such as a budget, project, goal, planner item, compliance run, Microsoft 365 license, imported document or published custom block. The assistant can look up available choices and ticket, user or device filter values within the report's scope. If a choice cannot be found or loaded, select it in the block's settings and review the result. Check the company, access and source data when an expected choice is missing.
+
+Supported filters vary by block. For example, **Planner Table** supports type and status filters; use **Quarterly Roadmap** when you also need priority filtering. For date-aware blocks, specify whether to follow the report period, use fixed dates or use a rolling period, then check the proposed range.
+
+New image uploads still require the image picker in the block's settings. Use it to upload and select the image, then continue editing the block.
+
 ## Set up the report in the builder
 
 Click **Report Settings** under the title to open the panel on the right.
 
+<Info>
+  **Branch preview:** The date-range instructions and screenshots below preview
+  an upcoming update. Your portal may still show separate quick-select controls
+  until the update is released.
+</Info>
+
 | Section | What you set |
 | --- | --- |
 | **Report Details** | **Type**, **Company** (in Global View), **Created By** and **Description**. For a parent company report you can also choose how child companies appear: parent only, merged, or grouped by company. |
-| **Date Range** | A **Custom Range**, or **Quick Select** presets: Today, Yesterday, Last 7 days, Last 30 days, This month, Last month, This quarter, Last quarter, Quarter to date, This year, Last year, Year to date and All time. |
+| **Date Range** | Open **Custom Range** to choose dates or use **Quick select** inside the calendar. See [Choose report dates](#choose-report-dates). |
 | **Display** | **Page** format (**Letter** or **A4**) and **Mode** (**Paged** or **Continuous**). **Show Grid** shows an alignment grid and **Show Cards** gives blocks card styling. |
 | **Applied Blocks** | A list of the blocks in the report. Click one to jump to it. |
 
-The title and version number are at the top of the builder. The version is a label you set. It does not give you a restore history. Use the undo and redo buttons for the current session. Report types come from your tenant. If there are none, click **Configure types** to open the Reports **Settings** tab.
+The title and version number are at the top of the builder. The version is a label you set. It does not give you a restore history. Use the undo and redo buttons for the current session. Report types come from your tenant. Manage them in **Settings > Reports** on the **Report types** tab.
 
 Compliance content works best in **Continuous** mode. The builder warns you and offers **Switch**.
+
+### Choose report dates
+
+In **Report Settings > Date Range**, open **Custom Range**. The calendar shows one month at a time. Enter a start and end date, select them in the calendar, or open **Quick select** at the top of the calendar. Use the month arrows to reach other dates.
+
+| Presets           | Choices                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------- |
+| Single days       | **Today**, **Yesterday**, **Tomorrow**                                                                   |
+| Rolling days      | **Last 7 days**, **Next 7 days**, **Last 30 days**, **Next 30 days**, **Last 90 days**, **Next 90 days** |
+| Rolling months    | **Last 6 months**, **Last 12 months**                                                                    |
+| Calendar weeks    | **This week**, **Last week**, **Next week**                                                              |
+| Calendar months   | **This month**, **Last month**, **Next month**, **Month to date**                                        |
+| Calendar quarters | **This quarter**, **Last quarter**, **Next quarter**, **Quarter to date**                                |
+| Calendar years    | **This year**, **Last year**, **Next year**, **Year to date**                                            |
+| Full history      | **All time**                                                                                             |
+
+**Next 7 days**, **Next 30 days** and **Next 90 days** include today. For example, **Next 7 days** runs from today through six days from today. **Next week**, **Next month**, **Next quarter** and **Next year** select the next complete calendar period.
+
+Check the dates, click **Apply** to close the calendar, then click **Save** in the report header and wait for **Saved**. A report-wide preset sets concrete start and end dates. Those dates stay the same when you reopen the saved report. To keep one block's period moving with the current date, use a [relative block range](#choose-dates-for-one-block).
+
+On a phone or short screen, scroll inside the calendar to reach the remaining dates. **Apply** and **Cancel** stay at the bottom of the calendar. If **Quick select** is open, press **Escape** to close its list first; the calendar stays open.
+
+The following branch previews show the same calendar in **Planner Table** settings, with loaded controls in MSPortal Demo.
+
+{/* Preview source: app branch t3/reporting-date-picker-layout, commit 0266eb6138636aff19b162aff2ae7f915f7fd1bd, docs/pr-previews/t3-reporting-date-picker-layout/. The six reporting-{calendar,presets,relative}-{desktop,mobile}.png captures are reused unchanged as images/product/reporting-{calendar,presets,relative}-{desktop,mobile}-preview.png below. Production follow-up remains open: after the app update is confirmed live, verify report-wide concrete dates and saved relative block ranges, recapture these six views in MSPortal Demo without development indicators, replace the same assets, reconcile the instructions, and remove the preview notice and captions. */}
+
+<Tabs>
+  <Tab title="Calendar on desktop">
+    <Frame caption="Branch preview: Planner Table's single-month calendar with Quick select inside it.">
+      <img
+        src="/images/product/reporting-calendar-desktop-preview.png"
+        alt="Planner Table settings with a January 2027 calendar, start and end date fields, Quick select, Apply and Cancel."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Calendar on phone">
+    <Frame caption="Branch preview: the calendar scrolls while Apply and Cancel stay visible on a phone.">
+      <img
+        src="/images/product/reporting-calendar-mobile-preview.png"
+        alt="Phone Planner Table settings with the compact calendar and visible Apply and Cancel buttons below the scrollable dates."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Presets on desktop">
+    <Frame caption="Branch preview: Quick select includes past and future periods.">
+      <img
+        src="/images/product/reporting-presets-desktop-preview.png"
+        alt="Quick select menu inside the Planner Table calendar, including Tomorrow, Next 7 days and Next 30 days."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Presets on phone">
+    <Frame caption="Branch preview: scroll the Quick select list for more periods on a phone.">
+      <img
+        src="/images/product/reporting-presets-mobile-preview.png"
+        alt="Phone Planner Table calendar with its Quick select list open and future day presets visible."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+### Choose dates for one block
+
+Open a block's gear. In **General**, **View**, **Block title** and **Header size** control its presentation; the fields wrap to fit a phone. Blocks that use dates also offer a **Date range** selector with the same relative presets listed above.
+
+| Choice                                                          | What happens                                                                                                                                                                     |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Use report date range**                                       | The block follows the report's dates. Choose this to clear a separate block range.                                                                                               |
+| A relative preset, such as **Next 30 days** or **Next quarter** | The block keeps the chosen period and calculates its dates when the report is rendered. The period continues to move after saving and reopening, including in scheduled reports. |
+| **Last N days (custom)**                                        | Set a rolling window of 1 to 1,825 days.                                                                                                                                         |
+| **Fixed date range**                                            | Pick concrete start and end dates. Quick select inside this fixed-range calendar is a shortcut for filling those dates; it does not make them relative.                          |
+| **All available data**                                          | Use the widest supported history for this block.                                                                                                                                            |
+
+**Planner Table**, and the older **Roadmap** block in saved reports, have their own **Date Range** calendar. Open **Quick select** inside that calendar to save a relative preset. For example, choosing **Next quarter** in October 2026 covers January 1–March 31, 2027. It remains **Next quarter** when saved and reloaded, so its dates move as time passes. Selecting specific dates keeps a fixed range. Existing reports with saved fixed dates still open with those dates. Clear the field with **X** to return to the report's range.
+
+After changing a block, close its settings, click **Save** in the report header and wait for **Saved**. A block with its own range can show a different period from the rest of the report. Check it before sharing or exporting. Blocks that show a current snapshot do not offer this date-range selector.
+
+<Tabs>
+  <Tab title="Block range on desktop">
+    <Frame caption="Branch preview: Completed Tickets by Week uses its own Next 30 days range.">
+      <img
+        src="/images/product/reporting-relative-desktop-preview.png"
+        alt="Completed Tickets by Week settings with Date range set to Next 30 days and a hint that the block uses its own range."
+        width="1440"
+        height="960"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Block range on phone">
+    <Frame caption="Branch preview: General settings and the relative Date range selector wrap on a phone.">
+      <img
+        src="/images/product/reporting-relative-mobile-preview.png"
+        alt="Phone Completed Tickets by Week settings with readable View, Block title, Header size and Next 30 days controls."
+        width="390"
+        height="844"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ### Edit on a narrow screen
 
@@ -173,6 +386,10 @@ The paper follows your portal's light or dark appearance, including **Follow ope
 <Frame caption="Scroll across the paper on a phone to edit at a readable size.">
   <img src="/images/product/theme-merge-report-mobile.png" alt="Phone report editor showing the left side of full-width paper without overlapping text and chart values." width="390" height="844" />
 </Frame>
+
+## Brand a full report
+
+A **Full Report** title page and its presentation slides follow a brand package: a named set of colors, fonts, logo, cover image, background pattern and title page style. Create packages by hand or with **Build with AI** in **Settings > Reports > Brand packages**, then pick one under **Appearance & output > Visual theme > Brand package** when you create the report. See [Brand packages](/user-guides/reporting/brand-packages).
 
 ## Design a custom block
 
@@ -521,7 +738,7 @@ Select **Email domain checks** in the security provider filters to include the s
     No. It is a label. Use undo and redo for the current session and keep a copy before large changes.
   </Accordion>
   <Accordion title="Does changing the date range rewrite AI narrative?">
-    No. Data blocks follow the date range. Generated text does not change on its own, so regenerate it and check it matches the period.
+    No. Date-aware blocks follow the report's range unless they have their own range. Current-snapshot blocks keep showing the current state. Generated text does not change on its own, so regenerate it and check it matches the period.
   </Accordion>
   <Accordion title="Does a shared link give a client access?">
     No. The recipient needs access to the report and its company. A downloaded PDF is a separate copy, so choose who receives it.
@@ -530,12 +747,13 @@ Select **Email domain checks** in the security provider filters to include the s
     Wait for the blocks to load, confirm the company and period, look at every page for clipping or empty data, and review the narrative and branding.
   </Accordion>
   <Accordion title="Where do I upload the logo?">
-    Your tenant logo comes from your tenant settings. Check the **Company Logo** block and the exported PDF to confirm it appears.
+    Your tenant logo comes from your tenant settings. Check the **Company Logo** block and the exported PDF to confirm it appears. A [brand package](/user-guides/reporting/brand-packages) can set its own logo for full report title pages and slides.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
+- [Brand packages](/user-guides/reporting/brand-packages)
 - [Reports Imports](/user-guides/reporting/email-imports)
 - [Company Overview](/user-guides/company-overview/index)
 - [Compliance](/user-guides/compliance/index)
