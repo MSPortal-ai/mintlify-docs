@@ -174,7 +174,7 @@ Billing portal sign-on adds an **Open billing portal** button to **Invoices** fo
 </Steps>
 
 <Note>
-  Only clients see **Open billing portal**. MSP staff don't, and neither does anyone impersonating a client, because the portal always signs in the person who clicks. Clients whose MSPortal email isn't confirmed yet are asked by Benji Pays to verify it the first time.
+  Only clients see **Open billing portal**; MSP staff don't. To test it, impersonate a client: the button signs you in to Benji Pays as that client. Clients whose MSPortal email isn't confirmed yet are asked by Benji Pays to verify it the first time.
 </Note>
 
 ## Turning features on or off
@@ -224,7 +224,7 @@ Disconnecting removes the Pay Now buttons and the **Open billing portal** button
 | "Use the HTTPS callback URL from BenjiPays. It ends in /callbackjwt." | Copy the **Login Redirect URL** from Benji Pays exactly, with nothing after `/callbackjwt`. |
 | "The client secret must be at least 16 characters" | Re-copy **CLIENTSECRET** from the Benji Pays SSO configuration in full. |
 | **Save portal settings** stays greyed out | Fill in every field. **Callback URL** must be the **Login Redirect URL** from Benji Pays: `https://`, ending in `/callbackjwt`, with nothing after it. The first time you enable sign-in, **Client secret** is required. |
-| No **Open billing portal** button for a client | Check **Enable billing portal sign-in** is on and saved in **Configure BenjiPays**. The button shows only for clients signed in as themselves, never for MSP staff or while impersonating. |
+| No **Open billing portal** button for a client | Check **Enable billing portal sign-in** is on and saved in **Configure BenjiPays**. The button shows only for clients, or for MSP staff while impersonating a client, never for staff signed in as themselves. |
 | Client sees "Your email is not linked to a BenjiPays billing account" | Benji Pays has no billing account with that client's MSPortal email. Add the email to the client's billing account in Benji Pays. |
 | Client sees "Your billing account is disabled" | The account is disabled in Benji Pays. Re-enable it there. |
 | Client sees "BenjiPays requires email verification" | The client follows the verification email from Benji Pays, then clicks **Open billing portal** again. |
@@ -237,7 +237,7 @@ Disconnecting removes the Pay Now buttons and the **Open billing portal** button
 | View the BenjiPays setup | `read_settings_integrations` (Integrations settings access) |
 | Save, change, turn features on or off, or disconnect BenjiPays | `manage_settings_integrations` |
 | See Pay Now buttons on **Invoices** | `read_invoices` |
-| Open the billing portal from **Invoices** | A client account with `read_invoices`, signed in as themselves |
+| Open the billing portal from **Invoices** | A client account with `read_invoices`, signed in or impersonated |
 
 Anyone who can view invoices can see the saved payment link, because it's the link behind the Pay Now button. Users without `manage_settings_integrations` see the setup as read-only.
 

@@ -15,7 +15,7 @@ MSPortal only reads from Action1. It never deploys updates, runs scripts or rebo
 ## What the integration covers
 
 - **Covered:** Action1 organizations and their endpoints, missing updates and pending reboots, open vulnerabilities, and installed software.
-- **Not covered:** update deployment, automation and remote actions. Endpoints link to the devices other sources already report and add a device only when nothing matches, so an RMM that reports the same machine stays its main source. The device details have no Action1-specific section.
+- **Not covered:** update deployment, automation and remote actions. Endpoints link to the devices other sources already report, so an RMM that reports the same machine stays its main source. An endpoint that matches nothing becomes a device only for a type you turn on **Auto-import** for. The device details have no Action1-specific section.
 
 ## Before you connect
 
@@ -51,16 +51,11 @@ Endpoints, patch status, vulnerabilities and software appear only for matched or
 
 ## Import devices
 
-Open **Import devices**. The **Endpoints and devices** page shows the last sync:
+Each sync links an endpoint to the device another source already reports, by serial number, MAC address or hostname within its company. Endpoints with no match wait on **Import devices** until you decide:
 
-| Row | What it counts |
-| --- | --- |
-| **Endpoints in matched organizations** | Endpoints whose Action1 organization is matched to a company. |
-| **Endpoints linked to devices** | Endpoints joined to an existing device or added as a new one. |
-| **Endpoints missing updates** | Endpoints missing at least one critical or other update. |
-| **Endpoints waiting for a reboot** | Endpoints with updates installed that have not restarted. |
-
-Map each endpoint type, such as Windows Server, Windows Workstation, Mac or Linux, to a device type so new devices get the right type. Each sync links an endpoint to the device another source already reports, by serial number, MAC address or hostname within its company. An endpoint with no match becomes a new device. Choose **Sync All Data** to sync now.
+1. In **Match device types**, choose the MSPortal device type for each endpoint type, such as Windows Server, Windows Workstation, Mac or Linux, or use **Match all suggested**. **Ignore** a type you never want as devices.
+2. In **Staged devices**, select endpoints and import them, or use **Import all matched**. An endpoint imports only once its organization is matched to a company and its type has a device type. **Ignore** endpoints you do not want.
+3. Turn on **Auto-import** for a type to have each sync add its new endpoints automatically. With it off, new endpoints of that type stay staged.
 
 ## Where the data appears
 
