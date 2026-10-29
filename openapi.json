@@ -8890,7 +8890,8 @@
             "type": "array",
             "items": {
               "type": "string",
-              "maxLength": 254
+              "maxLength": 254,
+              "format": "email"
             },
             "maxItems": 6,
             "description": "On a rejection, email the whole request to these addresses: your own, or ones the chain allows"
@@ -22219,8 +22220,17 @@
             "description": "Portal user to assign (must exist in this tenant)"
           },
           "dueDate": {
-            "type": "string",
-            "description": "ISO 8601"
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "description": "ISO 8601 date (YYYY-MM-DD) or date-time with offset"
           },
           "priority": {
             "type": "string",
@@ -22262,8 +22272,17 @@
             "description": "Portal user to assign (must exist in this tenant)"
           },
           "dueDate": {
-            "type": "string",
-            "description": "ISO 8601"
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ],
+            "description": "ISO 8601 date (YYYY-MM-DD) or date-time with offset"
           },
           "priority": {
             "type": "string",
@@ -22293,6 +22312,18 @@
                     "userId": {
                       "type": "string",
                       "format": "uuid"
+                    },
+                    "roleId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "attendeeType": {
+                      "type": "string",
+                      "enum": [
+                        "required",
+                        "optional",
+                        "resource"
+                      ]
                     }
                   },
                   "required": [
@@ -22306,6 +22337,18 @@
                     "email": {
                       "type": "string",
                       "format": "email"
+                    },
+                    "roleId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "attendeeType": {
+                      "type": "string",
+                      "enum": [
+                        "required",
+                        "optional",
+                        "resource"
+                      ]
                     }
                   },
                   "required": [
@@ -29524,17 +29567,21 @@
           },
           "costUnit": {
             "type": "string",
+            "nullable": true,
             "enum": [
               "per_client",
               "per_user",
-              "per_device"
+              "per_device",
+              null
             ]
           },
           "costRecurrence": {
             "type": "string",
+            "nullable": true,
             "enum": [
               "monthly",
-              "annual"
+              "annual",
+              null
             ]
           }
         },
@@ -43223,6 +43270,7 @@
           {
             "schema": {
               "type": "integer",
+              "maximum": 100000,
               "minimum": 1,
               "default": 1,
               "description": "Page number"
@@ -43464,6 +43512,7 @@
           {
             "schema": {
               "type": "integer",
+              "maximum": 100000,
               "minimum": 1,
               "default": 1,
               "description": "Page number"
@@ -50619,7 +50668,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (reports.write) or the linked user lacks the module permission",
+            "description": "Forbidden - missing scope (reports.write) or the linked user lacks manage_reporting (hard deletes are manage-level, as in the app)",
             "content": {
               "application/json": {
                 "schema": {
@@ -54691,10 +54740,10 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "description": "Inclusive ISO-8601 start; defaults to 24 hours ago"
+              "description": "Inclusive ISO-8601 start; defaults to 24 hours before dateTo (or before now when dateTo is omitted)"
             },
             "required": false,
-            "description": "Inclusive ISO-8601 start; defaults to 24 hours ago",
+            "description": "Inclusive ISO-8601 start; defaults to 24 hours before dateTo (or before now when dateTo is omitted)",
             "name": "dateFrom",
             "in": "query"
           },
@@ -67892,11 +67941,10 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "default": 1,
-              "description": "Page number"
+              "maximum": 100000,
+              "default": 1
             },
             "required": false,
-            "description": "Page number",
             "name": "page",
             "in": "query"
           },
@@ -71152,7 +71200,23 @@
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/components/schemas/StandardsSetupChangeResult"
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/StandardsSetupChangeResult"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "version": {
+                              "type": "string",
+                              "description": "Version after this write; send it as expectedVersion on the next PUT"
+                            }
+                          },
+                          "required": [
+                            "version"
+                          ]
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -73932,7 +73996,9 @@
                 "project_score",
                 "tool_stack_score",
                 "environment_score",
-                "operational_score"
+                "operational_score",
+                "company_name",
+                "risk_level"
               ],
               "default": "health_score",
               "description": "Sort column"
@@ -74220,10 +74286,11 @@
                   "backup"
                 ]
               },
-              "description": "Metrics to return, in order (repeat the key or comma-separate; default health, patch, backup)"
+              "description": "Metrics to return, in order, each at most once (repeat the key or comma-separate; default health, patch, backup)",
+              "uniqueItems": true
             },
             "required": false,
-            "description": "Metrics to return, in order (repeat the key or comma-separate; default health, patch, backup)",
+            "description": "Metrics to return, in order, each at most once (repeat the key or comma-separate; default health, patch, backup)",
             "name": "metric",
             "in": "query"
           },
@@ -75088,6 +75155,16 @@
             },
             "required": false,
             "name": "scope",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
             "in": "query"
           },
           {
