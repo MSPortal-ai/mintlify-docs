@@ -1806,7 +1806,7 @@
             },
             "maxItems": 50,
             "default": [],
-            "description": "User ids of named client approvers (max 50), from approver-options"
+            "description": "User ids of named client approvers (max 50), from approver-options: company-user records, signed in before or not. Someone who has never signed in gets the request by email."
           },
           "approverCompanyRoleId": {
             "type": "string",
@@ -28720,6 +28720,199 @@
           "isClientVisible"
         ]
       },
+      "UploadInvoiceRequest": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Your system's id for the record. Pushing the same externalId again updates the record instead of creating a second one."
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "2026-1042"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "MSPortal company (client) id, from GET /api/public/v1/companies. Its portal users see the record."
+          },
+          "invoiceDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "example": "2026-10-01"
+          },
+          "dueDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "paidDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Set when paid; marks the invoice closed"
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Status shown in the table",
+            "example": "Open"
+          },
+          "invoiceType": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Defaults to Standard"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Za-z]{3}$",
+            "description": "ISO 4217 currency code",
+            "example": "EUR"
+          },
+          "total": {
+            "type": "number",
+            "description": "Invoice total; must be greater than 0",
+            "example": 1190
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "salesTax": {
+            "type": "number"
+          },
+          "payments": {
+            "type": "number"
+          },
+          "balance": {
+            "type": "number",
+            "description": "Amount still due; defaults to total"
+          },
+          "reference": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "customerPo": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "pdf": {
+            "$ref": "#/components/schemas/FinancialUploadPdf"
+          }
+        },
+        "required": [
+          "externalId",
+          "invoiceNumber",
+          "companyId",
+          "invoiceDate",
+          "total"
+        ]
+      },
+      "FinancialUploadPdf": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "File name ending in .pdf",
+            "example": "invoice-2026-1042.pdf"
+          },
+          "contentBase64": {
+            "type": "string",
+            "description": "The PDF's bytes as standard base64 (no data: prefix), at most 3,000,000 bytes decoded"
+          }
+        },
+        "required": [
+          "fileName",
+          "contentBase64"
+        ],
+        "description": "The document the client opens in the portal. Required the first time an externalId is pushed; omit it on a later push to keep the stored PDF."
+      },
+      "UploadQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Your system's id for the record. Pushing the same externalId again updates the record instead of creating a second one."
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "MSPortal company (client) id, from GET /api/public/v1/companies. Its portal users see the record."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "example": "Firewall refresh"
+          },
+          "number": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "A-77"
+          },
+          "stage": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Stage shown in the table, e.g. Draft, Sent, Won, Lost. Roles that limit quotes to some stages hide quotes without one."
+          },
+          "ownerName": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "MSP staff member who owns the quote"
+          },
+          "contactName": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Client contact the quote is for. Roles limited to their own quotes match it against the portal user's full name."
+          },
+          "oneTimeTotal": {
+            "type": "number"
+          },
+          "monthlyTotal": {
+            "type": "number"
+          },
+          "annualTotal": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Za-z]{3}$",
+            "description": "ISO 4217 currency code",
+            "example": "EUR"
+          },
+          "quoteDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the quote was created (ISO 8601); defaults to now"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "wonAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional https link to the quote in your system"
+          },
+          "pdf": {
+            "$ref": "#/components/schemas/FinancialUploadPdf"
+          }
+        },
+        "required": [
+          "externalId",
+          "companyId",
+          "name"
+        ]
+      },
       "IntegrationDetail": {
         "allOf": [
           {
@@ -29289,6 +29482,57 @@
         "required": [
           "roleIds"
         ]
+      },
+      "DocumentationFileUploadRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Title shown in the documentation library, e.g. 'Invoice 2026-1042'",
+            "example": "Invoice 2026-1042"
+          },
+          "fileName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "File name with its extension: .pdf, .docx, .xlsx, .xls or .csv",
+            "example": "invoice-2026-1042.pdf"
+          },
+          "fileSize": {
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "maximum": 52428800,
+            "description": "Exact size in bytes, at most 50 MiB",
+            "example": 48213
+          },
+          "contentType": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "MIME type of the file. The response's contentType is the one to send on the PUT.",
+            "example": "application/pdf"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Company (client) the document belongs to; its portal users can open it. Required unless folderId is a folder pinned to a company: a file without a company would be visible to every client, so it is refused."
+          },
+          "folderId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Custom folder ID (the UUID of a custom:<uuid> key from the folders endpoint), e.g. an 'Invoices' folder. A folder pinned to a company only accepts that company."
+          }
+        },
+        "required": [
+          "name",
+          "fileName",
+          "fileSize",
+          "contentType"
+        ],
+        "description": "Send the same body to prepare and finalize; finalize checks the stored bytes against it."
       },
       "NotificationReadStateResult": {
         "type": "object",
@@ -66456,7 +66700,7 @@
     "/api/public/v1/financial/quotes": {
       "get": {
         "summary": "List quotes",
-        "description": "Quotes from active quoting integrations with stage, owner, company and monthly/annual/one-time totals, paginated. Read-only: quotes are created and managed in the source quoting provider. Requires `financial.read`, the linked user's read_quotes permission and an active PSA or quoting integration.",
+        "description": "Quotes from active quoting integrations and quotes uploaded through POST /api/public/v1/financial/quotes (sourceProvider api), with stage, owner, company and monthly/annual/one-time totals, paginated. Requires `financial.read`, the linked user's read_quotes permission and an active PSA or quoting integration.",
         "tags": [
           "Financial"
         ],
@@ -66617,6 +66861,154 @@
             }
           }
         }
+      },
+      "post": {
+        "summary": "Upload quote",
+        "description": "Create or update one quote with its PDF from your own quoting system. It lists in the Quotes table with the synced ones, and the company's portal users can open the PDF there. Send the PDF inline as base64. The record is keyed by externalId: push it again to update it, for example when its stage changes; omit pdf to keep the stored one. Requires `financial.write` and the linked user's write_settings_integrations permission; staff API keys only. No PSA or quoting integration is needed.",
+        "tags": [
+          "Financial"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadQuoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "quote updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "MSPortal id; use it to delete the record"
+                        },
+                        "externalId": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "boolean",
+                          "description": "true when created, false when updated"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "externalId",
+                        "created"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "quote created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "MSPortal id; use it to delete the record"
+                        },
+                        "externalId": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "boolean",
+                          "description": "true when created, false when updated"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "externalId",
+                        "created"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (financial.write), a company-user key, or the linked user lacks write_settings_integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The PDF is larger than 3,000,000 bytes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/public/v1/financial/quotes/{id}": {
@@ -66704,12 +67096,123 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": "Delete uploaded quote",
+        "description": "Delete a quote uploaded through POST /api/public/v1/financial/quotes, with its PDF.  Requires `financial.write` and the linked user's write_settings_integrations permission; staff API keys only. No PSA or quoting integration is needed.",
+        "tags": [
+          "Financial"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "MSPortal quote id"
+            },
+            "required": true,
+            "description": "MSPortal quote id",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "quote deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "deleted": {
+                          "type": "boolean",
+                          "enum": [
+                            true
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "deleted"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (financial.write), a company-user key, or the linked user lacks write_settings_integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "quote not found or not uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The PDF is larger than 3,000,000 bytes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/public/v1/financial/invoices": {
       "get": {
         "summary": "List invoices",
-        "description": "PSA-synced invoices with status, type, dates, totals, payments and balances, paginated. Read-only: invoices are owned by the PSA. Requires the linked user's read_invoices permission.",
+        "description": "PSA-synced invoices and invoices uploaded through POST /api/public/v1/financial/invoices (provider api), with status, type, dates, totals, payments and balances, paginated. Requires the linked user's read_invoices permission.",
         "tags": [
           "Financial"
         ],
@@ -66917,6 +67420,154 @@
             }
           }
         }
+      },
+      "post": {
+        "summary": "Upload invoice",
+        "description": "Create or update one invoice with its PDF from your own billing system. It lists in the Invoices table with the synced ones, and the company's portal users can open the PDF there. Send the PDF inline as base64. The record is keyed by externalId: push it again to update it, for example when it is paid; omit pdf to keep the stored one. Requires `financial.write` and the linked user's write_settings_integrations permission; staff API keys only. No PSA or quoting integration is needed.",
+        "tags": [
+          "Financial"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadInvoiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "invoice updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "MSPortal id; use it to delete the record"
+                        },
+                        "externalId": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "boolean",
+                          "description": "true when created, false when updated"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "externalId",
+                        "created"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "invoice created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "MSPortal id; use it to delete the record"
+                        },
+                        "externalId": {
+                          "type": "string"
+                        },
+                        "created": {
+                          "type": "boolean",
+                          "description": "true when created, false when updated"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "externalId",
+                        "created"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (financial.write), a company-user key, or the linked user lacks write_settings_integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The PDF is larger than 3,000,000 bytes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/public/v1/financial/invoices/summary": {
@@ -67083,6 +67734,117 @@
           },
           "404": {
             "description": "Invoice not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete uploaded invoice",
+        "description": "Delete a invoice uploaded through POST /api/public/v1/financial/invoices, with its PDF. Invoices synced from a PSA answer 404. Requires `financial.write` and the linked user's write_settings_integrations permission; staff API keys only. No PSA or quoting integration is needed.",
+        "tags": [
+          "Financial"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "MSPortal invoice id"
+            },
+            "required": true,
+            "description": "MSPortal invoice id",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "invoice deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "deleted": {
+                          "type": "boolean",
+                          "enum": [
+                            true
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "deleted"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (financial.write), a company-user key, or the linked user lacks write_settings_integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "invoice not found or not uploaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The PDF is larger than 3,000,000 bytes",
             "content": {
               "application/json": {
                 "schema": {
@@ -68446,6 +69208,262 @@
           },
           "404": {
             "description": "Page or role not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/documentation/files": {
+      "post": {
+        "summary": "Prepare documentation file upload",
+        "description": "Start uploading a file (an invoice, quote, order or any PDF, DOCX, XLSX, XLS or CSV up to 50 MiB) into a company's documentation library. Returns a documentId and a signed uploadUrl valid for 2 hours. Step 2: PUT the raw bytes to uploadUrl with `Content-Type` set to the returned contentType (no Authorization header). Step 3: POST /api/public/v1/documentation/files/{documentId}/finalize with the same body. Nothing is visible until finalized. Requires `documentation.write` and the linked user's write_settings_documentation permission; staff API keys only.",
+        "tags": [
+          "Documentation"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentationFileUploadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Upload prepared",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "documentId": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "ID the document gets on finalize"
+                        },
+                        "uploadUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "Signed storage URL; PUT the raw bytes here"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "description": "Content-Type to send on the PUT and keep for finalize"
+                        },
+                        "fileSize": {
+                          "type": "integer"
+                        },
+                        "instructions": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "documentId",
+                        "uploadUrl",
+                        "contentType",
+                        "fileSize",
+                        "instructions"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the permission named in the endpoint description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company or folder not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/documentation/files/{id}/finalize": {
+      "post": {
+        "summary": "Finalize documentation file upload",
+        "description": "Register the bytes PUT to uploadUrl as a file document in the documentation library. The stored size and type must match the body. Retrying with the same documentId returns the same document, so a timeout is safe to retry. The file is then listed by GET /api/public/v1/documentation/documents (source custom, documentKind file) and opens for that company's portal users under Documentation. Requires `documentation.write` and the linked user's write_settings_documentation permission; staff API keys only.",
+        "tags": [
+          "Documentation"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "documentId from the prepare call"
+            },
+            "required": true,
+            "description": "documentId from the prepare call",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentationFileUploadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "File document created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "companyId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "folderId": {
+                          "type": "string",
+                          "nullable": true,
+                          "format": "uuid"
+                        },
+                        "fileName": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "fileSize": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "companyId",
+                        "folderId",
+                        "fileName",
+                        "contentType",
+                        "fileSize"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the permission named in the endpoint description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company or folder not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This documentId already holds a different file",
             "content": {
               "application/json": {
                 "schema": {
