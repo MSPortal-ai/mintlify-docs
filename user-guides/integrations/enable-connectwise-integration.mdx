@@ -258,19 +258,19 @@ MSPortal checks which parts of ConnectWise your API member is allowed to read, a
 
 ### Choose data
 
-**Choose data** keeps each dataset and its filters together. Turning a dataset on reveals its settings directly below it; turning it off hides them without clearing saved choices. Each switch and selector saves when you change it. Wait for the saved state, and start the first sync when it is offered.
+**Choose data** lays its switches side by side in two groups, **Core data** and **Extended data**. Turning a dataset on reveals its settings below that group; turning it off hides them without clearing saved choices. Each switch and selector has an (i) beside its name: hover over, tap or focus it to read what the setting does. Each switch and selector saves when you change it. Wait for the saved state, and start the first sync when it is offered.
 
 | Option | Description |
 |--------|-------------|
-| **Sync Companies** | Sync company data from ConnectWise. Its company filters and company auto-import settings appear below it. |
-| **Sync Users** | Sync member and contact data from ConnectWise. Its contact auto-import settings appear below it. |
-| **Enable Opportunity Sync** | Sync opportunities from ConnectWise. Its Planner auto-import settings appear below it. |
+| **Sync Companies** | Sync company data from ConnectWise. Its company filters and company auto-import settings appear below the **Core data** row. |
+| **Sync Users** | Sync member and contact data from ConnectWise. Its contact auto-import settings appear below the **Core data** row. |
+| **Enable Opportunity Sync** | Sync opportunities from ConnectWise. Its **Auto-import to Planner** switch appears below the **Extended data** switches. |
 | **Enable Project Sync** | Sync projects from ConnectWise |
-| **Enable Invoice Sync** | Sync invoices from ConnectWise. Its invoice visibility settings appear below it. |
+| **Enable Invoice Sync** | Sync invoices from ConnectWise. **Hide invoice statuses** appears below the **Extended data** switches. |
 | **Sync product catalog** | Import the product and service catalog for quoting and budgets |
 | **Enable change management** | Import ConnectWise changes into the change calendar |
 | **Warranty writeback** | Write warranty data back to ConnectWise configurations when MSPortal resolves a device's warranty |
-| **Enable Ticket Sync** | Sync service tickets from ConnectWise. Its ticket scope appears below it. |
+| **Enable Ticket Sync** | Sync service tickets from ConnectWise. It sits in the **Core data** row, and its ticket scope appears below that row. |
 
 <Note>
   A toggle appears locked when the permission check found that your API member cannot read that data. Grant the permission named beside it in ConnectWise, then click **Re-check** on **Permissions** to unlock it.
@@ -289,17 +289,17 @@ MSPortal checks which parts of ConnectWise your API member is allowed to read, a
 
 **Company Auto-Import:** under **Auto-Import Company Types**, select the company types to create in the portal automatically during sync. MSPortal asks you to confirm before it imports a new batch, because companies are a billed item.
 
-**Contact Auto-Import:** turn on **Enable Auto-Import** to create user accounts for active contacts automatically when companies are added. Select a **Default Role for Imported Contacts**, and optionally map specific ConnectWise contact types to other portal roles. Unmapped types use the default role.
+**Contact Auto-Import:** turn on **Contact Auto-Import** to create user accounts for active contacts automatically when companies are added. Select a **Default Role for Imported Contacts**, and optionally use **Add rule** under **Portal roles by contact type** to give specific ConnectWise contact types other portal roles. Unmapped types use the default role.
 
 <Tip>
   We recommend choosing a role with minimal permissions if you plan to import all contacts.
 </Tip>
 
-**Planner auto-import:** under **Enable Opportunity Sync**, turn on **Auto-import opportunities into the Planner** to create a planner item for each new ConnectWise opportunity. Use **Minimum opportunity value** and **Opportunity types to auto-import** to limit which ones come through. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities).
+**Planner auto-import:** with **Enable Opportunity Sync** on, turn on **Auto-import to Planner** to create a planner item for each new ConnectWise opportunity. Use **Minimum opportunity value** and **Opportunity types to auto-import** to limit which ones come through. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities).
 
-**Invoice visibility:** under **Enable Invoice Sync**, choose the invoice statuses to hide from the Invoices page. Hiding a status does not stop those invoices from syncing.
+**Invoice visibility:** with **Enable Invoice Sync** on, use **Hide invoice statuses** to choose the invoice statuses to hide from the Invoices page. Hiding a status does not stop those invoices from syncing.
 
-**Ticket Sync Scope:** under **Enable Ticket Sync**, select the **Boards to Sync** and the statuses to exclude.
+**Ticket Sync Scope:** with **Enable Ticket Sync** on, select the **Boards to Sync** and the statuses to exclude.
 
 <Info>
   The first sync runs in the background and can take a few minutes, depending on the amount of data in your ConnectWise instance. Options in later tasks may be incomplete while it runs. Check errors and the connection's sync result before treating an empty list as final.
@@ -420,7 +420,7 @@ Only companies still mapped to this connection are affected. Unmapping a company
 | Permission errors | Verify the API member has the MSPortal security role assigned |
 | Sync not starting | Check the connection status. A paused connection must be reactivated before **Run sync** works. |
 | Tickets from wrong boards | Verify the correct boards are selected in **Ticket Sync Scope** |
-| Contacts not importing | Verify **Enable Auto-Import** is on and a default role is selected in **Choose data** |
+| Contacts not importing | Verify **Contact Auto-Import** is on and a default role is selected in **Choose data** |
 | New boards or statuses are missing | Run [Sync PSA data](/user-guides/integrations/connectwise-resync-psa-settings), then check the boards selected in **Choose data** |
 | Setup finished but records are absent | Check pending imports, background errors in **Sync activity** and the selected company |
 | Changing a project ticket status fails with a security error | Check **Project Tickets** > **Edit Level** on the API member's role. **Project Ticket Tasks** Edit is a different permission. |
