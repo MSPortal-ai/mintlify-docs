@@ -31585,6 +31585,12 @@
               ]
             },
             "maxItems": 50
+          },
+          "expectedVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Version returned by the previous PUT; when set, a concurrent change is a 409"
           }
         },
         "required": [
@@ -34357,7 +34363,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks manage_budgets (deleting a line is manage-level, as in the app)",
             "content": {
               "application/json": {
                 "schema": {
@@ -51410,7 +51416,17 @@
             }
           },
           "409": {
-            "description": "The schedule's report template is no longer available",
+            "description": "The schedule's report template is no longer available, or has no report type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "The run could not be queued (Trigger.dev unavailable); retry",
             "content": {
               "application/json": {
                 "schema": {
@@ -72030,14 +72046,14 @@
                           "type": "string",
                           "format": "uuid"
                         },
-                        "plans": {
+                        "saved": {
                           "type": "integer",
                           "description": "Distinct plans saved"
                         }
                       },
                       "required": [
                         "itemId",
-                        "plans"
+                        "saved"
                       ]
                     }
                   },
@@ -72944,14 +72960,14 @@
                           "type": "string",
                           "format": "uuid"
                         },
-                        "links": {
+                        "saved": {
                           "type": "integer",
                           "description": "Links stored after de-duplication"
                         }
                       },
                       "required": [
                         "itemId",
-                        "links"
+                        "saved"
                       ]
                     }
                   },
@@ -74084,7 +74100,7 @@
     "/api/public/v1/customer-success/client-health/summary": {
       "get": {
         "summary": "Get client health summary",
-        "description": "Portfolio-wide client health stats: average score, counts by risk level, average NPS, tool stack adoption and overdue invoices.",
+        "description": "Portfolio-wide client health stats: average score and counts by risk level. The NPS, tool stack adoption and overdue invoice fields are reserved and currently null / 0.",
         "tags": [
           "Customer Success"
         ],
@@ -75484,6 +75500,16 @@
           },
           "403": {
             "description": "Forbidden - missing scope (tasks.write), the linked user is not MSP staff, or the task is not theirs to change",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task not found",
             "content": {
               "application/json": {
                 "schema": {
