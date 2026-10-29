@@ -5646,37 +5646,47 @@
             "type": "object",
             "properties": {
               "total_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "patched_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "pending_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "reboot_required_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "failed_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "no_policy_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "unknown_devices": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "patch_coverage": {
                 "type": "number"
               },
               "pending_patches": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "not_approved_patches": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "installed_patches": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "device_type_breakdown": {
                 "type": "array",
@@ -6002,14 +6012,17 @@
           },
           "joinType": {
             "type": "string",
+            "nullable": true,
             "enum": [
               "entra_joined",
               "hybrid_joined",
-              "entra_registered"
+              "entra_registered",
+              null
             ]
           },
           "complianceState": {
             "type": "string",
+            "nullable": true,
             "enum": [
               "compliant",
               "noncompliant",
@@ -6017,14 +6030,17 @@
               "conflict",
               "error",
               "config_manager",
-              "unknown"
+              "unknown",
+              null
             ]
           },
           "ownership": {
             "type": "string",
+            "nullable": true,
             "enum": [
               "company",
-              "personal"
+              "personal",
+              null
             ]
           },
           "operatingSystem": {
@@ -8439,6 +8455,45 @@
           "provider": {
             "type": "string"
           },
+          "recipientDelivery": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "none"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "sent",
+                      "queued",
+                      "failed"
+                    ]
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "status",
+                  "count"
+                ]
+              }
+            ],
+            "description": "What happened to the CC recipients: none requested, sent/queued, or failed (the note is still posted)"
+          },
           "statusUpdate": {
             "type": "object",
             "nullable": true,
@@ -8483,7 +8538,8 @@
         "required": [
           "posted",
           "ticketId",
-          "provider"
+          "provider",
+          "recipientDelivery"
         ]
       },
       "UpdateTicketStatusRequest": {
@@ -17727,7 +17783,9 @@
             "type": "string"
           },
           "provider": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Set only when groupBy=provider"
           },
           "amount": {
             "type": "number"
@@ -21884,17 +21942,7 @@
           },
           "itemType": {
             "type": "string",
-            "enum": [
-              "divider",
-              "text_block",
-              "planner",
-              "compliance",
-              "goal",
-              "budget",
-              "report",
-              "training",
-              "device"
-            ]
+            "description": "One of the API entry types (divider, text_block, planner, compliance, goal, budget, report, training, device) or an item type created in the app (ticket, secure_score, survey_outcome)"
           },
           "position": {
             "type": "integer"
@@ -22108,8 +22156,13 @@
               "pending",
               "in_progress",
               "completed",
-              "cancelled"
-            ]
+              "cancelled",
+              "ToDo",
+              "InProgress",
+              "Completed",
+              "Blocked"
+            ],
+            "description": "Legacy items may carry ToDo, InProgress, Completed or Blocked"
           },
           "priority": {
             "type": "string",
@@ -22233,11 +22286,38 @@
           "participants": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreateMeetingParticipantInput"
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "required": [
+                    "userId"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
             },
             "minItems": 1,
             "maxItems": 100,
-            "description": "Each a tenant userId or an external email; already-attached attendees are skipped"
+            "description": "Each exactly one of a tenant userId or an external email; already-attached attendees are skipped"
           }
         },
         "required": [
@@ -22457,26 +22537,52 @@
         ]
       },
       "BusinessReviewTargetPeriod": {
-        "type": "object",
-        "nullable": true,
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "month",
-              "quarter"
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "month"
+                ]
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12,
+                "description": "Month 1-12"
+              }
+            },
+            "required": [
+              "type",
+              "value"
             ]
           },
-          "value": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 12,
-            "description": "Month 1-12, or quarter 1-4"
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "quarter"
+                ]
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4,
+                "description": "Quarter 1-4"
+              }
+            },
+            "required": [
+              "type",
+              "value"
+            ]
+          },
+          {
+            "nullable": true
           }
-        },
-        "required": [
-          "type",
-          "value"
         ]
       },
       "BusinessReviewTargetsResult": {
@@ -24642,7 +24748,7 @@
               "email",
               "sign_in"
             ],
-            "description": "Who can respond (default email)"
+            "description": "Who can respond; omitted keeps the current mode"
           },
           "isEnabled": {
             "type": "boolean",
@@ -24815,6 +24921,10 @@
             "type": "string",
             "nullable": true
           },
+          "updatedAt": {
+            "type": "string",
+            "description": "Version token to send as expectedUpdatedAt on the decision endpoint"
+          },
           "response": {
             "type": "object",
             "properties": {
@@ -24929,6 +25039,7 @@
           "explanation",
           "closedBy",
           "closedAt",
+          "updatedAt",
           "response",
           "history",
           "canAct"
@@ -25919,7 +26030,8 @@
                   "type": "string"
                 },
                 "weeksLeft": {
-                  "type": "integer"
+                  "type": "number",
+                  "description": "Remaining days / 7, two decimals"
                 },
                 "team": {
                   "type": "object",
@@ -27057,6 +27169,7 @@
           },
           "bodyHtml": {
             "type": "string",
+            "maxLength": 2000000,
             "description": "HTML, sanitized on save"
           },
           "iconKey": {
@@ -27107,7 +27220,8 @@
             "maxLength": 500
           },
           "bodyHtml": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 2000000
           },
           "iconKey": {
             "type": "string",
@@ -28240,7 +28354,7 @@
         "properties": {
           "typeKey": {
             "type": "string",
-            "format": "uuid"
+            "description": "Task type key (UUID-shaped hash from GET; not RFC 4122)"
           },
           "values": {
             "type": "object",
@@ -28720,7 +28834,15 @@
           },
           "overall": {
             "type": "string",
-            "description": "pass, warn, fail, unknown (domain not in DNS) or pending (not checked yet)"
+            "enum": [
+              "pass",
+              "warn",
+              "fail",
+              "unknown",
+              "error",
+              "pending"
+            ],
+            "description": "pass, warn, fail, unknown (domain not in DNS), error or pending (not checked yet)"
           },
           "checks": {
             "type": "object",
@@ -28728,36 +28850,99 @@
               "spf": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "dmarc": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "dkim": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "mta_sts": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "tls_rpt": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "dnssec": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               },
               "bimi": {
                 "type": "string",
                 "nullable": true,
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "missing",
+                  "unknown",
+                  "error",
+                  null
+                ],
                 "description": "pass, warn, fail, missing, unknown or error"
               }
             },
@@ -31693,7 +31878,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Fields that changed"
+            "description": "Fields applied from the request (listed even when the stored value was already equal)"
           }
         },
         "required": [
@@ -31806,7 +31991,6 @@
         "properties": {
           "user_id": {
             "type": "string",
-            "nullable": true,
             "format": "uuid",
             "description": "Auth user id for owner_user_id"
           },
@@ -32602,11 +32786,16 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          "version": {
+            "type": "string",
+            "description": "Pass as expectedVersion on PUT to reject concurrent changes"
           }
         },
         "required": [
           "role",
-          "permissionIds"
+          "permissionIds",
+          "version"
         ]
       },
       "RolePermissionsResult": {
@@ -32632,6 +32821,10 @@
       "ReplaceRolePermissionsRequest": {
         "type": "object",
         "properties": {
+          "expectedVersion": {
+            "type": "string",
+            "description": "The version from GET; when set, a concurrent change since then returns 409"
+          },
           "permissionIds": {
             "type": "array",
             "items": {
@@ -33523,7 +33716,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.read)",
+            "description": "Forbidden - missing scope (budgets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -33587,7 +33780,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -33656,7 +33849,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.read)",
+            "description": "Forbidden - missing scope (budgets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -33743,7 +33936,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -33820,7 +34013,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -33919,7 +34112,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -34029,7 +34222,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -34117,7 +34310,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.write)",
+            "description": "Forbidden - missing scope (budgets.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -34183,7 +34376,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.read)",
+            "description": "Forbidden - missing scope (budgets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -34343,7 +34536,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.read)",
+            "description": "Forbidden - missing scope (budgets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -34424,7 +34617,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (budgets.read)",
+            "description": "Forbidden - missing scope (budgets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35411,7 +35604,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.read)",
+            "description": "Forbidden - missing scope (calendar.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35475,7 +35668,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.write)",
+            "description": "Forbidden - missing scope (calendar.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35544,7 +35737,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.read)",
+            "description": "Forbidden - missing scope (calendar.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35631,7 +35824,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.write)",
+            "description": "Forbidden - missing scope (calendar.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35750,7 +35943,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.write)",
+            "description": "Forbidden - missing scope (calendar.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35853,7 +36046,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.read)",
+            "description": "Forbidden - missing scope (calendar.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -35922,7 +36115,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (calendar.read)",
+            "description": "Forbidden - missing scope (calendar.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -37061,7 +37254,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "description": "With includeSuggestions, re-plan clients that already have a target"
             },
             "required": false,
@@ -37268,7 +37460,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false,
               "description": "Include assigned MSP team members on each company"
             },
@@ -37359,7 +37550,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope",
+            "description": "Forbidden - missing scope or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -37422,7 +37613,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope",
+            "description": "Forbidden - missing scope or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -37471,7 +37662,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false,
               "description": "Include assigned MSP team members"
             },
@@ -38154,7 +38344,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (company-users.read)",
+            "description": "Forbidden - missing scope (company-users.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -38218,7 +38408,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (company-users.write)",
+            "description": "Forbidden - missing scope (company-users.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -38297,7 +38487,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (company-users.read)",
+            "description": "Forbidden - missing scope (company-users.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -38422,7 +38612,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (compliance.read)",
+            "description": "Forbidden - missing scope (compliance.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -38851,7 +39041,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (compliance.read)",
+            "description": "Forbidden - missing scope (compliance.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -39068,7 +39258,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (compliance.write)",
+            "description": "Forbidden - missing scope (compliance.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -39182,7 +39372,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (compliance.read)",
+            "description": "Forbidden - missing scope (compliance.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -39644,7 +39834,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (compliance.read)",
+            "description": "Forbidden - missing scope (compliance.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -41643,7 +41833,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (dashboards.read)",
+            "description": "Forbidden - missing scope (dashboards.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -41706,7 +41896,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (dashboards.write)",
+            "description": "Forbidden - missing scope (dashboards.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -41930,7 +42120,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (dashboards.write)",
+            "description": "Forbidden - missing scope (dashboards.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42045,7 +42235,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (dashboards.read)",
+            "description": "Forbidden - missing scope (dashboards.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42304,7 +42494,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42373,7 +42563,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42478,7 +42668,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42547,7 +42737,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42663,7 +42853,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -42732,7 +42922,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (devices.read)",
+            "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -43148,7 +43338,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (devices.read) or the linked user lacks read_documentation, or no CIPP integration is active",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks read_documentation, or no CIPP integration is active",
             "content": {
               "application/json": {
                 "schema": {
@@ -43187,10 +43377,11 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
-              "default": true
+              "default": true,
+              "description": "Include the diff against the previous version (true/false, 1/0, yes/no)"
             },
             "required": false,
+            "description": "Include the diff against the previous version (true/false, 1/0, yes/no)",
             "name": "includeChanges",
             "in": "query"
           }
@@ -43235,7 +43426,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (devices.read) or the linked user lacks read_documentation, or no CIPP integration is active",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks read_documentation, or no CIPP integration is active",
             "content": {
               "application/json": {
                 "schema": {
@@ -43624,7 +43815,15 @@
                 "next_eol",
                 "category",
                 "lob",
-                "risk"
+                "risk",
+                "function",
+                "role",
+                "licensing",
+                "remote_control",
+                "unattended_access",
+                "file_sharing",
+                "privileged_services",
+                "credential_storage"
               ],
               "default": "attention"
             },
@@ -44139,7 +44338,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.read)",
+            "description": "Forbidden - missing scope (goals.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44203,7 +44402,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.write)",
+            "description": "Forbidden - missing scope (goals.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44272,7 +44471,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.read)",
+            "description": "Forbidden - missing scope (goals.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44359,7 +44558,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.write)",
+            "description": "Forbidden - missing scope (goals.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44426,7 +44625,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.write)",
+            "description": "Forbidden - missing scope (goals.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44482,7 +44681,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.read)",
+            "description": "Forbidden - missing scope (goals.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44528,7 +44727,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.read)",
+            "description": "Forbidden - missing scope (goals.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44574,7 +44773,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (goals.read)",
+            "description": "Forbidden - missing scope (goals.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -44708,7 +44907,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (surveys.read)",
+            "description": "Forbidden - missing scope (surveys.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -45723,6 +45922,16 @@
           },
           "404": {
             "description": "Survey not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Survey is not active",
             "content": {
               "application/json": {
                 "schema": {
@@ -46983,7 +47192,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (tickets.read)",
+            "description": "Forbidden - missing scope (tickets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -47189,7 +47398,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (tickets.read)",
+            "description": "Forbidden - missing scope (tickets.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -48774,7 +48983,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.read)",
+            "description": "Forbidden - missing scope (planner.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -48838,7 +49047,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.write)",
+            "description": "Forbidden - missing scope (planner.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -48907,7 +49116,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.read)",
+            "description": "Forbidden - missing scope (planner.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -48994,7 +49203,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.write)",
+            "description": "Forbidden - missing scope (planner.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -49061,7 +49270,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.write)",
+            "description": "Forbidden - missing scope (planner.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -49117,7 +49326,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.read)",
+            "description": "Forbidden - missing scope (planner.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -49186,7 +49395,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (planner.read)",
+            "description": "Forbidden - missing scope (planner.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50109,7 +50318,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50173,7 +50382,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.write)",
+            "description": "Forbidden - missing scope (reports.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50246,7 +50455,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50333,7 +50542,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.write)",
+            "description": "Forbidden - missing scope (reports.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50410,7 +50619,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.write)",
+            "description": "Forbidden - missing scope (reports.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50569,7 +50778,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50642,7 +50851,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50766,7 +50975,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50907,7 +51116,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -50966,7 +51175,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (reports.read)",
+            "description": "Forbidden - missing scope (reports.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51143,6 +51352,16 @@
           },
           "404": {
             "description": "Report schedule not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The schedule's report template is no longer available",
             "content": {
               "application/json": {
                 "schema": {
@@ -51339,7 +51558,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51403,7 +51622,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.write)",
+            "description": "Forbidden - missing scope (automation.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51472,7 +51691,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51559,7 +51778,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.write)",
+            "description": "Forbidden - missing scope (automation.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51626,7 +51845,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.write)",
+            "description": "Forbidden - missing scope (automation.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51715,7 +51934,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.write)",
+            "description": "Forbidden - missing scope (automation.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51846,7 +52065,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -51966,7 +52185,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -52012,7 +52231,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -52058,7 +52277,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (automation.read)",
+            "description": "Forbidden - missing scope (automation.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -52206,7 +52425,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (training.read)",
+            "description": "Forbidden - missing scope (training.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -52270,7 +52489,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (training.write)",
+            "description": "Forbidden - missing scope (training.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -53643,7 +53862,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (tenant-users.read)",
+            "description": "Forbidden - missing scope (tenant-users.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -53707,7 +53926,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (tenant-users.write)",
+            "description": "Forbidden - missing scope (tenant-users.write) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -53786,7 +54005,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (tenant-users.read)",
+            "description": "Forbidden - missing scope (tenant-users.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -54128,7 +54347,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (analytics.read)",
+            "description": "Forbidden - missing scope (analytics.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -54197,7 +54416,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (analytics.read)",
+            "description": "Forbidden - missing scope (analytics.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -54308,7 +54527,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (analytics.read)",
+            "description": "Forbidden - missing scope (analytics.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -54388,7 +54607,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - Missing required scope (analytics.read)",
+            "description": "Forbidden - missing scope (analytics.read) or the linked user lacks the module permission",
             "content": {
               "application/json": {
                 "schema": {
@@ -54415,8 +54634,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to one or more companies (repeat the key or comma-separate)"
             },
             "required": false,
@@ -54489,7 +54712,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false,
               "description": "Include background and integration activity"
             },
@@ -54604,8 +54826,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to one or more companies (repeat the key or comma-separate)"
             },
             "required": false,
@@ -54732,8 +54958,12 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to one or more companies (repeat the key or comma-separate)"
             },
             "required": false,
@@ -54821,8 +55051,12 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to one or more companies (repeat the key or comma-separate)"
             },
             "required": false,
@@ -56235,7 +56469,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -56313,7 +56546,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -57805,7 +58037,12 @@
           },
           {
             "schema": {
-              "type": "string",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
               "description": "PSA status values (repeat the key or comma-separate)"
             },
             "required": false,
@@ -57815,13 +58052,16 @@
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "on_track",
-                "at_risk",
-                "blocked",
-                "completed"
-              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "on_track",
+                  "at_risk",
+                  "blocked",
+                  "completed"
+                ]
+              },
               "description": "Overlay health status (repeatable)"
             },
             "required": false,
@@ -57832,7 +58072,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -57842,7 +58081,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -57852,7 +58090,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "description": "Only projects at risk, blocked, overdue or with pending client actions"
             },
             "required": false,
@@ -57974,7 +58211,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -58071,7 +58307,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": true
             },
             "required": false,
@@ -58081,7 +58316,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -58284,7 +58518,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -60854,7 +61087,7 @@
     "/api/public/v1/projects/{id}/status": {
       "put": {
         "summary": "Update project status",
-        "description": "Change a project's lifecycle status. PSA-backed projects are written through (ConnectWise / Autotask; Halo updates the portal cache only); native projects update in the portal. Target by PSA status name or external id, or by Kanban display group. Requires write_projects_status.",
+        "description": "Change a project's lifecycle status. PSA-backed projects are written through (ConnectWise, Autotask and Halo); native projects update in the portal. Target by PSA status name or external id, or by Kanban display group. Requires write_projects_status.",
         "tags": [
           "Projects"
         ],
@@ -61485,8 +61718,7 @@
           },
           {
             "schema": {
-              "type": "boolean",
-              "nullable": true
+              "type": "boolean"
             },
             "required": false,
             "name": "internalOnly",
@@ -61494,8 +61726,7 @@
           },
           {
             "schema": {
-              "type": "boolean",
-              "nullable": true
+              "type": "boolean"
             },
             "required": false,
             "name": "includeInScheduling",
@@ -61836,7 +62067,7 @@
     "/api/public/v1/projects/{id}/documents": {
       "get": {
         "summary": "List project documents",
-        "description": "The project's document library. Documents paginate with page/limit; folders return 100 at a time (continue with foldersOffset while hasMore). Staff only.",
+        "description": "The project's document library. Documents paginate with page/limit; folders return 100 at a time; pass nextFoldersOffset as foldersOffset while hasMore is true. Staff only.",
         "tags": [
           "Projects"
         ],
@@ -61936,7 +62167,12 @@
                       "type": "boolean"
                     },
                     "foldersOffset": {
-                      "type": "integer"
+                      "type": "integer",
+                      "description": "The folder offset this page was requested with"
+                    },
+                    "nextFoldersOffset": {
+                      "type": "integer",
+                      "description": "Folder offset for the next folder page"
                     }
                   },
                   "required": [
@@ -61944,7 +62180,8 @@
                     "pagination",
                     "folders",
                     "hasMore",
-                    "foldersOffset"
+                    "foldersOffset",
+                    "nextFoldersOffset"
                   ]
                 }
               }
@@ -63617,11 +63854,10 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 30,
-              "default": 30,
-              "description": "Trend lookback in days"
+              "description": "Trend lookback in days; defaults to the provider window (Kaseya 30, x360Cloud 7)"
             },
             "required": false,
-            "description": "Trend lookback in days",
+            "description": "Trend lookback in days; defaults to the provider window (Kaseya 30, x360Cloud 7)",
             "name": "days",
             "in": "query"
           },
@@ -64134,8 +64370,7 @@
           },
           {
             "schema": {
-              "type": "boolean",
-              "nullable": true
+              "type": "boolean"
             },
             "required": false,
             "name": "accountEnabled",
@@ -66140,8 +66375,12 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to these companies (repeat the key or comma-separate; at most 100)"
             },
             "required": false,
@@ -66389,8 +66628,12 @@
           },
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to these companies (repeat the key or comma-separate; at most 100)"
             },
             "required": false,
@@ -66573,8 +66816,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to these companies (repeat the key or comma-separate; at most 100)"
             },
             "required": false,
@@ -66744,8 +66991,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
               "description": "Limit to these companies (repeat the key or comma-separate; at most 100)"
             },
             "required": false,
@@ -66782,12 +67033,16 @@
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "halo",
-                "connectwise",
-                "autotask"
-              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "halo",
+                  "connectwise",
+                  "autotask"
+                ]
+              },
+              "maxItems": 3,
               "description": "Limit to these PSA providers (repeat the key or comma-separate; at most 3)"
             },
             "required": false,
@@ -67118,6 +67373,16 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "Integration is already paused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -67198,6 +67463,16 @@
           },
           "404": {
             "description": "Integration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Integration is not paused",
             "content": {
               "application/json": {
                 "schema": {
@@ -67343,7 +67618,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67431,7 +67706,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67521,7 +67796,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67588,7 +67863,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67729,7 +68004,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.read) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67813,7 +68088,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -67925,7 +68200,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -68043,7 +68318,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the documentation permission",
+            "description": "Forbidden - missing scope (documentation.write) or the linked user lacks the permission named in the endpoint description",
             "content": {
               "application/json": {
                 "schema": {
@@ -68227,7 +68502,7 @@
             }
           },
           "400": {
-            "description": "Validation error",
+            "description": "No recipients in the selected groups, or no group id resolves to a broadcast group",
             "content": {
               "application/json": {
                 "schema": {
@@ -68248,16 +68523,6 @@
           },
           "403": {
             "description": "Forbidden - missing scope (broadcasts.write) or the linked user lacks the broadcasts permission",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No recipients in the selected groups",
             "content": {
               "application/json": {
                 "schema": {
@@ -69913,15 +70178,18 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "standards",
-                "billedSkus",
-                "software",
-                "psaProducts",
-                "integrations",
-                "inventory"
-              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "standards",
+                  "billedSkus",
+                  "software",
+                  "psaProducts",
+                  "integrations",
+                  "inventory"
+                ]
+              },
               "description": "Sections to return (repeat the key or comma-separate); all when omitted"
             },
             "required": false,
@@ -70224,7 +70492,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -73621,13 +73888,16 @@
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "thriving",
-                "healthy",
-                "at_risk",
-                "critical"
-              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "thriving",
+                  "healthy",
+                  "at_risk",
+                  "critical"
+                ]
+              },
               "description": "Filter by risk level (repeat the key or comma-separate)"
             },
             "required": false,
@@ -73649,7 +73919,17 @@
           {
             "schema": {
               "type": "string",
-              "maxLength": 100,
+              "enum": [
+                "health_score",
+                "service_quality_score",
+                "engagement_score",
+                "financial_score",
+                "sales_score",
+                "project_score",
+                "tool_stack_score",
+                "environment_score",
+                "operational_score"
+              ],
               "default": "health_score",
               "description": "Sort column"
             },
@@ -73927,12 +74207,15 @@
           },
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "health",
-                "patch",
-                "backup"
-              ],
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "health",
+                  "patch",
+                  "backup"
+                ]
+              },
               "description": "Metrics to return, in order (repeat the key or comma-separate; default health, patch, backup)"
             },
             "required": false,
@@ -74806,7 +75089,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false
             },
             "required": false,
@@ -75258,7 +75540,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.read), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.read) or the linked user lacks the tenant settings permission (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -75353,7 +75635,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.read), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.read) or the linked user lacks read_settings_users (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -75368,7 +75650,7 @@
     "/api/public/v1/tenant/profile": {
       "patch": {
         "summary": "Update tenant profile",
-        "description": "Update the MSP's name, billing contact email, address, timezone, language, currency, custom domain and primary admin. Saving custom_domain records the hostname only; DNS and hosting verification are separate steps. Returns the updated setup. Requires `tenant.write` and write_settings_tenant. MSP staff only.",
+        "description": "Update the MSP's name, billing contact email, address, timezone, language, currency, custom domain and primary admin. Saving custom_domain records the hostname only; DNS and hosting verification are separate steps. Returns the updated setup. Requires `tenant.write` and write_settings_tenant or manage_settings_tenant. MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
@@ -75427,7 +75709,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.write), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.write) or the linked user lacks the tenant settings permission (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -75511,7 +75793,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.write), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.write) or the linked user lacks the tenant settings permission (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -75595,7 +75877,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.write), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.write) or the linked user lacks the tenant settings permission (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -75610,7 +75892,7 @@
     "/api/public/v1/tenant/settings": {
       "patch": {
         "summary": "Update tenant settings",
-        "description": "Update support contact details, business hours, website, portal name, client/staff AI configuration, company visibility defaults and custom-domain sign-in methods. Nested customizations replace the stored value, so read GET /tenant first. Requires `tenant.write` and write_settings_tenant. MSP staff only.",
+        "description": "Update support contact details, business hours, website, portal name, client/staff AI configuration, company visibility defaults and custom-domain sign-in methods. Nested customizations replace the stored value, so read GET /tenant first. Requires `tenant.write` and write_settings_tenant or manage_settings_tenant. MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
@@ -75669,7 +75951,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tenant.write), the linked user is not MSP staff, or lacks the tenant settings permission",
+            "description": "Forbidden - missing scope (tenant.write) or the linked user lacks the tenant settings permission (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -76022,6 +76304,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Role not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
@@ -76090,6 +76382,16 @@
           },
           "403": {
             "description": "Forbidden - missing scope (roles.write), the linked user is not MSP staff, or lacks the permission for this role scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -76174,6 +76476,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Role not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -76244,6 +76556,16 @@
           },
           "403": {
             "description": "Forbidden - missing scope (roles.read), the linked user is not MSP staff, or lacks the permission for this role scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -76725,7 +77047,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (analytics.read), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
+            "description": "Forbidden - missing scope (analytics.read, companies.read and tenant-users.read), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
             "content": {
               "application/json": {
                 "schema": {
@@ -76810,6 +77132,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Company not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -76876,7 +77208,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (analytics.read), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
+            "description": "Forbidden - missing scope (companies.write), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
             "content": {
               "application/json": {
                 "schema": {
