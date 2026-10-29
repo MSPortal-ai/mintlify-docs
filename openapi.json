@@ -1819,6 +1819,11 @@
             "nullable": true,
             "maxLength": 1000,
             "description": "Optional message to the approvers"
+          },
+          "expectedUpdatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The budget's updatedAt the client last read; 409 when it changed since"
           }
         }
       },
@@ -23046,7 +23051,7 @@
           },
           "idempotencyKey": {
             "type": "string",
-            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i",
             "description": "Stable key for this request; a retry with the same key creates nothing new"
           }
         },
@@ -36393,6 +36398,26 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "The meeting agenda is locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "A linked entity belongs to another company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -36501,6 +36526,16 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "The meeting agenda is locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -36581,6 +36616,16 @@
           },
           "404": {
             "description": "Agenda item not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The meeting agenda is locked",
             "content": {
               "application/json": {
                 "schema": {
@@ -42037,7 +42082,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "Forbidden - missing scope (dashboards.read), the linked user lacks read_settings_dashboards, or the key is linked to a company user (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -42106,7 +42151,7 @@
             }
           },
           "403": {
-            "description": "Forbidden",
+            "description": "Forbidden - missing scope (dashboards.read), the linked user lacks read_settings_dashboards, or the key is linked to a company user (MSP staff only)",
             "content": {
               "application/json": {
                 "schema": {
@@ -45846,7 +45891,6 @@
           {
             "schema": {
               "type": "boolean",
-              "nullable": true,
               "default": false,
               "description": "Calculate live analytics instead of using stored data"
             },
@@ -47271,7 +47315,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tickets.read) or the linked user lacks the module permission",
+            "description": "Forbidden - missing scope (tickets.read), the linked user lacks the module permission, or no PSA integration is active",
             "content": {
               "application/json": {
                 "schema": {
@@ -47477,7 +47521,7 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (tickets.read) or the linked user lacks the module permission",
+            "description": "Forbidden - missing scope (tickets.read), the linked user lacks the module permission, or no PSA integration is active",
             "content": {
               "application/json": {
                 "schema": {
@@ -48155,6 +48199,28 @@
             "description": "PSA ticket number by default; the internal id returned by list/search with byInternalId=true",
             "name": "id",
             "in": "path"
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "description": "Resolve the path id as the internal ticket id"
+            },
+            "required": false,
+            "description": "Resolve the path id as the internal ticket id",
+            "name": "byInternalId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Disambiguate a PSA number shared by several integrations"
+            },
+            "required": false,
+            "description": "Disambiguate a PSA number shared by several integrations",
+            "name": "integrationId",
+            "in": "query"
           }
         ],
         "requestBody": {
@@ -61917,7 +61983,7 @@
                       "properties": {
                         "typeKey": {
                           "type": "string",
-                          "format": "uuid"
+                          "description": "Task type key (UUID-shaped hash; not RFC 4122)"
                         },
                         "internalOnly": {
                           "type": "boolean"
@@ -68887,6 +68953,16 @@
           },
           "403": {
             "description": "Forbidden - missing scope (broadcasts.read) or the linked user lacks the broadcasts permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Broadcast not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -76000,6 +76076,16 @@
                 }
               }
             }
+          },
+          "413": {
+            "description": "Payload too large (about 4 MB of base64 at most)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -76688,6 +76774,16 @@
                 }
               }
             }
+          },
+          "409": {
+            "description": "The role's permissions are changing; retry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       },
@@ -76766,6 +76862,16 @@
           },
           "403": {
             "description": "Forbidden - missing scope (roles.write), the linked user is not MSP staff, or lacks the permission for this role scope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role not found",
             "content": {
               "application/json": {
                 "schema": {
