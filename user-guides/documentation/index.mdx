@@ -85,23 +85,68 @@ The full steps are in [Add files and links to the Documentation Hub](/user-guide
 
 ## Email security checks for client domains
 
-Open **Documentation > Domains** and use the company selector to choose your scope. The **Email security** column shows whether a domain is passing, needs attention, is failing, cannot be found, or has not been checked. Select the status to see SPF, DMARC, DKIM, MTA-STS, TLS-RPT, DNSSEC and BIMI details.
+### Read a domain's email security
 
-Checks run daily over public DNS without a security integration. To request another check, open the domain row's **…** menu and select **Check now**. This action requires permission to manage domain records and active billing. It queues a check for that domain; the list watches for updated results for two minutes. A failed DNS lookup keeps the previous result.
+Open **Documentation > Domains** and use the company selector to choose your scope. Checks run daily over public DNS without a security integration.
+
+- **Email security** shows **Passing**, **Needs attention**, **Failing**, **Domain not found** or **Not checked yet**, with **SPF**, **DMARC** and **DKIM** badges beside it. Use the column filter to show one status.
+- **Problems** lists what to fix, most serious first, for example **No DMARC record**, **DMARC not enforced (p=none)** or **SPF allows any sender (+all)**. It leaves out optional records most domains never publish (MTA-STS, TLS-RPT, DNSSEC and BIMI) and a DKIM key that could not be found.
+- Click the status badge to open the detail sheet with every check: SPF, DMARC, DKIM, MTA-STS, TLS-RPT, DNSSEC and BIMI, each with its explanation and DNS record.
+- A star beside the domain name marks the company's primary domain. **Sources** and **Primary** are hidden by default; turn them on under **Columns**.
 
 DKIM can only be discovered at known mail-provider selectors. **Unknown** means no key was found at those selectors; it does not prove DKIM is absent or broken.
 
-<Frame caption="MSPortal Demo: request an email-security check from the domain row.">
-  <img src="/images/product/domains-email-check-now-desktop.png" alt="Documentation Domains filtered to one domain, with one row checked as Needs attention and the other row menu showing Check now" width="2880" height="1920" />
+<Frame caption="MSPortal Demo: Email security and Problems for each of a company's domains.">
+  <img src="/images/product/domains-email-security-problems-preview-desktop.png" alt="Documentation Domains with four domains, each showing an Email security status with SPF, DMARC and DKIM badges and a Problems entry such as No DMARC record or DMARC not enforced (p=none)." width="2880" height="1920" />
 </Frame>
-<Frame caption="The same row action on a phone.">
-  <img src="/images/product/domains-email-check-now-phone.png" alt="Phone view of the domain row menu with Check now" width="780" height="1688" />
+<Frame caption="On a phone, each domain is a card with Email security and Problems.">
+  <img src="/images/product/domains-email-security-problems-preview-phone.png" alt="Phone view of Documentation Domains with domain cards showing Email security badges and Problems." width="780" height="1688" />
 </Frame>
 
+### Check domains again
+
+To check one domain now, open its row's **…** menu and select **Check now**. To check several, select their checkboxes and choose **Actions (N) > Check email security**. One request covers up to 100 domains; with more selected, the action is unavailable.
+
+Checking needs write or manage access to documentation domains and active billing. The checks are queued, and the list watches for updated results for two minutes. A failed DNS lookup keeps the previous result.
+
+<Frame caption="MSPortal Demo: with two domains selected, the Actions menu offers Check email security and Create Planner items.">
+  <img src="/images/product/domains-email-security-bulk-actions-preview-desktop.png" alt="Documentation Domains with two rows checked and the Actions (2) menu open to Check email security and Create Planner items." width="2880" height="1920" />
+</Frame>
+
+### Create Planner items from the results
+
+You need **Write Planner** or **Manage Planner** and active billing.
+
+<Steps>
+  <Step title="Choose the domains">
+    For one domain, open its row's **…** menu and select **Create Planner item**. For several, select their checkboxes and choose **Actions (N) > Create Planner items**. Up to 100 domains can be included.
+
+    <Frame caption="The row menu has Check now and Create Planner item.">
+      <img src="/images/product/domains-email-security-row-menu-preview-desktop.png" alt="Documentation Domains row menu open with Check now, Create Planner item and Set primary." width="2880" height="1920" />
+    </Frame>
+  </Step>
+  <Step title="Pick a quarter">
+    The dialog lists each company with its selected domains. Choose the **Quarter** the work belongs in. The list offers the current quarter and the seven after it. An item in the current quarter is due today; a later quarter's item is due on that quarter's first day.
+
+    <Frame caption="One Planner item for Scaling Ops covering its two selected domains.">
+      <img src="/images/product/domains-email-security-planner-dialog-preview-desktop.png" alt="Create Planner item dialog with the Quarter set to Q4 2026 (Oct to Dec) and Scaling Ops listed with mspcheckmate.com and msportal.ai." width="2880" height="1920" />
+    </Frame>
+  </Step>
+  <Step title="Create the items">
+    Click **Create item** (or **Create N items**). A message confirms how many Planner items were created, and a second message says how many could not be created if any failed.
+  </Step>
+</Steps>
+
+Each company gets one Planner item covering its selected domains. One domain gives an item titled **Email security: example.com**; several give **Email security for N domains**. Each domain's full check result goes in the item's private notes: its status, mail provider, DMARC enforcement, check date, and every check with its explanation and DNS record. The Planner assistant can read them when you plan the work. Company users cannot write private notes, so the items they create carry the results in the public notes instead.
+
+The notes are a copy of the results when the item was created; later checks do not update them. Open the item in [Planner](/user-guides/planner/index) to review it or change its type, status and visibility.
+
+### Export the domain list
+
+Click **Export CSV** above the table. The file includes every domain that matches the company selector and your filters, across all pages, including hidden columns. When email security checks are enabled, it adds **Email security**, **SPF**, **DMARC**, **DKIM** and **Problems** columns. **Problems** lists the problems separated by semicolons.
+
 <Accordion title="Before the feature is enabled">
-  Domain records and their ordinary actions remain available. Email security and **Check now** appear only after the feature is enabled.
-  <img src="/images/product/domains-email-flag-off-desktop.png" alt="Domains before email checks are enabled, desktop" width="2880" height="1920" />
-  <img src="/images/product/domains-email-flag-off-phone.png" alt="Domains before email checks are enabled, phone" width="780" height="1688" />
+  Domain records, **Export CSV** and the ordinary row actions remain available. Email security, **Problems**, the row checkboxes, **Check now** and **Create Planner item** appear only after the feature is enabled.
 </Accordion>
 
 ## Troubleshooting
