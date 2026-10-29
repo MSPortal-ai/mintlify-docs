@@ -1,0 +1,162 @@
+---
+title: 'Ticket description layout'
+description: 'Choose how answers from ticket templates are laid out in the PSA ticket description, and give long questions a short label for technicians.'
+icon: 'align-left'
+---
+
+When someone submits a ticket template, MSPortal writes their answers into the ticket description in your PSA. The **Ticket description layout** card in **Settings > Tickets** controls how those answers look. A field's **Short label for tickets** in the template editor lets technicians read "Desk phone: No" instead of the full question.
+
+**Audience:** MSP staff who manage ticket settings and ticket templates.
+
+## Before you start
+
+- You need the **write** or **manage** Tickets settings permission to change the layout or edit templates. With read access only, the card's controls are disabled and **Save layout** does not appear.
+- The layout applies to tickets created from a ticket template after you save it. Tickets that already exist keep their description.
+
+## How the layout changes the description
+
+Until you change it, the description lists every question and its answer, separated by blank lines:
+
+```text
+What is the new employee's full name? Jordan Lee
+
+What is the new employee's job title? Office Manager
+
+Does the new employee need a desk phone? No
+
+Should the new employee be enrolled in Duo? Yes
+```
+
+With the structured layout and its starting choices, the same answers are grouped under the template's section titles, with short labels and bullets. In Autotask it reads:
+
+```text
+EMPLOYEE & ROLE
+- Name: Jordan Lee
+- Title: Office Manager
+
+PHONE & DUO
+- Desk phone: No
+- Duo: Yes
+```
+
+HaloPSA, ConnectWise and Syncro get the same grouping as formatted text, with bold labels and a bulleted list. See [How each PSA shows it](#how-each-psa-shows-it).
+
+## Choose the layout
+
+<Steps>
+  <Step title="Open the card">
+    Go to **Settings > Tickets**. On the **General** tab, scroll to **Ticket description layout**.
+  </Step>
+  <Step title="Turn on Use a structured layout">
+    Off keeps the layout shown first above. Turn it on to show the other choices.
+  </Step>
+  <Step title="Group answers under section headings">
+    On, each template section's title becomes a heading over that section's answers. Sections with no answers are left out. Off, answers follow one another with no headings.
+  </Step>
+  <Step title="Use short labels">
+    On, fields that have a **Short label for tickets** show it instead of the full question. Fields without one keep the question. See [Add a short label to a field](#add-a-short-label-to-a-field).
+  </Step>
+  <Step title="Pick the styles">
+    | Setting | Choices |
+    | --- | --- |
+    | **Heading style** | **CAPITALS** writes the title in capital letters. **Underlined** underlines the title (in Autotask, a line of dashes goes under it). **Plain** writes the title as it is. Available while section headings are on. |
+    | **Answers** | **Bulleted** makes the answers a bulleted list (in Autotask, each answer starts with a dash). **One per line** puts each answer on its own line with no marker. |
+    | **Spacing** | **Compact** keeps a section's answers on consecutive lines. **Blank line between answers** adds an empty line between them. Sections are always separated by a blank line. |
+  </Step>
+  <Step title="Check the preview">
+    The **Preview** beside the settings updates as you change them. It uses sample answers from a new employee request and shows them the way the PSA selected in **PSA Integration** on the same tab displays the description. The hint under the preview names that PSA.
+  </Step>
+  <Step title="Select Save layout">
+    **Save layout** is available once you change something. "Ticket description layout saved." confirms the save. Leaving the page without saving discards your changes.
+  </Step>
+</Steps>
+
+{/* Image pending a clean production capture (see scripts/media-capture/ticket-description-layout.md in the app repo).
+<Frame caption="The structured layout turned on in MSPortal Demo. The preview uses built-in sample answers.">
+  <img src="/images/product/ticket-description-layout-settings.png"
+    alt="Ticket description layout card in Settings > Tickets with the structured layout turned on, its heading, answer and spacing choices, and the sample preview."
+    width="WIDTH_SETTINGS" height="HEIGHT_SETTINGS" />
+</Frame>
+*/}
+
+## Add a short label to a field
+
+Template questions are written for the person asking for help, so they are often long. A short label gives the technician a compact name for the same answer.
+
+<Steps>
+  <Step title="Open the template">
+    Go to **Settings > Tickets > Templates** and open the template, or select **New Template**.
+  </Step>
+  <Step title="Open the field">
+    Under **Sections & Fields**, select the field to open its editor.
+  </Step>
+  <Step title="Enter the short label">
+    Type a label in **Short label for tickets**, for example "Desk phone". It is optional and holds up to 255 characters. Label (display text) and Embedded Template fields do not have one.
+  </Step>
+  <Step title="Save the template">
+    Select **Save Template**. The short label is kept only when you save.
+  </Step>
+</Steps>
+
+<Frame caption="A field with a short label, in a MSPortal Demo template editor.">
+  <img src="/images/product/ticket-description-layout-short-label.png"
+    alt="Template field editor with the question &quot;Does the new employee need a desk phone?&quot; and the short label &quot;Desk phone&quot; in Short label for tickets."
+    width="2456" height="660" />
+</Frame>
+
+The form your users fill in still shows the full question. The short label appears only in the ticket description, and only while **Use a structured layout** and **Use short labels** are both on.
+
+## Preview a template's description
+
+In the template editor, select **Preview** and enter sample answers. Under the form, **Ticket description** shows the description those answers would produce with your saved layout. Pickers such as **User** or **Device** show "(details of the selected record)" in place of the record's details. Preview does not create a ticket.
+
+The preview uses the saved layout. After you change the layout in **Settings > Tickets**, select **Save layout** before checking a template.
+
+## What goes into the description
+
+- Answered questions, in template order. Blank questions are left out.
+- Questions hidden by a template's conditional logic are left out, even if they had an answer before they were hidden.
+- Label (display text), PSA Classification and Embedded Template fields do not add a line. Each embedded template creates its own ticket.
+- Acknowledged notices are listed at the end as "Acknowledged:" with the notice text.
+- A label that already ends with "?", "!" or ":" gets no extra colon.
+
+## How each PSA shows it
+
+The layout you choose is the same for every PSA. How it looks depends on the PSA that receives your tickets:
+
+| PSA | How the description looks |
+| --- | --- |
+| **Autotask** | Plain text. Headings, underlines and bullets are built from ordinary characters: capital letters, a line of dashes under an underlined heading, and a dash before each answer. |
+| **HaloPSA** | Formatted text, with bold labels, underlined headings and a bulleted list. |
+| **Syncro** | Sent as formatted text, like HaloPSA. Whether Syncro shows the formatting depends on your Syncro account's rich text setting. |
+| **ConnectWise** | ConnectWise's own formatting of the same description. The preview shows it the way MSPortal displays ConnectWise ticket notes. |
+
+The settings preview and the template editor's **Ticket description** preview both follow the PSA selected in **PSA Integration**, so you can check the result before you save. With the structured layout off, every PSA gets the default layout.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| The controls are disabled | Your role has read access to Tickets settings only. Ask someone with write or manage access. |
+| A ticket still shows full questions | **Use short labels** is off, or the field has no **Short label for tickets**, or the template was not saved after adding it. |
+| A ticket shows no headings | **Group answers under section headings** is off, or the layout was not saved. |
+| **Heading style** is greyed out | Turn on **Group answers under section headings** first. |
+| The template preview shows the original layout | Save the layout in **Settings > Tickets** first. The preview hint then says it uses the structured layout. |
+| An answer is missing from the ticket | The question was blank or hidden by conditional logic when the request was submitted. |
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="Ticket settings" icon="gear" href="/user-guides/settings/tickets">
+    Delivery, defaults and the other cards on the General tab.
+  </Card>
+  <Card title="Create and preview a ticket template" icon="file-lines" href="/user-guides/ticketing/create-and-preview-ticket-template">
+    Add sections and questions, then try the form in Preview.
+  </Card>
+  <Card title="How to create a ticket template" icon="ticket" href="/user-guides/ticketing/how-to-create-a-ticket-template">
+    Field types, conditional logic and embedded templates.
+  </Card>
+  <Card title="Show or require a field conditionally" icon="code-branch" href="/user-guides/ticketing/how-to-create-a-ticket-template#show-or-require-a-field-conditionally">
+    Rules that hide questions, and their answers, from the ticket.
+  </Card>
+</CardGroup>

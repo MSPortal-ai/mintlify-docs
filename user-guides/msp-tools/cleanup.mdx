@@ -1,0 +1,198 @@
+---
+title: 'Cleanup'
+description: 'Review paid licenses and agents that may no longer be needed, across all your clients, and keep the ones that stay on purpose.'
+icon: 'broom'
+---
+
+**Cleanup** lists paid licenses and agents that may no longer be needed, across your clients, so your team can review them in one place. It reads data your integrations already sync. Every row is a candidate to review: Cleanup never removes a license, unassigns a seat or uninstalls an agent, and nothing changes at any vendor.
+
+Cleanup is for MSP staff. Company users never see it.
+
+<Frame caption="MSPortal Demo: the Licenses tab with its summary cards, Add all to planner and the candidate table.">
+  <img src="/images/product/cleanup-licenses.png" width="2880" height="1920" alt="Cleanup page on the Licenses tab, with summary cards for disabled accounts, inactive accounts, spare seats and kept items above a table of spare Microsoft 365 seats for Acorn Construction." />
+</Frame>
+
+## Before you start
+
+- Open it from the sidebar at **MSP Tools > Cleanup**.
+- Each tab needs its own access in the role editor (**Settings > Users & Roles**):
+
+  | Tab | Access it needs |
+  | --- | --- |
+  | **Licenses** | **Read** on **Cloud: Licenses**, plus **Read** on **Cloud** for Microsoft 365 rows or **Read** on **Storefront** for Adobe rows. |
+  | **Idle agents** | **Read** on **Devices**. |
+  | **Kept** | Access to either of the other tabs. |
+
+  **Write** and **Manage** include **Read**. Cleanup opens on **Licenses** when your role can read it, and on **Idle agents** otherwise.
+- Keeping an item needs **Write** on the permission that covers it: **Cloud** for Microsoft 365 licenses and accounts, **Storefront** for Adobe seats and **Devices** for agents. Without it, you can read the lists and the **Kept** tab, but you see no row menu and no checkboxes.
+- Adding items to the Planner needs **Write** on **Planner**. Creating tickets needs permission to create tickets.
+- Cleanup can only list what your integrations sync. Connect Microsoft 365, CIPP, Adobe and your RMM and security tools, and map their companies. See [Integration Company Mapping](/user-guides/settings/integration-company-mapping).
+
+## Choose the companies
+
+Cleanup follows the company selector at the top of the app. Unless you select a single company, each tab shows a **Company** column, and its column filter narrows the list to some of the companies in scope. Changing the company selector reloads the tab and clears its filters, sort and page.
+
+## Review licenses
+
+The **Licenses** tab lists paid licenses for a reason shown in the **Reason** column:
+
+| Reason | What it means | Source |
+| --- | --- | --- |
+| **Disabled account** | A paid Microsoft 365 license is still assigned to an account that is disabled. Each license is its own row. | Microsoft 365 |
+| **No sign-in for 30+ days** | CIPP reports no sign-in on the account for 30 days or more, and the account still holds at least one paid Microsoft 365 license. **Count** shows how many, and **License** names them. | CIPP |
+| **Spare seats** | A paid subscription has seats nobody is assigned. **Count** shows the unassigned seats, with the number purchased beside it. | Microsoft 365 or Adobe |
+
+Free, trial, viral and zero-cost licenses are never listed. Storage add-ons sold by the gigabyte do not count as spare seats. An account already listed for a disabled-account license is not listed again for inactivity. **No sign-in for 30+ days** uses only CIPP connections that are active and not paused.
+
+The summary rail above the table shows:
+
+- **On disabled accounts**: paid licenses on disabled accounts, and how many accounts hold them.
+- **Inactive accounts**: accounts with a paid license and no sign-in for 30+ days.
+- **Spare seats**: unassigned paid seats, and how many subscriptions they come from.
+- **Kept**: items your team chose to keep. Click it to open the **Kept** tab.
+
+Click **On disabled accounts**, **Inactive accounts** or **Spare seats** to filter the table to that reason. Click the same card again to clear the filter.
+
+The table also shows **User**, **License**, **Count**, **Last sign-in** and **Source**. A **Disabled** tag beside a user on an inactive-account row means the account is disabled too.
+
+## Review idle agents
+
+The **Idle agents** tab lists agents whose own vendor has not heard from them for a while. Each agent from each tool is its own row, so a device with a stale Huntress agent and a stale NinjaOne agent appears twice.
+
+<Steps>
+  <Step title="Choose how long an agent has been idle">
+    Use **Idle for at least** in the table header: **14+ days**, **30+ days**, **60+ days** or **90+ days**. The tab opens on **30+ days**.
+  </Step>
+  <Step title="Read the rows">
+    Each row shows the **Device**, the **Agent** (the tool it belongs to), its **Last check-in** and how long it has been **Idle for**.
+  </Step>
+</Steps>
+
+Agents come from Huntress, NinjaOne, Datto RMM, N-able N-central, Addigy, Intune (CIPP), Liongard, Cork, Bitdefender and Action1. Paused or inactive integrations are left out, because their check-in times stop updating. An agent with no check-in time is never listed. Meraki, PSA, documentation tools, ConnectWise RMM, DNSFilter and network monitoring tools are not included.
+
+The summary rail shows **Idle agents** (and how many tools they come from), **Devices** with at least one idle agent, and **Kept**. Click **Idle agents** to clear the table's filters.
+
+## Filter, sort and export
+
+Both tabs work the same way:
+
+- Filter from the column headers. **Reason**, **Source**, **Agent** and **Company** take a list of values, **Count** and **Idle for** take a range, **Last sign-in** and **Last check-in** take a date range, and **User**, **License** and **Device** take text.
+- Click a column header to sort.
+- Use **Columns** to show or hide columns.
+- Click **Export CSV** to download every row that matches your filters, across all pages. The file adds columns the table does not show, such as the sign-in name, license code, purchased and assigned seats, and each agent's vendor ID.
+
+The list loads 50 rows per page. The checkbox in the header selects the rows on this page, and a second click selects every row on every page that matches your filters. Actions then apply to all of them, up to 5,000 rows.
+
+## Turn candidates into work
+
+Send what you find to the Planner for a client conversation, or to your PSA for a technician to act on. Both group the items by company and list each one, so nobody has to copy rows by hand.
+
+### Add to the Planner
+
+- **Add all to planner** in the table header takes every item in the current, filtered list.
+- To add only some, select their checkboxes and choose **Actions > Add to planner**, or choose **Add to planner** from a row's **⋯** menu.
+
+MSPortal creates one planner item per company, such as **License cleanup: 3 items to review**. Each lists that company's candidates in its private notes, starts as **Not Started** and is hidden from company users. Planner items for idle agents link to their devices.
+
+<Frame caption="MSPortal Demo: Add all to planner for one company opens the planner item for review, with the candidates in Private Notes.">
+  <img src="/images/product/cleanup-add-to-planner.png" width="2880" height="1920" alt="Planner item dialog titled License cleanup: 3 items to review for Acorn Construction, with Hide from company users ticked and the three spare-seat subscriptions listed in Private Notes." />
+</Frame>
+
+With one company, the planner item opens so you can review and save it. With several, a confirmation lists each company and its item count, then creates them all and shows its progress. If a company fails, it stays in the dialog so you can try again. One run creates up to 500 planner items from up to 10,000 rows.
+
+### Create tickets
+
+Select items and choose **Actions > Create ticket**, or choose **Create ticket** from a row's **⋯** menu. MSPortal creates one PSA ticket per company that lists its items. Add a **Note for the technician (optional)** before you click **Create**.
+
+- Tickets use your compliance ticket settings for board, status, priority and type, the same as tickets created from Compliance. A company's own ticket defaults still apply first.
+- Tickets go to the PSA you create tickets in. Companies not linked to a company in that PSA are listed as skipped. Link them in your PSA integration settings.
+- If your PSA doesn't respond, MSPortal emails the request to your fallback ticket address and stops, so no other tickets are created in that run.
+
+## Keep an item
+
+Some candidates stay on purpose: a shared mailbox, an account on legal hold, a spare laptop in a cupboard. Keep them, and they leave the list until you remove the keep or their review date passes.
+
+<Steps>
+  <Step title="Open the row menu">
+    Click the **⋯** menu at the end of the row and choose **Keep…**.
+  </Step>
+  <Step title="Enter a reason">
+    **Reason** is required, up to 2,000 characters. It stays with the keep so anyone can see why the item stayed.
+  </Step>
+  <Step title="Set a review date (optional)">
+    Pick a **Review after** date to bring the item back for another look. Leave it empty to keep the item until someone removes the keep.
+  </Step>
+  <Step title="Click Keep">
+    The item leaves the list, and the **Kept** count in the summary rail goes up.
+  </Step>
+</Steps>
+
+To keep several items with one reason, select their checkboxes, then choose **Actions > Keep**. Items someone else kept in the meantime, or that are no longer reported, are skipped, and the confirmation says how many.
+
+When a review date passes, the item returns to its list with a **Review due** tag. Hover the tag to read the reason it was kept.
+
+### Kept agents and automatic device cleanup
+
+Keeping an agent also protects its device from MSPortal's automatic device cleanup, and stops Huntress idle-agent retirement from removing it. The protection ends when you remove the keep or its review date passes.
+
+## Manage kept items
+
+The **Kept** tab lists every keep in the selected companies with its **Item**, **Type** (**License** or **Agent**), **Reason**, **Kept by**, **Kept on**, **Review after** and **Status**. The summary rail counts items that are **Kept** and items whose **Review due** date has passed. Click either card to filter the table to that status.
+
+| Status | Meaning |
+| --- | --- |
+| **Kept** | The item is out of the cleanup lists. |
+| **Review due** | The review date has passed, and the item is back on its list. |
+| **Removed** | The keep was removed or replaced. Shown only with **Show removed**. |
+
+- **Edit keep…** in the row menu changes the reason or the review date. Click **Save** to replace the keep.
+- **Remove keep** in the row menu asks you to confirm, then returns the item to its cleanup list.
+- To remove several keeps, select them and choose **Actions > Remove keep**.
+- Turn on **Show removed** to see the history, including who removed each keep and when.
+- **Export CSV** downloads the kept items that match your filters.
+
+## Troubleshooting
+
+| Problem | What to check |
+| --- | --- |
+| **Cleanup** is missing from the sidebar | Your role needs **Read** on **Cloud: Licenses** or on **Devices**. |
+| A tab is missing | Each tab has its own access. See [Before you start](#before-you-start). |
+| A list is empty | Check the company selector, your filters and, on **Idle agents**, the **Idle for at least** threshold. Check that the integration is connected, active and mapped to the company. |
+| A license you expected is missing | Free, trial, viral and zero-cost licenses are never listed. The item may also be kept: check the **Kept** tab. |
+| An agent you expected is missing | Its tool may not be one Cleanup reads, its integration may be paused, or the agent may have no check-in time. |
+| There is no row menu or checkbox | Your role needs **Write** on the permission that covers the item. |
+| An item came back with **Review due** | Its review date passed. Keep it again with a new date, or act on it in the vendor's own tool. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Cleanup remove licenses or uninstall agents?">
+    No. Cleanup lists candidates. Remove a license, reduce a subscription or retire an agent in the vendor's own tool.
+  </Accordion>
+  <Accordion title="Why does a device appear more than once on Idle agents?">
+    Each tool's agent is its own row. A device can have an idle agent in more than one tool.
+  </Accordion>
+  <Accordion title="Can my clients see Cleanup?">
+    No. Cleanup is for MSP staff only.
+  </Accordion>
+  <Accordion title="What happens to a keep when the review date passes?">
+    The item returns to its list with a **Review due** tag, and the keep shows **Review due** on the **Kept** tab. For an agent, the device is no longer protected from automatic device cleanup.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="Cloud licenses" icon="id-card" href="/user-guides/cloud/licenses">
+    Read license usage and assignments for each company.
+  </Card>
+  <Card title="Devices" icon="laptop" href="/user-guides/devices/index">
+    Find devices and the agents reporting on them.
+  </Card>
+  <Card title="Users & Roles" icon="users" href="/user-guides/settings/users-roles">
+    Give a role access to Cloud, Storefront or Devices.
+  </Card>
+  <Card title="MSP Tools" icon="toolbox" href="/user-guides/msp-tools/index">
+    See the other staff-only tools.
+  </Card>
+</CardGroup>
