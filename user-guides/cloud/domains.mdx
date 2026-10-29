@@ -1,10 +1,10 @@
 ---
 title: 'Read cloud and registrar domains'
-description: 'Review Microsoft, Google, and DNSimple domain records, summary counts, verification labels, and provider-specific fields.'
+description: 'Review Microsoft, Google, and DNSimple domain records, summary counts, verification labels, email security results, and provider-specific fields.'
 icon: 'globe'
 ---
 
-Use **Cloud > Domains** to see the domains synced from Microsoft 365, Google Workspace, and DNSimple (the registrar) for your companies. This page is for MSP staff and company users who need to check verification, primary domains, or expiry dates.
+Use **Cloud > Domains** to see the domains synced from Microsoft 365, Google Workspace, and DNSimple (the registrar) for your companies. This page is for MSP staff and company users who need to check verification, primary domains, expiry dates, or email security.
 
 ## Before you start
 
@@ -12,6 +12,7 @@ Use **Cloud > Domains** to see the domains synced from Microsoft 365, Google Wor
 - Company users see only their own company. MSP staff see the companies selected in the company selector.
 - Each provider must be connected in **Settings > Integrations**, and each domain must be mapped to a company. DNSimple domains that are not mapped to a company do not appear.
 - Domains are synced data. They are not a live registrar lookup.
+- The **Email security** and **Problems** columns appear only when your MSP has email domain security checks turned on and your role can read documentation domains or security. See [Check email security](#check-email-security).
 
 ## Open the domain list
 
@@ -59,7 +60,9 @@ Company users see DNSimple rows labeled **Managed by** followed by their MSP nam
 
 | Column | What it shows |
 | --- | --- |
-| **Domain** | The domain name. A **Primary** badge marks a cloud primary domain. A **Secondary** badge marks a DNSimple domain that is not in any synced Microsoft 365 or Google Workspace tenant. |
+| **Domain** | The domain name. A star marks a cloud primary domain. A **Secondary** badge marks a DNSimple domain that is not in any synced Microsoft 365 or Google Workspace tenant. |
+| **Email security** | The latest email security result, with **SPF**, **DMARC** and **DKIM** badges. Click the status to open the details. A dash means the domain is not in the company's domain inventory. Shown only when email domain security checks are on. |
+| **Problems** | What to fix, most serious first, such as **No DMARC record**. Shown with **Email security**. |
 | **Provider** and **Company** | The source and the mapped company. **Provider** appears only when your scope has more than one provider. |
 | **Verification** | **Verified** or **Unverified**. |
 | **Services** | The services Microsoft reports for the domain. Google and DNSimple rows show a dash. |
@@ -71,11 +74,44 @@ Company users see DNSimple rows labeled **Managed by** followed by their MSP nam
 | **Registrar status** | Hidden by default. The DNSimple state of the domain. |
 | **Aliases** | Hidden by default. Google domain aliases. Microsoft and DNSimple rows show a dash. |
 | **Created** | Hidden by default. When the domain was created or registered. |
-| **Last synced** | Hidden by default. When MSPortal last refreshed the record. |
 
 <Note>
 DNSimple does not report a verification flag, so every DNSimple row shows **Unverified**. That label does not mean the domain failed verification. Check the matching Microsoft 365 or Google Workspace row for the real verification state.
 </Note>
+
+## Check email security
+
+<Note>
+  Branch preview: the email security columns, row selection and actions in this section, and their screenshots, show an upcoming Domains update. They may differ from your live portal until it is released.
+</Note>
+
+Cloud > Domains shows the same email security results as [Documentation > Domains](/user-guides/documentation/index#email-security-checks-for-client-domains). Results come from daily checks over public DNS, and each row is matched to the company's domain inventory by company and domain name.
+
+<Frame caption="Branch preview, MSPortal Demo: the star marks the primary domain, and Problems lists what to fix.">
+  <img src="/images/product/cloud-domains-email-security-preview-desktop.png" alt="Cloud domains for Scaling Ops with Email security badges, Problems such as No DMARC record, and a star beside the primary domain scalingops.net." width="2880" height="1920" />
+</Frame>
+
+<Steps>
+  <Step title="Read the results">
+    **Email security** shows **Passing**, **Needs attention**, **Failing**, **Domain not found** or **Not checked yet**, with **SPF**, **DMARC** and **DKIM** badges. **Problems** lists what to fix, most serious first. Optional records most domains never publish, such as MTA-STS or BIMI, are left out of **Problems**.
+  </Step>
+  <Step title="Open the details">
+    Click the status badge. The sheet shows the mail provider and each check (SPF, DMARC, DKIM, MTA-STS, TLS-RPT, DNSSEC and BIMI) with its explanation and DNS record.
+
+    <Frame caption="Branch preview: the detail sheet for scalingops.net.">
+      <img src="/images/product/cloud-domains-email-security-sheet-preview-desktop.png" alt="Email security detail sheet for scalingops.net showing Failing, DMARC is not enforced, SPF Pass with its record, DMARC Not set up, DKIM Pass, and MTA-STS, TLS-RPT, DNSSEC and BIMI Not set up." width="2880" height="1920" />
+    </Frame>
+  </Step>
+  <Step title="Check again or plan the fix">
+    Open a row's **…** menu and select **Check now** or **Create Planner item**. For several domains, select their checkboxes and open **Actions (N)**, then choose **Check email security** or **Create Planner items**. Up to 100 domains can be included at once.
+  </Step>
+</Steps>
+
+**Check now** and **Check email security** need write or manage access to documentation domains. **Create Planner item** needs **Write Planner** or **Manage Planner**. Both need active billing. Rows with a dash under **Email security** cannot be selected. The Planner dialog and the notes it writes work as described in [Create Planner items from the results](/user-guides/documentation/index#create-planner-items-from-the-results).
+
+<Frame caption="Branch preview: on a phone, each domain card shows Email security and Problems.">
+  <img src="/images/product/cloud-domains-email-security-preview-phone.png" alt="Phone view of Cloud domains with the summary cards and a scalingops.net card showing a star, Email security badges and No DMARC record." width="780" height="1688" />
+</Frame>
 
 ## Tell the two kinds of Secondary apart
 
@@ -94,8 +130,11 @@ The summary counts follow the company selector and the **Provider** filter. They
 | The **Domains** tab is missing | Your role does not have Cloud read access. Ask your MSP to add it. |
 | You see **No cloud domains match these filters.** | Clear the column filters and check the company selector. |
 | A DNSimple domain is missing | The domain is not mapped to a company yet. MSP staff map it in **Settings > Integrations**. |
-| A DNSimple domain shows **Secondary domain** but the domain is in use | The Microsoft 365 or Google Workspace tenant has not synced that domain yet. Check **Last synced** on the matching row, or ask your MSP to check the integration. |
-| A recently verified domain still shows **Unverified** | The list shows the last sync. Check **Last synced**, then ask your MSP to confirm the connection is healthy. |
+| A DNSimple domain shows **Secondary domain** but the domain is in use | The Microsoft 365 or Google Workspace tenant has not synced that domain yet. Ask your MSP to check the integration. |
+| A recently verified domain still shows **Unverified** | The list shows the last sync. Wait for the next sync, then ask your MSP to confirm the connection is healthy. |
+| **Email security** shows a dash | The domain is not in the company's domain inventory in **Documentation > Domains**, so it has no check result and cannot be selected. |
+| **Email security** and **Problems** are missing | Email domain security checks are off for your MSP, or your role cannot read documentation domains or security. |
+| There are no checkboxes or **Check now** | Your role cannot check domains or create Planner items, or billing is restricted. |
 | You see **You do not have access to this Cloud data.** | Your role lacks Cloud read access. |
 | You see **Cloud data is temporarily unavailable. Try again shortly.** | Reload the page after a minute. If it persists, tell your MSP. |
 
@@ -103,7 +142,7 @@ The summary counts follow the company selector and the **Provider** filter. They
 
 <AccordionGroup>
   <Accordion title="Can I add, verify, renew, or delete a domain here?">
-    No. This page is read only. Make domain changes in the provider, then wait for the next sync.
+    No. Domain records are read only here. Make domain changes in the provider, then wait for the next sync. The only actions are rechecking email security and creating Planner items.
   </Accordion>
   <Accordion title="Why does the same domain appear twice?">
     Each provider and each company mapping creates its own row. Compare **Provider** and **Company**.
@@ -126,4 +165,5 @@ The summary counts follow the company selector and the **Provider** filter. They
 
 - [Find and export domains](/user-guides/cloud/filter-domains)
 - [Review domain renewal information](/user-guides/cloud/review-domain-renewals)
+- [Email security checks for client domains](/user-guides/documentation/index#email-security-checks-for-client-domains)
 - [Cloud overview](/user-guides/cloud/index)
