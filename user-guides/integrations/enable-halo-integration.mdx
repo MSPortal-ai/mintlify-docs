@@ -173,16 +173,16 @@ Read the reported failure before changing the API role. A timeout, unavailable e
 
 ### Choose data
 
-Choose what to sync from Halo PSA. Each dataset switch keeps its filters directly below it: turning a switch on reveals its scope, and turning it off hides the scope without clearing saved filters. Switches and scope selectors save immediately; wait for the save result.
+Choose what to sync from Halo PSA. Switches sit side by side in two groups, **Core data** and **Extended data**. Turning a switch on reveals its settings below that group, and turning it off hides them without clearing saved filters. Each switch and selector has an (i) beside its name: hover over, tap or focus it to read what the setting does. Switches and scope selectors save immediately; wait for the save result.
 
 | Option | Description |
 |--------|-------------|
 | **Sync Users** | Sync user/contact data from Halo PSA |
 | **Sync Companies** | Sync company/client data from Halo PSA |
 | **Enable Ticket Sync** | Sync tickets from Halo PSA. Reveals **Ticket Sync Scope**. |
-| **Enable Opportunity Sync** | Sync opportunities from Halo PSA. Reveals the **Auto-import to Planner** controls. |
+| **Enable Opportunity Sync** | Sync opportunities from Halo PSA. Reveals the **Auto-import to Planner** switch. |
 | **Enable Project Sync** | Sync projects from Halo PSA. Use **Exclude Project Types** to skip projects of certain Halo ticket types. |
-| **Enable Invoice Sync** | Sync invoices from Halo PSA. Reveals **Hide Invoice Statuses**. |
+| **Enable Invoice Sync** | Sync invoices from Halo PSA. Reveals **Hide invoice statuses**. |
 | **Sync product catalog** | Import the product and service catalog for quoting and budgets |
 | **Enable asset sync** | Sync assets on a recurring schedule. Use **Asset statuses to exclude** to skip statuses. Excluding a status stops syncing those assets and keeps their devices. Inactive assets follow [Devices from Halo assets](#devices-from-halo-assets). |
 | **Enable change management** | Import Halo changes into the change calendar |
@@ -193,15 +193,9 @@ Choose what to sync from Halo PSA. Each dataset switch keeps its filters directl
   A toggle appears locked when the permission check found that your API application cannot read that data. Grant the permission named beside it in Halo, then select **Re-check** in **Permissions** to unlock it.
 </Note>
 
-<Frame caption="MSP staff in the Demo tenant.">
-  <img src="/images/product/integrations-choose-data-preview-desktop.png" alt="Halo Choose data groups company and contact settings beneath their sync switches." width="1280" height="853" />
+<Frame caption="Branch preview: MSP staff in the Demo tenant.">
+  <img src="/images/product/integrations-choose-data-preview-desktop.png" alt="Halo Choose data with Sync Companies, Sync Users and Enable Ticket Sync in one Core data row, company and contact auto-import and ticket sync scope pickers side by side, and the Extended data switches in a three-column grid, each with an (i) beside its name." width="1440" height="940" />
 </Frame>
-
-<Accordion title="Phone layout">
-<Frame caption="MSP staff in the Demo tenant.">
-  <img src="/images/product/integrations-choose-data-preview-mobile.png" alt="Phone layout showing invoice visibility beneath enabled invoice sync." width="780" height="1688" />
-</Frame>
-</Accordion>
 
 #### Ticket sync scope
 
@@ -219,26 +213,22 @@ Previously synchronized tickets of an excluded type are removed on the next sync
 
 #### Contact and company auto-import
 
-- **Contact auto-import:** turn on **Enable Auto-Import** to create user accounts for active contacts when companies are added, and select a **Default Role for Imported Contacts** (e.g., Viewer). Optionally, use **Halo Role Mapping** to map Halo roles and the Important Contact flag to other portal roles. When a contact matches more than one mapping, the mapping highest in the list wins. Contacts that match no mapping get the default role.
+- **Contact auto-import:** turn on **Contact Auto-Import** to create user accounts for active contacts when companies are added, and select a **Default Role for Imported Contacts** (e.g., Viewer). Optionally, under **Portal roles by Halo role**, select **Add rule** to give a Halo role or the Important Contact flag another portal role. When a contact matches more than one rule, the rule highest in the list wins. Contacts that match no rule get the default role.
 - **Company auto-import:** under **Auto-Import Company Types**, select the Halo client types to create in the portal automatically during sync. MSPortal asks you to confirm before it imports a new batch, because companies are a billed item.
 
-#### Auto-import opportunities into the Planner
+#### Auto-import to Planner
 
-Under enabled opportunity sync, the **Auto-import to Planner** section controls which opportunities create planner items:
+With **Enable Opportunity Sync** on, the **Auto-import to Planner** switch sits below the **Extended data** switches and controls which opportunities create planner items:
 
 | Setting | Description |
 |---------|-------------|
-| **Auto-import opportunities into the Planner** | Master toggle. When off, opportunities only come into the planner via the manual Import Opportunities dialog |
+| **Auto-import to Planner** | Master switch. When off, opportunities only come into the planner via the manual Import Opportunities dialog. Turning it on reveals the two filters below. |
 | **Minimum opportunity value** | Skip opportunities below a value threshold (useful for filtering out noise from small stub deals) |
 | **Opportunity types to auto-import** | Halo opportunity types to include. The list comes from the opportunity types that have appeared in your Halo data, since Halo's opportunity type is free text. If none are selected, all types are eligible. |
 
 Once enabled, every Halo sync creates planner items for new matching opportunities and keeps existing PSA-managed planner items in sync. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities) in the Planner guide.
 
-<Frame caption="Invoice status visibility and Planner auto-import controls on Choose data.">
-  <img src="/images/product/integrations-choose-data-invoices-preview.png" alt="Invoice status visibility and Planner auto-import controls appear beneath their dataset switches on Choose data." width="1280" height="853" />
-</Frame>
-
-**Hide Invoice Statuses** chooses which invoices appear on the Invoices page. Hiding a status does not stop those invoices from synchronizing.
+**Hide invoice statuses** chooses which invoices appear on the Invoices page. Hiding a status does not stop those invoices from synchronizing.
 
 Synchronizing source records, linking them to companies and importing portal records are separate steps. Use the initial-sync action when offered, then inspect the result. Options in later tasks may stay incomplete while background work runs, so check errors and sync results before treating an empty list as the final dataset.
 
@@ -393,7 +383,7 @@ Only companies still mapped to this connection are affected, and archived device
 | A data option is unavailable | Check its result in **Permissions**, grant the named Halo permission and select **Re-check**. |
 | Tickets not syncing | Check that the correct teams are selected in **Ticket Sync Scope**, that ticket statuses and types aren't excluded, and that the API agent belongs to those teams. |
 | New statuses are absent | Run a sync and check the selected teams in **Choose data**. |
-| Contacts not importing | Verify **Enable Auto-Import** is on and a default role is selected in **Choose data**. |
+| Contacts not importing | Verify **Contact Auto-Import** is on and a default role is selected in **Choose data**. |
 | Permission errors | Review the API permissions in Halo PSA and ensure all required permissions are enabled. See [Create Custom Halo PSA Role and API User](/user-guides/integrations/halo-psa-custom-role-and-user). |
 | Projects load, but creating or editing one fails | Check **Project Modify** on the application and the agent's project access. |
 | A project loads, but its child ticket, checklist or note cannot be changed | Check ticket write, action and to-do access, ticket type access and team or client restrictions on the API agent. |
