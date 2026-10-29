@@ -29290,43 +29290,6 @@
           "roleIds"
         ]
       },
-      "SendBroadcastRequest": {
-        "type": "object",
-        "properties": {
-          "subject": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255,
-            "description": "Email subject line"
-          },
-          "htmlBody": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100000,
-            "description": "HTML body of the broadcast email"
-          },
-          "groupIds": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "minItems": 1,
-            "maxItems": 50,
-            "description": "Broadcast group IDs to send to (from the groups endpoint)"
-          },
-          "useDarkWrapper": {
-            "type": "boolean",
-            "default": true,
-            "description": "Wrap the body in the tenant's dark email wrapper"
-          }
-        },
-        "required": [
-          "subject",
-          "htmlBody",
-          "groupIds"
-        ]
-      },
       "NotificationReadStateResult": {
         "type": "object",
         "properties": {
@@ -68590,108 +68553,12 @@
             }
           }
         }
-      },
-      "post": {
-        "summary": "Send broadcast",
-        "description": "Send an emergency broadcast email to every member of the selected broadcast groups. Delivery runs in the background; the response carries the broadcast id, the Trigger run id, the resolved recipient count and the group names. The linked user is recorded as the sender. Requires `broadcasts.write` and write_broadcasts.",
-        "tags": [
-          "Broadcasts"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendBroadcastRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Broadcast queued",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "broadcastId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "triggerRunId": {
-                          "type": "string"
-                        },
-                        "totalRecipients": {
-                          "type": "integer"
-                        },
-                        "groupNames": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        }
-                      },
-                      "required": [
-                        "broadcastId",
-                        "triggerRunId",
-                        "totalRecipients",
-                        "groupNames"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "No recipients in the selected groups, or no group id resolves to a broadcast group",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - missing scope (broadcasts.write) or the linked user lacks the broadcasts permission",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/api/public/v1/broadcasts/groups": {
       "get": {
         "summary": "List broadcast groups",
-        "description": "Broadcast groups with member counts; use the ids as groupIds when sending a broadcast. Optionally scoped to one company.",
+        "description": "Broadcast groups with member counts, optionally scoped to one company. Sending a broadcast is not available over the API.",
         "tags": [
           "Broadcasts"
         ],
