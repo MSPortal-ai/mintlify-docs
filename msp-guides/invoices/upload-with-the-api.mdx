@@ -21,6 +21,8 @@ Uploaded invoices and quotes sort, filter, search, export and bulk-download with
   - **Write Documentation** (`documentation.write`) for orders and other documents.
   - **Read Companies** (`companies.read`) to look up company IDs.
   - Optional: **Read Financial** (`financial.read`) to list what you uploaded.
+
+  Already have a key? Add these scopes to it instead: in **Manage API Keys**, open the key's **⋯** menu, choose **Edit**, check the scopes and click **Save Changes**. The key value stays the same, so anything already using it keeps working, and the new scopes apply as soon as you save.
 - **Create the key as an MSP staff user with write access.** A key acts as the user who created it. Invoice and quote uploads need **Integrations** at **Write**. Document uploads need the **Documentation** settings permission at **Write**. Admin roles have both. A key created by a company (portal) user cannot upload.
 - **Use your region's address.** It is the address you sign in to MSPortal at: US tenants call `https://app.msportal.ai`, EU tenants `https://eu.msportal.ai`. The examples use the EU address.
 - **No PSA or quoting integration is needed.** The **Invoices** and **Quotes** pages appear after your first upload. To let a client's portal users open them, give their role the **Invoices**, **Quotes** or **Documentation** permission.
@@ -232,7 +234,7 @@ A rule checked after the fields, such as a missing PDF on the first upload, come
 | --- | --- | --- |
 | 400 | A field is missing or invalid, for example no PDF on the first upload, a `total` of 0, or a file that is not a PDF | Read `error`, fix the request and send it again |
 | 401 | The key is missing, wrong or revoked | Check the `Authorization` header |
-| 403 | The key lacks the scope, or its user lacks the permission | Add the scope, or create the key as a user with the permissions in [Before you start](#before-you-start) |
+| 403 | The key lacks the scope, or its user lacks the permission | Add the scope from the key's **⋯** menu > **Edit**, or create the key as a user with the permissions in [Before you start](#before-you-start) |
 | 404 | The company, folder or record does not exist in your tenant | Check the ID |
 | 409 | A document retry names a different company or folder | Use a new prepare call for a different company |
 | 413 | The PDF is over 3,000,000 bytes, or the request body is too large | Compress the PDF |
