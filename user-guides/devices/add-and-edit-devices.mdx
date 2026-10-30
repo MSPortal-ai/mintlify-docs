@@ -108,9 +108,35 @@ Synced devices take their details from the connected tool.
 - Meraki devices show some fields as read-only ("Some fields synced from Meraki"). You can still change warranty dates, company, location, and custom fields.
 - A field the connected tool controls can be replaced at the next sync.
 - A **Purchase Date** you enter is kept across syncs.
-- **Update Device** changes the portal record. It does not change the physical computer or write the change back to your RMM or PSA.
+- **Update Device** changes the portal record. It does not change the physical computer or write the change back to your RMM or PSA. The one exception is a ConnectWise Asio device's **Friendly Name**, which is saved to Asio (see below).
 
 For a correction in a source-controlled field, ask your MSP to fix it in the connected tool or its import settings.
+
+## Rename a device in your RMM
+
+A ConnectWise Asio device has a **Friendly Name** as well as its device name. The device name is the computer's hostname and comes from Asio. The friendly name is the label you choose, and MSPortal saves it to Asio, so it changes in both places. This needs manage access to Devices.
+
+### In the Devices table
+
+<Steps>
+  <Step title="Click the friendly name">
+    In the **Friendly Name** column, click the device's name, or **—** if it has none. The cell becomes a text field.
+  </Step>
+  <Step title="Type the new name">
+    Up to 128 characters.
+  </Step>
+  <Step title="Save">
+    Press **Enter** or click the check mark. Press **Esc** or click **×** to cancel.
+  </Step>
+</Steps>
+
+The column is editable when ConnectWise Asio is your only RMM. If you also use NinjaOne, rename the device from its panel instead.
+
+### In the device panel
+
+Open the device, click the **Edit** tab, change **Friendly Name**, and click **Update Device**. The friendly name is saved to your RMM first. If the RMM does not accept it, nothing else is saved and the panel stays open with the reason.
+
+A friendly name cannot be cleared, only changed. If a rename is refused with "Unknown/invalid scope(s)", your MSP needs to give the Asio API key device write access; see [Configure ConnectWise Asio Integration](/user-guides/integrations/enable-connectwise-asio-integration#friendly-names).
 
 ## Delete a device record
 
@@ -136,6 +162,7 @@ Deleting removes the portal record only. It does not wipe the computer or remove
 | No **Edit** tab             | You need Manage access to Devices. Without it you see **Read-only mode**.                        |
 | The change did not appear   | Check for an error message, reopen the device, and look at both device fields and custom fields. |
 | A synced field changed back | The connected tool controls it. Ask your MSP to correct it there.                                |
+| "The RMM didn't accept the new friendly name" | The message ends with the RMM's reason. "Unknown/invalid scope(s)" means the Asio API key needs device write access. |
 
 ## Frequently asked questions
 
