@@ -37,9 +37,11 @@ The first sync can take hours, or even days, for a large account. Companies appe
     | Platform - Custom Fields values | Read |
     | Platform - DataMapping | Read |
     | Platform - DeviceGroups | Read |
-    | Platform - Devices | Read |
+    | Platform - Devices | Read and Write |
     | Platform - Sites | Read |
     | Platform - Tickets | Create, Read and Update |
+
+    **Platform - Devices** Write lets MSPortal save a device's friendly name back to Asio. Everything else works without it, but renaming a device shows "The RMM didn't accept the new friendly name".
   </Step>
   <Step title="Save and copy the credentials">
     Select **Save**. Copy the **Client ID** and **Client Secret** now. Asio does not show them again after you close the dialog.
@@ -125,6 +127,16 @@ Matching alone does not create missing locations. If no locations appear, check 
 
 For selections, type mappings and results, see [Import Devices](/user-guides/integrations/import-devices).
 
+## Friendly names
+
+Asio's friendly name for a device syncs to MSPortal on its own. The device name stays the computer's hostname.
+
+- In **Devices**, the **Friendly Name** column shows it. Filter, sort, search and the CSV download include it.
+- A device's panel is titled by its friendly name, with the device name beside it.
+- People with manage access to Devices can rename a device: click its **Friendly Name** in the table, or change **Friendly Name** on the device's **Edit** tab. MSPortal saves the new name to Asio, so it changes there too. See [Add and edit device records](/user-guides/devices/add-and-edit-devices#rename-a-device-in-your-rmm).
+
+Renaming needs the **Platform - Devices** Write scope. To add it to an existing connection, edit the MSPortal API key in **Integrations > API Access** in Asio and give **Platform - Devices** both Read and Write. The Client ID and Client Secret stay the same, so nothing changes in MSPortal.
+
 ## Manage an existing connection
 
 - **Update the secret:** open **Connect**, enter the new Client Secret, select **Test connection**, then **Save changes**. Leave the masked secret unchanged to keep it. The saved environment and Client ID are locked; to change them, connect a new Asio API client.
@@ -141,6 +153,7 @@ For selections, type mappings and results, see [Import Devices](/user-guides/int
 | A mapping disappeared | Reopen **Import or match companies** and check which rows show a saved link. |
 | Devices are missing | Check that the company is matched, the first sync has finished, the device type is matched and not ignored, and the devices were imported from **Staged devices**. |
 | Inventory is old | Check the last successful sync in **Sync activity** and any paused or error state on the connection. A scheduled time does not guarantee a successful run. |
+| Renaming says "The RMM didn't accept the new friendly name: Unknown/invalid scope(s)" | The API key lacks **Platform - Devices** Write. Add it in **Integrations > API Access** in Asio, then rename the device again. |
 
 ## Frequently asked questions
 
