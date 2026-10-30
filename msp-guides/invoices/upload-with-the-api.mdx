@@ -84,7 +84,7 @@ The answer is `201` with the MSPortal `id`. Store it if you may want to delete t
 | `invoiceNumber` | Yes | Shown in the **Invoice #** column. Up to 100 characters, with at most 18 digits in total. |
 | `companyId` | Yes | From [Find the company ID](#find-the-company-id). |
 | `invoiceDate` | Yes | `YYYY-MM-DD`. |
-| `total` | Yes | Greater than 0. |
+| `total` | Yes | At least 0.01, with up to two decimals. |
 | `pdf` | The first time | `fileName` must end in `.pdf`; the content must be a PDF. |
 | `dueDate`, `paidDate` | No | `YYYY-MM-DD`. A `paidDate` marks the invoice closed. |
 | `status` | No | Shown in the **Status** column, for example `Open` or `Paid`. |
@@ -194,6 +194,7 @@ Finalize answers `201`, and the document appears in the company's Documentation 
 - `fileSize` must be the exact size in bytes, and `fileName` must end in the file's extension (`.pdf`, `.docx`, `.xlsx`, `.xls` or `.csv`) and must not contain `..`.
 - To file orders in their own folder, click **New folder** on the **Documentation** page once, read the folder's `id` from `GET /documentation/folders`, and pass it as `folderId`. A folder without a company works for every client.
 - If finalize times out, send it again with the same `documentId` and body: it returns the same document, never a duplicate. A retry that names a different company or folder answers `409`.
+- An `uploadUrl` accepts one file. If the bytes you sent had the wrong size or type, finalize answers `400`; start again with a new prepare call.
 - Documents uploaded this way can't be deleted through the API yet.
 
 ## Delete an upload
