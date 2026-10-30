@@ -8,22 +8,23 @@ This guide is for MSP staff and developers who connect a billing or quoting syst
 
 | What you upload | Where it appears | Who sees it |
 | --- | --- | --- |
-| Invoice | A row in the **Invoices** table, next to invoices synced from your PSA. **View PDF** opens the PDF you uploaded. | MSP staff, and the company's portal users whose role can view invoices |
-| Quote | A row in the **Quotes** table and its quote page, next to synced quotes. **View quote** opens the PDF you uploaded. | MSP staff, and the company's portal users whose role can view quotes |
-| Order or any other document | A file in the company's **Documentation** library | MSP staff, and the company's portal users who can open Documentation |
+| Invoice | A row in the **Invoices** table, next to invoices synced from your PSA. **View PDF** opens the PDF you uploaded. | MSP staff, and the company's portal users whose role includes **Invoices** |
+| Quote | A row in the **Quotes** table and its quote page, next to synced quotes. **View quote** and **Download PDF** open the PDF you uploaded. | MSP staff, and the company's portal users whose role includes **Quotes** |
+| Order or any other document | A file in the company's **Documentation** library | MSP staff, and the company's portal users whose role includes **Documentation** |
 
-Uploaded invoices and quotes sort, filter, search and export with the synced ones. Push the same record again to update it, for example when an invoice is paid.
+Uploaded invoices and quotes sort, filter, search, export and bulk-download with the synced ones. Push the same record again to update it, for example when an invoice is paid.
 
 ## Before you start
 
-- **Create an API key.** Go to **Settings > Integrations**, find **API Access**, click **Manage API Keys**, then **Create New Key**. Pick these scopes:
+- **Create an API key.** Go to **Settings > Integrations**, find the **API Access** card, click **Manage API Keys**, then **Create New Key**. Creating keys needs the **Integrations** permission at **Manage**. Pick these scopes:
   - **Write Financial** (`financial.write`) for invoices and quotes.
   - **Write Documentation** (`documentation.write`) for orders and other documents.
   - **Read Companies** (`companies.read`) to look up company IDs.
   - Optional: **Read Financial** (`financial.read`) to list what you uploaded.
-- **Use an MSP staff account with the right permissions.** A key acts as the user who created it. Invoice and quote uploads need **Integrations** write permission; document uploads need **Documentation settings** write permission. A company user's key cannot upload.
-- **Use your region's address.** US tenants call `https://app.msportal.ai`, EU tenants `https://eu.msportal.ai`. The examples use the EU address.
-- **No PSA or quoting integration is needed.** The **Invoices** and **Quotes** pages appear after your first upload. To let a client's portal users open them, give their role the **Invoices** or **Quotes** permission.
+- **Create the key as an MSP staff user with write access.** A key acts as the user who created it. Invoice and quote uploads need **Integrations** at **Write**. Document uploads need the **Documentation** settings permission at **Write**. Admin roles have both. A key created by a company (portal) user cannot upload.
+- **Use your region's address.** It is the address you sign in to MSPortal at: US tenants call `https://app.msportal.ai`, EU tenants `https://eu.msportal.ai`. The examples use the EU address.
+- **No PSA or quoting integration is needed.** The **Invoices** and **Quotes** pages appear after your first upload. To let a client's portal users open them, give their role the **Invoices**, **Quotes** or **Documentation** permission.
+- The examples use `curl` and `jq`. Any language that can send JSON over HTTPS works the same way.
 
 Every request sends the key as a Bearer token:
 
@@ -39,14 +40,15 @@ The **API Reference** tab lists every field, under **Financial** and **Documenta
 Each record belongs to one company (your client). List your companies once, match them to your clients by `name`, and store each MSPortal `id` next to the client in your system:
 
 ```bash
-curl -s "$MSPORTAL/companies?limit=100&page=1" -H "Authorization: Bearer $KEY"
+curl -s "$MSPORTAL/companies?limit=100&page=1" -H "Authorization: Bearer $KEY" \
+  | jq '.data[] | {id, name}'
 ```
 
-The answer's `pagination.hasNextPage` tells you whether to fetch `page=2`. Use the matching company's `id` as `companyId` below.
+While `pagination.hasNextPage` is `true`, fetch the next page (`page=2`, and so on). Use the matching company's `id` as `companyId` below.
 
 ## Upload an invoice
 
-Send the invoice and its PDF in one request. The PDF goes in `pdf.contentBase64` as standard base64, up to 3,000,000 bytes.
+Send the invoice and its PDF in one request. The PDF goes in `pdf.contentBase64` as standard base64 (no `data:` prefix), up to 3,000,000 bytes.
 
 ```bash
 PDF=$(base64 -w0 invoice-2026-1042.pdf)   # macOS: base64 -i invoice-2026-1042.pdf
@@ -70,7 +72,7 @@ curl -s -X POST "$MSPORTAL/financial/invoices" \
 EOF
 ```
 
-The answer is `201` with the MSPortal `id`:
+The answer is `201` with the MSPortal `id`. Store it if you may want to delete the invoice later.
 
 ```json
 { "data": { "id": "b8c1…", "externalId": "INV-2026-1042", "created": true } }
@@ -78,10 +80,19 @@ The answer is `201` with the MSPortal `id`:
 
 | Field | Required | Notes |
 | --- | --- | --- |
-| `externalId` | Yes | Your system's ID. It identifies the invoice on later calls. |
-| `invoiceNumber`, `companyId`, `invoiceDate`, `total` | Yes | `total` must be greater than 0. Dates are `YYYY-MM-DD`. |
-| `pdf` | The first time | `fileName` must end in `.pdf`. |
-| `dueDate`, `status`, `currency`, `subtotal`, `salesTax`, `payments`, `balance`, `reference`, `customerPo`, `invoiceType` | No | `balance` defaults to `total`. `invoiceType` defaults to Standard. |
+| `externalId` | Yes | Your system's ID, up to 255 characters. It identifies the invoice on later calls. |
+| `invoiceNumber` | Yes | Shown in the **Invoice #** column. Up to 100 characters, with at most 18 digits in total. |
+| `companyId` | Yes | From [Find the company ID](#find-the-company-id). |
+| `invoiceDate` | Yes | `YYYY-MM-DD`. |
+| `total` | Yes | Greater than 0. |
+| `pdf` | The first time | `fileName` must end in `.pdf`; the content must be a PDF. |
+| `dueDate`, `paidDate` | No | `YYYY-MM-DD`. A `paidDate` marks the invoice closed. |
+| `status` | No | Shown in the **Status** column, for example `Open` or `Paid`. |
+| `currency` | No | ISO 4217 code, for example `EUR`. |
+| `subtotal`, `salesTax`, `payments` | No | Numbers. |
+| `balance` | No | Amount still due. Defaults to `total`. |
+| `reference`, `customerPo` | No | Shown in the **Reference** and **Customer PO** columns. |
+| `invoiceType` | No | Defaults to `Standard`. |
 
 ### Mark an invoice paid
 
@@ -96,16 +107,19 @@ curl -s -X POST "$MSPORTAL/financial/invoices" \
     "companyId": "3f0c2a5e-0000-4000-8000-000000000001",
     "invoiceDate": "2026-10-01",
     "total": 1190,
+    "payments": 1190,
     "balance": 0,
     "paidDate": "2026-10-15",
     "status": "Paid"
   }'
 ```
 
+Every push replaces the invoice's values, so send all the fields you want to keep, not only the ones that changed.
+
 ## Upload a quote
 
 ```bash
-PDF=$(base64 -w0 quote-A-77.pdf)
+PDF=$(base64 -w0 quote-A-77.pdf)   # macOS: base64 -i quote-A-77.pdf
 
 curl -s -X POST "$MSPORTAL/financial/quotes" \
   -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
@@ -127,67 +141,97 @@ curl -s -X POST "$MSPORTAL/financial/quotes" \
 EOF
 ```
 
-- `externalId`, `companyId`, `name` and, the first time, `pdf` are required.
-- Push the same `externalId` again to change the stage (for example `Won`) or replace the PDF.
-- `contactName` is the client contact the quote is for. Roles that only show users their own quotes match it against the portal user's full name.
-- Roles that only show some stages hide quotes without a `stage`, so send one.
-- `url` is an optional `https` link to the quote in your system; the quote page shows it as **Open quote**.
+| Field | Required | Notes |
+| --- | --- | --- |
+| `externalId` | Yes | Your system's ID, up to 255 characters. |
+| `companyId` | Yes | From [Find the company ID](#find-the-company-id). |
+| `name` | Yes | The quote's title. |
+| `pdf` | The first time | `fileName` must end in `.pdf`; the content must be a PDF. |
+| `number` | No | Shown in the **Number** column. |
+| `stage` | No | For example `Draft`, `Sent`, `Won` or `Lost`. Roles that only show some stages hide quotes without one, so send it. |
+| `contactName` | No | The client contact the quote is for. Roles that only show users their own quotes match it against the portal user's full name. |
+| `ownerName` | No | The MSP staff member who owns the quote. |
+| `oneTimeTotal`, `monthlyTotal`, `annualTotal` | No | Numbers. |
+| `currency` | No | ISO 4217 code, for example `EUR`. |
+| `quoteDate`, `expiresAt`, `wonAt` | No | ISO 8601 date and time. `quoteDate` defaults to the time of the first upload. |
+| `url` | No | An `https` link to the quote in your system. The quote page shows it as **Open quote**. |
+
+Push the same `externalId` again to change the stage or replace the PDF. As with invoices, every push replaces the quote's values; a push without `quoteDate` keeps the stored date.
 
 ## Upload an order or another document
 
-Orders have no table of their own, so they go into the company's **Documentation** library. A document upload takes three calls, so files up to 50 MiB fit: prepare, send the bytes, finalize. PDF, DOCX, XLSX, XLS and CSV files are accepted.
+Orders have no table of their own, so they go into the company's **Documentation** library. PDF, DOCX, XLSX, XLS and CSV files up to 50 MiB are accepted. A document upload takes three calls: prepare, send the bytes, finalize.
 
-<Steps>
-  <Step title="Prepare the upload">
-    ```bash
-    SIZE=$(stat -c%s order-5501.pdf)   # macOS: stat -f%z order-5501.pdf
+```bash
+FILE=order-5501.pdf
+BODY=$(jq -n --argjson size "$(wc -c < "$FILE" | tr -d ' ')" '{
+  name: "Order 5501",
+  fileName: "order-5501.pdf",
+  fileSize: $size,
+  contentType: "application/pdf",
+  companyId: "3f0c2a5e-0000-4000-8000-000000000001"
+}')
 
-    curl -s -X POST "$MSPORTAL/documentation/files" \
-      -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
-      -d "{\"name\": \"Order 5501\", \"fileName\": \"order-5501.pdf\", \"fileSize\": $SIZE,
-           \"contentType\": \"application/pdf\", \"companyId\": \"3f0c2a5e-0000-4000-8000-000000000001\"}"
-    ```
-    The answer holds a `documentId`, an `uploadUrl` valid for 2 hours and the `contentType` to send.
-  </Step>
-  <Step title="Send the file to uploadUrl">
-    ```bash
-    curl -s -X PUT "$UPLOAD_URL" -H "Content-Type: application/pdf" --data-binary @order-5501.pdf
-    ```
-    This request goes to storage directly. Do not send the `Authorization` header.
-  </Step>
-  <Step title="Finalize">
-    Send the same body as in step 1 to the finalize address:
-    ```bash
-    curl -s -X POST "$MSPORTAL/documentation/files/$DOCUMENT_ID/finalize" \
-      -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
-      -d "{\"name\": \"Order 5501\", \"fileName\": \"order-5501.pdf\", \"fileSize\": $SIZE,
-           \"contentType\": \"application/pdf\", \"companyId\": \"3f0c2a5e-0000-4000-8000-000000000001\"}"
-    ```
-    The document now appears in the company's Documentation library. A retry after a timeout returns the same document, so it is safe.
-  </Step>
-</Steps>
+# 1. Prepare: returns documentId, uploadUrl (valid for 2 hours) and contentType.
+PREPARED=$(curl -s -X POST "$MSPORTAL/documentation/files" \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d "$BODY")
+DOCUMENT_ID=$(echo "$PREPARED" | jq -r .data.documentId)
+UPLOAD_URL=$(echo "$PREPARED" | jq -r .data.uploadUrl)
+CONTENT_TYPE=$(echo "$PREPARED" | jq -r .data.contentType)
+
+# 2. Send the bytes to storage. No Authorization header on this call.
+curl -s -X PUT "$UPLOAD_URL" -H "Content-Type: $CONTENT_TYPE" -H "x-upsert: false" \
+  --data-binary @"$FILE"
+
+# 3. Finalize with the same body as step 1.
+curl -s -X POST "$MSPORTAL/documentation/files/$DOCUMENT_ID/finalize" \
+  -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d "$BODY"
+```
+
+Finalize answers `201`, and the document appears in the company's Documentation library.
 
 - `companyId` is required. A document without a company would be visible to every client, so it is refused.
-- To file orders in their own folder, create an **Orders** folder under **Documentation** once, read its ID from `GET /documentation/folders`, and pass it as `folderId`.
+- `fileSize` must be the exact size in bytes, and `fileName` must end in the file's extension (`.pdf`, `.docx`, `.xlsx`, `.xls` or `.csv`) and must not contain `..`.
+- To file orders in their own folder, click **New folder** on the **Documentation** page once, read the folder's `id` from `GET /documentation/folders`, and pass it as `folderId`. A folder without a company works for every client.
+- If finalize times out, send it again with the same `documentId` and body: it returns the same document, never a duplicate. A retry that names a different company or folder answers `409`.
+- Documents uploaded this way can't be deleted through the API yet.
 
 ## Delete an upload
 
-Delete an invoice or quote you uploaded by its MSPortal `id`. The PDF is removed with it. Invoices synced from your PSA cannot be deleted this way.
+Delete an invoice or quote you uploaded by its MSPortal `id`. The PDF is removed with it. Invoices synced from your PSA can't be deleted this way and answer `404`.
 
 ```bash
 curl -s -X DELETE "$MSPORTAL/financial/invoices/b8c1…" -H "Authorization: Bearer $KEY"
 curl -s -X DELETE "$MSPORTAL/financial/quotes/7d42…" -H "Authorization: Bearer $KEY"
 ```
 
+## Retries
+
+- Invoice and quote uploads are keyed by `externalId`, so sending the same request again is always safe: it updates the record instead of creating a second one.
+- Document uploads are safe to finalize again with the same `documentId`. If a prepare call fails, start over with a new prepare.
+
 ## Errors
 
-Every error answers with `error` (a readable message) and `code`.
+Every error answers with a JSON body. `error` is a readable message, `code` a stable value to branch on, and `requestId` identifies the call for support. When fields are invalid, `details` names each one:
+
+```json
+{
+  "error": "Validation failed",
+  "code": "VALIDATION_ERROR",
+  "requestId": "27fd3b90-…",
+  "details": [{ "path": ["total"], "message": "Too small: expected number to be >0" }]
+}
+```
+
+A rule checked after the fields, such as a missing PDF on the first upload, comes back as `{ "error": "a PDF is required", "code": "VALIDATION_ERROR", "requestId": "…" }`.
 
 | Status | Meaning | What to do |
 | --- | --- | --- |
 | 400 | A field is missing or invalid, for example no PDF on the first upload, a `total` of 0, or a file that is not a PDF | Read `error`, fix the request and send it again |
 | 401 | The key is missing, wrong or revoked | Check the `Authorization` header |
-| 403 | The key lacks the scope, or its user lacks the permission | Add the scope, or create the key as a user with the permission named in [Before you start](#before-you-start) |
+| 403 | The key lacks the scope, or its user lacks the permission | Add the scope, or create the key as a user with the permissions in [Before you start](#before-you-start) |
 | 404 | The company, folder or record does not exist in your tenant | Check the ID |
-| 413 | The PDF is over 3,000,000 bytes | Compress the PDF |
-| 429 | Too many requests | Wait until the time in `X-RateLimit-Reset`, then retry |
+| 409 | A document retry names a different company or folder | Use a new prepare call for a different company |
+| 413 | The PDF is over 3,000,000 bytes, or the request body is too large | Compress the PDF |
+| 429 | Too many requests | Wait until the time in the `X-RateLimit-Reset` header, then retry |
+| 500 | Something failed on our side | Retry later. If it keeps failing, send the `requestId` to MSPortal support |
