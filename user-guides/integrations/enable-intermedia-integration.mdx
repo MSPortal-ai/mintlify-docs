@@ -1,46 +1,138 @@
 ---
-title: 'Provide Intermedia Partner API access'
-description: 'Securely submit Intermedia Partner API credentials for integration development'
-icon: 'plug'
+title: 'Configure Intermedia Integration'
+description: 'Connect Intermedia, map Elevate customer accounts to companies and connect call analytics so Voice shows users, call volumes and call history'
+icon: 'phone'
 ---
 
-Provide Partner API access for the MSPortal team to develop the Intermedia integration, which will map Intermedia customers to companies and show their services, seats and usage. This is a **credential intake**: the credentials are stored securely but are not tested yet, and nothing syncs until the integration ships.
-
-Open **Settings > Integrations**, find **Intermedia** in the directory, and open its setup. You need an MSP staff account with permission to manage integrations, and the provider must be enabled for your portal. Company users should ask their MSP to connect the service.
+The Intermedia integration maps your Intermedia Elevate customer accounts to MSPortal companies and syncs their users. Connect call analytics for an account to read its call history as well. The data appears in the [Voice](/user-guides/voice/index) module, in the Voice report blocks and content source, and through the MCP server and public API.
 
 <Note>
-Intermedia is currently a **Pilot** integration available to selected tenants. If you don't see Intermedia in **Settings > Integrations**, contact support@msportal.ai. The pilot stores your Partner API credentials securely and notifies the MSPortal integration team. It does not sync customer, service or usage data yet; data sync features build on this access.
+Branch preview: this guide describes the Intermedia setup page as it works on an unreleased branch, verified on the MSPortal Demo tenant with sample accounts. Until release, the **Intermedia** card in **Settings > Integrations** appears only for accounts with the integration feature turned on; contact support@msportal.ai if you need it. The setup page replaces the earlier credential intake form, and credentials submitted through that form stay stored.
 </Note>
 
-## Before you start
+## What gets synchronized
 
-1. In the Intermedia Partner Portal, open **Integrations > Public API** and select **Get Access to Partner API**. Intermedia confirms when access is on.
-2. Select **Create a New API Client** with **Enable Client** checked.
-3. Make sure your account contact has the **Public API** and **Billing Support** roles.
-4. Copy your **Partner ID** (shown at the top of the side menu), the **Client ID** and the **Client Secret**.
+<CardGroup cols={2}>
+  <Card title="Customer accounts" icon="building">
+    Each Elevate customer account with its plan, state and user count, mapped to a company
+  </Card>
+  <Card title="Users" icon="users">
+    The people provisioned in each account, with their names and numbers
+  </Card>
+  <Card title="Call history" icon="phone">
+    One record per call with its start, direction, both parties, duration and charge, for accounts with call analytics connected
+  </Card>
+  <Card title="Nothing is written back" icon="lock">
+    MSPortal reads from Intermedia. It never changes accounts, users or calls at the provider
+  </Card>
+</CardGroup>
 
-## Submit your credentials
+Accounts and their users sync every hour. Call history syncs hourly for accounts with call analytics connected: the first sync reads the last 30 days, and later syncs continue from where the previous one stopped. Calls stay in MSPortal once synced. Accounts and users that Intermedia no longer reports are removed from the lists.
 
-1. Open the Intermedia setup form.
-2. Enter **Partner ID**, **Client ID** and **Client Secret**.
-3. Select **Secure credentials**. MSPortal stores the Client ID and Client Secret only in Vault, and a successful first submission notifies the MSPortal integration team. They will contact you if more information is needed.
+## Prerequisites
 
-## Replace or remove access
+- An Intermedia Partner Portal login. Your contact needs the **Private Label Public API** role.
+- For call history, access to each customer account's HostPilot to create a Unite Extend API service account.
+- MSPortal integration management access to connect, change credentials and connect call analytics. Integration write access is enough to map accounts and run **Sync All Data**. Everyone else sees the setup page read-only.
+- MSPortal companies to map the Intermedia accounts to. Only mapped accounts appear in Voice.
 
-Open the existing intake to replace credentials. Stored secrets stay masked; enter the replacements, then select **Update credentials**. A successful replacement notifies the integration team; saving unchanged values does not resubmit them.
+## Part 1: Create a Partner API client
 
-To remove access, disconnect Intermedia and confirm in the **Remove Intermedia credentials?** dialog. This removes the intake record and its stored Vault credentials and cannot be undone. It does not revoke access at Intermedia; disable or delete the API client in the Partner Portal when it is no longer needed.
+<Steps>
+  <Step title="Open the Public API page">
+    Sign in to the Intermedia Partner Portal and open **Integrations > Public API**.
+  </Step>
+  <Step title="Create the API client">
+    Select **Create a New API Client** with **Enable Client** checked.
+  </Step>
+  <Step title="Copy the three values">
+    Copy your **Partner ID**, the **Client ID** and the **Client Secret**. The Partner ID is shown at the top of the Partner Portal side menu.
+  </Step>
+</Steps>
 
-Users without integration management permission see the intake read-only.
+## Part 2: Connect, map and review
+
+The setup page has three steps: **Connect**, **Map accounts** and **Review data**. There is no screenshot of the **Connect** step yet; it is a single card with the three fields described below.
+
+<Steps>
+  <Step title="Open the Intermedia setup page">
+    Go to **Settings > Integrations**, find **Intermedia** and open its setup.
+  </Step>
+  <Step title="Test the connection">
+    On **Connect**, enter the **Partner ID**, **Client ID** and **Client Secret**, then select **Test Connection**. A successful test shows **Connected — N customer accounts**. When Intermedia rejects the client, its own reason appears so you can compare it with the Partner Portal. Editing any field clears the result; test again before you save.
+  </Step>
+  <Step title="Create the integration">
+    Select **Create Integration**. MSPortal stores the Client ID and Client Secret in its secure credential vault, masks them, and starts the first sync. The Partner ID cannot change after connecting; add another connection for a different partner.
+  </Step>
+  <Step title="Map accounts">
+    On **Map accounts**, link each Intermedia customer account to the company it serves. The table shows each account with its **Plan** and **Users**.
+
+    Use **Quick Match** to suggest companies by name, or pick a company in each row. Suggested matches are staged, not saved: review them, then select **Import Selected** to save the links. You can also create a new company from the row. Moving to the next step after changing mappings queues a sync, so the mapped accounts' users and calls are read without waiting for the hour.
+  </Step>
+  <Step title="Review data">
+    **Review data** shows **Mapped accounts** out of all accounts, **Users**, **Accounts with call analytics** out of all accounts and **Calls synced**, with the **Last successful sync** and **Last attempt** times beneath the accounts table. Counts update while a sync runs. Select **Sync All Data** to queue a full sync, and use **View Voice** or **Manage Company Mappings** to move on. Select **Complete Setup** when you are finished; a sync can continue in the background.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview on the Demo tenant: the Review data step with two of four accounts mapped, one account connected to call analytics, one that needs attention and two not connected.">
+  <img src="/images/product/intermedia-review-desktop-preview.png" alt="Intermedia data review step showing Mapped accounts 2 of 4, Users 53, Accounts with call analytics 2 of 4 and Calls synced 483 above a Call analytics table with Account, Company, Users and Call analytics columns and a row menu for each account." width="2880" height="1920" />
+</Frame>
+
+## Connect call analytics for an account
+
+Call history needs a Unite Extend API service account created in each customer account's HostPilot. Connect one per account to read its calls.
+
+<Steps>
+  <Step title="Create the service account in HostPilot">
+    In the customer's HostPilot, open **Intermedia Unite > Apps & Integrations > Unite Extend API access** and create a Service Account. Copy its **Client ID** and **Client Secret**; the secret is shown only once.
+  </Step>
+  <Step title="Open the connect dialog">
+    On the **Review data** step, open the account's row menu (**⋯**) in the **Call analytics** table and choose **Connect call analytics**.
+  </Step>
+  <Step title="Test the service account">
+    Enter the **Client ID** and **Client Secret**, then select **Test Connection**. A successful test shows **Connected — N calls in the last day**. When Intermedia rejects the service account, its reason appears instead.
+  </Step>
+  <Step title="Connect">
+    Select **Connect**. MSPortal stores the service account encrypted, queues a sync for the account, and the row's status changes to **Connected**.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview on the Demo tenant: the Connect call analytics dialog after a successful test.">
+  <img src="/images/product/intermedia-analytics-dialog-desktop-preview.png" alt="Connect call analytics for Summit Architecture dialog with HostPilot instructions, masked Client ID and Client Secret fields, a Connected, 17 calls in the last day confirmation, and Retest Connection and Connect buttons." width="2880" height="1920" />
+</Frame>
+
+### Call analytics statuses
+
+| Status | Meaning |
+| --- | --- |
+| **Connected** | The service account works and the account's calls sync every hour. |
+| **Needs attention** | Intermedia rejected the service account on the last sync. Its reason appears beneath the status, for example `401: invalid_client`. Other accounts keep syncing. Open the row menu and choose **Replace service account** with a new Client ID and Client Secret. |
+| **Not connected** | No service account has been connected. The account's users still sync; its calls do not. |
+
+To stop reading an account's calls, open its row menu and choose **Disconnect call analytics**. MSPortal deletes the stored service account; calls already synced stay. Disconnecting does not disable the service account at Intermedia, so remove it in HostPilot when it is no longer needed.
+
+## Update or remove the connection
+
+To replace the partner API client, reopen the setup page. The **Connect** step reads **Connected to Intermedia** with the saved values masked. Enter the new **Client ID** and **Client Secret**, select **Test Connection**, then **Update Credentials**. A re-sync is queued.
+
+To remove the integration, select **Delete** in the setup page footer and confirm. This removes the connection, every account's stored service account and the synced accounts, users and calls, and it affects every company mapped to Intermedia. It does not revoke access at Intermedia: disable or delete the API client in the Partner Portal and the service accounts in HostPilot when they are no longer needed.
 
 ## Troubleshooting
 
-- **No test step:** expected. Intermedia publishes its Partner API reference only inside the Partner Portal, so MSPortal stores these credentials without testing them until the integration is built.
-- **Cannot edit:** ask an MSP administrator for integration management access.
-- **Missing data after submission:** data sync is not part of this intake yet.
+| Problem | What to do |
+| --- | --- |
+| **Test Connection** fails on **Connect** | Check the Partner ID against the top of the Partner Portal side menu, confirm the API client has **Enable Client** checked and that your contact holds the **Private Label Public API** role. The message shows Intermedia's reason. |
+| Accounts are missing from **Map accounts** | The first sync may still be running; counts update while it does. The list shows the customer accounts the partner API returns for your Partner ID. |
+| An account shows **Not mapped** on **Review data** | Map it on **Map accounts** or from **Manage Company Mappings**. Unmapped accounts never appear in Voice. |
+| **Test Connection** fails in the call analytics dialog | The service account must come from the same customer account's HostPilot, and the secret is shown only once at creation. Create a new service account if the secret was lost. |
+| **Needs attention** after connecting | The service account was changed or disabled at Intermedia. Replace it from the row menu. |
+| **Calls synced** stays at zero | No account has call analytics connected, or the first call sync has not finished. Connect an account and wait for the sync to complete. |
+| **Some data could not be synced** | Previously saved data is kept. Check the connection on **Connect** and run **Sync All Data** again. |
+| The fields are disabled | Ask an MSP administrator for integration management access. |
 
 ## Related guides
 
-- [Integration setup guides](/user-guides/integrations/index)
+- [Voice](/user-guides/voice/index)
 - [Map and import companies](/user-guides/integrations/import-companies)
+- [Sync schedules](/user-guides/integrations/sync-schedules)
 - [Integration troubleshooting](/user-guides/integrations/faq)
