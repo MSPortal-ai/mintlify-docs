@@ -35,6 +35,8 @@ export KEY=your-api-key
 
 The **API Reference** tab lists every field, under **Financial** and **Documentation**.
 
+Leave out optional fields you have no value for. An empty string (`""`) in a text field is refused with a `400`.
+
 ## Find the company ID
 
 Each record belongs to one company (your client). List your companies once, match them to your clients by `name`, and store each MSPortal `id` next to the client in your system:
@@ -90,7 +92,7 @@ The answer is `201` with the MSPortal `id`. Store it if you may want to delete t
 | `status` | No | Shown in the **Status** column, for example `Open` or `Paid`. |
 | `currency` | No | ISO 4217 code, for example `EUR`. |
 | `subtotal`, `salesTax`, `payments` | No | Numbers. |
-| `balance` | No | Amount still due. Defaults to `total`. |
+| `balance` | No | Amount still due. Without it, MSPortal stores 0 when `paidDate` is set, otherwise `total` minus `payments`. |
 | `reference`, `customerPo` | No | Shown in the **Reference** and **Customer PO** columns. |
 | `invoiceType` | No | Defaults to `Standard`. |
 
