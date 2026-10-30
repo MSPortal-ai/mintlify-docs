@@ -1,0 +1,213 @@
+---
+title: "Voice"
+description: "Read voice accounts, users, call volumes and call history from your connected voice provider, and find the same data in reports, the MCP server and the public API."
+icon: phone
+---
+
+Voice shows what your connected voice provider reports: the customer accounts mapped to companies, the people provisioned in them, and their calls. It is for MSP staff and company users who have Voice read access. Intermedia Elevate is the first supported provider.
+
+Voice reports. It does not place calls, change users or alter anything at the provider.
+
+<Note>
+Branch preview: this guide and its screenshots describe Voice as it works on an unreleased branch, captured on the MSPortal Demo tenant with sample accounts and calls. Labels and figures are verified against that build and will be recaptured from production after release.
+</Note>
+
+## Before you start
+
+- Your role has the **Voice** read permission. MSP roles that could already read Security received it automatically. Company roles get it when the MSP grants it; see [Company user permissions](/user-guides/settings/change-company-user-permissions).
+- Your MSP has connected Intermedia and mapped its customer accounts to companies. Voice appears in the sidebar only once a voice integration exists. See [Configure Intermedia Integration](/user-guides/integrations/enable-intermedia-integration).
+- Call history needs call analytics connected for each account. Accounts without it still show their users, but no calls.
+- Voice is a feature MSPortal turns on per account, listed under **Protection**. If the permission and integration are in place and the sidebar entry is still missing, contact support@msportal.ai.
+
+Company users only ever see the accounts, users and calls of their own companies, whichever company scope is active.
+
+## Open Voice
+
+<Steps>
+  <Step title="Open Voice">
+    Select **Voice** in the sidebar's **Protection** group. The page opens on **Overview**.
+  </Step>
+  <Step title="Set the company scope">
+    Use the company selector at the top of the page. Every tab, chart and table follows it. MSP staff can choose any company they are allowed to see, or all companies.
+  </Step>
+  <Step title="Choose the period">
+    Open the period selector in the header and choose **Last 7 days**, **Last 30 days** or **Last 90 days**. The default is the last 30 days. Every tab reads the same period.
+  </Step>
+  <Step title="Pick a tab">
+    Select **Overview**, **Calls**, **Users** or **Accounts** in the header.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="Desktop">
+    <Frame caption="Branch preview on the Demo tenant: the Voice Overview with the summary rail, Calls per day, Calls by hour of day and Busiest callers.">
+      <img src="/images/product/voice-overview-desktop-preview.png" alt="Voice Overview tab for all companies over the last 30 days: 483 calls, 762 minutes of talk time, 87% answered, 6 active callers of 38 users and 2 accounts, above a Calls per day trend, a Calls by hour of day bar chart and a Busiest callers list." width="2880" height="2316" />
+    </Frame>
+  </Tab>
+  <Tab title="Phone">
+    <Frame caption="Branch preview on the Demo tenant: the same Overview on a phone, with the header buttons under Actions.">
+      <img src="/images/product/voice-overview-mobile-preview.png" alt="Voice Overview on a phone: the five summary statistics stacked in a card, then the Calls per day chart, the Calls by hour of day chart and the Busiest callers list." width="780" height="3270" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## What each tab shows
+
+| Tab | What it shows |
+| --- | --- |
+| **Overview** | A summary rail, the daily call trend, calls by hour of day and the busiest callers for the selected companies and period. |
+| **Calls** | One row per call, newest first. |
+| **Users** | One row per person who made or took a call, busiest first, with their call counts and talk time. |
+| **Accounts** | One row per mapped account, busiest first, with its totals and call analytics status. |
+
+### Overview
+
+The summary rail shows five figures for the period:
+
+| Statistic | What it means |
+| --- | --- |
+| **Calls** | Every synced call, with the inbound and outbound counts beneath. |
+| **Talk time** | Total minutes on calls, with the average call length in seconds beneath. |
+| **Answered** | The share of calls with any talk time, with the number of unanswered calls beneath. The figure turns amber below 70%. |
+| **Active callers** | The people who made or took at least one call, out of all users provisioned in the mapped accounts. |
+| **Accounts** | The mapped accounts in scope, and how many of them have call analytics connected. The figure turns amber when none do. |
+
+Below the rail:
+
+- **Calls per day** plots the period as three series, **Inbound**, **Outbound** and **Internal**.
+- **Calls by hour of day** shows which hours are busiest. Days and hours follow your browser's time zone.
+- **Busiest callers** lists the eight people with the most calls, each with their company and talk time. Select **Users** at the bottom of the card to open the full list.
+
+Two empty states can replace the charts:
+
+| Message | Meaning |
+| --- | --- |
+| **No voice data yet** | No mapped account is in scope. Map Intermedia accounts to companies and connect call analytics in **Settings > Integrations**. Users who manage integrations get a button to the page. |
+| **No calls in this period** | Accounts are mapped, but no account in scope has call history for the period. Call history arrives once an account's call analytics are connected and the first sync completes. |
+
+<Frame caption="Branch preview on the Demo tenant: the Overview before any account is mapped.">
+  <img src="/images/product/voice-overview-empty-desktop-preview.png" alt="Voice Overview showing the No voice data yet card, which explains that Intermedia accounts must be mapped to companies and call analytics connected in Settings > Integrations." width="2880" height="1920" />
+</Frame>
+
+### Calls
+
+<Frame caption="Branch preview on the Demo tenant: the Calls tab with 57 sample calls over the last 30 days.">
+  <img src="/images/product/voice-calls-desktop-preview.png" alt="Voice Calls tab listing 25 of 57 calls with Started, Direction, From, To, Duration, Account and Company columns, a filter row under the headers and a Columns menu." width="2880" height="3438" />
+</Frame>
+
+| Column | What it shows |
+| --- | --- |
+| **Started** | When the call began, in your time zone. Point at it for the exact time. |
+| **Direction** | **Inbound**, **Outbound** or **Internal**. |
+| **From** and **To** | Each party's name with the number or extension beneath, or the number alone when the provider sent no name. |
+| **Duration** | Talk time as minutes and seconds. A call with no talk time shows **Unanswered**. |
+| **Account** | The Intermedia account the call belongs to. |
+| **Company** | The company the account is mapped to. |
+| **Group** and **Charge** | The call group and the provider's charge for the call. Both are hidden until you turn them on in **Columns**. |
+
+Filter in the row under the headers: a date range for **Started**, a direction, text for the parties and the account, a duration range and a company. The company filter only narrows the active company scope; it cannot reach companies outside it. Tables show 25 rows per page; change **Rows per page** or use **Columns** to choose what you see. Select a column heading to sort.
+
+### Users
+
+<Frame caption="Branch preview on the Demo tenant: the Users tab ranking six callers by calls.">
+  <img src="/images/product/voice-users-desktop-preview.png" alt="Voice Users tab listing six users with User, Account, Company, Calls, Inbound, Outbound, Talk time and Last call columns, sorted with the busiest caller first." width="2880" height="1920" />
+</Frame>
+
+| Column | What it shows |
+| --- | --- |
+| **User** | The person's name with their number or extension beneath. A number with no name reads **Unknown caller**. |
+| **Account** and **Company** | The account the user belongs to and its mapped company. |
+| **Calls**, **Inbound**, **Outbound** | Call counts for the period. **Internal** and **Number** are available from **Columns**. |
+| **Talk time** | Total talk time for the period as hours, minutes and seconds. |
+| **Last call** | When the person's most recent call started. |
+
+The caller of an outbound or internal call and the called party of an inbound call count as the user.
+
+### Accounts
+
+<Frame caption="Branch preview on the Demo tenant: the Accounts tab with two mapped accounts, both with call analytics connected.">
+  <img src="/images/product/voice-accounts-desktop-preview.png" alt="Voice Accounts tab listing Acme Corporation and Bluewave Dental with Company, Plan, State, Users, Calls, Talk time and a Call analytics column showing Connected badges." width="2880" height="1920" />
+</Frame>
+
+| Column | What it shows |
+| --- | --- |
+| **Account** and **Company** | The Intermedia account and the company it is mapped to. Unmapped accounts never appear here. |
+| **Plan** and **State** | The account's Elevate plan and its state at Intermedia. |
+| **Users** | The people provisioned in the account. |
+| **Calls** and **Talk time** | Totals for the period. **Inbound**, **Outbound** and **Internal** are available from **Columns**. |
+| **Call analytics** | **Connected**, **Needs attention** or **Not connected**. Only connected accounts contribute calls; MSP staff fix the other two on the integration's **Review data** step. |
+
+## How often data updates
+
+| Data | Sync schedule |
+| --- | --- |
+| Accounts and users | Every hour |
+| Call history, for accounts with call analytics connected | Every hour; the first sync reads the last 30 days |
+
+Opening Voice does not start a sync. MSP staff can run **Sync All Data** on the Intermedia setup page.
+
+## Voice in reports and dashboards
+
+Two blocks in the **Voice** category of the block library read the same data, scoped to the report's company and period:
+
+| Block | What it shows |
+| --- | --- |
+| **Voice Call Volume** | Calls, talk time, answered share and the daily inbound, outbound and internal trend, with the busiest callers beside the figures (turn them off in the block's settings). |
+| **Busiest Callers** | The people with the most calls, with their inbound, outbound and talk time. Choose how many to rank, from 3 to 25. |
+
+Both need the Voice read permission and a connected Intermedia integration; otherwise they stay out of the library. **Full Report** also offers a **Voice** content source, off by default, with **Summary** and **Detailed** levels, so the written report can cover call volumes, talk time, answered share, the busiest callers and each account's users. See [Reporting](/user-guides/reporting/index).
+
+## Voice in the MCP server and public API
+
+AI clients connected to the [MCP server](/user-guides/mcp-server/index) get a `query_voice` tool with four actions: `get_voice_summary`, `list_voice_calls`, `list_voice_users` and `list_voice_accounts`. They need the `voice.read` scope, the Voice read permission and a connected voice provider, and they follow the connected user's company access. See the [MCP Tools Reference](/user-guides/mcp-server/tools-reference#voice).
+
+The public API exposes the same reads under the `voice.read` scope:
+
+| Endpoint | Returns |
+| --- | --- |
+| `GET /api/public/v1/voice/summary` | Accounts, users, active callers, calls by direction, answered share, talk time, charges and a daily trend for the window. |
+| `GET /api/public/v1/voice/calls` | Call history, newest first. |
+| `GET /api/public/v1/voice/users` | Callers, busiest first. |
+| `GET /api/public/v1/voice/accounts` | Mapped accounts, busiest first, with call analytics status. |
+
+Each accepts an optional `companyId` and a window as `days` (7, 30 or 90, default 30) or `from` and `to` timestamps. The API key's linked user needs the Voice read permission, and the request is refused when no voice provider is connected. See the **API Reference** tab for parameters and response fields.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Voice** is missing from the sidebar | Your role lacks the Voice read permission, no voice integration is connected, or the feature is off for your account. Ask your MSP administrator. |
+| **No voice data yet** | No mapped account is in the company scope. MSP staff map accounts on the Intermedia setup page's **Map accounts** step. |
+| **No calls in this period** | No account in scope has call analytics connected, or the first sync has not finished. Check the **Call analytics** column on **Accounts** and the period. |
+| An account shows **Needs attention** | Intermedia rejected the account's service account. MSP staff replace it from the setup page's **Review data** step; the message beside the status is Intermedia's reason. |
+| Figures look low | The period and the company scope limit every figure, and accounts without call analytics add users but no calls. Widen the period or check **Accounts**. |
+| Times look shifted | Days, hours and the **Started** column follow your browser's time zone. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can company users see other companies' calls?">
+    No. Company users see only the accounts mapped to the companies they can access, and the company filter cannot reach beyond that scope.
+  </Accordion>
+  <Accordion title="Why does Active callers show fewer people than Users?">
+    **Users** counts everyone provisioned in the mapped accounts. **Active callers** counts only those with at least one call in the period.
+  </Accordion>
+  <Accordion title="Does Voice record or play calls?">
+    No. It shows call records as the provider reports them: who called whom, when, for how long and at what charge.
+  </Accordion>
+</AccordionGroup>
+
+<CardGroup cols={2}>
+  <Card title="Configure Intermedia Integration" icon="plug" href="/user-guides/integrations/enable-intermedia-integration">
+    Connect Intermedia, map accounts to companies and connect call analytics.
+  </Card>
+  <Card title="Reporting" icon="chart-pie" href="/user-guides/reporting/index">
+    Add the Voice blocks and content source to reports and dashboards.
+  </Card>
+  <Card title="MCP Tools Reference" icon="screwdriver-wrench" href="/user-guides/mcp-server/tools-reference">
+    Call the Voice actions from a connected AI client.
+  </Card>
+  <Card title="Company user permissions" icon="user-shield" href="/user-guides/settings/change-company-user-permissions">
+    Grant company roles the Voice read permission.
+  </Card>
+</CardGroup>

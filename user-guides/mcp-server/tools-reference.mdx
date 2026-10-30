@@ -685,6 +685,19 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 | `list_petra_incidents` | `query_identity_threats` | Read | `read_security` | List Petra Security Microsoft 365 account compromise incidents, open first and then newest: affected user, remediation status (isOpen while an attacker may still hold the account), detection (live, or historical when found in past sign-in data while onboarding the tenant), dwell time, phishing email subject and sender, Petra tenant, mapped company and a Petra dashboard link. Search matches user, phishing email, status, tenant and company. |
 | `list_vulnerabilities` | `query_security` | Read | `read_security` | List vulnerability findings from every connected vulnerability scanner (Cork, Action1, RoboShadow and Cyrisma), sorted by CVSS score (highest first): provider, CVE id/description, affected software and device, CVSS/EPSS scores, normalized severity (critical/high/medium/low; the CVSS band for Action1 and RoboShadow, Cyrisma's own rating for Cyrisma), the scanner's own priority (Cork: critical/accelerated/routine; the others have none, so a priority filter returns Cork findings only), known-exploited flag (CISA KEV for Action1), first/last seen and status. Returns open findings unless status is 'resolved', which lists Cork findings a complete sync stopped reporting, with resolvedAt (the other scanners have no resolved history yet). Action1 findings are one row per endpoint and CVE; RoboShadow lists findings of organisations mapped to a company only; Cyrisma lists one row per CVE per mapped tenant, where device is a sample of the affected assets and software is the CVE's root cause. Pass provider to read one scanner. Search matches CVE id and software fields. |
 
+## Voice
+
+**Module scopes:** `voice.read`
+
+Branch preview: these actions ship with the Intermedia integration on an unreleased branch. They are advertised only when the tenant has a voice provider connected, and they follow the connected user's company access.
+
+| Action / legacy name | Public tool | Access | Permissions | Description |
+| --- | --- | --- | --- | --- |
+| `get_voice_summary` | `query_voice` | Read | `read_voice` | Voice service summary from connected voice providers (Intermedia Elevate): mapped accounts and how many have call analytics connected, provisioned users and active callers, calls by direction (inbound, outbound, internal), answered and unanswered counts and share, talk time, average and longest call, charges, and a daily call trend. A call with no talk time was not answered. Counts cover the window (default the last 30 days, or `days`, or from/to). Accounts without call analytics contribute users but no calls. |
+| `list_voice_calls` | `query_voice` | Read | `read_voice` | Call history from connected voice providers, newest first: when the call started, direction, duration (0 means unanswered), both parties with their device type, the call group, the voice account and mapped company, and the charge. Search matches party names and numbers and the account name. Counts cover the window (default the last 30 days). |
+| `list_voice_users` | `query_voice` | Read | `read_voice` | The people who made or took calls, busiest first: name and number, voice account and mapped company, calls by direction, talk time and the last call. The caller of an outbound or internal call and the called party of an inbound one count as the user. Counts cover the window (default the last 30 days). |
+| `list_voice_accounts` | `query_voice` | Read | `read_voice` | Voice accounts mapped to companies, busiest first: provider, account name, plan, state, mapped company, provisioned users, calls by direction, talk time and whether call analytics are connected (not_configured, ok, failed). Counts cover the window (default the last 30 days). |
+
 ## Broadcasts
 
 **Module scopes:** `broadcasts.read`, `broadcasts.write`

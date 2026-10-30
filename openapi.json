@@ -28774,10 +28774,9 @@
           },
           "total": {
             "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true,
+            "minimum": 0.01,
             "maximum": 1000000000000,
-            "description": "Invoice total; must be greater than 0",
+            "description": "Invoice total; at least 0.01",
             "example": 1190
           },
           "subtotal": {
@@ -33832,6 +33831,438 @@
               "requirementId"
             ]
           }
+        ]
+      },
+      "VoiceSummary": {
+        "type": "object",
+        "properties": {
+          "window": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "from",
+              "to"
+            ]
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accounts": {
+            "type": "integer"
+          },
+          "accountsWithCallAnalytics": {
+            "type": "integer"
+          },
+          "users": {
+            "type": "integer"
+          },
+          "activeCallers": {
+            "type": "integer"
+          },
+          "calls": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "inbound": {
+                "type": "integer"
+              },
+              "outbound": {
+                "type": "integer"
+              },
+              "internal": {
+                "type": "integer"
+              },
+              "answered": {
+                "type": "integer"
+              },
+              "unanswered": {
+                "type": "integer"
+              },
+              "answeredPercent": {
+                "type": "number",
+                "nullable": true
+              }
+            },
+            "required": [
+              "total",
+              "inbound",
+              "outbound",
+              "internal",
+              "answered",
+              "unanswered",
+              "answeredPercent"
+            ]
+          },
+          "talkTime": {
+            "type": "object",
+            "properties": {
+              "totalSeconds": {
+                "type": "number"
+              },
+              "totalMinutes": {
+                "type": "number"
+              },
+              "averageSeconds": {
+                "type": "number"
+              },
+              "longestSeconds": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "totalSeconds",
+              "totalMinutes",
+              "averageSeconds",
+              "longestSeconds"
+            ]
+          },
+          "charges": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ]
+          },
+          "daily": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "calls": {
+                  "type": "integer"
+                },
+                "inbound": {
+                  "type": "integer"
+                },
+                "outbound": {
+                  "type": "integer"
+                },
+                "internal": {
+                  "type": "integer"
+                },
+                "talkTimeSeconds": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "date",
+                "calls",
+                "inbound",
+                "outbound",
+                "internal",
+                "talkTimeSeconds"
+              ]
+            }
+          },
+          "lastSyncedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "window",
+          "providers",
+          "accounts",
+          "accountsWithCallAnalytics",
+          "users",
+          "activeCallers",
+          "calls",
+          "talkTime",
+          "charges",
+          "daily",
+          "lastSyncedAt"
+        ]
+      },
+      "VoiceCall": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound",
+              "internal"
+            ]
+          },
+          "durationSeconds": {
+            "type": "integer"
+          },
+          "answered": {
+            "type": "boolean"
+          },
+          "from": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "deviceType": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "number",
+              "name",
+              "deviceType"
+            ]
+          },
+          "to": {
+            "type": "object",
+            "properties": {
+              "number": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "deviceType": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "number",
+              "name",
+              "deviceType"
+            ]
+          },
+          "group": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "companyId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "charge": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "amount",
+              "currency"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "startedAt",
+          "direction",
+          "durationSeconds",
+          "answered",
+          "from",
+          "to",
+          "group",
+          "accountName",
+          "companyId",
+          "companyName",
+          "charge"
+        ]
+      },
+      "VoiceUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "companyId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "calls": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "inbound": {
+                "type": "integer"
+              },
+              "outbound": {
+                "type": "integer"
+              },
+              "internal": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "total",
+              "inbound",
+              "outbound",
+              "internal"
+            ]
+          },
+          "talkTimeSeconds": {
+            "type": "number"
+          },
+          "lastCallAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "number",
+          "accountName",
+          "companyId",
+          "companyName",
+          "calls",
+          "talkTimeSeconds",
+          "lastCallAt"
+        ]
+      },
+      "VoiceAccount": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "users": {
+            "type": "integer"
+          },
+          "calls": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "inbound": {
+                "type": "integer"
+              },
+              "outbound": {
+                "type": "integer"
+              },
+              "internal": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "total",
+              "inbound",
+              "outbound",
+              "internal"
+            ]
+          },
+          "talkTimeSeconds": {
+            "type": "number"
+          },
+          "callAnalytics": {
+            "type": "string",
+            "enum": [
+              "not_configured",
+              "ok",
+              "failed"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "provider",
+          "accountName",
+          "plan",
+          "state",
+          "companyId",
+          "companyName",
+          "users",
+          "calls",
+          "talkTimeSeconds",
+          "callAnalytics"
         ]
       }
     },
@@ -78335,6 +78766,617 @@
           },
           "403": {
             "description": "Forbidden - missing scope (companies.write), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/voice/summary": {
+      "get": {
+        "summary": "Get voice summary",
+        "description": "Voice service summary from connected voice providers (Intermedia Elevate): mapped accounts, users and active callers, calls by direction, answered share, talk time, charges and a daily trend over the window (default the last 30 days). Requires `voice.read`, the linked user's read_voice permission and a connected voice provider.",
+        "tags": [
+          "Voice"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Restrict to one company"
+            },
+            "required": false,
+            "description": "Restrict to one company",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window starts at (inclusive); default `days` ago"
+            },
+            "required": false,
+            "description": "ISO timestamp the window starts at (inclusive); default `days` ago",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window ends at (exclusive); default now"
+            },
+            "required": false,
+            "description": "ISO timestamp the window ends at (exclusive); default now",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "7",
+                "30",
+                "90"
+              ],
+              "description": "Preset window when from/to are absent (default 30)"
+            },
+            "required": false,
+            "description": "Preset window when from/to are absent (default 30)",
+            "name": "days",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voice summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/VoiceSummary"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (voice.read), the linked user lacks read_voice, or no voice provider is connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/voice/calls": {
+      "get": {
+        "summary": "List voice calls",
+        "description": "Call history, newest first: start, direction, duration (0 means unanswered), both parties, group, account, mapped company and charge.",
+        "tags": [
+          "Voice"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Restrict to one company"
+            },
+            "required": false,
+            "description": "Restrict to one company",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window starts at (inclusive); default `days` ago"
+            },
+            "required": false,
+            "description": "ISO timestamp the window starts at (inclusive); default `days` ago",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window ends at (exclusive); default now"
+            },
+            "required": false,
+            "description": "ISO timestamp the window ends at (exclusive); default now",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "7",
+                "30",
+                "90"
+              ],
+              "description": "Preset window when from/to are absent (default 30)"
+            },
+            "required": false,
+            "description": "Preset window when from/to are absent (default 30)",
+            "name": "days",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Party name or number, or account name"
+            },
+            "required": false,
+            "description": "Party name or number, or account name",
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "inbound",
+                "outbound",
+                "internal"
+              ]
+            },
+            "required": false,
+            "name": "direction",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Calls",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VoiceCall"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (voice.read), the linked user lacks read_voice, or no voice provider is connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/voice/users": {
+      "get": {
+        "summary": "List voice users",
+        "description": "The people who made or took calls, busiest first, with calls by direction, talk time and the last call.",
+        "tags": [
+          "Voice"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Restrict to one company"
+            },
+            "required": false,
+            "description": "Restrict to one company",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window starts at (inclusive); default `days` ago"
+            },
+            "required": false,
+            "description": "ISO timestamp the window starts at (inclusive); default `days` ago",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window ends at (exclusive); default now"
+            },
+            "required": false,
+            "description": "ISO timestamp the window ends at (exclusive); default now",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "7",
+                "30",
+                "90"
+              ],
+              "description": "Preset window when from/to are absent (default 30)"
+            },
+            "required": false,
+            "description": "Preset window when from/to are absent (default 30)",
+            "name": "days",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Name, number or account name"
+            },
+            "required": false,
+            "description": "Name, number or account name",
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "inbound",
+                "outbound",
+                "internal"
+              ]
+            },
+            "required": false,
+            "name": "direction",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voice users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VoiceUser"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (voice.read), the linked user lacks read_voice, or no voice provider is connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/voice/accounts": {
+      "get": {
+        "summary": "List voice accounts",
+        "description": "Voice accounts mapped to companies, busiest first: provider, plan, state, users, calls by direction, talk time and call analytics status.",
+        "tags": [
+          "Voice"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Restrict to one company"
+            },
+            "required": false,
+            "description": "Restrict to one company",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window starts at (inclusive); default `days` ago"
+            },
+            "required": false,
+            "description": "ISO timestamp the window starts at (inclusive); default `days` ago",
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO timestamp the window ends at (exclusive); default now"
+            },
+            "required": false,
+            "description": "ISO timestamp the window ends at (exclusive); default now",
+            "name": "to",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "7",
+                "30",
+                "90"
+              ],
+              "description": "Preset window when from/to are absent (default 30)"
+            },
+            "required": false,
+            "description": "Preset window when from/to are absent (default 30)",
+            "name": "days",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Account or company name"
+            },
+            "required": false,
+            "description": "Account or company name",
+            "name": "search",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voice accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VoiceAccount"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (voice.read), the linked user lacks read_voice, or no voice provider is connected",
             "content": {
               "application/json": {
                 "schema": {
