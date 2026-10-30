@@ -28733,6 +28733,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 100,
+            "description": "Invoice number; at most 18 digits in total",
             "example": "2026-1042"
           },
           "companyId": {
@@ -28773,20 +28774,31 @@
           },
           "total": {
             "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "maximum": 1000000000000,
             "description": "Invoice total; must be greater than 0",
             "example": 1190
           },
           "subtotal": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "salesTax": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "payments": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "balance": {
             "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000,
             "description": "Amount still due; defaults to total"
           },
           "reference": {
@@ -28816,6 +28828,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255,
+            "pattern": "\\.pdf$/i",
             "description": "File name ending in .pdf",
             "example": "invoice-2026-1042.pdf"
           },
@@ -28871,13 +28884,19 @@
             "description": "Client contact the quote is for. Roles limited to their own quotes match it against the portal user's full name."
           },
           "oneTimeTotal": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "monthlyTotal": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "annualTotal": {
-            "type": "number"
+            "type": "number",
+            "minimum": -1000000000000,
+            "maximum": 1000000000000
           },
           "currency": {
             "type": "string",
@@ -28900,7 +28919,8 @@
           },
           "url": {
             "type": "string",
-            "format": "uri",
+            "maxLength": 2000,
+            "pattern": "^https:\\/\\/",
             "description": "Optional https link to the quote in your system"
           },
           "pdf": {
