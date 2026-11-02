@@ -10,7 +10,7 @@ icon: 'folder-open'
 
 - Open **Projects** in the left menu. Your role decides which views you see (**Dashboard**, **Cards**, **List**, **Kanban**, **Schedule**, **Dispatch**) and whether you can edit.
 - Pick a company in the company selector to focus the portfolio, or choose **Global View** for every company you can access.
-- Native projects live in MSPortal. PSA projects also depend on your connected PSA.
+- Native projects live in MSPortal. PSA projects also depend on your connected PSA, and status and date changes you make to them are written back to it. See [What writes back to your PSA](#what-writes-back-to-your-psa).
 - Company users see only the projects and fields their MSP shares, set under **Settings > Projects > Project Settings > Client project access**.
 
 ## Choose a portfolio view
@@ -108,6 +108,30 @@ The Resources board groups project tasks across your portfolio by team member. I
 
 Reassignment writes back for MSPortal, ConnectWise, and Autotask project tasks. Tasks from other providers are read-only. A ConnectWise or Autotask task can only move to a member from the same integration; otherwise MSPortal asks you to use **Assign to…**.
 
+## What writes back to your PSA
+
+Projects synced from ConnectWise or Autotask are two-way for status and dates. When you change a project's status or reschedule a project, phase or task in MSPortal, MSPortal writes the change to your PSA. You do not need to make the same change again in your PSA.
+
+MSPortal sends the change to your PSA first. It updates its own copy only after the PSA accepts the change. If the PSA rejects it, MSPortal shows an error and keeps the old value, so the two systems do not drift apart. Changes made directly in your PSA reach MSPortal on its next sync.
+
+| Change made in MSPortal | ConnectWise | Autotask | Halo |
+| --- | --- | --- | --- |
+| Project status (portfolio **Kanban**, project status) | Writes back | Writes back | Writes back |
+| Task or ticket status (project **Board**, ticket details) | Writes back | Writes back | Writes back |
+| Task owner (**Resources** board, project **Board**) | Writes back | Writes back | Not available |
+| Project, phase and task dates (**Reschedule**, **Edit dates**, **Projects > Dispatch**, ticket and phase details) | Writes back | Writes back | Only when the scheduling feature is on for your portal. Task start dates cannot be changed from ticket details. |
+| Technician bookings on **Projects > Dispatch** | Writes back | Writes back | Writes back |
+
+A few limits apply:
+
+- **Autotask phases.** Rename a phase in Autotask; MSPortal does not send phase renames. To change an Autotask phase's dates, set both a start date and an end date.
+- **Phase descriptions and notes** stay in MSPortal for every PSA.
+- **Templates.** Project and onboarding templates live in MSPortal. Editing a template never changes an existing PSA project. Creating a project from a template with a PSA destination, or choosing **Apply template** on a PSA project, creates the phases and tasks in your PSA. See [Project templates](/user-guides/projects/templates).
+- **MSPortal-only records.** Milestones, deliverables, updates, decisions, action items and the details on **Edit project details** live in MSPortal and are not written to your PSA. Native MSPortal projects have no PSA.
+- **Onboarding portals.** Onboarding task status syncs with the linked PSA project's tickets, and a task due date you change in the portal is written to the linked PSA task. Phase dates you set in the portal stay in MSPortal. See [Link a project, create tickets, and log time](/user-guides/client-onboarding/managing-portals#link-a-project-create-tickets-and-log-time).
+
+Each write uses your PSA integration's API account, which needs project edit access. See the project permissions in the [Autotask](/user-guides/integrations/enable-autotask-integration#project-management-permissions), [ConnectWise](/user-guides/integrations/enable-connectwise-integration#project-management-permissions) and [Halo](/user-guides/integrations/enable-halo-integration) guides.
+
 ## Create a native project (MSP staff)
 
 Click **New project**, choose a template, and choose **MSPortal only** to keep the project in MSPortal. You need project write permission. Company users ask their MSP to start new work. See [Native Projects: Start to Finish](/user-guides/projects/native-projects).
@@ -129,6 +153,9 @@ Click **New project**, choose a template, and choose **MSPortal only** to keep t
   </Accordion>
   <Accordion title="Why do Company users and MSP staff see different views?">
     **Dashboard** and **Dispatch** are for MSP staff only. Each of the other views has its own role permission. The MSP also sets which projects and fields clients see.
+  </Accordion>
+  <Accordion title="Does MSPortal write back to Autotask or ConnectWise, or is it one way?">
+    It writes back. When you change a project's status or reschedule a project, phase or task in MSPortal, the change is written to Autotask or ConnectWise, so you do not update it again there. If the PSA rejects a change, MSPortal shows an error and keeps the old value. Milestones and other MSPortal-only records stay in MSPortal. See [What writes back to your PSA](#what-writes-back-to-your-psa).
   </Accordion>
   <Accordion title="Does changing a filter change the project?">
     No. Search, filters, sort, and view only change what you see. Your browser remembers some of them. Moving a status or rescheduling are separate actions.

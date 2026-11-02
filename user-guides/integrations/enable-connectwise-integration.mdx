@@ -137,6 +137,19 @@ The settings go on the role of the **API member that owns the keys saved in MSPo
 MSPortal-only projects, portal templates and project registers use MSPortal permissions only. An explicit action that creates or updates a PSA project, phase or ticket needs the ConnectWise permissions above. ConnectWise access never grants a staff or client user access inside MSPortal.
 </Note>
 
+### What MSPortal writes back to ConnectWise projects
+
+ConnectWise projects are two-way for status and dates. You do not need to repeat these changes in ConnectWise:
+
+- **Project status**, from the portfolio **Kanban** or the project's status.
+- **Project ticket status**, from the project **Board** or ticket details.
+- **Ticket owner**, from the **Resources** board or the project **Board**.
+- **Project, phase and ticket dates**, from **Reschedule**, **Edit dates**, **Projects > Dispatch**, or ticket and phase details.
+
+MSPortal writes to ConnectWise first and updates its own copy only after ConnectWise accepts the change. If ConnectWise rejects it, MSPortal shows an error and keeps the old value.
+
+Phase descriptions and notes, milestones, and project and onboarding templates stay in MSPortal. Onboarding task status syncs with ConnectWise, and an onboarding task due date changed in the portal is written to the linked ConnectWise ticket. Onboarding phase dates stay in MSPortal. See [What writes back to your PSA](/user-guides/projects/index#what-writes-back-to-your-psa).
+
 ### Allow project checklist changes
 
 Adding a checklist item or changing its completion writes to ConnectWise as the API member. The staff member needs the MSPortal project permission, and the API member separately needs ConnectWise access.
@@ -439,6 +452,9 @@ Only companies still mapped to this connection are affected. Unmapping a company
   </Accordion>
   <Accordion title="Does a green permissions result verify ticket writes?">
     Not every write. Sync checks probe read access, while Project checklist writes reads the API member's task permission levels without changing data. Creating tickets, comments or other ConnectWise changes still needs the relevant write permission and a successful action.
+  </Accordion>
+  <Accordion title="Does MSPortal write back to ConnectWise, or is it one way?">
+    It writes back. Project status, ticket status, ticket owners, and project, phase and ticket dates you change in MSPortal are written to ConnectWise, so you do not update them again there. Milestones and onboarding portal dates stay in MSPortal. See [What MSPortal writes back to ConnectWise projects](#what-msportal-writes-back-to-connectwise-projects).
   </Accordion>
   <Accordion title="Does Finish setup mean all data is ready?">
     No. Check the background sync result and verify company, user and device imports separately.

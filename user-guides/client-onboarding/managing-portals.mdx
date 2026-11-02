@@ -159,7 +159,7 @@ To assign many tasks, select **Reassign**, check the tasks (hold Shift to select
 
 ### Work with a task
 
-Select a task to open its details. They show **Status**, **Assignment**, **Evidence**, **Due**, and **Portal comments**. For client tasks you can also choose **Which contacts can see this task?**, with **All contacts** as the default. Set phase target dates with **Set phase dates** or **Edit phase dates**. The change applies to this portal only and does not change the template.
+Select a task to open its details. They show **Status**, **Assignment**, **Evidence**, **Due**, and **Portal comments**. For client tasks you can also choose **Which contacts can see this task?**, with **All contacts** as the default. Set phase target dates with **Set phase dates** or **Edit phase dates**. The change applies to this portal only and does not change the template. With **Status sync** on, a task due date set here is also written to the task's linked PSA ticket. Phase dates set here stay in this portal; to move phase dates in your PSA, reschedule the linked project's phases in **Projects**, or change them in your PSA.
 
 Each task has two comment streams. Use the filter to switch between **Client-facing**, **Both**, and **Internal**.
 
@@ -374,13 +374,17 @@ Go to **Settings > Projects > Onboarding Portals > PSA projects**. This section 
 | Setting | What it does |
 | --- | --- |
 | **Auto-create tickets** | Creates a ticket for each task when a project is linked |
-| **Status sync** | Keeps ticket status in sync both ways, every 10 minutes |
+| **Status sync** | Keeps task and ticket status in sync both ways. A status change in the portal is sent to the PSA right away, and PSA changes come back every 10 minutes. A task due date changed in the portal is also sent to the PSA ticket; phase dates are not synced. |
 | **Default billable** | New time entries default to billable |
 | **Default billing status** | Billing status for new onboarding time entries |
 | **Provider Defaults** | Default board or team, priority, status, and ticket type for each PSA, plus Halo category, impact, and urgency |
 | **Time entry defaults** | Default work role and work type for time entries |
 
 Select **Save Changes** when you are done. A stale ticket status can mean a sync has not finished. Check for a sync failure before you treat a ticket as complete.
+
+<Note>
+Task status syncs both ways between an onboarding portal and its PSA tickets. A task due date you change in the portal is sent to the linked PSA ticket, but a due date changed in the PSA does not come back to the portal. Clearing a due date in the portal leaves the PSA date as it is. Phase dates you edit in the portal stay in MSPortal. For what writes back from the linked project itself, see [What writes back to your PSA](/user-guides/projects/index#what-writes-back-to-your-psa).
+</Note>
 
 ## Export to Excel
 
@@ -471,6 +475,9 @@ Your MSP dashboard shows two onboarding widgets when you have onboarding access 
   </Accordion>
   <Accordion title="Can I safely open a credential to see if it arrived?">
     No. Opening the task only shows its status. **Reveal & Delete** and **Download & Destroy** use up the submission. Read the retrieval guide first.
+  </Accordion>
+  <Accordion title="If I change a task's status or dates in the portal, do I update the PSA too?">
+    No, with **Status sync** on. Task status syncs with the linked PSA ticket both ways, and a task due date you change in the portal is sent to the PSA ticket. Phase dates set in the portal are the exception: reschedule the linked project's phases in **Projects**, or change them in your PSA.
   </Accordion>
   <Accordion title="Why do I see the Link Project screen when I start a portal?">
     The portal has no linked project yet. Link or create one, or select **Skip**. A portal that already has a project goes straight to the confirmation.
