@@ -1,6 +1,6 @@
 ---
 title: "Ticket settings"
-description: "Configure ticket delivery, note emails, request forms, role display groups and company routing."
+description: "Configure ticket delivery, note emails, manager notices, request forms, role display groups and company routing."
 icon: ticket
 ---
 
@@ -169,6 +169,45 @@ How emailing works:
 - Under each emailed note, a status line shows **Emailed to**, **Emailing**, or **Could not email** with the people's names. Hover over a line to see the addresses.
 
 See [Find and follow up on a ticket](/msp-guides/ticketing/follow-up-on-a-ticket#email-a-note-to-people) for the steps on a ticket.
+
+## Tell managers about new tickets
+
+<Note>
+Limited availability. This switch appears only when manager ticket notifications are turned on for your organization. Ask MSPortal support if you want to try it.
+</Note>
+
+When this is on, a person's manager hears about each ticket that person submits through MSPortal. It is for the manager's information only: nothing waits for the manager, nothing needs approving, and who can see the ticket does not change. To have a manager approve requests instead, use a [**The requester's manager** approval step](/user-guides/ticketing/ticket-approval-chains). To let managers see their reports' tickets, give their role [**Own and All Reports' Tickets**](#create-a-display-group-for-a-role).
+
+<Steps>
+  <Step title="Connect Microsoft 365 for the company">
+    Managers come from Microsoft 365. The users sync records each user's manager. See [Manager data issues](/user-guides/microsoft-365/connecting-companies#manager-data-issues) for users whose manager could not be synced.
+  </Step>
+  <Step title="Open Settings > Tickets > General">
+    Find **Tell requesters' managers about new tickets**, next to **Allow emailing ticket notes**.
+  </Step>
+  <Step title="Turn it on">
+    The change saves immediately, and "Managers now hear about their team's new tickets." confirms it. Turn it off the same way.
+  </Step>
+</Steps>
+
+What the manager gets:
+
+- An email from your organization's ticket sender with who submitted the ticket, its title, the company and the ticket number. It says no action is needed.
+- When the manager can sign in to MSPortal as a user of the same company, an in-app notification too, and both link to the ticket. What opens follows the manager's own ticket visibility.
+- When the manager exists only in Microsoft 365, the email alone, without a link.
+
+When no notice is sent:
+
+- The requester has no manager in Microsoft 365, or the manager's account is disabled there.
+- The manager is the requester.
+- The manager was asked to approve the request in an approval chain, so they already know about it.
+- The ticket came from an automation, a compliance or remediation action, or an embedded template inside another request (the main request covers it).
+- No PSA ticket was created, for example when the PSA was down and the request went to the fallback email address.
+- The manager's address belongs to a user of another company. A manager only ever hears about their own company's requesters.
+
+Each manager hears about a ticket once, even if it is submitted again or the email is retried.
+
+To change the email's wording, create a **Manager Ticket Notice** template in [Settings > Email](/user-guides/settings/email) and set it as the default. Without one, managers get the built-in email in their language. The in-app notification always uses the built-in wording.
 
 ## Manage ticket categories
 
@@ -375,7 +414,7 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
     **PSA Integration** and **Email (SMTP)**. Portal visibility is controlled by display groups and roles.
   </Accordion>
   <Accordion title="Which settings wait for a Save click?">
-    Delivery Method, PSA Integration, New Ticket View, **Allow emailing ticket notes**, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Ticket change approvals** uses **Save** in its dialog. Display groups use **Create Group** or **Update Group**.
+    Delivery Method, PSA Integration, New Ticket View, **Allow emailing ticket notes**, **Tell requesters' managers about new tickets**, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Ticket change approvals** uses **Save** in its dialog. Display groups use **Create Group** or **Update Group**.
   </Accordion>
   <Accordion title="Where do I choose which statuses a role can use?">
     In the display group, under **Allowed Ticket Statuses**, next to the board and ticket-type restrictions.
@@ -397,6 +436,9 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
   </Accordion>
   <Accordion title="Why is Email to missing from a ticket note?">
     Check that **Allow emailing ticket notes** is on, that the note is a public note, and that the ticket is a service ticket from HaloPSA, ConnectWise, Autotask or Syncro. For ConnectWise, Autotask and Syncro, the PSA connection also needs a **Reply mailbox**.
+  </Accordion>
+  <Accordion title="Why didn't a manager hear about a new ticket?">
+    Check that **Tell requesters' managers about new tickets** is on, that the requester's company is connected to Microsoft 365 with the manager synced, and that the ticket reached the PSA. See [When no notice is sent](#tell-managers-about-new-tickets) for the other cases.
   </Accordion>
   <Accordion title="Does the New Ticket View setting submit a ticket?">
     No. It changes how the new-ticket page looks. A user still completes and submits the request.
