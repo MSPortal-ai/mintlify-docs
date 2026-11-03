@@ -49,9 +49,9 @@ The **Ticket Defaults** card appears under the delivery settings once a PSA is s
 
     | PSA | Fields |
     |---|---|
-    | ConnectWise | **Service Board**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype**, **Source** |
-    | Autotask | **Queue**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype**, **Ticket Category**, **Work Type**, **Source** |
-    | Halo PSA | **Team**, **Priority**, **Status**, **Category**, **Impact**, **Urgency**, **Source** |
+    | ConnectWise | **Service Board**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype**, **Source**, **Requester field** |
+    | Autotask | **Queue**, **Priority**, **Status**, **Ticket Type**, **Ticket Subtype**, **Ticket Category**, **Work Type**, **Source**, **Requester field** |
+    | Halo PSA | **Team**, **Priority**, **Status**, **Category**, **Impact**, **Urgency**, **Source**, **Requester field** |
     | Syncro | **Priority**, **Status** |
 
     ConnectWise and Autotask require a board or queue and a status. Halo requires a category and a status. Status and type lists narrow to the board you pick.
@@ -64,6 +64,56 @@ The **Ticket Defaults** card appears under the delivery settings once a PSA is s
     **Save Defaults** stays disabled until you change at least one value. A confirmation toast appears when the defaults are saved.
   </Step>
 </Steps>
+
+### Requester field
+
+<Note>
+  **Branch preview:** The **Requester field** is part of an unreleased update.
+  The screenshots show sample data and will be replaced with production
+  captures after release.
+</Note>
+
+Use **Requester field** to record, in your PSA ticket, the name of the person who created each ticket through MSPortal. It works with ConnectWise, Autotask and Halo PSA. Syncro has no ticket UDFs, so the field does not appear for it.
+
+The picker lists the free-text ticket UDFs (user-defined fields) in the PSA connection you selected for ticket delivery. Create the UDF in your PSA first, as a text field on tickets. In Halo PSA, add it to the ticket types your tickets use, or Halo drops the value. MSPortal reads the list of UDFs from your PSA once a night, so a UDF you just created appears after the next sync.
+
+<Steps>
+  <Step title="Open Settings > Tickets > General">
+    Scroll to **Ticket Defaults**. The **Requester field** sits beside **Default Source**. Changing it needs the **write** or **manage** Tickets settings permission.
+  </Step>
+  <Step title="Pick the UDF">
+    Open **Requester field** and choose the UDF that should hold the requester's name, such as "Submitted By". Choose **Not recorded** to stop recording it.
+    <Frame caption="Branch preview with sample data: the Requester field list in an Autotask Ticket Defaults card.">
+      <img src="/images/product/ticket-defaults-requester-field-open-preview.png" alt="Requester field list open in the Autotask Ticket Defaults card, offering Not recorded, Submitted By and Requested For." width="752" height="434" />
+    </Frame>
+  </Step>
+  <Step title="Click Save Defaults">
+    The help under the field reads "Every ticket someone creates through MSPortal records their name in this Autotask PSA ticket UDF. Templates can't change it." With ConnectWise or Halo PSA selected, it names that PSA instead.
+    <Frame caption="Branch preview with sample data: the Requester field set to a Submitted By UDF.">
+      <img src="/images/product/ticket-defaults-requester-field-preview.png" alt="Autotask Ticket Defaults card with Requester field set to Submitted By and its help text below." width="752" height="434" />
+    </Frame>
+  </Step>
+</Steps>
+
+What gets recorded:
+
+- Every ticket a person creates through MSPortal gets the signed-in submitter's name in the UDF. That covers ticket forms and templates, the AI assistant, released approvals, the new-ticket page and the browser extension.
+- MSPortal fills the value in when it creates the ticket, so a requester cannot type a different name.
+- It wins over a template field mapped to the same UDF. For that reason, template editors do not offer the requester UDF, and a template field still mapped to it shows "*name* (records the requester, from Ticket Defaults)".
+- Tickets that no person submits, such as automation and compliance tickets, are not affected.
+- The ticket's PSA contact is still the submitter, as before.
+- If the PSA refuses the value, for example because the UDF was deleted or renamed, the ticket is still created without it.
+
+The setting belongs to the selected PSA connection. If you switch **PSA Integration** to another PSA, the Requester field is cleared: pick a UDF again for the new PSA. The same field appears in the PSA connection's **Configure tickets** step under **Settings > Integrations**.
+
+To record a different person, such as the employee a request is for, map a template field to its own UDF. See [Send template answers to PSA fields](/user-guides/ticketing/send-answers-to-psa-fields).
+
+| Problem | What to do |
+|---|---|
+| "Couldn't load your Autotask PSA ticket UDFs. Try again later." | MSPortal could not read the UDF list from your PSA. Your saved choice is kept. Reload the page later, and check the PSA connection under [Integrations](/user-guides/settings/integrations) if it persists. |
+| The field shows "*name* (not found in Autotask PSA)" | The saved UDF no longer exists in the PSA, or was renamed. Pick another UDF, or choose **Not recorded**, and click **Save Defaults**. |
+| A new UDF is missing from the list | MSPortal reads UDFs once a night. Check that it is a text field on tickets, then look again after the next sync. |
+| The name does not appear in Halo PSA | Add the UDF to the ticket type the ticket uses. |
 
 ## Set an Autotask status after a client reply
 
@@ -361,3 +411,4 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
 - [Integrations](/user-guides/settings/integrations)
 - [Change management](/user-guides/ticketing/change-management)
 - [Create a ticket template](/user-guides/ticketing/how-to-create-a-ticket-template)
+- [Send template answers to PSA fields](/user-guides/ticketing/send-answers-to-psa-fields)
