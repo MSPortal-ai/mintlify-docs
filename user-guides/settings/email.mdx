@@ -39,9 +39,35 @@ Email settings control how MSPortal emails look, who they come from, and where r
   </Step>
 </Steps>
 
-Template categories include Survey, Invitation, Onboarding Email, Onboarding Invitation, Meeting, the meeting booking categories, Report, Training Reminder, Project Action & Decision, Ticket Fallback and Emergency Broadcast. The **Used when** and **Recipients** columns say when each is sent.
+Template categories include Survey, Invitation, Onboarding Email, Onboarding Invitation, Meeting, the meeting booking categories, the approval email categories, Report, Training Reminder, Project Action & Decision, Ticket Fallback and Emergency Broadcast. The **Used when** and **Recipients** columns say when each is sent.
 
 For an **Onboarding Invitation** template, keep the `{{portal_url}}` variable. MSPortal will not save the template without it.
+
+## Customize approval emails
+
+Every approval email MSPortal sends for you has its own category. Without a default template for a category, MSPortal sends its built-in email in each recipient's language. Once you set a default template, that template is sent instead, as you wrote it.
+
+| Category | Sent when | Sent to |
+|----------|-----------|---------|
+| **Ticket Approval Request** | A ticket request needs approval and an approval step starts, including steps the requester's manager approves | The step's approvers |
+| **Ticket Approval Reminder** | An approval step is still waiting when its reminder is due | Approvers who have not decided yet |
+| **Ticket Approval Outcome** | A ticket approval request is approved, not approved, expires, or is withdrawn by someone else | The person who submitted the request |
+| **Ticket Approval Forward** | An approver rejects a ticket request and forwards it | The addresses the approver entered |
+| **Change Approval Request** | A change request on a ticket needs approval | The change request's approvers |
+| **Report Approval Request** | A scheduled report waits for approval before it is sent, and when its reminder is due | The schedule owner, when they can approve reports |
+| **Budget Approval Request** | A budget is sent to the client for approval | The client's budget approvers |
+| **Budget Review Request** | A budget is sent to colleagues for review before it goes to the client | The chosen staff reviewers |
+| **Budget Signed Off** | A client approver signs off a budget | The person who sent the budget and its approvers |
+
+When you create a template in one of these categories, the editor starts from the built-in wording with variables in place. Each category lists its own variables, such as `{{recipient_name}}`, `{{company_name}}`, `{{tenant_name}}`, the request or budget title, and request details.
+
+Keep the `{{approval_url}}` variable. It is the link people use to open the request and approve or reject it. MSPortal will not save an approval template without it. If a saved template ever lacks it, MSPortal adds the built-in button with the link to the email.
+
+Set the template as the default for its category to start using it. To go back to the built-in email, delete the template or turn off its default. In-app notifications keep their built-in wording.
+
+<Note>
+If a saved approval template cannot be loaded or filled in, MSPortal sends the built-in email for that message, so approvals are never held up.
+</Note>
 
 ## Edit, preview and manage templates
 
@@ -125,6 +151,8 @@ If a regenerate fails partway, reload the list and look at the current addresses
 | A sender still uses the old address | Check the saved **Default From Address** and the workflow's template |
 | Imports stopped after a regenerate | Change the forwarding rule to the company's new address and check that it is **Active** |
 | Some reports from a busy sender never arrive | Each sender can file 60 messages an hour to one address, and each address takes 300 an hour. Extra messages are dropped without a bounce. Spread a large backlog over several hours |
+| An approval template will not save | Add the `{{approval_url}}` variable to the email content, for example as a button link |
+| Approval emails still use the built-in wording | Set your template as the default for its category in the **Status** column |
 | **Create Template** is missing | You need Write access to Email settings |
 | **Add Domain** is missing, or the domain controls are unavailable | You need Manage access to Email settings |
 | Adding or verifying the domain shows an email provider error | When the message gives a reason, correct the domain and try again. Otherwise wait a few minutes and retry |
