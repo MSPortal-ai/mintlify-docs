@@ -1,12 +1,12 @@
 # Mintlify documentation
 
-Work directly in this existing checkout on `main` for guides, screenshots and
-release notes. Do not create worktrees or feature/release branches for this repo.
+Every docs change (guides, screenshots, release notes) lands through a ready
+pull request, so pending work stays visible on GitHub instead of sitting in a
+checkout. A merge to `main` publishes the docs.
 
-A docs task lands as one commit on `main`, with no pull request. Inspect git
-status before editing and preserve other sessions' changes. Stage only explicit
-paths. Commits and pushes require the user's existing authorization; a push to
-`main` publishes the docs. Keep unpublished release drafts local.
-
-For MSPortal product media and content verification, follow `claude.md` and the
-sibling app checkout's `AGENTS.md` and `msportal-docs` skill.
+Edit in the worktree that `bun run agent:docs worktree [branch]` prints from
+the sibling msportal-main checkout; this shared checkout stays on `main` for
+reading. The workflow (branch names, when a docs PR merges, release notes,
+handoffs) is in that checkout's `docs/agents/git.md` › Mintlify documentation.
+For product media and content verification, follow `claude.md` and the app
+checkout's `msportal-docs` skill.
