@@ -21,7 +21,7 @@ Use **Settings > Users & Roles** to invite MSP staff, change their access, compa
 | **Company Users** | Company user records and their Permissions Groups |
 | **Roles** | Tenant and Company permission roles. The **Role List** and **Permission Matrix** sub-tabs show them one at a time or side by side |
 | **Team Roles** | Organizational team responsibilities and related team configuration |
-| **Access Rules** | Rules that mark service accounts. Matches cannot sign in and are not counted as seats in financial reporting. Only the Primary Admin sees this tab |
+| **Access Rules** | Rules that block sign-in for service accounts, or import Microsoft 365 users as Company users automatically. Only the Primary Admin sees this tab. See [Set access rules](#set-access-rules) |
 
 Company roles are permission sets. Team Roles describe staff responsibilities and supply the **Assignee Role** choices for MSP-owned tasks in onboarding templates. Onboarding contacts, client-owned task assignees and email recipients use **Settings > Projects > Onboarding Portals > Client roles** instead.
 
@@ -266,6 +266,102 @@ After a successful merge, the candidate list updates. **No duplicate users found
   </Frame>
 </Accordion>
 
+## Set access rules
+
+<Note>
+  **Branch preview:** The **Action** choice, import rules and the **Microsoft 365
+  license** condition are part of an unreleased update. The screenshots use
+  sample data, and the tab may differ from your live portal until the update is
+  released.
+</Note>
+
+Access rules act on the people MSPortal syncs from Microsoft 365 and your PSA, whether or not they have a portal user yet. Each rule has an **Action**:
+
+| Action | What it does |
+| --- | --- |
+| **Block sign-in** | Marks matching identities as service accounts. They cannot sign in or be invited, and they no longer count as seats in financial reporting. Their records, history and source links stay visible. |
+| **Import Microsoft 365 users** | Creates a Company user, with the role you choose, for each matching Microsoft 365 user who does not have a portal user yet. |
+
+Only the Primary Admin sees the **Access Rules** tab. Creating or editing an import rule also needs write access to Company Users settings. Without it, the dialog shows **Importing users also needs permission to manage company users.**
+
+<Frame caption="Branch preview, sample data: one rule of each action. An import rule shows its role under the action.">
+  <img src="/images/product/access-rules-list-preview-desktop.png" alt="Access rules list with a Block sign-in rule and an Import Microsoft 365 users rule shown as Client user, each with Status, Match conditions, Matching Users, an on/off switch, edit and delete" width="2880" height="760" />
+</Frame>
+
+<Accordion title="Phone preview">
+  <Frame caption="Branch preview, sample data: the same rules on a phone.">
+    <img src="/images/product/access-rules-list-preview-mobile.png" alt="Access rules on a phone, each rule as a card with Action, Status, Match conditions, Matching Users and Last applied" width="780" height="1688" />
+  </Frame>
+</Accordion>
+
+### Create an access rule
+
+<Steps>
+  <Step title="Open Settings > Users & Roles > Access Rules">
+    Click **Add Rule**. When the list is empty, click **Create first rule**. The **Create access rule** dialog opens.
+  </Step>
+  <Step title="Name the rule">
+    Enter a **Rule name** and, optionally, a **Description**.
+  </Step>
+  <Step title="Choose the Action">
+    Choose **Block sign-in** or **Import Microsoft 365 users**. Switching to an import rule removes conditions that use PSA fields and starts you with **Microsoft 365 license** **is assigned**.
+  </Step>
+  <Step title="Choose the role (import rules only)">
+    **Role for imported users** lists your Company roles, and the first one is preselected. Pick the role with the least access these people need.
+  </Step>
+  <Step title="Add the conditions">
+    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. Import rules can use Microsoft 365 fields only: **Microsoft 365 license**, **Microsoft 365 group**, **Microsoft 365 user type**, **Source account enabled**, **Display name**, **Email address**, **Job title**, **Department**, **Office location**, **Microsoft 365 employee type** and **Microsoft 365 employee ID**. Block sign-in rules can also use PSA fields.
+  </Step>
+  <Step title="Preview the matches">
+    Click **Preview matches** to list up to 100 synced identities that match. For an import rule, the summary shows how many users will be imported out of all matches, and each person shows the outcome described in [Who an import rule skips](#who-an-import-rule-skips).
+  </Step>
+  <Step title="Save and apply">
+    Leave **Apply this rule** on and click **Save and apply**. A paused rule is saved but has no effect. Saving an import rule shows **Access rule saved. Matching Microsoft 365 users are being imported.**
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview, sample data: an import rule for one license, with the preview showing who will be imported and why others are skipped.">
+  <img src="/images/product/access-rules-import-dialog-preview-desktop.png" alt="Create access rule dialog with the condition Microsoft 365 license is assigned Microsoft 365 E3 in 2 companies, the Rule outcome, and a preview of 2 users to import of 4 matches marked Will be imported, Already a portal user and Imports off for this tenant" width="2880" height="1920" />
+</Frame>
+
+<Accordion title="Phone preview">
+  <Frame caption="Branch preview, sample data: the import preview and Save and apply on a phone.">
+    <img src="/images/product/access-rules-import-dialog-preview-mobile.png" alt="Create access rule dialog on a phone with each previewed user as a card showing the company and outcome, above Save and apply and Cancel" width="780" height="1688" />
+  </Frame>
+</Accordion>
+
+### Match by Microsoft 365 license
+
+Use the **Microsoft 365 license** field with **is assigned** or **is not assigned**. The **Value** list shows the licenses synced from your clients' Microsoft 365 tenants, with how many companies have each one. A rule matches that license in every client tenant, so one rule covers all of them. The condition works on both actions, for example to import everyone with Microsoft 365 Business Premium, or to block sign-in for accounts that have no license.
+
+### What an import rule does
+
+- **When it runs:** after each Microsoft 365 users sync, and right after you save the rule or turn a tenant's user import back on.
+- **Who it creates:** a Company user in the company the person's Microsoft 365 tenant is connected to, with status **Imported** and the rule's role.
+- **No invitation:** MSPortal sends no email. The Microsoft 365 account is linked to the portal user when the person first signs in. To invite people, use **Send Welcome Email** on **Company Users**.
+- **Existing users stay as they are:** an import rule never changes a portal user, including their role. An address already used by a portal user in your organization, as a main address or a Microsoft alias, is skipped.
+- **Turning it off keeps users:** pausing, editing or deleting an import rule stops new imports only. Users it already imported stay. Remove them from **Company Users** if they should not have access.
+- **Per tenant:** to stop imports for one client's Microsoft tenant, turn off user import on the [Microsoft 365 Companies page](/user-guides/microsoft-365/connecting-companies#turn-user-import-on-or-off).
+
+<Tip>
+  Avoid overlapping import rules with different roles. Each person is imported once, so give each group of people one rule.
+</Tip>
+
+### Who an import rule skips
+
+| Preview outcome | Meaning |
+| --- | --- |
+| **Will be imported** | The person gets a Company user on the next import. |
+| **Already a portal user** | Their address is already in use in your organization. Normal linking connects them to that user. |
+| **Imports off for this tenant** | User import is turned off for their Microsoft tenant on the Microsoft 365 Companies page. |
+| **Account disabled** | Their Microsoft 365 account is disabled. |
+| **Cannot sign in** | A guest, service, shared or resource account, an account whose sign-in is blocked (for example by a **Block sign-in** rule), or a person whose access was removed with **Remove Access** on **Company Users**. |
+| **No email address** | Microsoft 365 has no email address for the person. |
+
+### Pause, edit or delete a rule
+
+Use the switch on a rule's row to pause or resume it. It saves right away. The pencil opens the rule for editing, and the trash icon deletes it after you confirm. Deleting a **Block sign-in** rule restores sign-in for users that only this rule denied. Deleting an import rule keeps the users it imported.
+
 ## Troubleshooting
 
 | Problem | What to do |
@@ -282,6 +378,10 @@ After a successful merge, the candidate list updates. **No duplicate users found
 | The user list shows **Failed to load users** | Click **Retry**. |
 | A user cannot be deleted | The message names what still depends on them, such as client meeting bookings or published calendar meetings. Disable the user instead. |
 | A role shows **Couldn't load this role's permissions** | Click **Try again**. Saving stays off until the permissions load. |
+| An import rule creates nobody | Open the rule and click **Preview matches**. Each skipped person shows why. Check that user import is on for the tenant on the Microsoft 365 Companies page and that a Microsoft 365 users sync has run. |
+| An import rule's **Action** shows **Role deleted: pick a new one** | The rule's role was deleted. Edit the rule, choose another **Role for imported users** and save. |
+| **Import Microsoft 365 users** is unavailable | You need write access to Company Users settings as well as access to the **Access Rules** tab. |
+| **Role for imported users** shows **No company roles yet** | Create a Company role on the **Roles** tab, then reopen the rule. |
 
 ## Frequently asked questions
 
@@ -314,6 +414,12 @@ After a successful merge, the candidate list updates. **No duplicate users found
     - **PSA:** their contact is marked inactive in ConnectWise, Autotask, or Halo PSA, and they have no other active contact.
 
     A disabled user loses portal access and is signed out. They no longer appear in user dropdowns such as a ticket form's employee field. Company Users hides them unless you filter **Status** to **Disabled**. If sign-in is unblocked in Microsoft 365, the next sync restores a user disabled by the Microsoft 365 rule.
+  </Accordion>
+  <Accordion title="Does an import rule invite the people it creates?">
+    No. Imported users get no email. Each person's Microsoft 365 account is linked when they first sign in. Send invitations from **Company Users** when you are ready.
+  </Accordion>
+  <Accordion title="What happens to imported users when I delete the import rule?">
+    They stay. Deleting or pausing a rule, or turning user import off for a tenant, only stops new imports.
   </Accordion>
 </AccordionGroup>
 
