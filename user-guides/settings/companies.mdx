@@ -11,6 +11,7 @@ Companies Settings is where MSP staff create client companies, edit their detail
 - You need Companies settings access. Read access lets you view companies. Write access lets you add, edit and run bulk actions. Manage access is also needed to delete companies, turn **AI Home** on or off, and open **Blocked Companies** and **Hardware defaults**.
 - Premium Training actions need the Training manage permission.
 - To import companies, connect a supported PSA first. See [Import Companies](/user-guides/integrations/import-companies).
+- **New from import** also needs **Integration Company Mapping** write access, because the new company is linked to its PSA record.
 - Company users cannot use this page.
 
 ## Find a company
@@ -32,8 +33,8 @@ Each row has a **...** menu. With write access it shows **Edit Company**. With r
 ## Create a company
 
 <Steps>
-  <Step title="Click Add Company">
-    Click **Add Company** in the page header. The **Add New Company** dialog opens.
+  <Step title="Open the form">
+    Click **New Company** in the page header, then **Blank company**. The **Add New Company** dialog opens. If no PSA is connected, or your role can't import companies, the button is **Add Company** and opens the dialog directly.
   </Step>
   <Step title="Enter the details">
     Enter the required **Name**. Add **Contact Name**, **Contact Email**, **Contact Phone**, **Website**, **Industry**, **Company Size** and **Primary Domain** as needed.
@@ -51,6 +52,41 @@ Each row has a **...** menu. With write access it shows **Edit Company**. With r
 </Frame>
 
 A contact email on a company does not create a portal user or send an invitation. The **Compliance Schedule** and **Business Review Schedule** fields set meeting frequency. They are separate from [automated compliance run schedules](/user-guides/settings/compliance-schedules).
+
+## Create a company from your PSA
+
+Use **New from import** to bring one client in from your PSA and link it to your other tools in the same dialog. It works with Halo, ConnectWise, Autotask, Syncro and ConnectWise Asio.
+
+<Steps>
+  <Step title="Open New from import">
+    Click **New Company** in the page header, then **New from import**.
+  </Step>
+  <Step title="Pick the PSA company">
+    If you have more than one PSA connected, choose it in **Import from**. The list shows only that PSA's companies that aren't in MSPortal yet, with their type. Search to narrow it, select one company, and click **Import and continue**. A message confirms the company was created.
+  </Step>
+  <Step title="Review the matches">
+    MSPortal checks your other connected tools, such as your RMM, backup and documentation tools, for records that match the new company. It uses the same matching as **Review likely matches** in [Integration Company Mapping](/user-guides/settings/integration-company-mapping#review-likely-matches). Each match shows the tool, the record and a confidence score, and every match starts checked. Uncheck any that belong to a different client.
+  </Step>
+  <Step title="Link or skip">
+    Click **Link** (the button shows the count, such as **Link 3 matches**) to link the checked records and close the dialog. Click **Skip** to finish without linking. **Open company** goes to the new company's page.
+  </Step>
+</Steps>
+
+<Frame caption="New Company in the page header offers a blank company or one imported from your PSA.">
+  <img src="/images/product/company-new-company-menu.png" alt="New Company menu open on Settings > Companies with Blank company and New from import options" width="1382" height="266" />
+</Frame>
+
+<Frame caption="Pick the PSA company to create. Only companies that aren't in MSPortal yet are listed.">
+  <img src="/images/product/company-new-from-import-pick.png" alt="New company from import dialog with Import from set to Autotask PSA, a search field, and a list of PSA companies with their types, one selected" width="1309" height="1537" />
+</Frame>
+
+<Frame caption="When nothing in your other tools matches, link the company later from Integration Company Mapping.">
+  <img src="/images/product/company-new-from-import-no-matches.png" alt="Link step of New from import saying there are no matches for A1 Facilities Management in the other integrations, with Open company and Done buttons" width="1294" height="602" />
+</Frame>
+
+Matching only suggests records that aren't linked to any company yet, and skips tools where the new company already has a link, such as the PSA it came from. Each tool offers its best match. A record that matches an existing company better stays with that company. Link it by hand in [Integration Company Mapping](/user-guides/settings/integration-company-mapping) if it belongs to the new one.
+
+If the company is inactive in your PSA, it's created as inactive and the dialog says so. Activate it on its page, then link its tools from Integration Company Mapping.
 
 ## Edit a company
 
@@ -97,6 +133,8 @@ If a value changes back after a sync, your PSA owns that field. Change it in the
 A parent company and a location are different things. A location is a physical site of one company.
 
 ## Import companies
+
+To bring in a single company and link its tools in one step, use [New from import](#create-a-company-from-your-psa). Use **Import** for several companies at once.
 
 <Note>In the import dialog, **Quick Match**, bulk **Assign**, filter counts and **Clear Filters** share one toolbar. On a phone, open **Filters** to search.</Note>
 
@@ -279,6 +317,8 @@ Do not delete a company to hide it or to fix an import. Change its status to ina
 
 | Problem | What to do |
 |---------|-----------|
+| **New from import** is missing | Connect a supported PSA. Your role also needs **Integration Company Mapping** write access |
+| A PSA company isn't in the **New from import** list | It's already linked to a company in MSPortal. Search the company list for it, or check the link in [Integration Company Mapping](/user-guides/settings/integration-company-mapping) |
 | A company is missing | Clear the list filters. Check **Status**, your access and your import mapping before you add a duplicate |
 | The **Actions** menu is missing | Select at least one company. You need write access |
 | **Delete Selected**, **Blocked Companies** or **AI Home** is missing | These need manage access |
