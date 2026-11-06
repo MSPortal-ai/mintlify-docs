@@ -27,24 +27,86 @@ Before connecting to MSPortal.ai, you need to create an API member and security 
   </Step>
 
   <Step title="Create Security Role">
-    Create a security role named "MSPortal" with the following permissions. These permissions enable MSPortal to sync companies, contacts, tickets, opportunities, agreements, and related data.
+    Create a security role named "MSPortal". Expand each category and set the levels below. The names match the ConnectWise **Security Roles** screen. Leave every permission that is not listed, and every category not listed (such as **Marketing**), at **None**.
 
-    For **every category** listed below, set **Add Level**, **Edit Level**, and **Inquire Level** to **All**. Leave **Delete Level** as **None**.
+    Use **All**, not **My**: **My** limits the API member to records assigned to it, so syncs miss records and updates to other people's work fail. A row marked *only when* is needed only if you use that feature; the rest of the integration works without it.
 
-    | Category | Add | Edit | Delete | Inquire |
-    |----------|-----|------|--------|---------|
-    | Companies | All | All | None | All |
-    | Finance | All | All | None | All |
-    | Marketing | All | All | None | All |
-    | Procurement | All | All | None | All |
-    | Project | All | All | None | All |
-    | Sales | All | All | None | All |
-    | Service Desk | All | All | None | All |
-    | System | All | All | None | All |
-    | Time & Expense | All | All | None | All |
+    <AccordionGroup>
+      <Accordion title="Companies">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Company Maintenance** | None | All | None | All | Sync companies and their sites. Edit is needed *only when* traffic light writes company custom fields. |
+        | **Contacts** | All | All | None | All | Sync contacts for user import. Add creates a contact, or adds a phone number, when a company user without a ConnectWise contact submits a ticket; Edit updates the phone number from the ticket form. |
+        | **Configurations** | None | All | None | All | Sync configurations as devices. Edit is needed *only when* warranty writeback is on. |
+        | **Team Members** | None | None | None | All | Read each company's account team |
+        | **Manage Attachments** | All | None | None | All | Upload ticket attachments and read quote documents |
+        | **Notes** | All | All | All | All | *Only when* traffic light writes a banner note to the company: add, update and remove it |
+        | **CRM/Sales Activities** | All | None | None | All | *Only when* CSAT follow-up creates an activity for a low score |
+      </Accordion>
+
+      <Accordion title="Finance">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Agreements** | None | None | None | All | Sync agreements and additions for contract value and prepaid hours |
+        | **Invoicing** | None | None | None | All | Sync invoices and open invoice PDFs |
+        | **Billing View Time** | None | All | None | All | Read billable time. Edit is needed *only when* staff log billable time from MSPortal. |
+      </Accordion>
+
+      <Accordion title="Procurement">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Product Catalog** | None | None | None | All | Sync the product catalog |
+      </Accordion>
+
+      <Accordion title="Project">
+        Project sync needs only Inquire on **Project Headers** and **Project Tickets**. The other levels are for creating and updating ConnectWise projects from MSPortal; see [Project management permissions](#project-management-permissions).
+
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Project Headers** | All | All | None | All | Sync projects; create projects and update their status, name, dates and custom fields |
+        | **Project Phase** | All | All | None | All | Read phases; create phases and update their names and dates |
+        | **Project Tickets** | All | All | None | All | Sync project tickets; create them and update status, owner, priority, dates, budget hours and custom fields |
+        | **Close Projects** | None | All | None | All | Move a project into a closed status |
+        | **Close Project Tickets** | None | All | None | All | Move a project ticket into a closed status |
+        | **Project Notes** | All | None | None | All | Read and add project ticket notes |
+        | **Project Teams** | All | All | All | All | Read project teams; add, change and remove people in a project role |
+        | **Project Ticket Tasks** | All | All | All | All | Read and add checklist items and change their completion. Delete is needed *only for* **Delete checklist item**. |
+        | **Project Templates** | None | None | None | All | Import project templates |
+      </Accordion>
+
+      <Accordion title="Sales">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Opportunity** | All | None | None | All | Sync opportunities. Add creates an opportunity from a Planner item. |
+        | **Closed Opportunity** | None | None | None | All | Sync won and lost opportunities |
+        | **Opportunity Finance** | None | None | None | All | Read forecast lines for opportunity and quote values |
+      </Accordion>
+
+      <Accordion title="Service Desk">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Service Tickets** | All | All | None | All | Sync tickets and notes; create tickets, add notes, change status and write ticket custom fields |
+        | **Close Service Tickets** | None | All | None | All | Move a ticket into a closed status from the portal or a change approval |
+        | **Resource Scheduling** | All | All | All | All | *Only when* you book work from **Projects** > **Dispatch**: create, move and remove schedule entries |
+      </Accordion>
+
+      <Accordion title="System">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Member Maintenance** | None | None | None | All | Match ConnectWise members to staff, ticket owners and time entry authors |
+        | **Table Setup** | All | All | None | All | Read boards, statuses, types, sources, priorities, work types, work roles, project roles and custom field definitions. Add and Edit create and update the ticket callback that keeps tickets current in real time. |
+      </Accordion>
+
+      <Accordion title="Time & Expense">
+        | Permission | Add | Edit | Delete | Inquire | Used for |
+        |------------|-----|------|--------|---------|----------|
+        | **Time Entry** | All | None | None | All | Sync time for hours and effort reporting. Add logs time on tickets and project tickets. |
+        | **Time Entry Billable Option** | None | All | None | All | *Only when* staff choose billable or non-billable when logging time |
+      </Accordion>
+    </AccordionGroup>
 
     <Tip>
-      The easiest way to configure this is to expand each category and set all sub-permissions to **All** for Add, Edit, and Inquire. You can leave Delete as **None** for all categories.
+      If **Table Setup** is customized to specific tables, allow at least **General / Integrator Login** for the ticket callback and **Service / Service Board** for boards.
     </Tip>
 
     Click **Save and Close** to finalize the security role settings.
@@ -81,7 +143,7 @@ Before connecting to MSPortal.ai, you need to create an API member and security 
 
 ## Project management permissions
 
-Skip this section unless you will create or update ConnectWise projects from MSPortal. If you set every Project permission to **All** in the role above, you only need to confirm these levels.
+Skip this section unless you will create or update ConnectWise projects from MSPortal. The **Project** permissions in the role above already include these levels; use this section to check an existing role.
 
 The settings go on the role of the **API member that owns the keys saved in MSPortal**. Your staff member's personal ConnectWise role does not give the integration any access.
 
@@ -100,8 +162,8 @@ The settings go on the role of the **API member that owns the keys saved in MSPo
     | **Project Tickets** | Inquire: All; Add: All; Edit: All | Read and create project tickets, and update their status, owner, priority, summary, budget hours, dates and mapped fields |
     | **Close Projects** | Inquire: All; Add: None; Edit: All | Move a project into a closed status |
     | **Close Project Tickets** | Inquire: All; Add: None; Edit: All | Move a project ticket into a closed status |
-    | **Project Notes** | Inquire: All; Add: All; Edit: All | Read and add project notes. Project ticket comments also need access to the parent Project Tickets record. |
-    | **Project Teams** | Inquire: All; Add: All; Edit: All | Read project team members and fill assignment choices |
+    | **Project Notes** | Inquire: All; Add: All | Read and add project ticket notes. Project ticket comments also need access to the parent Project Tickets record. |
+    | **Project Teams** | Inquire: All; Add: All; Edit: All; Delete: All | Read project team members and fill assignment choices; add, change and remove people in a project role |
     | **Project Ticket Tasks** | Inquire: All; Add: All; Edit: All | Read and add checklist items, change completion and update checklist progress notes. This is separate from Project Tickets. |
     | **Project Templates** | Inquire: All | Import project templates into **Settings** > **Projects** > **Templates** |
 
@@ -115,7 +177,7 @@ The settings go on the role of the **API member that owns the keys saved in MSPo
     |------|--------|----------|
     | **Companies** > **Company Maintenance** and **Contacts** | Inquire: All | Select the project's company and contact |
     | **System** > **Member Maintenance** | Inquire: All | Resolve project managers, ticket owners and time entry authors |
-    | **System** > **Table Setup** | Inquire: All | Fill boards, statuses, types, priorities, work types and work roles. A missing lookup can block a write even when the project is editable. |
+    | **System** > **Table Setup** | Inquire: All | Fill boards, statuses, types, priorities, work types, work roles and project roles. A missing lookup can block a write even when the project is editable. |
     | **Time & Expense** > **Time Entry** | Inquire: All; Add: All when logging time | Sync project effort and create project ticket time entries |
     | **Finance** > **Billing View Time** | Inquire: All; Edit: All when logging billable time | Read and record billable time |
     | **Time & Expense** > **Time Entry Billable Option** | Inquire and Edit: All when choosing billable or non-billable time | Set the billing option on time entries |
@@ -125,7 +187,7 @@ The settings go on the role of the **API member that owns the keys saved in MSPo
   </Step>
 
   <Step title="Decide on checklist deletion">
-    Read, create and update work does not need Delete access. To use **Delete checklist item**, also set **Project** > **Project Ticket Tasks** > **Delete Level: All**. Leave Delete off on other project records.
+    Read, create and update work does not need Delete access, except removing someone from a project role, which needs **Project Teams** > **Delete Level: All**. To use **Delete checklist item**, also set **Project** > **Project Ticket Tasks** > **Delete Level: All**. Leave Delete off on other project records.
   </Step>
 
   <Step title="Save and re-check">
