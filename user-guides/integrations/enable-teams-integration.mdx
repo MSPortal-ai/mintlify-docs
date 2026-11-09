@@ -19,7 +19,7 @@ The Microsoft Teams integration packages your portal as a custom Teams app that 
 
 - **One package for all of your clients.** You configure the app once and download one zip. Every client organization installs that same package; there is no per-client build.
 - **The tabs show the live portal.** Each tab loads the matching MSPortal view inside Teams, so new features, fixes and data reach your clients without a new package.
-- **A new package only for app changes.** Re-upload the package only after you change the app itself: its name, descriptions, icon, accent color or tabs. See [Updating an Installed App](#updating-an-installed-app).
+- **A new package only for app changes.** Upload a new package only after you change the app itself: its name, descriptions, icon, accent color or tabs. See [Updating an Installed App](#updating-an-installed-app).
 
 The Microsoft Teams app is available on every MSPortal account. Find it under **Settings > Integrations**.
 
@@ -27,7 +27,7 @@ The Microsoft Teams app is available on every MSPortal account. Find it under **
 
 - MSPortal.ai account with integration management permissions
 - Microsoft Teams in the client's Microsoft 365 environment
-- Permission to upload custom apps in the client's Teams environment (larger organizations may require a Teams administrator to approve the upload)
+- A Teams administrator (or Global Administrator) account in each client's Microsoft 365 organization, to deploy the app from the Teams admin center
 
 ## Part 1: Configure Your Teams App
 
@@ -86,61 +86,45 @@ Set up the app's branding and tabs in MSPortal.
   <Step title="Save">
     Click **Save changes** and wait for the **Teams app saved** message. Tab toggles, reordering and **Reset to defaults** change the form only until you save. The download uses the saved configuration.
 
-    <img src="/images/product/teams-app-settings-download.png" alt="Bottom of the Microsoft Teams app settings with the accent color, vanity domain, Save changes and Download Teams app package buttons, and client install instructions." width="1440" height="960" />
+    <img src="/images/product/teams-app-settings-download.png" alt="Bottom of the Microsoft Teams app settings with the last tabs, accent color, vanity domain, and the Save changes and Download Teams app package buttons." width="900" height="700" />
   </Step>
 </Steps>
 
 ---
 
-## Part 2: Download and Install the App Package
+## Part 2: Deploy the App in the Teams Admin Center
 
-MSPortal generates a Teams app package (a zip file) from your configuration. Install it in each client's Microsoft 365 organization, either for the whole organization from the Teams admin center or by a user uploading it in Teams.
-
-### Deploy to a Whole Client Organization (Recommended)
-
-A Teams administrator in the client's organization (or your team, through delegated admin access) publishes the app once for everyone.
+Deploy the app once per client organization from the Microsoft Teams admin center. A Teams administrator in the client's Microsoft 365 organization does this, or your team if you administer their Microsoft 365 environment. Every client uses the same package.
 
 <Steps>
   <Step title="Download the Package">
-    Click **Download Teams app package**. This downloads a zip file containing your branded app.
+    In MSPortal, click **Download Teams app package**. This downloads a zip file containing your branded app.
   </Step>
 
-  <Step title="Upload It to the Organization's App Catalog">
-    In the client's [Teams admin center](https://admin.teams.microsoft.com), open **Teams apps > Manage apps** and choose **Upload new app**, then select the zip.
+  <Step title="Open the Client's Teams Admin Center">
+    Sign in to the [Teams admin center](https://admin.teams.microsoft.com) for the client's organization and go to **Teams apps > Manage apps**.
   </Step>
 
-  <Step title="Make It Available">
-    Allow the app for the users who should have it. To add it for them automatically, add it to a setup policy under **Teams apps > Setup policies** (**Installed apps**, and **Pinned apps** to pin it to the left rail).
-  </Step>
-</Steps>
-
-Teams can take several hours to apply setup-policy changes to every user.
-
-### Install for Yourself or a Single Team
-
-Where the organization allows custom app uploads, a user can install the app directly.
-
-<Steps>
-  <Step title="Download the Package">
-    Click **Download Teams app package** in MSPortal, or use the zip your MSP sent you.
+  <Step title="Upload the Package">
+    Select **Upload new app** (in some layouts, **Actions > Upload new app**), select **Upload**, and pick the zip you downloaded. The app is added to the organization's catalog under **Built for your org**; no approval step is needed when an admin uploads it.
   </Step>
 
-  <Step title="Upload the App in Microsoft Teams">
-    In Microsoft Teams, open **Apps > Manage your apps > Upload a custom app > Upload for me or my teams**.
+  <Step title="Check Who Can Use It">
+    Open the app from **Manage apps** and confirm its status is **Allowed** and that it is available to the users who should have it (everyone, or specific users and groups).
   </Step>
 
-  <Step title="Pick the Downloaded Zip">
-    Select the zip file you downloaded from MSPortal.
-  </Step>
-
-  <Step title="Add the App">
-    Click **Add**. Your portal appears in the Teams left rail with the tabs you configured.
+  <Step title="Pin It for Users">
+    Go to **Teams apps > Setup policies** and open **Global (Org-wide default)** to reach everyone, or a custom policy for specific users. Under **Pinned apps**, select **Add apps**, add your app and select **Save**. Pinning adds the app for those users and places it in the Teams left rail.
   </Step>
 </Steps>
 
 <Note>
-  Larger Microsoft 365 organizations may block direct custom app uploads. In that case, a Teams administrator can approve and deploy the custom app from the Teams admin center instead.
+  Teams can take a few hours to show a newly uploaded app and to apply setup-policy changes. If the app does not appear under **Installed apps** in a setup policy, use **Pinned apps** as described above: Microsoft does not allow custom apps with channel tabs in that list, and pinning installs the app anyway.
 </Note>
+
+<Tip>
+  To try the app on your own account before rolling it out, open Teams and select **Apps > Manage your apps > Upload a custom app > Upload for me or my teams**, then pick the zip. This works only where the organization allows custom app uploads.
+</Tip>
 
 ---
 
@@ -182,9 +166,10 @@ Your clients get MSPortal updates inside Teams automatically: the tabs load the 
 A new package is needed only when you change the app itself. Each time you save the Teams app settings, and when you change your logo under **Settings > Tenant > Branding**, MSPortal raises the app's version number. To roll those changes out:
 
 1. Download the package again.
-2. Upload it where the app was first installed: in the Teams admin center, open the app under **Teams apps > Manage apps** and upload the new file; for a direct install, upload the new version in Teams.
+2. In each client's Teams admin center, go to **Teams apps > Manage apps** and open your app.
+3. Select **Upload file** and pick the new zip.
 
-The app keeps the same app ID, so Teams treats the new package as an update to the installed app rather than a second app.
+The app keeps the same app ID, so Teams treats the new package as an update to the installed app rather than a second app. Existing availability and setup policies carry over to the new version.
 
 ---
 
@@ -195,8 +180,9 @@ The app keeps the same app ID, so Teams treats the new package as an update to t
 | Microsoft Teams card missing from Integrations | Your role needs permission to manage integrations; ask an administrator on your MSPortal account |
 | "Save your configuration first" when downloading | Click Save before downloading the app package |
 | Save button disabled | Check the Tabs section: at least one tab must be enabled, and no more than 16 |
-| Client cannot upload the app in Teams | Their organization restricts custom app uploads; a Teams administrator must approve the app from the Teams admin center |
-| Tab changes not visible to clients | Download the updated package and upload the new version in Teams |
+| App does not appear for users | Teams can take a few hours after upload or a setup-policy change. Check the app is **Allowed** and available to those users under **Teams apps > Manage apps** |
+| App missing from **Installed apps** in a setup policy | Add it under **Pinned apps** instead; Microsoft does not list custom apps with channel tabs under Installed apps |
+| Tab changes not visible to clients | Download the updated package and select **Upload file** on the app in **Teams apps > Manage apps** |
 
 ---
 
@@ -250,10 +236,10 @@ After publishing your Teams app:
     No. The tabs load the live portal, so product updates appear in Teams automatically. Upload a new package only after you change the app's name, descriptions, icon, accent color or tabs.
   </Accordion>
   <Accordion title="Does Save deploy the app to all clients?">
-    No. Saving updates the configuration and raises the package version. Download the package and distribute it through each organization's Teams process.
+    No. Saving updates the configuration and raises the package version. Download the package and upload it in each client's Teams admin center.
   </Accordion>
   <Accordion title="What should I check before rolling it out?">
-    Install the saved package for a test user, sign in, and check the enabled tabs, their data and the browser links. A Teams administrator may need to approve distribution.
+    Upload the saved package for your own account (see the tip in Part 2), sign in, and check the enabled tabs, their data and the browser links before you deploy it to a client.
   </Accordion>
 </AccordionGroup>
 
