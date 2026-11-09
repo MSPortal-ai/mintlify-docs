@@ -15,9 +15,13 @@ The Microsoft Teams integration packages your portal as a custom Teams app that 
 - Let clients sign in with their Microsoft account and work with live portal data inside Teams
 - Rename and reorder tabs to match how your clients think about your services
 
-<Note>
-  The Microsoft Teams app is enabled per account. If the **Microsoft Teams** card does not appear on your Integrations page, contact support@msportal.ai to have it enabled.
-</Note>
+## How the App Works
+
+- **One package for all of your clients.** You configure the app once and download one zip. Every client organization installs that same package; there is no per-client build.
+- **The tabs show the live portal.** Each tab loads the matching MSPortal view inside Teams, so new features, fixes and data reach your clients without a new package.
+- **A new package only for app changes.** Re-upload the package only after you change the app itself: its name, descriptions, icon, accent color or tabs. See [Updating an Installed App](#updating-an-installed-app).
+
+The Microsoft Teams app is available on every MSPortal account. Find it under **Settings > Integrations**.
 
 ## Prerequisites
 
@@ -63,6 +67,8 @@ Set up the app's branding and tabs in MSPortal.
     <Note>
       Teams allows up to 16 tabs per app, and at least one tab must be enabled.
     </Note>
+
+    <img src="/images/product/teams-app-settings-branding.png" alt="Microsoft Teams app settings in MSPortal with the app name, descriptions and the tab list the MSP's clients see in Teams." width="1440" height="960" />
   </Step>
 
   <Step title="Set the Accent Color">
@@ -79,6 +85,8 @@ Set up the app's branding and tabs in MSPortal.
 
   <Step title="Save">
     Click **Save changes** and wait for the **Teams app saved** message. Tab toggles, reordering and **Reset to defaults** change the form only until you save. The download uses the saved configuration.
+
+    <img src="/images/product/teams-app-settings-download.png" alt="Bottom of the Microsoft Teams app settings with the accent color, vanity domain, Save changes and Download Teams app package buttons, and client install instructions." width="1440" height="960" />
   </Step>
 </Steps>
 
@@ -86,11 +94,35 @@ Set up the app's branding and tabs in MSPortal.
 
 ## Part 2: Download and Install the App Package
 
-MSPortal generates a Teams app package (a zip file) from your configuration. You or your clients upload it into Microsoft Teams.
+MSPortal generates a Teams app package (a zip file) from your configuration. Install it in each client's Microsoft 365 organization, either for the whole organization from the Teams admin center or by a user uploading it in Teams.
+
+### Deploy to a Whole Client Organization (Recommended)
+
+A Teams administrator in the client's organization (or your team, through delegated admin access) publishes the app once for everyone.
 
 <Steps>
   <Step title="Download the Package">
     Click **Download Teams app package**. This downloads a zip file containing your branded app.
+  </Step>
+
+  <Step title="Upload It to the Organization's App Catalog">
+    In the client's [Teams admin center](https://admin.teams.microsoft.com), open **Teams apps > Manage apps** and choose **Upload new app**, then select the zip.
+  </Step>
+
+  <Step title="Make It Available">
+    Allow the app for the users who should have it. To add it for them automatically, add it to a setup policy under **Teams apps > Setup policies** (**Installed apps**, and **Pinned apps** to pin it to the left rail).
+  </Step>
+</Steps>
+
+Teams can take several hours to apply setup-policy changes to every user.
+
+### Install for Yourself or a Single Team
+
+Where the organization allows custom app uploads, a user can install the app directly.
+
+<Steps>
+  <Step title="Download the Package">
+    Click **Download Teams app package** in MSPortal, or use the zip your MSP sent you.
   </Step>
 
   <Step title="Upload the App in Microsoft Teams">
@@ -145,7 +177,14 @@ Return to **Settings > Integrations** and click **Manage Teams app** at any time
 
 ### Updating an Installed App
 
-Each time you save changes, MSPortal bumps the app's version number. To roll changes out to clients who already installed the app, download the package again and upload the new version in Microsoft Teams; Teams recognizes it as an update to the existing app.
+Your clients get MSPortal updates inside Teams automatically: the tabs load the live portal, so new features, fixes and data appear without any action from you.
+
+A new package is needed only when you change the app itself. Each time you save the Teams app settings, and when you change your logo under **Settings > Tenant > Branding**, MSPortal raises the app's version number. To roll those changes out:
+
+1. Download the package again.
+2. Upload it where the app was first installed: in the Teams admin center, open the app under **Teams apps > Manage apps** and upload the new file; for a direct install, upload the new version in Teams.
+
+The app keeps the same app ID, so Teams treats the new package as an update to the installed app rather than a second app.
 
 ---
 
@@ -153,7 +192,7 @@ Each time you save changes, MSPortal bumps the app's version number. To roll cha
 
 | Issue | Solution |
 |-------|----------|
-| Microsoft Teams card missing from Integrations | Contact support@msportal.ai to have the Teams app enabled for your account |
+| Microsoft Teams card missing from Integrations | Your role needs permission to manage integrations; ask an administrator on your MSPortal account |
 | "Save your configuration first" when downloading | Click Save before downloading the app package |
 | Save button disabled | Check the Tabs section: at least one tab must be enabled, and no more than 16 |
 | Client cannot upload the app in Teams | Their organization restricts custom app uploads; a Teams administrator must approve the app from the Teams admin center |
@@ -203,6 +242,12 @@ After publishing your Teams app:
   </Accordion>
   <Accordion title="Why is my vanity domain rejected even though DNS resolves?">
     The domain must be verified and active for your account under **Settings > Tenant > Domains**. You cannot use a domain that belongs to another account or MSPortal's own host.
+  </Accordion>
+  <Accordion title="Do I need a separate package for each client?">
+    No. One package works for all of your clients. Each client's Microsoft 365 organization installs the same zip, and each user sees only the companies and data their MSPortal access allows.
+  </Accordion>
+  <Accordion title="Do clients need a new package when MSPortal releases new features?">
+    No. The tabs load the live portal, so product updates appear in Teams automatically. Upload a new package only after you change the app's name, descriptions, icon, accent color or tabs.
   </Accordion>
   <Accordion title="Does Save deploy the app to all clients?">
     No. Saving updates the configuration and raises the package version. Download the package and distribute it through each organization's Teams process.
