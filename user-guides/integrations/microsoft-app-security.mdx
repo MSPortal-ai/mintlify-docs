@@ -1,0 +1,180 @@
+---
+title: "Security of MSPortal's Microsoft apps"
+sidebarTitle: "Microsoft app security"
+description: "What MSPortal's Microsoft apps can access, how MSPortal protects them, and how you can monitor and limit them in your tenants."
+icon: "shield-check"
+---
+
+MSPortal connects to Microsoft 365 through two Microsoft Entra app registrations. This page lists what each app can access, how MSPortal protects them, and the steps you or your clients can take to monitor and limit them. It's written for MSP security staff and for client tenant administrators.
+
+## The apps
+
+| App | Application (client) ID | Used for | Consented in |
+| --- | --- | --- | --- |
+| **MSPortal.ai Integration** | `78668eb2-8553-4d0c-ae67-a55462892a3c` | Signing in to MSPortal with Microsoft, and syncing users, groups, licenses, domains and Secure Score from connected client tenants | Each client tenant you connect, and the tenant of anyone who signs in with Microsoft |
+| **Calendar app** | `2e24bbda-f081-4d8d-a25d-2e87a0971bf6` | Booking meetings from MSPortal and reading free/busy for your staff | Your own MSP tenant only, never client tenants |
+
+Both are shared multi-tenant apps used by every MSP on MSPortal. MSPortal.ai Integration is publisher-verified (Scaling Ops Consulting Inc., Microsoft Partner Network ID 7019509).
+
+MSPortal holds **no GDAP relationships and no Partner Center access**, and never asks for Global Administrator or Privileged Role Administrator rights. Microsoft only lets one of those two roles approve application permissions, so one of them approves the connection in each client tenant, once.
+
+## What the apps can access
+
+### MSPortal.ai Integration: application permissions
+
+These are granted when a client admin connects a tenant. All of them are read-only.
+
+| Permission | Why MSPortal needs it |
+| --- | --- |
+| `User.Read.All` | Reads users and their managers, to match MSPortal users to Microsoft accounts and apply access rules |
+| `Group.Read.All`, `GroupMember.Read.All` | Read groups and their memberships, for access rules and reporting |
+| `Organization.Read.All` | Reads the tenant profile and subscribed licenses |
+| `LicenseAssignment.Read.All` | Reads license assignments, for license reporting |
+| `Domain.Read.All` | Reads the tenant's domains |
+| `SecurityEvents.Read.All` | Reads Secure Score and its recommendations |
+
+The syncs sign in as the app itself. They don't use any user's sign-in or stored user token.
+
+### MSPortal.ai Integration: delegated permissions
+
+| Permission | Why MSPortal needs it |
+| --- | --- |
+| `openid`, `profile`, `email`, `User.Read` | Signing in to MSPortal with Microsoft. Your MSPortal session is kept by MSPortal itself, not by a Microsoft token. |
+| `Domain.Read.All` | Used once when a tenant is connected, to confirm which tenant was connected and which admin approved it |
+| `Organization.Read.All` | Used only when an MSP signs up for MSPortal with Microsoft, to read its organization's name |
+
+<Note>
+Tenants connected before November 2026 may also show `SecurityEvents.ReadWrite.All` (application) or `offline_access` (delegated). MSPortal no longer requests or uses either one. `SecurityEvents.ReadWrite.All` only allows updating the status of security alerts and Secure Score recommendations; it gives no access to users, mail, files, roles or credentials. To remove both, see [Remove permissions MSPortal no longer uses](#remove-permissions-msportal-no-longer-uses).
+</Note>
+
+### Calendar app
+
+| Permission | Why MSPortal needs it |
+| --- | --- |
+| `Calendars.ReadWrite` (application) | Creates, updates and cancels meetings booked in MSPortal, and reads free/busy |
+
+Microsoft grants this permission for every mailbox in your tenant. MSPortal only syncs the calendars its **Sync scope** setting allows; see [Limit which calendars MSPortal syncs](#limit-which-calendars-msportal-syncs).
+
+## How MSPortal protects the apps
+
+- **Read-only access.** The apps hold no permission to assign roles, change applications or service principals, or add credentials, so the app can't raise its own privileges or plant credentials in your tenant.
+- **App instance property lock** is on for both apps, for all properties, in every tenant. Nobody can add credentials to MSPortal's service principal inside your tenant.
+- **Dedicated tenant.** The app registrations live in an Entra tenant used for nothing else, with administrative access limited to a single administrator, protected by phishing-resistant passkeys.
+- **Secret rotation** every six months, inside Microsoft's recommendation of less than 12 months. If a compromise is suspected, MSPortal rotates within an hour; you don't need to do anything, because your consent is granted to the app, not to a particular secret.
+- **Daily credential monitoring.** An automated check alerts MSPortal when either app gains a secret, certificate, federated credential or permission.
+- **Notification.** MSPortal notifies affected MSPs within 24 hours of becoming aware of a compromise of these apps. Report a concern to **security@msportal.ai**.
+
+## Where sign-ins appear, and the expected sources
+
+Microsoft records MSPortal's sign-ins into your tenant only in your tenant's logs, so you are the one who can see them.
+
+- **Service principal sign-ins** are MSPortal.ai Integration syncing your data. They all come from your MSP's MSPortal region:
+
+  | MSPortal region | Source range |
+  | --- | --- |
+  | US | `5.60.65.64/26` |
+  | EU | `3.40.0.32/27` |
+
+  A service principal sign-in by MSPortal.ai Integration from outside your region's range is not MSPortal.
+- **User sign-ins** for the same app are people signing in to MSPortal with Microsoft, and the admin approving a tenant connection. They come from each person's own location.
+- The **calendar app** also signs in from MSPortal's web hosting, which doesn't use fixed addresses, so it has no fixed range.
+
+To see them, open **Sign-in logs** (under **Monitoring & health**) in the Microsoft Entra admin center, select the **Service principal sign-ins** tab, and filter **Application ID** to `78668eb2-8553-4d0c-ae67-a55462892a3c`.
+
+## Steps you can take
+
+### Alert on sign-ins from outside the expected range
+
+If your tenant sends sign-in logs to a Log Analytics workspace or Microsoft Sentinel (this needs Microsoft Entra ID P1 or P2), add an alert rule on this query:
+
+```kusto
+AADServicePrincipalSignInLogs
+| where AppId == "78668eb2-8553-4d0c-ae67-a55462892a3c"
+| where not(ipv4_is_in_range(IPAddress, "5.60.65.64/26"))   // US region; use "3.40.0.32/27" for EU
+| project TimeGenerated, IPAddress, Location, ResultType, ServicePrincipalName
+```
+
+<Steps>
+  <Step title="Send sign-in logs to Log Analytics">
+    In the Microsoft Entra admin center, open **Diagnostic settings** (under **Monitoring & health**) and add a setting that sends **ServicePrincipalSignInLogs** and **AuditLogs** to your workspace.
+  </Step>
+  <Step title="Create the alert">
+    In the Azure portal, open the workspace, go to **Alerts > Create > Alert rule**, choose **Custom log search**, paste the query, and alert when it returns any rows.
+  </Step>
+</Steps>
+
+Microsoft's Conditional Access for workload identities only applies to apps registered in your own tenant, so it can't restrict MSPortal's app. Monitoring is the control available for third-party apps.
+
+### Alert on changes to MSPortal's app in your tenant
+
+Watch for anyone adding credentials or permissions to MSPortal's service principal in your tenant:
+
+```kusto
+AuditLogs
+| where OperationName in (
+    "Add service principal credentials",
+    "Add app role assignment to service principal",
+    "Add delegated permission grant",
+    "Update service principal")
+| where TargetResources has "MSPortal.ai Integration"
+| project TimeGenerated, OperationName, InitiatedBy, TargetResources
+```
+
+Without a workspace, check by hand: open **Audit logs** (under **Monitoring & health**) in the Microsoft Entra admin center, set **Category** to **ApplicationManagement**, and look for entries whose target is MSPortal.ai Integration.
+
+### Review what you've granted
+
+<Steps>
+  <Step title="Open the app">
+    In the Microsoft Entra admin center, open **Enterprise applications** and select **MSPortal.ai Integration**.
+  </Step>
+  <Step title="Review permissions">
+    Select **Permissions** to see every permission your tenant has granted, under **Admin consent**.
+  </Step>
+</Steps>
+
+### Remove permissions MSPortal no longer uses
+
+If your tenant still shows `SecurityEvents.ReadWrite.All` or `offline_access`, an administrator can remove them with Microsoft Graph PowerShell. Run this once in each tenant; it removes only those two grants and leaves everything MSPortal uses in place.
+
+```powershell
+Connect-MgGraph -TenantId "<your tenant ID>" -Scopes "Application.Read.All","AppRoleAssignment.ReadWrite.All","DelegatedPermissionGrant.ReadWrite.All"
+
+$msportal = Get-MgServicePrincipal -Filter "appId eq '78668eb2-8553-4d0c-ae67-a55462892a3c'"
+$graph = Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'"
+
+# Application permission: SecurityEvents.ReadWrite.All
+$role = $graph.AppRoles | Where-Object { $_.Value -eq "SecurityEvents.ReadWrite.All" }
+Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $msportal.Id |
+  Where-Object { $_.AppRoleId -eq $role.Id } |
+  ForEach-Object { Remove-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $msportal.Id -AppRoleAssignmentId $_.Id }
+
+# Delegated permission: offline_access
+Get-MgOauth2PermissionGrant -Filter "clientId eq '$($msportal.Id)'" |
+  Where-Object { $_.Scope -split " " -contains "offline_access" } |
+  ForEach-Object {
+    $scope = ($_.Scope -split " " | Where-Object { $_ -and $_ -ne "offline_access" }) -join " "
+    Update-MgOauth2PermissionGrant -OAuth2PermissionGrantId $_.Id -Scope $scope
+  }
+```
+
+Reconnecting a tenant in MSPortal doesn't remove old grants; only this kind of removal does.
+
+### Limit which calendars MSPortal syncs
+
+In MSPortal, go to **Settings > Integrations**, expand **Microsoft 365 Calendar**, and set **Sync scope**.
+
+The options are **Individually approved**, **Company role users** and **All configured users**. **Individually approved** is the narrowest: MSPortal syncs only the users you approve one by one.
+
+### Disconnect a tenant
+
+To stop MSPortal's access to a tenant completely, open **Enterprise applications > MSPortal.ai Integration > Properties** in that tenant and set **Enabled for users to sign-in?** to **No**, or delete the enterprise application.
+
+- New tokens stop immediately. Tokens already issued can stay valid until they expire, typically within about an hour.
+- This also stops people in that tenant from signing in to MSPortal with Microsoft.
+- Disconnecting in MSPortal alone doesn't remove consent on the Microsoft side.
+
+## Related
+
+- [Connect companies to Microsoft 365](/user-guides/microsoft-365/connecting-companies)
+- [Connect rollout companies to Microsoft 365](/user-guides/getting-started/onboarding/company-m365)
