@@ -68,7 +68,14 @@ Microsoft grants this permission for every mailbox in your tenant. MSPortal only
 
 Microsoft records MSPortal's sign-ins into your tenant only in your tenant's logs, so you are the one who can see them.
 
-- **Service principal sign-ins** are MSPortal.ai Integration syncing your data. For MSPs in MSPortal's US region, they all come from **`5.60.65.64/26`**. A service principal sign-in by MSPortal.ai Integration from any other address is not MSPortal.
+- **Service principal sign-ins** are MSPortal.ai Integration syncing your data. They all come from your MSP's MSPortal region:
+
+  | MSPortal region | Source range |
+  | --- | --- |
+  | US | `5.60.65.64/26` |
+  | EU | `3.40.0.32/27` |
+
+  A service principal sign-in by MSPortal.ai Integration from outside your region's range is not MSPortal.
 - **User sign-ins** for the same app are people signing in to MSPortal with Microsoft, and the admin approving a tenant connection. They come from each person's own location.
 - The **calendar app** also signs in from MSPortal's web hosting, which doesn't use fixed addresses, so it has no fixed range.
 
@@ -83,7 +90,7 @@ If your tenant sends sign-in logs to a Log Analytics workspace or Microsoft Sent
 ```kusto
 AADServicePrincipalSignInLogs
 | where AppId == "78668eb2-8553-4d0c-ae67-a55462892a3c"
-| where not(ipv4_is_in_range(IPAddress, "5.60.65.64/26"))
+| where not(ipv4_is_in_range(IPAddress, "5.60.65.64/26"))   // US region; use "3.40.0.32/27" for EU
 | project TimeGenerated, IPAddress, Location, ResultType, ServicePrincipalName
 ```
 
