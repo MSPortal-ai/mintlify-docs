@@ -323,13 +323,9 @@ MSPortal checks which parts of ConnectWise your API member is allowed to read, a
   </Step>
 
   <Step title="Reduce excess access">
-    The check also reads the API member's own security role. If the role grants far more than MSPortal uses, **Permissions** shows **The ConnectWise Manage API user has more access than MSPortal needs** and lists what it found:
+    The check also reads the API member's own security role and compares it with the MSPortal role in [Create Security Role](#create-security-role). If the role grants more, **Permissions** shows **The ConnectWise Manage API user has more access than MSPortal needs** and lists each permission set above that role, with the levels it grants and what MSPortal needs. For example, **Companies -> Company Maintenance: Delete All. MSPortal needs Edit All, Inquire All.** Any level on a permission the table does not list counts, including Inquire.
 
-    - Add, Edit and Delete at **All** on most permissions, which matches an administrator role
-    - Any Add, Edit or Delete level on **System > Security Roles**
-    - Add or Delete level on **System > Member Maintenance**
-
-    MSPortal keeps working, but anyone who obtains the API keys gets the same access. Go to **System > Members > API Members**, open the member that owns MSPortal's API keys and assign it the MSPortal security role from [Create Security Role](#create-security-role). Leave every permission the table does not list at **None**, then click **Re-check**.
+    MSPortal keeps working, but anyone who obtains the API keys gets the extra access. Go to **System > Members > API Members**, open the member that owns MSPortal's API keys and note its security role. Lower each listed permission to what MSPortal needs under **System > Security Roles**. If the role is shared with people or other integrations, give the API member its own MSPortal role instead. Then click **Re-check**.
 
     The warning never blocks setup or turns off a sync.
   </Step>
