@@ -167,19 +167,40 @@ See [Find and follow up on a ticket](/msp-guides/ticketing/follow-up-on-a-ticket
 
 ## Tell managers about new tickets
 
-When this is on, a person's manager hears about each ticket that person submits through MSPortal. It is for the manager's information only: nothing waits for the manager, nothing needs approving, and who can see the ticket does not change. To have a manager approve requests instead, use a [**The requester's manager** approval step](/user-guides/ticketing/ticket-approval-chains). To let managers see their reports' tickets, give their role [**Own and All Reports' Tickets**](#create-a-display-group-for-a-role).
+<Note>
+  Branch preview: the **Manager notices** rule, the **Managers** button and the screenshots below show an upcoming Settings > Tickets update. Until it is released, the switch is on the **General** tab, next to **Allow emailing ticket notes**, and your live portal may differ.
+</Note>
+
+**Manager notices** is the first rule in the table on **Settings > Tickets > Approvals**. When it is on, a person's manager hears about each ticket that person submits through MSPortal. It is for the manager's information only: nothing waits for the manager, nothing needs approving, and who can see the ticket does not change. To have a manager approve requests instead, use a [**The requester's manager** approval step](/user-guides/ticketing/ticket-approval-chains). To let managers see their reports' tickets, give their role [**Own and All Reports' Tickets**](#create-a-display-group-for-a-role).
+
+<Frame caption="Branch preview: the Approvals tab lists Manager notices first. The Managers button sits beside New approval chain.">
+  <img src="/images/product/settings-tickets-approvals-table-preview-desktop.png" alt="Approvals tab in Ticket Settings with the Manager notices rule first in the table and a Managers button in the toolbar, both outlined in red" width="2880" height="1920" />
+</Frame>
+
+The rule reads **Every company** under **Applies to**, **Every ticket submitted in MSPortal** under **Templates**, and **Requester's manager** with **For information only** under **Steps**. Its **Status** shows **On** or **Off**.
 
 <Steps>
   <Step title="Connect Microsoft 365 for the company">
     Managers come from Microsoft 365. The users sync records each user's manager. See [Manager data issues](/user-guides/microsoft-365/connecting-companies#manager-data-issues) for users whose manager could not be synced.
   </Step>
-  <Step title="Open Settings > Tickets > General">
-    Find **Tell requesters' managers about new tickets**, next to **Allow emailing ticket notes**.
+  <Step title="Open Settings > Tickets > Approvals">
+    Select the **Manager notices** row, or open its **⋯** menu and choose **Edit**. The **Manager notices** editor opens.
   </Step>
-  <Step title="Turn it on">
-    The change saves immediately, and "Managers now hear about their team's new tickets." confirms it. Turn it off the same way.
+  <Step title="Turn it on or off">
+    Use the **Send manager notices** switch beside **Save** and click **Save**. You can also turn the rule on or off straight from the row's **⋯** menu, without opening the editor.
   </Step>
 </Steps>
+
+<Frame caption="Branch preview: the Manager notices editor, with the See who reports to whom button outlined in red.">
+  <img src="/images/product/settings-tickets-manager-notices-editor-preview-desktop.png" alt="Manager notices editor showing where managers come from, the count of people with a manager, a warning count, who is told, and the Send manager notices switch beside Save" width="2880" height="1920" />
+</Frame>
+
+The editor explains the rule and shows:
+
+- **Where managers come from.** A person's manager is the **Manager** field on their Microsoft 365 account. MSPortal reads it every time a client's Microsoft 365 users sync, and nothing in MSPortal overrides it. To change who is told, change the manager in Microsoft 365.
+- **A count** such as "25 of 32 people have a manager in Microsoft 365", and a warning count for people whose manager is not among the client's synced users, so nobody is told for them.
+- **Who is told.** The manager of whoever submits the ticket, once per ticket. Tickets created by automations and compliance tickets send no notice, and a manager who already approved the request is not told again.
+- **The email.** Its wording is under **Settings > Email**, in **Manager Ticket Notice**.
 
 What the manager gets:
 
@@ -199,6 +220,32 @@ When no notice is sent:
 Each manager hears about a ticket once, even if it is submitted again or the email is retried.
 
 To change the email's wording, create a **Manager Ticket Notice** template in [Settings > Email](/user-guides/settings/email) and set it as the default. Without one, managers get the built-in email in their language. The in-app notification always uses the built-in wording.
+
+### See who reports to whom
+
+Click **Managers** in the Approvals toolbar to open **Who reports to whom**. It lists every synced Microsoft 365 person with these columns:
+
+| Column | What it shows |
+| --- | --- |
+| **Person** | The person's name and email. |
+| **Company** | The client company the person belongs to. |
+| **Manager** | Their manager from Microsoft 365, with the manager's email. |
+| **Manager status** | Whether the manager can be told or asked, from the table below. |
+
+| Manager status | What it means |
+| --- | --- |
+| **Can sign in** | The manager gets notices by email and in MSPortal, and can approve requests. |
+| **Email only** | The manager gets notices by email. They cannot approve requests until they are a contact of the company who can sign in. |
+| **Manager not synced** | Microsoft 365 names a manager who is not among the client's synced users: the account is disabled, has no mailbox, or is in another directory. Nobody is told or asked. |
+| **No manager** | Microsoft 365 has no manager for this person. |
+
+Filter by **Person**, **Company**, **Manager** or **Manager status**, and sort by person, company or manager. Filter **Manager** to a name to list that manager's reports.
+
+<Frame caption="Branch preview: Who reports to whom, with a status for each person's manager. The people shown are sample data.">
+  <img src="/images/product/settings-tickets-managers-list-preview-desktop.png" alt="Who reports to whom list with Person, Company, Manager and Manager status columns and filters above each column" width="2880" height="1920" />
+</Frame>
+
+The same list opens from **See who reports to whom** in the **Manager notices** editor, and from an approval chain step set to **The requester's manager**. It is read-only: to change a manager, change it in Microsoft 365, and the list updates after the next users sync.
 
 ## Manage ticket categories
 
@@ -347,23 +394,33 @@ Tickets created from the Compliance page use their own defaults instead of the G
 
 ## Set up change approvals
 
+<Note>
+  Branch preview: the **Ticket change requests** editor shown here is an upcoming layout. Until it is released, the dialog is titled **Ticket change approvals** and has an **On** switch and an **Approver company role** field, without the **Steps** section.
+</Note>
+
 <Steps>
   <Step title="Open Settings > Tickets > Approvals">
-    The **Approvals** table lists every rule that makes a ticket wait for a decision. **Ticket change requests** is the built-in rule for changes technicians request from a ticket; approval chains for request forms sit beside it. The **?** in the table header explains how approvals work.
+    The **Approvals** table lists every rule that makes a ticket wait for a decision, plus the **Manager notices** rule, which only informs. **Ticket change requests** is the built-in rule for changes technicians request from a ticket; approval chains for request forms sit beside it. The **?** in the table header explains how approvals work.
   </Step>
   <Step title="Open Ticket change requests">
-    Select the row, or choose **Edit** from its menu. The **Ticket change approvals** dialog opens.
+    Select the row, or choose **Edit** from its menu. The **Ticket change requests** editor opens, laid out like the approval chain editor.
   </Step>
   <Step title="Choose where the decision is made">
-    Under **Decided in**, select **MSPortal** or **Autotask**. For Autotask, pick the **Autotask integration**. Tickets from other PSAs always use MSPortal approvals.
+    Under **Decided in**, select **MSPortal** or **Autotask**. With **MSPortal**, approvers get an email and an in-app notification and decide in MSPortal. With **Autotask**, MSPortal opens the approval in Autotask and follows the decision made there. Pick the **Autotask integration** for Autotask. Tickets from other PSAs always use MSPortal approvals.
   </Step>
   <Step title="Pick the Approver company role">
-    Requests notify this company role.
+    The **Steps** section has one step. Everyone who holds the **Approver company role** at the ticket's client is asked, and the first answer decides. A client with nobody in the role cannot be asked.
   </Step>
-  <Step title="Turn on On and click Save">
-    The row shows **On** with the role as its step. **Turn off** in the row menu pauses the rule without losing its settings. See [Change management](/user-guides/ticketing/change-management) for requesting and approving changes.
+  <Step title="Turn on Use this rule and click Save">
+    **Use this rule** sits beside **Save**. The row shows **On** with the role as its step. **Turn off** in the row menu, or switching **Use this rule** off, pauses the rule without losing its settings. See [Change management](/user-guides/ticketing/change-management) for requesting and approving changes.
   </Step>
 </Steps>
+
+<Frame caption="Branch preview: the Ticket change requests editor, with Decided in, one step and Use this rule beside Save.">
+  <img src="/images/product/settings-tickets-change-requests-editor-preview-desktop.png" alt="Ticket change requests editor with Decided in set to MSPortal, one step with an Approver company role field, and the Use this rule switch beside Save" width="2880" height="1920" />
+</Frame>
+
+Change requests always use a single step. Extra steps, named approvers, the requester's manager, reminders and expiry belong to [approval chains](/user-guides/ticketing/ticket-approval-chains), which cover requests from ticket templates.
 
 ## Let clients escalate tickets
 
@@ -405,7 +462,7 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
     **PSA Integration** and **Email (SMTP)**. Portal visibility is controlled by display groups and roles.
   </Accordion>
   <Accordion title="Which settings wait for a Save click?">
-    Delivery Method, PSA Integration, New Ticket View, **Allow emailing ticket notes**, **Tell requesters' managers about new tickets**, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Ticket change approvals** uses **Save** in its dialog. Display groups use **Create Group** or **Update Group**.
+    Delivery Method, PSA Integration, New Ticket View, **Allow emailing ticket notes**, category rows and the Companies grid save immediately, and the email fields save when you leave them. **Ticket Defaults** uses **Save Defaults**. **Compliance** uses **Save Compliance Defaults**. **Ticket change requests** and **Manager notices** use **Save** in their editors, and each editor has its own on and off switch beside **Save**. Display groups use **Create Group** or **Update Group**.
   </Accordion>
   <Accordion title="Where do I choose which statuses a role can use?">
     In the display group, under **Allowed Ticket Statuses**, next to the board and ticket-type restrictions.
@@ -429,7 +486,7 @@ Open **Settings > Tickets > Templates** to see the template catalog. Click **New
     Check that **Allow emailing ticket notes** is on, that the note is a public note, and that the ticket is a service ticket from HaloPSA, ConnectWise, Autotask or Syncro. For ConnectWise, Autotask and Syncro, the PSA connection also needs a **Reply mailbox**.
   </Accordion>
   <Accordion title="Why didn't a manager hear about a new ticket?">
-    Check that **Tell requesters' managers about new tickets** is on, that the requester's company is connected to Microsoft 365 with the manager synced, and that the ticket reached the PSA. See [When no notice is sent](#tell-managers-about-new-tickets) for the other cases.
+    Check that the **Manager notices** rule on the **Approvals** tab is **On**, that the requester's company is connected to Microsoft 365 with the manager synced, and that the ticket reached the PSA. Open **Managers** on the **Approvals** tab and look for the person: **Manager not synced** or **No manager** means nobody is told. See [When no notice is sent](#tell-managers-about-new-tickets) for the other cases.
   </Accordion>
   <Accordion title="Does the New Ticket View setting submit a ticket?">
     No. It changes how the new-ticket page looks. A user still completes and submits the request.
