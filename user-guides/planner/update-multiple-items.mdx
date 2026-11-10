@@ -1,15 +1,16 @@
 ---
 title: 'Update several Planner items'
-description: 'Apply shared status, value, type, date, hours or cost changes to selected List View rows.'
+description: 'Apply shared status, value, type, date, hours or cost changes, or draft AI public notes, for selected List View rows.'
 icon: 'box-archive'
 ---
 
-Change the same field on many Planner items at once from List View. This guide is for MSP staff with Manage Planner.
+Change the same field on many Planner items at once from List View. This guide is for MSP staff with Manage Planner. **AI Public Notes** also works with Write Planner.
 
 ## Before you start
 
 - You need **Manage Planner**. Bulk actions are in List View, which is in **Planner Menu**.
 - List View shows 25 rows per page by default. Bulk actions work on the rows you select on the current page.
+- **AI Public Notes** needs **Write Planner** or **Manage Planner**, and AI turned on for your MSP. See [Draft public notes with AI](#draft-public-notes-with-ai).
 - Bulk changes edit Planner data only. They do not change linked tickets or projects in your PSA.
 
 ## Select the items
@@ -91,6 +92,64 @@ To keep separate lines, descriptions or recurrences, edit each item's **Costs** 
 
 The same number applies in each item's own currency. The dialog does not convert currencies, and it hides the currency symbol when your selection mixes currencies. Select items from one currency where you can.
 
+## Draft public notes with AI
+
+<Note>
+  Branch preview: this feature and its screenshots show an upcoming Planner
+  update. It may not be in your live portal until it is released.
+</Note>
+
+**AI Public Notes** writes client-facing **Notes** for many items at once. It reads each item's **Private Notes**, the same source as the **AI Draft** button in the item editor. See [Create and edit Planner items](/user-guides/planner/create-and-edit-items#add-notes-with-a-template-or-ai).
+
+The menu entry shows only when AI is turned on for your MSP and you have **Write Planner** or **Manage Planner**.
+
+<Steps>
+  <Step title="Select the items">
+    Tick the rows in List View. On a phone, open **Actions** first.
+  </Step>
+  <Step title="Open AI Public Notes">
+    Click **Actions (N) > AI Public Notes**. The **Generate AI Public Notes** dialog opens.
+
+    <Frame caption="Branch preview: AI Public Notes sits between Set Cost and Merge Items.">
+      <img src="/images/product/planner-list-ai-public-notes-menu.png" alt="Planner Actions menu with AI Public Notes between Set Cost and Merge Items." width="232" height="470" />
+    </Frame>
+  </Step>
+  <Step title="Read what will be skipped">
+    The dialog says how many selected items have no private notes. Those items are skipped and nothing is written for them.
+  </Step>
+  <Step title="Choose the options (optional)">
+    Tick **Exclude estimated time** to leave out any implementation or testing time estimate. Without it, the draft includes a one-line estimate.
+
+    Tick **Include custom instructions** to show a **Custom instructions** box. Type writing preferences for this run, such as length or focus. The box holds up to 2,000 characters. Your instructions apply to this run only and are not saved. **Generate** stays off while the option is ticked and the box is empty.
+
+    <Frame caption="Branch preview: both options are ticked and the Custom instructions box is open.">
+      <img src="/images/product/planner-list-ai-public-notes-dialog.png" alt="Generate AI Public Notes dialog with Exclude estimated time and Include custom instructions ticked and a Custom instructions box." width="980" height="910" />
+    </Frame>
+  </Step>
+  <Step title="Click Generate">
+    Click **Generate (N)**, where N is the number of items that have private notes. The dialog works through the items in batches of five and shows progress, for example "Writing 3 of 12…". Click **Stop** to end the run after the current batch. Items already written keep their notes.
+
+    <Frame caption="Branch preview: progress while the notes are written.">
+      <img src="/images/product/planner-list-ai-public-notes-progress.png" alt="Generate AI Public Notes dialog showing Writing 0 of 2 with Stop and a busy Generate button." width="980" height="1030" />
+    </Frame>
+  </Step>
+  <Step title="Read the summary">
+    A message tells you how many items got notes, how many were skipped and how many failed.
+
+    <Frame caption="Branch preview: the summary after a run.">
+      <img src="/images/product/planner-list-ai-public-notes-toast.png" alt="Message reading Added AI public notes to 2 items. 1 item had no private notes." width="670" height="175" />
+    </Frame>
+  </Step>
+</Steps>
+
+Each draft is added below any public notes already on the item. It never replaces them. Open an item to read and edit the draft, and set **Hide from company users** as you need. The draft is saved to the item as soon as it is written, so there is no **Save** to click.
+
+<Frame caption="Branch preview: an item's Notes after a run. The private notes stay as they were.">
+  <img src="/images/product/planner-list-ai-public-notes-result.png" alt="An item's Notes box holding the drafted client-facing text above its Private Notes." width="1490" height="1050" />
+</Frame>
+
+Read every draft before a client sees it. AI can misread short private notes.
+
 ## Merge similar items
 
 Use **Merge Items** when several items describe the same work for one company, for example overdue hardware lifecycle items from different quarters.
@@ -149,6 +208,9 @@ Deleted items cannot be restored. To keep an item for later, use **Archive** on 
 | Cost lines disappeared | **Set Cost** replaced them with one row. Re-enter the detail lines on the item if you need them. |
 | **Merge Items** is missing | Select at least two items and check Manage Planner permission. |
 | The Merge button stays disabled | Read the reason in the Merge dialog, such as items from different companies or an item managed by a Standard or automation rule. |
+| **AI Public Notes** is missing | AI must be turned on for your MSP, and you need Write Planner or Manage Planner. |
+| An item got no public notes | It had no private notes. Add private notes, then run **AI Public Notes** again. |
+| Some items failed | Select just those rows and run it again. Check the summary message for the counts. |
 | **Delete Selected** is missing | You need Manage Planner, and no selected item may be a Standards item. |
 
 ## Frequently asked questions
@@ -172,8 +234,14 @@ Deleted items cannot be restored. To keep an item for later, use **Archive** on 
   <Accordion title="Does Set Cost keep my existing cost lines?">
     No. It replaces them with one row in the item's current recurrence.
   </Accordion>
+  <Accordion title="Does AI Public Notes replace the notes already on an item?">
+    No. Each draft is added below any public notes already there.
+  </Accordion>
+  <Accordion title="Can I stop AI Public Notes part way?">
+    Yes. Click **Stop**. The run ends after the current batch, and items already written keep their notes.
+  </Accordion>
   <Accordion title="Can I archive several items at once?">
-    No. Archive and Restore are row actions. The Actions menu has field updates, **Merge Items** and **Delete Selected**.
+    No. Archive and Restore are row actions. The Actions menu has field updates, **AI Public Notes**, **Merge Items** and **Delete Selected**.
   </Accordion>
   <Accordion title="Can I use bulk actions on archived items?">
     Yes, if you have permission. Updating a field does not restore the item.
