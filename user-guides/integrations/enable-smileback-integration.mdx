@@ -1,0 +1,71 @@
+---
+title: "Configure SmileBack Integration"
+description: "Connect SmileBack, match the companies your reviews name, and see SmileBack ratings in CSAT dashboards, reports and the review queue."
+icon: 'face-smile-beam'
+---
+
+Connect SmileBack to bring your CSAT reviews into MSPortal. Each review becomes a CSAT rating that appears in the CSAT dashboards, reports, technician performance, the assistant and the CSAT review queue, beside your other CSAT sources.
+
+The integration is in beta and available to selected tenants. Setup is for MSP staff with permission to manage integrations. MSPortal only reads from SmileBack: it never creates, edits or deletes anything there.
+
+## Before you start
+
+You need two sets of details from SmileBack:
+
+- **API credentials:** in SmileBack, open **Account › API Credentials** and copy the client ID and client secret. Account administrators and CSAT/NPS managers can open this page.
+- **An API user:** the SmileBack email and password of the user MSPortal signs in as. A user who normally signs in with ConnectWise SSO needs a SmileBack password first: use **Reset password** on the SmileBack sign-in page to set one.
+
+Also note which SmileBack application your account signs in to: North America (`app.smileback.io`) or Europe (`app.smileback.eu`).
+
+## Connect and match companies
+
+<Steps>
+  <Step title="Enter and test the connection">
+    Open **Settings > Integrations**, select **SmileBack** and open **Connect**. Choose the **Region**, then enter the **Client ID**, **Client secret**, **API user email** and **API user password**. Click **Test connection**. A successful test shows how many reviews the connection can read.
+  </Step>
+  <Step title="Save the connection">
+    Click **Save and continue**. MSPortal starts reading your reviews in the background. The region cannot be changed after the connection is saved; connect again to use the other region.
+  </Step>
+  <Step title="Match companies">
+    Open **Import or match companies**. Each company SmileBack names on a review appears here with its review count. Match each one to a company in MSPortal, or import it as a new company. Quick match suggests a 100% match when SmileBack's company ID is the record ID or identifier of a company already linked to your PSA, and falls back to name similarity otherwise. Review the suggestions before you apply them.
+
+    Saved matches also attach existing ratings to the chosen company, so they appear in that company's dashboards and reports.
+  </Step>
+  <Step title="Review and finish">
+    Open **Review**, check each task and select **Finish setup**.
+  </Step>
+</Steps>
+
+## How SmileBack ratings appear
+
+- **Scale:** SmileBack's three faces map to a 3-point scale: negative is 1, neutral is 2 and positive is 3.
+- **Companies:** a rating appears under a company only after its SmileBack company is matched. Unmatched ratings are kept and attach as soon as you save the match.
+- **Technicians:** a rating credits a technician when the SmileBack agent name matches exactly one technician in your PSA. A name shared by two technicians credits nobody.
+- **Tickets:** ratings link to the PSA ticket when you have one PSA connection. With two active PSA connections, ratings keep the SmileBack ticket number but do not credit a technician.
+- **Review queue:** SmileBack is a review-queue source. Ratings below your review threshold enter the CSAT review queue like your other CSAT sources. You can turn the source on or off in the review queue settings.
+- **Changes in SmileBack:** edited ratings update on the next sync. A review deleted in SmileBack, or whose rating is cleared, is removed from MSPortal on the next sync.
+
+Only CSAT reviews are synced. SmileBack NPS and project surveys are not imported.
+
+## Syncing
+
+New and changed reviews sync every two hours. A full read of every review runs weekly and refreshes the company list. To sync sooner, open the connection's **More actions** menu and select **Run sync**.
+
+## Manage or troubleshoot the connection
+
+| Symptom | What to check |
+| --- | --- |
+| The connection test fails | Check the region, client ID and secret, and that the API user's email and password sign in to SmileBack directly, not only through ConnectWise SSO. |
+| No companies appear | Wait for the first sync to finish. Companies appear only once a review names them. |
+| A company has reviews but no score in dashboards | Match the company on **Import or match companies**. |
+| Ratings do not credit technicians | Check that the agent name in SmileBack matches one technician in your PSA, and that you have a single active PSA connection. |
+| Counts differ from SmileBack | New reviews arrive on the next two-hourly sync. Deleted and cleared reviews are not counted. |
+| Controls are unavailable | Ask an MSP administrator to check your integration management permission. |
+
+**Disconnect…** in **More actions** removes the stored credentials, your company matches and the SmileBack ratings in MSPortal. It does not change anything in SmileBack. To stop MSPortal's access entirely, also change the API user's password or remove its access in SmileBack.
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)
