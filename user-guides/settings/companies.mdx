@@ -8,7 +8,7 @@ Companies Settings is where MSP staff create client companies, edit their detail
 
 ## Before you start
 
-- You need Companies settings access. Read access lets you view companies. Write access lets you add, edit and run bulk actions. Manage access is also needed to delete companies, turn **AI Home** on or off, and open **Blocked Companies** and **Hardware defaults**.
+- You need Companies settings access. Read access lets you view companies. Write access lets you add, edit and run bulk actions. Manage access is also needed to delete companies, turn **AI Home** or a company's **AI** on or off, and open **Blocked Companies** and **Hardware defaults**.
 - Premium Training actions need the Training manage permission.
 - To import companies, connect a supported PSA first. See [Import Companies](/user-guides/integrations/import-companies).
 - **New from import** also needs **Integration Company Mapping** write access, because the new company is linked to its PSA record.
@@ -179,9 +179,42 @@ Check [Integration Company Mapping](/user-guides/settings/integration-company-ma
 | **Set Meeting Schedules** | Sets **Business reviews** and **Compliance reviews** frequency. **Keep existing** leaves a schedule alone. **No schedule** removes it. Click **Apply schedules** |
 | **Enable Premium Training** / **Disable Premium Training** | Turns Premium Training on or off at once. Needs the Training manage permission |
 | **Enable AI Home** / **Disable AI Home** | Turns AI Home on or off at once. Needs manage access |
+| **Turn off AI** / **Turn on AI** | Stops or allows every AI feature for the selected companies. See [Turn off AI for a company](#turn-off-ai-for-a-company). Needs manage access |
 | **Delete Selected** | Permanently deletes the selected companies. Needs manage access |
 
-**Enable and Disable Premium Training** and **Enable and Disable AI Home** apply as soon as you click them, with no confirmation dialog. Training availability, user overrides and enrollment are separate settings. See [Enable Training](/user-guides/training/enabling-training).
+**Enable and Disable Premium Training**, **Enable and Disable AI Home** and **Turn off AI** / **Turn on AI** apply as soon as you click them, with no confirmation dialog. Training availability, user overrides and enrollment are separate settings. See [Enable Training](/user-guides/training/enabling-training).
+
+## Turn off AI for a company
+
+Use this when a client must not have any of its data used by AI, for example because its contract or its own policy forbids it. Your other companies keep AI.
+
+<Steps>
+  <Step title="Open the company">
+    In **Settings > Companies**, open the company. On the **Overview** tab, find the **AI** card.
+  </Step>
+  <Step title="Turn off Use AI with this company's data">
+    The change saves right away. To change several companies at once, select them in the list and choose **Turn off AI** from the **Actions** menu, or use **Turn off AI** in a row's **...** menu.
+  </Step>
+</Steps>
+
+The **AI** column in the company list shows **Off** for every company with AI turned off.
+
+While AI is off for a company:
+
+- None of its data is sent to an AI model. The assistant, its tools, RON, the Chrome extension and MCP clients cannot see the company or any of its records, even when you ask about all companies.
+- AI reports for it are blocked: AI narrative reports, report presentations, AI report editing and AI sections of scheduled reports. Reports without AI still run.
+- Ticket AI, meeting summaries, planner and compliance note drafts, survey analysis and other AI features refuse the company, or leave it out when they cover many companies.
+- Background AI jobs skip it, including feedback triage and automation **AI Transform** steps.
+- Its company users see no AI features, the same as when **Enable AI features for client users** is off in [Tenant Settings](/user-guides/settings/tenant#configure-ai-features).
+
+While any company has AI off:
+
+- Assistant conversations that started before AI was turned off start fresh, so earlier answers about that company are never reused.
+- Searching all companies from the assistant needs a company selection. Pick the companies you want in the company selector.
+- AI standards suggestions are unavailable.
+- A survey's overall analysis and sentiment cover only the answers from companies with AI on.
+
+Turning AI back on takes effect right away. Nothing is deleted while AI is off.
 
 ## Manage company types
 
@@ -325,7 +358,8 @@ Do not delete a company to hide it or to fix an import. Change its status to ina
 | A PSA company isn't in the **New from import** list | It's already linked to a company in MSPortal. Search the company list for it, or check the link in [Integration Company Mapping](/user-guides/settings/integration-company-mapping) |
 | A company is missing | Clear the list filters. Check **Status**, your access and your import mapping before you add a duplicate |
 | The **Actions** menu is missing | Select at least one company. You need write access |
-| **Delete Selected**, **Blocked Companies** or **AI Home** is missing | These need manage access |
+| **Delete Selected**, **Blocked Companies**, **AI Home** or **Turn off AI** is missing | These need manage access |
+| The assistant says AI is turned off for a company | AI is off for that company. Turn it back on in its **AI** card, or pick other companies |
 | **Enable Premium Training** is missing | You need the Training manage permission |
 | A client cannot sign in | Check the person's Company user record and Company role. A company contact email does not create a login |
 | A parent-company user sees only their own company | Assign them the Parent Admin team role. See [Give a parent-company user access to child companies](/user-guides/settings/parent-company-access) |
@@ -358,6 +392,9 @@ Do not delete a company to hide it or to fix an import. Change its status to ina
   </Accordion>
   <Accordion title="Does saving an Overview field save the other tabs?">
     No. Each field and each tab saves on its own.
+  </Accordion>
+  <Accordion title="Does turning off AI for a company stop AI for my whole organization?">
+    No. Only that company's data is kept away from AI. To turn AI off everywhere, use **Enable all AI-powered features** in [Tenant Settings](/user-guides/settings/tenant#configure-ai-features).
   </Accordion>
   <Accordion title="Will unblocking a company restore its deleted history?">
     No. It only lets the company be imported again.
