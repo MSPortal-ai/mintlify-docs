@@ -34272,6 +34272,258 @@
             ]
           }
         ]
+      },
+      "TimeEntries": {
+        "type": "object",
+        "properties": {
+          "dateFrom": {
+            "type": "string",
+            "description": "First date read (YYYY-MM-DD)"
+          },
+          "dateTo": {
+            "type": "string",
+            "description": "Last date read (YYYY-MM-DD)"
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "integer"
+              },
+              "technicians": {
+                "type": "integer"
+              },
+              "hoursWorked": {
+                "type": "number"
+              },
+              "billableHoursWorked": {
+                "type": "number"
+              },
+              "nonBillableHoursWorked": {
+                "type": "number"
+              },
+              "unknownBillingHoursWorked": {
+                "type": "number"
+              },
+              "hoursBillable": {
+                "type": "number",
+                "description": "Hours the PSA bills: billed or to-bill hours on billable entries"
+              },
+              "ticketHoursWorked": {
+                "type": "number"
+              },
+              "internalHoursWorked": {
+                "type": "number"
+              },
+              "timeOffHoursWorked": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "entries",
+              "technicians",
+              "hoursWorked",
+              "billableHoursWorked",
+              "nonBillableHoursWorked",
+              "unknownBillingHoursWorked",
+              "hoursBillable",
+              "ticketHoursWorked",
+              "internalHoursWorked",
+              "timeOffHoursWorked"
+            ],
+            "description": "Totals across every matching entry"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "<psa>:<PSA entry id>"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "ticket",
+                    "internal",
+                    "time_off"
+                  ],
+                  "description": "ticket: time on a client ticket. internal: the MSP's own work (Autotask internal codes and its own tickets). time_off: vacation, sick, personal and paid time off"
+                },
+                "psa": {
+                  "type": "string",
+                  "enum": [
+                    "connectwise",
+                    "halo",
+                    "autotask"
+                  ]
+                },
+                "dateWorked": {
+                  "type": "string"
+                },
+                "startTime": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "endTime": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "hoursWorked": {
+                  "type": "number"
+                },
+                "hoursBillable": {
+                  "type": "number",
+                  "nullable": true,
+                  "description": "0 when non-billable, null when billing is unknown"
+                },
+                "billing": {
+                  "type": "string",
+                  "enum": [
+                    "billable",
+                    "non_billable",
+                    "unknown"
+                  ],
+                  "description": "Halo entries are billable or unknown: its time feed carries no non-billable flag"
+                },
+                "technician": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "technicianExternalId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "workType": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "ConnectWise work type, Halo charge type or Autotask work type; the internal time or time off category for those kinds"
+                },
+                "workRole": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "ConnectWise only"
+                },
+                "notes": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Public note, first 500 characters. Always null for time off"
+                },
+                "ticket": {
+                  "type": "object",
+                  "nullable": true,
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "nullable": true,
+                      "description": "Null on the MSP's own Autotask tickets, which are not synced"
+                    },
+                    "number": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "title": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "status": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "integrationId": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "number",
+                    "title",
+                    "status",
+                    "integrationId"
+                  ],
+                  "description": "Null for general internal time and time off"
+                },
+                "company": {
+                  "type": "object",
+                  "nullable": true,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "description": "Null for internal time and time off"
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "psa",
+                "dateWorked",
+                "startTime",
+                "endTime",
+                "hoursWorked",
+                "hoursBillable",
+                "billing",
+                "technician",
+                "technicianExternalId",
+                "workType",
+                "workRole",
+                "notes",
+                "ticket",
+                "company"
+              ]
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "totalCount": {
+                "type": "integer"
+              },
+              "totalPages": {
+                "type": "integer"
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              },
+              "hasPrevPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "page",
+              "limit",
+              "totalCount",
+              "totalPages",
+              "hasNextPage",
+              "hasPrevPage"
+            ]
+          }
+        },
+        "required": [
+          "dateFrom",
+          "dateTo",
+          "summary",
+          "entries",
+          "pagination"
+        ]
       }
     },
     "parameters": {}
@@ -79387,6 +79639,195 @@
           },
           "403": {
             "description": "Forbidden - missing scope (companies.write), the linked user lacks the readiness permission, the endpoint is staff-only, or a company user addressed another company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/analytics/time-entries": {
+      "get": {
+        "summary": "List time entries",
+        "description": "PSA time entries logged on service tickets across every ticket (ConnectWise, Halo and Autotask), newest first, with hour totals across every matching entry. Filter by technician name, date range (up to 92 days, default the last 30), work type, billing status, PSA or company. Entries on tickets MSPortal has not synced or that belong to no client are left out; project time is under /projects/{id}/time-entries. `entryKind` adds Autotask internal time and time off (permission read_staff_time); they belong to no company, so `companyId` narrows ticket time only. Staff only; requires `analytics.read`, read_technician_performance, read_tickets and the psa_time_entries feature.",
+        "tags": [
+          "Analytics"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Earliest date worked, inclusive (YYYY-MM-DD). Defaults to 30 days before dateTo"
+            },
+            "required": false,
+            "description": "Earliest date worked, inclusive (YYYY-MM-DD). Defaults to 30 days before dateTo",
+            "name": "dateFrom",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Latest date worked, inclusive (YYYY-MM-DD). Defaults to today"
+            },
+            "required": false,
+            "description": "Latest date worked, inclusive (YYYY-MM-DD). Defaults to today",
+            "name": "dateTo",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Technician name contains (case-insensitive)"
+            },
+            "required": false,
+            "description": "Technician name contains (case-insensitive)",
+            "name": "technician",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Work type contains (case-insensitive)"
+            },
+            "required": false,
+            "description": "Work type contains (case-insensitive)",
+            "name": "workType",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "billable",
+                "non_billable",
+                "unknown"
+              ]
+            },
+            "required": false,
+            "name": "billing",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "connectwise",
+                "halo",
+                "autotask"
+              ]
+            },
+            "required": false,
+            "name": "psa",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ticket",
+                  "internal",
+                  "time_off"
+                ]
+              },
+              "description": "Entry kinds, repeated or comma-separated (default ticket). internal and time_off are Autotask only and need the read_staff_time permission"
+            },
+            "required": false,
+            "description": "Entry kinds, repeated or comma-separated (default ticket). internal and time_off are Autotask only and need the read_staff_time permission",
+            "name": "entryKind",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "maxItems": 100,
+              "description": "Limit to one or more companies (repeat the key or comma-separate)"
+            },
+            "required": false,
+            "description": "Limit to one or more companies (repeat the key or comma-separate)",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100001,
+              "description": "Page number (default 1). Only the first 100,000 matching entries can be paged"
+            },
+            "required": false,
+            "description": "Page number (default 1). Only the first 100,000 matching entries can be paged",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Entries per page (default 50)"
+            },
+            "required": false,
+            "description": "Entries per page (default 50)",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time entries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TimeEntries"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (analytics.read), read_technician_performance or read_tickets, the endpoint is staff-only, the psa_time_entries feature is off, or entryKind asks for internal or time_off without the read_staff_time permission",
             "content": {
               "application/json": {
                 "schema": {

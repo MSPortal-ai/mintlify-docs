@@ -27,6 +27,10 @@ All scheduled times below are in **UTC**. Frequencies are accurate as of the lat
 **Clear & Resync** removes the portal's data for that integration and rebuilds it. Do not use it to get a recent update. See [Clear and Resync](/user-guides/integrations/clear-and-resync-integrations).
 </Warning>
 
+## Devices removed at the source
+
+Device integrations remove a device from MSPortal when the source stops reporting it, unless another connected integration still reports the same device. A large removal waits before it is applied: when one sync would remove or re-source more than 25 devices and more than a fifth of the connection's devices, MSPortal changes nothing until the source has reported the same removal for 3 days, then applies it. If more than four fifths of the connection's devices would go at once, MSPortal keeps them, because that usually means the API credentials changed or can no longer see everything.
+
 ## Microsoft 365
 
 | Data Type | Frequency |
@@ -257,7 +261,7 @@ Enabled directory datasets and posture run daily. Posture can be deferred while 
     | Security | Daily |
     | Summary reports | Daily |
 
-    Each agent sync removes agents that Huntress no longer returns, and can also retire agents that have not checked in for a chosen number of days (**Retire agents that stop checking in** under **Agent import**). A device another integration still reports stays and only loses its Huntress link.
+    Agents that Huntress stops returning are removed 3 days later. The agent sync can also retire agents that have not checked in for a chosen number of days (**Retire agents that stop checking in** under **Agent import**). A device another integration still reports stays and only loses its Huntress link.
   </Accordion>
 
   <Accordion title="Bitdefender GravityZone (Beta)">

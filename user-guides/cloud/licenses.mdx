@@ -60,10 +60,24 @@ Adobe rows do not open this panel.
 | Provider | What the row shows | Click a row |
 | --- | --- | --- |
 | **Microsoft 365** | Assigned, purchased, available, and utilization. **Renews / Expires** and a **Trial** badge show when subscription data is available. | Opens the assigned users. |
-| **Google Workspace** | The number of distinct users holding each product and SKU. Google does not send purchased seat counts, so **Purchased**, **Available**, and **Utilization** show **Unavailable**. | Opens the assigned users. |
+| **Google Workspace** | The number of distinct users holding each product and SKU. Google does not send purchased seat counts. When the company has a matching Sherweb subscription, its quantity fills **Purchased**, **Available**, and **Utilization**. Otherwise they show **Unavailable**. | Opens the assigned users. |
 | **Adobe** | Used quantity as **Assigned**, current quantity as **Purchased**, status, and renewal date. | Does nothing. |
 
 Hover over **Unavailable** to read why. It is not zero.
+
+## Google Workspace seat counts from Sherweb
+
+Google reports who holds each license, not how many seats were bought. If your MSP sells Google Workspace through Sherweb, MSPortal reads the seat count from the Sherweb subscription instead.
+
+A Google license shows seat counts when all of these are true:
+
+- Sherweb is connected in **Settings > Integrations** and is not paused. See [Enable the Sherweb integration](/user-guides/integrations/enable-sherweb-integration).
+- The Sherweb customer is mapped to the same company as the Google Workspace tenant.
+- The Sherweb subscription has the same product name as the Google license, for example **Google Workspace Business Standard**. A billing term after the name, such as **- Annual paid monthly**, still matches.
+
+**Purchased** is the Sherweb quantity. Several subscriptions for the same product are added together. **Available** is purchased minus assigned users, never below zero. **Renews / Expires** shows the earliest Sherweb renewal date when Sherweb reports one.
+
+Licenses that Sherweb does not sell to that company, such as **Cloud Identity Free**, stay **Unavailable**. The counts update after the next Sherweb and Google Workspace syncs.
 
 ## What each column shows
 
@@ -73,7 +87,7 @@ Hover over **Unavailable** to read why. It is not zero.
 | **Provider** and **Company** | The source and the company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
 | **Product** | The product family. |
 | **Assigned** | Users holding the license, or used quantity for Adobe. A person with several licenses counts once on each license. |
-| **Purchased** | The purchased seat count, when the provider reports one. |
+| **Purchased** | The purchased seat count, when the provider reports one. For Google Workspace, the quantity on a matching Sherweb subscription. |
 | **Available** | Purchased minus assigned, never below zero. |
 | **Utilization** | Assigned divided by purchased as a percentage, capped at 100%. Shown only when the purchased count is known and above zero. |
 | **Renews / Expires** | The renewal date. A **Trial** badge shows for trial subscriptions. Microsoft rows use the earliest renewal date for that SKU. |
@@ -106,7 +120,7 @@ MSP staff with Calendar write access or Planner write access see checkboxes on M
 | --- | --- |
 | The **Licenses** tab is missing | Your role has neither Cloud read nor Storefront read access. Ask your MSP. |
 | A license is missing | Turn off **Hide free & trial** and **Hide large allocations**, then clear the column filters and check the company selector. |
-| **Purchased** says **Unavailable** | Expected for Google Workspace. Check the seat count with your MSP or in the Google subscription. |
+| **Purchased** says **Unavailable** | The Google Workspace license has no matching Sherweb subscription for that company. Check that Sherweb is connected, the Sherweb customer is mapped to the company, and the product names match. Otherwise check the seat count in the Google subscription. |
 | The summary is missing | A **License**, **Product**, or **Status** filter is active. Clear it. |
 | **By domain**, **By office**, and **By combination** are missing | Those views need Cloud read access. Storefront read access alone shows the **Licenses** view only. |
 | An Adobe row does not open | Adobe rows have no assigned users panel. |
@@ -116,7 +130,7 @@ MSP staff with Calendar write access or Planner write access see checkboxes on M
 
 <AccordionGroup>
   <Accordion title="Why does Google show Unavailable for Purchased and Available?">
-    Google reports who holds each license but not how many seats were bought. **Unavailable** is not zero. Ask your MSP to check the Google subscription.
+    Google reports who holds each license but not how many seats were bought. MSPortal fills the counts in from a matching Sherweb subscription for the same company. With no match, the row shows **Unavailable**, which is not zero. Ask your MSP to check the Google subscription.
   </Accordion>
   <Accordion title="Does Assigned show how many people use the software?">
     No. It shows assignments, not sign-in activity.
@@ -128,7 +142,7 @@ MSP staff with Calendar write access or Planner write access see checkboxes on M
     Adobe uses Storefront read access. The other tabs need Cloud read access.
   </Accordion>
   <Accordion title="Why is the renewal date blank?">
-    Google rows never carry a renewal date. For Microsoft 365 and Adobe, the date appears only when the provider sends it.
+    Google rows carry a renewal date only when a matching Sherweb subscription reports one. For Microsoft 365 and Adobe, the date appears only when the provider sends it.
   </Accordion>
   <Accordion title="Can I change or cancel a license here?">
     No. Company users can [open a ticket](/user-guides/ticketing/open-a-ticket) or use the [Storefront](/user-guides/storefront/index) if your MSP has turned it on. MSP staff change licenses in the provider.
