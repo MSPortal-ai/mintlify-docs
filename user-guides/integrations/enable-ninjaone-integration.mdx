@@ -274,6 +274,8 @@ Open **Review** and choose **Finish setup** once the required tasks are complete
 
 Each device sync compares the inventory with what NinjaOne returns for your mapped organizations. A device that NinjaOne no longer reports is removed from MSPortal on that sync, along with its planner and meeting agenda references. If another connected integration still reports the same device, for example a Huntress agent that was never uninstalled, the device stays in the inventory and its **Source** changes to that integration. Remove the agent in that product to retire the device everywhere.
 
+A large removal waits before it is applied. When one sync would remove or re-source more than 25 devices and more than a fifth of the connection's devices, MSPortal changes nothing until NinjaOne has reported the same removal for 3 days, then applies it. If almost all of the connection's devices would go at once (more than four fifths), MSPortal keeps them, because that usually means the API credentials changed or can no longer see every organization.
+
 ---
 
 ## Review installed software
