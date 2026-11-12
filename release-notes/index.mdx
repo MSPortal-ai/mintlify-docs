@@ -15,18 +15,18 @@ MSPortal runs your AI where your data lives. EU portals use models hosted in the
 
 **Key Features:**
 - **AI in your data region**: the assistant, AI reports, ticket AI, meeting summaries, automations and every other AI feature run on models hosted in your portal's region. When a model can't run in your region, the request stops rather than running somewhere else.
-- **Background work in your region**: scheduled jobs for EU portals, such as syncs, reports and digests, run on EU servers.
-- **One clear exception**: the small decision model behind quick choices, such as routing assistant requests and picking ticket templates, runs in the US for every region. It returns choices and scores only and keeps no data.
+- **Quick decisions in your region too**: the small model behind quick choices, such as routing assistant requests and picking ticket templates, runs in your region as well. EU portals use a decision model hosted in the EU.
+- **EU data stays in the EU, end to end**: as part of our SOC 2 work, we audited every path your data takes. All data for EU portals stays completely in the EU region, end to end.
 
 #### Turn AI off for a client company
 
 Turn AI off for any client with one switch, and none of that client's data is sent to an AI model, in any feature. Use the **AI** switch on the company's **Overview** tab in **Settings > Companies**, or the **AI** column, row menu and bulk action on the companies list.
 
 **Key Features:**
-- **Every AI feature**: the assistant and its searches, the vCIO advisor, the Chrome extension, MCP connections, AI reports and presentations, ticket AI, meeting summaries and the meeting coach, Planner, compliance and survey AI, automations and background AI jobs all leave the client out or decline to run for it.
+- **Every AI feature**: the assistant and its searches, the vCIO advisor, the Chrome extension, MCP connections, AI reports and presentations, ticket AI, meeting summaries, Planner, compliance and survey AI, automations and background AI jobs all leave the client out or decline to run for it.
 - **Enforced at the data layer**: AI requests can't read the client's records at all, so its data stays out even when you ask about all companies.
 - **Clients see no AI**: the client's own users get the portal without AI features.
-- **Takes effect right away**: meeting coach sessions for the client stop, and assistant conversations that began before the switch start fresh.
+- **Takes effect right away**: assistant conversations that began before the switch start fresh.
 - **Fully reversible**: turn AI back on whenever you like. Nothing is deleted while it's off.
 
 See [Turn off AI for a company](https://docs.msportal.ai/user-guides/settings/companies#turn-off-ai-for-a-company).
@@ -45,12 +45,6 @@ Create a fictional client, **Acorn Construction (Demo)**, filled with sample dat
 - **Your choice of who manages it**: a **Demo company** permission controls who can create, reset and remove it.
 
 Sample tickets need a connected PSA. While the demo company exists it appears in lists, dashboards and reports that cover all companies, so remove it when you are done to keep those figures clean.
-
-### Choose a navigation style
-
-Pick **Current** or the new **Modern** sidebar and top bar, as your organization's default or just for yourself. Pages, permissions and your sidebar order stay the same in every style.
-
-See [Choose a navigation style](https://docs.msportal.ai/user-guides/getting-started/customizing-the-sidebar#choose-a-navigation-style).
 
 ### Planner report with a cover page
 
@@ -99,11 +93,13 @@ An agreement's **Devices** tab lists the equipment linked to that contract in Ha
 ### Client onboarding portals and templates
 
 - **Add tasks to a portal**: add a task to any phase of an onboarding portal straight from its **Tasks** page, and choose its type: a form, checklist, approval or training.
+- **Assign contacts in bulk**: assign up to 1,000 contacts to portal tasks at once.
 - **Template columns**: choose the columns on a template's **Phases & Items** view. **Item columns** shows, hides and reorders item fields, including assignee role, priority, estimated and budget hours, billable and category. **Phase columns** adds assignee roles, hour totals and item counts to each phase header. Your layout stays the way you left it.
 
 ### Invoices and surveys
 
 - **Delete and archive invoices**: delete invoices you uploaded through the API, and archive invoices older than a set number of days.
+- **Uploaded invoices**: invoices you upload always show on the **Invoices** page.
 - **Delete survey responses**: survey managers can delete survey and NPS responses one at a time or in bulk, to clear test submissions.
 
 ### Warranties
@@ -138,24 +134,25 @@ An agreement's **Devices** tab lists the equipment linked to that contract in Ha
 - **Complete answers**: the assistant answers counts and lists from complete data, reports full totals for large sets of time entries, and says clearly when an answer covers only part of the data.
 - **Steady tools**: the assistant keeps the same tools for the whole conversation, knows today's date, and reads product guides more reliably.
 - **Ticket forms**: the assistant fills person fields from the name you give and shows each ticket's finished subject. Images attached to your messages reach the assistant every time.
+- **Time entries by technician**: the assistant, MCP connections and the public API list ticket time entries from ConnectWise, Autotask and Halo, filtered by technician, date, work type and billing status, with total hours.
 - **Compliance and templates**: AI assistants and the API can set any status from a compliance check's own list, and the AI template designer fixes its own save errors and can use your synced PSA project types.
 
 ### Improvements
 
-- **Pages**: pages hold their layout while they load, project pages open in one smooth step, and you can collapse summary bars from the small arrow in their corner to give tables more room.
-- **Projects**: the Projects list shows one table per status, with upcoming projects under **Upcoming**, and saving tasks, phases and project settings shows the change instantly.
+- **Pages**: pages hold their layout while they load, project pages open in one smooth step, and you can collapse summary bars from the small arrow in their corner to give tables more room. Integration setup pages show one loading state, then appear complete.
+- **Projects**: the Projects list shows one table per status, with upcoming projects under **Upcoming**, and saving tasks, phases and project settings shows the change instantly. A project's **Team** tab shows your team as soon as the page opens.
 - **Tickets and templates**: when your PSA refuses a ticket status change, MSPortal shows the PSA's reason. Tickets for clients linked to several PSA companies go to the requester's own site. Saving a ticket template keeps you in the editor, required multi-select fields accept the options you tick, and ticket subjects show the exact date chosen in a date field.
-- **TimeZest**: new tickets carry their TimeZest scheduling link, appointment types appear in the template's picker, and you turn on scheduling first, then pick the appointment type and resources.
+- **TimeZest**: new tickets carry their TimeZest scheduling link, appointment types appear in the template's picker, and you turn on scheduling first, then pick the appointment type and resources. Templates with TimeZest scheduling stay editable while the TimeZest connection is paused.
 - **Approvals**: approvers review the ticket's shared notes and files on the approval request without needing access to Tickets, and manager notices sit on the **Approvals** tab with a list of who reports to whom in Microsoft 365.
-- **Microsoft 365 and CIPP**: Microsoft 365 posture shows email filtering layers, Microsoft service issues and shared mailboxes that allow sign-in. Paused connections show on the Integrations page with **Sync now**, and CIPP syncs finish faster for large MSPs.
-- **Huntress SAT**: phishing sent and clicked counts show for every user and client, count only the emails Huntress sent, and training data stays current for MSPs with large client lists.
+- **Microsoft 365 and CIPP**: Microsoft 365 posture shows email filtering layers, Microsoft service issues and shared mailboxes that allow sign-in. Paused connections show on the Integrations page with **Sync now**, and CIPP syncs finish faster for large MSPs. Calendar availability updates within a minute of every Microsoft 365 calendar change, and MCP connections search Microsoft 365 users and filter by license quickly for large MSPs.
+- **Huntress**: Security Awareness phishing sent and clicked counts show for every user and client and count only the emails Huntress sent, and training data stays current for MSPs with large client lists. Remediations show when they happened, and ones left unapproved on a closed incident show as closed.
 - **HaloPSA**: asset imports bring in every asset you select, and **Settings > Revenue categories** loads quickly for large Halo tenants.
-- **Integrations**: turning a dataset off removes what it synced, newly imported companies get their full PSA history, company matching shows the right Suggested count and lists organizations whose company was deleted under **Ignored**, and a paused UniFi sync names the console your API key doesn't own.
+- **Integrations**: synced PSA time entries match ConnectWise, Autotask and Halo, including deleted entries, billable status and work dates. Turning a dataset off removes what it synced, newly imported companies get their full PSA history, company matching shows the right Suggested count and lists organizations whose company was deleted under **Ignored**, and a paused UniFi sync names the console your API key doesn't own.
 - **Quotes**: quote details show pricing beside the summary with line items in one table, and clients open Salesbuildr quotes in Salesbuildr's customer view without a Salesbuildr login.
-- **Reports**: CSAT report blocks have their own date range, choosing a Full Report template responds instantly, and a report's **Name** filter finds anyone as you type, even in the largest tenants.
+- **Reports**: CSAT report blocks have their own date range, choosing a Full Report template responds instantly, and a report's **Name** filter finds anyone as you type, even in the largest tenants. Report device filters, such as excluding a manufacturer, apply to the **Device Appendix / List**.
 - **vCIO**: the Workload calculator switches between **Clients** and **Owners** views.
 - **Microsoft Teams app**: setup walks you through the Teams admin center, and Settings pages open with their tabs and actions inside Teams.
-- **Settings**: the role permission matrix compares the roles you pick and stays fast with hundreds of roles, PSA setup shows the ticket progress tracker beside the resolution stages, the **Locations** tab explains that locations stay in MSPortal, and changing a client user's email to one in use shows the reason under the field.
+- **Settings**: the role permission matrix compares the roles you pick and stays fast with hundreds of roles, PSA setup shows the ticket progress tracker beside the resolution stages, the **Locations** tab explains that locations stay in MSPortal, and changing a client user's email to one in use shows the reason under the field. Starting **View as** while another tab is loading switches that tab to the person you're viewing.
 - **Translations**: confirmation buttons size to fit their labels in every language.
 
 ## November 6, 2026
