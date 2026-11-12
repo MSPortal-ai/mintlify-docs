@@ -228,7 +228,11 @@ After initial setup, all enabled datasets sync automatically once per day. To sy
 
 ### Agents removed from Huntress
 
-Each agent sync removes agents that Huntress no longer returns for a mapped organization, and their devices when no other integration reports them. A device that another connected integration still reports, such as an RMM, stays in the inventory and only loses its Huntress link.
+When Huntress stops returning an agent for a mapped organization, MSPortal waits 3 days, then removes the agent and its device if no other integration reports it. A device that another connected integration still reports, such as an RMM, stays in the inventory and only loses its Huntress link.
+
+The wait covers reorganizing in Huntress. If you rebuild or rename organizations and the agents re-register under new IDs, map the new organizations within those 3 days. Each re-registered agent then links to its existing device, and the device keeps its history. An agent that Huntress returns again within the 3 days stays as it was.
+
+If Huntress stops returning more than four fifths of a connection's agents at once, MSPortal keeps them and their devices. This protects your inventory when an API key is replaced with one for a different Huntress account, or when rebuilt organizations are not mapped yet. Once the key is corrected or the new organizations are mapped, the agents that are really gone are removed on a later sync.
 
 Huntress keeps an agent on its list until someone removes it, even when the computer stopped checking in months ago. To retire those automatically, set **Retire agents that stop checking in** under **Agent import** to 30, 60, 90 or 180 days. On each sync, an agent whose last check-in is older than that is treated as removed. An agent with no check-in date is never retired.
 
