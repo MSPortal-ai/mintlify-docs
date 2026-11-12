@@ -99,7 +99,7 @@ Adding, verifying, refreshing and removing the domain, and saving **Default From
   <Step title="Copy the DNS records">
     The **DNS Records Required** table lists each record's **Type**, **Name**, **Value**, **Priority**, **TTL** and **Status**. Copy each **Name** and **Value** exactly as shown and add them at your DNS provider. Do not copy generic examples.
 
-    One row is a CNAME labelled **Return-Path for Resend Forge**, for example `rsend` pointing to `send.forge.rmta.net`. The box above the table shows the full **Custom Return-Path** host, such as `rsend.yourdomain.com`. Resend, the email service MSPortal sends through, has upgraded to Resend Forge, and this record gives your domain its improvements (see [What Resend Forge improves](#what-resend-forge-improves)). Add it with the other records. On Cloudflare, set it to **DNS only** (gray cloud), because a proxied record does not verify.
+    One row is a CNAME labelled **Return-Path for Resend Forge**, for example `rsend` pointing to `send.forge.rmta.net`. The box above the table shows the full **Custom Return-Path** host, such as `rsend.yourdomain.com`. Resend, the email service MSPortal sends through, has upgraded to Resend Forge, and this record gives your domain its improvements (see [What Resend Forge improves](#what-resend-forge-improves)). Add it with the other records. On Cloudflare, set it to **DNS only** (gray cloud), because a proxied record does not verify. On the EU portal this row is not listed, because Resend Forge sends only from the US and EU sending domains keep sending from the EU.
   </Step>
   <Step title="Check verification">
     After your DNS changes spread, click **Check Verification**. The status badge shows **Pending DNS**, **Verifying**, **Verified** or **Failed**. Pending means the records are not found yet. **Refresh Status** gets the latest result.
@@ -122,6 +122,10 @@ MSPortal has always sent email through Resend. Resend has upgraded its sending i
 - **Retries for up to 48 hours** when a receiving server asks to try again later, for example greylisting or a temporary rate limit.
 - **Automatic fallback** to Resend's previous engine if Forge cannot deliver a message.
 - **SPF stays aligned** with your domain, through the Return-Path record.
+
+<Note>
+Resend Forge sends only from the US. Sending domains on the EU portal stay on Resend's EU sending, so they never show this upgrade and need no extra record.
+</Note>
 
 #### Add the record
 
