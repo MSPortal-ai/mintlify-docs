@@ -24,6 +24,8 @@ Send portal notifications from your own domain, such as `support@yourdomain.com`
   </Step>
   <Step title="Copy the DNS records">
     Copy each record shown for the domain, with its type, name, and value, into your DNS provider. Use exactly what the page shows. Example SPF and DKIM values from other guides will not work.
+
+    Include the CNAME labelled **Return-Path for Resend Forge**, such as `rsend` pointing to `send.forge.rmta.net`. It sends your email through Resend Forge for better deliverability. On Cloudflare, set it to **DNS only** (gray cloud).
   </Step>
   <Step title="Check verification">
     When the records are in place, click **Check Verification**. The status shows **Pending DNS**, **Verifying**, **Verified**, or **Failed**. Pending does not mean verified.
@@ -66,6 +68,7 @@ A sending domain sets the sender of outbound messages. It does not set up ticket
 | --- | --- |
 | Status stays **Pending DNS** | Compare each record's type, name, and value with your DNS provider. Check for a doubled domain suffix. Wait, then **Check Verification** again. |
 | Status shows **Failed** | Fix the record the page points to, then check verification again. Ask the domain administrator to check for conflicting records. |
+| **Move to Resend Forge** appears on a verified domain | Add the one CNAME it shows, then click **Check Verification**. Your domain keeps sending as usual until it verifies. See [Move a verified domain to Resend Forge](/user-guides/settings/email#move-a-verified-domain-to-resend-forge). |
 | No **Default From Address** field | It appears only after the domain is **Verified**. |
 | **Save** is greyed out | The address field is empty. Enter an address on the verified domain. |
 | You cannot add a domain | You need write access to Email settings. |
