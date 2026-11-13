@@ -31,12 +31,13 @@ Before connecting to MSPortal.ai, you need to create an API user and security ro
   <Step title="Create MSPortal Security Role">
     1. Copy the default **API User (system)** role
     2. Rename it to **MSPortal**
-    3. Scroll down to **Other** and enable:
+    3. Under **Service Desk**, keep **Tickets** **Add** and **Edit** set to **All**. MSPortal creates tickets and updates their status with this role.
+    4. Scroll down to **Other** and enable:
        - **Can create webhooks**: Yes
        - Set webhook limit to **25**
 
     <Note>
-      We recommend setting unused areas to "No permissions" or "Read only" to follow the principle of least privilege. However, this may cause synchronization issues if you later enable those features.
+      We recommend setting unused areas to "No permissions" or "Read only" to follow the principle of least privilege. However, this may cause synchronization issues if you later enable those features. Keep Service Desk **Tickets** writable: if the API user can only read tickets, tickets submitted in MSPortal are emailed to your fallback inbox instead of being created in Autotask.
     </Note>
   </Step>
 
@@ -188,7 +189,7 @@ The Autotask connection page lists its setup tasks in the **Setup guide**: **Con
 
 ### Permissions
 
-MSPortal checks what your Autotask API user is allowed to read, and shows the result for each area of data. If the check has not run yet, select **Run check**.
+MSPortal checks what your Autotask API user is allowed to read, and whether it may create and update tickets, and shows the result for each area. The check only reads your security level; it never creates or changes anything. If the check has not run yet, select **Run check**.
 
 <Steps>
   <Step title="Review the results">
@@ -196,7 +197,9 @@ MSPortal checks what your Autotask API user is allowed to read, and shows the re
 
     Areas marked **Required** must be granted before you can continue: Companies, Contacts and staff, Tickets, and Queues and statuses. Without these the integration cannot function.
 
-    Other areas cover Configurations, Opportunities, Product catalog, Invoices, Contracts, Projects, Time entries, Service calls, Company notes, and Satisfaction feedback. You can continue and fix them later.
+    Other areas cover Ticket creation and updates, Configurations, Opportunities, Product catalog, Invoices, Contracts, Projects, Time entries, Service calls, Company notes, and Satisfaction feedback. You can continue and fix them later.
+
+    If **Ticket creation and updates** is **Not permitted**, the API user can read tickets but its security level has Service Desk **Tickets** **Add** or **Edit** set to **None**. Until you change it, tickets submitted in MSPortal are emailed to your fallback inbox, and the message says the PSA was unavailable.
   </Step>
 
   <Step title="Grant anything missing">
