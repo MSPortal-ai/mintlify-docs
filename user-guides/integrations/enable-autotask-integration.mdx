@@ -20,7 +20,7 @@ Before connecting to MSPortal.ai, you need to create an API user and security ro
 
 ### Create Security Role
 
-MSPortal signs in to Autotask as one API user. That user can do exactly what its security level allows, so build a level that grants only what MSPortal uses.
+MSPortal signs in to Autotask as one API user. That user can do exactly what its security level allows, so start from Autotask's API level, remove what MSPortal never uses, and keep what it does.
 
 <Steps>
   <Step title="Open Security Levels">
@@ -29,96 +29,113 @@ MSPortal signs in to Autotask as one API user. That user can do exactly what its
     3. Expand **Resources/Users (HR)** and open **Security Levels**
   </Step>
 
-  <Step title="Copy the API-only level and clear it">
+  <Step title="Copy the API-only level">
     1. Open the menu beside **API User (system) (API-only)** and select **Copy**. Autotask does not let you edit the system level itself.
     2. Rename the copy to **MSPortal**.
-    3. In every section, select **No Permission**. The copy starts with full access to everything, so clear it before you grant anything.
+
+    The copy starts with full access to everything, including deleting records. The next two steps trim it.
   </Step>
 
-  <Step title="Grant what MSPortal uses">
-    Open each section and set the rows below. Leave every setting that is not listed, and every section that is not listed (such as **Inventory** and **Reports**), at no permission.
+  <Step title="Remove what MSPortal never uses">
+    MSPortal never deletes your Autotask records, so the biggest cut is **Delete**. Then switch off the areas it does not touch.
 
-    A row marked *only when* is needed only if you use that feature; the rest of the integration works without it. Where a row offers **All** or **Mine**, use **All**: **Mine** limits the API user to records assigned to it, so syncs miss records and updates to other people's work fail.
+    | Where | Change |
+    |-------|--------|
+    | Every section | Set every **Delete** to **None**. The one exception is **Service Desk** > **Service Calls**, and only when you book work from **Projects** > **Dispatch** in MSPortal. |
+    | **Documents & Knowledge Base** | Select **No Permission** |
+    | **Reports** | Select **No Permission** |
+    | **Projects** and **Service Desk** | On the **Expenses** row, set View to **None**, Add to **No** and Edit to **None** |
+    | **Inventory** | Set every row except **Products** to **None** and **No**, and clear every box under **Feature Access** |
+    | **Contracts** | Set **Can Approve & Post** and **Can Invoice** to **None** |
+    | **CRM** | Clear every box under **Feature Access** and **Opportunity Checklist Permissions** |
+    | **Admin** | Clear every box except the ones listed under **Admin** in the next step. Make sure **Application-Wide (Shared) Features (Full Access)** is clear. |
+    | **Other** | Clear every box under **Dashboard**, **Client Portal**, **Community Online** and **Miscellaneous** |
+    | **Web Services API** | Clear every box under **Resource Impersonation** and **Contact Impersonation** |
+  </Step>
 
-    Autotask has renamed some labels between releases. **Organizations** were **Accounts**, and **Devices** were **Configuration Items**. Use whichever your screen shows.
+  <Step title="Keep what MSPortal uses">
+    Check that the rows below are set as shown. A row marked *only when* is needed only if you use that feature; the rest of the integration works without it. Where a row offers **All** or **Mine**, use **All**: **Mine** limits the API user to records assigned to it, so syncs miss records and updates to other people's work fail.
+
+    Autotask has renamed some labels between releases. **Accounts** may show as **Organizations**, and **Configuration Items** as **Devices**. Use whichever your screen shows.
 
     <AccordionGroup>
       <Accordion title="Service Desk">
         | Setting | Set to | Used for |
         |---------|--------|----------|
         | **Tickets**: View | All | Sync tickets, their notes and attachments |
-        | **Tickets**: Add | Yes | Create the tickets people submit in MSPortal. With this off, every submission is emailed to your fallback inbox instead. |
+        | **Tickets**: Add | Yes | Create the tickets people submit in MSPortal. With this set to No, every submission is emailed to your fallback inbox instead. |
         | **Tickets**: Edit | Yes | Change status when a client replies, closes or reopens a ticket, and write mapped fields |
-        | **Tickets**: Delete | None | MSPortal never deletes tickets |
-        | **Ticket Notes**: Edit, Delete | None | MSPortal adds notes and attachments, which follows ticket access. It never edits or deletes a note. |
         | **Service Calls**: View | All | *Only when* service calls sync to the calendar |
         | **Service Calls**: Add, Edit, Delete | Yes, Yes, All | *Only when* you book work from **Projects** > **Dispatch**: create, move and remove service calls |
-        | **Can modify Non-Billable setting on ticket time entries** | On | *Only when* staff log ticket time from MSPortal and choose billable or non-billable |
         | **Can view non-billable time entries** | On | *Only when* time entries sync, so non-billable time is counted |
+        | **Can modify Non-Billable setting on ticket time entries** | On | *Only when* staff log ticket time from MSPortal and choose billable or non-billable |
       </Accordion>
 
       <Accordion title="CRM">
         | Setting | Set to | Used for |
         |---------|--------|----------|
-        | **Customer & Cancellation** | All | Sync your client organizations, their locations and contacts |
-        | **Vendor & Partners** and **Prospects, Leads, & Dead** | None | Set to All *only when* you want those organization types in MSPortal |
-        | **Accounts**: Edit | All | *Only when* traffic light writes its status to organization fields and alerts, or account notes written in MSPortal are saved to Autotask |
-        | **Contacts**: Edit | All | *Only when* a ticket form collects a phone number, which is saved to the contact |
+        | **Customer & Cancelation** | All | Sync your client organizations, their locations and contacts |
+        | **Vendor & Partners** and **Prospects, Leads, & Dead** | All | Set to None if you do not want those organization types in MSPortal |
+        | **Accounts**: Edit | All | *Only when* traffic light writes its status to organization fields and alerts |
+        | **Notes**: Add, Edit | Yes, All | *Only when* account notes written in MSPortal are saved to Autotask |
         | **Opportunities & Quotes**: View | All | *Only when* opportunities sync |
-        | **Opportunities & Quotes**: Add | Yes | *Only when* you create an Autotask opportunity from an MSPortal quote |
-        | **Devices and Subscriptions**: View | All | *Only when* you import devices from Autotask |
-        | **Devices and Subscriptions**: Edit | All | *Only when* [warranty writeback](/user-guides/integrations/autotask-warranty-writeback) is on |
+        | **Opportunities & Quotes**: Add | Yes | *Only when* you create an Autotask opportunity from an MSPortal quote. Also tick **Can modify Opportunity Owner (reassign Opportunities)**. |
+        | **Configuration Items & Subscriptions**: View | All | *Only when* you import devices from Autotask |
+        | **Configuration Items & Subscriptions**: Edit | All | *Only when* [warranty writeback](/user-guides/integrations/autotask-warranty-writeback) is on |
+        | **Attachments**: View, Add | All, Yes | Read and upload attachments |
       </Accordion>
 
       <Accordion title="Contracts">
-        Skip this section unless you sync contracts, invoices or the product catalog.
+        Skip this section unless you sync contracts or invoices.
 
         | Setting | Set to | Used for |
         |---------|--------|----------|
         | **Contracts**: View | All | Sync contracts, their services and charges |
-        | **Contracts**: Add | No | MSPortal never creates contracts |
         | **Contract Visibility** | Full | Read the services, bundles and charges on each contract |
-        | Viewing billing items | Allowed | Sync billed items for contract figures |
-        | Viewing invoices | Allowed | *Only when* invoices sync, including invoice PDFs |
-        | Viewing products and services | Allowed | *Only when* the product catalog syncs |
+        | **Can access Invoice History, (Invoice) Export Wizard and Payments** | On | *Only when* invoices sync. With this clear, Autotask refuses to list invoices. |
+      </Accordion>
+
+      <Accordion title="Inventory">
+        | Setting | Set to | Used for |
+        |---------|--------|----------|
+        | **Products**: View | All | *Only when* the product catalog syncs |
       </Accordion>
 
       <Accordion title="Projects">
-        Skip this section unless you use Autotask projects in MSPortal. Viewing is enough to sync them. The other rows are for creating and updating projects from MSPortal; see [Project management permissions](#project-management-permissions).
+        Skip this section unless you use Autotask projects in MSPortal. See [Project management permissions](#project-management-permissions) for the project-specific checks.
 
         | Setting | Set to | Used for |
         |---------|--------|----------|
-        | **Client & Internal**: View | All | Sync projects, phases, tasks and time entry notes |
-        | **Client & Internal**: Add | Yes | *Only when* you create Autotask projects, phases or tasks from MSPortal, including from templates |
-        | Editing projects and tasks | All | *Only when* you change status, owner, dates or mapped fields from MSPortal |
+        | **Client & Internal**: View | All | Sync projects, phases, tasks and time entry notes. Autotask lets anyone who can view a project also edit it, so this row also covers changing status, owner, dates and mapped fields from MSPortal. |
+        | **Client & Internal**: Add | Yes | *Only when* you create Autotask projects from MSPortal, including from templates |
+        | **Project Templates**: View | All | *Only when* you import Autotask project templates |
         | **Can enter time on** | All Tasks | *Only when* staff log time against project tasks |
-      </Accordion>
-
-      <Accordion title="Timesheets">
-        | Setting | Set to | Used for |
-        |---------|--------|----------|
-        | Viewing timesheets | All | *Only when* time entries sync |
+        | **Can modify Non-Billable setting on task and issue time entries** | On | *Only when* staff choose billable or non-billable on project time |
       </Accordion>
 
       <Accordion title="Admin">
-        Autotask keeps its setup lists, such as queues, statuses, roles and device types, behind these Admin areas. MSPortal only reads them.
+        Autotask keeps its setup lists behind these Admin areas. MSPortal reads them and changes nothing. Keep these ten and clear every other box in the section.
 
         | Setting | Set to | Used for |
         |---------|--------|----------|
-        | **Resources/Users (HR)** | On | Match staff and fill assignment lists |
+        | **Your Organization** | On | Your company's locations and settings |
+        | **Resources/Users (HR)** | On | Staff, roles and departments, to match staff and fill assignment lists |
         | **Accounts & Contacts** | On | Organization types and classifications |
         | **Service Desk (Tickets)** | On | Queues, statuses, priorities, issue types and ticket categories |
-        | **Devices** | On | *Only when* you import devices |
-        | **Projects & Tasks** | On | *Only when* you use Autotask projects |
-        | **Contracts & Un-Posting** | On | *Only when* you sync contracts, invoices or the product catalog |
+        | **Projects & Tasks** | On | Project and task setup lists |
+        | **Sales & Opportunities** | On | Opportunity stages and categories |
+        | **Products, Services, & Inventory** | On | Products, services and work types |
+        | **Configuration Items** | On | Device types and categories. With this clear, device import cannot read them. |
+        | **Finance, Accounting, & Invoicing** | On | Payment terms and invoice setup |
+        | **Contracts & Un-Posting** | On | Contract setup lists |
       </Accordion>
 
       <Accordion title="Other">
         | Setting | Set to | Used for |
         |---------|--------|----------|
-        | **Can create webhooks** | Yes, limit **25** | Ticket and note changes reach MSPortal within seconds |
-        | **Not required to change password** | On | Autotask never asks the API user to change its password |
-        | **Can view Organization Survey Ratings and Contact Survey Ratings** | On | *Only when* you [import Autotask CSAT](#import-autotask-native-csat-for-dashboards-and-reports) |
+        | **Can create Webhooks** | On | Ticket and note changes reach MSPortal within seconds |
+        | **Maximum number of Webhooks** | 25 | Room for the ticket and ticket note webhooks |
+        | **Can view Account Survey Ratings and Contact Survey Ratings** | On | *Only when* you [import Autotask CSAT](#import-autotask-native-csat-for-dashboards-and-reports) |
         | **Can view Resource Survey Ratings** | On | *Only when* you import Autotask CSAT |
       </Accordion>
 
@@ -126,11 +143,12 @@ MSPortal signs in to Autotask as one API user. That user can do exactly what its
         | Setting | Set to | Used for |
         |---------|--------|----------|
         | **Can login to Web Services API** | On | Required. Without it the API user cannot connect. |
+        | **Resource Impersonation** and **Contact Impersonation** | Every box clear | MSPortal does not use Autotask impersonation. Notes and replies written in MSPortal are added by the API user, with the staff member's name in the note title. |
       </Accordion>
     </AccordionGroup>
 
     <Tip>
-      Turning a feature on later? Add its rows here first, then select **Re-check** on the connection's **Permissions** task in MSPortal.
+      Turning a feature on later? Set its rows here first, then select **Re-check** on the connection's **Permissions** task in MSPortal.
     </Tip>
   </Step>
 
@@ -192,16 +210,16 @@ These settings go on the security level of the **API user whose credentials are 
 
     | What you do in MSPortal | Rows it needs under Projects |
     |-------------------------|------------------------------|
-    | See projects, phases, tasks and time entry notes | **Client & Internal**: View |
-    | Create projects, phases and tasks, including from templates | View and Add |
-    | Change status, owner, priority, dates, estimated hours or mapped fields | View and Edit |
-    | Log time against project tasks | View and **Can enter time on**: All Tasks |
+    | See projects, phases, tasks and time entry notes | **Client & Internal**: View set to All |
+    | Change status, owner, priority, dates, estimated hours or mapped fields | The same View row. Autotask lets anyone who can view a project also edit it, so there is no separate Edit setting. |
+    | Create projects, phases and tasks, including from templates | View, and **Client & Internal**: Add set to Yes |
+    | Log time against project tasks | View, and **Can enter time on** set to All Tasks |
 
     Three things to check while you are there:
 
     - **Line of Business.** Autotask can hide projects and tasks by Line of Business even with View set to All, so include every Line of Business the integration should see.
     - **Time entries.** The API user must be allowed to enter time for the resource the time belongs to. Enable the billing field permissions if staff set billable or non-billable time.
-    - **No Delete.** MSPortal never deletes a project, phase or task, so leave Delete off.
+    - **No deletes.** MSPortal never deletes a project, phase or task. Keep **Delete** at None on the **Task Notes** and **Charges** rows.
 
     Baseline project tasks stay read-only, and Autotask's rules for completed tasks and submitted or posted time still apply. See Autotask's [task access rules](https://www.autotask.net/help/Developerhelp/Content/APIs/REST/Entities/TasksEntity.htm) and [time entry requirements](https://ww2.autotask.net/help/developerhelp/Content/APIs/REST/Entities/TimeEntriesEntity.htm).
   </Step>
@@ -291,11 +309,11 @@ MSPortal checks what your Autotask API user is allowed to read, and whether it m
 
     Other areas cover Ticket creation and updates, Configurations, Opportunities, Product catalog, Invoices, Contracts, Projects, Time entries, Service calls, Company notes, and Satisfaction feedback. You can continue and fix them later.
 
-    If **Ticket creation and updates** is **Not permitted**, the API user can read tickets but its security level does not allow **Tickets** **Add** or **Edit** under **Service Desk**. Until you change it, tickets submitted in MSPortal are emailed to your fallback inbox, and the message says the PSA was unavailable.
+    If **Ticket creation and updates** is **Not permitted**, the API user can read tickets but its security level has **Tickets** Add or Edit set to **No** under **Service Desk**. Until you change it, tickets submitted in MSPortal are emailed to your fallback inbox, and the message says the PSA was unavailable.
   </Step>
 
   <Step title="Grant anything missing">
-    Any area that is not permitted shows the exact security level setting to change, for example **Security Level -> Contracts -> Products & Services: View**.
+    Any area that is not permitted names the security level setting to change.
 
     Update the security level assigned to your API user, then come back and click **Re-check**. Every setting MSPortal uses is listed under [Create Security Role](#create-security-role).
 
@@ -625,7 +643,7 @@ This imports survey results already collected by Autotask's built-in surveys. Yo
 
 <Steps>
   <Step title="Grant survey rating rights">
-    In Autotask, open **Admin** > **Resources/Users** > **Security Levels** and edit the level assigned to the API user. Under **Other** > **Surveys**, enable **Can view Organization Survey Ratings and Contact Survey Ratings** and **Can view Resource Survey Ratings**.
+    In Autotask, open **Admin** > **Resources/Users** > **Security Levels** and edit the level assigned to the API user. Under **Other** > **Surveys**, enable **Can view Account Survey Ratings and Contact Survey Ratings** and **Can view Resource Survey Ratings**.
   </Step>
 
   <Step title="Re-check permissions">
@@ -733,11 +751,11 @@ Only companies still mapped to this connection are affected. Unmapping a company
 | New statuses are absent | Wait for metadata to sync, check the selected queues and reload the task. |
 | Webhooks not working | Ensure your API user's security role can create webhooks, then contact MSPortal support. |
 | Missing data | Open **Permissions**, select **Re-check** and grant the setting named beside anything not permitted. The rows are listed under [Create Security Role](#create-security-role). |
-| New tickets arrive by email saying the PSA was unavailable | **Ticket creation and updates** is not permitted. Under **Service Desk**, allow **Tickets** **Add** and **Edit** on the API user's security level. |
+| New tickets arrive by email saying the PSA was unavailable | **Ticket creation and updates** is not permitted. Under **Service Desk**, set **Tickets** Add and Edit to **Yes** on the API user's security level. |
 | Contacts not importing | Verify **Contact Auto-Import** is on and a default role is selected in **Choose data**. |
 | Setup finished but records are absent | Check background errors in **Sync activity**, imports you have not run yet and the selected company. |
-| Projects load, but a status or task edit fails | Check the API user's Projects **Edit** access, task restrictions and Line of Business scope. |
-| Creating a project or applying a template fails | Check create access to Projects, Phases and Tasks, and the resource and work type choices. Check partial results before retrying. |
+| Projects load, but a status or task edit fails | Check **Client & Internal** View is set to All, then task restrictions and Line of Business scope. |
+| Creating a project or applying a template fails | Check **Client & Internal** Add is set to Yes, and the resource and work type choices. Check partial results before retrying. |
 | Logging project time fails | Check **TimeEntries** create access, **Can enter time on**, the resource mapping, billing field permissions and Autotask's completed task and timesheet rules. |
 | Survey results are missing from CSAT views | Check the saved **Import satisfaction ratings** switch, the security level's survey rating rights, company links, synced tickets and the reader's CSAT permission. |
 
