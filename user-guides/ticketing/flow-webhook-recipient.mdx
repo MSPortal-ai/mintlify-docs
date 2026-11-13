@@ -45,7 +45,7 @@ This guide is for MSP staff whose role can write or manage ticket settings.
   </Step>
 
   <Step title="Send a test event">
-    Click **Send test event**. MSPortal posts a `ticket.test` request using your template's field keys with sample values. A message such as "Test sent (HTTP 200). Check your Flow run history." confirms delivery. The test does not save the template, and your receiving flow can still take real actions.
+    Click **Send test event**. MSPortal posts a `ticket.test` request using your template's field keys with sample values. The company and contact IDs in a test are samples too (`TEST-COMPANY`, `TEST-CONTACT`), so no real client is named. A message such as "Test sent (HTTP 200). Check your Flow run history." confirms delivery. The test does not save the template, and your receiving flow can still take real actions.
   </Step>
 
   <Step title="Save the template">
@@ -84,7 +84,7 @@ A free request inspector such as webhook.site shows exactly what MSPortal sends 
 </Steps>
 
 <Tip>
-Save the template and submit a real request with the inspector URL still in place to see a production payload, including the PSA ticket number. Then swap in your real flow URL. Do not send sensitive production data to a public inspection service.
+Save the template and submit a real request with the inspector URL still in place to see a production payload, including the client's PSA company ID. Then swap in your real flow URL. Do not send sensitive production data to a public inspection service.
 </Tip>
 
 ## Connect Power Automate
@@ -107,7 +107,7 @@ Save the template and submit a real request with the inspector URL still in plac
   </Step>
 
   <Step title="Generate the schema">
-    In the trigger, click **Use sample payload to generate schema** and paste the JSON body you captured. Power Automate then offers `fields.username`, `ticket.number`, and the other properties as dynamic content.
+    In the trigger, click **Use sample payload to generate schema** and paste the JSON body you captured. Power Automate then offers `fields.username`, `company.external_id`, and the other properties as dynamic content.
   </Step>
 
   <Step title="Build the rest of the flow">
@@ -137,19 +137,50 @@ Use this for requests that live entirely outside the PSA.
   </Step>
 </Steps>
 
-Webhook-only templates still follow company visibility, role access, and required-field rules. A successful submission shows "Submission was sent to your configured Flow webhook. No PSA ticket was created." If the webhook fails, the requester sees "Flow webhook delivery failed", and there is no email fallback in this mode.
+Webhook-only templates still follow company visibility, role access, and required-field rules. The requester sees **Request submitted** when the workflow accepts the request, and also when it did not answer and MSPortal has queued the request to try again. If the workflow refuses the request, or every attempt fails, MSPortal emails the request to your fallback inbox so it is not lost. See [Retries](#retries).
+
+## Branches
+
+A branch with no webhook of its own sends its requests to the main form's webhook. Set the webhook once on the main form and every client on a branch is covered, including branches you add later.
+
+Open a branch and expand **Flow Webhook (JSON)** to see which applies:
+
+- **This branch uses the main form's webhook** names the delivery mode and where requests go. A change to the main form's webhook applies to the branch too.
+- Check **Use a different webhook for this branch** to give the branch its own settings. From then on only the branch's webhook runs for requests made on that branch. The main form's does not, even if you leave the branch's webhook switched off.
+- Clear **Use a different webhook for this branch** and save to go back to the main form's webhook.
 
 ## What happens on each submission
 
 | Situation | Result |
 | --- | --- |
-| **Create PSA ticket + webhook**, PSA ticket created | The ticket is created, then the webhook fires with the real ticket number. A webhook failure does not undo the ticket. |
-| **Create PSA ticket + webhook**, PSA creation fails | The webhook fires with the submission data and null PSA fields. If it succeeds, the requester sees that the PSA ticket failed but the submission went to the webhook. If it also fails, MSPortal falls back to email. |
-| **Webhook only** | The webhook fires and no PSA ticket is created. A failed webhook returns an error. |
-| No PSA integration connected | The webhook is the destination. If it fails, MSPortal falls back to email. |
+| **Create PSA ticket + webhook**, PSA ticket created | The ticket is created, then the webhook fires. A webhook failure does not undo the ticket. If the workflow does not answer, MSPortal retries. |
+| **Create PSA ticket + webhook**, PSA creation fails | The webhook fires once with the submission data. If it succeeds, the requester sees that the PSA ticket failed but the submission went to the webhook. If it also fails, MSPortal emails the request to your fallback inbox right away. |
+| **Webhook only** | The webhook fires and no PSA ticket is created. If the workflow does not answer, MSPortal retries, then emails your fallback inbox if every attempt fails. If the workflow refuses the request, MSPortal emails your fallback inbox right away. |
+| No PSA integration connected | The webhook is the destination, and failures are handled as in **Webhook only**. |
 | Receiver returns HTTP success | The endpoint accepted the request. Its later steps can still fail. |
 
-The webhook waits up to 10 seconds for a response. Do not submit the same real request again just because a webhook timed out. Check the PSA and your receiving flow first, because either may already have acted.
+Each attempt waits up to 10 seconds for a response.
+
+## Retries
+
+MSPortal sends each request once while the person submits. If that attempt fails in a way another attempt can fix, MSPortal tries again on its own:
+
+| Attempt | Sent |
+| --- | --- |
+| 1 | When the form is submitted |
+| 2 | 1 minute after attempt 1 fails |
+| 3 | 5 minutes after attempt 2 |
+| 4 | 15 minutes after attempt 3 |
+| 5 | 1 hour after attempt 4 |
+| 6 | 3 hours after attempt 5, about 4 hours 20 minutes after the submission |
+
+- **Retried:** no response within 10 seconds, a connection error, and HTTP 408, 425, 429 or any 5xx.
+- **Not retried:** any other 4xx. The receiver refused the request as sent, and the same body would be refused again.
+- **Same request every time:** each attempt sends the identical body, with the same `request_id` and `X-MSPortal-Request-Id`, and the same signature. `X-MSPortal-Delivery-Attempt` counts the attempts. If your workflow processed an attempt that MSPortal timed out on, the repeat carries a `request_id` you have already seen, so store that ID and skip a request you have handled.
+- **Current settings:** a retry goes to the form's webhook as it is saved at that moment. Fix a wrong URL and save, and the waiting requests reach the corrected URL. Turn the webhook off and a waiting request is treated as failed at its next attempt.
+- **When every attempt fails:** a request whose only destination was the webhook (**Webhook only**, or no PSA connected) is emailed to your fallback inbox, the same inbox used when PSA ticket creation fails. A request that also created a PSA ticket is not emailed, because the ticket holds it.
+
+The requester is not asked to do anything while MSPortal retries. Do not submit the same real request again after a timeout: check [Submissions](#list-and-export-submissions) first.
 
 ## The JSON payload
 
@@ -158,18 +189,52 @@ The webhook waits up to 10 seconds for a response. Do not submit the same real r
     ```json
     {
       "event": "ticket.submitted",
+      "request_id": "0b1f6c1e-6f0a-4a57-9a4e-2f6d1c0e7b11",
       "timestamp": "2026-05-25T19:45:09.560Z",
       "tenant_id": "...",
       "template": { "id": "...", "name": "...", "key": "..." },
       "ticket":   { "id": ..., "number": "...", "summary": "...", "description": "...",
                     "external_url": "...", "board": "...", "status": "...", "priority": "..." },
       "company":  { "id": "...", "name": "...", "external_id": "..." },
-      "contact":  { "name": "...", "email": "...", "external_id": "...", "user_type": "tenant" },
+      "contact":  { "name": "...", "email": "...", "external_id": "...", "user_type": "company",
+                    "impersonated_by": null },
       "fields":   { "<your_field_key>": ..., "<your_field_key>": ... }
     }
     ```
 
     Real submissions use `"event": "ticket.submitted"` and your tenant ID. Test events use `"event": "ticket.test"` and the literal tenant ID `"test-tenant"`.
+
+    `request_id` is unique to one submission and identical on every retry of it. Use it to match a request to the [Submissions](#list-and-export-submissions) list and to skip one you have already handled.
+  </Accordion>
+
+  <Accordion title="Who the request is for: company">
+    | Property | Value |
+    | --- | --- |
+    | `company.id` | MSPortal's ID for the client company. |
+    | `company.name` | The client company's name in MSPortal. |
+    | `company.external_id` | The client's company ID in your PSA (ConnectWise, Autotask or HaloPSA), as text. |
+
+    `company.external_id` is filled whenever the client company is linked to a company in the PSA you selected for tickets. It is the same on a main form and on its branches, in both delivery modes, and for requests made by client contacts and by your staff on a client's behalf. It is `null` when:
+
+    - the client company is not linked to a PSA company (check **Settings > Integrations**, your PSA, company mapping);
+    - no PSA is connected; or
+    - one of your staff submitted the form without choosing a company.
+
+    A client linked to several PSA companies sends the one the requester's own PSA contact belongs to.
+  </Accordion>
+
+  <Accordion title="Who sent the request: contact">
+    | Property | Value |
+    | --- | --- |
+    | `contact.name` | The signed-in person's name. |
+    | `contact.email` | The signed-in person's own account email. |
+    | `contact.external_id` | That person's contact ID in your PSA (a member ID for your own staff), as text. `null` when they are not linked to a PSA contact. |
+    | `contact.user_type` | `company` for a client user, `tenant` for your staff. |
+    | `contact.impersonated_by` | `null`, unless one of your staff submitted while using **View as**. Then it holds that staff member's `name` and `email`. |
+
+    The contact is never a form answer. MSPortal reads it from the session of the person who submitted, whether they signed in with Microsoft, Google or a password, so someone filling in the form cannot change it. Email addresses a form asks for, such as a new hire's address, arrive in `fields`.
+
+    When one of your staff uses **View as** to act as a client user, `contact` names that client user and `contact.impersonated_by` names the staff member. A workflow that acts on the requester's authority should check that `contact.impersonated_by` is `null`.
   </Accordion>
 
   <Accordion title="The fields object">
@@ -186,8 +251,8 @@ The webhook waits up to 10 seconds for a response. Do not submit the same real r
     Every field key in the template is present. Unanswered optional fields are `null`. Multi-select answers arrive as arrays, numbers as numbers, and checkboxes as booleans.
   </Accordion>
 
-  <Accordion title="When PSA fields are null">
-    On webhook-only submissions, or when PSA creation failed, `ticket.id`, `ticket.number`, `ticket.external_url`, `ticket.board`, `ticket.status`, and `ticket.priority` are `null`. `summary`, `description`, and `fields` are always filled. Branch on `ticket.number` in your flow to handle both cases.
+  <Accordion title="The ticket object">
+    `ticket.summary` and `ticket.description` carry the request's subject and description. `ticket.id`, `ticket.number`, `ticket.external_url`, `ticket.board`, `ticket.status`, and `ticket.priority` are always `null`: the webhook sends the submission, not the PSA ticket made from it. To find the PSA ticket for a request, look the request up in [Submissions](#list-and-export-submissions), where the export lists its ticket number.
   </Accordion>
 
   <Accordion title="Headers">
@@ -196,6 +261,8 @@ The webhook waits up to 10 seconds for a response. Do not submit the same real r
     | `Content-Type` | `application/json` |
     | `User-Agent` | `MSPortal-FlowWebhook/1.0` |
     | `X-MSPortal-Event` | `ticket.submitted` or `ticket.test` |
+    | `X-MSPortal-Request-Id` | The body's `request_id`, the same on every retry |
+    | `X-MSPortal-Delivery-Attempt` | `1` for the first attempt, up to `6` |
     | `X-MSPortal-Tenant` | Your tenant ID, or `test-tenant` on test events |
     | `X-MSPortal-Signature` | `sha256=` plus an HMAC-SHA256 hex digest, only when a shared secret is set |
   </Accordion>
@@ -207,9 +274,26 @@ When a shared secret is set, compute `HMAC-SHA256(secret, raw request body)` as 
 
 A valid signature shows the sender knew the secret. It does not stop a request from being replayed, so make your receiver safe to run twice for any step that must not repeat.
 
-## Check recent deliveries
+## List and export submissions
 
-Open the saved template and expand **Flow Webhook (JSON)**. **Recent deliveries** lists each attempt with its time, HTTP status, duration, and any error. Test attempts carry a **Test** badge. MSPortal sees only the HTTP result, so also check your receiving flow's run history.
+Open the saved template and expand **Flow Webhook (JSON)**. **Submissions** lists every request the form sent to the webhook, newest first. A main form includes the requests made on its branches, each marked with its branch name. A branch lists its own.
+
+Each request shows:
+
+- its status: **Delivered**, **Retrying** with the time of the next attempt, or **Not delivered**;
+- when it was submitted, the number of attempts when there was more than one, and the last HTTP status;
+- the client company with its PSA company ID, and the requester's email;
+- the inbox it was emailed to, if delivery failed and MSPortal used the fallback;
+- the receiver's error, when there was one; and
+- its request ID, the `request_id` your workflow received.
+
+To reconcile against what your workflow received, choose an **Export range** (**Last 7 days** to **Last 12 months**) and click **Export CSV**. The file has one row per request, with these columns in every language:
+
+`request_id`, `submitted_at`, `form`, `branch`, `company_name`, `company_external_id`, `contact_name`, `contact_email`, `contact_external_id`, `contact_user_type`, `summary`, `ticket_number`, `delivery_mode`, `status`, `attempts`, `last_http_status`, `last_error`, `last_attempt_at`, `delivered_at`, `next_attempt_at`, `fallback_email_to`
+
+Times are in UTC. `status` is `delivered`, `retrying` or `failed`. One file holds up to 10,000 requests, the newest first; choose a shorter range if a form has more.
+
+Requests sent before this list existed are included, without a PSA company ID or contact ID. Test events are not requests, so they are not listed here: **Settings > Audit > Ticketing** records them, along with every individual attempt. MSPortal sees only the HTTP result, so also check your receiving flow's run history.
 
 ## Embedded templates
 
@@ -226,7 +310,10 @@ If a template contains an [embedded template](/user-guides/ticketing/how-to-crea
 | The test arrived but real submissions do not | Confirm the template is active and that you clicked **Save Template** after enabling the webhook. Then submit from **Tickets > New Ticket** and check your flow's run history. |
 | Your flow expects `ticket.created` | The current real event is `ticket.submitted`. Update the receiver. |
 | HMAC check fails after **Parse JSON** | Parsing and re-serializing changes whitespace and key order. Hash the raw body exactly as received, with the same secret. |
-| You need to know if a PSA ticket exists | Check `ticket.number`. It is `null` when no PSA ticket was created. |
+| You need to know if a PSA ticket exists | Open **Submissions** and export the range. `ticket_number` is filled for a request that created a PSA ticket. |
+| `company.external_id` is `null` | The client company is not linked to a company in your PSA, or staff submitted without choosing a company. Map the company under **Settings > Integrations**, then submit again. |
+| A request shows **Retrying** | Your endpoint did not answer or returned 408, 425, 429 or a 5xx. MSPortal sends it again at the time shown. Fix the endpoint, or correct the URL and save. |
+| A request shows **Not delivered** | Every attempt failed, or the endpoint refused the request. The row names the inbox the request was emailed to, and the receiver's error. |
 
 ## Frequently asked questions
 
@@ -244,10 +331,16 @@ If a template contains an [embedded template](/user-guides/ticketing/how-to-crea
     No. It proves the endpoint accepted the request. Check the later steps and the final record in the receiving system.
   </Accordion>
   <Accordion title="Should I resubmit after a timeout?">
-    Check **Recent deliveries**, your flow, and the PSA first. A timeout does not prove nothing happened, and resubmitting can duplicate work.
+    No. MSPortal retries on its own, with the same `request_id`. Check **Submissions**, your flow, and the PSA first. A timeout does not prove nothing happened, and resubmitting creates a second request with a new `request_id`.
   </Accordion>
-  <Accordion title="Do branches use the parent's webhook?">
-    Yes. A branch without its own webhook setting uses the parent template's.
+  <Accordion title="Do branches use the main form's webhook?">
+    Yes. A branch without its own webhook settings uses the main form's, and keeps following it when it changes. A branch with **Use a different webhook for this branch** checked uses only its own. See [Branches](#branches).
+  </Accordion>
+  <Accordion title="Can I point several forms at one endpoint?">
+    Yes. Use `template.key` to tell the forms apart and `company.external_id` to tell the clients apart. Both arrive on every request.
+  </Accordion>
+  <Accordion title="Can the person filling in the form change contact.email?">
+    No. It is the signed-in person's account email, read from their session. See **Who sent the request: contact** under [The JSON payload](#the-json-payload).
   </Accordion>
 </AccordionGroup>
 
