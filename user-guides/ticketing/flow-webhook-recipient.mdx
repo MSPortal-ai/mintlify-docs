@@ -108,6 +108,14 @@ Save the template and submit a real request with the inspector URL still in plac
 
   <Step title="Generate the schema">
     In the trigger, click **Use sample payload to generate schema** and paste the JSON body you captured. Power Automate then offers `fields.username`, `company.external_id`, and the other properties as dynamic content.
+
+    A schema generated from one sample accepts only that sample's types, and some properties change type between requests. Before you rely on the schema, edit it so these allow both:
+
+    - `company.id`, `company.external_id` and `contact.external_id`: text or `null`.
+    - `contact.impersonated_by`: `null`, or an object with `name` and `email`.
+    - Every key under `fields` that is optional on the form: its type or `null`.
+
+    In Power Automate, write a nullable property as `"type": ["string", "null"]`, or remove the `type` line for that property. Otherwise **Parse JSON** fails on the first request that sends the other type.
   </Step>
 
   <Step title="Build the rest of the flow">
@@ -276,7 +284,7 @@ A valid signature shows the sender knew the secret. It does not stop a request f
 
 ## List and export submissions
 
-Open the saved template and expand **Flow Webhook (JSON)**. **Submissions** lists every request the form sent to the webhook, newest first. A main form includes the requests made on its branches, each marked with its branch name. A branch lists its own. The list updates on its own while a request is waiting for another attempt. A form with no webhook still shows **Submissions** when it has requests to list: those sent before its webhook was turned off, or by a branch that has a webhook of its own.
+Open the saved template and expand **Flow Webhook (JSON)**. **Submissions** lists every request the form sent to the webhook, newest first. A main form includes the requests made on its branches, each marked with its branch name. A branch lists its own. The list and the export follow the company selector: with a company selected, they show that company's requests only. The list updates on its own while it is open. A form with no webhook still shows **Submissions** when it has requests to list: those sent before its webhook was turned off, or by a branch that has a webhook of its own.
 
 Each request shows:
 
@@ -294,6 +302,14 @@ To reconcile against what your workflow received, choose an **Export range** (**
 Times are in UTC. `status` is `delivered`, `retrying` or `failed`. One file holds up to 10,000 requests, the newest first; choose a shorter range if a form has more.
 
 Requests sent before this list existed are included, without a PSA company ID or contact ID. Test events are not requests, so they are not listed here: **Settings > Audit > Ticketing** records them, along with every individual attempt. MSPortal sees only the HTTP result, so also check your receiving flow's run history.
+
+### See every form's requests in one place
+
+**Settings > Audit > Workflows** lists the requests of all your forms together, newest first. Each row shows when the request was submitted, its status, the form and branch, the client company with its PSA company ID, who submitted it, the number of attempts, and the result: the last HTTP status, the receiver's error, the time of the next attempt, or the inbox the request was emailed to. Turn on the **Request ID** column to match a row to the `request_id` your workflow received.
+
+Choose **Today**, **Last 7 days** or **Last 30 days**, filter by status, and search by form, branch, company, requester, summary or request ID. The list follows the company selector.
+
+The tab has its own permission, **Audit: Workflows**, so you can give a reviewer this tab and nothing else in Settings. Every role that had **Audit: Ticketing** when the tab arrived received the new permission.
 
 ## Embedded templates
 
