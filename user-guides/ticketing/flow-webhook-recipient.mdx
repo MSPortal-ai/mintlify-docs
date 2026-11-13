@@ -108,6 +108,14 @@ Save the template and submit a real request with the inspector URL still in plac
 
   <Step title="Generate the schema">
     In the trigger, click **Use sample payload to generate schema** and paste the JSON body you captured. Power Automate then offers `fields.username`, `company.external_id`, and the other properties as dynamic content.
+
+    A schema generated from one sample accepts only that sample's types, and some properties change type between requests. Before you rely on the schema, edit it so these allow both:
+
+    - `company.id`, `company.external_id` and `contact.external_id`: text or `null`.
+    - `contact.impersonated_by`: `null`, or an object with `name` and `email`.
+    - Every key under `fields` that is optional on the form: its type or `null`.
+
+    In Power Automate, write a nullable property as `"type": ["string", "null"]`, or remove the `type` line for that property. Otherwise **Parse JSON** fails on the first request that sends the other type.
   </Step>
 
   <Step title="Build the rest of the flow">
