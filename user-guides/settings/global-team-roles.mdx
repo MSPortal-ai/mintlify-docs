@@ -4,7 +4,7 @@ description: 'Give one person a team role at every company, and automate company
 icon: 'users'
 ---
 
-Use a **Global team role** when one person should hold a role at every company, such as a shared service manager or onboarding lead. A Global role has exactly one holder. Use the **Add team members** and **Remove team members** automation actions when membership should change in response to a record or event. This page is for MSP staff.
+Use a **Global team role** when one person should hold a role at every company, such as a shared service manager or onboarding lead. A Global role has exactly one holder, and that person replaces anyone else in the role. Use the **Add team members** and **Remove team members** automation actions when membership should change in response to a record or event. This page is for MSP staff.
 
 Team roles describe responsibilities. They do not replace the Tenant or Company permission roles managed under **Settings > Users & Roles > Roles**.
 
@@ -35,13 +35,13 @@ Team roles describe responsibilities. They do not replace the Tenant or Company 
     </Frame>
   </Step>
   <Step title="Save the row">
-    Click the check mark or press Enter. MSPortal assigns that person to the role at every current company. New companies get the same person automatically.
+    Click the check mark or press Enter, then confirm. MSPortal assigns that person to the role at every current company and removes anyone else from it. New companies get the same person automatically.
   </Step>
 </Steps>
 
-To change the holder, edit the row and pick someone else. To stop using Global, edit the row and uncheck **Global**. Either way MSPortal asks you to confirm, because the current holder's inherited assignments are removed from every company. Their direct company assignments stay.
+To change the holder, edit the row and pick someone else. MSPortal asks you to confirm, and the previous holder is removed from the role at every company. To stop using Global, edit the row and uncheck **Global**. MSPortal asks you to confirm, and the holder's inherited assignments are removed from every company.
 
-Turning Global on does not promote people who already hold the role at some companies. They keep those company assignments, and only the person you pick becomes the Global holder. Adding someone to a Global role on one company's **Team** tab also assigns them to that company only.
+The holder is the only person in a Global role. When you turn Global on, any other staff member already assigned to the role at any company is removed from it, and the people removed are not restored if you turn Global off later. While the role is Global, no other staff member can be added to it: a company's **Team** tab shows the role as Global with no selector, bulk role actions and the company roles import leave it alone, and automation actions and PSA sync skip other people. A client contact who holds the role at their own company is not affected.
 
 <Note>
 A Global role is held by one named person, so it is not filled from your PSA. While **Global** is checked the PSA roles selector is hidden. Turning Global on for a role that has a PSA role mapping removes that mapping, and MSPortal asks you to confirm first. Uncheck **Global** to map PSA roles again.
@@ -49,9 +49,9 @@ A Global role is held by one named person, so it is not filled from your PSA. Wh
 
 ## Keep a company-specific exception
 
-Removing a member from one company's role creates a lasting exception for that company. The person can remain assigned elsewhere. Global inheritance and PSA reconciliation do not silently restore the excluded assignment.
+A Global role's holder is managed in one place. A company's **Team** tab, a user's **Teams** section, bulk role actions and the company roles import show or skip a Global role; none of them adds or removes its holder.
 
-Explicitly add the person back to that company's role to clear their exception. An **Add team members** automation action also clears the selected person's exception for the matched company.
+To leave one company out, use a **Remove team members** automation action for that role. It removes the holder from the matched company and records a lasting exception, so Global inheritance and PSA reconciliation do not restore the assignment. An **Add team members** action that selects the holder clears the exception for the matched company.
 
 Turning Global off removes the holder's inherited assignments. Direct company assignments and company-specific removal exceptions remain. It does not delete staff accounts or the team role.
 
@@ -76,7 +76,7 @@ The actions work like this.
 
 | Action | Configuration | Result |
 | --- | --- | --- |
-| **Add team members** | Select a team role and one or more staff members | Adds those people to the matched company's role and clears their exclusions there. It never changes who holds a Global role. |
+| **Add team members** | Select a team role and one or more staff members | Adds those people to the matched company's role and clears their exclusions there. It never changes who holds a Global role, and it skips anyone who is not the holder of a Global role. |
 | **Remove team members** | Select a team role and specific staff, or select **Remove everyone in this team role** | Removes those members from the matched company's role and records company-specific exclusions. |
 
 <img src="/images/product/team-membership-action-menu-branch-preview.png" alt="Add team members and Remove team members at the top of the automation action menu" width="478" height="855" />
@@ -124,6 +124,8 @@ Global membership uses the same company team assignments as the team views and t
 | A member does not inherit into one company | They may have a company-specific exception. Add them back on that company's **Team** tab |
 | A person appeared at more companies than expected | Check whether they hold a Global role |
 | A Global role shows **No one assigned** | Edit the row and pick a person, or uncheck **Global** |
+| A role has no selector on a company's **Team** tab | It is a Global role. Change who holds it under **Settings > Users & Roles > Team Roles** |
+| People disappeared from a role | The role was made Global. Its holder replaced them at every company |
 | The PSA roles selector is missing while editing | **Global** is checked. A Global role has no PSA role mapping |
 | A membership action reports no change | Check that the record has a company, the person's current membership and the selected role. Repeating an add or remove can change nothing |
 | A selected person or role no longer works | It may have been removed or changed. Reopen the rule and pick it again |
