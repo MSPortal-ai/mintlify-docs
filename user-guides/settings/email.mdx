@@ -99,7 +99,7 @@ Adding, verifying, refreshing and removing the domain, and saving **Default From
   <Step title="Copy the DNS records">
     The **DNS Records Required** table lists each record's **Type**, **Name**, **Value**, **Priority**, **TTL** and **Status**. Copy each **Name** and **Value** exactly as shown and add them at your DNS provider. Do not copy generic examples.
 
-    One row is a CNAME labelled **Return-Path for Resend Forge**, for example `rsend` pointing to `send.forge.rmta.net`. The box above the table shows the full **Custom Return-Path** host, such as `rsend.yourdomain.com`. This record sends your email through Resend Forge, the email service's own sending infrastructure, which improves deliverability. Add it with the other records. On Cloudflare, set it to **DNS only** (gray cloud), because a proxied record does not verify.
+    One row is a CNAME labelled **Return-Path for Resend Forge**, for example `rsend` pointing to `send.forge.rmta.net`. The box above the table shows the full **Custom Return-Path** host, such as `rsend.yourdomain.com`. Resend, the email service MSPortal sends through, has upgraded to Resend Forge, and this record gives your domain its improvements (see [What Resend Forge improves](#what-resend-forge-improves)). Add it with the other records. On Cloudflare, set it to **DNS only** (gray cloud), because a proxied record does not verify. On the EU portal this row is not listed, because Resend Forge sends only from the US and EU sending domains keep sending from the EU.
   </Step>
   <Step title="Check verification">
     After your DNS changes spread, click **Check Verification**. The status badge shows **Pending DNS**, **Verifying**, **Verified** or **Failed**. Pending means the records are not found yet. **Refresh Status** gets the latest result.
@@ -111,16 +111,32 @@ Adding, verifying, refreshing and removing the domain, and saving **Default From
 
 DNS changes usually finish within minutes but can take up to 48 hours.
 
-### Move a verified domain to Resend Forge
+### Finish the Resend Forge upgrade
 
-A domain verified before Resend Forge was available may show **Verified. Add the Resend Forge record below to improve deliverability.** and a **Move to Resend Forge** panel under your sender addresses.
+MSPortal has always sent email through Resend. Resend has upgraded its sending infrastructure to Resend Forge, and a domain verified before the upgrade needs one extra DNS record to get its improvements. Nothing else changes: your sender addresses, templates and settings stay the same.
+
+#### What Resend Forge improves
+
+- **Faster delivery** than Resend's previous engine.
+- **Best-in-class delivery rates**, from Resend's own IP addresses with no third party in between.
+- **Retries for up to 48 hours** when a receiving server asks to try again later, for example greylisting or a temporary rate limit.
+- **Automatic fallback** to Resend's previous engine if Forge cannot deliver a message.
+- **SPF stays aligned** with your domain, through the Return-Path record.
+
+<Note>
+Resend Forge sends only from the US. Sending domains on the EU portal stay on Resend's EU sending, so they never show this upgrade and need no extra record.
+</Note>
+
+#### Add the record
+
+A domain that still needs the record shows **Verified. Add the Resend Forge record below to get its delivery improvements.** and a **Resend Forge upgrade** panel under your sender addresses.
 
 <Steps>
   <Step title="Copy the Forge record">
     The panel shows the **Custom Return-Path**, such as `rsend.yourdomain.com`, and one CNAME record, such as `rsend` pointing to `send.forge.rmta.net`. Add that CNAME at your DNS provider. Keep your existing DNS records.
   </Step>
   <Step title="Check the record">
-    Click **Check Verification**. Until the record verifies, your domain keeps sending as usual. Once it verifies, the panel goes away and the status reads **Verified on (date). Resend Forge record verified.** Resend then moves your email onto Forge gradually.
+    Click **Check Verification**. Until the record verifies, your domain keeps sending as usual. Once it verifies, the panel goes away and the status reads **Verified on (date). Resend Forge record verified.** Resend then moves your email onto Forge gradually, so some messages may still go out the previous way for a while.
   </Step>
 </Steps>
 
