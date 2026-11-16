@@ -22,8 +22,8 @@ A health score describes the evidence in the published scorecard. It is not a li
   <Step title="Check Last computed">
     Read the **Last computed** date in the page header.
   </Step>
-  <Step title="Read Dimension Breakdown">
-    For each dimension, compare the score, the applied weight, the evidence coverage and the observed metrics with the rules below.
+  <Step title="Read Health by Area">
+    For each area, hover the grade to see its share of the overall score. Click the metrics with low grades or **No data** to see their numbers, and compare them with the rules below.
   </Step>
   <Step title="Read Top Negative Drivers">
     These show which dimensions cost the most points.
@@ -54,6 +54,8 @@ For each enabled, applicable dimension with a score, multiply its base weight by
 
 Overall coverage compares the adjusted observed weights with the base weights of enabled, applicable dimensions. A missing dimension contributes no score, but can reduce coverage when it is enabled and applicable. An excluded or inapplicable dimension does not count toward that denominator.
 
+**Health by Area** on the company page calls dimensions areas. It shows each area's score as a letter: **A** 80 or more, **B** 60 to 79, **C** 40 to 59, **D** 20 to 39 and **F** under 20. Hovering the grade shows the area's applied weight as its share of the overall health score. "Areas with missing data count for less" is the coverage adjustment above. The overall Health Score stays a number from 0 to 100.
+
 The default model publishes a numeric score only when there are **at least three scored dimensions** and **at least 40% overall coverage**. Otherwise the result is **Limited data**. Available dimension scores and negative drivers may still appear.
 
 For an illustrative configuration with only these three dimensions enabled:
@@ -74,11 +76,13 @@ Service Quality compares the last four complete ticket weeks with the preceding 
 
 | Metric | Relative weight | Risk condition |
 | --- | ---: | --- |
-| Ticket demand trend | 25 | Current average weekly demand exceeds the prior average |
-| Resolution time trend | 20 | Current average resolution time is at least 110% of the prior average; both periods need closed tickets |
-| Open backlog size | 15 | Current average backlog exceeds five tickets |
-| Open ticket age | 15 | Current average age exceeds ten days; an observed nonempty backlog is needed |
-| Backlog trend | 10 | Current average backlog exceeds the prior average |
+| Change in New Tickets | 25 | Current average weekly demand exceeds the prior average |
+| Change in Time to Close | 20 | Current average resolution time is at least 110% of the prior average; both periods need closed tickets |
+| Average Open Tickets | 15 | Current average backlog exceeds five tickets |
+| Average Open Ticket Age | 15 | Current average age exceeds ten days; an observed nonempty backlog is needed |
+| Change in Open Tickets | 10 | Current average backlog exceeds the prior average |
+
+Each ticket metric passes or fails, so its row shows **A** when it passes and **F** when its risk condition is met. A change metric shows **Up from 0** when the prior four weeks had none. **Change in Time to Close** shows **No comparison** when the prior four weeks averaged 0 days to close. **Average Open Ticket Age** is the average age, not the age of the oldest ticket; open the metric to see the company's 10 oldest open tickets.
 
 The score is 100 multiplied by one minus the triggered risk weight divided by observed risk weight. Missing observations are omitted rather than counted as healthy. Switch exclusions change which weights participate. High-priority growth and escalation evidence can appear as warnings but do not directly add scoring penalties in this model.
 
@@ -86,10 +90,10 @@ The score is 100 multiplied by one minus the triggered risk weight divided by ob
 
 | Metric | Default share | Scoring basis |
 | --- | ---: | --- |
-| Meeting recency | 40% | Latest past meeting: within 90 days = 100, 120 days = 60, 180 days = 40, older = 20 |
-| Recent NPS | 20% | Latest response within 365 days: 9+ = 100, 7+ = 80, 5+ = 60, 3+ = 40, below 3 = 20 |
-| Recent CSAT | 25% | Mean normalized satisfaction score from mapped CSAT responses in the trailing 90 days, on a 0 to 100 scale |
-| CSAT response rate | 15% | CSAT responses divided by tickets closed, both over the last 13 complete weeks, mapped to the bands below |
+| Days Since Last Meeting | 40% | Latest past meeting: within 90 days = 100, 120 days = 60, 180 days = 40, older = 20 |
+| NPS | 20% | Latest response within 365 days: 9+ = 100, 7+ = 80, 5+ = 60, 3+ = 40, below 3 = 20 |
+| CSAT | 25% | Mean normalized satisfaction score from mapped CSAT responses in the trailing 90 days, on a 0 to 100 scale |
+| CSAT Response Rate | 15% | CSAT responses divided by tickets closed, both over the last 13 complete weeks, mapped to the bands below |
 
 Native and imported CSAT responses can contribute; CES campaigns and responses without a mapped company or normalized score do not. If the tenant has no qualifying CSAT response in the last 13 weeks, both CSAT metrics are unavailable and carry no weight. No meeting or recent NPS response means missing evidence for that metric, not a favorable default.
 
@@ -105,11 +109,11 @@ Financial uses profitability measures from the **three complete calendar months 
 
 | Metric | Default share | Interpretation |
 | --- | ---: | --- |
-| Reactive hours per endpoint | 16.5% | Average monthly support hours divided by the configured endpoint count; below 0.33/0.50/0.75/1.00 hours earns 100/75/50/25 points, otherwise 10 |
-| Effective hourly rate | 17% | Managed revenue divided by support hours; at least 200/150/100/75 earns 100/80/60/40 points, otherwise 20 |
-| All-in seat price | 16.5% | Average monthly managed revenue per configured endpoint, compared with the target seat price |
-| Overdue invoices | 30% | Overdue count divided by still-open invoice count; this is a count ratio, not overdue balance divided by revenue |
-| Payment speed | 20% | Average nonnegative days from invoice date to paid date for paid invoices in the trailing year |
+| Reactive Hours per Endpoint per Month | 16.5% | Average monthly support hours divided by the configured endpoint count; below 0.33/0.50/0.75/1.00 hours earns 100/75/50/25 points, otherwise 10 |
+| Effective Hourly Rate | 17% | Managed revenue divided by support hours; at least 200/150/100/75 earns 100/80/60/40 points, otherwise 20 |
+| All-in Seat Price | 16.5% | Average monthly managed revenue per configured endpoint, compared with the target seat price |
+| Open Invoices Overdue | 30% | Overdue count divided by still-open invoice count; this is a count ratio, not overdue balance divided by revenue |
+| Average Days to Pay | 20% | Average nonnegative days from invoice date to paid date for paid invoices in the trailing year |
 
 The endpoint model can use devices, users or the greater of those counts. Effective hourly rate needs positive revenue and support hours; seat price needs positive revenue and endpoint count. A missing denominator gives no sample, not a zero.
 
@@ -121,8 +125,8 @@ For overdue invoices, no open invoices means no sample. Zero overdue earns 100, 
 
 Sales gives equal default shares to activity recency and decided win rate. Its sales source sync must be within 14 days.
 
-- Activity recency uses the latest qualifying PSA opportunity or Quoter quote activity. Within 30/90/180/365 days earns 100/80/60/40 points; older activity earns 20. No activity means no sample.
-- Decided win rate uses won outcomes divided by won plus lost outcomes within the trailing year. At least three decided outcomes are required. Win rates of at least 80%/60%/40%/20% earn 100/80/60/40 points; lower rates earn 20.
+- **Days Since Last Opportunity or Quote** uses the latest qualifying PSA opportunity or Quoter quote activity. Within 30/90/180/365 days earns 100/80/60/40 points; older activity earns 20. No activity means no sample.
+- **Deals Won** uses won outcomes divided by won plus lost outcomes within the trailing year. At least three decided outcomes are required. Win rates of at least 80%/60%/40%/20% earn 100/80/60/40 points; lower rates earn 20.
 
 PSA opportunity outcomes take precedence for a company with PSA opportunity records. Quoter outcomes are a fallback when no PSA opportunity record is available for that company; an insufficient PSA decided sample does not automatically switch to Quoter.
 
@@ -134,15 +138,15 @@ This dimension uses synced PSA project records and a project source synced withi
 
 | Metric | Default share | Scoring basis |
 | --- | ---: | --- |
-| Active project schedule health | 40% | Percentage of open, not-on-hold projects with due dates that are not overdue |
-| Recent on-time delivery | 40% | Percentage of closed projects completed in the trailing year, with due and completion dates, completed on or before the due date |
-| Effort adherence | 20% | Percentage of measured open or recently completed projects at or below 110% of estimated hours |
+| Active Projects on Schedule | 40% | Percentage of open, not-on-hold projects with due dates that are not overdue |
+| Projects Finished on Time | 40% | Percentage of closed projects completed in the trailing year, with due and completion dates, completed on or before the due date |
+| Projects Within Estimated Hours | 20% | Percentage of measured open or recently completed projects at or below 110% of estimated hours |
 
 Effort needs a positive estimate and an actual-hours value. A project on hold is omitted from active schedule health but may still qualify for effort adherence. Empty qualifying sets produce no sample, rather than a perfect score. Project count and project monetary values do not earn points on their own.
 
 ## Standards
 
-Standards scores deployed required checks as a percentage of applicable checks:
+Standards scores deployed required checks as a percentage of applicable checks, shown as **Required Standards Deployed**:
 
 - In a normal category, each required item is one check. Optional items do not count.
 - In a **Require one of group** category, the category is one check if it contains items, regardless of each item's Required switch. Any deployed option satisfies it.
@@ -154,7 +158,7 @@ The Standards list at the bottom of a Client Health detail page counts deployed 
 
 ## Environment
 
-Environment gives 60% to server availability and 40% to patch coverage. The device source sync must be within 14 days.
+Environment gives 60% to **Servers Online** (server availability) and 40% to **Devices Fully Patched** (patch coverage). The device source sync must be within 14 days.
 
 Server classification uses a server type or server operating-system name. A server is observed when it has a status or last-seen timestamp. It counts as offline when its status explicitly says offline or its last-seen timestamp is over seven days old. A missing last-seen timestamp alone does not make an otherwise observed server offline. The score is the percentage of observed servers not counted offline; no observed servers means no sample.
 
@@ -166,17 +170,17 @@ Device count is context and earns no points. User activity does not feed Environ
 
 | Metric | Default share | Scoring basis |
 | --- | ---: | --- |
-| Planner timeliness | 40% | Overdue, unfinished, non-archived items divided by all non-archived Planner items with due dates |
-| Goal progress | 35% | Mean available goal progress, clamped to 0 to 100; a goal whose status is named Completed contributes 100 |
-| Compliance timeliness | 25% | Past-due assignments without a completion timestamp divided by all assignments with due dates |
+| Planner Items Overdue | 40% | Overdue, unfinished, non-archived items divided by all non-archived Planner items with due dates |
+| Average Goal Progress | 35% | Mean available goal progress, clamped to 0 to 100; a goal whose status is named Completed contributes 100 |
+| Compliance Items Overdue | 25% | Past-due assignments without a completion timestamp divided by all assignments with due dates |
 
-For Planner and compliance, zero overdue earns 100; overdue shares up to 10%/25%/50% earn 80/60/40; higher shares earn 20. The percentage shown as the observed metric is the **overdue rate**, not the resulting health points: a smaller observed percentage can mean a better score.
+For Planner and compliance, zero overdue earns 100; overdue shares up to 10%/25%/50% earn 80/60/40; higher shares earn 20. The percentage shown on **Planner Items Overdue** and **Compliance Items Overdue** is the **overdue rate**, not the resulting health points. The row's grade reflects the points, so a smaller percentage means a better grade.
 
 Completed and Cancelled Planner items with due dates remain in the denominator but are not overdue. Archived Planner items are excluded. Compliance completion uses its completion timestamp. No qualifying due-date records or observed goal progress means no sample for that metric.
 
 ## Read changes over time
 
-Previously published scorecards keep their results. The chart separates model-revision segments, but switching metric inclusion within the same model does **not** guarantee a new visible segment. A score change can come from new evidence, changed metric inclusion or a different data sample, as well as changed performance. Check the settings and dimension coverage before you credit a change to your work.
+Previously published scorecards keep their results. The chart separates model-revision segments, but switching metric inclusion within the same model does **not** guarantee a new visible segment. A score change can come from new evidence, changed metric inclusion or a different data sample, as well as changed performance. Check the settings and which metrics have data before you credit a change to your work.
 
 The portfolio stale warning uses a missing data-through timestamp or one older than 36 hours. The 14-day source requirements above are separate metric eligibility gates, so a stale warning does not mean every dimension is unavailable. [Refresh Client Health](/user-guides/msp-tools/refresh-client-health) explains source sync and publication.
 
@@ -184,17 +188,17 @@ The portfolio stale warning uses a missing data-through timestamp or one older t
 
 | Problem | What to do |
 | --- | --- |
-| A company shows **Limited data** | The company has fewer than three scored dimensions or under 40% coverage. Open it and check which dimensions lack evidence. |
-| A dimension shows **N/A** | It has no sample, too small a sample, a source synced more than 14 days ago, or it does not apply. Check the integration and company mapping. |
+| A company shows **Limited data** | The company has fewer than three scored dimensions or under 40% coverage. Open it and check which areas show **No data**. |
+| An area or metric shows **No data**, or a list column shows **N/A** | It has no sample, too small a sample, a source synced more than 14 days ago, or it does not apply. Check the integration and company mapping. |
 | Sales has no score although quotes exist | Only PSA opportunities and Quoter quotes feed Sales. Salesbuildr and QuoteWerks quotes do not. |
-| Patch coverage is empty | Only Datto RMM, ConnectWise Asio and Syncro patch records feed it. |
+| **Devices Fully Patched** shows **No data** | Only Datto RMM, ConnectWise Asio and Syncro patch records feed it. |
 | The Standards list differs from Standards Compliance | The list counts every listed item. The score counts required checks and one-of groups. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Where can I see why a company received its score?">
-    Open the company from the **Health** tab of **MSP Tools > Client Success**. Review **Dimension Breakdown**, coverage, applied weights, **Top Negative Drivers** and **Last computed**.
+    Open the company from the **Health** tab of **MSP Tools > Client Success**. Review **Health by Area** (hover each grade for the area's share of the score, and click a metric for its numbers), **Top Negative Drivers** and **Last computed**.
   </Accordion>
   <Accordion title="Is the overall score a simple average of the dimensions?">
     No. Each enabled dimension's base weight is multiplied by its evidence coverage, then normalized into the applied weights.
@@ -212,7 +216,7 @@ The portfolio stale warning uses a missing data-through timestamp or one older t
     Eight complete weeks, split into two four-week periods, and a ticket source synced within 14 days.
   </Accordion>
   <Accordion title="Do high-priority growth warnings subtract points?">
-    No. They show as warnings next to the five scored metrics.
+    No. They are warnings only. They do not change the five scored ticket metrics.
   </Accordion>
   <Accordion title="Which surveys count toward CSAT?">
     Mapped native or imported CSAT responses that have a normalized score. CES campaigns and unmapped responses are left out.
@@ -227,7 +231,7 @@ The portfolio stale warning uses a missing data-through timestamp or one older t
     No. When a company has PSA opportunity records, PSA outcomes win even with fewer than three decided outcomes.
   </Accordion>
   <Accordion title="Does a project on hold leave every Projects metric?">
-    No. It leaves active schedule health but can still count for effort adherence.
+    No. It leaves **Active Projects on Schedule** but can still count for **Projects Within Estimated Hours**.
   </Accordion>
   <Accordion title="Does a missing Standards assignment drop out of the score?">
     No. It counts as Not Started.
