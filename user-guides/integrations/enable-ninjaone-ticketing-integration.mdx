@@ -1,83 +1,275 @@
 ---
 title: 'Configure NinjaOne Ticketing Integration'
-description: 'Connect a NinjaOne API client for ticketing synchronization and reporting'
+description: 'Connect NinjaOne ticketing to MSPortal.ai and finish setup on its connection page'
 icon: 'ticket'
 ---
 
-Connect NinjaOne Ticketing to MSPortal.ai with a machine-to-machine API client. The setup verifies access to your NinjaOne ticketing account and stores the connection securely.
+This guide walks MSP staff through connecting NinjaOne ticketing to MSPortal.ai. You create an API client in NinjaOne, then connect, check permissions, choose data and import or match records on the NinjaOne Ticketing connection page. Once it is set up, NinjaOne tickets appear in MSPortal, and your team and clients can create tickets, reply and change status from the portal. Company users do not administer this connection.
 
 <Note>
-NinjaOne Ticketing is currently a pilot integration, marked **Credential intake** on its setup page. The pilot establishes and validates the API connection; ticket synchronization and reporting features build on this connection as they become available. No tickets are imported yet. It is available to every tenant.
+NinjaOne Ticketing is a beta integration. If it is not available in **Settings > Integrations**, contact support@msportal.ai.
 </Note>
 
 <Note>
-This connection is separate from NinjaOne RMM. Setting up [NinjaOne device sync](/user-guides/integrations/enable-ninjaone-integration) does not enable ticketing, and this connection does not sync devices.
+This connection is separate from NinjaOne RMM. Setting up [NinjaOne device sync](/user-guides/integrations/enable-ninjaone-integration) does not enable ticketing, and this connection does not sync devices. Organizations are matched to companies separately on each connection.
 </Note>
 
 ## Prerequisites
 
-- NinjaOne administrator access
-- MSPortal.ai integration management permission
-- The URL of your NinjaOne instance
+- NinjaOne system administrator access
+- MSPortal.ai account with integration management permissions
+- The URL you sign in to NinjaOne at, such as `https://app.ninjarmm.com` or `https://eu.ninjarmm.com`
+- One NinjaOne Ticketing connection per MSPortal account. If another PSA is also connected, choose which one new tickets go to in **Settings** > **Tickets**.
 
-## Create a NinjaOne API Client
+## Part 1: Create a NinjaOne API client
 
 <Steps>
   <Step title="Open NinjaOne API settings">
-    In NinjaOne, go to **Administration > Apps > API**.
+    In NinjaOne, go to **Administration > Apps > API > Client App IDs** and add a client.
   </Step>
+
   <Step title="Create the application">
-    Create an **API Services (machine-to-machine)** application. Enable the **Client Credentials** grant type and the required Monitoring and Management scopes.
+    Choose the application platform **API Services (machine-to-machine)** and give it a name such as "MSPortal".
   </Step>
+
+  <Step title="Grant scopes">
+    Select the **Monitoring** and **Management** scopes, and set the allowed grant type to **Client Credentials**. Monitoring reads organizations. Management reads and writes tickets.
+  </Step>
+
   <Step title="Copy the credentials">
-    Copy the client ID and client secret, and note the HTTPS URL you use to access your NinjaOne instance.
+    Copy the client ID and client secret.
+
+    <Warning>
+      NinjaOne shows the client secret once, when you save the client. Copy it before you leave the page.
+    </Warning>
   </Step>
 </Steps>
 
-## Connect in MSPortal
+---
+
+## Part 2: Connect NinjaOne Ticketing in MSPortal
+
+The NinjaOne Ticketing connection page lists its tasks in the **Setup guide**: **Connect**, **Permissions**, **Choose data**, **Import or match companies**, **Import or match users**, **Configure tickets** and **Review**. **Import or match users** is optional.
+
+### Open the connection page
 
 <Steps>
-  <Step title="Open the setup page">
-    In MSPortal, go to **Settings > Integrations**, find **NinjaOne Ticketing**, and click **Connect**.
+  <Step title="Navigate to Integrations">
+    In MSPortal.ai, go to **Settings** > **Integrations**.
   </Step>
-  <Step title="Enter the connection details">
-    Enter the **Instance URL**, **Client ID**, and **Client Secret**.
 
-    Use the HTTPS URL of your NinjaOne instance, not a ticket link or an API path.
-  </Step>
-  <Step title="Test the connection">
-    Click **Test Connection**. MSPortal verifies the API client and reports the ticket boards it can access when available. This is a connection check, not a ticket import.
-  </Step>
-  <Step title="Save the connection">
-    Click **Secure credentials** after the test succeeds. The client credentials are stored securely in Vault. A successful test alone does not save them.
+  <Step title="Start Setup">
+    On the **Directory** tab, find **NinjaOne Ticketing** and select **Connect**. If it is already connected, select **Open** on its row in **Active** to continue its tasks.
   </Step>
 </Steps>
 
-## Managing the Connection
+---
+
+### Connect
 
 <Steps>
-  <Step title="Reopen the connection">
-    Go to **Settings > Integrations** and click **Configure** on the NinjaOne Ticketing connection. Saved credentials appear masked.
+  <Step title="Enter API Credentials">
+    Fill in the following fields:
+
+    | Field | Description | Example |
+    |-------|-------------|---------|
+    | **NinjaOne instance URL** | The address you sign in to NinjaOne at | `https://app.ninjarmm.com` |
+    | **Client ID** | The client ID of the API client you created | |
+    | **Client Secret** | The client secret of that API client | |
+
+    <Note>
+      Enter the instance address only, not a ticket link or an API path. MSPortal accepts NinjaOne's own regional addresses.
+    </Note>
   </Step>
-  <Step title="Retest or replace credentials">
-    To check access, click **Retest Connection**. To replace credentials, enter the new values, click **Retest Connection**, then click **Update credentials**. Changing any field clears the earlier test, and retesting alone does not save replacements.
+
+  <Step title="Test Connection">
+    Select **Test connection** to verify your credentials. A successful test does not save the connection. If you change a field after testing, select **Test again**.
+
+    If the connection fails:
+    - Confirm the instance URL is the one you sign in at
+    - Check that the client ID and client secret are copied correctly
+    - Confirm the client uses **API Services (machine-to-machine)**, the **Client Credentials** grant type and both the **Monitoring** and **Management** scopes
   </Step>
-  <Step title="Disconnect (optional)">
-    Click **Disconnect** and confirm. This removes the MSPortal connection and its stored Vault credentials. It does not change or revoke the NinjaOne application.
+
+  <Step title="Save">
+    Select **Save and continue** to create the connection. Credentials are stored in the vault and never shown again. Continue to **Permissions**.
   </Step>
 </Steps>
 
-Users without integration management permission can review the connection but cannot change its credentials.
+---
+
+### Permissions
+
+MSPortal checks what your NinjaOne API client is allowed to read, and shows the result for each area of data.
+
+<Steps>
+  <Step title="Review the results">
+    If the check has not run yet, select **Run check**. Each area of data is listed with its result, such as **Granted**, **Not permitted** or **Could not verify**.
+
+    Every area is **Required** and must be granted before you can continue:
+
+    | Area | NinjaOne scope |
+    |------|----------------|
+    | Companies | Monitoring |
+    | Contacts and staff | Management |
+    | Tickets | Management |
+    | Ticket statuses | Management |
+  </Step>
+
+  <Step title="Grant anything missing">
+    An area that is not permitted names the scope to add. Edit the client under **Administration > Apps > API > Client App IDs**, add the scope, then come back and select **Re-check**.
+
+    <Note>
+      A **Could not verify** result usually means NinjaOne was slow or unavailable, so select **Re-check** before changing the client.
+    </Note>
+  </Step>
+</Steps>
+
+<Note>
+  The check tests read access only. It does not prove that creating tickets, replying or changing status will succeed. Those also use the Management scope.
+</Note>
+
+---
+
+### Choose data
+
+Choose what to sync from NinjaOne. Changes save as you make them, and turning a dataset on starts its first sync.
+
+| Option | Description |
+|--------|-------------|
+| **Sync Companies** | Sync NinjaOne organizations |
+| **Sync Users** | Sync NinjaOne technicians, end users and ticketing contacts |
+| **Enable Ticket Sync** | Sync tickets and their comments from NinjaOne |
+
+Tickets sync only for organizations you have imported or matched to a company. A ticket with no organization in NinjaOne is not synced.
+
+<Note>
+  NinjaOne Ticketing has no opportunity, project, invoice or product sync, and does not import devices. Use [NinjaOne RMM](/user-guides/integrations/enable-ninjaone-integration) for devices.
+</Note>
+
+A switch appears locked when the permission check found that your API client cannot read that data. Add the scope named beside it in NinjaOne, then select **Re-check** in **Permissions** to unlock it.
+
+---
+
+### Import or match companies
+
+Open **Import or match companies** to link each NinjaOne organization to an MSPortal company. The list has **Import**, **Suggested**, **Matched** and **Ignored** views, and opens on **Import**, which lists organizations that are not matched yet.
+
+- Select **Accept** to save a suggested match, or **Change** to pick a different company. **Accept N strong matches** accepts every suggestion with 90% confidence or more after you confirm the list.
+- For an unmatched organization, use **Choose company…** to link an existing company, or **Import** to create it as a new portal company.
+- Use **Ignore** for organizations you do not want in MSPortal, and **Restore** to bring them back.
+
+Accepted matches, imports, ignores and **Remove match** save immediately. Matching an organization starts a sync of its tickets. See [Import companies](/user-guides/integrations/import-companies) for selection scope and retry guidance.
+
+---
+
+### Import or match users
+
+Import or match at least one company, then open **Import or match users** for its end users and contacts. You can leave other companies for later and return to import more users.
+
+1. Select **Import** beside a contact, or select contacts and choose **Import selected**.
+2. In the review panel, choose the **Role** for the imported users and review the counts. Contacts without an email address are skipped; you can add an address before confirming.
+3. Confirm the import and check the result. Large selections run in batches.
+
+To link an existing portal user instead, use **Choose user…** or accept a reviewed suggestion. Importing contacts does not automatically invite them to the portal. See [Import users](/user-guides/integrations/import-users) for details.
+
+<Note>
+  A NinjaOne contact that belongs to no organization cannot be imported, because MSPortal would not know which company it belongs to.
+</Note>
+
+---
+
+### Configure tickets
+
+Set up how NinjaOne tickets behave in MSPortal. Each change saves straight away.
+
+<Steps>
+  <Step title="Review new ticket defaults">
+    **New ticket defaults** sets the values used for new tickets created in the portal. These are the same defaults as **Settings** > **Tickets**, and editing them requires the Ticket Settings permission.
+  </Step>
+
+  <Step title="Choose closed statuses">
+    Under **Ticket statuses**, select the **Closed statuses** that mean a ticket is closed. Leave it empty to count **Resolved**, **Closed** and their custom statuses as closed. Statuses appear once the first sync has finished.
+
+    <Tip>
+      If your team finishes tickets in another status, such as **Approved**, add it here. Otherwise those tickets count as open in MSPortal.
+    </Tip>
+  </Step>
+
+  <Step title="Place statuses in resolution stages">
+    **Resolution stages** drive the visual indicator of ticket progress. Place each NinjaOne status in the stage it belongs to. A status can sit in one stage only.
+  </Step>
+</Steps>
+
+A custom NinjaOne status is shown with the built-in status it belongs to, for example **Waiting: Vendor**.
+
+---
+
+### Review and finish setup
+
+Open **Review** and resolve any required task that is not done, then select **Finish setup**. Each task saves its own changes, so finishing setup does not apply a separate batch of pending imports.
+
+<Note>
+Finishing setup does not mean every sync has completed. Check **Sync activity** before treating an empty list as final.
+</Note>
+
+---
+
+## Working with NinjaOne tickets
+
+| In MSPortal | In NinjaOne |
+|-------------|-------------|
+| Create a ticket | A ticket is created on your default ticket form, for the matched organization, with the portal user as requester when they are a known NinjaOne contact |
+| Reply on a ticket | A public comment is added |
+| Add an internal note | A private comment is added. Client users never see internal notes |
+| Change status | The ticket's status is updated |
+
+- **Authors**: NinjaOne records comments added through its API under the API client, so MSPortal puts the name of the person who wrote the reply at the top of the comment.
+- **Time**: MSPortal shows the time NinjaOne has tracked on a ticket, but does not log time to NinjaOne.
+- **Attachments**: files are not sent to or read from NinjaOne.
+- **Ticket forms**: a ticket's form is shown as its category. NinjaOne boards are saved views rather than queues, so MSPortal does not use them.
+- **Deleted tickets**: a ticket deleted in NinjaOne is removed from MSPortal on the next sync.
+
+---
+
+## Managing Your Integration
+
+Open the connection from **Settings** > **Integrations** > **Active**. Then use:
+
+- **Overview** and **Sync activity**: Check the connection's status and recent sync runs
+- **Run sync**: Start a sync of **All data** or one dataset
+- **Choose data**, **Import or match companies** and **Import or match users**: Change what syncs and import more records at any time
+- **More actions** > **Rename**: Give the connection a nickname
+- **More actions** > **Disconnect…**: Removes the stored credentials, the matches between NinjaOne organizations and your companies, and data synced from this connection. It does not revoke the API client in NinjaOne
+
+### Replacing your API client
+
+In **Connect**, leave the masked credentials unchanged to keep them, or enter replacements, select **Test connection** and then **Save changes**. A test alone does not save replacement credentials. Confirm the saved connection works before you remove the old client in NinjaOne.
+
+---
+
+## Synchronization Process
+
+- Turning a dataset on in **Choose data** starts its first sync
+- New and changed tickets sync every five minutes; organizations and users every four hours; statuses daily
+- The first ticket sync reads your ticket history and can take a while on a large account
+- Contacts and tickets for an organization appear once that organization is imported or matched
+
+To force an immediate synchronization, use **Run sync** in the connection header and choose **All data** or one dataset.
+
+---
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Instance URL is rejected | Enter the HTTPS URL for your NinjaOne instance rather than an API path or unrelated domain. |
-| Client authentication fails | Confirm the client uses **API Services**, the **Client Credentials** grant, and the required Monitoring and Management scopes. |
-| No ticket boards are returned | Confirm the API application can access ticketing data in the connected NinjaOne account. |
-| **Secure credentials** stays disabled | Fill in every field and run **Test Connection** again. Editing a field clears the earlier test. |
-| No tickets appear after connecting | Expected during the pilot. The connection stores and verifies credentials only. |
+| Instance URL is rejected | Enter the address you sign in to NinjaOne at, not an API path or another domain |
+| Connection test fails | Confirm the client uses **API Services (machine-to-machine)**, the **Client Credentials** grant type, and the Monitoring and Management scopes |
+| A sync switch is locked | Add the scope shown beside it in NinjaOne, then select **Re-check** in **Permissions** |
+| No tickets appear | Confirm **Enable Ticket Sync** is on in **Choose data** and the ticket's organization is imported or matched, then check **Sync activity** |
+| Closed tickets show as open | Add the status your team closes tickets in under **Configure tickets** > **Closed statuses** |
+| A ticket could not be created | The message shown comes from NinjaOne. The request is kept in your MSPortal inbox so it is not lost |
+| Setup finished but records are absent | Check **Sync activity**, company matches and pending imports |
 
 ## Related Resources
 
