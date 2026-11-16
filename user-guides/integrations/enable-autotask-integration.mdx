@@ -393,6 +393,17 @@ Choose what data to sync from Autotask and set up automatic imports. Each switch
     To create portal users from your clients' Microsoft 365 tenants instead, use an access rule with the action **Import Microsoft 365 users** (branch preview). See [Set access rules](/user-guides/settings/users-roles#set-access-rules).
   </Step>
 
+  <Step title="Deactivate contacts with Microsoft 365 (optional)">
+    **Deactivate the contact when Microsoft 365 disables the person** (preview; appears once MSPortal turns it on for your MSP): with **Sync Users** on, this switch sits below **Contact Auto-Import**. When Microsoft 365 blocks a client user's sign-in and MSPortal disables that user, MSPortal marks each of their linked, active Autotask contacts inactive, so the person can no longer open or reply to tickets by email. When Microsoft 365 enables the person again, MSPortal reactivates exactly the contacts it deactivated.
+
+    - It applies to people Microsoft 365 disables after you turn it on. People who are already disabled are left alone.
+    - A contact that was already inactive is never recorded, so MSPortal never reactivates a contact you deactivated yourself.
+    - Disabling someone yourself in MSPortal, or for any reason other than Microsoft 365, never changes their Autotask contact.
+    - It needs a Microsoft 365 connection. Changes are sent after each Microsoft 365 users sync, and a failed change is retried up to five times.
+    - Turning it off stops new deactivations. Contacts MSPortal already deactivated are still reactivated when Microsoft 365 enables the person.
+    - **Recent contact changes** below the switch lists each contact MSPortal changed, and why one was left alone or failed. It needs read access to company users. The API user must be allowed to edit Autotask contacts; a refusal shows there.
+  </Step>
+
   <Step title="Configure Company Auto-Import and Filters">
     | Setting | Description |
     |---------|-------------|

@@ -216,6 +216,17 @@ Previously synchronized tickets of an excluded type are removed on the next sync
 - **Contact auto-import:** turn on **Contact Auto-Import** to create user accounts for active contacts when companies are added, and select a **Default Role for Imported Contacts** (e.g., Viewer). Optionally, under **Portal roles by Halo role**, select **Add rule** to give a Halo role or the Important Contact flag another portal role. When a contact matches more than one rule, the rule highest in the list wins. Contacts that match no rule get the default role. To create portal users from your clients' Microsoft 365 tenants instead, use an access rule with the action **Import Microsoft 365 users** (branch preview). See [Set access rules](/user-guides/settings/users-roles#set-access-rules).
 - **Company auto-import:** under **Auto-Import Company Types**, select the Halo client types to create in the portal automatically during sync. MSPortal asks you to confirm before it imports a new batch, because companies are a billed item.
 
+#### Deactivate contacts with Microsoft 365
+
+**Deactivate the contact when Microsoft 365 disables the person** (preview; appears once MSPortal turns it on for your MSP): with **Sync Users** on, this switch sits below **Contact Auto-Import**. When Microsoft 365 blocks a client user's sign-in and MSPortal disables that user, MSPortal marks each of their linked, active Halo PSA contacts inactive, so the person can no longer open or reply to tickets by email. When Microsoft 365 enables the person again, MSPortal reactivates exactly the contacts it deactivated.
+
+- It applies to people Microsoft 365 disables after you turn it on. People who are already disabled are left alone.
+- A contact that was already inactive is never recorded, so MSPortal never reactivates a contact you deactivated yourself.
+- Disabling someone yourself in MSPortal, or for any reason other than Microsoft 365, never changes their Halo PSA contact.
+- It needs a Microsoft 365 connection. Changes are sent after each Microsoft 365 users sync, and a failed change is retried up to five times.
+- Turning it off stops new deactivations. Contacts MSPortal already deactivated are still reactivated when Microsoft 365 enables the person.
+- **Recent contact changes** below the switch lists each contact MSPortal changed, and why one was left alone or failed. It needs read access to company users. The API user must be allowed to edit Halo PSA contacts; a refusal shows there.
+
 #### Auto-import to Planner
 
 With **Enable Opportunity Sync** on, the **Auto-import to Planner** switch sits below the **Extended data** switches and controls which opportunities create planner items:
