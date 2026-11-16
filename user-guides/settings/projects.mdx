@@ -10,7 +10,7 @@ The unified page has three top-level tabs.
 
 | Tab | Sections |
 | --- | --- |
-| **Project Settings** | **Display Configuration**, **Client project access**, **Types**, **Status Mapping**, **Custom Fields**, and **Upcoming projects** when available |
+| **Project Settings** | **Display Configuration**, **Client project access**, **Types**, **Status Mapping**, **Custom Fields**, and, when available, **Upcoming projects** and **Tracker** |
 | **Templates** | **Templates**, **Checklists**, and **Forms** |
 | **Onboarding Portals** | **Portals**, **Client roles**, **Pages**, and **PSA projects** when a supported PSA is active |
 
@@ -244,6 +244,10 @@ Check the **Unmapped Statuses** list before you save. Projects with an unmapped 
 
 Show ConnectWise, Halo, or Autotask custom fields on projects and project tickets, and choose who can see and edit them.
 
+<Tip>
+A custom field must exist in your PSA first. For a status column your team types into without creating a PSA field, or one that follows a project task, use the [Tracker columns](#set-up-the-tracker-columns) instead.
+</Tip>
+
 <img src="/images/product/projects-settings-custom-fields.png" alt="Custom Fields settings with the added-field search and configured project fields" width="2880" height="1920" />
 
 <Steps>
@@ -316,6 +320,84 @@ This section shows only when a PSA with sales opportunities is connected.
 </Steps>
 
 The Upcoming Projects list and its schedule both use these rules.
+
+## Set up the Tracker columns
+
+The **Tracker** section sets the columns of [Projects > Tracker](/user-guides/projects/project-status-tracker), the grid with one row per open project. It shows only when the **Project status tracker** is turned on for your MSP. Ask MSPortal support to turn it on.
+
+Go to **Settings > Projects > Project Settings > Tracker**. The list shows your columns in the order they appear in the Tracker, left to right. Every change here saves on its own, and applies to every project.
+
+<Frame caption="Tracker columns on MSPortal Demo. Three are typed in and four follow a project task.">
+  <img src="/images/product/projects-tracker-settings-desktop.png" alt="Settings Projects Tracker section listing seven columns with the headings Column, Filled in by, Task name contains and Shows, and the Paste columns and Add column buttons" width="1440" height="960" />
+</Frame>
+
+### Add a column
+
+<Steps>
+  <Step title="Click Add column">
+    Enter a **Column name**, up to 80 characters. Names must be unique; capital letters do not make a name different.
+  </Step>
+  <Step title="Choose who fills it in">
+    Under **Filled in by**, choose **Typed in** for a column your team types, or **A project task** for a column that follows a task in each project.
+  </Step>
+  <Step title="For a task column, name the task">
+    In **Task name contains**, type part of the task's name, such as `survey`. MSPortal counts the task names in open projects that contain the text and lists them with the number of projects each appears in. Click one to use its full name. Capital letters are ignored.
+  </Step>
+  <Step title="Choose what to show">
+    Under **Show**, pick **Task status**, **Latest note** or **Completed date**.
+  </Step>
+  <Step title="Click Add">
+    The column appears at the end of the list and in the Tracker.
+  </Step>
+</Steps>
+
+<Frame caption="A column that follows the task whose name contains &quot;migrat&quot;. The suggestions come from task names in your open projects.">
+  <img src="/images/product/projects-tracker-add-column.png" alt="Add column dialog with the Column name Migration, Filled in by set to A project task, Task name contains set to migrat with matching task names listed, and Show set to Task status" width="512" height="762" />
+</Frame>
+
+| **Show** option | What each cell shows |
+| --- | --- |
+| **Task status** | The task's current status, in your PSA's own words, such as **In Progress** or **Done**. |
+| **Latest note** | The most recent note logged with time on the task, or the most recent note on a native MSPortal task, up to 500 characters. A note added to a PSA task without a time entry is not shown. |
+| **Completed date** | The date the task was closed. Empty until then. |
+
+On each project the column follows one task. When several task names contain the text, MSPortal takes a task whose name matches exactly, then the one with the shortest name. Use more of the name to be specific. A project with no matching task shows **—** in that column.
+
+### Paste columns from a spreadsheet
+
+Use **Paste columns** to create many typed-in columns at once, for example from the header row of a spreadsheet your team already keeps.
+
+<Steps>
+  <Step title="Copy the header row">
+    In your spreadsheet, select the header cells and copy them.
+  </Step>
+  <Step title="Click Paste columns">
+    Paste into **Column names**. You can also type one name per line. The dialog says how many new columns it will add. Names already in use are skipped, and names longer than 80 characters are shortened.
+  </Step>
+  <Step title="Click Add columns">
+    Each new name becomes a **Typed in** column. Edit a column afterwards to make it follow a task.
+  </Step>
+</Steps>
+
+<Frame caption="Five names pasted from a spreadsheet header row. Internet already exists, so four columns will be added.">
+  <img src="/images/product/projects-tracker-paste-columns.png" alt="Paste columns dialog with Kickoff call, Phones, Internet, Printers and Go-live date pasted into Column names, the message 4 new columns, and the button Add 4 columns" width="512" height="410" />
+</Frame>
+
+Only the names come across. Cell values are typed in the Tracker, or filled in by the [AI Assistant](/user-guides/projects/project-status-tracker#ask-the-assistant-to-fill-it-in).
+
+### Edit, reorder or delete a column
+
+Click the **...** menu on a column's row.
+
+| Action | What it does |
+| --- | --- |
+| **Edit** | Change the name, switch between **Typed in** and **A project task**, or change the task and what it shows. Text people typed in the column stays. |
+| **Move up**, **Move down** | Move the column one place. The Tracker shows columns in this order. |
+| **Delete** | Removes the column and everything typed in it, from every project. MSPortal asks you to confirm, then shows an **Undo** bar for a few seconds. After that it cannot be restored. |
+
+The Tracker holds up to 100 columns.
+
+To let people see the Tracker and type in it, see [Give a role access](/user-guides/projects/project-status-tracker#give-a-role-access).
 
 ## Create and manage templates
 
@@ -413,6 +495,8 @@ These are reusable settings and the portal directory. To manage one portal, open
 | A custom field is missing or read-only | Allow a day for a new PSA field to sync, then check **Show on projects**, role access, **Allow edits**, and your project permissions. |
 | Clients cannot see a project tab | Check that the tab is set to **MSP + clients** under **Display Configuration > Project tabs**. |
 | A client cannot use a form | Check that the form is shared and that the client role has the forms permissions. |
+| There is no **Tracker** section | The Project status tracker is not turned on for your MSP. Ask MSPortal support. |
+| A tracker column is empty on every project | It follows a task, and no task in an open project contains its **Task name contains** text. Edit the column and pick one of the suggested task names. |
 
 ## Frequently asked questions
 
