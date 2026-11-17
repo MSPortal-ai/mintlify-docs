@@ -4,7 +4,7 @@ description: 'Choose schedules and visibility for new work and understand what a
 icon: 'arrows-rotate'
 ---
 
-Sync Standards creates a tracking record and a Planner item for every standard at every active company, and refreshes the Planner items that already exist. This page is for MSP staff who manage the Standards catalog.
+Sync Standards creates a tracking record and a Planner item for every standard at every active company, and refreshes the Planner items that already exist. Standards [tracked by site](#choose-how-sites-become-planner-items) can instead get one Planner item per site. This page is for MSP staff who manage the Standards catalog.
 
 <Note>
 Excluded companies are skipped by Standards sync. Excluding a company also archives its generated Standards Planner work immediately.
@@ -34,8 +34,13 @@ Excluded companies are skipped by Standards sync. Excluding a company also archi
   <Step title="Decide whether to turn on Hide from company users">
     Turn it on to mark each new Planner item as internal-only, so company users do not see it in the client portal. Leave it off to let company users see new items.
   </Step>
+  <Step title="Choose an option under Standards tracked by site">
+    This section shows only when a category is [tracked by site](/user-guides/settings/standards#track-a-category-by-site). Pick how those standards become Planner items. See [Choose how sites become Planner items](#choose-how-sites-become-planner-items).
+
+    The line under the options counts the new Planner items this sync would create with the chosen option, how many are for single sites, and how many companies they cover.
+  </Step>
   <Step title="Click Sync All Companies in the dialog">
-    The dialog closes and a message says **Standards sync started. Company records will be updated in the background.** Click **Cancel** instead to leave without syncing. Your schedule and visibility choices are not remembered for the next sync.
+    The dialog closes and a message says **Standards sync started. Company records will be updated in the background.** Click **Cancel** instead to leave without syncing. Your schedule and visibility choices are not remembered for the next sync. The site option is: see below.
 
     <Frame caption="Review the scope, schedule and visibility before you submit. Counts depend on your catalog.">
       <img src="/images/product/standards-sync-options.png" alt="Standards sync dialog with specific-date, Unscheduled and Hide from company users choices." width="1024" height="1420" />
@@ -45,6 +50,23 @@ Excluded companies are skipped by Standards sync. Excluding a company also archi
     The started message means the task was submitted, not that every record is done. Large MSPs can take a moment.
   </Step>
 </Steps>
+
+## Choose how sites become Planner items
+
+For standards in a category tracked by site, companies with two or more sites have a status per site. The **Standards tracked by site** section of the dialog decides how those standards turn into Planner items.
+
+| Option | What the sync creates |
+| --- | --- |
+| **Bundle all sites into one Planner item** | One Planner item per company and standard, covering every site. Its status mirrors the company's status. This is the default and matches how Standards worked before sites. |
+| **Split Planner items by site** | One Planner item per site, titled with the standard and the site, such as **Firewall — Main Office**. Each item mirrors its own site in both directions: completing it marks that site **Deployed**. |
+| **Bundle all site failures into one Planner item** | One Planner item per company and standard, created only while at least one site is not deployed (**Not Started** or **In Progress**). Its description starts with **Sites not deployed:** followed by the site names, refreshed on each sync. |
+
+The option you sync with is saved for your MSP. Later syncs keep using it until you change it, including the automatic sync for a new company and syncs started through the API or MCP.
+
+- **Switching to Split** archives the company's own generated Planner item for each standard tracked by site. It is archived, not deleted.
+- **Switching back from Split** restores the company's item and archives the per-site items instead.
+- **Per-site items carry no price.** The standard's price is charged once per company, so a per-site item does not get **Default Price**. It does get the standard's [Planner template](/user-guides/settings/standards#apply-a-planner-template): hours, notes, checklist links and cost lines.
+- **Items you created by hand are never archived** by these options.
 
 ## Check the result
 
@@ -71,6 +93,7 @@ Excluded companies are skipped by Standards sync. Excluding a company also archi
 | Linked Planner status | Matched to the Standards status. Planner-only **On Hold** and **Pending Approval** states are kept. |
 | Existing Planner dates and visibility | Not changed. The schedule and **Hide from company users** choices apply to new items only. |
 | Existing public and private Planner notes | Not changed, unless a Planner template is applied to an open item. The template's notes are then written to it. |
+| A standard tracked by site at a company with two or more sites | Creates, archives or restores Planner items to match the saved site option. See [Choose how sites become Planner items](#choose-how-sites-become-planner-items). |
 
 <Warning>
 The dialog says existing company statuses are not overwritten. That covers statuses only. A sync can replace a company-specific Planner title, description, estimate or type with the shared catalog values. When a standard has a Planner template, it can also replace the notes, business value, hours and probability on open items.
@@ -88,6 +111,9 @@ The default estimate on a new Planner item is a planning number. It is not a pur
 | Some companies or standards have no new Planner item. | The sync may have only partly finished, or the standard does not apply to that company. Check the matrix, wait a few minutes, then run the sync again. Do not delete tracking or Planner records to force a retry. |
 | Existing Planner items did not change. | Completed, Cancelled and archived items keep their template. Check the item's status. |
 | Company users cannot see new items. | **Hide from company users** was on for that sync. Change visibility on the Planner items. |
+| **Standards tracked by site** is missing from the dialog. | No category is tracked by site. Turn on **Track by site** for the category first. |
+| A company's Planner item for a standard was archived. | **Split Planner items by site** is the saved option, so each site has its own item. Choose another option and sync again to restore it. |
+| The item count under the site options is unavailable. | The count could not be loaded. The sync still runs. |
 
 ## Frequently asked questions
 
@@ -118,6 +144,15 @@ The default estimate on a new Planner item is a planning number. It is not a pur
   </Accordion>
   <Accordion title="Where do the generated items show up?">
     In **Planner > List** with the **Source** filter set to **Standards**, and from the linked work in the Standards matrix.
+  </Accordion>
+  <Accordion title="Is the site option remembered?">
+    Yes. The option you sync with is saved for your MSP and used by later syncs, including the automatic sync for a new company, until you change it.
+  </Accordion>
+  <Accordion title="Does Split delete the company's Planner item?">
+    No. It archives it. Choosing another option and syncing restores it and archives the per-site items instead.
+  </Accordion>
+  <Accordion title="Why does a per-site item have no estimate?">
+    The standard's price is charged once per company, so per-site items do not carry **Default Price**. They still get the standard's Planner template, including its cost lines.
   </Accordion>
   <Accordion title="Does syncing place an order or create a support ticket?">
     No. Standards creates planning and deployment tracking only.

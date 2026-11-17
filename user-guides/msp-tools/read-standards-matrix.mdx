@@ -70,6 +70,52 @@ The table header stays pinned while you scroll through companies. Each company n
 
 Standards that do not apply because of a company's device platform or a company field rule cannot be changed. Hover the cell to read the reason.
 
+## Show sites
+
+When a category is [tracked by site](/user-guides/settings/standards#track-a-category-by-site), its standards get a status for each site of a company that has two or more sites. A site is one of the company's locations. Companies with one site or none keep a single status.
+
+<Steps>
+  <Step title="Click Sites">
+    The **Sites** button sits in the table toolbar. It appears when at least one category is tracked by site and a company in view has two or more sites.
+  </Step>
+  <Step title="Read the site rows">
+    Each such company gets one row per site, under the company's own row. Standards tracked by site show a status mark for each site.
+  </Step>
+  <Step title="Read the empty cells">
+    Standards that are not tracked by site are answered once for the company, so their cells on site rows are empty.
+  </Step>
+  <Step title="Hover the company's cell">
+    For a standard tracked by site, the company's cell reads **Deployed at X of Y sites**.
+  </Step>
+  <Step title="Click Sites again">
+    This hides the site rows. It does not change any status.
+  </Step>
+</Steps>
+
+To change a site's status, see [Update a company's Standards deployments](/user-guides/msp-tools/update-standard-deployments#change-one-site).
+
+### How sites roll up to the company
+
+The company's status for a standard tracked by site is worked out from its sites. Sites marked **N/A** or **Declined** are left out first.
+
+| Sites | Company status |
+| --- | --- |
+| Every remaining site is **Deployed** | **Deployed** |
+| Every remaining site is **Not Started** | **Not Started** |
+| Any other mix of the remaining sites | **In Progress** |
+| Every site is **N/A** | **N/A** |
+| The sites are only **N/A** and **Declined** | **Declined** |
+
+One site deployed and one not started is **In Progress** for the company, never **Deployed**.
+
+The deployment percentage, Client Health, **Cost**, **White space**, **Opportunity**, reports and exports use the company status, which is this rollup. Deployment options and notes stay on the company, not on individual sites.
+
+### When a company's sites change
+
+- A new site never changes the company's status. If the company is **Deployed**, **Declined** or **N/A**, the new site starts with that status. Otherwise it starts as **Not Started**.
+- When a site is deleted, the company follows the sites that remain.
+- When a company goes from one site to two, both sites start with the company's status.
+
 ## Read the deployment percentage
 
 The summary above the matrix shows a percentage and a **deployed/required** count. It follows the company search and company scope, and it skips excluded companies.
@@ -78,6 +124,7 @@ The summary above the matrix shows a percentage and a **deployed/required** coun
 - A **1 of N** category counts as one check. Any deployed member meets it, and deploying several does not add checks.
 - Optional standards show as **deployed/total optional** and do not change the percentage.
 - Counts for **N/A**, **declined**, **unclassified** and **below target** appear next to the percentage when they apply.
+- A standard tracked by site counts once per company, using the company's rolled-up status. Sites do not add checks.
 
 For example, three deployed checks, one In Progress check and one N/A check give **3/4 required**, or **75% deployed**. The N/A check is outside the count.
 
@@ -100,6 +147,8 @@ The same percentage feeds the Standards dimension of [Client Health](/user-guide
     See [Read a Planner item](/user-guides/planner/read-item-details) for dates, status and notes. [Standards work in Planner](/user-guides/planner/understand-standards-items) explains how Standards statuses map to Planner statuses.
   </Step>
 </Steps>
+
+A site cell works differently: clicking it opens its status menu. When the site has its own Planner item, which the **Split Planner items by site** sync option creates, the menu ends with **Open Planner item**.
 
 ## See what the right-click menus do
 
@@ -158,6 +207,9 @@ To change an exclusion, see [Exclude or include companies in Standards](/user-gu
 | The summary changed after a search | The summary recalculates for the matching rows. Clear the search. |
 | **No standards configured** shows unexpectedly | Reload the page. If it persists, ask an administrator to check your Standards access. |
 | A status differs from Planner | Open both records, then ask an administrator to check the Standards sync. |
+| The **Sites** button is missing | No category is tracked by site, or no company in view has two or more sites. Check the company's locations and the category's **Track by site** switch. |
+| A site row has empty cells | Those standards are not tracked by site, so they are answered once for the company. |
+| A company shows **In Progress** although a site is deployed | The company is **Deployed** only when every site that is not N/A or Declined is deployed. Click **Sites** to see which sites are not. |
 
 ## Frequently asked questions
 
@@ -185,6 +237,12 @@ To change an exclusion, see [Exclude or include companies in Standards](/user-gu
   </Accordion>
   <Accordion title="Do child companies inherit their parent's status?">
     No. Each row shows its own recorded statuses.
+  </Accordion>
+  <Accordion title="Does one deployed site make the company Deployed?">
+    No. For a standard tracked by site, the company is **Deployed** only when every site that is not N/A or Declined is deployed. Any mix is **In Progress**.
+  </Accordion>
+  <Accordion title="Do sites count as extra checks in the percentage?">
+    No. Each standard counts once per company, using the company's rolled-up status.
   </Accordion>
   <Accordion title="Why do I still see Tool Stack in some links?">
     Tool Stack is the former name. Some older links and web addresses still use it. The Planner source filter says Standards.
