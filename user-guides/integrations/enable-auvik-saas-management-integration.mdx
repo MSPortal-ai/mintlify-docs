@@ -1,0 +1,72 @@
+---
+title: "Connect Auvik SaaS Management"
+description: "Match your Auvik SaaS Management clients to companies and see each company's SaaS applications, usage and contract spend."
+icon: 'cloud'
+---
+
+Connect Auvik SaaS Management to see the SaaS applications each client uses. MSPortal reads the clients in your Auvik SaaS Management account, you match them to companies, and each matched company's page shows its applications, how many people used them this month, their risk, and the spend recorded on their contracts.
+
+Auvik SaaS Management is a separate Auvik product from Auvik's network management, so it has its own card. To bring in Auvik sites, network devices and alerts, see [Connect Auvik and review network data](/user-guides/integrations/enable-auvik-integration).
+
+The integration is in beta and available to selected tenants. Setup is for MSP staff with permission to manage integrations. MSPortal only reads from Auvik: it never creates, edits or deletes anything there.
+
+## Before you start
+
+- **An Auvik API user with SaaS Management access:** pick or create an Auvik user whose role can read SaaS Management, then generate its API key from the user's profile. Each Auvik user has one API key, so a dedicated user for integrations is best. The same user and key can serve the Auvik network card as well.
+- **Your Auvik region:** the part of your Auvik dashboard address before `.my.auvik.com`, for example `us1`.
+
+## Connect and match clients
+
+<Steps>
+  <Step title="Enter and test the connection">
+    Open **Settings > Integrations**, select **Auvik SaaS Management** and open **Connect**. Choose the **Auvik region**, then enter the **Account username** and **API key**. Click **Test connection**. The test signs in and reads one SaaS Management client, so a user without SaaS Management access is refused here.
+  </Step>
+  <Step title="Save the connection">
+    Click **Save and continue**. MSPortal starts reading your SaaS Management clients in the background.
+  </Step>
+  <Step title="Match clients">
+    Open **Import or match Auvik SaaS Management clients**. Each client appears with its user count and the external ID you gave it in Auvik. Match each one to a company in MSPortal, or import it as a new company. Quick match suggests companies by name; review the suggestions before you apply them.
+
+    Applications are read only for matched clients. Saving a match starts a sync, so the company's applications appear a few minutes later.
+  </Step>
+  <Step title="Review and finish">
+    Open **Review**, check each task and select **Finish setup**.
+  </Step>
+</Steps>
+
+## See a company's SaaS applications
+
+Open a company's page. The **SaaS applications** card shows:
+
+- the number of applications Auvik SaaS Management discovered for the company;
+- **Used this month:** applications with at least one user in the last month;
+- **Contract MRR:** the monthly recurring cost recorded on the applications' contracts in Auvik SaaS Management;
+- **Renewing soon:** contracts that renew in the next 90 days;
+- the most used applications this month, with their category, risk and user counts.
+
+The card needs the **SaaS applications (Auvik SaaS Management)** permission, which no role has by default. An administrator turns it on per role in **Settings > Users & Roles > Roles**. The card is for MSP staff; company users do not see it.
+
+## Syncing
+
+The client list and every matched client's applications sync every six hours. A sync that stops part-way continues from where it stopped. Applications Auvik SaaS Management no longer lists are removed on the next complete sync, and unmatching a client removes its applications from MSPortal.
+
+## Manage or troubleshoot the connection
+
+| Symptom | What to check |
+| --- | --- |
+| The test says the user cannot read SaaS Management data | Give the API user a role with SaaS Management access in Auvik, then test again. |
+| The test says the username or API key was rejected | Check the username and API key, and that the key belongs to that user. |
+| The test reports a region move | Choose the region it names and test again. |
+| No clients appear | Wait for the first sync to finish, and check that the API user can see your clients in Auvik SaaS Management. |
+| A company's card shows no applications | Match the company's client on **Import or match**, then allow a few minutes for the sync. |
+| Contract MRR is 0 | MSPortal shows the spend recorded on contracts in Auvik SaaS Management. Add contracts there to see spend. |
+| The card does not appear | Check that your role has the **SaaS applications (Auvik SaaS Management)** permission. |
+
+**Disconnect…** in **More actions** removes the stored credentials, your client matches and the SaaS application data in MSPortal. It does not change anything in Auvik.
+
+## Related guides
+
+- [Connect Auvik and review network data](/user-guides/integrations/enable-auvik-integration)
+- [Integration setup guides](/user-guides/integrations/index)
+- [Map and import companies](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)
