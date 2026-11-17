@@ -18572,6 +18572,10 @@
             "type": "boolean",
             "description": "Deploying any one item satisfies the category"
           },
+          "trackBySite": {
+            "type": "boolean",
+            "description": "Standards in the category carry a status per site for clients with two or more sites; the client status is then the rollup of its sites"
+          },
           "sortOrder": {
             "type": "integer"
           },
@@ -18589,6 +18593,7 @@
           "icon",
           "plannerItemTypeId",
           "requireOneOf",
+          "trackBySite",
           "sortOrder",
           "items"
         ]
@@ -18742,6 +18747,10 @@
             "type": "boolean",
             "description": "Deploying any one item satisfies the category"
           },
+          "trackBySite": {
+            "type": "boolean",
+            "description": "Standards in the category carry a status per site for clients with two or more sites; the client status is then the rollup of its sites"
+          },
           "sortOrder": {
             "type": "integer"
           },
@@ -18759,6 +18768,7 @@
           "icon",
           "plannerItemTypeId",
           "requireOneOf",
+          "trackBySite",
           "sortOrder",
           "items"
         ]
@@ -18865,6 +18875,44 @@
                 "nullable": true
               }
             ]
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "locationId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "not_started",
+                    "in_progress",
+                    "deployed",
+                    "not_applicable",
+                    "declined"
+                  ]
+                },
+                "plannerItemId": {
+                  "type": "string",
+                  "nullable": true,
+                  "format": "uuid",
+                  "description": "The Planner item made for this site by the \"split\" sync option"
+                }
+              },
+              "required": [
+                "locationId",
+                "name",
+                "status",
+                "plannerItemId"
+              ]
+            },
+            "description": "Status per site when the standard is tracked by site for this client (its category has trackBySite and the client has two or more sites); status is then their rollup: sites that are not applicable or declined are left out, all remaining deployed is deployed, all not started is not_started, anything else is in_progress. Empty otherwise."
           }
         },
         "required": [
@@ -18885,7 +18933,8 @@
           "selectedOption",
           "deploymentAlignment",
           "targetTierId",
-          "targetTier"
+          "targetTier",
+          "sites"
         ]
       },
       "StandardsCompliance": {
@@ -30053,6 +30102,10 @@
             "type": "boolean",
             "description": "Deploying any one item satisfies the category"
           },
+          "trackBySite": {
+            "type": "boolean",
+            "description": "Standards in the category carry a status per site for clients with two or more sites; the client status is then the rollup of its sites"
+          },
           "sortOrder": {
             "type": "integer"
           }
@@ -30064,6 +30117,7 @@
           "icon",
           "plannerItemTypeId",
           "requireOneOf",
+          "trackBySite",
           "sortOrder"
         ]
       },
@@ -30096,6 +30150,10 @@
           "requireOneOf": {
             "type": "boolean",
             "description": "When true, deploying any one item satisfies the category and every item is made optional"
+          },
+          "trackBySite": {
+            "type": "boolean",
+            "description": "Track the category's standards by site. Off by default. Turning it on copies each client's status to its sites, so no client status changes; turning it off removes the site statuses and keeps each client's status"
           },
           "sortOrder": {
             "type": "integer",
@@ -30136,6 +30194,10 @@
           "requireOneOf": {
             "type": "boolean",
             "description": "When true, deploying any one item satisfies the category and every item is made optional"
+          },
+          "trackBySite": {
+            "type": "boolean",
+            "description": "Track the category's standards by site. Off by default. Turning it on copies each client's status to its sites, so no client status changes; turning it off removes the site statuses and keeps each client's status"
           },
           "sortOrder": {
             "type": "integer",
@@ -31476,6 +31538,11 @@
                   "type": "string",
                   "nullable": true,
                   "format": "uuid"
+                },
+                "locationId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "One site of the client (a location id from the company's standards sites). Only for a standard tracked by site, and not together with selectedOptionId or notes"
                 }
               },
               "required": [
@@ -31925,6 +31992,15 @@
           },
           "hideFromCompanyUsers": {
             "type": "boolean"
+          },
+          "siteMode": {
+            "type": "string",
+            "enum": [
+              "bundle",
+              "split",
+              "failures"
+            ],
+            "description": "For standards tracked by site. bundle (default): one planner item per client covering every site. split: one planner item per site, and the client's own item is archived while this option is saved. failures: one planner item per client, created only while a site is not deployed, naming those sites. Omitted keeps the saved option."
           }
         }
       },
@@ -71617,7 +71693,7 @@
     "/api/public/v1/standards/companies/{companyId}": {
       "get": {
         "summary": "Get company standards",
-        "description": "One company's standards deployment: every catalog item with its lifecycle status, deployment options, selected option, target tier (the company's service plan), deployment alignment, vCIO notes and linked planner item. Items with no recorded status are not_started. Company users may only read their own company and never see prices or notes.",
+        "description": "One company's standards deployment: every catalog item with its lifecycle status, deployment options, selected option, target tier (the company's service plan), deployment alignment, vCIO notes and linked planner item. Items with no recorded status are not_started. A standard tracked by site also lists the status of each of the company's sites, and its status is their rollup. Company users may only read their own company and never see prices or notes.",
         "tags": [
           "Standards"
         ],
@@ -74785,7 +74861,7 @@
     "/api/public/v1/standards/settings/company-statuses": {
       "put": {
         "summary": "Set company standard statuses",
-        "description": "Set the Standards matrix status for one or more client and standard pairs, optionally with the deployment option the client uses (null clears it) and, for a single cell, vCIO notes. Linked planner items follow. Requires write_planner.",
+        "description": "Set the Standards matrix status for one or more client and standard pairs, optionally with the deployment option the client uses (null clears it) and, for a single cell, vCIO notes. Linked planner items follow. For a standard tracked by site, a cell without locationId sets the client and every one of its sites; a cell with locationId sets that one site, and the client's status becomes the rollup of its sites (one site deployed and one not is in_progress for the client). Requires write_planner.",
         "tags": [
           "Standards"
         ],
@@ -74833,7 +74909,7 @@
             }
           },
           "400": {
-            "description": "Validation error",
+            "description": "A locationId for a standard that is not tracked by site",
             "content": {
               "application/json": {
                 "schema": {
@@ -74863,7 +74939,7 @@
             }
           },
           "404": {
-            "description": "Company or standard not found",
+            "description": "Company, standard or site not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -75796,7 +75872,7 @@
     "/api/public/v1/standards/settings/sync": {
       "post": {
         "summary": "Sync standards to planner",
-        "description": "Queue the Standards page's \"Sync all companies\" background job, which creates or updates one planner item per active client and standard. targetDate schedules new items, null leaves them unscheduled, omitted uses the current month; hideFromCompanyUsers hides them from client users. One-shot job with no undo. Requires manage_settings_tool_stack.",
+        "description": "Queue the Standards page's \"Sync all companies\" background job, which creates or updates one planner item per active client and standard. targetDate schedules new items, null or omitted leaves them unscheduled; hideFromCompanyUsers hides them from client users. siteMode chooses how standards tracked by site become planner items and is saved for the tenant, so later syncs keep using it. One-shot job with no undo. Requires manage_settings_tool_stack.",
         "tags": [
           "Standards"
         ],
