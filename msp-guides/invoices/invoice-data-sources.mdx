@@ -59,6 +59,27 @@ The due date is copied straight from the PSA invoice. MSPortal does not calculat
 
 A **Due Date** turns red with a warning icon when the date has passed and the **Balance** is above zero. Status does not affect the highlight. A **Balance** above zero is shown in amber.
 
+## Line items
+
+The **Items** count and the **Line items** dialog on the [Invoices](/user-guides/invoices/view-invoices#open-an-invoices-line-items) page read lines MSPortal has already synced, so they open instantly and reports can use them. Unit cost and margin are never shown.
+
+| PSA | Where the lines come from | When they arrive |
+| --- | --- | --- |
+| ConnectWise | The time entries, expense entries and products billed on the invoice. Whatever they leave of the invoice subtotal becomes one line: **Agreement** for an agreement invoice's recurring charge, otherwise **Not itemized** (adjustments and other charges ConnectWise does not list) | With the invoice sync, every 2 hours, for new and changed invoices. Invoices from the last 12 months that predate this feature are filled in over the next runs, newest first, up to 1,500 invoices a run |
+| Autotask | The billing items posted to the invoice, with their billing item type and contract | With the billing item sync, every 4 hours |
+| Halo | The invoice lines Halo returns with the invoice, with the product category and contract | With the invoice sync, every 2 hours |
+
+| Column | ConnectWise | Autotask | Halo |
+| --- | --- | --- | --- |
+| **Item** | Work type (time), expense type, or product ID | Billing item name | Item short description or code |
+| **Description** | Ticket number and summary, or the product's customer description | Line description as printed on the invoice | Item long description |
+| **Type** | **Product**, **Time**, **Expense**, **Agreement** or **Not itemized** | Billing item type | Product category |
+| **Agreement** | The agreement on the time entry, expense or product | Contract | Contract |
+| **Qty**, **Unit price** | Hours and hourly rate, or quantity and price. Expenses show only an amount | Quantity and rate | Quantity and unit price |
+| **Amount** | The billed amount after agreement coverage. No-charge time shows 0 | Total amount | Net amount |
+
+ConnectWise time notes are never copied, because ConnectWise keeps internal notes there. Older ConnectWise versions cannot list an invoice's products; their product charges appear in the **Not itemized** line.
+
 ## Why an invoice is missing or hidden
 
 - **Zero or negative totals.** Invoices with a total of zero or less, such as credit memos, are not shown.
@@ -78,6 +99,7 @@ The [Pax8 tab](/user-guides/invoices/view-pax8-invoices) splits each Pax8 invoic
 | An invoice is missing | Go through [Why an invoice is missing or hidden](#why-an-invoice-is-missing-or-hidden), starting with zero totals, hidden statuses, and company mapping. |
 | A value is wrong | Change it in the PSA. It arrives with the next sync. |
 | A payment is not showing | Wait for the next sync. ConnectWise rechecks unpaid invoices on every run. |
+| **Items** shows a dash for a PSA invoice | Its lines have not synced yet. See [Line items](#line-items) for when they arrive. For Autotask, check that billing item sync is on for the integration. |
 
 ## Frequently asked questions
 
