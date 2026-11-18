@@ -27,7 +27,7 @@ Use **Budgets Menu > Forecast** to project one company's category costs for the 
     <img src="/images/product/budget-forecast-years.png" alt="Years to Forecast choices from one through five years, with three selected." width="500" height="332" />
   </Step>
   <Step title="Read the table">
-    Each row is a category. Read **Include**, the **Base Year** amount, one column per forecast year, **% Increase** and **Use Global**. Scroll sideways for later years. The **Total** row adds the included categories. Under each year, the change compares with the year before, not with the base year. Rows come from your Planner item types.
+    Each row is a category. Read **Include**, its **% Increase**, the **Base Year** amount and one column per forecast year. Scroll sideways for later years. The **Total** row adds the included categories. Under each year, the change compares with the year before, not with the base year. Rows come from your Planner item types.
   </Step>
 </Steps>
 
@@ -41,17 +41,19 @@ The currency comes from the company's budget data, with your MSP's default as a 
 
 | Control | What it does |
 | --- | --- |
+| **Forecast Settings** | Opens the settings below. The button reads the horizon and the default, for example **3 Years · +5%**, or **No default** while **Apply to All Categories** is off. |
 | **Years to Forecast** | Shows 1 to 5 years after the Base Year. Lowering it drops overrides past the new end. Raising it again does not bring them back. |
-| **Default Annual Increase (%)** | A percentage from 0 to 100. It does not change any row until **Apply to All Categories** is on. |
-| **Apply to All Categories** | Copies the default percentage into every row. Turning it off keeps the percentages already copied. |
+| **Default Annual Increase** | A percentage from 0 to 100 for every category marked **Default**. Changing it moves those categories and leaves a category's own rate alone. |
+| **Apply to All Categories** | While on, categories marked **Default** grow by the default. While off, they stay flat and read **Flat**. It never overwrites a percentage you typed for a category. |
 | **Include** | Counts the category in the totals. Turn it off to leave the category out of every total. It does not hold the cost flat. |
 | **Base Year** amount | Sets this forecast's starting amount. It does not change any budget. |
-| **% Increase** | Grows the category each year from the year before. A blank percentage repeats the base amount in years that have no override. |
-| **Use Global** | While **Apply to All Categories** is on, ticks the row to use the default percentage. Clear it to type a percentage for the row. |
-| A future-year amount | Typing in the box sets an **Override** for that category and year. Clear the box to go back to the calculated amount. Typing 0 sets a zero override. |
+| **% Increase** | Grows the category each year from the year before. A category marked **Default** follows the default, shown in grey. Type a percentage to give the category its own rate; it keeps that rate when the default changes. Click the reset arrow beside it, or clear the box, to follow the default again. |
+| A future-year amount | Typing in the box sets an override for that category and year, marked **Override** under the box. Click the reset arrow beside it, or clear the box, to go back to the calculated amount. Typing 0 sets a zero override. |
 | **Hide Empty Categories** | Hides rows with a zero base amount. A hidden row with a future override still counts in the total. This setting is not saved. |
 
-For example, a base amount of 1,000 with a 5% increase gives 1,050, then 1,102.50. If you override the first year to 2,000, the next year is 2,100 at 5%. With a blank percentage the next year goes back to 1,000. A 0% rate carries the previous amount forward, which is different from a blank percentage after an override.
+For example, a base amount of 1,000 with a 5% increase gives 1,050, then 1,102.50. If you override the first year to 2,000, the next year is 2,100 at 5%. A category marked **Flat** goes back to 1,000 the year after an override. A 0% rate carries the previous amount forward instead.
+
+A company's first forecast starts with **Apply to All Categories** on, so every category grows by the 5% default until you change it.
 
 ## Save the forecast
 
@@ -76,7 +78,7 @@ Save keeps the forecast rules for that company and Base Year. It does not approv
 | **You don't have permission to view budget forecast.** | Ask your MSP admin for budget edit access. Read-only budget access is not enough. |
 | **Select a single company to forecast** | Pick one company in the top bar. |
 | **Sync** and **Save** are missing, and the worksheet cannot be edited | You need **manage_budgets**. Without it the worksheet is read-only. |
-| The default is 5% but amounts stay flat | Turn on **Apply to All Categories** or type a percentage in each row. The default field alone changes nothing. |
+| The default is 5% but amounts stay flat | Turn on **Apply to All Categories**. Categories marked **Flat** follow the default only while it is on. |
 | **Total** does not match the visible rows | Clear **Hide Empty Categories** and check the **Include** switches and future overrides. |
 | **Total** does not match one budget | The forecast adds every budget for that company and year, including rejected lines. |
 | The starting amounts are all zero | Check that the company has budgets with categories for that year. Reload before you replace saved rules. |
@@ -92,13 +94,13 @@ Save keeps the forecast rules for that company and Base Year. It does not approv
     No. It adds every budget for the company and year, whatever the status.
   </Accordion>
   <Accordion title="Does turning Include off keep a category flat?">
-    No. It leaves the category out of the totals. Keep **Include** on and leave **% Increase** blank to hold a base amount flat.
+    No. It leaves the category out of the totals. Keep **Include** on and type 0 in **% Increase** to hold the amount flat.
   </Accordion>
-  <Accordion title="Does turning Apply to All Categories off restore my old rates?">
-    No. The percentages already copied stay. Edit each row.
+  <Accordion title="Does turning Apply to All Categories on overwrite the rates I typed?">
+    No. It only moves the categories marked **Default**. A category with its own rate keeps it.
   </Accordion>
   <Accordion title="How do I remove a forecast override?">
-    Clear that future-year box. The calculated value returns.
+    Click the reset arrow beside the amount, or clear the box. The calculated value returns.
   </Accordion>
   <Accordion title="Does saving a forecast approve or create budgets?">
     No. It only saves the forecast rules.
