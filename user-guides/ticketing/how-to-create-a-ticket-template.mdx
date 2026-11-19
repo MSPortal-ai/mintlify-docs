@@ -289,9 +289,39 @@ Export a JSON backup before you make major changes. You can import it later to r
 
 The field **Key** is generated from the label and cannot be changed after the first save. Keys must be unique in a template. Use **Use in variables as** to see the name to use in subject variables.
 
+### Choose the ticket contact with a User field
+
+<Note>
+**Branch preview:** **Override Contact** is available in the upcoming template editor update. Existing templates keep their contact behavior until you enable it and save.
+</Note>
+
+Use **Override Contact** when the person chosen in a form should be the contact on the new PSA ticket.
+
+<Steps>
+  <Step title="Open a User field">
+    Under **Sections & Fields**, expand the field that should choose the ticket contact and set its **Type** to **User**.
+  </Step>
+  <Step title="Enable Override Contact">
+    Turn on **Override Contact**. Only one User field per template can have it enabled. If another field owns the setting, the disabled switch names that field; turn it off there before enabling it here.
+  </Step>
+  <Step title="Save and test">
+    Click **Save Template**. On **Tickets > New Ticket**, select the template and choose one person in that field. Submit a request in a company you use for testing, then check the contact on the PSA ticket.
+  </Step>
+</Steps>
+
+<Frame caption="Branch preview: Label for formatted output and the two matching switches share a row in a Demo User field.">
+  <img src="/images/product/ticket-template-contact-output-preview.png"
+    alt="Demo User field with Label for formatted output on the left, Override Contact enabled in the middle, and conditional visibility off on the right."
+    width="2460" height="578" />
+</Frame>
+
+The selected person must belong to the ticket's company and resolve to an active contact in the PSA connection used for delivery. If MSPortal cannot find one unambiguous contact, submission shows an error so you can choose another person or correct their contact link.
+
+The person submitting the request remains its submitter. Other User fields continue to collect answers, even if a field is named "Requester name". They do not change the ticket contact. An optional override left empty, or hidden by a condition, keeps the usual contact behavior. Changing the field away from **User** clears **Override Contact**.
+
 ### Send an answer to a PSA field
 
-With ConnectWise, Autotask or Halo PSA connected, a field's editor can also write its answer to a ticket UDF in your PSA. Pick the UDF in the field named after your PSA, such as **Autotask PSA field**, beside **Short label for tickets** and **Default Value**. Use it to record who a request is for, separately from the submitter. See [Send template answers to PSA fields](/user-guides/ticketing/send-answers-to-psa-fields).
+With ConnectWise, Autotask or Halo PSA connected, a field's editor can also write its answer to a ticket UDF in your PSA. Pick the UDF in the field named after your PSA, such as **Autotask PSA field**, beside **Label for formatted output** and **Default Value**. Use it to record who a request is for, separately from the submitter. See [Send template answers to PSA fields](/user-guides/ticketing/send-answers-to-psa-fields).
 
 **Field types**
 
