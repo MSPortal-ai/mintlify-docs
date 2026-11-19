@@ -42,6 +42,10 @@ ConnectWise Asio (formerly ConnectWise RMM) is a remote monitoring and managemen
     | Platform - Devices | Read and Write |
     | Platform - Sites | Read |
     | Platform - Tickets | Create, Read and Update |
+    | Backup Dashboard - Read backup jobs | Read (for ConnectWise SaaS Backup) |
+    | Backup Dashboard - Read alarms | Read (for ConnectWise SaaS Backup) |
+
+    The two **Backup Dashboard** scopes are only needed if you use ConnectWise SaaS Backup (SaaS 365 Backup). See [ConnectWise SaaS Backup](#connectwise-saas-backup).
 
     **Platform - Devices** Write lets MSPortal save a device's friendly name back to Asio. Everything else works without it, but renaming a device shows "The RMM didn't accept the new friendly name".
 
@@ -77,7 +81,7 @@ ConnectWise Asio (formerly ConnectWise RMM) is a remote monitoring and managemen
 
 ## Choose data
 
-Open **Choose data** to pick which data to import. The choices are **Companies**, **Locations**, **Devices**, **Networks**, **Tickets** and **Software**. Changes save as you make them. Turning a category off stops future syncs of it. Turning **Software** off removes that integration's software inventory, and turning it back on starts a new inventory sync. Devices, networks and software use your existing company mappings, so keep **Companies** on to discover new companies to map.
+Open **Choose data** to pick which data to import. The choices are **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, **Software** and **Backups**. Changes save as you make them. Turning a category off stops future syncs of it. Turning **Software** or **Backups** off removes the data that integration synced for it, after you confirm, and turning it back on starts a new sync. Devices, networks and software use your existing company mappings, so keep **Companies** on to discover new companies to map.
 
 ## Map companies
 
@@ -159,6 +163,18 @@ Asio's friendly name for a device syncs to MSPortal on its own. The device name 
 
 Renaming needs the **Platform - Devices** Write scope. To add it to an existing connection, edit the MSPortal API key in **Integrations > API Access** in Asio and give **Platform - Devices** both Read and Write. The Client ID and Client Secret stay the same, so nothing changes in MSPortal.
 
+## ConnectWise SaaS Backup
+
+If you use ConnectWise SaaS Backup (also sold as SaaS 365 Backup) through Asio, its backup data comes through this same connection. You do not need a separate integration.
+
+- Give the Asio API key the **Backup Dashboard - Read backup jobs** and **Backup Dashboard - Read alarms** scopes. Edit the existing MSPortal key in **Integrations > API Access** in Asio; the Client ID and Client Secret stay the same, so nothing changes in MSPortal.
+- Keep **Backups** on under **Choose data**. It is on by default.
+- MSPortal reads the SaaS Backup jobs and alarms of every matched Asio company every 6 hours. Jobs from other backup products in the Asio Backup Dashboard are skipped, because MSPortal connects those products directly.
+- Each job's health shows under **Backup > Microsoft 365**, one row per company, with **Microsoft 365**, **Google Workspace** and **Entra ID** coverage. See [Read SaaS backup health](/user-guides/backup/read-saas-backup-health).
+- Open SaaS Backup alarms show under **Backup > Alerts**. An alarm Asio stops listing is marked resolved.
+
+Without the two scopes the backup sync is skipped and the rest of the Asio connection keeps working.
+
 ## Manage an existing connection
 
 - **Update the secret:** open **Connect**, enter the new Client Secret, select **Test connection**, then **Save changes**. Leave the masked secret unchanged to keep it. The saved environment and Client ID are locked; to change them, connect a new Asio API client.
@@ -176,6 +192,7 @@ Renaming needs the **Platform - Devices** Write scope. To add it to an existing 
 | Devices are missing                                                                   | Check that the company is matched, the first sync has finished, the device type is matched and not ignored, and the devices were imported from **Staged devices**.  |
 | Inventory is old                                                                      | Check the last successful sync in **Sync activity** and any paused or error state on the connection. A scheduled time does not guarantee a successful run.          |
 | Renaming says "The RMM didn't accept the new friendly name: Unknown/invalid scope(s)" | The API key lacks **Platform - Devices** Write. Add it in **Integrations > API Access** in Asio, then rename the device again.                                      |
+| ConnectWise SaaS Backup data does not appear                                          | Check that the API key has both **Backup Dashboard** read scopes, **Backups** is on under **Choose data**, the companies are matched, and a sync has run since.     |
 
 ## Frequently asked questions
 
