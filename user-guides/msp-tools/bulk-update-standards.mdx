@@ -6,6 +6,12 @@ icon: "table-cells"
 
 This guide shows MSP staff how to change many Standards statuses at once, from a company row or a standard column.
 
+<Note>
+  Branch preview: manual **Below plan** is an upcoming change. Its database
+  migration is pending and has not been deployed. Any Below plan screenshots on
+  this page use synthetic fixtures, not production saves.
+</Note>
+
 ## Before you start
 
 - You need Standards read access, Planner Write permission and active billing.
@@ -14,14 +20,16 @@ This guide shows MSP staff how to change many Standards statuses at once, from a
 
 ## Choose the scope first
 
-| Where you open the menu | What it changes |
-| --- | --- |
-| A single status cell | That company and that standard. See [Update a company's Standards deployments](/user-guides/msp-tools/update-standard-deployments). |
-| A company name | Every standard in that company's row. |
-| A standard's column header | That standard for every non-excluded company in the loaded scope. |
+| Where you open the menu    | What it changes                                                                                                                     |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| A single status cell       | That company and that standard. See [Update a company's Standards deployments](/user-guides/msp-tools/update-standard-deployments). |
+| A company name             | Every standard in that company's row.                                                                                               |
+| A standard's column header | That standard for every non-excluded company in the loaded scope.                                                                   |
 
 <Warning>
-**Search companies...** does not limit a column action. Companies hidden by the search are still changed. The company selector at the top of the app sets the loaded scope. Excluded companies are skipped by column actions.
+  **Search companies...** does not limit a column action. Companies hidden by
+  the search are still changed. The company selector at the top of the app sets
+  the loaded scope. Excluded companies are skipped by column actions.
 </Warning>
 
 ## Set all standards for one company
@@ -37,7 +45,7 @@ This guide shows MSP staff how to change many Standards statuses at once, from a
     Right-click the company name, or click the three-dot button beside it. The menu header shows the company name and **Mark all standards as**.
   </Step>
   <Step title="Choose a status">
-    Pick **Mark Deployed**, **Mark In Progress**, **Mark Not Started**, **Mark N/A** or **Mark Declined**. A toast reads **Updated** followed by the number of entries.
+    Pick **Mark Deployed**, **Mark Below Plan**, **Mark In Progress**, **Mark Not Started**, **Mark N/A** or **Mark Declined**. A toast reads **Updated** followed by the number of entries.
   </Step>
   <Step title="Review the row">
     Check the whole row, then open a few linked Planner items.
@@ -63,6 +71,7 @@ An excluded company can still be changed from its row menu while it is shown.
     <Frame caption="The column menu says Mark all companies as. Company search does not narrow it.">
       <img src="/images/product/standards-column-menu.png" alt="Standard column menu headed Mark all companies as, with Mark Deployed, Mark In Progress, Mark Not Started, Mark N/A and Mark Declined." width="440" height="468" />
     </Frame>
+
   </Step>
   <Step title="Choose a status or option">
     Pick a status. If the standard has configured options, you can pick one option instead. That marks every affected company **Deployed** with that option.
@@ -73,14 +82,20 @@ An excluded company can still be changed from its row menu while it is shown.
 </Steps>
 
 <Frame caption="When a standard has deployment options, they appear under their tier above the status choices.">
-  <img src="/images/product/standards-deployment-options-menu.png" alt="Column menu with a deployment option listed under its tier, followed by Deployed, option not specified, Mark In Progress, Mark Not Started, Mark N/A and Mark Declined." width="440" />
+  <img
+    src="/images/product/standards-deployment-options-menu.png"
+    alt="Column menu with a deployment option listed under its tier, followed by Deployed, option not specified, Mark In Progress, Mark Not Started, Mark N/A and Mark Declined."
+    width="440"
+  />
 </Frame>
 
 **Deployed — option not specified** clears the selected option for the affected companies. Other statuses can keep an earlier option, so check it when you mark records Deployed again.
 
+**Mark Below Plan** is available in both bulk menus without deployment options. It records an outstanding gap for applicable required standards. To clear it, choose another Standards status for the same scope.
+
 ## What a bulk change updates
 
-- Each affected record gets the new status, and its linked Planner item gets the matching status. Deployed becomes Completed. N/A and Declined become Cancelled. In Progress and Not Started keep their names.
+- Each affected record gets the new status, and its linked Planner item gets the matching status. Deployed becomes Completed. N/A and Declined become Cancelled. In Progress and Not Started keep their names. Manual Below plan becomes Not Started.
 - A bulk change can replace On Hold or Pending Approval on linked Planner items.
 - Bulk changes keep the notes stored on Standards records.
 - For a standard [tracked by site](/user-guides/msp-tools/read-standards-matrix#show-sites), the new status is set on every site of each affected company.
@@ -90,34 +105,39 @@ If a bulk change fails, a toast reads **Failed to update standards** and the cel
 
 ## Troubleshooting
 
-| Problem | What to do |
-| --- | --- |
-| A company I searched out was changed | Column actions ignore the search. Set the correct status on that company, one cell at a time. |
-| An excluded company did not change | Column actions skip excluded companies. Use its row menu. |
-| A cell did not change | The standard does not apply to that company. Hover the cell to read the rule. |
+| Problem                                 | What to do                                                                                                    |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| A company I searched out was changed    | Column actions ignore the search. Set the correct status on that company, one cell at a time.                 |
+| An excluded company did not change      | Column actions skip excluded companies. Use its row menu.                                                     |
+| A cell did not change                   | The standard does not apply to that company. Hover the cell to read the rule.                                 |
 | Planner items still show the old status | Reload, then ask an administrator to run [Sync Standards to companies](/user-guides/settings/sync-standards). |
-| **Failed to update standards** appears | Check Planner Write permission and active billing, reload, then retry. |
+| **Failed to update standards** appears  | Check Planner Write permission and active billing, reload, then retry.                                        |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="How do I change every standard for one company?">
-    Right-click the company name, or click its three-dot button, and use **Mark all standards as**.
+    Right-click the company name, or click its three-dot button, and use **Mark
+    all standards as**.
   </Accordion>
   <Accordion title="How do I change one standard for several companies?">
     Right-click the standard's column header and use **Mark all companies as**.
   </Accordion>
   <Accordion title="Does the company search limit a column action?">
-    No. A column action includes loaded, non-excluded companies the search hides.
+    No. A column action includes loaded, non-excluded companies the search
+    hides.
   </Accordion>
   <Accordion title="Does the row action change only required standards?">
-    No. It changes every applicable standard in the row, including optional ones and one-of group members.
+    No. It changes every applicable standard in the row, including optional ones
+    and one-of group members.
   </Accordion>
   <Accordion title="Can one column action set the same option for every company?">
-    Yes. Choose an option in the column menu. It marks the affected records Deployed with that option.
+    Yes. Choose an option in the column menu. It marks the affected records
+    Deployed with that option.
   </Accordion>
   <Accordion title="Is there a confirmation?">
-    No. Choosing a status saves it. Press **Escape** or click outside the menu to cancel before you choose.
+    No. Choosing a status saves it. Press **Escape** or click outside the menu
+    to cancel before you choose.
   </Accordion>
   <Accordion title="Does the company-row menu choose an option for every standard?">
     No. Set each standard's option one cell at a time afterward.
@@ -126,7 +146,8 @@ If a bulk change fails, a toast reads **Failed to update standards** and the cel
     No. The matrix can save while a linked Planner update fails. Check both.
   </Accordion>
   <Accordion title="Do bulk changes erase Standards notes?">
-    No. Bulk and single-cell status changes both keep the notes stored on Standards records.
+    No. Bulk and single-cell status changes both keep the notes stored on
+    Standards records.
   </Accordion>
 </AccordionGroup>
 
