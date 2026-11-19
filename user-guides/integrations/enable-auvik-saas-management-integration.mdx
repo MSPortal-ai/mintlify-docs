@@ -1,10 +1,10 @@
 ---
 title: "Connect Auvik SaaS Management"
-description: "Match your Auvik SaaS Management clients to companies and see each company's SaaS applications, usage and contract spend."
+description: "Match your Auvik SaaS Management clients to companies and see their SaaS applications, usage and contract spend in Cloud."
 icon: 'cloud'
 ---
 
-Connect Auvik SaaS Management to see the SaaS applications each client uses. MSPortal reads the clients in your Auvik SaaS Management account, you match them to companies, and each matched company's page shows its applications, how many people used them this month, their risk, and the spend recorded on their contracts.
+Connect Auvik SaaS Management to see the SaaS applications each client uses. MSPortal reads the clients in your Auvik SaaS Management account, you match them to companies, and **Cloud > Applications** lists every matched company's applications, how many people used them this month, their risk, and the spend recorded on their contracts.
 
 Auvik SaaS Management is a separate Auvik product from Auvik's network management, so it has its own card. To bring in Auvik sites, network devices and alerts, see [Connect Auvik and review network data](/user-guides/integrations/enable-auvik-integration).
 
@@ -34,17 +34,21 @@ The integration is in beta and available to selected tenants. Setup is for MSP s
   </Step>
 </Steps>
 
-## See a company's SaaS applications
+## See SaaS applications in Cloud
 
-Open a company's page. The **SaaS applications** card shows:
+Open **Cloud** in the sidebar and select **Applications**. When CIPP's Microsoft 365 modules are also connected, choose **SaaS applications** in the switch above the table; otherwise the tab opens on them. The company selector in the top bar sets which companies you see.
 
-- the number of applications Auvik SaaS Management discovered for the company;
+The summary above the table shows, for the selected companies:
+
+- **Discovered apps:** the applications Auvik SaaS Management found;
 - **Used this month:** applications with at least one user in the last month;
+- **High or critical risk:** applications Auvik SaaS Management rates high or critical;
 - **Contract MRR:** the monthly recurring cost recorded on the applications' contracts in Auvik SaaS Management;
-- **Renewing soon:** contracts that renew in the next 90 days;
-- the most used applications this month, with their category, risk and user counts.
+- **Renewals in 90 days:** applications with a contract that renews in the next 90 days.
 
-The card needs the **SaaS applications (Auvik SaaS Management)** permission, which no role has by default. An administrator turns it on per role in **Settings > Users & Roles > Roles**. The card is for MSP staff; company users do not see it.
+The table lists each application with its publisher, company, category, risk, approval status, monthly and total users, contract MRR and next renewal. Search by application, publisher, category or company, filter by company, category or risk, and sort by any column except status. The summary keeps counting every application in the selected companies while you filter the table.
+
+Applications use the Cloud permissions: a role needs read access to both **Cloud** and **Cloud: Applications** in **Settings > Users & Roles > Roles**. They are for MSP staff; company users do not see them.
 
 ## Syncing
 
@@ -58,9 +62,9 @@ The client list and every matched client's applications sync every six hours. A 
 | The test says the username or API key was rejected | Check the username and API key, and that the key belongs to that user. |
 | The test reports a region move | Choose the region it names and test again. |
 | No clients appear | Wait for the first sync to finish, and check that the API user can see your clients in Auvik SaaS Management. |
-| A company's card shows no applications | Match the company's client on **Import or match**, then allow a few minutes for the sync. |
+| A company has no applications in Cloud | Match the company's client on **Import or match**, then allow a few minutes for the sync. |
 | Contract MRR is 0 | MSPortal shows the spend recorded on contracts in Auvik SaaS Management. Add contracts there to see spend. |
-| The card does not appear | Check that your role has the **SaaS applications (Auvik SaaS Management)** permission. |
+| **Applications** or **SaaS applications** does not appear in Cloud | Check that your role has read access to both **Cloud** and **Cloud: Applications**. |
 
 **Disconnect…** in **More actions** removes the stored credentials, your client matches and the SaaS application data in MSPortal. It does not change anything in Auvik.
 
