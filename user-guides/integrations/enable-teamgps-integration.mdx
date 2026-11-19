@@ -1,0 +1,74 @@
+---
+title: "Configure TeamGPS Integration"
+description: "Connect TeamGPS, match the companies your CSAT reviews name, and see TeamGPS ratings in CSAT dashboards, reports and the review queue."
+icon: 'face-smile'
+---
+
+Connect TeamGPS to bring your CSAT reviews into MSPortal. Each answered review becomes a CSAT rating that appears in the CSAT dashboards, reports, technician performance, the assistant and the CSAT review queue, beside your other CSAT sources.
+
+Setup is for MSP staff with permission to manage integrations. MSPortal only reads from TeamGPS: it never creates, edits or deletes anything there.
+
+## Before you start
+
+You need a TeamGPS Public API key. A TeamGPS admin opens **Admin Settings › Integrations › Public API's**, turns the Public API on and generates a key.
+
+TeamGPS keeps one key per account, and generating a new key replaces the old one. If another tool already reads TeamGPS with a key, give MSPortal that same key rather than generating a new one, or the other tool stops working.
+
+## Connect and match companies
+
+<Steps>
+  <Step title="Enter and test the key">
+    Open **Settings > Integrations**, select **TeamGPS** and open **Connect**. Paste the **Public API key** and click **Test connection**. A successful test shows how many answered reviews the key can read.
+  </Step>
+  <Step title="Save the connection">
+    Click **Save and continue**. MSPortal starts reading your reviews in the background.
+  </Step>
+  <Step title="Match companies">
+    Open **Import or match companies**. Each company a TeamGPS review names appears here with its review count. TeamGPS identifies companies by name only, so quick match suggests matches by name similarity against your MSPortal companies and the companies linked to your PSA. Review the suggestions before you apply them, or match each company yourself, or import it as a new company.
+
+    Saved matches also attach existing ratings to the chosen company, so they appear in that company's dashboards and reports.
+  </Step>
+  <Step title="Review and finish">
+    Open **Review**, check each task and select **Finish setup**.
+  </Step>
+</Steps>
+
+<Note>
+If you sent us your TeamGPS key before the sync was available, you do not need to enter it again. Open the TeamGPS connection and continue from **Import or match companies** once the first sync has listed your companies.
+</Note>
+
+## How TeamGPS ratings appear
+
+- **Scale:** TeamGPS's three ratings map to a 3-point scale: Negative is 1, Neutral is 2 and Positive is 3.
+- **Answered reviews only:** TeamGPS also lists every survey it sent that was never answered. Those are not imported, so they do not count toward scores.
+- **Companies:** a rating appears under a company only after its TeamGPS company is matched. Unmatched ratings are kept and attach as soon as you save the match.
+- **Technicians:** TeamGPS lists each ticket's team members with their PSA member identifier. A rating credits the first internal team member who matches exactly one technician in your PSA by identifier, email or name.
+- **Tickets:** ratings link to the PSA ticket TeamGPS names (for example, the ConnectWise ticket number).
+- **Review queue:** TeamGPS is a review-queue source. Ratings below your review threshold enter the CSAT review queue like your other CSAT sources. You can turn the source on or off in the review queue settings.
+- **Changes in TeamGPS:** a rating or comment changed in TeamGPS updates on the next sync.
+
+Only CSAT reviews are synced. TeamGPS CES, NPS, custom surveys and employee data are not imported.
+
+## Syncing
+
+New and changed reviews sync every two hours. A full read of every answered review runs weekly and refreshes the company list. Each page of reviews is saved as it is read, so a sync that is interrupted continues where it stopped. To sync sooner, open the connection's **More actions** menu and select **Run sync**.
+
+## Manage or troubleshoot the connection
+
+| Symptom | What to check |
+| --- | --- |
+| The connection test fails with "Invalid API key" | Check that the key was copied whole, and that nobody generated a newer key in TeamGPS since. |
+| The connection test says the Public API is not active | Ask a TeamGPS admin to turn the Public API on under **Admin Settings › Integrations › Public API's**. |
+| No companies appear | Wait for the first sync to finish. Companies appear only once an answered review names them. |
+| A company has reviews but no score in dashboards | Match the company on **Import or match companies**. |
+| Ratings do not credit technicians | Check that the technician's PSA member identifier or email in TeamGPS matches one technician in your PSA, and that you have a single active PSA connection. |
+| Counts differ from TeamGPS | New reviews arrive on the next two-hourly sync. Surveys that were sent but never answered are not counted. |
+| Controls are unavailable | Ask an MSP administrator to check your integration management permission. |
+
+**Disconnect…** in **More actions** removes the stored key, your company matches and the TeamGPS ratings in MSPortal. It does not change anything in TeamGPS. To stop MSPortal's access entirely, also generate a new key in TeamGPS (and give it to any other tool that uses the old one).
+
+## Related guides
+
+- [Integrations](/user-guides/integrations/index)
+- [Company mapping and imports](/user-guides/integrations/import-companies)
+- [Integration troubleshooting](/user-guides/integrations/faq)
