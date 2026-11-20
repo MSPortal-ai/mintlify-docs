@@ -1,142 +1,80 @@
 ---
-title: 'Understand Planner Analytics charts'
-description: 'Read health, risk, expected value, pipeline, resource and client commitment panels.'
-icon: 'chart-pie'
+title: 'Planner Analytics charts and client coverage'
+description: 'Read the quarterly forecast, find work needing attention, and check where client roadmaps are missing details.'
+icon: 'chart-column'
 ---
 
-This guide explains how each Planner Analytics panel is calculated, so you can read the charts correctly. It is for MSP staff with Manage Planner.
+Open **Planner Menu > Analytics** with **Manage Planner**. Use **Overview** to explore work by quarter, status and type. Use **Clients** to compare roadmaps for the clients in the company selector.
 
-## Before you start
+<Note>Branch preview. This guide shows the upcoming Planner Analytics page.</Note>
 
-- You need **Manage Planner**. Company users and staff with only Read or Write Planner cannot open Analytics.
-- Open **Planner Menu > Analytics** and set the company selector, **Currency**, **Cost type** and period first. Every panel uses that filtered data. See [Read and export Planner Analytics](/user-guides/planner/read-analytics).
-- Use the **Dashboard** and **Pipeline** tabs in the page header to switch between panels. Switching tabs does not change any item.
+## Forecast by quarter
 
-<Frame caption="Dashboard and Pipeline use the same Analytics filters.">
-  <img src="/images/product/planner-analytics-tabs.png" alt="Planner Analytics tabs: Dashboard selected, with Pipeline alongside." width="350" height="74" />
+Each column groups dated items by due date, or by start date when the due date is empty. The colored segments split the column by status category. Completed work is included. Cancelled work is excluded. **Show** sets the column height to one-time cost, monthly recurring cost or item count.
+
+The current quarter appears in bold. The chart shows up to four quarters before it and seven after it, trimming empty quarters at the ends. **Earlier** and **Later** collect dated work beyond that window. Select a column to focus the page on its entire quarter or range.
+
+The strip below the chart counts open items with neither date, even when a period is selected. In a cost view it also shows their cost in the selected measure. Select **Show them** to see the undated work.
+
+<Frame caption="Branch preview. Compare quarterly costs with the count and cost of items in each status.">
+  <img src="/images/product/planner-analytics-forecast-status.png" alt="Quarterly one-time costs beside item counts, percentages and costs by status." width="1895" height="522" />
 </Frame>
 
-## Dashboard: Project Health Score
+## By status
 
-**Overall Health** combines four measures and leaves out Cancelled work.
+Each row uses the exact status name in the configured Planner status order, including custom statuses. The count and percentage show how many of all matching items have that status. This includes completed and cancelled items. In a cost view, the row also shows the amount for that status. Select a status name to focus on its items.
 
-| Measure | Weight | What it measures |
-| --- | --- | --- |
-| On-Time Delivery | 35% | The share of items that are not overdue. |
-| Completion Rate | 30% | Completed items divided by non-cancelled items. It is not weighted by Business Value. |
-| Success Probability | 20% | The average probability of unfinished items, with 50% when unset and 100% when everything is completed. |
-| Work Distribution | 15% | The In Progress share of unfinished work, scaled by 150% and capped at 100%. |
+## Needs attention
 
-The gauge shows **Healthy** at 75% or above, **At Risk** from 50% to below 75%, and **Critical** below 50%. These are planning indicators. They are not a service-level or compliance rating.
+Choose a group to see the items that need follow-up. Dates use the MSP’s time zone.
 
-An item is overdue when its due date is before today and its status is not Completed or Cancelled.
-
-The **Healthy**, **At Risk** and **Critical** item buttons use item rules. Completed is Healthy. Overdue, On Hold or probability below 30% is Critical. Otherwise a probability of 60% or more is Healthy and the rest are At Risk. The **Overdue** button narrows to overdue items. Clicking a button filters the analysis.
-
-The Completion Rate inside this panel is a plain count. The headline **Completion Rate** is weighted by Business Value, so the two can differ.
-
-## Dashboard: Risk Matrix
-
-The Risk Matrix leaves out Completed and Cancelled work. High impact means High or Medium Business Value, or a cost above 10,000 in the selected currency and cost type.
-
-| Category | Probability | Impact |
-| --- | --- | --- |
-| High Risk | Below 50% | High |
-| Opportunity | 50% or above | High |
-| Low Priority | Below 50% | Low |
-| Monitor | 50% or above | Low |
-
-Click a quadrant to filter the analysis. A missing probability counts as 50%.
-
-A Risk Matrix category is not the same as a Project Health category. Overdue work can be Critical for health and still sit in Opportunity because of its probability and impact.
-
-## Dashboard: expected value and High Risk Items
-
-**EV by Status** and **EV by Quarter** compare the **Expected** amount (cost times probability) with the **Planned** cost. Completed work counts its full cost and Cancelled work is left out. Click a bar to filter by that status or quarter.
-
-Quarters are calendar quarters of an item's due date, or of its start date when it has no due date. Items with neither date appear in **Unscheduled**, including their costs and hours. Click that bucket to analyze the same undated work.
-
-**High Risk Items** lists up to five unfinished items that have a cost above zero, ranked by cost times (1 minus probability). This is different from the Risk Matrix quadrants. Click an item to narrow Analytics to it. Use List View to open and edit it.
-
-<Frame caption="Undated work has an Unscheduled bucket in EV by Quarter.">
-  <img src="/images/product/planner-audit-analytics-unscheduled-desktop.png" alt="Expected value charts with a separate Unscheduled bucket." width="1440" height="960" />
-</Frame>
-
-## Pipeline: status and resources
-
-**Status Pipeline** groups non-cancelled work into Not Started, Pending Approval, In Progress and Completed. Other statuses such as On Hold show separately as **Other Statuses**. Click a stage to narrow the analysis. The arrows show status order. They are not historical conversion rates.
-
-Its Completion Rate is the plain share of non-cancelled work that is Completed. **Blocked Items** counts On Hold items. Stage values and hours use the selected cost type and estimated effort.
-
-**Resource Allocation** is a heatmap of estimated hours by quarter and status, leaving out Cancelled work. Darker cells hold more hours compared with the largest cell in the filtered chart. It does not show technician availability or a capacity limit. Click a cell to filter by its quarter and status. **No hours allocated to display** means the matching work has zero estimated hours.
-
-<Frame caption="Resource Allocation separates Unscheduled from calendar quarters.">
-  <img src="/images/product/planner-audit-pipeline-unscheduled-desktop.png" alt="Resource Allocation heatmap with a separate Unscheduled column." width="1440" height="960" />
-</Frame>
-
-## Pipeline: Client Commitment Tracker
-
-This panel leaves out Cancelled work, then groups the filtered work by company and shows up to ten companies, ordered by cost in the selected cost type.
-
-- **Committed** is the sum of that company's non-cancelled Planner estimates. It does not mean the client approved anything or signed a commitment.
-- **Delivered** is the cost of Completed items. **Delivery Rate** is Delivered divided by Committed, or zero when Committed is zero.
-- **Upcoming** counts unfinished, non-cancelled items due in the next 30 days.
-- Click a company card to narrow Analytics to that company.
-
-The company badge uses its own score. It starts at 100, subtracts 10 for each overdue item and 5 for each unfinished item below 50% probability, then adds 10 for a delivery rate above 75% or subtracts 20 for one below 25%. The result stays between 0 and 100. **Good** is 75 or more, **Fair** is 50 or more and **Poor** is below 50. This is not the Project Health gauge, and it does not check invoices or actual effort.
-
-<Frame caption="Client names, health badges and committed amounts fit on phones.">
-  <img src="/images/product/planner-audit-client-commitments-mobile.png" alt="Client Commitment Tracker cards on a phone with names and amounts on separate lines." width="390" height="844" />
-</Frame>
-
-## Clear a chart selection
-
-Click **Clear** in the toolbar to remove the chart selection and keep your other filters. If a selection matches nothing, click **Clear Filter**. A new chart selection replaces the old one. Nothing is saved as a report, and the underlying work does not change.
-
-## Troubleshooting
-
-| Problem | What to do |
+| Group | Items shown |
 | --- | --- |
-| A panel says there is no active data | Check the period, status and type filters and the company selector. Completed and Cancelled work is left out of some panels. |
-| The two Completion Rate figures differ | The headline figure is weighted by Business Value. The Health panel uses a plain count. |
-| An item is Critical in Health but Opportunity in the Risk Matrix | The two panels use different rules. This is expected. |
-| An item appears in Unscheduled | It has neither a due date nor a start date. Choose **All Time** to include undated work. |
-| Fewer companies show in Client Commitment Tracker than your selection | It shows up to ten companies, after the Analytics filters. |
+| **Overdue** | Open items with a due date before today. The oldest due date comes first. |
+| **Due soon** | Open items due today through 30 days from today, inclusive. |
+| **Awaiting approval** | Items in the Pending Approval status category, including custom statuses in that category. |
+| **On hold** | Items in the On Hold status category. |
 
-## Frequently asked questions
+Select an item title to open it in Planner. If the group has more than six items, select **Show all** to expand the list.
 
-<AccordionGroup>
-  <Accordion title="Is Project Health Score the same as the headline Completion Rate?">
-    No. Health combines four measures and uses a plain completion count. The headline rate is weighted by Business Value.
-  </Accordion>
-  <Accordion title="What makes an item Critical in the health panel?">
-    Being unfinished and overdue, On Hold or below 30% probability. Completed items are Healthy.
-  </Accordion>
-  <Accordion title="What is the Risk Matrix probability boundary?">
-    Below 50% is low probability. 50% or above is high probability.
-  </Accordion>
-  <Accordion title="Does High Risk Items list every High Risk quadrant item?">
-    No. It lists up to five unfinished items with a cost, ranked by cost times (1 minus probability).
-  </Accordion>
-  <Accordion title="Does clicking a High Risk Items title open the editor?">
-    No. It narrows Analytics to that item. Open it from List View.
-  </Accordion>
-  <Accordion title="Do the pipeline arrows show historical conversion?">
-    No. They show the current spread of work by status.
-  </Accordion>
-  <Accordion title="Does Resource Allocation show technician capacity?">
-    No. It groups estimated Planner hours by quarter and status.
-  </Accordion>
-  <Accordion title="Does Committed mean the client approved the amount?">
-    No. It sums Planner estimates for that company.
-  </Accordion>
-  <Accordion title="Is the Good, Fair or Poor badge the Overall Health gauge?">
-    No. The badge uses overdue items, low-probability work and delivery rate.
-  </Accordion>
-</AccordionGroup>
+<Frame caption="Branch preview. Select an overdue item to open it in Planner.">
+  <img src="/images/product/planner-analytics-attention.png" alt="The Overdue group lists Acme Corporation’s Annual Insurance Review with its cost and days overdue." width="1256" height="245" />
+</Frame>
+
+## Open work by type
+
+The bars rank types by the selected **Show** measure for open items. When no open item has a positive amount for the selected cost measure, the bars rank types by item count instead. **No type** groups items without a type. Select a bar to focus the page on that type.
+
+## Planning data
+
+Each row shows how many open items have a detail filled in, out of all open items in view. A bar turns amber when the share is below 50%. Select a field name with missing entries to focus on the open items that need that detail.
+
+| Field | What counts as filled in |
+| --- | --- |
+| **Cost** | A positive one-time or monthly recurring amount, including annual costs spread over 12 months. |
+| **Due or start date** | Either date is present. |
+| **Owner** | An owner is assigned. |
+| **Hours** | Estimated hours are greater than zero. |
+
+## Clients
+
+The **Clients** tab lists every client in the current company scope and currency, including clients with **No open items**. **Global View** leaves out companies hidden from Global View. With a selection chip active, the table shows only clients represented by matching, non-cancelled items. Remove the chip to check coverage across the whole scope.
+
+| Column | How to read it |
+| --- | --- |
+| **Roadmap**, **Open**, **Awaiting approval** | Whether any open items match, how many are open, and how many are in the Pending Approval category. |
+| **One-time cost**, **Monthly recurring** | The client’s one-time and monthly recurring totals for open items. |
+| **Overdue**, **Due in 90 days** | Open items past their due date, and open items due today through 90 days from today. |
+| **Unscheduled**, **Completed** | Open items with neither date, and items in the Completed category. These columns follow the page’s period. |
+| **Next due** | The earliest open due date today or later. |
+
+Use the table’s column filters to compare a subset of clients. **Total** follows those filters. Select a client name to open **Overview** with a removable client chip.
+
+<Frame caption="Branch preview. Select a client name to review its open work in Overview.">
+  <img src="/images/product/planner-analytics-clients.png" alt="Acme Corporation has 36 open items, including one awaiting approval." width="1235" height="233" />
+</Frame>
 
 ## Related guides
 
 - [Read and export Planner Analytics](/user-guides/planner/read-analytics)
 - [Plan costs and hours](/user-guides/planner/plan-costs-and-hours)
-- [Find Planner items in List View](/user-guides/planner/find-planner-items)
