@@ -1,6 +1,6 @@
 ---
 title: 'Read and export Planner Analytics'
-description: 'Filter Planner items, read open costs and deadlines, and export the items behind the figures.'
+description: 'Filter Planner items, read open costs and deadlines, and export matching items or client totals.'
 icon: 'chart-simple'
 ---
 
@@ -28,8 +28,8 @@ Use Planner Analytics to answer three questions before a client review. How much
   </Step>
 </Steps>
 
-<Frame caption="Branch preview. Check the five summary figures alongside the active filters.">
-  <img src="/images/product/planner-analytics-summary.png" alt="Acme Corporation has 36 open items, $27,150 in open one-time cost and $436 in monthly recurring cost." width="1896" height="197" />
+<Frame caption="Branch preview. Read Acme Corporation’s open costs and deadlines alongside the filters.">
+  <img src="/images/product/planner-analytics-summary.png" alt="Five summary figures above Period, Status, Type, Show and Export." width="2880" height="262" />
 </Frame>
 
 ## Read the summary
@@ -40,45 +40,40 @@ Use Planner Analytics to answer three questions before a client review. How much
 | **Open one-time cost** | The sum of one-time cost lines on open items. The amount underneath is the one-time cost of completed items. |
 | **Monthly recurring** | Monthly cost lines on open items, plus their annual cost lines divided by 12. For example, 100 per month and 600 per year add 150 to this figure. |
 | **Overdue** | Open items with a due date before today in the MSP’s time zone. Start dates never make an item overdue. The count underneath covers items due today through 30 days from today. |
-| **Unscheduled** | Open items with neither a due date nor a start date. This count follows every item filter except **Period**. The amount underneath is their one-time cost. |
+| **Unscheduled** | Open items with neither a due date nor a start date. This figure looks across all quarters. With a period selected, **All time ·** appears before the undated amount. The amount follows **Monthly recurring** when selected and otherwise shows one-time cost. |
 
-## Focus on matching items
+Amounts of 100 or more display in whole currency units. Smaller amounts retain cents when the currency uses them.
 
-<Steps>
-  <Step title="Select a figure or chart">
-    Select **Overdue** or **Unscheduled** when its count is above zero. You can also select a forecast column, status name or type bar. A chip beside the filters identifies the selection. Selecting **Unscheduled** switches **Period** to **All time**.
-  </Step>
-  <Step title="Review the selection">
-    The figures and export now use the matching items. To compare clients, open **Clients**. Select a client name to return to **Overview** with that client in focus.
-  </Step>
-  <Step title="Remove the selection">
-    Select the chip’s × to clear it. A new chart selection replaces the previous chip. The period, status, type and currency controls keep their current values.
-  </Step>
-</Steps>
+## Find the items behind a figure
+
+On **Overview**, select a forecast quarter, **Overdue** or **Unscheduled** to narrow the page. Other ways to add a filter chip are to select a client on **Clients**, open a full **Needs attention** group, or select a missing field in **Planning data**. Selecting a status row or type bar changes the **Status** or **Type** toolbar filter directly.
+
+Chips combine. For example, select a quarter and then **No owner** to find open items in that quarter that need an owner. A different quarter replaces the selected quarter. **Unscheduled** replaces a quarter and switches **Period** to **All time**. Choosing a dated period removes **Unscheduled**. Use the × on a chip to remove it, or **Clear all** when two or more chips are active. Clearing chips preserves your toolbar filters.
+
+Open **Items** to see one row for each item matching the page filters and chips, including completed and cancelled items when they match. Select a title under **Item** to open it in Planner. **Due or start** shows the due date when available and the start date otherwise. In a single-company view the table hides **Client**. The footer counts the rows and totals **One-time cost** and **Monthly recurring**, including any column filters you apply inside the table.
+
+<Frame caption="Branch preview. The Overdue chip carries into Items, with the most recently missed due date first.">
+  <img src="/images/product/planner-analytics-items.png" alt="Acme Corporation’s overdue item titles, statuses, types, dates and costs." width="2478" height="772" />
+</Frame>
 
 For the rules behind each panel, see [Planner Analytics charts and client coverage](/user-guides/planner/understand-analytics-charts).
 
-## Export the items to CSV
+## Export to CSV
 
-<Steps>
-  <Step title="Check the scope">
-    Check the company selector, currency, period, status, type and any selection chip. Remove the chip if you want the wider export.
-  </Step>
-  <Step title="Select Export">
-    When at least one item matches, select **Export**. The downloaded CSV contains one row per matching item, including items with zero cost.
-  </Step>
-</Steps>
+**Overview** and **Items** export one row per item matching the page filters and chips, including items with zero cost. Column filters inside the Items table affect its footer. **Export** still downloads the full set selected by the page filters and chips.
 
-The columns are **Title**, **Client**, **Status**, **Type**, **Start date**, **Due date**, **One-time cost**, **Monthly cost**, **Annual cost**, **Hours**, **Owner** and **ISO 4217** (the currency code). All three cost columns appear for every **Show** measure. **Monthly cost** and **Annual cost** each contain the sum of that item’s lines at the original frequency.
+The item CSV columns are **Title**, **Client**, **Status**, **Type**, **Start date**, **Due date**, **One-time cost**, **Monthly cost**, **Annual cost**, **Hours**, **Owner** and **ISO 4217** (the currency code). All three cost columns appear for every **Show** measure. **Monthly cost** and **Annual cost** sum the item’s cost lines at their original frequency.
+
+On **Clients**, select **Export** for one row per visible client. The file follows the client table’s column filters and **No open items** selection. It contains the client table columns plus **ISO 4217**.
 
 ## Troubleshooting
 
 | Problem | What to check |
 | --- | --- |
 | Analytics opens the timeline | Check that the staff role has **Manage Planner**. |
-| An expected item is missing | Check the company selector and currency. Remove the chip, choose **All time**, and set **Status** and **Type** to **All**. Check List View for archived items. |
+| An expected item is missing | Check the company selector and currency. Remove active chips, choose **All time**, and set **Status** and **Type** to **All**. Check List View for archived items. |
 | A quarter shows no items but **Unscheduled** is above zero | Those open items have neither date. Select **Unscheduled** to see them across all time. |
-| **Export** is unavailable | No items match the current filters. Widen the selection. |
+| **Export** is unavailable | The current tab has no matching rows. Widen the selection. |
 | The page shows a loading error | Select **Retry** to reload the data before reading the totals. |
 
 ## Frequently asked questions
@@ -89,9 +84,6 @@ The columns are **Title**, **Client**, **Status**, **Type**, **Start date**, **D
   </Accordion>
   <Accordion title="Why is an item with a past start date missing from Overdue?">
     Only a past due date makes an open item overdue. An item due today appears under **Due soon**.
-  </Accordion>
-  <Accordion title="Which filters does Export use on the Clients tab?">
-    **Export** uses the page filters and selection chip. Column filters inside the client table only narrow the table. List View filters belong to List View.
   </Accordion>
 </AccordionGroup>
 
