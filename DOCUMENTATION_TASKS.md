@@ -279,3 +279,11 @@ The app's reviewed empty, loading, error, and dark-mode captures remain in its P
 - [ ] Verify device-read access and company scope, stored-history retention after failed/no-product responses, replacement by a matching product with no agreements, stale-history hiding after an identity correction, and summary-date preservation in the live workflow. Reconcile the guide with the observed behavior.
 - [ ] Capture and review production desktop/mobile images without developer indicators or sensitive identifiers. Replace the two stable assets above and remove branch-preview notices/captions only after production verification.
 - [ ] Keep this follow-up open until live verification and replacement captures are complete. Preview rendering and docs validation do not prove database persistence or production availability.
+
+## Ticket contact override release follow-up (2026-11-19)
+
+The ticket template guides on app branch `t3/6aa99e05` document the new User-field **Override Contact** option and the renamed **Label for formatted output**. They are marked as branch previews until the app change is confirmed live. The reviewed app capture `screenshots/cw-contact/override-enabled-desktop.png` supplies the stable docs asset `images/product/ticket-template-contact-output-preview.png`, a lossless crop of the User field editor, used by the full template and ticket-description-layout guides. The earlier UDF mapping screenshot still shows the old output-label name; its guide calls out that difference.
+
+- [ ] After the app release, verify saving one contact override, choosing a different contact from the submitter, and receiving that contact on the PSA ticket in MSPortal Demo.
+- [ ] Verify the renamed output label and the matching field-setting switches in production at desktop and phone widths.
+- [ ] Replace the preview editor image and the earlier UDF mapping image with reviewed production captures, then remove the branch-preview notes.

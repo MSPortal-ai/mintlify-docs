@@ -33,6 +33,35 @@ Select a device's **Name** in **Devices** to open its details. **Overview** show
 
 A protection badge or recent inventory entry does not by itself establish that every security control is healthy. Use the relevant reported evidence and ask your provider about missing or unexpected values.
 
+<Note>
+  Branch preview: the **Tickets** tab and the placement of Asio's **Friendly
+  Name** described below are pending release. The screenshots use synthetic
+  sample data, not customer records.
+</Note>
+
+When Asio supplies a **Friendly Name**, it is the first field in the **Overview**
+grid. A separate provider details box is absent when the friendly name would be
+its only content; provider links or other details can still appear there.
+
+<Frame caption="Synthetic branch preview: Asio Friendly Name at the start of Overview on desktop.">
+  <img
+    src="/images/product/devices-friendly-name-desktop.png"
+    alt="Synthetic device Overview with Friendly Name first and no separate provider details box"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: the same Overview on a phone.">
+  <img
+    src="/images/product/devices-friendly-name-mobile.png"
+    alt="Synthetic phone device Overview showing Friendly Name before the other fields"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
 ## Purchase date and device age
 
 **Purchase Date** appears in the Overview when one is recorded. The line under it shows where the date came from: **Entered manually**, or **From** followed by the source, such as ConnectWise PSA, Autotask, Halo PSA, IT Glue or ConnectWise RMM. Apple and Dell warranty lookups can also supply it.
@@ -126,6 +155,106 @@ When your MSP connects CIPP and the device has a matching Intune record, the Ove
 
 The note under the section gives the device name Intune reports, which can differ from the RMM name. The section is absent when CIPP has no Intune record for the device; that is not a compliance result. To list devices that no RMM agent reports, filter **Devices** by **Not in RMM**; see [Find devices missing from your RMM](/user-guides/devices/find-devices#find-devices-missing-from-your-rmm).
 
+## Review linked tickets
+
+<Note>
+  Branch preview: the ticket visibility rules below are pending release. The
+  screenshots below use synthetic data; production verification and captures
+  will follow release.
+</Note>
+
+The **Tickets** tab requires an active ConnectWise PSA connection and **Read
+Devices** and **Read Tickets** permissions. When you open a device, MSPortal checks for linked
+tickets. **Tickets** appears beside **Overview** only if the device has at least
+one linked ticket you can see for the selected companies.
+
+1. Open the device from **Devices** and select **Tickets** beside **Overview**.
+2. Use the column filters and sorting controls to find a ticket. On a phone,
+   open **Filters** above the ticket cards.
+3. On desktop, choose **10**, **25**, or **50** in **Rows per page**. Use
+   **Previous** and **Next** to move through the loaded results.
+4. Select a ticket's subject or row to open the ticket in MSPortal.
+
+| Column       | What it shows                                                        |
+| ------------ | -------------------------------------------------------------------- |
+| **Ticket #** | The ticket number                                                    |
+| **Subject**  | The ticket summary, or **Untitled ticket** when unavailable          |
+| **Status**   | The ConnectWise status                                               |
+| **State**    | Whether the ticket is **Open** or **Closed**                         |
+| **Opened**   | When the ticket was opened                                           |
+| **Updated**  | When it was last updated                                             |
+| **Closed**   | The closed date; hidden by default and available through **Columns** |
+
+The panel widens on desktop for the table. On a phone, tickets appear as cards
+inside the panel; scroll the cards and use the pagination controls at the bottom.
+
+<Frame caption="Synthetic branch preview: the Tickets tab with filters and open and closed tickets.">
+  <img
+    src="/images/product/devices-linked-tickets-desktop.png"
+    alt="Synthetic device Tickets tab with Ticket number, Subject, Status, State, Opened and Updated columns"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: ticket cards and Filters on a phone.">
+  <img
+    src="/images/product/devices-linked-tickets-mobile.png"
+    alt="Synthetic device Tickets tab on a phone with wrapped subjects and pagination"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+### Result limits and missing tickets
+
+The tab loads **up to 100 linked tickets**, with open tickets first and newer
+tickets first within each group. Filters, sorting, and pagination apply only to
+those loaded tickets. When more exist, a notice such as **Showing 100 of 140
+linked tickets** gives the loaded count and total. **Next** does not load tickets
+beyond the first 100; use the main **Tickets** page to find other tickets.
+
+<Frame caption="Synthetic branch preview: page 2 within the 100 loaded tickets, with 140 linked tickets in total.">
+  <img
+    src="/images/product/devices-many-tickets-desktop.png"
+    alt="Synthetic desktop ticket table showing 100 of 140 linked tickets and page 2 of 10"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: the same result limit and pagination on a phone.">
+  <img
+    src="/images/product/devices-many-tickets-mobile.png"
+    alt="Synthetic phone Tickets tab showing 100 of 140 linked tickets with Next and Previous controls"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+You see tickets linked to the device's imported or linked ConnectWise
+configurations, within your ticket and company access. A link added in
+ConnectWise usually appears after the next ticket sync. If nothing else on the
+ticket changed, it can take up to two days. A ticket bundled or merged into a
+parent shows as that parent.
+
+| What you see | What to check |
+| --- | --- |
+| **Tickets** is missing | Check the company selector and both read permissions. If you expect a ticket, ask your MSP to confirm the ConnectWise PSA connection, the ticket’s configuration link, and the latest ticket sync. |
+| Filters show no results | Clear the filters and check the result-limit notice. Filters search only the loaded tickets. |
+
+<Frame caption="Branch preview with sample data. This device has no visible linked tickets, so only Overview appears here.">
+  <img
+    src="/images/product/devices-no-tickets-mobile.png"
+    alt="Reception workstation on a phone with Overview as the only tab"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
 ## Understand the IP location section
 
 **Reported IP Address** and **External IP** serve different purposes. The former may be an internal network address. **IP location** uses the integration-reported external IP to estimate the internet exit point.
@@ -156,6 +285,10 @@ The detail panel can also offer:
 - **IT Glue**, when the portal has an active integration and this device has an IT Glue mapping.
 - **Software**, for MSP staff with device-read access when installed inventory has been confirmed for this device. Review installed versions, lifecycle warnings and **Urgent** and **High** update priorities; see [Software inventory](/user-guides/devices/track-software).
 - **Edit**, when your account has device-management permission.
+- **Backup**, when a backup provider protects this device. For Acronis it shows the status, last backup and next backup. A virtual machine or database backed up through another machine names that machine, such as **via ACME-HV01**. Select it to open that device.
+- **Hosted backups**, on a machine that Acronis backs other workloads up through, such as a Hyper-V host. It lists each virtual machine or database with its status and last backup. Select a name to open that device.
+
+An **Acronis backup** badge in the header shows that Acronis backs the device up. When the backup runs through another machine, the badge names it, for example **via ACME-HV01**, and selecting the name opens that device. Devices are matched to Acronis by machine name within the same company, so a device renamed in only one system shows no badge.
 
 These tabs have separate purposes. A missing integration tab is not a finding that the device is unprotected or undocumented in every system. Ask the MSP to check integration availability, mapping, synchronization, and your access.
 
@@ -234,9 +367,9 @@ If a section fails to load, close and reopen the device after the inventory has 
   </Accordion>
   <Accordion title="Why does the device name differ from the inventory name?">
     Your RMM can give a device a friendly name (NinjaOne's display name, or
-    ConnectWise Asio's friendly name). The panel is titled by that name and shows
-    the underlying device name beside it, so you can identify the same record.
-    You can rename an Asio device; see [Rename a device in your
+    ConnectWise Asio's friendly name). The panel is titled by that name and
+    shows the underlying device name beside it, so you can identify the same
+    record. You can rename an Asio device; see [Rename a device in your
     RMM](/user-guides/devices/add-and-edit-devices#rename-a-device-in-your-rmm).
   </Accordion>
   <Accordion title="Why does Device Age differ from the warranty start?">

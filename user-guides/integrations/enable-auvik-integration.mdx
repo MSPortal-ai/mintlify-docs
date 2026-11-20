@@ -10,15 +10,16 @@ Open **Settings > Integrations**, find the provider in the directory, and open i
 
 ## Before you start
 
-Use an Auvik API service account with read access to tenants, inventory devices, and alert history. Find the region code in your dashboard URL, immediately before `.my.auvik.com`.
+Use an Auvik API service account with read access to tenants, inventory devices, and alert history. You don't need your Auvik region: MSPortal finds it from the API key.
 
 ## Connect and map sites
 
-1. In **Connect**, choose **Auvik region** and enter **Account username** and **API key**.
-2. Select **Test Connection**. After verification, select **Create Integration**. For an existing connection, use **Save connection**.
-3. Continue to **Map sites**. Allow the first sync to discover your sites.
-4. Link each site to its MSPortal company. Several sites may map to one company. Review proposed matches before saving them.
-5. Continue to **Review and import**. Inventory is collected only for mapped sites. At least one mapped site and a successful sync are required to finish setup.
+1. In **Connect**, enter **Account username** and **API key**.
+2. Select **Test connection**. MSPortal tries the key in each Auvik region and shows the one that accepts it. If Auvik doesn't answer from every region, an **Auvik region** picker appears: test again with **Detect automatically**, or choose the region code from your dashboard URL, immediately before `.my.auvik.com`.
+3. Select **Save and continue**. MSPortal saves the detected region with the connection.
+4. Continue to **Map sites**. Allow the first sync to discover your sites.
+5. Link each site to its MSPortal company. Several sites may map to one company. Review proposed matches before saving them.
+6. Continue to **Review and import**. Inventory is collected only for mapped sites. At least one mapped site and a successful sync are required to finish setup.
 
 ## Review and import
 
@@ -31,7 +32,9 @@ Recent alert history covers alerts detected in the last 30 days, including resol
 - **No sites yet:** wait for discovery to finish; large accounts can take a few minutes.
 - **No devices:** verify the site-to-company mapping and run the next sync before importing.
 - **Setup cannot finish:** map at least one site and wait for a successful sync.
-- **Connection rejected:** check the region code, username, API key, and account read permissions.
+- **Every Auvik region rejected the key:** check the username, API key, and account read permissions.
+- **Region couldn't be confirmed:** Auvik didn't answer from every region. Test again in a moment, or choose your region in the picker that appears.
+- **Auvik moved the account to another region:** for a saved connection, enter the API key again and test. If you chose a region yourself, choose the one the test names (for example `ca1.my.auvik.com`).
 
 ## Related guides
 

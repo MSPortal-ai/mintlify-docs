@@ -1,15 +1,15 @@
 ---
-title: "Read Kaseya and Spanning backup health"
-description: "Read workload coverage, trends and customer results for Kaseya SaaS Protection and Spanning Backup."
+title: "Read SaaS backup health"
+description: "Read workload coverage, trends and customer results for Kaseya SaaS Protection, Spanning Backup and ConnectWise SaaS Backup."
 icon: shield-halved
 ---
 
-These reports summarize Microsoft 365 backup health for Exchange, OneDrive, SharePoint and Teams from Kaseya SaaS Protection and Spanning Backup. MSP staff and company users with Backup read access can use them. They are not restore browsers for individual files.
+These reports summarize SaaS backup health: Exchange, OneDrive, SharePoint and Teams from Kaseya SaaS Protection and Spanning Backup, and Microsoft 365, Google Workspace and Entra ID accounts from ConnectWise SaaS Backup through ConnectWise Asio. MSP staff and company users with Backup read access can use them. They are not restore browsers for individual files.
 
 ## Before you start
 
 - You have Backup read access.
-- Kaseya SaaS Protection or Spanning Backup is connected, its feature is turned on for your account, and its customers are mapped to companies.
+- Kaseya SaaS Protection or Spanning Backup is connected, its feature is turned on for your account, and its customers are mapped to companies. For ConnectWise SaaS Backup, ConnectWise Asio is connected with the Backup Dashboard scopes and its companies are matched (see [ConnectWise Asio setup](/user-guides/integrations/enable-connectwise-asio-integration#connectwise-saas-backup)).
 - The company selector shows the companies you want.
 
 ## Open the report
@@ -19,7 +19,7 @@ These reports summarize Microsoft 365 backup health for Exchange, OneDrive, Shar
     Go to **Backup > Microsoft 365**.
   </Step>
   <Step title="Choose the provider">
-    When several providers have data, choose **SaaS Protection** for Kaseya or **Spanning Backup**. With one provider, its report opens directly.
+    When several providers have data, choose **SaaS Protection** for Kaseya, **Spanning Backup** or **ConnectWise SaaS Backup**. With one provider, its report opens directly.
   </Step>
   <Step title="Check the scope">
     Confirm the companies in scope. The header shows how many customers are included.
@@ -47,6 +47,14 @@ Kaseya also shows **Services in initial backup**. Its workload statuses read as 
 
 Spanning uses its own reported workload health and has no initial-backup metric. Do not apply Kaseya's thresholds to Spanning.
 
+ConnectWise SaaS Backup counts protected accounts (a Microsoft 365 tenant, a Google Workspace domain, an Entra ID tenant), not services, and has no initial-backup metric. Each account's health comes from its latest backup job:
+
+| Label | Meaning |
+| --- | --- |
+| **Healthy** | The last backup succeeded within 3 days, or a backup is running and the last success is under 2 days old. |
+| **Needs attention** | The job reported warnings, its last backup is more than 3 days old, or it is running without a success in the last 2 days. |
+| **Critical** | The last backup failed. |
+
 Check individual customer and workload rows even when the overall label is **Healthy**, because a workload can still have no data. A percentage from an old snapshot does not show current protection.
 
 **Last 100% successful backup** is the most recent date every active workload in scope was fully protected. Customers without a date need a separate check. **Last synced** shows when the data was imported, not when a backup ran.
@@ -55,7 +63,7 @@ Check individual customer and workload rows even when the overall label is **Hea
 
 <Steps>
   <Step title="Pick the trend range">
-    Kaseya offers **10 days** and **30 days**. Spanning always shows 7 days.
+    Kaseya offers **10 days** and **30 days**. ConnectWise SaaS Backup offers **7 days** and **30 days**, from daily snapshots that start with its first sync. Spanning always shows 7 days.
   </Step>
   <Step title="Read the lines">
     Hover a point to read its percentage. The lines combine successful-service coverage by workload and day. A line drawn across a gap does not prove a backup ran in it.
@@ -102,3 +110,4 @@ Select **Refresh** to reload the imported report. It does not start a provider s
 - [Read Microsoft 365 backups](/user-guides/backup/read-microsoft-365-backups)
 - [Kaseya SaaS Protection setup](/user-guides/integrations/enable-kaseya-saas-protection-integration)
 - [Spanning Backup setup](/user-guides/integrations/enable-spanning-integration)
+- [ConnectWise Asio setup](/user-guides/integrations/enable-connectwise-asio-integration)

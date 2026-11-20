@@ -1,7 +1,7 @@
 ---
-title: 'Configure ConnectWise Asio Integration'
-description: 'Connect ConnectWise Asio, map companies to companies, and import device inventory'
-icon: 'plug'
+title: "Configure ConnectWise Asio Integration"
+description: "Connect ConnectWise Asio, map companies to companies, and import device inventory"
+icon: "plug"
 ---
 
 ConnectWise Asio (formerly ConnectWise RMM) is a remote monitoring and management platform. This guide is for MSP staff who connect Asio so its companies, devices, hypervisors and network devices appear in MSPortal. On the Asio connection page, the **Setup guide** lists **Connect**, **Choose data**, **Import or match companies**, **Locations** (optional), **Import devices** and **Review**.
@@ -14,7 +14,9 @@ ConnectWise Asio (formerly ConnectWise RMM) is a remote monitoring and managemen
 - ConnectWise PSA keys do not work here. Asio uses its own API Client ID and Client Secret.
 
 <Note>
-The first sync can take hours, or even days, for a large account. Companies appear on **Import or match companies** as they sync, and devices appear in staging as the sync progresses.
+  The first sync can take hours, or even days, for a large account. Companies
+  appear on **Import or match companies** as they sync, and devices appear in
+  staging as the sync progresses.
 </Note>
 
 ## Create API credentials in Asio
@@ -40,8 +42,13 @@ The first sync can take hours, or even days, for a large account. Companies appe
     | Platform - Devices | Read and Write |
     | Platform - Sites | Read |
     | Platform - Tickets | Create, Read and Update |
+    | Backup Dashboard - Read backup jobs | Read (for ConnectWise SaaS Backup) |
+    | Backup Dashboard - Read alarms | Read (for ConnectWise SaaS Backup) |
+
+    The two **Backup Dashboard** scopes are only needed if you use ConnectWise SaaS Backup (SaaS 365 Backup). See [ConnectWise SaaS Backup](#connectwise-saas-backup).
 
     **Platform - Devices** Write lets MSPortal save a device's friendly name back to Asio. Everything else works without it, but renaming a device shows "The RMM didn't accept the new friendly name".
+
   </Step>
   <Step title="Save and copy the credentials">
     Select **Save**. Copy the **Client ID** and **Client Secret** now. Asio does not show them again after you close the dialog.
@@ -62,6 +69,7 @@ The first sync can take hours, or even days, for a large account. Companies appe
     | **Environment** | The region your Asio account runs in: **Production (NA)**, **Production (EU)**, **Production (AU)** or **QA**. |
     | **Client ID** | The Client ID you copied. It must start with the prefix for your environment: NA `0e30`, EU `0e31`, AU `0e32`, QA `0e11`. |
     | **Client Secret** | The matching Client Secret. |
+
   </Step>
   <Step title="Test the connection">
     Select **Test connection**. If it fails, check the environment, the Client ID prefix, the secret and the scopes.
@@ -73,24 +81,33 @@ The first sync can take hours, or even days, for a large account. Companies appe
 
 ## Choose data
 
-Open **Choose data** to pick which data to import. The choices are **Companies**, **Locations**, **Devices**, **Networks**, **Tickets** and **Software**. Changes save as you make them. Turning a category off stops future syncs of it. Turning **Software** off removes that integration's software inventory, and turning it back on starts a new inventory sync. Devices, networks and software use your existing company mappings, so keep **Companies** on to discover new companies to map.
+Open **Choose data** to pick which data to import. The choices are **Companies**, **Locations**, **Devices**, **Networks**, **Tickets**, **Software** and **Backups**. Changes save as you make them. Turning a category off stops future syncs of it. Turning **Software** or **Backups** off removes the data that integration synced for it, after you confirm, and turning it back on starts a new sync. Devices, networks and software use your existing company mappings, so keep **Companies** on to discover new companies to map.
 
 ## Map companies
 
 <Steps>
   <Step title="Open Import or match companies">
-    The list shows each Asio company and whether it is matched. Companies appear after discovery has returned them from Asio.
+    The list shows each Asio company and whether it is matched. Companies appear
+    after discovery has returned them from Asio.
   </Step>
   <Step title="Match companies">
-    Accept a suggested match, or choose the MSPortal company on each row. **Review N suggested matches** opens **Accept suggested matches**, which lists every suggestion at 70% confidence or more with those at 90% or more already selected. Lower the **Auto-select by confidence** slider, as far as 70%, to select weaker suggestions too, untick any pair you want to check yourself, then select **Apply N Matches**. **Ignore** hides an Asio company that is not a client's.
+    Accept a suggested match, or choose the MSPortal company on each row.
+    **Review N suggested matches** opens **Accept suggested matches**, which
+    lists every suggestion at 70% confidence or more with those at 90% or more
+    already selected. Lower the **Auto-select by confidence** slider, as far as
+    70%, to select weaker suggestions too, untick any pair you want to check
+    yourself, then select **Apply N Matches**. **Ignore** hides an Asio company
+    that is not a client's.
   </Step>
   <Step title="Check the saved links">
-    Each accepted match saves immediately. Check that the rows show saved links before you continue.
+    Each accepted match saves immediately. Check that the rows show saved links
+    before you continue.
   </Step>
 </Steps>
 
 <Tip>
-Map Asio companies to companies you already have. **Import company** creates a new MSPortal company immediately, so check for an existing one first.
+  Map Asio companies to companies you already have. **Import company** creates a
+  new MSPortal company immediately, so check for an existing one first.
 </Tip>
 
 Removing a saved link takes effect immediately. Saved matches decide which company receives Asio data.
@@ -99,10 +116,12 @@ Removing a saved link takes effect immediately. Saved matches decide which compa
 
 <Steps>
   <Step title="Open Locations">
-    Only locations for matched companies appear. If you do not need location mapping, skip this task.
+    Only locations for matched companies appear. If you do not need location
+    mapping, skip this task.
   </Step>
   <Step title="Match locations">
-    Accept a suggestion, choose one of the company's locations, or create one from the row. Every change saves immediately.
+    Accept a suggestion, choose one of the company's locations, or create one
+    from the row. Every change saves immediately.
   </Step>
 </Steps>
 
@@ -112,16 +131,22 @@ Matching alone does not create missing locations. If no locations appear, check 
 
 <Steps>
   <Step title="Open Import devices">
-    Open **Import devices** on the connection page. Staged devices and type mappings are on the same page.
+    Open **Import devices** on the connection page. Staged devices and type
+    mappings are on the same page.
   </Step>
   <Step title="Match device types">
-    In **Match device types**, choose the MSPortal device type each Asio type becomes. Turn on **Auto-import** for types you want imported automatically. Every change saves immediately.
+    In **Match device types**, choose the MSPortal device type each Asio type
+    becomes. Turn on **Auto-import** for types you want imported automatically.
+    Every change saves immediately.
   </Step>
   <Step title="Import the devices you want">
-    In **Staged devices**, select the devices and import them, or use **Import all matched**. Devices whose company is not matched yet show **Match company first**.
+    In **Staged devices**, select the devices and import them, or use **Import
+    all matched**. Devices whose company is not matched yet show **Match company
+    first**.
   </Step>
   <Step title="Finish setup">
-    Open **Review** and select **Finish setup** once the required tasks are complete.
+    Open **Review** and select **Finish setup** once the required tasks are
+    complete.
   </Step>
 </Steps>
 
@@ -133,9 +158,22 @@ Asio's friendly name for a device syncs to MSPortal on its own. The device name 
 
 - In **Devices**, the **Friendly Name** column shows it. Filter, sort, search and the CSV download include it.
 - A device's panel is titled by its friendly name, with the device name beside it.
+- **Branch preview:** **Friendly Name**, when available, is the first field in **Overview**. The separate provider details box appears only when it has other details or links to show. See the [synthetic device previews](/user-guides/devices/understand-device-details#read-the-overview).
 - People with manage access to Devices can rename a device: click its **Friendly Name** in the table, or change **Friendly Name** on the device's **Edit** tab. MSPortal saves the new name to Asio, so it changes there too. See [Add and edit device records](/user-guides/devices/add-and-edit-devices#rename-a-device-in-your-rmm).
 
 Renaming needs the **Platform - Devices** Write scope. To add it to an existing connection, edit the MSPortal API key in **Integrations > API Access** in Asio and give **Platform - Devices** both Read and Write. The Client ID and Client Secret stay the same, so nothing changes in MSPortal.
+
+## ConnectWise SaaS Backup
+
+If you use ConnectWise SaaS Backup (also sold as SaaS 365 Backup) through Asio, its backup data comes through this same connection. You do not need a separate integration.
+
+- Give the Asio API key the **Backup Dashboard - Read backup jobs** and **Backup Dashboard - Read alarms** scopes. Edit the existing MSPortal key in **Integrations > API Access** in Asio; the Client ID and Client Secret stay the same, so nothing changes in MSPortal.
+- Keep **Backups** on under **Choose data**. It is on by default.
+- MSPortal reads the SaaS Backup jobs and alarms of every matched Asio company every 6 hours. Jobs from other backup products in the Asio Backup Dashboard are skipped, because MSPortal connects those products directly.
+- Each job's health shows under **Backup > Microsoft 365**, one row per company, with **Microsoft 365**, **Google Workspace** and **Entra ID** coverage. See [Read SaaS backup health](/user-guides/backup/read-saas-backup-health).
+- Open SaaS Backup alarms show under **Backup > Alerts**. An alarm Asio stops listing is marked resolved.
+
+Without the two scopes the backup sync is skipped and the rest of the Asio connection keeps working.
 
 ## Manage an existing connection
 
@@ -146,32 +184,37 @@ Renaming needs the **Platform - Devices** Write scope. To add it to an existing 
 
 ## Troubleshooting
 
-| Problem | What to do |
-| --- | --- |
-| Connection test fails | Check the **Environment**, the Client ID prefix, the Client Secret and that every scope above is granted. Check that the credentials have not been revoked in Asio. |
-| No companies on **Import or match companies** | Wait for the first sync to progress, and confirm the API key has the **Platform - Companies** Read scope. Avoid creating the connection again. |
-| A mapping disappeared | Reopen **Import or match companies** and check which rows show a saved link. |
-| Devices are missing | Check that the company is matched, the first sync has finished, the device type is matched and not ignored, and the devices were imported from **Staged devices**. |
-| Inventory is old | Check the last successful sync in **Sync activity** and any paused or error state on the connection. A scheduled time does not guarantee a successful run. |
-| Renaming says "The RMM didn't accept the new friendly name: Unknown/invalid scope(s)" | The API key lacks **Platform - Devices** Write. Add it in **Integrations > API Access** in Asio, then rename the device again. |
+| Problem                                                                               | What to do                                                                                                                                                          |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Connection test fails                                                                 | Check the **Environment**, the Client ID prefix, the Client Secret and that every scope above is granted. Check that the credentials have not been revoked in Asio. |
+| No companies on **Import or match companies**                                         | Wait for the first sync to progress, and confirm the API key has the **Platform - Companies** Read scope. Avoid creating the connection again.                      |
+| A mapping disappeared                                                                 | Reopen **Import or match companies** and check which rows show a saved link.                                                                                        |
+| Devices are missing                                                                   | Check that the company is matched, the first sync has finished, the device type is matched and not ignored, and the devices were imported from **Staged devices**.  |
+| Inventory is old                                                                      | Check the last successful sync in **Sync activity** and any paused or error state on the connection. A scheduled time does not guarantee a successful run.          |
+| Renaming says "The RMM didn't accept the new friendly name: Unknown/invalid scope(s)" | The API key lacks **Platform - Devices** Write. Add it in **Integrations > API Access** in Asio, then rename the device again.                                      |
+| ConnectWise SaaS Backup data does not appear                                          | Check that the API key has both **Backup Dashboard** read scopes, **Backups** is on under **Choose data**, the companies are matched, and a sync has run since.     |
 
 ## Frequently asked questions
 
 <AccordionGroup>
   <Accordion title="Does Test connection save the integration?">
-    No. After a successful test, select **Save and continue** for a new connection, or **Save changes** for an existing one.
+    No. After a successful test, select **Save and continue** for a new
+    connection, or **Save changes** for an existing one.
   </Accordion>
   <Accordion title="Are suggested links saved automatically?">
-    No. Suggestions wait for your review. Accepting a suggestion saves its link immediately; removing a saved link also takes effect immediately.
+    No. Suggestions wait for your review. Accepting a suggestion saves its link
+    immediately; removing a saved link also takes effect immediately.
   </Accordion>
   <Accordion title="Does Finish setup mean every device is imported?">
-    No. Device sync and import run separately. Check **Import devices** and the resulting inventory.
+    No. Device sync and import run separately. Check **Import devices** and the
+    resulting inventory.
   </Accordion>
   <Accordion title="Can a company user set up Asio?">
     No. Setup is an MSP staff task.
   </Accordion>
   <Accordion title="Does Asio replace my ConnectWise PSA setup?">
-    No. Asio is the RMM connection. ConnectWise PSA has its own setup for tickets and company imports.
+    No. Asio is the RMM connection. ConnectWise PSA has its own setup for
+    tickets and company imports.
   </Accordion>
 </AccordionGroup>
 

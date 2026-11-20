@@ -120,8 +120,8 @@ The Planner type sets the type of the Planner items that [Sync All Companies](/u
 
 The editor is one form. Each row has its label and a short hint on the left and its controls on the right.
 
-<Frame caption="The item editor: Details, Deployment options, Standards applicability and Answered by billing rows.">
-  <img src="/images/product/standards-item-editor.png" alt="Standards item editor showing the Details fields, an empty Deployment options row, a Standards applicability row with Add condition, and an Answered by billing row with Link a product." width="1852" height="1124" />
+<Frame caption="The item editor: Details, Vendor cost, Deployment options, Planner template, Standards applicability, Answered by detection and Answered by billing rows.">
+  <img src="/images/product/standards-item-editor.png" alt="Standards item editor with Name, Vendor, Monthly price per client and Service plans on one line above Description, the Required switch at the right under the item's Required label, then Vendor cost, Deployment options, Planner template, Standards applicability with Add condition, Answered by detection with software, integration and domain check pickers, and Answered by billing with Link a product." width="2556" height="1876" />
 </Frame>
 
 | Field | What it does |
@@ -130,10 +130,12 @@ The editor is one form. Each row has its label and a short hint on the left and 
 | **Vendor** | An optional supplier label such as SentinelOne. It does not connect an integration or install anything. |
 | **Service plans** | The plans that expect this standard. Leave it at **All plans** to expect it of every client. The field shows only after you create at least one tier. |
 | **Default Price** | The Planner cost estimate for linked items, in your currency. Sync supplies it. It is not a quote or an invoice amount. |
-| **Required** | Whether the standard counts as a required check. The switch is disabled in a **Require one of group** category. |
+| **Required** | Whether the standard counts as a required check. The switch sits at the right of the Details row, under the item's **Required** or **Optional** label, and is disabled in a **Require one of group** category. |
 | **Description** | Copied to the linked Planner item's description on sync. |
+| **Raise at contract review** | Branch preview, shown only where Contract review is turned on. A contract review lists the standard for every company it applies to and that has not deployed it. See [Review agreements before they renew](/user-guides/agreements/contract-review#raise-missing-standards). |
 | **Deployment options** | Named implementations of the standard, each ranked by a tier. See [tiers and options](/user-guides/settings/standards-tiers). |
 | **Standards applicability** | Conditions that decide which companies the standard applies to. See [Choose which Standards apply](/user-guides/settings/standards-applicability). |
+| **Answered by detection** | Software, integrations and domain checks that mark the standard Deployed automatically when MSPortal finds them for a client. These are the same rules as setup's **Detection** step. |
 | **Answered by billing** | PSA products that mark the standard Deployed automatically. See [Use PSA billing to answer Standards](/user-guides/settings/standards-sku-automation). |
 | **Planner template** | An optional template applied to the standard's open Planner items on sync. See [Apply a Planner template](#apply-a-planner-template). |
 
@@ -199,6 +201,29 @@ The category counts as one required check, and any deployed item in it satisfies
 
 Turning the rule off does not bring back the earlier Required choices. Open the items and turn **Required** back on where you need it. For scoring and exclusions, see [Read the Standards matrix](/user-guides/msp-tools/read-standards-matrix).
 
+## Track a category by site
+
+Use this when a client's sites can differ, such as a firewall or a phone system at each office. A site is one of the company's [locations](/user-guides/settings/companies#add-a-location).
+
+<Steps>
+  <Step title="Open the category details">
+    Click the pencil (**Edit category details**) in the category header.
+  </Step>
+  <Step title="Turn on Track by site">
+    Turn on **Track by site**. It is off by default. The change saves on its own a moment later, with no confirmation.
+  </Step>
+  <Step title="Check the result">
+    The category header shows a **By site** badge.
+  </Step>
+</Steps>
+
+Every standard in the category then gets a status for each site of a company that has two or more sites. Companies with one site or none are unaffected and keep a single status.
+
+- **Turning it on** copies each company's current status to each of its sites. No company status changes.
+- **Turning it off** asks you to confirm, then removes the site statuses for good. Each company keeps the status it had, and Planner items made for single sites are archived. Turning it on again starts every site from its company's status.
+
+The company's status for the standard becomes the rollup of its sites. See [Read the Standards matrix](/user-guides/msp-tools/read-standards-matrix#show-sites) for how the rollup works, and [Sync Standards to companies](/user-guides/settings/sync-standards#choose-how-sites-become-planner-items) to choose how sites become Planner items.
+
 ## Organize the list
 
 <Steps>
@@ -226,7 +251,7 @@ Saving the catalog does not change company Planner items. Review [Sync Standards
 
 **Email domain security checks** are on for every portal. If MSPortal turns them off for a tenant, the email-security column, **Check now**, report block and **Domain check** choice are hidden. Turning it off stops new checks and hides stored DNS results without deleting them. Turning it off also hides stored domain signal rules, evidence and automatic answers immediately. Saving other detection rules preserves those hidden signal rules for when the feature is reenabled.
 
-In setup's **Detection** step, choose **Domain check** and select the DMARC-enforced or safe-SPF signal. A company satisfies the rule when at least the configured minimum number of checked domains pass and no domain receiving mail fails that signal. A parked domain without MX records does not block the rule. One passing domain cannot hide another unprotected mail domain. A successful DNS measurement can prove a standard for 48 hours. Failed checks retain the historical result, but do not extend that window. Expired mail-domain evidence blocks the signal even if another domain passes. On its next read, the matrix hides expired proof, including after checks are reenabled; a successful recheck can restore it.
+In setup's **Detection** step, choose **Domain check** and select the DMARC-enforced or safe-SPF signal. You can also pick it under **Domain checks that prove it** in the standard's **Answered by detection** row. A company satisfies the rule when at least the configured minimum number of checked domains pass and no domain receiving mail fails that signal. A parked domain without MX records does not block the rule. One passing domain cannot hide another unprotected mail domain. A successful DNS measurement can prove a standard for 48 hours. Failed checks retain the historical result, but do not extend that window. Expired mail-domain evidence blocks the signal even if another domain passes. On its next read, the matrix hides expired proof, including after checks are reenabled; a successful recheck can restore it.
 
 DMARC enforcement means a quarantine or reject policy. Safe SPF requires one SPF record without a pass-all mechanism and with no more than ten DNS-lookup terms in that record. Billing evidence takes precedence over domain detection; integration evidence also takes precedence when both match. The matrix identifies an answer detected from domain checks. Request fresh DNS checks from the domain row menu (**Check now**) or, for several domains, **Actions (N) > Check email security** on **Documentation > Domains** or **Cloud > Domains**; Standards reevaluates the stored evidence on its scheduled run.
 
@@ -277,6 +302,12 @@ DMARC enforcement means a quarantine or reject policy. Safe SPF requires one SPF
   </Accordion>
   <Accordion title="Does turning the group rule off restore Required?">
     No. Turn Required back on for each item that should count.
+  </Accordion>
+  <Accordion title="Does Track by site change any company's status?">
+    No. Turning it on copies each company's status to its sites, and turning it off keeps each company's status. Turning it off archives Planner items made for single sites.
+  </Accordion>
+  <Accordion title="Can I track one standard by site and not the rest of its category?">
+    No. **Track by site** is set per category and covers every standard in it.
   </Accordion>
   <Accordion title="Can I drag an item to a different category?">
     No. You can reorder items only inside their own category.

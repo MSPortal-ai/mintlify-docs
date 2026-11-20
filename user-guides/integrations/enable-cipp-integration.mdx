@@ -1,19 +1,26 @@
 ---
-title: 'Configure CIPP Integration'
-description: 'Connect the CIPP API to power the client-facing Microsoft 365 Posture page and security reporting'
-icon: 'cloud'
+title: "Configure CIPP Integration"
+description: "Connect the CIPP API to power the client-facing Microsoft 365 Posture page and security reporting"
+icon: "cloud"
 ---
 
 This guide walks you through connecting CIPP (the CyberDrain Improved Partner Portal) to MSPortal.ai. The setup wizard has five steps: **Connect**, **Choose data**, **Map companies**, **Review**, and **Data**.
 
 On the CIPP connection page, the **Setup guide** lists the same work as tasks: **Connect**, **Choose data**, **Import or match companies**, **Configure compliance group** (optional) and **Review**. **Configure compliance group** is the same Compliance group import described in [Part 7](#part-7-import-cipp-standards-into-compliance).
 
-Once connected, MSPortal synchronizes security, identity, email, Intune, and tenant configuration data from CIPP and presents it to your clients as the [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page.
+Once connected, MSPortal synchronizes security, identity, email, Intune, and tenant configuration data from CIPP and presents it on the [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page when both the CIPP integration feature and the advanced CIPP feature are enabled, the connection is active, and the user has Cloud and Cloud: Posture read access.
 
 For every mapped tenant, CIPP also supplies Intune managed devices, Windows Autopilot devices and SharePoint storage quota. Intune details appear on matching [device records](/user-guides/devices/understand-device-details#review-microsoft-entra-id-and-intune-details), and Intune devices that no other tool reports can be imported into **Devices** (see [Import Intune devices](#import-intune-devices)).
 
 <Note>
-CIPP is in **Beta**. It is available to every tenant and shows a **Beta** badge in **Settings › Integrations › Directory**. If something does not match your CIPP instance, contact support@msportal.ai.
+  CIPP is in **Beta**. It is available to every tenant and shows a **Beta**
+  badge in **Settings › Integrations › Directory**. If something does not match
+  your CIPP instance, contact support@msportal.ai.
+</Note>
+
+<Note>
+  Branch preview: the Current Posture access requirements in this guide
+  accompany an upcoming app update.
 </Note>
 
 ## Prerequisites
@@ -58,6 +65,7 @@ CIPP is in **Beta**. It is available to every tenant and shows a **Beta** badge 
     <Frame caption="The CIPP Connect step before credentials are entered.">
       <img src="/images/product/cipp-setup-connection.png" alt="CIPP connection form with blank credential fields and test and save buttons" width="1536" height="1152" />
     </Frame>
+
   </Step>
   <Step title="Test the Connection">
     Click **Test Connection**. On success you'll see **Connection Verified**: Microsoft issued an access token for this CIPP API client.
@@ -66,6 +74,7 @@ CIPP is in **Beta**. It is available to every tenant and shows a **Beta** badge 
     Click **Create Integration** to save. The button stays disabled until the test passes. Credentials are stored only in Vault.
 
     A token proves the credentials are valid. It does not prove that every CIPP dataset is reachable, because the API client's CIPP role controls which tenants and reports it can read.
+
   </Step>
 </Steps>
 
@@ -75,10 +84,14 @@ CIPP is in **Beta**. It is available to every tenant and shows a **Beta** badge 
 
 <Steps>
   <Step title="Open Choose data">
-    After saving credentials, open **Choose data**, before matching companies. The older wizard shows the same **Choose data** step before **Map companies**.
+    After saving credentials, open **Choose data**, before matching companies.
+    The older wizard shows the same **Choose data** step before **Map
+    companies**.
   </Step>
   <Step title="Choose whether to document Intune policies">
-    Check **Document Intune policies** to turn it on, or leave it unchecked to keep it off. To read what it does, hover over or tap the (i) beside it. The choice saves immediately. Leaving it unchecked is valid.
+    Check **Document Intune policies** to turn it on, or leave it unchecked to
+    keep it off. To read what it does, hover over or tap the (i) beside it. The
+    choice saves immediately. Leaving it unchecked is valid.
   </Step>
   <Step title="Continue">
     Continue to company matching once the choice has saved.
@@ -90,11 +103,21 @@ With the setting on, the nightly CIPP sync saves each Intune policy's versions a
 Sharing Intune documentation with company users is a separate switch, **Show Intune documentation to company users** in **Settings > Documentation > Intune**. It is off by default.
 
 <Frame caption="Choose data between Connect and company matching.">
-  <img src="/images/product/cipp-choose-data-preview-desktop.png" alt="CIPP Choose data step with Intune documentation unchecked" width="1440" height="960" />
+  <img
+    src="/images/product/cipp-choose-data-preview-desktop.png"
+    alt="CIPP Choose data step with Intune documentation unchecked"
+    width="1440"
+    height="960"
+  />
 </Frame>
 
 <Frame caption="Choose data in the older wizard.">
-  <img src="/images/product/cipp-choose-data-legacy-preview-desktop.png" alt="CIPP wizard Choose data step with Document Intune policies unchecked" width="1440" height="960" />
+  <img
+    src="/images/product/cipp-choose-data-legacy-preview-desktop.png"
+    alt="CIPP wizard Choose data step with Document Intune policies unchecked"
+    width="1440"
+    height="960"
+  />
 </Frame>
 
 ## Part 4: Map Companies
@@ -113,6 +136,7 @@ After connecting, MSPortal discovers the Microsoft 365 tenants managed in CIPP. 
     3. Review the pending links, then click **Import Selected** to save them
 
     A company you create here is saved immediately. Removing a saved link also takes effect immediately. Clearing a pending link only discards that draft.
+
   </Step>
   <Step title="Continue">
     Click **Next**. **Next** saves any pending links and starts a full data sync for the mapped tenants.
@@ -120,7 +144,9 @@ After connecting, MSPortal discovers the Microsoft 365 tenants managed in CIPP. 
 </Steps>
 
 <Note>
-Data is only stored and shown for tenants that are mapped to a company. Unmapped tenants are listed for mapping but their data stays out of every page and report.
+  Data is only stored and shown for tenants that are mapped to a company.
+  Unmapped tenants are listed for mapping but their data stays out of every page
+  and report.
 </Note>
 
 ## Part 5: Review
@@ -131,18 +157,18 @@ The Review step confirms your data coverage before you finish setup:
 - **Healthy datasets**, **Datasets running**, **Security coverage**, **Intune coverage** and **Dataset issues** indicators
 - **Last data received** time
 - **Start full sync** to run a synchronization on demand
-- **View Microsoft 365 posture** to open the client-facing view, and **Manage company mappings** to return to the Map step
+- **View Microsoft 365 posture** to open the client-facing view when the advanced CIPP feature is enabled, and **Manage company mappings** to return to the Map step
 
 Synchronization continues automatically in the background after setup, with a full refresh every day. A "sync started" message means the sync was requested, not that it finished. Wait for the counters to settle before you judge coverage.
 
 ### Which dataset issues count
 
-| Situation | How MSPortal treats it |
-|-----------|------------------------|
-| A dataset failed | Counted under **Dataset issues**. Data from datasets that succeeded stays available |
-| CIPP asks MSPortal to check back while it prepares a report | Counted under **Dataset issues** while waiting. The sync retries that dataset a few minutes later in the same run |
-| A client tenant does not have the feature (for example Autopilot without Intune licensing, Conditional Access blocking partner access, or CSP licenses without the Sherweb integration in CIPP) | Not an issue. MSPortal skips that tenant and keeps data from the rest |
-| No tenant has the feature | Left out of the healthy totals |
+| Situation                                                                                                                                                                                       | How MSPortal treats it                                                                                            |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| A dataset failed                                                                                                                                                                                | Counted under **Dataset issues**. Data from datasets that succeeded stays available                               |
+| CIPP asks MSPortal to check back while it prepares a report                                                                                                                                     | Counted under **Dataset issues** while waiting. The sync retries that dataset a few minutes later in the same run |
+| A client tenant does not have the feature (for example Autopilot without Intune licensing, Conditional Access blocking partner access, or CSP licenses without the Sherweb integration in CIPP) | Not an issue. MSPortal skips that tenant and keeps data from the rest                                             |
+| No tenant has the feature                                                                                                                                                                       | Left out of the healthy totals                                                                                    |
 
 A failed or missing dataset is never treated as a passing security result.
 
@@ -161,7 +187,7 @@ The **Data** step is your admin console for everything CIPP is syncing:
 - **Dataset coverage** showing every dataset by category, with any sync issues flagged
 - **Record explorer** to search and filter every synced record, including the full source payload from the CIPP API
 
-Use this view to confirm data is flowing, investigate a specific record, or check why a dataset has no data. Filter to the right company and dataset before you open a record, because some records show the full provider payload. This console is for your team; clients see the curated [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page instead.
+Use this view to confirm data is flowing, investigate a specific record, or check why a dataset has no data. Filter to the right company and dataset before you open a record, because some records show the full provider payload. This console is for your team; clients with access to Current Posture see the curated [Microsoft 365 Posture](/user-guides/microsoft-365/posture) page.
 
 ## Import Intune devices
 
@@ -185,10 +211,10 @@ Imported devices appear in **Devices** with CIPP as their source. If your RMM la
 
 The **Data** step can turn your CIPP standards into a reusable company-level Compliance group. MSPortal creates one check per standard. You then assign the group to runs through your normal Compliance workflow.
 
-| Action | Permission needed |
-|--------|-------------------|
-| Preview standards | Read access to integrations and Compliance settings |
-| Create or update the group | Also Compliance settings write access |
+| Action                     | Permission needed                                   |
+| -------------------------- | --------------------------------------------------- |
+| Preview standards          | Read access to integrations and Compliance settings |
+| Create or update the group | Also Compliance settings write access               |
 
 This is a tenant-wide MSP task, so a user limited to specific companies cannot run it.
 
@@ -205,6 +231,7 @@ This is a tenant-wide MSP task, so a user limited to specific companies cannot r
     Check the count line, for example **12 standards available · 0 imported**, and the list of standard names. The list includes standards synced from mapped companies in the last 48 hours.
 
     If the panel shows **Map companies and sync CIPP standards to see available checks.**, map companies and let a sync finish first. **Create group** stays unavailable until at least one standard is available.
+
   </Step>
   <Step title="Choose Automatic Updates">
     Keep **Automatically update these checks in active runs from CIPP results.** selected if you want CIPP results to set check statuses. It is selected by default.
@@ -213,6 +240,7 @@ This is a tenant-wide MSP task, so a user limited to specific companies cannot r
     Select **Create group**. A **Compliance group saved.** message confirms the import.
 
     The import also creates a **CIPP Standards** status list with **Unknown**, **Compliant** and **Noncompliant**. **Unknown** is the default status.
+
   </Step>
   <Step title="Review the Group">
     Select **Open Compliance groups** to review the new **CIPP Microsoft 365 Standards** group in **Settings > Compliance > Groups**.
@@ -225,10 +253,12 @@ The import does not add checks to any run.
 
 <Steps>
   <Step title="Add the Group to a Run Template">
-    In [Compliance settings](/user-guides/settings/compliance#runs-tab), open the **Runs** tab and add **CIPP Microsoft 365 Standards** to a run template.
+    In [Compliance settings](/user-guides/settings/compliance#runs-tab), open
+    the **Runs** tab and add **CIPP Microsoft 365 Standards** to a run template.
   </Step>
   <Step title="Start Assessments">
-    Create an assessment from that template, or [schedule assessments](/user-guides/settings/compliance-schedules).
+    Create an assessment from that template, or [schedule
+    assessments](/user-guides/settings/compliance-schedules).
   </Step>
 </Steps>
 
@@ -240,19 +270,19 @@ After the group exists, the button reads **Update group**. Select it to add chec
 
 With automatic updates on, MSPortal sets each imported check in active runs after every CIPP sync. It also evaluates results right after you create or update the group.
 
-| CIPP evidence | Result in the run |
-|---------------|-------------------|
-| CIPP reports the standard as compliant | **Compliant** |
-| CIPP reports the standard as noncompliant | **Noncompliant** |
-| No evidence, results older than 48 hours, malformed data or an unavailable license | **Unknown** |
+| CIPP evidence                                                                      | Result in the run |
+| ---------------------------------------------------------------------------------- | ----------------- |
+| CIPP reports the standard as compliant                                             | **Compliant**     |
+| CIPP reports the standard as noncompliant                                          | **Noncompliant**  |
+| No evidence, results older than 48 hours, malformed data or an unavailable license | **Unknown**       |
 
 When one company maps to more than one CIPP tenant, the check uses the worst result:
 
-| Tenant results | Check result |
-|----------------|--------------|
+| Tenant results                 | Check result     |
+| ------------------------------ | ---------------- |
 | Any tenant is **Noncompliant** | **Noncompliant** |
-| Every tenant is **Compliant** | **Compliant** |
-| Anything else | **Unknown** |
+| Every tenant is **Compliant**  | **Compliant**    |
+| Anything else                  | **Unknown**      |
 
 Automatic updates change only the status. They never touch completed runs or notes. They apply to company-level assignments in runs that are still in progress, and they run only while the CIPP connection is active.
 
@@ -270,30 +300,46 @@ To restore the group, return to the **Data** step and select **Create group** ag
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| API URL rejected | Use the public HTTPS base URL shown on the CIPP-API integration page, without a path, port, or query string |
-| Token request fails | Verify the Tenant ID, Application ID, and secret, and confirm the API client is enabled in CIPP |
-| "CIPP did not recognize the access token for this API client" | In CIPP, go to **Integrations > CIPP-API**, confirm the API client is registered and enabled, and confirm the API scope was copied from this CIPP instance |
-| "CIPP accepted the token, but the assigned CIPP role does not grant the required access" | Assign the API client a role with AllTenants read access, such as the built-in readonly role, then test again |
-| Only one tenant appears | The API client's role is limited to one tenant. See [Only one tenant appears](#only-one-tenant-appears) |
-| Some datasets fail | Check **Dataset issues** on the Review step. Data from datasets that succeeded stays available, but coverage is partial until the failures clear |
-| A company's posture page is empty | Confirm the tenant mapping is saved, a sync has finished since mapping, and the user can access that company |
-| "CIPP rejected the application token or the application lacks the required CIPP role" | Microsoft issued a token, so the Tenant ID, Application ID, secret, and API scope are all valid. The fix is inside CIPP: go to **Integrations > CIPP-API**, confirm the API client is enabled, assign it a CIPP role with AllTenants read access (the built-in readonly role is recommended), and confirm the API scope was copied from that same CIPP instance |
+| Issue                                                                                    | Solution                                                                                                                                                                                                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API URL rejected                                                                         | Use the public HTTPS base URL shown on the CIPP-API integration page, without a path, port, or query string                                                                                                                                                                                                                                                     |
+| Token request fails                                                                      | Verify the Tenant ID, Application ID, and secret, and confirm the API client is enabled in CIPP                                                                                                                                                                                                                                                                 |
+| "CIPP did not recognize the access token for this API client"                            | In CIPP, go to **Integrations > CIPP-API**, confirm the API client is registered and enabled, and confirm the API scope was copied from this CIPP instance                                                                                                                                                                                                      |
+| "CIPP accepted the token, but the assigned CIPP role does not grant the required access" | Assign the API client a role with AllTenants read access, such as the built-in readonly role, then test again                                                                                                                                                                                                                                                   |
+| Only one tenant appears                                                                  | The API client's role is limited to one tenant. See [Only one tenant appears](#only-one-tenant-appears)                                                                                                                                                                                                                                                         |
+| Some datasets fail                                                                       | Check **Dataset issues** on the Review step. Data from datasets that succeeded stays available, but coverage is partial until the failures clear                                                                                                                                                                                                                |
+| A company's posture page is empty                                                        | Confirm the tenant mapping is saved, a sync has finished since mapping, and the user can access that company                                                                                                                                                                                                                                                    |
+| "CIPP rejected the application token or the application lacks the required CIPP role"    | Microsoft issued a token, so the Tenant ID, Application ID, secret, and API scope are all valid. The fix is inside CIPP: go to **Integrations > CIPP-API**, confirm the API client is enabled, assign it a CIPP role with AllTenants read access (the built-in readonly role is recommended), and confirm the API scope was copied from that same CIPP instance |
 
 ## Related Resources
 
 <CardGroup cols={2}>
-  <Card title="Integrations Overview" icon="plug" href="/user-guides/integrations/index">
+  <Card
+    title="Integrations Overview"
+    icon="plug"
+    href="/user-guides/integrations/index"
+  >
     Explore all available integrations
   </Card>
-  <Card title="Microsoft 365" icon="microsoft" href="/user-guides/microsoft-365/index">
+  <Card
+    title="Microsoft 365"
+    icon="microsoft"
+    href="/user-guides/microsoft-365/index"
+  >
     Manage Microsoft 365 across your clients
   </Card>
-  <Card title="Microsoft 365 Posture" icon="shield-halved" href="/user-guides/microsoft-365/posture">
+  <Card
+    title="Microsoft 365 Posture"
+    icon="shield-halved"
+    href="/user-guides/microsoft-365/posture"
+  >
     See what clients see from CIPP data
   </Card>
-  <Card title="Compliance Settings" icon="list-check" href="/user-guides/settings/compliance">
+  <Card
+    title="Compliance Settings"
+    icon="list-check"
+    href="/user-guides/settings/compliance"
+  >
     Assign the CIPP standards group to runs
   </Card>
 </CardGroup>

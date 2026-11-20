@@ -330,7 +330,16 @@ The following screenshots show the same calendar in **Planner Table** settings, 
 
 ### Choose dates for one block
 
-Open a block's gear. In **General**, **View**, **Block title** and **Header size** control its presentation; the fields wrap to fit a phone. Blocks that use dates also offer a **Date range** selector with the same relative presets listed above.
+Open a block's gear. Every block's settings use the same groups, in this order, and show only the groups the block has:
+
+| Group | What it holds |
+| --- | --- |
+| **General** | **Block title** and **Header size**, **View**, and the header checkboxes. |
+| **Content** | What the block shows: sections, columns, metrics and chart choices. |
+| **Options** | How it shows them: text size, sorting, limits, totals and **Scroll to show every item**. |
+| **Filters** | Which records it includes. Blocks that use dates start with a **Date range** selector, then the block's own include and exclude rules. |
+
+In the sheet the fields sit in two columns, with each field's help text directly under it; on a phone they stack in one column. The **Date range** selector offers the same relative presets listed above.
 
 | Choice                                                          | What happens                                                                                                                                                                     |
 | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -409,7 +418,13 @@ The Blocks panel uses a searchable category dropdown with multiple selections. C
     Click the block. It lands on the current page.
   </Step>
   <Step title="Move and resize">
-    Hover over the block. Drag the grip to move it and use the size button to change its size.
+    Hover over the block to show its controls. Blocks on a page never cover each other.
+
+    - **Move:** drag the grip. A block you drop onto another block takes that spot, and the block it landed on moves down. A block that no longer fits on the page moves to the first free space on a later page, and MSPortal adds a page when it needs one. One click of the undo button puts back everything the drop moved.
+    - Click the size chip, such as **4x4**, to cycle through presets that fit on the page. Hover over it to see the next preset. In the branch preview, right-click the chip to choose any dimensions that fit.
+    - **Resize by hand:** drag a corner handle, or focus a corner handle and press the arrow keys. The block stops at the blocks next to it.
+
+    When a move or resize has no room, the block stays as it was and you see **No room for that here. Move or shrink a block next to it first.**
   </Step>
   <Step title="Configure or remove it">
     Click the gear to edit the block's settings. Click **X** to remove it.
@@ -475,7 +490,7 @@ The **Compliance Report** block shows summary tiles, a status breakdown and a li
 
 <Steps>
   <Step title="Make the block full size">
-    Add **Compliance Report** from the **Compliance** group in the **Blocks** panel. Use the size button to make it at least 3 columns wide and 3 rows tall. Smaller sizes do not list items, so they cannot be split.
+    Add **Compliance Report** from the **Compliance** group in the **Blocks** panel. Use the size button to make it at least 3 columns wide and 3 rows tall. If that size does not fit, move or shrink a neighboring block first. Smaller sizes do not list items, so they cannot be split.
   </Step>
   <Step title="Split it">
     Hover over the block and click **Split across pages**, the scissors icon in the block toolbar.
@@ -506,10 +521,19 @@ In **Continuous** mode, every part shows in one scrolling column. **Export PDF**
   <img src="/images/product/compliance-report-split-print-preview.png" alt="Three printed pages side by side: Compliance Report with summary tiles and items, then Compliance Report (Part 2) and Compliance Report (Part 3) with the remaining items." width="2400" height="1100" />
 </Frame>
 
+## Scroll long lists
+
+Blocks that list records, such as **Open Tickets**, **Quarterly Roadmap**, **Device Inventory** and the Microsoft 365 license tables, show as many whole rows as fit and end with a “+N more” count when the rest do not fit.
+
+- **Click “+N more”** in the builder, the report view or a dashboard to scroll through every item inside the block. This lasts while you view the page and does not change the saved report.
+- **Tick Scroll to show every item** under **Options** in the block's settings to make the block scroll every time it opens.
+
+Printed reports and PDFs cannot scroll, so they keep the “+N more” count. To print every item, use **Split across pages**, or the **Full list across pages** choice on the **Device Appendix / List** and **Users List** blocks. When a block loads only part of a larger list, the rows it did not load stay counted under the scrolling list.
+
 ## Read ranked summaries and large values
 
 <Note>
-Ranked summaries such as **Busiest weeks** and **Most unused seats** show the leading entries that fit the block, without a “+N more” footer. Full record lists still show when records are omitted. Visual-view metrics group large numbers and fit them to their available width, preserving decimal precision and units.
+Ranked summaries such as **Busiest weeks** and **Most unused seats** show the leading entries that fit the block, without a “+N more” footer. Full record lists still show when records are omitted; see [Scroll long lists](#scroll-long-lists). Visual-view metrics group large numbers and fit them to their available width, preserving decimal precision and units.
 </Note>
 
 In the **Ticket Categories Breakdown (Halo)** Visual view, **Top N · Categories** lists the largest categories that fit beside the sunburst. Making the block taller admits more whole rows. The sunburst and its centre ticket total still include every category in the selected data.
@@ -548,6 +572,26 @@ Custom sections use the selected report sources. Writing goals guide the report;
 <Frame caption="Define a client's custom section title and writing goals.">
   <img src="/images/product/full-report-custom-section-desktop-preview.png" alt="Custom report section dialog with a Business growth priorities title and writing goals about opening a second office." width="1440" height="960" />
 </Frame>
+
+## Arrange visuals in a Full Report
+
+<Note>Branch preview. These controls and screenshots show the upcoming report editor.</Note>
+
+1. In a report section, select **Insert block** (+), then **Visual Widget**. Choose a widget to start a row with one slot.
+2. Click the count at the top right of the row to cycle from **1** to **2** to **3** and back to **1**. Select **+ Visual Widget** in an empty slot to fill it. If you narrow a populated row, the extra widgets move into following rows.
+3. Drag a widget by its grip to a slot in the same row or another row. Drop it in an empty slot to move it, or on another widget to swap their positions.
+
+<Frame caption="Branch preview. The row count is 3, with one compliance widget in each slot.">
+  <img src="/images/product/report-visual-slots-preview.png" alt="Three widgets side by side beneath the row’s 3-slot control, each with a drag grip." width="768" height="474" />
+</Frame>
+
+To resize one widget, click its size chip (such as **3x2**) to cycle through the presets that fit its slot. Right-click the chip to choose from all dimensions that fit. The first number is the width in columns and the second is the height in rows.
+
+<Frame caption="Branch preview. The size menu for a widget in a one-slot row.">
+  <img src="/images/product/report-widget-sizes-preview.png" alt="Size menu beneath the widget’s 3x2 chip, with widths across the top and heights increasing down each column." width="768" height="490" />
+</Frame>
+
+Select **Save Report** to keep the layout when you reopen the report. On a phone, the slots stack vertically in row order.
 
 ## Halo Problems in QBRs
 
@@ -649,7 +693,7 @@ Lists the client's devices as a table, or as counts per group, for an appendix t
 | **Display Mode** | **Full List (appendix)** shows every device as a row. **Summary (counts per group)** shows counts grouped by the selected field. |
 | **Group / Sort By** | Group or sort the devices, for example by **Device Type**, **Manufacturer** or **Company**, or choose **No Grouping**. |
 | **Columns** | In the full list, tick the columns to show: **Name**, **Display Name**, **Company**, **Type**, **Manufacturer**, **Model**, **Serial Number**, **Warranty End Date**, **Purchase Date**, **Device Age**, **Last Seen**, **Last User**, **Location** and **Operating System**. |
-| **Display Options** | Show the total device count and group counts, and repeat the group label on continued pages. |
+| **Options** | Choose **+X More**, **Scrollable list** or **Full list across pages** for rows that do not fit, show the total device count and group counts, and repeat the group label on continued pages. |
 | **Maximum Rows** | Cap the number of devices listed. Use filters or the company selector to narrow a large fleet. |
 
 Device rules in **Report filters** apply to the list, its group counts and its summary. For example, a rule that excludes one manufacturer removes those devices from every page of the appendix.

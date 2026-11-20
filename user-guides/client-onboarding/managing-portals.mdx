@@ -110,7 +110,7 @@ When you change a template after a portal was built from it, bring those changes
     - **New in the template**: new phases with their items, and new tasks, approvals and documents in existing phases.
     - **Changed in the template**: the name, details and settings of phases, open tasks, and documents that aren't approved yet.
     - **Removed from the template**: tasks, approvals and documents deleted from the template, and phases deleted with everything in them. Items nobody has worked on are ticked for you. A task that was started or has comments is left unticked, so you can check it first.
-    - **Team role owners**: open MSP tasks whose template team role has a holder at the company. Filling an empty owner is ticked for you. Replacing a different person is left unticked, in case someone reassigned the task on purpose.
+    - **Task owners**: open MSP tasks get the person the template task names as its **Assignee**, or else the company's holder of the task's team role. Filling an empty owner is ticked for you. Replacing a different person is left unticked, in case someone reassigned the task on purpose. A team role nobody holds at the company, or a role that isn't in **Settings > Team roles** at all, gets one row with a person picker: choose who does that role on this portal, and they get the role's open tasks that have no owner, plus the role's new tasks. If one person already does that role on the portal, they're picked and ticked for you.
   </Step>
   <Step title="Apply">
     Untick anything you want to leave as it is, or use **Select all**, then select **Apply N changes**. If any removals are ticked, a confirmation lists them first: type `DELETE` and select **Remove and apply**.
@@ -119,7 +119,11 @@ When you change a template after a portal was built from it, bring those changes
 
 New tasks land next to their neighbors from the template, with the due dates, forms, emails, checklists, dependencies and team-role owner a new portal would give them. Items you added by hand keep their place.
 
-Progress and due dates stay as they are. Completed tasks, uploaded documents, decided approvals, sent or answered surveys, and tasks holding a client's signature, credentials, files, form entries, checked checklist items or a linked PSA ticket are never removed, even if they were deleted from the template. Items from an archived template stay too. A deleted phase that still holds any of them, or an item you added by hand, stays with those items in it. Removals need the **Manage** onboarding permission; without it, the preview leaves them out. A task's type changes only before the task starts, and a document's source changes only before anything is uploaded. If the template was archived or deleted, there is nothing to compare, and the dialog says so. Each update is recorded as **Updated From Template** in the portal's activity.
+A task's team role always shows the template's current role, so renaming or changing a role in the template shows on the portal right away. **Update from template** is what gives those tasks an owner. To have roles filled for you on every portal for a company, add the company's role holders in **Settings > Team roles**; the role name in the template must match the team role's name.
+
+Some template changes don't reach an open portal: the order of items already on it, due dates and due-date offsets, approval wording, checklist contents and report settings of existing tasks, dependencies between existing items, key dates, client pages, action items, automation hooks and portal branding. Edit those on the portal itself.
+
+Progress and due dates stay as they are. Completed tasks, uploaded documents, decided approvals, sent or answered surveys, and tasks holding a client's signature, credentials, files, form entries, checked checklist items or a linked PSA ticket are never removed, even if they were deleted from the template. Items from an archived template stay too. A deleted phase that still holds any of them, or an item you added by hand, stays with those items in it. Removals need **Projects & Client Onboarding** Manage access; without it, the preview leaves them out. A task's type changes only before the task starts, and a document's source changes only before anything is uploaded. If the template was archived or deleted, there is nothing to compare, and the dialog says so. Each update is recorded as **Updated From Template** in the portal's activity.
 
 ## Start a portal
 
@@ -200,7 +204,7 @@ Changes here apply to this portal only. The template stays as it is. To bring te
 
 <Steps>
   <Step title="Add a task">
-    Select **Add task** on a phase header. Enter the **Task name**, pick a **Type**, add **Details** if you like, choose who owns it and when it is due, then select **Add task**. The task goes at the end of the phase.
+    Select **Add task** on a phase header. Enter the **Task name**, pick a **Type**, add **Details** if you like, choose who owns it and when it is due, then select **Add task**. The task goes at the end of the phase. Turn on **Internal only** to keep the task out of the client portal until you are ready to share it.
   </Step>
   <Step title="Edit a task">
     Open the task's **⋯** menu and select **Edit task**. Change the **Task name** or **Details**, then select **Save**. Change the assignee and due date on the task row itself.
@@ -210,7 +214,7 @@ Changes here apply to this portal only. The template stays as it is. To bring te
   </Step>
 </Steps>
 
-Editing a task needs the **Write** onboarding permission, and deleting one needs **Manage**. A task that holds a client's signature or stored credentials can't be deleted. If the portal has a linked project, the **Edit task** and **Delete task** items are in the task's existing menu on the project's **Tasks** tab.
+Editing a task needs **Projects & Client Onboarding** Write access, and deleting one needs Manage access. A task that holds a client's signature or stored credentials can't be deleted. If the portal has a linked project, the **Edit task** and **Delete task** items are in the task's existing menu on the project's **Tasks** tab.
 
 ### Assign tasks
 
@@ -227,7 +231,7 @@ To assign many tasks, select **Reassign**, check the tasks (hold Shift to select
 
 ### Work with a task
 
-Select a task to open its details. They show **Status**, **Assignment**, **Evidence**, **Due**, and **Portal comments**. For client tasks you can also choose **Which contacts can see this task?**, with **All contacts** as the default. Set phase target dates with **Set phase dates** or **Edit phase dates**. The change applies to this portal only and does not change the template. With **Status sync** on, a task due date set here is also written to the task's linked PSA ticket. Phase dates set here stay in this portal; to move phase dates in your PSA, reschedule the linked project's phases in **Projects**, or change them in your PSA.
+Select a task to open its details. They show **Status**, **Assignment**, **Evidence**, **Due**, and **Portal comments**. For client tasks you can also choose **Which contacts can see this task?**, with **All contacts** as the default. Turn on **Internal only** to hide the task from the client portal, form answers included, at any point in the project. Turn it off when the task is ready to share, and the client sees it straight away. Set phase target dates with **Set phase dates** or **Edit phase dates**. The change applies to this portal only and does not change the template. With **Status sync** on, a task due date set here is also written to the task's linked PSA ticket. Phase dates set here stay in this portal; to move phase dates in your PSA, reschedule the linked project's phases in **Projects**, or change them in your PSA.
 
 Each task has two comment streams. Use the filter to switch between **Client-facing**, **Both**, and **Internal**.
 
@@ -247,6 +251,12 @@ Each task has two comment streams. Use the filter to switch between **Client-fac
     Select **Send Email**.
   </Step>
 </Steps>
+
+A reminder for one task links clients straight to that task. Its **Open Onboarding Task** button opens the portal, scrolls to the task, opens it, and briefly highlights it, so a client asked to upload documents lands on the upload. Contacts who need to sign in first still land on the task once they have. If the client cannot see the task (it is **Internal only**, or assigned to other contacts), the link opens the portal home instead. **Send All Tasks** and phase emails still open the portal home.
+
+### Copy a link to a task
+
+To send a client a link yourself (in a ticket, chat, or your own email), open the task's **⋯** menu and select **Copy client link**. The link opens the client portal on that task, the same way a task reminder does. Internal-only tasks have no client link.
 
 ### Schedule a meeting
 
@@ -347,6 +357,24 @@ Open **Team & Contacts**. Client contacts and your own staff share one list.
 
 Roles come from **Settings > Projects > Onboarding Portals > Client roles**. They help identify each person's responsibility and can affect task visibility.
 
+### Collect files from the outgoing provider
+
+Every tenant has a built-in **Outgoing Provider** client role for the client's previous IT provider. It cannot be renamed or removed. A contact with this role can only upload. They never see pages, key dates, other tasks, approvals, comments, or files your team or the client's staff added.
+
+<Steps>
+  <Step title="Address the upload requests">
+    On each document upload the outgoing provider should fill, set the assignee role to **Outgoing Provider**. In a template, the role is offered on document uploads only. To use a **Secure file drop** task, assign it to the outgoing provider's contact by name.
+  </Step>
+  <Step title="Add the contact">
+    Add the outgoing provider as a contact and choose **Outgoing Provider** as their role, then send the invite.
+  </Step>
+  <Step title="Check their view">
+    Use **View as** and pick the contact, or the **Outgoing Provider** role. The portal shows only their upload requests and the files they uploaded themselves.
+  </Step>
+</Steps>
+
+Overdue reminders and task emails sent to every contact skip the outgoing provider. A task email reaches them only when its recipient roles include **Outgoing Provider**.
+
 ### Send, replace, or revoke access
 
 The **Portal access** column shows **Active**, **Not signed in**, **Link expired**, or **Revoked**, with the last visit and visit count. Change a role from the **Portal role** menu on the row. Open the **...** menu on a contact for these actions.
@@ -374,7 +402,7 @@ Under **Your team**, open a staff member's **...** menu to reassign all of their
   </Step>
 </Steps>
 
-Preview works on a **Draft** portal, so you can test a template before any client is invited. Nothing you enter in preview is saved or triggers a notification. Preview needs **Projects & Client Onboarding** Write access. It does not test a real invitation, email verification, or a saved submission. You can also preview from the portal list under **Settings > Projects > Onboarding Portals > Portals**.
+Preview works on a **Draft** portal, so you can test a template before any client is invited. Nothing you enter in preview is saved or triggers a notification. Preview needs **Projects & Client Onboarding** Read access. It does not test a real invitation, email verification, or a saved submission. You can also preview from the portal list under **Settings > Projects > Onboarding Portals > Portals**.
 
 ## Review credentials, secure files, and signatures
 

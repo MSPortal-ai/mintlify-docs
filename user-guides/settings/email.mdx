@@ -20,7 +20,7 @@ Email settings control how MSPortal emails look, who they come from, and where r
 
 The **Email Templates** table lists every email type from the start. A type with no default template of yours shows the email MSPortal sends for it, named after the type (for example **Default Onboarding Email**) and marked **Built-in** under its name. Its **Status** shows **Default**, because it is the email being sent.
 
-To change one, click its name, or open the **...** menu and click **Edit**. The editor opens with the built-in subject and content filled in. Make your changes and click **Save Changes**. MSPortal saves the email as your default template for that type, and it replaces the built-in row. Until you save, the built-in email keeps being sent.
+To change one, click its name, or open the **...** menu and click **Edit**. The editor opens with the built-in subject and content filled in. Under its title, the editor says when MSPortal sends this email and who receives it. Make your changes and click **Save Changes**. MSPortal saves the email as your default template for that type, and it replaces the built-in row. Until you save, the built-in email keeps being sent.
 
 Most built-in emails are sent in each recipient's language. A template you save is sent as you wrote it.
 
@@ -36,13 +36,13 @@ To go back to the built-in email for a type, delete your default template or tur
     Click **Create Template**. The **Create Email Template** dialog opens.
   </Step>
   <Step title="Choose the category and name">
-    Pick a **Category**. It decides which variables are available and cannot be changed later. Enter a **Template Name**.
+    Pick a **Category**. It decides which variables are available and cannot be changed later. Under the dialog title, the editor says when MSPortal sends that type of email and who receives it. Enter a **Template Name**.
   </Step>
   <Step title="Set the options">
-    Turn on **Set as default template** to make this the template used for that category. Turn on **Use dark theme email wrapper** to wrap the email in the MSPortal dark theme. With it off, your content is sent as designed.
+    Turn on **Default for … emails** to make this the template used for that category. Turn on **Dark email frame** to wrap the email in the MSPortal dark frame. With it off, your content is sent as written, on a light background.
   </Step>
   <Step title="Write the subject and content">
-    Enter the **Subject Line**. Design the body under **Email Content (HTML)**. In **Available Variables**, click a variable to insert it at your cursor in the subject, HTML or plain text. Add a **Plain Text Version (Optional)** for mail clients that cannot show HTML. Use **Insert Company Logo** to add your logo. Upload it in your branding settings first.
+    Enter the **Subject Line** and write the email under **Message**. In **Variables**, search or click a variable to insert it where your cursor was in the subject, message or plain text. On a phone, open **Variables** above the subject. Open **Plain-text version (optional)** to edit the copy shown by email apps that can't display formatted email. Use the **Insert … logo** button beside **Message**, named with your company, to add your logo. Upload it in your branding settings first. Click **Preview** to see the email with sample data before you save.
   </Step>
   <Step title="Save">
     Click **Create Template**. A toast says **Template created successfully**.
@@ -50,6 +50,8 @@ To go back to the built-in email for a type, delete your default template or tur
 </Steps>
 
 Template categories include Survey, Invitation, Onboarding Email, Onboarding Invitation, Meeting, the meeting booking categories, the approval email categories, Report, Training Reminder, Project Action & Decision, Ticket Fallback and Emergency Broadcast. The **Used when** and **Recipients** columns say when each is sent.
+
+Where [Contract review](/user-guides/agreements/contract-review) is turned on (branch preview), a **Contract Review** category is listed too. It is the email a person sends a client's contacts from a contract review. Its variables are listed in [Email the client](/user-guides/agreements/contract-review#email-the-client).
 
 When [manager ticket notices](/user-guides/settings/tickets#tell-managers-about-new-tickets) are available to your organization, a **Manager Ticket Notice** category is listed too. It is the email the **Manager notices** rule on **Settings > Tickets > Approvals** sends. Its default copy is the email managers get today, in the recipient's language. Its variables include `{{manager_name}}`, `{{requester_name}}`, `{{company_name}}`, `{{ticket_title}}`, `{{ticket_number}}`, `{{ticket_url}}`, `{{ticket_link}}` and `{{tenant_name}}`. `{{ticket_link}}` is a **View the ticket in MSPortal** button for managers who can sign in and is left out for everyone else, so prefer it to `{{ticket_url}}`.
 
@@ -190,7 +192,7 @@ If a regenerate fails partway, reload the list and look at the current addresses
 | **Failed** appears | Fix the DNS records shown, then check again |
 | The Resend Forge record does not verify | Check that the CNAME's name and value match the page exactly. On Cloudflare, set the record to **DNS only**. A CNAME cannot share its name with another record, so remove any other record on that host. DNS changes can take up to 72 hours |
 | **Email address must use your verified domain** | Enter a From address on the domain you verified |
-| Raw variables such as `{{recipient_name}}` appear in an email | Insert variables from **Available Variables** and use only variables available for the template's category. Preview to check |
+| Raw variables such as `{{recipient_name}}` appear in an email | Insert variables from **Variables** and use only variables available for the template's category. Preview to check |
 | A template preview looks right but the email never arrived | Check the recipient, the spam folder, your domain status and the sending workflow. Preview does not send mail |
 | A sender still uses the old address | Check the saved **Default From Address** and the workflow's template |
 | Imports stopped after a regenerate | Change the forwarding rule to the company's new address and check that it is **Active** |
