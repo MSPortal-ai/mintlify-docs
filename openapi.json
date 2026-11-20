@@ -77967,7 +77967,7 @@
     "/api/public/v1/tenant": {
       "get": {
         "summary": "Get tenant setup",
-        "description": "The MSP tenant's profile, locale, currency, branding image paths, brand color, sign-in page design and supported portal/support/AI settings, plus updated_at for the PATCH endpoints. Secrets and subscription internals are never returned. Requires `tenant.read` and read_settings_tenant (or a tenant settings write/manage permission, or manage_launch_center). MSP staff only.",
+        "description": "The MSP tenant's profile, locale, currency, branding image paths, brand color, sign-in page design and supported portal/support/AI settings, plus updated_at for the PATCH endpoints. Secrets and subscription internals are never returned. Requires `tenant.read` and a read, write or manage level of tenant, branding or AI settings, or manage_launch_center. MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
@@ -78210,7 +78210,7 @@
     "/api/public/v1/tenant/branding": {
       "patch": {
         "summary": "Update tenant branding",
-        "description": "Update logos, favicon, reporting logo, primary brand color and the sign-in page design. Image paths must come from POST /tenant/branding/assets for this tenant. Requires `tenant.write` and manage_settings_tenant or manage_launch_center. MSP staff only.",
+        "description": "Update logos, favicon, reporting logo, primary brand color and the sign-in page design. Image paths must come from POST /tenant/branding/assets for this tenant. Requires `tenant.write` and manage_settings_branding or manage_launch_center. MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
@@ -78294,7 +78294,7 @@
     "/api/public/v1/tenant/branding/assets": {
       "post": {
         "summary": "Upload branding image",
-        "description": "Upload a PNG, JPEG or WebP image for the tenant's branding and get back a storage path to apply with PATCH /tenant/branding. Requires `tenant.write` and manage_settings_tenant or manage_launch_center. MSP staff only.",
+        "description": "Upload a PNG, JPEG or WebP image for the tenant's branding and get back a storage path to apply with PATCH /tenant/branding. Requires `tenant.write` and manage_settings_branding or manage_launch_center. MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
@@ -78378,7 +78378,7 @@
     "/api/public/v1/tenant/settings": {
       "patch": {
         "summary": "Update tenant settings",
-        "description": "Update support contact details, business hours, website, portal name, client/staff AI configuration, company visibility defaults and custom-domain sign-in methods. Nested customizations replace the stored value, so read GET /tenant first. Requires `tenant.write` and write_settings_tenant or manage_settings_tenant. MSP staff only.",
+        "description": "Update support contact details, business hours, website, portal name, client/staff AI configuration, company visibility defaults and custom-domain sign-in methods. Nested customizations replace the stored value, so read GET /tenant first. Requires `tenant.write`; the AI, support contact, business hours, website and portal name keys need write_settings_ai (or manage), custom-domain sign-in methods write_settings_branding (or manage), and company visibility write_settings_tenant (or manage). MSP staff only.",
         "tags": [
           "Tenant Setup"
         ],
