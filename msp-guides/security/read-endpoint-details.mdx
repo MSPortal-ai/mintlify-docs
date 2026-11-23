@@ -1,0 +1,106 @@
+---
+title: "Read security endpoint details"
+description: "Open an endpoint's side panel to see its identity, source, protection status, and backup details."
+icon: shield-halved
+---
+
+{/* Generated from /user-guides/security/read-endpoint-details.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use this page to read the details of one endpoint from Cork, Acronis, or Bitdefender GravityZone. It is for company users and MSP staff.
+
+## Before you start
+
+- You need Security read access and an active Cork, Acronis, or Bitdefender GravityZone integration.
+- Find the device first. See [Find security endpoints](/msp-guides/security/find-endpoints).
+- The panel shows the row already loaded in the table. It does not scan the device or refresh data from the provider.
+
+## Open the detail panel
+
+<Steps>
+  <Step title="Open Endpoints">
+    Open **Security > Endpoints** and find the device.
+  </Step>
+  <Step title="Click the row">
+    Click the row away from its checkbox. A panel opens on the right.
+  </Step>
+  <Step title="Confirm the device">
+    Check the device name, company, and source at the top. Badges beside them show **Online** or **Offline**, the protection status, and the source.
+  </Step>
+  <Step title="Read the sections">
+    Scroll through the sections described below. Close the panel when you finish. Closing it changes nothing.
+  </Step>
+</Steps>
+
+Fields without a value are left out of the panel. Which fields appear depends on the source.
+
+## Read the General section
+
+**General** can show **Device Name**, **Hostname**, **Company**, **OS**, **OS Version**, **Architecture**, **IP Addresses**, **Source**, and **Last Seen**.
+
+## Read an Acronis record
+
+- **Acronis Agent** can show **Agent Version**, **Protection Status**, **Auto Update** (Enabled or Disabled), and **Registered**. These are reported values. You cannot change them here.
+- Online and Protected are separate. A device can be online and unprotected.
+- For Acronis records, **OS Version** and **Last Seen** are blank, because Acronis does not report them. The agent version and the registration date are in the **Acronis Agent** section, under **Agent Version** and **Registered**. Use **Status** in the list for the connection state.
+- **Backup** shows **Last Backup Status**, **Last Backup Time**, and **Backup Size**. This section appears only when Acronis supplies a backup status or a backup size above zero.
+
+## Read a Bitdefender record
+
+**Bitdefender agent** can show:
+
+| Field | What it shows |
+| --- | --- |
+| **Agent Version** | The GravityZone agent version. |
+| **License** | **Active**, **Expired**, **Pending activation**, **Not licensed**, or **Unknown**. |
+| **Antivirus signatures** | **Up to date** or **Signatures outdated**. |
+| **Last update** | When the agent last reported an update. |
+| **Agent updates** | **Up to date** or **Agent outdated**. |
+| **Malware** | **Infected**, **Malware detected**, or **No malware detected**. |
+| **Policy** | The applied GravityZone policy. **(not applied yet)** follows a policy that has not reached the endpoint. |
+| **Network isolation** | **Isolated** or **Not isolated**. |
+| **Protection modules** | The protection modules enabled on the endpoint. |
+
+These are reported values from the latest GravityZone sync, every 4 hours. You cannot change them here.
+
+## Read a Cork record
+
+**Integration** can show **Integration Source**, **Integration Identifier**, and **External Device ID**. Cork records do not have an Online status or Acronis agent details.
+
+## Identifiers
+
+**Identifiers** lists **Internal ID**, **Integration ID**, and **External ID**. Your MSP can use them to match the record in the provider. You do not need to enter them anywhere.
+
+The panel has no restore, backup now, protection, or update action. For backup history, see [Find device backups](/msp-guides/backup/find-device-backups) and [Read backup activity and details](/msp-guides/backup/read-backup-details).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The panel does not open | Click the row text, not the checkbox. |
+| A field is missing | The provider did not supply it. Missing fields are left out. **OS Version** and **Last Seen** are always blank for Acronis. |
+| No **Backup** section | Acronis sent no backup status or size for this device. It does not prove there is no backup. |
+| Data looks old | The panel shows the last synced data. Ask your MSP to check the integration sync. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I change protection or Auto Update here?">
+    No. These are read-only. Your MSP uses the provider, such as Acronis or GravityZone, to change them.
+  </Accordion>
+  <Accordion title="Why are OS Version and Last Seen blank for an Acronis device?">
+    Acronis does not report them. Find the agent version and registration date in the **Acronis Agent** section. Check Acronis for the operating-system version.
+  </Accordion>
+  <Accordion title="Does opening the panel refresh the data?">
+    No. It shows the row already loaded in the table.
+  </Accordion>
+  <Accordion title="I am a company user. How do I ask about a device?">
+    Tell the [Home AI Assistant](/msp-guides/ticketing/open-a-ticket) the device, company, source, and the value you are asking about, then confirm the request when prompted.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Find security endpoints](/msp-guides/security/find-endpoints)
+- [Find devices](/msp-guides/devices/find-devices)
+- [Configure Bitdefender GravityZone Integration](/user-guides/integrations/enable-bitdefender-integration)
+- [Security](/msp-guides/security/index)

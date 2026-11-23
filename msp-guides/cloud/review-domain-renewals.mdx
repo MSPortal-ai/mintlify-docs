@@ -1,0 +1,103 @@
+---
+title: 'Review domain renewal information'
+description: 'Read synced DNSimple expiry and auto-renew fields, spot missing information, and hand renewal decisions to your MSP.'
+icon: 'calendar'
+---
+
+{/* Generated from /user-guides/cloud/review-domain-renewals.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Cloud > Domains** to read the expiry date and auto-renew setting of domains registered through DNSimple. This page is for MSP staff and company users. Microsoft 365 and Google Workspace rows do not carry registrar dates.
+
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- Your MSP must have DNSimple connected in **Settings > Integrations**, and each domain must be mapped to a company. Unmapped DNSimple domains do not appear.
+- You cannot renew a domain, change auto-renew, or edit a domain from this page.
+
+## Check expiry and auto-renew
+
+<Steps>
+  <Step title="Open Cloud > Domains">
+    Click **Cloud** in the sidebar, then click the **Domains** tab. Check the company selector in the top bar.
+  </Step>
+  <Step title="Show only DNSimple rows">
+    If a **Provider** column is shown, open its filter and check **DNSimple**. If there is no **Provider** column, your scope has only one provider.
+  </Step>
+  <Step title="Show the registrar columns">
+    Click **Columns**. Turn on **Auto-renew** and **Registrar status**. Click **Save Changes**. **Expires** is shown by default.
+  </Step>
+  <Step title="Find the domain">
+    Type the name in the filter box under the **Domain** column. Scroll the table sideways if some columns are off screen.
+  </Step>
+  <Step title="Compare the dates">
+    Read **Expires** and **Auto-renew** together. They come from the last sync, so ask your MSP to confirm the registrar details before you rely on them for a renewal decision.
+  </Step>
+</Steps>
+
+| Field | What it means |
+| --- | --- |
+| **Expires** | The expiry date from the last sync. A dash means no date was synced. It does not mean the domain never expires. |
+| **Auto-renew** | **On** or **Off** as synced from DNSimple. A dash means no value was synced. |
+| **Registrar status** | The state DNSimple reports for the domain. It is not a test of DNS, your website, or email. |
+
+## Build a renewal review list
+
+<Steps>
+  <Step title="Filter to DNSimple">
+    Set the **Provider** filter to **DNSimple**.
+  </Step>
+  <Step title="Export the list">
+    Click **Export CSV** above the table. The file includes every domain that matches your filters, across all pages.
+
+    <Frame caption="Export CSV downloads every matching domain. It does not renew a domain.">
+      <img src="/images/product/cloud-domain-export-control.png" alt="Export CSV button on Cloud Domains." width="244" height="64" />
+    </Frame>
+  </Step>
+  <Step title="Sort in a spreadsheet">
+    The table cannot be sorted or filtered by date. Open the CSV and sort **Expires** there. The file includes **Expires**, **Auto-renew**, and **Registrar status** even if those columns are hidden.
+  </Step>
+</Steps>
+
+## Hand the renewal to your MSP
+
+- **Company users:** [open a ticket](/msp-guides/ticketing/open-a-ticket) with the domain, the expiry date you see, and your concern.
+- **MSP staff:** check the expiry, renewal setting, and account status in DNSimple before you act. If a domain is missing here, check the DNSimple company mapping. See [DNSimple integration](/user-guides/integrations/enable-dnsimple-integration).
+
+<Note>
+**Unverified** on a DNSimple row and **Secondary domain** under **Cloud presence** are not renewal warnings. **Unverified** is the label for every DNSimple row. **Secondary domain** means the name was not found in a synced Microsoft 365 or Google Workspace tenant.
+</Note>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Expires** is a dash | The date was not synced. Ask your MSP to check the DNSimple connection and the domain's company mapping. |
+| A DNSimple domain is missing | Check the company selector and the **Provider** filter. MSP staff check the company mapping. |
+| **Auto-renew** is not shown | Show it with **Columns**, then click **Save Changes**. |
+| The date looks out of date | The page shows the last sync, not a live lookup. Ask your MSP to check the date in DNSimple. |
+| **Export CSV** is missing | Your role does not have Cloud read access. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I renew a domain or turn on auto-renew here?">
+    No. Your MSP manages renewals in DNSimple.
+  </Accordion>
+  <Accordion title="Does an empty Expires field mean the domain never expires?">
+    No. The date was not synced, or you are looking at a Microsoft 365 or Google Workspace row.
+  </Accordion>
+  <Accordion title="Does Auto-renew On guarantee the renewal?">
+    No. It is a synced flag. Your MSP must confirm the live registrar settings and payment details.
+  </Accordion>
+  <Accordion title="Is Created the original registration date?">
+    For DNSimple rows it is the registration date. For Google Workspace it is the domain creation time. For Microsoft 365 it is the date MSPortal stored the record.
+  </Accordion>
+  <Accordion title="Does Secondary domain mean I can cancel the domain?">
+    No. It only means the name was not found in a synced Microsoft 365 or Google Workspace tenant. Ask your MSP before you cancel anything.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read cloud and registrar domains](/msp-guides/cloud/domains)
+- [Find and export domains](/msp-guides/cloud/filter-domains)

@@ -1,0 +1,107 @@
+---
+title: "Find device backups"
+description: "Filter device backup records and read their status, last backup date and storage."
+icon: shield-halved
+---
+
+{/* Generated from /user-guides/backup/find-device-backups.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Backup > Devices lists backed-up devices, workloads and appliance assets from Cove, Acronis, NinjaOne, Datto Backup and Slide Backup. MSP staff and company users with Backup read access can use it.
+
+## Before you start
+
+- You have Backup read access.
+- A device-backup provider has reported data for your companies. The **Devices** tab is hidden until it has.
+- The company selector at the top shows the company you want.
+
+## Find a device
+
+<Steps>
+  <Step title="Open Devices">
+    Go to **Backup > Devices**.
+  </Step>
+  <Step title="Check the company">
+    Confirm the company selector. MSP staff should select the company before they look into one client's device.
+  </Step>
+  <Step title="Filter the list">
+    Use the **Device** filter to search by name. Use **Status** to narrow by result. MSP staff also get a **Provider** filter when more than one provider is connected.
+  </Step>
+  <Step title="Read the row">
+    Check **Type**, **Status**, **Last Backup** and the storage columns.
+  </Step>
+  <Step title="Page through results">
+    The list shows 25 rows per page. Use the pager for more.
+  </Step>
+</Steps>
+
+The default **Status** filter shows Success, Completed, Ok, Warning, InProcess, Failed, Error, Critical and Paused. **Not Configured** rows are hidden at first. To see them, choose **Not Configured** in **Status**. Clearing the filter returns to the default set, not to every status.
+
+If every expected device is unconfigured, ask your MSP to check the provider and company mapping instead of concluding that you have no devices.
+
+## Open Devices from the dashboard
+
+Selecting a tile, a status segment or a bar on the [Backup Dashboard](/msp-guides/backup/read-dashboard) opens Devices with filters already set. A provider card sets **Provider**. A status tile or segment also sets **Status**, for example Warning and InProcess for **Needs attention**. The filters live in the page address, so you can bookmark or share a filtered view. Change or clear them in the table to widen the list.
+
+## Read the columns
+
+| Column | Meaning |
+| --- | --- |
+| **Device** | The provider's device or resource name. Datto Backup and Slide Backup rows also name the appliance under it. Acronis lists each machine, virtual machine, NAS and database that has a backup plan. A resource backed up through another machine names it below, for example **via ACME-HV01**. A company whose machines are not listed yet shows one usage row that can stand for several workloads. |
+| **Company** | The mapped company. |
+| **Provider** | Cove, Acronis, NinjaOne, Datto Backup or Slide Backup. MSP staff see it only when several providers are connected. |
+| **Type** | The reported backup plugin, resource type or backup type. |
+| **Status** | The imported result. **Not Configured** means the source reports no backup setup. **Paused** means an MSP stopped the backup on purpose. **Unknown** means no status. |
+| **Last Backup** | The latest backup date. Shown when Cove, Acronis, Datto Backup or Slide Backup is connected. **Never** or a dash is not a successful backup. |
+| **Protected data** | Data selected for backup in the latest session. Cove and Slide Backup only. Hidden by default. |
+| **Used storage** | Storage used after compression and deduplication, including retained backups. Cove reports an **Account total** across all workloads. Datto Backup and Slide Backup report an **Appliance total**. |
+
+Select the column toggle above the table to show or hide columns. Missing or zero storage is not proof of protection. Read the status and date together, not the badge color alone.
+
+## Multi-company selections
+
+Some providers cannot be narrowed to a selection of several companies. MSPortal leaves their devices out and shows a note naming them. Select one company, or **Global View**, to see them. Company users see the note as "Some backup".
+
+## Open a device's details
+
+Select a row to open its panel. Cove device rows do not open a panel.
+
+| Provider | What opens |
+| --- | --- |
+| Acronis | Backup activity |
+| NinjaOne | Storage and timestamps |
+| Datto Backup | Asset status, snapshots and backup history |
+| Slide Backup | Asset status, recovery points and backup history |
+
+See [Read backup details](/msp-guides/backup/read-backup-details).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| No devices appear | Check the company selector and the default **Status** filter. Then ask your MSP to check the integration and mapping. A provider read failure can show an empty list. |
+| A provider's devices are missing | You may have several companies selected. Select one company or **Global View**. |
+| **Last Backup** is missing | NinjaOne-only lists have no **Last Backup** column. Open the NinjaOne row for **Last Success**, **Last Failure** and **Last Synced**. |
+| You need an export | The Backup tables have no CSV export. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why did Clear filters hide Not Configured devices?">
+    Clearing the filters restores the default status set. Choose **Not Configured** to see those rows.
+  </Accordion>
+  <Accordion title="Does one row always mean one physical device?">
+    No. An Acronis usage row, shown until a company's machines are listed, summarizes several workloads, and Datto Backup and Slide Backup rows are protected systems on an appliance. Acronis machines with only security plans, such as antimalware, and no backup plan are not listed. Read **Device** and **Type** before you compare row counts with an inventory.
+  </Accordion>
+  <Accordion title="Can I start a backup from a row?">
+    No. Rows open read-only details. Starting or changing a backup is a provider task for authorized MSP staff.
+  </Accordion>
+  <Accordion title="Why do company users not see a Provider column?">
+    Company users see their MSP's managed service, not the vendor behind it.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read the Backup Dashboard](/msp-guides/backup/read-dashboard)
+- [Read backup details](/msp-guides/backup/read-backup-details)
+- [Backup overview](/msp-guides/backup/index)
