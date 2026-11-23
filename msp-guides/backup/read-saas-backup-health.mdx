@@ -1,0 +1,115 @@
+---
+title: "Read SaaS backup health"
+description: "Read workload coverage, trends and customer results for Kaseya SaaS Protection, Spanning Backup and ConnectWise SaaS Backup."
+icon: shield-halved
+---
+
+{/* Generated from /user-guides/backup/read-saas-backup-health.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+These reports summarize SaaS backup health: Exchange, OneDrive, SharePoint and Teams from Kaseya SaaS Protection and Spanning Backup, and Microsoft 365, Google Workspace and Entra ID accounts from ConnectWise SaaS Backup through ConnectWise Asio. MSP staff and company users with Backup read access can use them. They are not restore browsers for individual files.
+
+## Before you start
+
+- You have Backup read access.
+- Kaseya SaaS Protection or Spanning Backup is connected, its feature is turned on for your account, and its customers are mapped to companies. For ConnectWise SaaS Backup, ConnectWise Asio is connected with the Backup Dashboard scopes and its companies are matched (see [ConnectWise Asio setup](/user-guides/integrations/enable-connectwise-asio-integration#connectwise-saas-backup)).
+- The company selector shows the companies you want.
+
+## Open the report
+
+<Steps>
+  <Step title="Open Microsoft 365">
+    Go to **Backup > Microsoft 365**.
+  </Step>
+  <Step title="Choose the provider">
+    When several providers have data, choose **SaaS Protection** for Kaseya, **Spanning Backup** or **ConnectWise SaaS Backup**. With one provider, its report opens directly.
+  </Step>
+  <Step title="Check the scope">
+    Confirm the companies in scope. The header shows how many customers are included.
+  </Step>
+  <Step title="Expand Overall backup health">
+    Open **Overall backup health** to see **Workload health**.
+  </Step>
+  <Step title="Expand Backup result trend">
+    Open **Backup result trend**, then read **Customer backup health** below it.
+  </Step>
+</Steps>
+
+## Read coverage and status
+
+**Backed up in the last 24 hours** compares backed-up services with active services in the imported snapshot. The percentage weights each customer by its active services. It is not an average of company percentages.
+
+Kaseya also shows **Services in initial backup**. Its workload statuses read as follows.
+
+| Label | Meaning |
+| --- | --- |
+| **Healthy** | Backed-up services cover all active services, and none are in initial backup. |
+| **Needs attention** | Coverage is at least 90% but below full, or initial backups remain. |
+| **Critical** | Coverage is below 90%. |
+| **No data** or **N/A** | There is no active-service count to calculate from. |
+
+Spanning uses its own reported workload health and has no initial-backup metric. Do not apply Kaseya's thresholds to Spanning.
+
+ConnectWise SaaS Backup counts protected accounts (a Microsoft 365 tenant, a Google Workspace domain, an Entra ID tenant), not services, and has no initial-backup metric. Each account's health comes from its latest backup job:
+
+| Label | Meaning |
+| --- | --- |
+| **Healthy** | The last backup succeeded within 3 days, or a backup is running and the last success is under 2 days old. |
+| **Needs attention** | The job reported warnings, its last backup is more than 3 days old, or it is running without a success in the last 2 days. |
+| **Critical** | The last backup failed. |
+
+Check individual customer and workload rows even when the overall label is **Healthy**, because a workload can still have no data. A percentage from an old snapshot does not show current protection.
+
+**Last 100% successful backup** is the most recent date every active workload in scope was fully protected. Customers without a date need a separate check. **Last synced** shows when the data was imported, not when a backup ran.
+
+## Read the trend and customer rows
+
+<Steps>
+  <Step title="Pick the trend range">
+    Kaseya offers **10 days** and **30 days**. ConnectWise SaaS Backup offers **7 days** and **30 days**, from daily snapshots that start with its first sync. Spanning always shows 7 days.
+  </Step>
+  <Step title="Read the lines">
+    Hover a point to read its percentage. The lines combine successful-service coverage by workload and day. A line drawn across a gap does not prove a backup ran in it.
+  </Step>
+  <Step title="Read Customer backup health">
+    The table lists each company with its mapped provider customer, **Health**, a ratio per workload and **Last full success**. Kaseya also shows **Initial**. On a narrow screen, scroll the table sideways.
+  </Step>
+</Steps>
+
+Customer rows do not open a restore or edit form.
+
+## Refresh the report
+
+Select **Refresh** to reload the imported report. It does not start a provider sync, run a backup or repair a failed service. Check the dates after you refresh.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Backup health could not be loaded** | Select **Refresh**. If it continues, company users contact their MSP. MSP staff check the provider's connection, sync status, company mapping and feature access. Some Spanning messages still mention Kaseya, so use the provider you selected. |
+| **No mapped SaaS Protection customers** | The connection synced customers, but none are mapped to a company. MSP staff select **Open company mapping** and map them. |
+| **Check your integration** | MSPortal could not load backup data. MSP staff select **Open integration settings** and check the connection and sync. |
+| The 30-day option is missing | Spanning shows 7 days only. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Refresh start a new backup?">
+    No. It reloads data already imported into MSPortal.
+  </Accordion>
+  <Accordion title="Why can 100% still need attention in Kaseya?">
+    Services can still be in initial backup. Read the initial-backup count and each workload's status with the percentage.
+  </Accordion>
+  <Accordion title="Why does Spanning have no Initial column or 30-day option?">
+    Those belong to Kaseya. Spanning uses a 7-day trend and its own health status.
+  </Accordion>
+  <Accordion title="Does Healthy prove every workload has data?">
+    No. Check each workload and the snapshot date.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read Microsoft 365 backups](/msp-guides/backup/read-microsoft-365-backups)
+- [Kaseya SaaS Protection setup](/user-guides/integrations/enable-kaseya-saas-protection-integration)
+- [Spanning Backup setup](/user-guides/integrations/enable-spanning-integration)
+- [ConnectWise Asio setup](/user-guides/integrations/enable-connectwise-asio-integration)

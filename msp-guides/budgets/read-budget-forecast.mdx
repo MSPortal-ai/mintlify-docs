@@ -1,0 +1,116 @@
+---
+title: 'Read and adjust a company budget forecast'
+description: 'Choose a company and base year, compare projected costs, and understand category growth and overrides.'
+icon: 'chart-line'
+---
+
+{/* Generated from /user-guides/budgets/read-budget-forecast.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Budgets Menu > Forecast** to project one company's category costs for the years after a **Base Year**. The forecast is a planning worksheet. It is separate from budget approval and Actuals. This guide is for MSP staff, and for company users whose MSP has given them budget access.
+
+## Before you start
+
+- You need budget edit access (**write_budgets** or **manage_budgets**) to open the page. Without it the page says **You don't have permission to view budget forecast.**
+- Only people with **manage_budgets** see the **Sync from Budget**, **Sync from Planner** and **Save** buttons, and only they can edit the worksheet. With **write_budgets** alone you can open the forecast, but it is read-only.
+- Select exactly one company in the top bar. Global View and a list of several companies show **Select a single company to forecast**.
+
+## Open the forecast
+
+<Steps>
+  <Step title="Select one company">
+    Pick the company in the top bar.
+  </Step>
+  <Step title="Open Forecast">
+    Click **Budgets**, then **Budgets Menu**, then **Forecast**. The page is titled **Budget Forecast**.
+  </Step>
+  <Step title="Choose the Base Year">
+    Use **Base Year** at the top left. It lists fiscal years from two years ago to five years ahead and starts on the current year. If you have unsaved changes, a message asks **Switch to base year 2026 and discard your unsaved forecast changes?** Click **Keep editing** to stay, or **Switch base year** to discard the edits and load the new year. Save first if you want to keep your work.
+
+    <img src="/images/product/budget-forecast-years.png" alt="Years to Forecast choices from one through five years, with three selected." width="500" height="332" />
+  </Step>
+  <Step title="Read the table">
+    Each row is a category. Read **Include**, its **% Increase**, the **Base Year** amount and one column per forecast year. Scroll sideways for later years. The **Total** row adds the included categories. Under each year, the change compares with the year before, not with the base year. Rows come from your Planner item types.
+  </Step>
+</Steps>
+
+## Where the starting amounts come from
+
+With no saved rules, the forecast starts from the company's budget lines for the Base Year. It adds up every budget the company has for that fiscal year. It does not let you pick one budget. Drafts, copies, archived budgets and rejected lines all count. Each line adds its twelve-month cost, which includes its billing schedule and any monthly overrides. A line with no category is not shown in any row.
+
+The currency comes from the company's budget data, with your MSP's default as a fallback. Amounts in different currencies are not converted. If the forecast differs from a budget total or Actuals, compare the budgets for that company and year.
+
+## Adjust the projection
+
+| Control | What it does |
+| --- | --- |
+| **Forecast Settings** | Opens the settings below. The button reads the horizon and the default, for example **3 Years · +5%**, or **No default** while **Apply to All Categories** is off. |
+| **Years to Forecast** | Shows 1 to 5 years after the Base Year. Lowering it drops overrides past the new end. Raising it again does not bring them back. |
+| **Default Annual Increase** | A percentage from 0 to 100 for every category marked **Default**. Changing it moves those categories and leaves a category's own rate alone. |
+| **Apply to All Categories** | While on, categories marked **Default** grow by the default. While off, they stay flat and read **Flat**. It never overwrites a percentage you typed for a category. |
+| **Include** | Counts the category in the totals. Turn it off to leave the category out of every total. It does not hold the cost flat. |
+| **Base Year** amount | Sets this forecast's starting amount. It does not change any budget. |
+| **% Increase** | Grows the category each year from the year before. A category marked **Default** follows the default, shown in grey. Type a percentage to give the category its own rate; it keeps that rate when the default changes. Click the reset arrow beside it, or clear the box, to follow the default again. |
+| A future-year amount | Typing in the box sets an override for that category and year, marked **Override** under the box. Click the reset arrow beside it, or clear the box, to go back to the calculated amount. Typing 0 sets a zero override. |
+| **Hide Empty Categories** | Hides rows with a zero base amount. A hidden row with a future override still counts in the total. This setting is not saved. |
+
+For example, a base amount of 1,000 with a 5% increase gives 1,050, then 1,102.50. If you override the first year to 2,000, the next year is 2,100 at 5%. A category marked **Flat** goes back to 1,000 the year after an override. A 0% rate carries the previous amount forward instead.
+
+A company's first forecast starts with **Apply to All Categories** on, so every category grows by the 5% default until you change it.
+
+## Save the forecast
+
+<Steps>
+  <Step title="Finish your edits">
+    Tab out of the last box and check the new amounts. An **Unsaved changes** badge shows next to **Base Year** while edits are waiting.
+  </Step>
+  <Step title="Click Save">
+    Click **Save** on the toolbar. This needs **manage_budgets**. Wait for **Budget forecast rules have been saved successfully.**
+  </Step>
+  <Step title="Check it">
+    Reload the same company and Base Year and check the settings and amounts.
+  </Step>
+</Steps>
+
+Save keeps the forecast rules for that company and Base Year. It does not approve a budget, create budgets, change Planner work or change provider prices. To fill the worksheet from budgets or Planner first, see [Sync a forecast from budgets or Planner](/msp-guides/budgets/sync-budget-forecast).
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **You don't have permission to view budget forecast.** | Ask your MSP admin for budget edit access. Read-only budget access is not enough. |
+| **Select a single company to forecast** | Pick one company in the top bar. |
+| **Sync** and **Save** are missing, and the worksheet cannot be edited | You need **manage_budgets**. Without it the worksheet is read-only. |
+| The default is 5% but amounts stay flat | Turn on **Apply to All Categories**. Categories marked **Flat** follow the default only while it is on. |
+| **Total** does not match the visible rows | Clear **Hide Empty Categories** and check the **Include** switches and future overrides. |
+| **Total** does not match one budget | The forecast adds every budget for that company and year, including rejected lines. |
+| The starting amounts are all zero | Check that the company has budgets with categories for that year. Reload before you replace saved rules. |
+| **Failed to save budget forecast rules.** | Keep the page open, read the error, and try again. Ask your MSP admin if it keeps failing. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can a company user with read-only budget access open Forecast?">
+    No. Forecast needs budget edit access.
+  </Accordion>
+  <Accordion title="Does Forecast use only my latest approved budget?">
+    No. It adds every budget for the company and year, whatever the status.
+  </Accordion>
+  <Accordion title="Does turning Include off keep a category flat?">
+    No. It leaves the category out of the totals. Keep **Include** on and type 0 in **% Increase** to hold the amount flat.
+  </Accordion>
+  <Accordion title="Does turning Apply to All Categories on overwrite the rates I typed?">
+    No. It only moves the categories marked **Default**. A category with its own rate keeps it.
+  </Accordion>
+  <Accordion title="How do I remove a forecast override?">
+    Click the reset arrow beside the amount, or clear the box. The calculated value returns.
+  </Accordion>
+  <Accordion title="Does saving a forecast approve or create budgets?">
+    No. It only saves the forecast rules.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Sync a forecast from budgets or Planner](/msp-guides/budgets/sync-budget-forecast)
+- [Read a budget overview](/msp-guides/budgets/read-budget)
+- [Read a budget monthly breakdown](/msp-guides/budgets/read-monthly-breakdown)

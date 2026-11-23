@@ -1,0 +1,410 @@
+---
+title: "Understand device details"
+description: "Read hardware, security, network, warranty, purchase, Intune, and integration information without confusing missing data with a healthy device."
+icon: "computer"
+---
+
+{/* Generated from /user-guides/devices/understand-device-details.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Select a device's **Name** in **Devices** to open its details. **Overview** shows the information currently available for that record. Available sections depend on the connected tools and the data they have supplied.
+
+<Note>
+  For Company users and MSP staff with access to the device. Provider portal and
+  remote-access shortcuts are hidden from Company users. An MSP screenshot can
+  include additional controls that your account does not have.
+</Note>
+
+## Read the Overview
+
+1. Confirm the device name and company in the panel header. A friendly display name may also show the underlying device name.
+2. Review the reported dates, including **Last Seen** in the inventory and any timestamps shown in the panel.
+3. Check the relevant fields below. A dash or absent section means the value is unavailable; it is not a successful health check.
+
+| Information                   | What to look for                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Basic inventory               | Operating system, model, manufacturer, serial number, reported IP, and MAC address                                        |
+| Hardware                      | Available processor, memory, and disk information                                                                         |
+| Security                      | Reported protection, encryption, firewall, patching, or enrollment information supported by the connected source          |
+| Network                       | Available hostname, domain, internal/external addresses, and adapters                                                     |
+| Battery                       | Available charge, charging, and cycle information                                                                         |
+| User                          | Reported current or last user details, where supplied                                                                     |
+| System                        | Available uptime, boot, operating-system build, agent, and reboot information                                             |
+| Warranty and purchase         | **Purchase Date** with where it came from, recorded warranty start/end dates, and the remaining-days or expired indicator |
+| Microsoft Entra ID and Intune | Join type, compliance, ownership, primary user, and Intune check-in details from CIPP                                     |
+| Custom fields                 | Additional fields configured and made visible to your account                                                             |
+
+A protection badge or recent inventory entry does not by itself establish that every security control is healthy. Use the relevant reported evidence and ask your provider about missing or unexpected values.
+
+<Note>
+  Branch preview: the **Tickets** tab and the placement of Asio's **Friendly
+  Name** described below are pending release. The screenshots use synthetic
+  sample data, not customer records.
+</Note>
+
+When Asio supplies a **Friendly Name**, it is the first field in the **Overview**
+grid. A separate provider details box is absent when the friendly name would be
+its only content; provider links or other details can still appear there.
+
+<Frame caption="Synthetic branch preview: Asio Friendly Name at the start of Overview on desktop.">
+  <img
+    src="/images/product/devices-friendly-name-desktop.png"
+    alt="Synthetic device Overview with Friendly Name first and no separate provider details box"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: the same Overview on a phone.">
+  <img
+    src="/images/product/devices-friendly-name-mobile.png"
+    alt="Synthetic phone device Overview showing Friendly Name before the other fields"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+## Purchase date and device age
+
+**Purchase Date** appears in the Overview when one is recorded. The line under it shows where the date came from: **Entered manually**, or **From** followed by the source, such as ConnectWise PSA, Autotask, Halo PSA, IT Glue or ConnectWise RMM. Apple and Dell warranty lookups can also supply it.
+
+A date entered on the device is kept when syncs run. Clear it to use the date from your PSA or IT Glue again. See [Add and edit device records](/msp-guides/devices/add-and-edit-devices#set-a-purchase-date).
+
+**Device Age** counts the years since the purchase date. When no purchase date is recorded, it counts from **Warranty Start**. A device with neither date has no age.
+
+## Review HPE warranty history
+
+For a device whose **Manufacturer** is **HPE** or **Hewlett Packard Enterprise**, users with read access to Devices can open **Warranty History**. This includes Company users who can access that device; Manage access is not required to read its history. HP devices do not receive this HPE tab.
+
+<Steps>
+  <Step title="Open the device">
+    In **Devices**, select the device's **Name**. Confirm that you have the
+    right device and company.
+  </Step>
+  <Step title="Select Warranty History">
+    History appears after a successful warranty lookup returns coverage for the
+    device. Opening this tab displays the stored result; it does not start a new
+    lookup.
+  </Step>
+  <Step title="Read the agreements and services">
+    Scroll through the complete returned history, including expired coverage.
+    Services are grouped under **Support agreement**, **Packaged support**, or
+    **Warranty**, with the agreement's service name when available. Groups with
+    the latest end dates appear first.
+  </Step>
+</Steps>
+
+Each service shows its name, **Start Date**, **End Date**, and status. **Service level** and **Deliverables** appear when HPE supplies them. A dash means a date is unavailable.
+
+| Status       | How to read it                                                                                                        |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| **Active**   | HPE marks the service active and its available dates do not put it in the past or future. The end date may be absent. |
+| **Expired**  | The end date has passed or HPE marks the service expired.                                                             |
+| **Upcoming** | The start date is in the future.                                                                                      |
+| **Unknown**  | The available dates and status do not establish one of the other states. Ask your provider to confirm coverage.       |
+
+The tab also shows the product description and **Product number**. **HPE Support Center** opens HPE's warranty-check site in a new tab, where you can check coverage with HPE.
+
+<Frame caption="Sample data: HPE agreements and service details on desktop, cropped to the device panel.">
+  <img
+    src="/images/product/hpe-warranty-history-desktop-preview.png"
+    alt="Demo HPE server Warranty History with grouped agreements, service dates, Active badges, service levels, and deliverables"
+    width="600"
+    height="936"
+  />
+</Frame>
+
+<Frame caption="The same HPE warranty history on a phone; scroll within the panel to read more services.">
+  <img
+    src="/images/product/hpe-warranty-history-mobile-preview.png"
+    alt="Phone layout of Demo HPE server Warranty History with agreement cards and service dates"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+**Warranty Start** and **Warranty End** in the Overview remain summary dates. Read the individual history rows to see which services apply to which dates. A failed lookup or a response that returns no product retains previously stored history. When HPE returns the matching product with no agreements, the tab shows **HPE reports no warranty coverage.** The existing summary-date preservation still applies. Stored history is therefore not proof that the latest lookup succeeded.
+
+If the saved serial number changes or the manufacturer no longer identifies an HPE device, history for the previous identity is hidden. See [Add and edit device records](/msp-guides/devices/add-and-edit-devices#correct-an-hpe-device-identity).
+
+### If history is missing
+
+| What you see                              | What to check                                                                                                                                      |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No **Warranty History** tab               | Confirm the manufacturer is HPE or Hewlett Packard Enterprise, your role has device-read access, and the feature has been released.                |
+| Loading placeholders                      | Wait for the device details to finish loading. This is not a coverage result.                                                                      |
+| **No warranty history yet**               | No usable stored history is available for this device identity. Ask your MSP to check its serial number, manufacturer, and warranty lookup.        |
+| **No data available** inside an agreement | HPE returned the agreement without service details. The agreement heading is kept in the history.                                                  |
+| **HPE reports no warranty coverage.**     | No agreements are available in the displayed result. Confirm coverage with HPE before treating the device as uncovered.                            |
+| **Could not load warranty history.**      | Close and reopen the device after the inventory has loaded. If it persists, report the problem to your MSP; it does not mean coverage has expired. |
+
+## Review Microsoft Entra ID and Intune details
+
+When your MSP connects CIPP and the device has a matching Intune record, the Overview shows a **Microsoft Entra ID and Intune** section. It can include:
+
+| Field                                         | What it shows                                                                                |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **Join type**                                 | **Entra joined**, **Hybrid joined** or **Entra registered**                                  |
+| **Compliance**                                | The Intune compliance state, such as **Compliant**, **Not compliant** or **In grace period** |
+| **Ownership**                                 | **Corporate** or **Personal**                                                                |
+| **Primary user**                              | The device's primary Intune user                                                             |
+| **Operating system** and **Management agent** | As reported by Intune                                                                        |
+| **Last Intune check-in** and **Enrolled**     | When the device last checked in with Intune and when it enrolled                             |
+| **Entra device ID** and **Intune device ID**  | The Microsoft identifiers for the device                                                     |
+| **Encrypted**                                 | Whether Intune reports the device as encrypted                                               |
+| **Last synced from CIPP**                     | When the portal last received this data                                                      |
+
+The note under the section gives the device name Intune reports, which can differ from the RMM name. The section is absent when CIPP has no Intune record for the device; that is not a compliance result. To list devices that no RMM agent reports, filter **Devices** by **Not in RMM**; see [Find devices missing from your RMM](/msp-guides/devices/find-devices#find-devices-missing-from-your-rmm).
+
+## Review linked tickets
+
+<Note>
+  Branch preview: the ticket visibility rules below are pending release. The
+  screenshots below use synthetic data; production verification and captures
+  will follow release.
+</Note>
+
+The **Tickets** tab requires an active ConnectWise PSA connection and **Read
+Devices** and **Read Tickets** permissions. When you open a device, MSPortal checks for linked
+tickets. **Tickets** appears beside **Overview** only if the device has at least
+one linked ticket you can see for the selected companies.
+
+1. Open the device from **Devices** and select **Tickets** beside **Overview**.
+2. Use the column filters and sorting controls to find a ticket. On a phone,
+   open **Filters** above the ticket cards.
+3. On desktop, choose **10**, **25**, or **50** in **Rows per page**. Use
+   **Previous** and **Next** to move through the loaded results.
+4. Select a ticket's subject or row to open the ticket in MSPortal.
+
+| Column       | What it shows                                                        |
+| ------------ | -------------------------------------------------------------------- |
+| **Ticket #** | The ticket number                                                    |
+| **Subject**  | The ticket summary, or **Untitled ticket** when unavailable          |
+| **Status**   | The ConnectWise status                                               |
+| **State**    | Whether the ticket is **Open** or **Closed**                         |
+| **Opened**   | When the ticket was opened                                           |
+| **Updated**  | When it was last updated                                             |
+| **Closed**   | The closed date; hidden by default and available through **Columns** |
+
+The panel widens on desktop for the table. On a phone, tickets appear as cards
+inside the panel; scroll the cards and use the pagination controls at the bottom.
+
+<Frame caption="Synthetic branch preview: the Tickets tab with filters and open and closed tickets.">
+  <img
+    src="/images/product/devices-linked-tickets-desktop.png"
+    alt="Synthetic device Tickets tab with Ticket number, Subject, Status, State, Opened and Updated columns"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: ticket cards and Filters on a phone.">
+  <img
+    src="/images/product/devices-linked-tickets-mobile.png"
+    alt="Synthetic device Tickets tab on a phone with wrapped subjects and pagination"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+### Result limits and missing tickets
+
+The tab loads **up to 100 linked tickets**, with open tickets first and newer
+tickets first within each group. Filters, sorting, and pagination apply only to
+those loaded tickets. When more exist, a notice such as **Showing 100 of 140
+linked tickets** gives the loaded count and total. **Next** does not load tickets
+beyond the first 100; use the main **Tickets** page to find other tickets.
+
+<Frame caption="Synthetic branch preview: page 2 within the 100 loaded tickets, with 140 linked tickets in total.">
+  <img
+    src="/images/product/devices-many-tickets-desktop.png"
+    alt="Synthetic desktop ticket table showing 100 of 140 linked tickets and page 2 of 10"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+<Frame caption="Synthetic branch preview: the same result limit and pagination on a phone.">
+  <img
+    src="/images/product/devices-many-tickets-mobile.png"
+    alt="Synthetic phone Tickets tab showing 100 of 140 linked tickets with Next and Previous controls"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+You see tickets linked to the device's imported or linked ConnectWise
+configurations, within your ticket and company access. A link added in
+ConnectWise usually appears after the next ticket sync. If nothing else on the
+ticket changed, it can take up to two days. A ticket bundled or merged into a
+parent shows as that parent.
+
+| What you see | What to check |
+| --- | --- |
+| **Tickets** is missing | Check the company selector and both read permissions. If you expect a ticket, ask your MSP to confirm the ConnectWise PSA connection, the ticket’s configuration link, and the latest ticket sync. |
+| Filters show no results | Clear the filters and check the result-limit notice. Filters search only the loaded tickets. |
+
+<Frame caption="Branch preview with sample data. This device has no visible linked tickets, so only Overview appears here.">
+  <img
+    src="/images/product/devices-no-tickets-mobile.png"
+    alt="Reception workstation on a phone with Overview as the only tab"
+    width="390"
+    height="844"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+## Understand the IP location section
+
+**Reported IP Address** and **External IP** serve different purposes. The former may be an internal network address. **IP location** uses the integration-reported external IP to estimate the internet exit point.
+
+- **IP observed** describes when the external address was recorded.
+- **Last checked** describes when that address was looked up for location.
+- **Find approximate location** runs the available lookup; it can contact the configured location service.
+- **Open map** opens the approximate coordinates on an external map.
+
+If no external IP is reported, the **IP location** section is hidden. Typing an internal address into a device record does not supply a verified external location.
+
+<Frame caption="This Demo device has no Software tab or IP location section because those details are unavailable.">
+  <img
+    src="/images/product/ninja-empty-device-preview-desktop.png"
+    alt="Demo device Overview with only Overview and Edit tabs and no IP location section"
+    width="2880"
+    height="1920"
+  />
+</Frame>
+
+The result is approximate, not GPS tracking or a street address. A VPN, shared office connection, or internet provider can make several devices appear in the same place. See [find an approximate IP location](/user-guides/devices/ip-location) and [understand location results](/user-guides/devices/ip-location-accuracy-and-privacy).
+
+## Open integration tabs
+
+The detail panel can also offer:
+
+- **Cork** or **Liongard**, when the device has corresponding integration data.
+- **IT Glue**, when the portal has an active integration and this device has an IT Glue mapping.
+- **Software**, for MSP staff with device-read access when installed inventory has been confirmed for this device. Review installed versions, lifecycle warnings and **Urgent** and **High** update priorities; see [Software inventory](/msp-guides/devices/track-software).
+- **Edit**, when your account has device-management permission.
+- **Backup**, when a backup provider protects this device. For Acronis it shows the status, last backup and next backup. A virtual machine or database backed up through another machine names that machine, such as **via ACME-HV01**. Select it to open that device.
+- **Hosted backups**, on a machine that Acronis backs other workloads up through, such as a Hyper-V host. It lists each virtual machine or database with its status and last backup. Select a name to open that device.
+
+An **Acronis backup** badge in the header shows that Acronis backs the device up. When the backup runs through another machine, the badge names it, for example **via ACME-HV01**, and selecting the name opens that device. Devices are matched to Acronis by machine name within the same company, so a device renamed in only one system shows no badge.
+
+These tabs have separate purposes. A missing integration tab is not a finding that the device is unprotected or undocumented in every system. Ask the MSP to check integration availability, mapping, synchronization, and your access.
+
+<Note>
+  Supported device resync controls sit beside the close button. Software
+  inventory is available to MSP staff when enabled for the tenant.
+</Note>
+
+<Frame caption="Device software with the resync action beside the close button.">
+  <img
+    src="/images/product/pr1601-device-software-desktop.png"
+    alt="Device software with the resync action beside the close button"
+    width="1440"
+    height="960"
+  />
+</Frame>
+
+MSP staff may also see **Portal**, **Remote**, or provider-named shortcuts in the header. These open another service and can require separate access. They do not grant Company users remote control.
+
+## Review installed software
+
+<Note>
+  These screenshots show the MSP staff view using Demo inventory; Company users
+  do not receive the Software tab.
+</Note>
+
+With software inventory enabled and device-read access, **Software** appears after installed inventory is confirmed for this device. It stays hidden while that first read is pending, when the read fails, or when the device has no installed inventory. Missing software data is not proof that the device has no applications installed.
+
+Select **Software** to review application names, versions, publishers, and the available lifecycle status. Use **Search software** or **Needs attention only** to narrow the list. A search with no matches keeps the tab and filters available, so you can clear the filter and continue.
+
+If the inventory disappears while you are viewing Software, the panel returns to **Overview**. When inventory becomes available again, Overview stays selected until you select Software yourself.
+
+<Frame caption="The device Software list on desktop.">
+  <img
+    src="/images/product/ninja-software-preview-desktop.png"
+    alt="Installed applications with software search and the Needs attention only control"
+    width="2880"
+    height="1920"
+  />
+</Frame>
+
+<Frame caption="The same Software controls and list on a phone.">
+  <img
+    src="/images/product/ninja-software-preview-mobile.png"
+    alt="Phone layout of the device Software tab with search, filter, and installed applications"
+    width="780"
+    height="1688"
+    style={{ maxWidth: "390px", width: "100%" }}
+  />
+</Frame>
+
+## Report a problem with the record
+
+Give your IT provider the device name, company, the field that appears wrong, and the reported date. Explain whether you are reporting an inventory error or a problem using the device. Opening a detail panel does not create a support ticket.
+
+If a section fails to load, close and reopen the device after the inventory has loaded. Do not treat missing extended details as proof that the device has no hardware, security tools, or network connection.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does opening the panel run a fresh scan of the device?">
+    The panel primarily displays imported and cached information. Some MSP
+    management views can refresh provider data, including an automatic refresh
+    for supported ASIO devices. Opening the IP location section alone does not
+    force a new location lookup. Check the reported timestamps.
+  </Accordion>
+  <Accordion title="Why are Hardware, Security, or Battery missing?">
+    The connected source may not supply that information, or its details may not
+    have loaded. Missing information is not a healthy or unhealthy result by
+    itself.
+  </Accordion>
+  <Accordion title="Can I remotely control my computer from this page?">
+    Company users do not receive the MSP provider or remote-access shortcuts.
+    MSP staff may see external links when a connected source supplies them;
+    those services have their own access requirements.
+  </Accordion>
+  <Accordion title="Why does the device name differ from the inventory name?">
+    Your RMM can give a device a friendly name (NinjaOne's display name, or
+    ConnectWise Asio's friendly name). The panel is titled by that name and
+    shows the underlying device name beside it, so you can identify the same
+    record. You can rename an Asio device; see [Rename a device in your
+    RMM](/msp-guides/devices/add-and-edit-devices#rename-a-device-in-your-rmm).
+  </Accordion>
+  <Accordion title="Why does Device Age differ from the warranty start?">
+    Device Age counts from the purchase date when one is recorded, and from the
+    warranty start only when there is no purchase date.
+  </Accordion>
+  <Accordion title="Does a missing warranty date mean it expired?">
+    No. It means no date is available in the record. Ask your provider to
+    confirm coverage.
+  </Accordion>
+  <Accordion title="Which coverage does an automatic warranty check use?">
+    The latest end date across all coverage the manufacturer lists for the
+    serial number. For HP that includes the factory warranty, bundled warranty
+    and Care Packs. A coverage whose start date equals its end date is a
+    placeholder, not real coverage, so the device shows no warranty date until
+    real dates are found.
+  </Accordion>
+  <Accordion title="Is IP location live GPS tracking?">
+    No. It estimates the location of the internet exit point associated with a
+    reported external IP. Check both observation and lookup dates.
+  </Accordion>
+  <Accordion title="Why is IT Glue missing for this device?">
+    The tab requires an active IT Glue integration and an IT Glue mapping for
+    this device. Ask the MSP to check the saved mapping and your access.
+  </Accordion>
+  <Accordion title="Does closing the Edit panel prove my changes were saved?">
+    No. Check any error message, reopen the device, and verify the intended
+    values. A closed panel alone is not confirmation of a successful update.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Find and export devices](/msp-guides/devices/find-devices)
+- [View networks and configurations](/msp-guides/devices/view-networks-and-configurations)
+- [Open a support ticket](/msp-guides/ticketing/open-a-ticket)

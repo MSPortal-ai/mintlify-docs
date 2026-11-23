@@ -1,0 +1,117 @@
+---
+title: 'Troubleshoot QuoteWerks quotes and QuoteValet links'
+description: 'Find missing QuoteWerks quotes, check company access, and get help with QuoteValet documents.'
+icon: 'file-invoice-dollar'
+---
+
+{/* Generated from /user-guides/quotes/troubleshoot-quotewerks-quotes.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+MSPortal supports **QuoteWerks**, **Quoter**, and **Salesbuildr** quotes. For QuoteWerks, quote visibility, company assignment, and a usable QuoteValet document link are separate checks.
+
+**Audience:** Company users with quote access and MSP staff. Company users can check their visible quotes and available provider links; their MSP manages integration settings, customer mappings, and user permissions.
+
+## Check as a company user
+
+<Steps>
+  <Step title="Open Quotes and check the company">
+    Click **Quotes** in the sidebar and check the company selector in the top bar.
+  </Step>
+  <Step title="Clear the filters">
+    Click **Clear Filters**, then search for the quote number or name. Check the other pages.
+  </Step>
+  <Step title="Check the quote">
+    If you find it, check its company and details before you open a document.
+  </Step>
+  <Step title="Open the provider link">
+    Click the **Number** to read the quote in MSPortal, or choose **... > Open in QuoteWerks** to go to the provider. On the detail page the provider link is labeled **Open quote**.
+  </Step>
+  <Step title="Ask your MSP">
+    If the quote or link is missing, send your MSP the quote number, the expected company, and what you see. Do not send credentials or guess a QuoteValet address.
+  </Step>
+</Steps>
+
+MSPortal sign-in does not give you access to the provider page. If a colleague sees a quote that you cannot, your role can limit you to **Mine only**, **My site**, or certain statuses. Ask your MSP to review your access.
+
+## Open a QuoteValet document
+
+**Open in QuoteWerks** can open a QuoteValet customer-facing proposal. The provider label stays QuoteWerks. Check the quote number, company, revision, and terms on the linked page.
+
+Use document or download options offered there, or ask your MSP for a copy. The built-in MSPortal **Download PDF** action is specific to Salesbuildr; QuoteWerks is still supported through its available provider link. CSV export contains every quote that matches your filters, in the visible columns. It does not replace the proposal or accept a quote.
+
+## MSP checks for a missing or incorrect quote
+
+| Symptom | Where to check |
+| --- | --- |
+| Quote absent everywhere | Check the QuoteWerks connection and its API key. On the **Complete** step, click **Start quote sync**, then check the result after the background job finishes. |
+| Quote exists for MSP but not the Company | In the QuoteWerks setup, open **Map** and check that the customer is linked to the right company and shows **Saved**. Then review the company role's quote access and allowed statuses. |
+| Customer missing from Map | Use Map > Sync for a customer import and allow it to finish. Check connection errors if the customer remains absent. |
+| Mapping appears correct but changed after navigation | The choice may have been Pending. Save with Import Selected and reopen Map to verify Saved. |
+| Quotes changed company after clearing a link | Clearing a Saved mapping unassigns related imported quotes and line items immediately. Restore the correct mapping and verify the results. |
+| Header exists but line items or totals look incomplete | Compare with the provider document. A visible header or sync-started message does not prove every line item imported; ask support to investigate the specific quote. |
+| Older quote still absent after manual sync | Ask support to check the historical import window and provider record. Do not assume a manual request covers every year. |
+
+The QuoteWerks Map step explicitly links source customers to portal companies. It is different from Quoter's company-association workflow. A quote can exist in the MSP view without an assigned Company, so absence of a customer mapping does not mean the record was never imported.
+
+## MSP checks for a missing QuoteValet link
+
+Open the saved QuoteWerks connection's **Connect** step. Check whether QuoteValet is configured. If needed, paste a valid customer-facing QuoteValet link for the intended account and select **Save settings**. Leaving that input blank preserves an existing configuration.
+
+The account setting alone is insufficient: the quote also needs its QuoteValet document association, or an imported customer-facing quote link. Confirm the document exists in the provider and is associated with the correct quote. Saving configuration does not publish a new QuoteValet proposal. Do not construct or guess customer links.
+
+If an existing link points to the wrong document or account, stop using that link and ask the MSP or MSPortal support to investigate the quote and connection. Use the provider's verified document in the meantime.
+
+## Information to include when asking for help
+
+Provide the provider name **QuoteWerks**, quote number, expected company, whether the quote is missing or only its document link, your selected view/filters, and the visible error. MSP staff should also check the customer's saved mapping and the time/result of the relevant sync. Share private documents only through your normal approved support channel.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does MSPortal support QuoteWerks as well as Quoter and Salesbuildr?">
+    Yes. All three are supported. QuoteWerks uses its customer mappings and available provider or QuoteValet links; its document workflow differs from the Salesbuildr Download PDF action.
+  </Accordion>
+  <Accordion title="Why can my MSP see a QuoteWerks quote that I cannot?">
+    The quote may not be assigned to your company, or your role, view, scope, filters, or allowed statuses may exclude it. Ask your MSP to check the saved customer mapping and Company quote access.
+  </Accordion>
+  <Accordion title="Can a Company administrator fix the customer mapping?">
+    No. Ask your MSP to open QuoteWerks setup > Map and save the correct portal company. Company administrators do not manage integration mappings or user permissions.
+  </Accordion>
+  <Accordion title="Why does Open in QuoteWerks open QuoteValet?">
+    QuoteValet can deliver the customer-facing QuoteWerks proposal. MSPortal retains the source label QuoteWerks while opening the available customer document link.
+  </Accordion>
+  <Accordion title="Why is Open in QuoteWerks missing?">
+    The quote may lack an imported customer link or the QuoteValet configuration and document association needed to build one. Ask your MSP to check both the connection and the specific quote.
+  </Accordion>
+  <Accordion title="Does configuring QuoteValet create a customer document?">
+    No. Configuration supplies account information for links. The quote needs a QuoteValet document association or an imported customer link; saving settings does not publish a proposal.
+  </Accordion>
+  <Accordion title="Where is Download PDF for a QuoteWerks quote?">
+    The built-in MSPortal Download PDF action is specific to Salesbuildr. Open the available QuoteWerks or QuoteValet link and use its document options, or ask your MSP for a copy.
+  </Accordion>
+  <Accordion title="Can I export QuoteWerks rows to CSV?">
+    Yes. The Quotes table export contains every matching quote in the visible columns. It is table data, not the full proposal or an acceptance document.
+  </Accordion>
+  <Accordion title="Does Sync started mean the quote is available?">
+    No. It confirms that a background request started. Wait for its actual result and verify the quote, company, line items, and document link.
+  </Accordion>
+  <Accordion title="Does a quote without a Company prove import failed?">
+    No. A QuoteWerks record can be imported without a portal company assignment. The MSP should check its customer mapping separately from the import.
+  </Accordion>
+  <Accordion title="Does QuoteWerks use the same mapping screen as Quoter?">
+    No. QuoteWerks has an explicit Map step for customer-company links. The current Quoter wizard has Connect and Complete without that manual mapping step.
+  </Accordion>
+  <Accordion title="Will opening or exporting a quote accept it?">
+    No. Opening a link or exporting table data does not accept a quote. Review the provider document and follow the acceptance process offered there.
+  </Accordion>
+  <Accordion title="Why does an older quote remain missing after a manual sync?">
+    A manual sync does not guarantee all historical records. Ask your MSP or MSPortal support to check the import window and the specific provider quote.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Find and open quotes](/msp-guides/quotes/view-quotes)
+- [Download quote documents](/msp-guides/quotes/download-quotes)
+- [Map QuoteWerks customers](/user-guides/integrations/map-quotewerks-customers)
+- [Connect and manage QuoteWerks](/user-guides/integrations/enable-quotewerks-integration)
+- [Manage Company quote access](/user-guides/quotes/manage-company-access)

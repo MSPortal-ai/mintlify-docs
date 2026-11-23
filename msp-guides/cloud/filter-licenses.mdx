@@ -1,0 +1,138 @@
+---
+title: 'Find, filter, and export licenses'
+description: 'Find a cloud license by name or SKU, show hidden allocations, find spare seats, and export every matching license.'
+icon: 'filter'
+---
+
+{/* Generated from /user-guides/cloud/filter-licenses.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use the filters and switches on **Cloud > Licenses** to narrow the list before you share counts or ask for a license change. This page is for MSP staff and company users who can see the Licenses tab.
+
+## Before you start
+
+- You need Cloud read access or Storefront read access. Export works with either.
+- Filters and export follow the company selector in the top bar.
+- The list shows 50 licenses per page.
+
+## Find a license
+
+<Steps>
+  <Step title="Open Cloud > Licenses">
+    Click **Cloud** in the sidebar, then click the **Licenses** tab. Check the company selector in the top bar and make sure the **Licenses** view is selected.
+  </Step>
+  <Step title="Type a name or SKU code">
+    Type in the filter box under the **License** column heading. It matches the license name and the SKU code. Case does not matter.
+  </Step>
+  <Step title="Narrow by provider, company, or product">
+    Open the filters under **Provider**, **Company**, or **Product** and check the options you want. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected.
+  </Step>
+  <Step title="Filter by status">
+    The **Status** column is hidden by default. Click **Columns**, turn on **Status**, click **Save Changes**, then use its filter.
+  </Step>
+  <Step title="Read the results">
+    The list reloads from page 1. Clear a filter, or choose **All**, to broaden the results.
+  </Step>
+</Steps>
+
+The **License** filter does not search company names or email domains. Use the company selector for companies and [By domain](/msp-guides/cloud/view-license-assignments) for email domains.
+
+## Show hidden licenses and find spare seats
+
+<Steps>
+  <Step title="Find the switches">
+    The switches are above the table, next to the **Licenses** view button.
+
+    <Frame caption="Hide free & trial and Hide large allocations start turned on.">
+      <img src="/images/product/cloud-license-visibility-controls.png" alt="Hide free & trial and Hide large allocations switches turned on in Cloud Licenses." width="740" height="66" />
+    </Frame>
+  </Step>
+  <Step title="Turn switches off to show more">
+    Turn off **Hide free & trial** and **Hide large allocations** to see every license.
+  </Step>
+  <Step title="Turn on Only unused seats">
+    Turn on **Only unused seats** to see only licenses with at least one available seat.
+  </Step>
+  <Step title="Use Show SKU if you need the code first">
+    Turn on **Show SKU** to put the SKU code above the name. It does not change the counts.
+  </Step>
+</Steps>
+
+| Switch | What it does |
+| --- | --- |
+| **Hide free & trial** | Hides Microsoft 365 licenses whose synced subscriptions are marked as trials, licenses whose SKU code contains FREE, TRIAL, FACULTY, or STUDENT, developer and Power Apps viral SKUs, and Microsoft 365 licenses with zero purchased seats. On by default. |
+| **Hide large allocations** | Hides licenses with 10,000 or more purchased seats. On by default. |
+| **Only unused seats** | Shows licenses with at least one available seat. Google Workspace rows with no matching Sherweb subscription disappear because their seat count is unknown. Off by default. |
+| **Show SKU** | Shows the SKU code first. |
+
+**Hide free & trial** uses the same subscription data as the **Trial** badge. A Microsoft SKU with both paid and trial subscriptions is hidden while the switch is on. Turn it off to review that row.
+
+**Hide free & trial** also applies to the **By domain**, **By office**, and **By combination** views. The other switches apply to the **Licenses** view only.
+
+## Sort the list
+
+<Steps>
+  <Step title="Sort a column">
+    Use the sort control in a column heading, such as **Available** or **Renews / Expires**.
+  </Step>
+  <Step title="Read the sorted list">
+    Sorting covers every page and returns you to page 1.
+  </Step>
+</Steps>
+
+## Export every matching license
+
+<Steps>
+  <Step title="Set your filters">
+    Set the company selector, filters, and switches first.
+  </Step>
+  <Step title="Click Export CSV">
+    Click **Export CSV** above the table. A progress toast shows how many licenses are loaded. The export includes every license that matches your filters, across all pages, in the table's current sort order. The browser downloads `cloud-licenses`. When one company is selected, the company name is added to the file name.
+  </Step>
+  <Step title="Check the result">
+    The toast reads **Exported N rows** when the file is ready. If it reads **The export could not finish. Try again.**, no file was downloaded. Click **Export CSV** again.
+  </Step>
+</Steps>
+
+The CSV columns are **License**, **SKU**, **Provider**, **Company**, **Product**, **Assigned**, **Purchased**, **Available**, **Utilization**, **Renews / Expires**, **Trial**, **Status**, and **Last synced**. Hidden table columns are still exported. **Purchased**, **Available**, and **Utilization** are blank when the seat count is unknown.
+
+The export is a data file only. It does not include invoices and does not follow row checkboxes.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A license is missing | Turn off **Hide free & trial** and **Hide large allocations**, turn off **Only unused seats**, click **Clear Filters**, and check the company selector. |
+| Google rows disappear | **Only unused seats** is on. Turn it off. |
+| The summary is missing | A **License**, **Product**, or **Status** filter is active. Clear it. |
+| You see **No cloud licenses match these filters.** | Click **Clear Filters** and check the switches. |
+| **Export CSV** is missing | Your role has neither Cloud read nor Storefront read access. |
+| The CSV has fewer rows than you expect | The export follows the company selector, filters and switches. Clear them, then export again. |
+| **The export could not finish. Try again.** | No file was downloaded. Click **Export CSV** again. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why is a license missing when I first open the page?">
+    **Hide free & trial** and **Hide large allocations** start turned on. Turn them off.
+  </Accordion>
+  <Accordion title="Does Only unused seats find licenses nobody uses?">
+    No. It finds licenses with spare seats. It does not measure activity or find inactive people.
+  </Accordion>
+  <Accordion title="How do I see a license marked Trial?">
+    Turn off **Hide free & trial**. The switch hides Microsoft 365 licenses marked as trials even when the SKU code looks paid and the license has purchased seats.
+  </Accordion>
+  <Accordion title="Does Show SKU change what I search or export?">
+    No. The **License** filter always matches names and SKU codes, and the CSV always has both.
+  </Accordion>
+  <Accordion title="Does Export CSV include every license?">
+    Yes. It includes every license that matches your company, filters and switches, not only the page you see.
+  </Accordion>
+  <Accordion title="Do I need license management permission to export?">
+    No. Cloud read access or Storefront read access is enough, for the records you can already see.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read cloud license usage](/msp-guides/cloud/licenses)
+- [View license assignments and combinations](/msp-guides/cloud/view-license-assignments)

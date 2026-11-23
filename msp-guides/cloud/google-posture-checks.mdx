@@ -1,0 +1,136 @@
+---
+title: 'Understand Google posture checks'
+description: 'Read Google check statuses, coverage and points, including missing-data limits and the MSP follow-up steps.'
+icon: 'calculator'
+---
+
+{/* Generated from /user-guides/cloud/google-posture-checks.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Cloud > Posture** to read the six checks behind a Google Workspace posture score. The score is an MSPortal calculation worth 100 points. It is separate from Microsoft Secure Score. This page is for MSP staff and company users.
+
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- Google Workspace must be connected for the company, with **Daily security posture** turned on under **Sync settings** on the connection.
+- The checks come from the last daily sync. They are not a full security assessment.
+
+## Open the checks
+
+<Steps>
+  <Step title="Open Cloud > Posture">
+    Click **Cloud** in the sidebar. The **Posture** tab opens first.
+  </Step>
+  <Step title="Open the Google Workspace checks">
+    With one company selected in the top bar, the Google Workspace card appears on the page. With several companies selected, click the **Google Workspace** row in the table to open the checks in a dialog.
+  </Step>
+  <Step title="Confirm the source">
+    Check that the badges read **Google Workspace** and **MSPortal**. Read the **Snapshot** date, the score percentage, and the points total.
+
+    <Frame caption="The provider, the MSPortal score source, and the snapshot date appear above the checks.">
+      <img src="/images/product/cloud-posture-google-source.png" alt="Google Workspace posture identifies MSPortal as its score source and shows the snapshot date." width="702" height="50" />
+    </Frame>
+  </Step>
+  <Step title="Read each check">
+    Read **Check**, **Status**, **Coverage**, and **Points** for each row. On a narrow screen the **Coverage** column is hidden, and the description holds the same counts.
+  </Step>
+  <Step title="Note the check and date">
+    Write down the check title and the snapshot date if you need help. The rows do not list the affected users and do not change settings.
+  </Step>
+</Steps>
+
+## The six checks
+
+Active users exclude suspended and archived accounts. Administrator checks include administrators and delegated administrators.
+
+| Check | What counts toward it | Points | Warning starts at |
+| --- | --- | --- | --- |
+| **2-step verification enrollment** | Active users enrolled in 2-Step Verification. | 25 | 80% |
+| **Administrator 2-step verification** | Active administrators who are both enrolled in and enforced for 2-Step Verification. | 25 | No warning band |
+| **2-step verification enforcement** | Active users with 2-Step Verification enforced. | 20 | 80% |
+| **Active account hygiene** | Active accounts with a sign-in in the last 90 days. The creation date is used when there is no sign-in date. | 15 | 90% |
+| **Verified domains** | Google Workspace domains that are verified. | 10 | No warning band |
+| **License assignment visibility** | Active users whose license assignment state is known, including users with no licenses. | 5 | 90% |
+
+Enrollment means a user set up 2-Step Verification. Enforcement means the administrator requires it. A user who only enrolled can still turn it off.
+
+## Read statuses and points
+
+| Status | What it means |
+| --- | --- |
+| **Pass** | Every item in scope meets the check. |
+| **Warning** | Coverage is below 100% but reaches the check's warning threshold. |
+| **Needs attention** | Coverage is below the warning threshold. |
+| **Unknown** | There is no data or no items to check, or the license snapshot is incomplete. The check earns zero points. |
+
+Points are the share of passing items times the maximum points, rounded to two decimals. For example, 18 of 20 enrolled users earns 22.5 of 25 points. The overall percentage is rounded to a whole number, so use the points to see small changes.
+
+- Items with no data stay in the total. A partly missing dataset can lower coverage and show **Needs attention** instead of **Unknown**.
+- **Administrator 2-step verification** and **Verified domains** only **Pass** at 100%. They still earn partial points, so **Needs attention** does not always mean zero.
+- **Unknown** checks keep the maximum at 100 points.
+
+## How fresh the snapshot is
+
+- Google usage reports run about three days behind. The sync asks for the report from three days before the run, and may use an older report if that one is missing.
+- Directory, domain, and license data are read at sync time.
+- The **Snapshot** date is the date MSPortal stored the snapshot. It does not mean every input is from that day.
+- If usage reports are not available, the sync can skip a new snapshot while other data still updates. The earlier snapshot stays on screen.
+- The Google Workspace sync runs once a day.
+
+MSP staff can check **Sync settings** on the Google Workspace connection in **Settings > Integrations** when a snapshot is missing or old. See [Connect Google Workspace](/user-guides/integrations/enable-google-workspace-integration).
+
+## Ask for follow-up
+
+<Steps>
+  <Step title="Company users: open a ticket">
+    [Open a ticket](/msp-guides/ticketing/open-a-ticket) with the company, the snapshot date, the check title, its status, and its coverage.
+  </Step>
+  <Step title="MSP staff: check the accounts and domains">
+    Use [Cloud Users](/msp-guides/cloud/users) and [Cloud Domains](/msp-guides/cloud/domains) to look at the accounts and domains. Their rows can be newer than the snapshot. Confirm in Google Workspace before you change anything.
+  </Step>
+  <Step title="Wait for the next daily sync">
+    Changes show up after the next sync and a new posture calculation.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| There is no Google Workspace row | Ask MSP staff to turn on **Daily security posture** under **Sync settings** on the connection. |
+| A check says **Unknown** | There is no data for it yet. See the status table. It can change on a later sync. |
+| The snapshot date is old | Google usage reports may be late. Ask your MSP to check the connection. |
+| The score dropped | Open the checks and compare coverage. A new user who has not enrolled lowers the enrollment and enforcement checks. |
+| Cloud Users shows newer data than the snapshot | Cloud Users updates on every sync. The snapshot waits for the daily calculation. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Is this a score from Google?">
+    No. It is an MSPortal calculation. Microsoft uses Microsoft Secure Score.
+  </Accordion>
+  <Accordion title="Does an administrator need both enrollment and enforcement to pass?">
+    Yes. Delegated administrators are included.
+  </Accordion>
+  <Accordion title="Do suspended and archived users count against the user checks?">
+    No. They are left out of every user check. That does not confirm offboarding is complete.
+  </Accordion>
+  <Accordion title="Does License assignment visibility need a paid license for every user?">
+    No. A known state of zero licenses counts as visible. The check does not measure purchasing.
+  </Accordion>
+  <Accordion title="Can a new user pass account hygiene without signing in?">
+    Yes. With no sign-in date, the account creation date is used against the 90-day limit.
+  </Accordion>
+  <Accordion title="Does Needs attention always mean zero points?">
+    No. Checks earn points in proportion to coverage.
+  </Accordion>
+  <Accordion title="Can I open the list of affected users from a check?">
+    No. A check shows counts, status, and points only.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read cloud security posture](/msp-guides/cloud/posture)
+- [Find and filter posture snapshots](/msp-guides/cloud/find-posture)
+- [Read cloud user accounts](/msp-guides/cloud/users)
+- [Read cloud and registrar domains](/msp-guides/cloud/domains)

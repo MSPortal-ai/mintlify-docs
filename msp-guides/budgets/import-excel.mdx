@@ -1,0 +1,115 @@
+---
+title: 'Import budget line items from Excel'
+description: 'Map an XLSX workbook, resolve import errors, review skipped duplicates, and save the imported costs.'
+icon: 'file-excel'
+---
+
+{/* Generated from /user-guides/budgets/import-excel.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Import > Import Excel** to add costs from an `.xlsx` workbook to a budget. The import adds proposed lines to the editor. They are not saved until you click **Save**. This guide is for MSP staff and for company users whose MSP has given them budget edit access.
+
+## Before you start
+
+- You need budget edit access (the **write_budgets** or **manage_budgets** permission).
+- The budget must be Draft or Pending Approval, and it must belong to a company. The **Import** button is unavailable otherwise.
+- Check the budget's **Currency** first. Imported prices use the budget's currency. Nothing is converted.
+
+## Prepare the workbook
+
+The importer reads the sheet named **Budget** if there is one. Otherwise it reads the first sheet. It does not combine sheets. A workbook exported from a budget imports without changes.
+
+| Column | How to prepare it |
+| --- | --- |
+| **Description**, **Qty**, **Unit Price** | Required. Give every cost a description. Qty and Unit Price must be numbers of zero or more. Unit Price is the price for one unit, not the line total. |
+| **Category** | Optional. Use the name of an existing budget category. Import does not create categories. |
+| **Recurrence** | Optional. Use One-Time, Monthly, Quarterly, Annual or Custom. Blank means One-Time. |
+| **Term** | Optional. A whole number of months, 1 or more. Blank means 1 for one-time lines and 12 for recurring lines. |
+| **Status** | Optional. Use Draft, Pending, Approved or Rejected. Blank means Pending. |
+| **Notes** | Optional. Notes become line notes. |
+
+Use number cells for quantities and prices. Give each cost its own description, because rows with the same description are treated as duplicates even when the prices differ.
+
+## Import the workbook
+
+<Steps>
+  <Step title="Open the budget">
+    Open a Draft or Pending Approval budget with **Edit**, or start a new budget with **Create New Budget** and choose a company. See [Create and edit a company budget](/msp-guides/budgets/create-and-edit-budgets).
+  </Step>
+  <Step title="Open the Import menu">
+    Click **Import**, then click **Import Excel**. The **Import budget from Excel** dialog opens.
+
+    <img src="/images/product/budget-import-menu.png" alt="Budget Import menu with Microsoft 365 licensing, Excel and previous year options." width="576" height="212" />
+  </Step>
+  <Step title="Choose the file">
+    Click **Choose file** and pick the `.xlsx` workbook. Wait for **Parsing...** to finish.
+  </Step>
+  <Step title="Check Column mapping">
+    The dialog finds the header row and fills in the mapping. Make sure **Description**, **Qty** and **Unit Price** point to the right workbook columns. Map **Category**, **Recurrence**, **Term**, **Status** and **Notes** if you need them. Choose **Not mapped** to skip a field.
+
+    <img src="/images/product/budget-excel-quantity-mapping.png" alt="Required Qty mapping linked to the workbook Qty column." width="586" height="128" />
+
+    The result updates as you change a mapping. The dialog has no header-row picker. If it picks the wrong row, clean up the workbook and choose it again.
+  </Step>
+  <Step title="Fix errors and read the warnings">
+    Any error blocks the import. Messages read like **Fix 2 issues before importing** with a row number for each. Warnings such as **Skipped 1 row** name rows that already exist in the budget or appear twice in the workbook. Those rows are left out.
+  </Step>
+  <Step title="Import the rows">
+    When the dialog says **Ready to import N line items**, click **Import N items**. The dialog closes and the new rows appear in the editor.
+  </Step>
+  <Step title="Set start months and review">
+    Imported lines start in January. Open each recurring line and set **Start month**. For Custom recurrence, also set **Every N months**. Check descriptions, quantities, prices, categories, statuses and notes.
+  </Step>
+  <Step title="Save">
+    Click **Save** and wait for **Budget saved successfully.** Then open **Monthly Breakdown** to check the schedule.
+  </Step>
+</Steps>
+
+## What the import copies
+
+Import copies the mapped line fields only. It does not copy the workbook's title, company, fiscal year, budget status or currency. It does not copy links to Planner items, goals or products, start months, custom intervals or monthly overrides.
+
+Import only adds. It never changes an existing line or removes a line that is missing from the workbook.
+
+## Troubleshooting
+
+| Message or result | What to do |
+| --- | --- |
+| **Map Description, Qty, and Unit Price before importing.** | Pick a source column for each of the three required fields. |
+| **Category "..." does not match a budget category.** | Use an existing category name, or leave **Category** unmapped and set it in the editor. |
+| **Category "..." matches more than one budget category.** | Ask your admin to rename the duplicate category, or set the category in the editor after import. |
+| **Recurrence "..." is not supported** or **Status "..." is not supported** | Use one of the listed values in that cell, then choose the file again. |
+| **Qty must be a valid number.** or **Unit Price must be a valid number.** | Fix the cell on the row named in the message. |
+| **No new line items were found.** | Every row already exists in the budget by description. Edit the existing lines instead. |
+| **No budget line items were found in the workbook.** | Check that the sheet has a header row and at least one cost row. |
+| **Import** is unavailable | The budget is locked, or it has no company. |
+| Save fails after a good import | Read the Save error. The import preview is not a saved budget. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Can I import a CSV or several sheets?">
+    No. The dialog accepts `.xlsx` only and reads one sheet.
+  </Accordion>
+  <Accordion title="Do my columns need the same order as an export?">
+    No. Use **Column mapping** to pick the right column for each field.
+  </Accordion>
+  <Accordion title="Will a changed price update an existing line?">
+    No. A matching description is skipped. Edit that line in the editor.
+  </Accordion>
+  <Accordion title="Can valid rows import while another row has an error?">
+    No. Fix every error first. Duplicate warnings are different. Those rows are skipped and the rest import.
+  </Accordion>
+  <Accordion title="Does an Approved status in the sheet approve the budget?">
+    No. It only sets that line's status. Approving the whole budget is a separate step.
+  </Accordion>
+  <Accordion title="Why did my imported rows disappear?">
+    They were never saved. Import adds rows to the open editor, and you must click **Save**.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Add and edit budget line items](/msp-guides/budgets/edit-line-items)
+- [Create and edit a company budget](/msp-guides/budgets/create-and-edit-budgets)
+- [Download or print a budget](/msp-guides/budgets/export-and-print-budgets)
+- [Read a budget monthly breakdown](/msp-guides/budgets/read-monthly-breakdown)

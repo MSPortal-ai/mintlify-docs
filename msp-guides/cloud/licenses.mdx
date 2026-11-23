@@ -1,0 +1,160 @@
+---
+title: 'Read cloud license usage'
+description: 'Review Microsoft 365, Google Workspace, and Adobe license counts, available seats, renewal dates, and access requirements.'
+icon: 'id-card'
+---
+
+{/* Generated from /user-guides/cloud/licenses.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Cloud > Licenses** to see how many licenses each company has, how many are assigned, and when they renew. This page is for MSP staff and company users. It covers Microsoft 365, Google Workspace, and Adobe.
+
+## Before you start
+
+- Microsoft 365 and Google Workspace rows need Cloud read access (the **Cloud** resource with **Read** access in the role editor).
+- Adobe rows need Storefront read access. A user with only Storefront read access sees the **Licenses** tab and no other Cloud tab.
+- Each provider must be connected in **Settings > Integrations**, and each company must be mapped.
+- The rows are synced data. They are not a live billing statement.
+
+## Open the license list
+
+<Steps>
+  <Step title="Open Cloud > Licenses">
+    Click **Cloud** in the sidebar, then click the **Licenses** tab.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. MSP staff can pick one company, **Global View**, or **Assigned Companies** if their access is limited.
+
+    <Frame caption="The Licenses view is selected by default. By domain, By office, and By combination need Cloud read access.">
+      <img src="/images/product/cloud-license-list-domain-views.png" alt="Cloud license view controls with Licenses selected and By domain." width="464" height="70" />
+    </Frame>
+  </Step>
+  <Step title="Read the summary">
+    The row above the table shows **Licenses**, **Purchased**, **Assigned**, **Available**, and **Utilization**.
+  </Step>
+  <Step title="Find a license">
+    Type a name or SKU code in the filter box under the **License** column heading. See [Find, filter, and export licenses](/msp-guides/cloud/filter-licenses).
+  </Step>
+  <Step title="Check the numbers">
+    Read **Assigned**, **Purchased**, **Available**, **Utilization**, and **Renews / Expires**. To see how fresh the data is, show **Last synced** with **Columns > Save Changes**.
+  </Step>
+</Steps>
+
+**Hide free & trial** and **Hide large allocations** start turned on, so a license you expect can be missing. Turn them off to see everything.
+
+## See who holds a license
+
+<Steps>
+  <Step title="Select one company">
+    Pick one company in the top bar.
+  </Step>
+  <Step title="Click a license row">
+    Click a Microsoft 365 or Google Workspace row. A panel opens with the counts and an **Assigned users** list showing **Name**, **Email**, and **Status**.
+  </Step>
+  <Step title="Close the panel">
+    Close the panel when you are done. See [View license assignments and combinations](/msp-guides/cloud/view-license-assignments).
+  </Step>
+</Steps>
+
+Adobe rows do not open this panel.
+
+## What each provider reports
+
+| Provider | What the row shows | Click a row |
+| --- | --- | --- |
+| **Microsoft 365** | Assigned, purchased, available, and utilization. **Renews / Expires** and a **Trial** badge show when subscription data is available. | Opens the assigned users. |
+| **Google Workspace** | The number of distinct users holding each product and SKU. Google does not send purchased seat counts. When the company has a matching Sherweb subscription, its quantity fills **Purchased**, **Available**, and **Utilization**. Otherwise they show **Unavailable**. | Opens the assigned users. |
+| **Adobe** | Used quantity as **Assigned**, current quantity as **Purchased**, status, and renewal date. | Does nothing. |
+
+Hover over **Unavailable** to read why. It is not zero.
+
+## Google Workspace seat counts from Sherweb
+
+Google reports who holds each license, not how many seats were bought. If your MSP sells Google Workspace through Sherweb, MSPortal reads the seat count from the Sherweb subscription instead.
+
+A Google license shows seat counts when all of these are true:
+
+- Sherweb is connected in **Settings > Integrations** and is not paused. See [Enable the Sherweb integration](/user-guides/integrations/enable-sherweb-integration).
+- The Sherweb customer is mapped to the same company as the Google Workspace tenant.
+- The Sherweb subscription has the same product name as the Google license, for example **Google Workspace Business Standard**. A billing term after the name, such as **- Annual paid monthly**, still matches.
+
+**Purchased** is the Sherweb quantity. Several subscriptions for the same product are added together. **Available** is purchased minus assigned users, never below zero. **Renews / Expires** shows the earliest Sherweb renewal date when Sherweb reports one.
+
+A Sherweb subscription for a Google license that nobody holds appears as its own row with **0** assigned and every seat available. Google does not list a license without users, so this row comes from Sherweb, and only while the company's Google Workspace connection has synced licenses within the last two days.
+
+Licenses that Sherweb does not sell to that company, such as **Cloud Identity Free**, stay **Unavailable**. The counts update after the next Sherweb and Google Workspace syncs.
+
+## What each column shows
+
+| Column | What it shows |
+| --- | --- |
+| **License** | The license name with its SKU code underneath. Turn on **Show SKU** to put the code first. |
+| **Provider** and **Company** | The source and the company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
+| **Product** | The product family. |
+| **Assigned** | Users holding the license, or used quantity for Adobe. A person with several licenses counts once on each license. |
+| **Purchased** | The purchased seat count, when the provider reports one. For Google Workspace, the quantity on a matching Sherweb subscription. |
+| **Available** | Purchased minus assigned, never below zero. |
+| **Utilization** | Assigned divided by purchased as a percentage, capped at 100%. Shown only when the purchased count is known and above zero. |
+| **Renews / Expires** | The renewal date. A **Trial** badge shows for trial subscriptions. Microsoft rows use the earliest renewal date for that SKU. |
+| **Status** | Hidden by default. The status the provider reports. |
+| **Last synced** | Hidden by default. When the row last synced. |
+
+The summary counts every matching license row on every page, not unique people. **Assigned** includes Google licenses. **Purchased**, **Available**, and **Utilization** leave out licenses with no known seat count. A note under the summary says how many were left out.
+
+The summary disappears while a **License**, **Product**, or **Status** column filter is active. Clear those filters to bring it back. The company selector, the **Provider** filter, and the **Hide free & trial**, **Hide large allocations**, and **Only unused seats** switches change the summary.
+
+## Add Microsoft 365 licenses to a meeting or the planner
+
+MSP staff with Calendar write access or Planner write access see checkboxes on Microsoft 365 license rows.
+
+<Steps>
+  <Step title="Select the rows">
+    Check one or more Microsoft 365 license rows. Google Workspace and Adobe rows cannot be checked.
+  </Step>
+  <Step title="Open Actions">
+    Click **Actions** above the table.
+  </Step>
+  <Step title="Choose Add to meeting or Add to planner">
+    Choose **Add to meeting** or **Add to planner** and finish the dialog that opens.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The **Licenses** tab is missing | Your role has neither Cloud read nor Storefront read access. Ask your MSP. |
+| A license is missing | Turn off **Hide free & trial** and **Hide large allocations**, then clear the column filters and check the company selector. |
+| **Purchased** says **Unavailable** | The Google Workspace license has no matching Sherweb subscription for that company. Check that Sherweb is connected, the Sherweb customer is mapped to the company, and the product names match. Otherwise check the seat count in the Google subscription. |
+| The summary is missing | A **License**, **Product**, or **Status** filter is active. Clear it. |
+| **By domain**, **By office**, and **By combination** are missing | Those views need Cloud read access. Storefront read access alone shows the **Licenses** view only. |
+| An Adobe row does not open | Adobe rows have no assigned users panel. |
+| The data looks old | Show **Last synced**. Ask your MSP to check the integration if it is out of date. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why does Google show Unavailable for Purchased and Available?">
+    Google reports who holds each license but not how many seats were bought. MSPortal fills the counts in from a matching Sherweb subscription for the same company. With no match, the row shows **Unavailable**, which is not zero. Ask your MSP to check the Google subscription.
+  </Accordion>
+  <Accordion title="Does Assigned show how many people use the software?">
+    No. It shows assignments, not sign-in activity.
+  </Accordion>
+  <Accordion title="Does 100% utilization mean I have exactly enough seats?">
+    Not always. The percentage is capped at 100%. Compare **Assigned** with **Purchased** to see how far over you are.
+  </Accordion>
+  <Accordion title="Why can I see Adobe licenses but not the other Cloud tabs?">
+    Adobe uses Storefront read access. The other tabs need Cloud read access.
+  </Accordion>
+  <Accordion title="Why is the renewal date blank?">
+    Google rows carry a renewal date only when a matching Sherweb subscription reports one. For Microsoft 365 and Adobe, the date appears only when the provider sends it.
+  </Accordion>
+  <Accordion title="Can I change or cancel a license here?">
+    No. Company users can [open a ticket](/msp-guides/ticketing/open-a-ticket) or use the [Storefront](/msp-guides/storefront/index) if your MSP has turned it on. MSP staff change licenses in the provider.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Find, filter, and export licenses](/msp-guides/cloud/filter-licenses)
+- [View license assignments and combinations](/msp-guides/cloud/view-license-assignments)
+- [Cloud overview](/user-guides/cloud/index)

@@ -1,0 +1,105 @@
+---
+title: 'Find and read Current Posture findings'
+description: 'Filter available finding types, search records and inspect their source context.'
+icon: 'radar'
+---
+
+{/* Generated from /user-guides/microsoft-365/find-posture-findings.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+This guide helps company users with Microsoft 365 read access and MSP staff find and read a Current Posture finding.
+
+## Before you start
+
+- Your role has Microsoft 365 read access.
+- Open **Cloud > Posture > Current Posture** with one company selected. See [Read Microsoft Current Posture](/msp-guides/microsoft-365/posture).
+
+## Find a record
+
+<Steps>
+  <Step title="Read the metrics">
+    Look at the detailed metrics under **Your Microsoft 365 posture**.
+  </Step>
+  <Step title="Pick a metric">
+    Select a clickable metric to narrow **Items needing attention** to its finding type. Scroll to the findings table if it is out of view.
+  </Step>
+  <Step title="Search">
+    Type a name or phrase in the **Finding** column filter. It also searches descriptions, identifiers, company or tenant text, and status or severity.
+  </Step>
+  <Step title="Page through results">
+    The table shows 25 rows at first. You can switch to 10, 25, 50 or 100.
+  </Step>
+  <Step title="Open a finding">
+    Click the row or its detail arrow to open the right-hand panel.
+  </Step>
+</Steps>
+
+The finding-type badge above the table has **Clear finding type filter**, which removes the metric filter. **Clear Filters** resets the text filter separately. If a metric shows no rows after you were on a later page, go back to page 1 and select the metric again, because changing the metric keeps the page number.
+
+## Know which metrics open findings
+
+Available metrics can open these related datasets:
+
+| Metric | Finding type |
+| --- | --- |
+| People protected by MFA; Admins without MFA | People without MFA. The admin metric opens the same people dataset, not an admin-only list. |
+| Unused accounts still active | Unused accounts. |
+| Domains protected from impersonation | Email domain protection. |
+| Mailboxes forwarding outside the company | External email forwarding. |
+| Devices meeting security policy | Devices needing attention. |
+| Open security incidents | Security incidents. |
+| Credentials exposed in third-party breaches | Exposed credentials. |
+
+A metric is clickable only when it has evidence. Other metrics, such as managed devices, sign-in policies, active alerts, intercepted mail and failed sign-ins, do not open their records here, so a count can exist without a matching list.
+
+The full findings table can also hold **Outdated sign-in methods**, **Admin access**, **Suspicious inbox rules**, **Shared mailboxes allowing sign-in** and **Critical software weaknesses**. These are selected categories, not a complete inventory. Some rows are records for review, not proven problems. An **Admin access** row, for example, does not mean access is unsafe.
+
+## Read the detail panel
+
+Read the name and description, then **Provider context** and **Posture signal**. Context can include Company, Tenant, Tenant domain, Category, Dataset and Enabled. Signal includes Status, Severity, Last synced and, when supplied, Observed in source.
+
+In the table, **Status** can show the severity label instead of the source status, so read the detail fields too. Unknown, or a missing description, means the source supplied too little to judge. It does not mean safe.
+
+Provider record IDs, source endpoints and the raw **Source payload** need integration-settings read access. The panel is not a settings editor. Close it with the close button or Escape.
+
+## What this table does not offer
+
+Current Posture has no CSV or PDF export, bulk actions, manual sorting, Status or Severity dropdown, or date selector. Use the **Finding** search and the metric filters. The **Type** and **Status** columns are labels, not filters. The per-company page has no **Company** column or filter.
+
+Company users [start with the Home AI Assistant](/msp-guides/ticketing/open-a-ticket) for help; include the finding and timestamps. MSP staff can [review or reopen a finding](/user-guides/microsoft-365/review-posture-findings) when permitted.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| A metric does nothing when clicked | It has no evidence or no finding dataset. It is summary-only. |
+| No rows after picking a metric | Go back to page 1 and pick the metric again. |
+| Source payload is missing | It needs integration-settings read access. Ask your MSP administrator. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why does clicking a metric do nothing?">
+    Only metrics with available evidence and a supported finding dataset are clickable. Other metrics are summary-only.
+  </Accordion>
+  <Accordion title="Does Admins without MFA open only administrator accounts?">
+    No. It opens the same People without MFA dataset as the coverage metric. That list is not an exact drilldown of the admin count.
+  </Accordion>
+  <Accordion title="Why does a finding-type filter appear above the table?">
+    It came from a metric selection. Use Clear finding type filter on its badge to remove it; Clear Filters handles the table text filter separately.
+  </Accordion>
+  <Accordion title="Why are results empty after selecting a metric on a later page?">
+    Metric selection currently preserves the page number. Return to page one and select the metric again before concluding there are no matching findings.
+  </Accordion>
+  <Accordion title="Can I filter Type or Status using their column headings?">
+    No. The current reader offers Finding text search and supported metric-driven finding-type filters, not separate Type or Status dropdowns.
+  </Accordion>
+  <Accordion title="Can I export all Current Posture findings?">
+    This table has no CSV or PDF export. Secure Score has a separate management-permission CSV workflow.
+  </Accordion>
+  <Accordion title="Does every row represent a confirmed threat?">
+    No. The table contains curated source categories and review items. Admin access or a suspicious-rule category alone is not proof of malicious activity.
+  </Accordion>
+  <Accordion title="Why can my MSP see source payload details that I cannot?">
+    Provider IDs, endpoints and payload details require integration-settings read access. Normal Company readers do not receive that management detail.
+  </Accordion>
+</AccordionGroup>
