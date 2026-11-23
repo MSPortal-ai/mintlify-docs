@@ -1,6 +1,6 @@
 ---
 title: 'Automatic user import'
-description: 'Create and disable client users and your own staff automatically from Microsoft 365 and your PSA, in one place.'
+description: 'Create and disable client users and your own staff automatically from Microsoft 365 and your PSA, and exclude the accounts that should never sign in, in one place.'
 icon: 'user-plus'
 ---
 
@@ -10,29 +10,30 @@ Use **Settings > Users & Roles > Automatic Import** to decide who becomes a port
 
 - You need read access to **Users** settings to see the **Automatic Import** tab.
 - Changing anything under **Client users** needs write access to both **Users** and **Company Users** settings. Deleting a rule also needs manage access to Users settings.
-- Changing anything under your own staff needs write access to **Users** settings, and manage access to delete a rule.
+- Changing anything under your own staff, or under **Exclusion rules**, needs write access to **Users** settings, and manage access to delete a rule.
 - You can only give a role whose permissions your own role holds. Role lists turn off the roles you cannot give.
 - Create the roles first, on the **Roles** tab. Client users get a Company role. Staff get a Tenant role.
 - A source appears once its integration is connected and syncing users. With nothing connected, the page shows **No user sources connected** and a link to your integrations.
 
-<Frame caption="Sample data: every user source in two panels, each with its switch and a summary of its rules.">
-  <img src="/images/product/automatic-import-sources-preview-desktop.png" alt="Automatic Import with a Client users panel listing Microsoft 365 with 2 import rules and 2 disable rules and ConnectWise Manage contacts with 2 role rules, and a staff panel listing ConnectWise Manage with 14 members, Syncro with 3 technicians and Microsoft 365, each row with a switch" width="2880" height="902" />
+<Frame caption="Sample data: every user source in two panels, each with its switch and a summary of its rules, and the Exclusion rules panel under them.">
+  <img src="/images/product/automatic-import-sources-preview-desktop.png" alt="Automatic Import with a Client users panel listing Microsoft 365 with 2 import rules and 2 disable rules and ConnectWise Manage contacts with 2 role rules, a staff panel listing ConnectWise Manage with 14 members, Syncro with 3 technicians and Microsoft 365, each row with a switch, and an Exclusion rules panel with an Add rule button, a built-in row for service, shared and resource accounts and two rules" width="2880" height="1396" />
 </Frame>
 
 <Accordion title="Phone preview">
-  <Frame caption="The same sources on a phone. A source's summary moves inside the row when you open it.">
-    <img src="/images/product/automatic-import-sources-preview-mobile.png" alt="Automatic Import on a phone with the Client users and staff panels stacked and one switch per source" width="780" height="1688" />
+  <Frame caption="The same page on a phone. A source's summary moves inside the row when you open it.">
+    <img src="/images/product/automatic-import-sources-preview-mobile.png" alt="Automatic Import on a phone with the Client users, staff and Exclusion rules panels stacked, one switch per source and one switch per rule" width="780" height="1656" />
   </Frame>
 </Accordion>
 
 ## Read the page
 
-The page has two panels:
+The page has three panels:
 
-| Panel | Who it creates | Sources |
+| Panel | What it decides | Sources |
 | --- | --- | --- |
-| **Client users** | People at your clients, as Company users of the company they belong to | **Microsoft 365**, and the contacts of each ConnectWise, Autotask or Halo PSA connection |
-| **Your MSP's name, then staff** | Your own team, as MSP staff with the Tenant role you pick | The technicians of each PSA connection, and your own Microsoft 365 tenant |
+| **Client users** | Who becomes a Company user of the company they belong to | **Microsoft 365**, and the contacts of each ConnectWise, Autotask or Halo PSA connection |
+| **Your MSP's name, then staff** | Who on your own team becomes MSP staff, with the Tenant role you pick | The technicians of each PSA connection, and your own Microsoft 365 tenant |
+| **Exclusion rules** | Which accounts are left out: service accounts, shared mailboxes, break-glass accounts. See [Add exclusion rules](#add-exclusion-rules) | Every source in the two panels above |
 
 Each source is one row:
 
@@ -68,12 +69,12 @@ Open **Microsoft 365** under **Client users**. Its rules read the people synced 
 </Steps>
 
 <Frame caption="Sample data: Microsoft 365 open, with two import rules, the built-in disable and one disable rule.">
-  <img src="/images/product/automatic-import-m365-rules-preview-desktop.png" alt="Microsoft 365 source open under Client users, with import rules MSPortal Access group and Licensed Microsoft 365 users showing their conditions, role and match counts, a locked Sign-in blocked in Microsoft 365 row marked Always on, a disable rule for unlicensed accounts, and the link Choose which Microsoft tenants import" width="2880" height="1670" />
+  <img src="/images/product/automatic-import-m365-rules-preview-desktop.png" alt="Microsoft 365 source open under Client users, with import rules MSPortal Access group and Licensed Microsoft 365 users showing their conditions, role and match counts, a locked Sign-in blocked in Microsoft 365 row marked Always on, a disable rule for unlicensed accounts, and the link Choose which Microsoft tenants import" width="2880" height="1220" />
 </Frame>
 
 <Accordion title="Phone preview">
   <Frame caption="The Microsoft 365 rules on a phone.">
-    <img src="/images/product/automatic-import-m365-rules-preview-mobile.png" alt="Microsoft 365 import and disable rules on a phone, each rule with its switch and menu" width="780" height="1854" />
+    <img src="/images/product/automatic-import-m365-rules-preview-mobile.png" alt="Microsoft 365 import and disable rules on a phone, each rule with its switch and menu" width="780" height="1540" />
   </Frame>
 </Accordion>
 
@@ -107,7 +108,7 @@ Licenses sync once a day. A license condition never judges an account that appea
 | **Already a portal user** | Their address is already in use in your organization. Normal linking connects them to that user. |
 | **Imports off for this tenant** | User import is turned off for their Microsoft tenant on the Microsoft 365 Companies page. |
 | **Account disabled** | Their Microsoft 365 account is disabled. |
-| **Cannot sign in** | A guest, service, shared or resource account, an account whose sign-in is blocked (for example by a **Block sign-in** [access rule](/user-guides/settings/users-roles#set-access-rules)), or a person whose access was removed with **Remove Access** on **Company Users**. |
+| **Cannot sign in** | A guest, service, shared or resource account, an account an [exclusion rule](#add-exclusion-rules) matches, or a person whose access was removed with **Remove Access** on **Company Users**. |
 | **No email address** | Microsoft 365 has no email address for the person. |
 
 ### Keep access in sync with a group
@@ -152,12 +153,12 @@ Each ConnectWise, Autotask and Halo PSA connection has its own row under **Clien
 </Steps>
 
 <Frame caption="Sample data: a ConnectWise connection's contacts, with the default role, two contact type rules and the built-in disable.">
-  <img src="/images/product/automatic-import-psa-contacts-preview-desktop.png" alt="ConnectWise Manage contacts source open, with Role for everyone else set to Client user, Portal roles by contact type mapping Primary Contact and Decision maker to Client manager with reorder arrows, and a locked row Contact deactivated or deleted in ConnectWise Manage marked Always on" width="2880" height="1594" />
+  <img src="/images/product/automatic-import-psa-contacts-preview-desktop.png" alt="ConnectWise Manage contacts source open, with Role for everyone else set to Client user, Portal roles by contact type mapping Primary Contact and Decision maker to Client manager with reorder arrows, and a locked row Contact deactivated or deleted in ConnectWise Manage marked Always on" width="2880" height="1144" />
 </Frame>
 
 <Accordion title="Phone preview">
   <Frame caption="A PSA connection's contact import on a phone.">
-    <img src="/images/product/automatic-import-psa-contacts-preview-mobile.png" alt="ConnectWise Manage contact import on a phone with the default role, the contact type rules stacked and the Always on disable row" width="780" height="1966" />
+    <img src="/images/product/automatic-import-psa-contacts-preview-mobile.png" alt="ConnectWise Manage contact import on a phone with the default role, the contact type rules stacked and the Always on disable row" width="780" height="1680" />
   </Frame>
 </Accordion>
 
@@ -196,7 +197,7 @@ The second panel, named after your MSP, creates MSP staff. Its sources are:
 </Steps>
 
 <Frame caption="Sample data: a ConnectWise connection's staff rules, one role for service managers and one for everyone else.">
-  <img src="/images/product/automatic-import-staff-rules-preview-desktop.png" alt="Staff panel with ConnectWise Manage open, showing import rules Service managers as Service manager and Everyone else in ConnectWise as Technician with match counts, and a disable rule Inactive in ConnectWise matching accounts whose source account is disabled" width="2880" height="1480" />
+  <img src="/images/product/automatic-import-staff-rules-preview-desktop.png" alt="Staff panel with ConnectWise Manage open, showing import rules Service managers as Service manager and Everyone else in ConnectWise as Technician with match counts, and a disable rule Inactive in ConnectWise matching accounts whose source account is disabled" width="2880" height="1128" />
 </Frame>
 
 <Frame caption="Sample data: a new staff import rule, with the preview showing who will be imported and why others are skipped.">
@@ -205,7 +206,7 @@ The second panel, named after your MSP, creates MSP staff. Its sources are:
 
 <Accordion title="Phone preview">
   <Frame caption="The staff rules and the rule dialog on a phone.">
-    <img src="/images/product/automatic-import-staff-rules-preview-mobile.png" alt="Staff import and disable rules for a PSA connection on a phone" width="780" height="1688" />
+    <img src="/images/product/automatic-import-staff-rules-preview-mobile.png" alt="Staff import and disable rules for a PSA connection on a phone" width="780" height="1264" />
     <img src="/images/product/automatic-import-staff-dialog-preview-mobile.png" alt="Staff import rule dialog on a phone with the preview list above Save and apply and Cancel" width="780" height="1688" />
   </Frame>
 </Accordion>
@@ -243,6 +244,56 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
 - **Safety stop:** when a rule would turn off more than three people and over half of your active staff in one pass, MSPortal holds the change, because that pattern usually means a sync failed, not that most of your team left. Saving the rule, or turning it on, then asks **Disable N staff members?** with the number it would turn off. Confirm to apply it, or cancel to leave everyone on. The confirmation covers the people you were shown: anyone the rule matches later is held again.
 - **NinjaOne** does not report when a technician is deactivated, so a disable rule on a NinjaOne source has to match on something else, such as a name or an email address.
 
+## Add exclusion rules
+
+The **Exclusion rules** panel, under your sources, lists the accounts every source leaves out. Use it for service accounts, shared mailboxes, break-glass accounts and anything else that is not a person who should sign in.
+
+An account that matches an exclusion rule becomes a service account with sign-in blocked:
+
+- **No sign-in and no invitation:** it cannot sign in to the portal or be invited.
+- **Not a seat:** it no longer counts as a seat in financial reporting.
+- **Skipped by imports:** Microsoft 365 import rules and staff import rules skip it. A PSA contact import still adds it, as a service account that cannot sign in.
+- **Still visible:** its records, history and source links stay.
+
+The first row, **Service, shared and resource accounts**, is always on: MSPortal leaves out the API users of a PSA, and the shared mailboxes and meeting rooms it recognizes in Microsoft 365, without a rule. Guests are not left out by that row. Add a rule for them if they should not sign in.
+
+<Frame caption="Sample data: the Exclusion rules panel with the built-in row and two rules.">
+  <img src="/images/product/automatic-import-exclusion-rules-preview-desktop.png" alt="The Exclusion rules panel with an Add rule button, an always-on row for service, shared and resource accounts, a rule named Break-glass and role accounts matching any of 2 conditions with 5 matches, and a rule named Microsoft 365 guests matching source account type equals Guest with 18 matches" width="2880" height="594" />
+</Frame>
+
+<Accordion title="Phone preview">
+  <Frame caption="The same panel on a phone.">
+    <img src="/images/product/automatic-import-exclusion-rules-preview-mobile.png" alt="The Exclusion rules panel on a phone with its Add rule button, the always-on row and two rules, each with a switch and a menu" width="780" height="818" />
+  </Frame>
+</Accordion>
+
+<Steps>
+  <Step title="Add a rule">
+    Click **Add rule** in the **Exclusion rules** panel. The **New exclusion rule** dialog opens.
+  </Step>
+  <Step title="Name the rule">
+    Enter a **Rule name** and, optionally, a **Description**.
+  </Step>
+  <Step title="Add the conditions">
+    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. A rule can use facts from any source: Microsoft 365 fields such as **Microsoft 365 user type**, **Microsoft 365 group** and **Source account type**, PSA fields such as **PSA agent or technician** and **Contact type**, and fields every source has, such as **Display name** and **Email address**.
+  </Step>
+  <Step title="Preview the matches">
+    Click **Preview matches** to list up to 100 synced accounts that match, with each one's source, company and current access.
+  </Step>
+  <Step title="Save and apply">
+    Leave **Apply this rule** on and click **Save and apply**. A paused rule is saved but has no effect.
+  </Step>
+</Steps>
+
+Two common exclusion rules:
+
+| To leave out | Conditions |
+| --- | --- |
+| Break-glass and role accounts | **Match any condition**: **Email address** **contains** `break`, **Email address** **contains** `role` |
+| Microsoft 365 guests | **Source account type** **equals** **Guest** |
+
+Use the switch on a rule's row to pause or resume it. It saves right away. The **⋯** menu has **Edit rule** and **Delete rule**. Pausing or deleting a rule gives back sign-in to the accounts that only this rule left out, and lets them be imported again.
+
 ## Troubleshooting
 
 | Problem | What to do |
@@ -269,8 +320,8 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
   <Accordion title="What happens to imported users when I delete the import rule?">
     They stay. Deleting or pausing a rule only stops new imports. Deleting a disable rule turns its people back on.
   </Accordion>
-  <Accordion title="Where did the import rules on Access Rules go?">
-    They are here, under **Client users > Microsoft 365**. **Access Rules** now holds only rules that block sign-in for service accounts.
+  <Accordion title="Where did the Access Rules tab go?">
+    Its rules are on this tab. Rules that import or disable Microsoft 365 users are under **Client users > Microsoft 365**. Rules that blocked sign-in are now exclusion rules, in the **Exclusion rules** panel, and work as before. A saved link to the Access Rules tab opens **Automatic Import**.
   </Accordion>
   <Accordion title="Where did Contact Auto-Import on my PSA connection go?">
     It is here, in that connection's row under **Client users**, with the same switch, default role and contact type rules. The connection's page shows whether it is on and links to this tab.
