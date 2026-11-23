@@ -142,7 +142,7 @@ Each ConnectWise, Autotask and Halo PSA connection has its own row under **Clien
     Click the PSA's row, for example **ConnectWise Manage**. With several connections to one PSA, each row shows the connection's name.
   </Step>
   <Step title="Choose the role for everyone else">
-    **Role for everyone else** is the role a contact gets when no rule below matches. A company's own default import role, set on the company, comes first.
+    **Role for everyone else** is the role a contact gets when no rule below matches. A company's own default import role, set on the company, comes first. Because a change here can move contacts onto those company roles, you need to be able to give them too: a role beyond your own permissions on any company's default refuses the save.
   </Step>
   <Step title="Give some contacts another role (optional)">
     Click **Add rule** to map a contact type to a portal role. In ConnectWise and Autotask the rules use contact types. In Halo PSA they use Halo roles and the Important Contact flag. When a contact matches more than one rule, the rule highest in the list wins. Use the arrows to reorder the rules.
@@ -217,7 +217,8 @@ What a staff import rule does:
 - **Who it creates:** a staff user with status **Imported** and the rule's role, linked to the technician or Microsoft 365 account it came from.
 - **No invitation:** MSPortal sends no email. The person is linked when they first sign in. Send invitations from the **Users** tab when you are ready.
 - **Existing users stay as they are:** a person who already has a portal user, staff or client, is skipped. A rule never changes an existing user's role and never turns a client user into staff.
-- **Skipped accounts:** disabled accounts, service and API accounts, and accounts with no email address. The preview shows **Account disabled**, **Cannot sign in** or **No email address** for each.
+- **Skipped accounts:** disabled accounts, service and API accounts, accounts an [exclusion rule](#add-exclusion-rules) matches, and accounts with no email address. The preview shows **Account disabled**, **Cannot sign in** or **No email address** for each.
+- **Staff before contacts:** in a PSA sync, staff rules run before contact import. A technician who is also a contact of one of your companies becomes staff, not a client user.
 - **Turning it off keeps staff:** pausing or deleting an import rule stops new imports only.
 
 ## Disable staff who leave
@@ -303,13 +304,13 @@ Use the switch on a rule's row to pause or resume it. It saves right away. The *
 | An import rule creates nobody | Open the rule and click **Preview matches**. Each skipped person shows why. For Microsoft 365, check that user import is on for the tenant on the Microsoft 365 Companies page and that a users sync has run. |
 | A rule shows **role deleted: pick a new one** | The rule's role was deleted. Edit the rule, choose another role and save. |
 | A PSA row shows **Pick a default role** | Contact import is on with no **Role for everyone else**. Choose one. |
-| **You can't give this role: it has permissions your own role doesn't** | Pick a role whose permissions you hold, or ask someone with that access to save the rule. |
+| **You can't give this role: it has permissions your own role doesn't** | Pick a role whose permissions you hold, or ask someone with that access to save the rule. For PSA contacts this also covers the default import role set on any company, since contacts no rule covers get that role. |
 | A PSA contact row says **Not importing** and its switch is off | Click the **(i)** beside the switch for the reason: the PSA API key cannot read contacts, or the connection is not syncing users. Fix it on the connection's page, then turn the switch on. |
 | **The connection's settings changed while saving. Try again.** | Someone else changed this connection's contact import since you opened the page, or a sync saved the connection at the same moment. The page reloads the current settings: check them, then make your change again. |
 | No Microsoft 365 source under your staff | MSPortal reads staff only from a Microsoft tenant your own account, or a Primary Admin's, is a member of. Connect that tenant on the Microsoft 365 Companies page. |
 | A rule shows **role deleted: pick a new one** in a PSA row | A role that contact import gives was deleted. Open the row and choose another role in the picker that reads **Role deleted: pick a new one**. |
 | A disable rule shows **disables held back** | It would have turned off most of your staff at once. Click **Review** on the rule's row, then confirm the number of staff it asks about. |
-| Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, so wait for the next users sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
+| Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, by a users sync that starts ten minutes or more after the reconnect. Wait for that sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
 | A PSA's contact types could not be loaded | The PSA did not answer or refused the API key. Saved rules still show. Try again, or check the connection's page. |
 
 ## Frequently asked questions
