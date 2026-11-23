@@ -37,7 +37,7 @@ The page has two panels:
 Each source is one row:
 
 - **The switch** on the right is **Import from this source automatically**. On means the source is creating users.
-- **The summary** beside the switch says what the source does today, for example **2 import rules · 1 disable rule**, or **Off**. A summary in amber, such as **Pick a default role**, names something to fix before the source can import.
+- **The summary** beside the switch says what the source does today, for example **2 import rules · 2 disable rules**, or **Off**. Built-in disables are counted. A summary in amber, such as **Pick a default role**, names something to fix before the source can import.
 - **Click the row** to open its rules. **Import rules** decide who becomes a user and with which role. **Disable rules** decide who is turned off and signed out.
 
 Every rule row has its own switch to pause or resume it, which saves right away, and a **⋯** menu with **Edit rule** and **Delete rule**.
@@ -92,7 +92,7 @@ Licenses sync once a day. A license condition never judges an account that appea
 - **No invitation:** MSPortal sends no email. The Microsoft 365 account is linked to the portal user when the person first signs in. To invite people, use **Send Welcome Email** on **Company Users**.
 - **Existing users stay as they are:** an import rule never changes a portal user's details or role. An address already used by a portal user in your organization, as a main address or a Microsoft alias, is skipped. With **Disable users who stop matching** on, it can disable and turn back on the people it matches, as described below.
 - **Turning it off keeps users:** pausing, editing or deleting an import rule stops new imports only. Users it already imported stay. People a synced rule disabled are turned back on. Remove them from **Company Users** if they should not have access.
-- **The source's switch:** it is on while at least one import rule is active. Turning it off pauses every Microsoft 365 import rule, and turning it back on resumes them.
+- **The source's switch:** it is on while at least one import rule is active. Turning it off pauses every active Microsoft 365 import rule. Turning it back on resumes the rules it paused, and leaves a rule you paused yourself paused.
 - **Per tenant:** to stop imports for one client's Microsoft tenant, turn off user import on the [Microsoft 365 Companies page](/user-guides/microsoft-365/connecting-companies#turn-user-import-on-or-off).
 
 <Tip>
@@ -163,7 +163,7 @@ Each ConnectWise, Autotask and Halo PSA connection has its own row under **Clien
 
 - **Changing a role rule updates existing users.** Users already imported from that connection move to the role their contact type now maps to.
 - **Disable rules:** **Contact deactivated or deleted** is built in and marked **Always on**. A client user whose last active contact in the PSA goes away is disabled and signed out.
-- **Users must be syncing.** When the connection is not syncing users, the row says so. Turn on **Sync Users** under **Choose data** on the connection's page.
+- **Users must be syncing.** When the connection is not syncing users, or its API key cannot read contacts, the row's summary reads **Not importing** and the row says why. Turn on **Sync Users** under **Choose data** on the connection's page. You can still turn the import off here.
 - **Changing who gets a role checks every role.** Reordering, adding or removing a rule, changing the default role and turning the import on can all hand a role to new people, so each of those saves needs you to be able to give every role in the list.
 - **The PSA's own page links here.** On the connection's **Choose data** task, **Contact Auto-Import** shows **On** or **Off** and the link **Set up in Automatic Import**.
 
@@ -188,7 +188,7 @@ The second panel, named after your MSP, creates MSP staff. Its sources are:
     **Staff role** lists your Tenant roles. When several rules match one person, the rule with the lowest **Priority** number gives the role.
   </Step>
   <Step title="Add the conditions">
-    A PSA rule starts with **PSA agent or technician** **is true**, which matches every technician. Narrow it with fields such as **PSA security role**, **PSA work role**, **Team**, **PSA group**, **Job title** or **Email address**. A Microsoft 365 rule starts with **Microsoft 365 group** **is a member of**: pick the group your team is in, or use **Department**, **Job title** and the other directory fields. Licenses are not available on staff rules.
+    A PSA rule starts with **PSA agent or technician** **is true**, which matches every technician. Narrow it with fields such as **PSA security role**, **PSA work role**, **Team**, **PSA group**, **Job title** or **Email address**. A Microsoft 365 rule starts with **Microsoft 365 group** **is a member of**: pick the group your team is in (the list shows your own tenant's groups only), or use **Department**, **Job title** and the other directory fields. Licenses are not available on staff rules.
   </Step>
   <Step title="Preview, then save and apply">
     Click **Preview matches** to see who will be imported and why others are skipped, then click **Save and apply**. The rule runs right away and reports how many staff it imported.
@@ -240,7 +240,7 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
 - **Disconnecting the source:** removing the PSA or Microsoft 365 connection removes its staff rules and turns back on the people its disable rules had turned off.
 - **An administrator's choice wins:** if you turn someone back on yourself, the rule leaves them alone until they stop matching and match again.
 - **Primary Admins are never disabled** by a rule, and you cannot save a rule that would disable your own account.
-- **Safety stop:** when a rule would turn off more than three people and over half of your active staff in one pass, MSPortal holds the change and tells you how many disables were held. That pattern usually means a sync failed, not that most of your team left. Open the rule, click **Preview matches** to see who it turns off, then click **Save and apply**. A save right after the preview applies it. A save without the preview, and turning the rule on with its switch, do not.
+- **Safety stop:** when a rule would turn off more than three people and over half of your active staff in one pass, MSPortal holds the change, because that pattern usually means a sync failed, not that most of your team left. Saving the rule, or turning it on, then asks **Disable N staff members?** with the number it would turn off. Confirm to apply it, or cancel to leave everyone on. The confirmation covers the people you were shown: anyone the rule matches later is held again.
 - **NinjaOne** does not report when a technician is deactivated, so a disable rule on a NinjaOne source has to match on something else, such as a name or an email address.
 
 ## Troubleshooting
@@ -256,7 +256,7 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
 | A PSA contact switch will not turn on and names the API key | The PSA API key cannot read contacts. Fix the permission on the connection's page, then try again. |
 | **The connection's settings changed while saving. Try again.** | A sync or another person saved the connection at the same moment. Make the change again. |
 | No Microsoft 365 source under your staff | MSPortal reads staff only from a Microsoft tenant your own account, or a Primary Admin's, is a member of. Connect that tenant on the Microsoft 365 Companies page. |
-| A disable rule was held | It would have turned off most of your staff at once. Open the rule, click **Preview matches**, then click **Save and apply**. |
+| A disable rule was held | It would have turned off most of your staff at once. Open the rule and click **Save and apply**, then confirm the number of staff it asks about. |
 | Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, so wait for the next users sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
 | A PSA's contact types could not be loaded | The PSA did not answer or refused the API key. Saved rules still show. Try again, or check the connection's page. |
 
