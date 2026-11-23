@@ -133,6 +133,21 @@ Map a Microsoft 365 group to a role: create an import rule with the condition **
 
 When a mailbox is converted to a shared mailbox, Microsoft 365 keeps the account enabled, so MSPortal cannot treat it as disabled. The licenses are usually removed, though. To disable those people, add a disable rule with **Microsoft 365 license** **has none**, and add **Microsoft 365 user type** **equals** **Member** so guests are left alone. Click **Preview matches** first: a portal user is disabled only when all of their Microsoft 365 accounts match.
 
+## Create PSA contacts from Microsoft 365
+
+**PSA contacts**, in the same **Microsoft 365** row, lists each ConnectWise, Autotask and Halo connection. Turn on **Create and update contacts in** a connection to give every client user linked to Microsoft 365 a contact in that PSA.
+
+- **Who gets a contact:** every active Company user linked to an enabled Microsoft 365 account of their own company. Guests, and accounts an exclusion rule leaves out, never get one. The person's company has to be mapped to a company in that PSA.
+- **Finding or creating the contact:** MSPortal uses the contact already linked to the person. Otherwise it looks for a contact with the same email in the PSA company, and creates one when there is none.
+- **What is sent:** first and last name, job title, business phone and mobile phone. After the first sync, MSPortal sends a field only when Microsoft 365 changes it. It never clears a field and never changes a contact's email, so an edit made in the PSA stays until Microsoft 365 changes that field.
+- **When it runs:** after each Microsoft 365 users sync, after you save a Microsoft 365 import rule, and right after you turn the option on.
+- **What the row shows:** how many contacts are up to date, how many are waiting and how many MSPortal created. When some could not be written, the row says how many failed. Click **Show who** for each person and the reason.
+- **Turning it off:** MSPortal stops writing contacts to that PSA. Contacts it created stay in the PSA.
+
+<Note>
+A contact that belongs to another company in the PSA is left alone, and the row lists the person as failed. Move the contact back in the PSA, or move the person to the matching company in MSPortal.
+</Note>
+
 ## Import client users from PSA contacts
 
 Each ConnectWise, Autotask and Halo PSA connection has its own row under **Client users**. Its switch turns contact import on for that connection: active contacts of your imported companies become Company users after each users sync.
@@ -313,6 +328,9 @@ Use the switch on a rule's row to pause or resume it. It saves right away. The *
 | A staff source says it **is no longer connected** | Its connection was paused or removed. Its rules stay listed but do not run, the source shows **Off**, and no rule can be added. Reconnect the source, or delete the rules. |
 | A staff source says **Neither your account nor a Primary Admin's is a member of this Microsoft tenant** | Another administrator, who is a member of that tenant, saved its rules. They still run. You can pause or delete them. To add or change rules there, sign in with an account that is a member of the tenant. |
 | Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, by a users sync that starts ten minutes or more after the reconnect. Wait for that sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
+| A person under **PSA contacts** shows **Their contact belongs to another company in the PSA** | MSPortal found the person's contact under another PSA company and left it alone. Move the contact back in the PSA, or move the person to the matching company in MSPortal. |
+| A person under **PSA contacts** shows **The PSA refused the change**, or the PSA's own error | Check the connection's API key permissions for contacts, and the contact's required fields in the PSA. MSPortal tries again after the next Microsoft 365 sync that changes the person, or when you turn the option off and on again. |
+| **PSA contacts** says contacts are written after the next Microsoft 365 sync | Nothing has run yet. Check that the client's company is mapped in the PSA connection, and wait for the next Microsoft 365 users sync. |
 | A PSA's contact types could not be loaded | The PSA did not answer or refused the API key. Saved rules still show. Try again, or check the connection's page. |
 
 ## Frequently asked questions
@@ -329,6 +347,9 @@ Use the switch on a rule's row to pause or resume it. It saves right away. The *
   </Accordion>
   <Accordion title="Where did Contact Auto-Import on my PSA connection go?">
     It is here, in that connection's row under **Client users**, with the same switch, default role and contact type rules. The connection's page shows whether it is on and links to this tab.
+  </Accordion>
+  <Accordion title="Does MSPortal delete PSA contacts?">
+    No. Turning **Create and update contacts in** a connection off stops new writes, and contacts MSPortal created stay in the PSA.
   </Accordion>
   <Accordion title="Can a rule turn a client user into staff?">
     No. A person who already has a portal user is skipped. Change their user type by hand if they should be staff.
