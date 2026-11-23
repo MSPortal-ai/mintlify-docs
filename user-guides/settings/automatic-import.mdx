@@ -236,12 +236,12 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
   </Step>
 </Steps>
 
-- **Who it disables:** a staff member whose accounts in that source all match. They are disabled and signed out.
+- **Who it disables:** a staff member whose accounts in that source all match. They are disabled and signed out. This includes someone an import rule creates in the same sync, who is turned off straight away.
 - **Coming back:** they are turned back on when an account stops matching, or when you pause or delete the rule. They return with the status they had before.
 - **Disconnecting the source:** removing the PSA or Microsoft 365 connection removes its staff rules and turns back on the people its disable rules had turned off.
 - **An administrator's choice wins:** if you turn someone back on yourself, the rule leaves them alone until they stop matching and match again.
 - **Primary Admins are never disabled** by a rule, and you cannot save a rule that would disable your own account.
-- **Safety stop:** when a rule would turn off more than three people and over half of your active staff in one pass, MSPortal holds the change, because that pattern usually means a sync failed, not that most of your team left. Saving the rule, or turning it on, then asks **Disable N staff members?** with the number it would turn off. Confirm to apply it, or cancel to leave everyone on. The confirmation covers the people you were shown: anyone the rule matches later is held again.
+- **Safety stop:** when a rule would turn off more than three people and over half of your active staff in one pass, MSPortal holds the change, because that pattern usually means a sync failed, not that most of your team left. The rule's row then says how many disables are held back. Click **Review** on that row, or save the rule, and MSPortal asks **Disable N staff members?** with the number it would turn off now. Confirm to apply it, or cancel to leave everyone on. The confirmation covers the people you were shown: anyone the rule matches later is held again.
 - **NinjaOne** does not report when a technician is deactivated, so a disable rule on a NinjaOne source has to match on something else, such as a name or an email address.
 
 ## Add exclusion rules
@@ -255,7 +255,7 @@ An account that matches an exclusion rule becomes a service account with sign-in
 - **Skipped by imports:** Microsoft 365 import rules and staff import rules skip it. A PSA contact import still adds it, as a service account that cannot sign in.
 - **Still visible:** its records, history and source links stay.
 
-The first row, **Service, shared and resource accounts**, is always on: MSPortal leaves out the API users of a PSA, and the shared mailboxes and meeting rooms it recognizes in Microsoft 365, without a rule. Guests are not left out by that row. Add a rule for them if they should not sign in.
+The first row, **Service, shared and resource accounts**, is always on: MSPortal leaves out the API users of a PSA, and the shared mailboxes and meeting rooms it recognizes in Microsoft 365, without a rule. The panel shows whenever a PSA or Microsoft 365 is connected, also when the page lists no import for it. Guests are not left out by that row. Add a rule for them if they should not sign in.
 
 <Frame caption="Sample data: the Exclusion rules panel with the built-in row and two rules.">
   <img src="/images/product/automatic-import-exclusion-rules-preview-desktop.png" alt="The Exclusion rules panel with an Add rule button, an always-on row for service, shared and resource accounts, a rule named Break-glass and role accounts matching any of 2 conditions with 5 matches, and a rule named Microsoft 365 guests matching source account type equals Guest with 18 matches" width="2880" height="594" />
@@ -281,7 +281,7 @@ The first row, **Service, shared and resource accounts**, is always on: MSPortal
     Click **Preview matches** to list up to 100 synced accounts that match, with each one's source, company and current access.
   </Step>
   <Step title="Save and apply">
-    Leave **Apply this rule** on and click **Save and apply**. A paused rule is saved but has no effect.
+    Leave **Apply this rule** on and click **Save and apply**. A paused rule is saved but has no effect. Closing a rule you have edited asks **Discard changes?** first.
   </Step>
 </Steps>
 
@@ -304,10 +304,10 @@ Use the switch on a rule's row to pause or resume it. It saves right away. The *
 | A rule shows **role deleted: pick a new one** | The rule's role was deleted. Edit the rule, choose another role and save. |
 | A PSA row shows **Pick a default role** | Contact import is on with no **Role for everyone else**. Choose one. |
 | **You can't give this role: it has permissions your own role doesn't** | Pick a role whose permissions you hold, or ask someone with that access to save the rule. |
-| A PSA contact switch will not turn on and names the API key | The PSA API key cannot read contacts. Fix the permission on the connection's page, then try again. |
+| A PSA contact row says **Not importing** and its switch is off | Click the **(i)** beside the switch for the reason: the PSA API key cannot read contacts, or the connection is not syncing users. Fix it on the connection's page, then turn the switch on. |
 | **The connection's settings changed while saving. Try again.** | A sync or another person saved the connection at the same moment. Make the change again. |
 | No Microsoft 365 source under your staff | MSPortal reads staff only from a Microsoft tenant your own account, or a Primary Admin's, is a member of. Connect that tenant on the Microsoft 365 Companies page. |
-| A disable rule was held | It would have turned off most of your staff at once. Open the rule and click **Save and apply**, then confirm the number of staff it asks about. |
+| A disable rule shows **disables held back** | It would have turned off most of your staff at once. Click **Review** on the rule's row, then confirm the number of staff it asks about. |
 | Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, so wait for the next users sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
 | A PSA's contact types could not be loaded | The PSA did not answer or refused the API key. Saved rules still show. Try again, or check the connection's page. |
 
