@@ -33732,15 +33732,6 @@
       "CreateTicketTemplateRequest": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 200
-          },
-          "key": {
-            "type": "string",
-            "pattern": "^[a-z0-9_-]+$"
-          },
           "description": {
             "type": "string",
             "nullable": true,
@@ -33761,37 +33752,10 @@
             "nullable": true,
             "format": "uuid"
           },
-          "visibility": {
-            "type": "string",
-            "enum": [
-              "tenant_only",
-              "company_only",
-              "company_and_contacts",
-              "public_link"
-            ],
-            "default": "company_and_contacts"
-          },
-          "theme": {
-            "type": "string",
-            "enum": [
-              "system",
-              "light",
-              "dark"
-            ],
-            "default": "system"
-          },
           "icon": {
             "type": "string",
             "nullable": true,
             "maxLength": 100
-          },
-          "isActive": {
-            "type": "boolean",
-            "default": true
-          },
-          "defaultCompanyEnabled": {
-            "type": "boolean",
-            "default": true
           },
           "defaultPriority": {
             "type": "string",
@@ -33950,6 +33914,91 @@
               "enabled"
             ]
           },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "event": {
+                  "type": "string",
+                  "enum": [
+                    "on_submit",
+                    "on_change",
+                    "on_create"
+                  ]
+                },
+                "condition": {
+                  "nullable": true
+                },
+                "action": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "set",
+                        "add_watcher",
+                        "webhook",
+                        "sla"
+                      ]
+                    },
+                    "payload": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "event",
+                "action"
+              ]
+            }
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 200
+          },
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "tenant_only",
+              "company_only",
+              "company_and_contacts",
+              "public_link"
+            ],
+            "default": "company_and_contacts"
+          },
+          "theme": {
+            "type": "string",
+            "enum": [
+              "system",
+              "light",
+              "dark"
+            ],
+            "default": "system"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true
+          },
+          "defaultCompanyEnabled": {
+            "type": "boolean",
+            "default": true
+          },
           "sections": {
             "type": "array",
             "items": {
@@ -33994,6 +34043,7 @@
                           "datetime",
                           "email",
                           "phone",
+                          "contact_phone",
                           "url",
                           "priority",
                           "impact",
@@ -34133,55 +34183,6 @@
             },
             "minItems": 1,
             "maxItems": 50
-          },
-          "rules": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 200
-                },
-                "event": {
-                  "type": "string",
-                  "enum": [
-                    "on_submit",
-                    "on_change",
-                    "on_create"
-                  ]
-                },
-                "condition": {
-                  "nullable": true
-                },
-                "action": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "set",
-                        "add_watcher",
-                        "webhook",
-                        "sla"
-                      ]
-                    },
-                    "payload": {
-                      "nullable": true
-                    }
-                  },
-                  "required": [
-                    "type"
-                  ]
-                }
-              },
-              "required": [
-                "name",
-                "event",
-                "action"
-              ]
-            }
           }
         },
         "required": [
@@ -35440,6 +35441,7 @@
                           "datetime",
                           "email",
                           "phone",
+                          "contact_phone",
                           "url",
                           "priority",
                           "impact",
@@ -35568,7 +35570,6 @@
                       "type"
                     ]
                   },
-                  "minItems": 1,
                   "maxItems": 100
                 }
               },
@@ -35579,10 +35580,15 @@
             },
             "minItems": 1,
             "maxItems": 50
+          },
+          "expectedUpdatedAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
           }
         },
         "additionalProperties": false,
-        "description": "Omitted fields keep their stored values; the key cannot change. sections and rules replace the whole list when given: send each existing field's key to keep the answers and settings tied to it. The Flow webhook stays as stored unless flowWebhook is given."
+        "description": "Omitted fields keep their stored values; the key cannot change. sections and rules replace the whole list when given: send each existing field's key to keep the answers and settings tied to it, and expectedUpdatedAt (the updatedAt from GET), which is required with them. The Flow webhook stays as stored unless flowWebhook is given."
       }
     },
     "parameters": {}
@@ -80635,6 +80641,16 @@
           },
           "404": {
             "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The template changed after expectedUpdatedAt. Read it again and resend the change.",
             "content": {
               "application/json": {
                 "schema": {
