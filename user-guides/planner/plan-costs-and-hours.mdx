@@ -1,6 +1,6 @@
 ---
 title: 'Plan costs and hours'
-description: 'Enter quantities, unit costs, recurring estimates, effort and probability for a Planner item.'
+description: 'Enter quantities, unit costs, per-user prices, recurring estimates, effort and probability for a Planner item.'
 icon: 'calculator'
 ---
 
@@ -28,6 +28,9 @@ Enter the effort, cost and likelihood for a Planner item. MSP staff set these es
   <Step title="Choose the recurrence">
     Open the recurrence menu on the row and pick **One-time**, **Monthly** or **Annual**.
   </Step>
+  <Step title="Price the row per user (optional)">
+    In the same menu, check **Per user**. The row's **Qty** becomes the company's **Users** count from the **Financial** tab, and the field is locked. The row reads, for example, **25 users on Financial**. Enter the price for one user under **Costs**.
+  </Step>
   <Step title="Add more rows (optional)">
     Click **Add cost** for another row. An item can have up to 20 rows.
   </Step>
@@ -47,6 +50,16 @@ Keep the cadences separate. A one-time 750 and a monthly 80 do not add up to 830
 ## Remove a cost row
 
 Click the trash button on the row. The last remaining row cannot be removed. To leave a zero estimate, clear its unit amount. A blank unit amount counts as zero. Do not use a quantity of zero to enter zero cost. A blank or zero quantity returns to 1 when you leave the field.
+
+## Price a cost per user
+
+A **Per user** row multiplies its unit amount by the number of users the company has on **MSP Tools > Client Success > Financial** (the **Users** column). Use it for costs billed by seat, such as a license or a security awareness subscription.
+
+- The count updates by itself. Each night, after Financial refreshes, MSPortal reprices every per-user row whose company's user count changed. Saving the item also uses the current count.
+- Moving the item to another company prices the row at that company's count when you save.
+- A company with no user count on Financial shows **No user count on Financial yet** and prices the row at zero users. Financial counts users for tenants with a connected PSA.
+- To stop following the count, open the row's menu and clear **Per user**. The row keeps the current count as a fixed **Qty** that you can edit.
+- Templates do not store per-user rows. Saving an item as a template turns each per-user row into a fixed quantity.
 
 Some rows say **Managed from linked device standard prices**. Their fields and trash button are locked. Linking or unlinking a device can add or remove these rows. Do not add a manual row for the same cost, or it counts twice.
 
@@ -84,6 +97,8 @@ Changing a chart filter never changes an item's cost rows.
 | The costs area shows an error | Click **Retry**. **Save** stays unavailable until costs load. Do not replace an estimate with zero because it failed to load. |
 | The currency symbol looks wrong | The editor uses the company's currency. If it differs from what you see elsewhere, check the company’s currency setting. The editor does not convert currencies. |
 | A cost row is locked | It is managed from a linked device's standard price. Change the device standard instead. |
+| A row's **Qty** is locked and shows users on Financial | The row is priced **Per user**. Clear **Per user** in the row's menu to enter a quantity yourself. |
+| A per-user row shows zero users | The company has no user count on Financial yet. Check the company's **Users** on the **Financial** tab. |
 | You cannot add another row | The item already has 20 rows. |
 | **Save** is grayed out | Wait for costs and custom fields to load, and check you have Write Planner. |
 
@@ -92,6 +107,9 @@ Changing a chart filter never changes an item's cost rows.
 <AccordionGroup>
   <Accordion title="Do I enter the unit price or the row total?">
     Enter the unit amount. The row amount is quantity times that amount.
+  </Accordion>
+  <Accordion title="Where does a per-user row's quantity come from?">
+    From the company's **Users** count on the **Financial** tab. It updates each night and whenever you save the item.
   </Accordion>
   <Accordion title="Can one item have one-time and monthly costs?">
     Yes. Use a separate row for each and choose a recurrence for each.
