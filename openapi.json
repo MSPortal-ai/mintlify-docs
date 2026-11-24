@@ -34607,6 +34607,982 @@
           "entries",
           "pagination"
         ]
+      },
+      "SetTicketTemplateCompaniesRequest": {
+        "type": "object",
+        "properties": {
+          "companyIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 5000
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "branchId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "keepBranchCompanies": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "companyIds",
+          "enabled"
+        ],
+        "additionalProperties": false
+      },
+      "SetTicketTemplateRolesRequest": {
+        "type": "object",
+        "properties": {
+          "roleIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 500
+          }
+        },
+        "required": [
+          "roleIds"
+        ],
+        "additionalProperties": false
+      },
+      "SetTicketTemplateStatusRequest": {
+        "type": "object",
+        "properties": {
+          "templateIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 100
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "templateIds",
+          "isActive"
+        ],
+        "additionalProperties": false
+      },
+      "TicketTemplateCompanyAccess": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          },
+          "hasOverride": {
+            "type": "boolean"
+          },
+          "variantId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "The form or branch this company uses; null when none"
+          },
+          "branchId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "branchName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "companyId",
+          "companyName",
+          "isEnabled",
+          "hasOverride",
+          "variantId",
+          "branchId",
+          "branchName"
+        ]
+      },
+      "TicketTemplateDetail": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "aiDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "theme": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "parentTemplateId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "branchName": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultCompanyEnabled": {
+            "type": "boolean"
+          },
+          "newCompanyBranchId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "defaultPriority": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultBoard": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketTypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketSubtypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketCategoryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultAutotaskWorkTypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultAutotaskSourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloCategoryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloImpactId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloUrgencyId": {
+            "type": "string",
+            "nullable": true
+          },
+          "useClientPsaDefaults": {
+            "type": "boolean"
+          },
+          "staticSubject": {
+            "type": "string",
+            "nullable": true
+          },
+          "lockSubject": {
+            "type": "boolean"
+          },
+          "priorityOverride": {
+            "nullable": true
+          },
+          "flowWebhook": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "deliveryMode": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "enabled",
+              "deliveryMode",
+              "destination"
+            ],
+            "description": "Whether a Flow webhook is set and how it delivers. Its URL and secret are never returned."
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "placeholder": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "helpText": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "required": {
+                        "type": "string"
+                      },
+                      "defaultValue": {
+                        "nullable": true
+                      },
+                      "options": {
+                        "nullable": true
+                      },
+                      "validation": {
+                        "nullable": true
+                      },
+                      "conditional": {
+                        "nullable": true
+                      },
+                      "embeddedTemplateId": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "label",
+                      "type",
+                      "placeholder",
+                      "helpText",
+                      "required",
+                      "embeddedTemplateId"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "fields"
+              ]
+            }
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "condition": {
+                  "nullable": true
+                },
+                "action": {
+                  "nullable": true
+                }
+              },
+              "required": [
+                "name",
+                "event"
+              ]
+            }
+          },
+          "branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "branchName": {
+                  "type": "string"
+                },
+                "isActive": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "branchName",
+                "isActive"
+              ]
+            }
+          },
+          "allowedRoles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            },
+            "description": "Client roles that may use the form; empty means every client role. A branch follows its main form."
+          },
+          "createdAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "templateId",
+          "name",
+          "key",
+          "description",
+          "aiDescription",
+          "category",
+          "categoryId",
+          "visibility",
+          "theme",
+          "icon",
+          "version",
+          "isActive",
+          "parentTemplateId",
+          "branchName",
+          "defaultCompanyEnabled",
+          "newCompanyBranchId",
+          "defaultPriority",
+          "defaultBoard",
+          "defaultStatus",
+          "defaultTicketTypeId",
+          "defaultTicketSubtypeId",
+          "defaultTicketCategoryId",
+          "defaultAutotaskWorkTypeId",
+          "defaultAutotaskSourceId",
+          "haloCategoryId",
+          "haloImpactId",
+          "haloUrgencyId",
+          "useClientPsaDefaults",
+          "staticSubject",
+          "lockSubject",
+          "flowWebhook",
+          "sections",
+          "rules",
+          "branches",
+          "allowedRoles",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "TicketTemplateSaveResult": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "sectionCount": {
+            "type": "integer"
+          },
+          "fieldCount": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "templateId",
+          "name",
+          "key",
+          "sectionCount",
+          "fieldCount",
+          "isActive"
+        ]
+      },
+      "TicketTemplateSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "fieldCount": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "key",
+          "description",
+          "category",
+          "categoryId",
+          "visibility",
+          "isActive",
+          "fieldCount",
+          "updatedAt"
+        ]
+      },
+      "UpdateTicketTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 2000
+          },
+          "aiDescription": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 2000
+          },
+          "category": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          },
+          "defaultPriority": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultBoard": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketTypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketSubtypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultTicketCategoryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultAutotaskWorkTypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "defaultAutotaskSourceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloCategoryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloImpactId": {
+            "type": "string",
+            "nullable": true
+          },
+          "haloUrgencyId": {
+            "type": "string",
+            "nullable": true
+          },
+          "useClientPsaDefaults": {
+            "type": "boolean"
+          },
+          "staticSubject": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          },
+          "lockSubject": {
+            "type": "boolean"
+          },
+          "priorityOverride": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "rules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "overridePriorityId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "condition": {
+                      "type": "object",
+                      "properties": {
+                        "when": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "op": {
+                          "type": "string",
+                          "enum": [
+                            "equals",
+                            "not_equals",
+                            "in",
+                            "not_in",
+                            "gt",
+                            "lt",
+                            "gte",
+                            "lte",
+                            "includes",
+                            "not_includes",
+                            "within_hours"
+                          ]
+                        },
+                        "value": {
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "when",
+                        "op"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "overridePriorityId",
+                    "condition"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "enabled",
+              "rules"
+            ]
+          },
+          "flowWebhook": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "url": {
+                "type": "string",
+                "maxLength": 2048,
+                "default": ""
+              },
+              "secret": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 256
+              },
+              "deliveryMode": {
+                "type": "string",
+                "enum": [
+                  "ticket_and_webhook",
+                  "webhook_only"
+                ]
+              },
+              "destination": {
+                "type": "string",
+                "enum": [
+                  "url",
+                  "rewst"
+                ]
+              },
+              "integrationId": {
+                "type": "string",
+                "nullable": true,
+                "format": "uuid"
+              }
+            },
+            "required": [
+              "enabled"
+            ]
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "event": {
+                  "type": "string",
+                  "enum": [
+                    "on_submit",
+                    "on_change",
+                    "on_create"
+                  ]
+                },
+                "condition": {
+                  "nullable": true
+                },
+                "action": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "set",
+                        "add_watcher",
+                        "webhook",
+                        "sla"
+                      ]
+                    },
+                    "payload": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "event",
+                "action"
+              ]
+            }
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 200
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "tenant_only",
+              "company_only",
+              "company_and_contacts",
+              "public_link"
+            ]
+          },
+          "theme": {
+            "type": "string",
+            "enum": [
+              "system",
+              "light",
+              "dark"
+            ]
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "defaultCompanyEnabled": {
+            "type": "boolean"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true,
+                  "maxLength": 1000
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9_-]+$"
+                      },
+                      "label": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "short_text",
+                          "long_text",
+                          "number",
+                          "decimal",
+                          "select",
+                          "multi_select",
+                          "checkbox",
+                          "radio",
+                          "date",
+                          "datetime",
+                          "email",
+                          "phone",
+                          "url",
+                          "priority",
+                          "impact",
+                          "urgency",
+                          "asset",
+                          "asset_field",
+                          "cloud_group",
+                          "user",
+                          "site",
+                          "attachment",
+                          "device",
+                          "location",
+                          "project",
+                          "file_upload",
+                          "screenshot",
+                          "psa_classification",
+                          "embedded_template",
+                          "label"
+                        ]
+                      },
+                      "placeholder": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 500
+                      },
+                      "helpText": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 1000
+                      },
+                      "required": {
+                        "type": "string",
+                        "enum": [
+                          "always",
+                          "conditional",
+                          "never"
+                        ],
+                        "default": "never"
+                      },
+                      "defaultValue": {
+                        "nullable": true
+                      },
+                      "options": {
+                        "type": "array",
+                        "nullable": true,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "label": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "value",
+                            "label"
+                          ]
+                        }
+                      },
+                      "validation": {
+                        "type": "object",
+                        "nullable": true,
+                        "additionalProperties": {
+                          "nullable": true
+                        }
+                      },
+                      "conditional": {
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "when": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "op": {
+                            "type": "string",
+                            "enum": [
+                              "equals",
+                              "not_equals",
+                              "in",
+                              "not_in",
+                              "gt",
+                              "lt",
+                              "gte",
+                              "lte",
+                              "includes",
+                              "not_includes",
+                              "within_hours"
+                            ]
+                          },
+                          "value": {
+                            "nullable": true
+                          },
+                          "then": {
+                            "type": "object",
+                            "properties": {
+                              "required": {
+                                "type": "boolean"
+                              },
+                              "show": {
+                                "type": "boolean"
+                              },
+                              "setDefault": {
+                                "nullable": true
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "when",
+                          "op"
+                        ]
+                      },
+                      "embeddedTemplateId": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uuid"
+                      }
+                    },
+                    "required": [
+                      "label",
+                      "type"
+                    ]
+                  },
+                  "minItems": 1,
+                  "maxItems": 100
+                }
+              },
+              "required": [
+                "title",
+                "fields"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 50
+          }
+        },
+        "additionalProperties": false,
+        "description": "Omitted fields keep their stored values; the key cannot change. sections and rules replace the whole list when given: send each existing field's key to keep the answers and settings tied to it. The Flow webhook stays as stored unless flowWebhook is given."
       }
     },
     "parameters": {}
@@ -79273,9 +80249,7 @@
       }
     },
     "/api/public/v1/ticket-templates": {
-      "post": {
-        "summary": "Create ticket template",
-        "description": "Create a reusable parent ticket template with metadata, sections, fields and optional rules. This does not submit a ticket and does not create template branches or visibility assignments. Requires `templates.write` and write_settings_templates.",
+      "get": {
         "tags": [
           "Ticket Templates"
         ],
@@ -79284,6 +80258,134 @@
             "BearerAuth": []
           }
         ],
+        "summary": "List ticket templates",
+        "description": "Parent ticket templates in name order; branches are listed on the template. Requires `templates.read`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false,
+            "name": "includeInactive",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "required": false,
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "categoryId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket templates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TicketTemplateSummary"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.read), a client user, or the linked user lacks Settings > Tickets Read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create ticket template",
+        "description": "Create a reusable parent ticket template with metadata, sections, fields and optional rules. This does not submit a ticket and does not create template branches. Requires `templates.write`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
         "requestBody": {
           "required": true,
           "content": {
@@ -79314,7 +80416,7 @@
             }
           },
           "400": {
-            "description": "Validation error (incl. embedded template references)",
+            "description": "Validation error",
             "content": {
               "application/json": {
                 "schema": {
@@ -79334,7 +80436,17 @@
             }
           },
           "403": {
-            "description": "Forbidden - missing scope (templates.write) or the linked user lacks write_settings_templates",
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -79345,6 +80457,685 @@
           },
           "409": {
             "description": "A template with this key already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/ticket-templates/{id}": {
+      "get": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get ticket template",
+        "description": "A template with its sections, fields, rules, branches and client role access. Requires `templates.read`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket template",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketTemplateDetail"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.read), a client user, or the linked user lacks Settings > Tickets Read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update ticket template",
+        "description": "Change a template's settings, sections or rules. Requires `templates.write`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTicketTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Template saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/TicketTemplateSaveResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Delete ticket template",
+        "description": "Delete a template and its branches. To hide a template without deleting it, turn it off with PUT /api/public/v1/ticket-templates/status. Requires `templates.write` and Settings > Tickets Manage.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deletedTemplateIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "uuid"
+                          }
+                        }
+                      },
+                      "required": [
+                        "deletedTemplateIds"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Manage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/ticket-templates/status": {
+      "put": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Turn ticket templates on or off",
+        "description": "Set whether templates can be used to submit tickets. Requires `templates.write`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetTicketTemplateStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "templateIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "uuid"
+                          }
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "templateIds",
+                        "isActive"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/ticket-templates/{id}/roles": {
+      "put": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Set ticket template client roles",
+        "description": "Replace the client roles that may use a main form; an empty list opens it to every client role. Branches follow their main form. Requires `templates.write`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetTicketTemplateRolesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Roles set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "templateId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "roleIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "uuid"
+                          }
+                        }
+                      },
+                      "required": [
+                        "templateId",
+                        "roleIds"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/ticket-templates/{id}/companies": {
+      "get": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List ticket template companies",
+        "description": "Every active company with the form or branch it uses. Requires `templates.read`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TicketTemplateCompanyAccess"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.read), a client user, or the linked user lacks Settings > Tickets Read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ticket Templates"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Set ticket template companies",
+        "description": "Turn a main form on or off for companies. enabled moves them onto the form, or onto branchId when given; disabled leaves them with no variant of it. keepBranchCompanies leaves companies already on a branch where they are. Requires `templates.write`. MSP staff only. Settings > Tickets gates every endpoint: Read lists and reads, Write creates and changes, Manage deletes.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetTicketTemplateCompaniesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Companies moved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "templateId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "moved": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "templateId",
+                        "moved"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (templates.write), a client user, or the linked user lacks Settings > Tickets Write",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ticket template not found",
             "content": {
               "application/json": {
                 "schema": {
