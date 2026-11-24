@@ -1,99 +1,131 @@
 ---
-title: "Read Acronis EDR incidents"
-description: "Find endpoint detection and response incidents, open their details, and tell incident state apart from mitigation."
+title: "Read EDR detections"
+description: "Read the EDR overview, find Acronis and Huntress detections in one table, and open their details."
 icon: shield-halved
 ---
 
-Use this page to find and read Acronis endpoint detection and response (EDR) incidents. It is for company users and MSP staff.
+Use this page to review endpoint detection and response (EDR) detections from Acronis and Huntress on the **Security > EDR** tab. It is for company users and MSP staff.
 
 ## Before you start
 
 - You need Security read access.
-- Acronis must be connected and its endpoints mapped to companies. Without Acronis, the **EDR Incidents** tab does not appear. See [Enable the Acronis integration](/user-guides/integrations/enable-acronis-integration).
-- Huntress incident reports are on the separate **Huntress** tab. See [Read Huntress security items](/user-guides/security/read-huntress).
+- Acronis or Huntress must be connected, with its endpoints or organizations mapped to companies. Unmapped records are left out. Without either one, the **EDR** tab does not appear. See [Enable the Acronis integration](/user-guides/integrations/enable-acronis-integration) and [Enable the Huntress integration](/user-guides/integrations/enable-huntress-integration).
+- Your MSP admin can rename the tab in **Settings > Navigation**, so it can show a different name.
 
-## Find an incident
+The **EDR** tab has two views, **Overview** and **Detections**. It opens on **Overview**. Both follow your company selection.
+
+## Read the Overview
+
+Open **Security > EDR** and check the company selector.
+
+| Section | What it shows |
+| --- | --- |
+| **Open detections** | Detections nobody has started on, with a sparkline of new detections per week. Click it to open **Detections** filtered to open items. |
+| **Resolved** | The share of all detections that are resolved, with the count underneath. |
+| **Agents online** | Agents reporting in, out of all agents. It appears when at least one agent is imported. |
+| **Pending remediations** | Huntress remediations waiting for approval. It appears when Huntress is connected. |
+| **Not mitigated** | Acronis incidents the agent could not contain. It appears when Acronis is connected. |
+| **Detections per week** | New detections per week over the last 12 weeks. Each point covers seven days, and the last one ends today. |
+| **Open by severity** | Open detections by severity. |
+| **Detection status** | Every detection split into **Open**, **In progress**, and **Resolved**. |
+
+The tiles and charts count Acronis incidents and Huntress escalations and incident reports. Huntress remediations count only in **Pending remediations**.
+
+Agent counts have no history in MSPortal, so **Agents online** shows today's value only. A Huntress agent counts as online when Huntress reports it active, or when it called back in the last 30 days.
+
+## Find a detection
 
 <Steps>
-  <Step title="Open EDR Incidents">
-    Open **Security > EDR Incidents** and check the company selector.
+  <Step title="Open Detections">
+    Open **Security > EDR**, check the company selector, and click **Detections**.
   </Step>
-  <Step title="Search by host">
-    Type in the **Host** column filter. It matches the host name or the host domain.
+  <Step title="Filter the table">
+    Every column has a filter. **Detection** searches the title, host, reference, and company. **Type** picks **Incident**, **Escalation**, **Incident report**, or **Remediation**; it lists only the types your connected integrations produce. **Host** matches the host name. **Company**, **Severity**, and **Status** pick from a list. **Detected** takes a date range. Filtering returns you to page 1.
   </Step>
-  <Step title="Filter the list">
-    Use **Company** to pick companies, **Severity** to pick High, Medium, or Low, and **State** to pick Not Started, Investigating, or Closed. Click a column header to sort by it.
-  </Step>
-  <Step title="Read the row">
-    Each row shows **#**, **Host**, **Company**, **Severity**, **Category**, **State**, **Mitigation**, and **Detected**. The table shows 20 incidents per page.
+  <Step title="Read a row">
+    Each row shows **Detection** (the title, with its reference underneath), **Type**, **Host**, **Company**, **Severity**, **Status**, and **Detected**. The table shows 25 detections per page, newest first. Click a column header to sort by it.
   </Step>
   <Step title="Open the details">
     Click a row, away from its checkbox and its three-dot menu, to open the side panel.
   </Step>
 </Steps>
 
-A link from the Security Dashboard can open this list with **State** already set. Clear the filter to see every incident.
+MSP staff also see a **Source** column, naming Acronis or Huntress, when both are connected. It can be filtered but not sorted.
+
+A link from the Security Dashboard can open **Detections** with **Status** already set. Clear the filter to see every detection.
 
 ## Understand the fields
 
-- **Severity** is the severity Acronis reports. **Category** names the kind of detection.
-- **State** tracks the investigation: **Not Started**, **Investigating**, or **Closed**.
-- **Mitigation** is separate: **Auto Mitigated**, **Mitigated**, or **Not Mitigated**. A Closed incident can still be Not Mitigated, and a Mitigated incident can still be open.
-- A badge can simplify a more specific Acronis value. Open the details panel to read the full Mitigation text.
+**Type** names the kind of record:
 
-## Read incident details
+- **Incident**: an Acronis EDR incident.
+- **Escalation**: a Huntress escalation. Escalations have no host.
+- **Incident report**: a Huntress incident report.
+- **Remediation**: a Huntress remediation step attached to an incident report.
 
-<Steps>
-  <Step title="Open the side panel">
-    Click the incident row. The title reads **Incident #** followed by the incident number.
-  </Step>
-  <Step title="Read the badges and categories">
-    The top of the panel shows the State and Mitigation badges and the **Categories**.
-  </Step>
-  <Step title="Read Host">
-    **Host** lists **Host Name**, **Domain**, **IP Address**, **Agent Version**, and **Company**.
-  </Step>
-  <Step title="Read Incident Details">
-    **Incident Details** lists **Severity**, **Verdict**, **State**, **Mitigation**, **Detected**, **Created**, and **Updated**. Fields without a value are left out.
-  </Step>
-  <Step title="Open Acronis if you need more">
-    Click **Open in Acronis Console** to open the incident in Acronis in a new tab. This needs your own Acronis sign-in.
-  </Step>
-</Steps>
+**Status** puts every source on one scale:
 
-The bottom of the panel lists **Internal ID**, **Acronis Incident ID**, and **Acronis Customer ID**, which your MSP can use to match the record.
+| Status | Acronis incident | Huntress escalation or incident report | Huntress remediation |
+| --- | --- | --- | --- |
+| **Open** | Not Started | Not closed or resolved | Not approved yet |
+| **In progress** | Investigating | Not used | Approved |
+| **Resolved** | Closed or False positive | Closed or resolved | Completed, cancelled, or its incident report is closed |
 
-This page is read-only. You cannot change an incident state, start remediation, or export a CSV here. To follow up, see [Follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents).
+**Severity** is the severity the source reports: **Critical**, **High**, **Medium**, **Low**, or **Info**. **Unrated** means the source sent none.
+
+**Detected** means different things by type. For an Acronis incident it is the incident time. For an escalation it is the occurrence time, and for an incident report the report time; either can fall back to the created date. For a remediation it is when Huntress completed or approved it, or its incident report's time when it was never approved.
+
+## Read the details
+
+Click an Acronis incident to open its full panel. The title reads **Incident #** followed by the incident number.
+
+- The top shows the State and Mitigation badges and the **Categories**.
+- **Host** lists **Host Name**, **Domain**, **IP Address**, **Agent Version**, and **Company**.
+- **Incident Details** lists **Severity**, **Verdict**, **State**, **Mitigation**, **Detected**, **Created**, and **Updated**. Fields without a value are left out.
+- MSP staff also see **Open in Acronis Console** and the **Identifiers** your MSP can use to match the record.
+
+State and Mitigation are separate in Acronis. A closed incident can still be **Not Mitigated**, and a **Mitigated** incident can still be open. Read both.
+
+Click any other row to open a shorter panel with **Status**, **Severity**, **Host Name**, **Company**, **Detected**, and **Reference**. MSP staff also see **Open in vendor console**.
+
+The vendor console needs your own sign-in to that vendor. Company users do not see vendor names or vendor console links on the **EDR** tab.
+
+This tab is read-only for the detections themselves. You cannot change a status, approve a remediation, or export a CSV here. To follow up, see [Follow up on EDR detections](/user-guides/security/follow-up-edr-incidents).
 
 ## Troubleshooting
 
 | Problem | What to do |
 | --- | --- |
-| The list is already filtered | Clear the **State** filter. A dashboard link can set it. |
-| **No EDR incidents found** | Clear all filters and check the company selector. Ask your MSP to confirm the Acronis sync and company mapping. |
-| **Security integration unavailable** | Acronis is not connected, or you lack Security read access. Ask your MSP admin. |
-| **Failed to load EDR incidents** | Reload the page. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
-| **Open in Acronis Console** is missing | Acronis did not supply a link for that incident. |
+| The list is already filtered | Clear the **Status** filter. A dashboard link can set it. |
+| **No detections** | Clear all filters and check the company selector. Then ask your MSP to check the Acronis or Huntress sync and company mapping. |
+| **No detections in the last 12 weeks** | Nothing new was detected for your selected companies in that time. Check the company selector and the integration sync. |
+| Zero counts on every tile | The integration may not be synced, or its records are unmapped. Zero counts do not prove you are safe. |
+| **Could not load detections.** | Reload the page. If it keeps failing, report it through the [Home AI Assistant](/user-guides/ticketing/open-a-ticket). |
+| **Security integration unavailable** | Neither Acronis nor Huntress is connected, or you lack Security read access. Ask your MSP admin. |
+| **Open in vendor console** is missing | The vendor did not supply a link for that detection, or you are a company user. |
 
 ## Frequently asked questions
 
 <AccordionGroup>
-  <Accordion title="Does Closed mean the incident is mitigated?">
-    No. State and Mitigation are separate. Read both.
+  <Accordion title="Where did the Huntress tab go?">
+    Huntress escalations, incident reports, and remediations are now on **Security > EDR > Detections**, in the same table as Acronis incidents. Old Huntress links open that view.
   </Accordion>
-  <Accordion title="Does opening the Acronis link give me access to Acronis?">
-    No. You need your own Acronis access. Company users can ask their MSP to investigate.
+  <Accordion title="Does Resolved mean an Acronis incident is mitigated?">
+    No. Status follows the Acronis state. Open the incident and read **Mitigation** too.
   </Accordion>
-  <Accordion title="Can I resolve an incident or start a scan here?">
-    No. Use Acronis for remediation.
+  <Accordion title="Does Agents online mean the device is online right now?">
+    Not always. A Huntress agent also counts when it called back in the last 30 days.
+  </Accordion>
+  <Accordion title="Can I approve a remediation or close a detection here?">
+    No. Use Acronis or Huntress.
   </Accordion>
   <Accordion title="I am a company user. How do I ask for an investigation?">
-    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the incident number, host, company, severity, and date, then confirm the request when prompted.
+    Tell the [Home AI Assistant](/user-guides/ticketing/open-a-ticket) the detection title or reference, host, company, severity, and date, then confirm the request when prompted.
   </Accordion>
 </AccordionGroup>
 
 ## Related guides
 
-- [Follow up on EDR incidents](/user-guides/security/follow-up-edr-incidents)
+- [Follow up on EDR detections](/user-guides/security/follow-up-edr-incidents)
 - [Read the Security Dashboard](/user-guides/security/read-dashboard)
 - [Security](/user-guides/security/index)
