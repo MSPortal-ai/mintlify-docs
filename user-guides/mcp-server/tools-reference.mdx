@@ -11,7 +11,7 @@ Use this reference to find the MSPortal MCP tool for a job, see what permission 
 - Connect your client and approve access. See [MCP Server](/user-guides/mcp-server/index).
 - Call **get_current_user** to check the connected user, tenant and company.
 - Your client receives only the tools that your server version, approved areas, role, company scope, integrations and client tool selection allow. A tool in this reference may not be in your session.
-- The catalog groups 385 operations into 120 public tools, so full access stays under a 128-tool client limit.
+- The catalog groups 387 operations into 120 public tools, so full access stays under a 128-tool client limit.
 - Some actions also need a feature turned on for your tenant. Their description ends with the feature they need, such as "Needs the Budget approvals feature." Without it, the action is not in your session.
 
 ## Call a read tool
@@ -561,11 +561,13 @@ Ownership, company sharing and tenant boundaries are enforced when a change is c
 
 ## Integrations
 
-**Module scopes:** `integrations.read`, `integrations.write`
+**Module scopes:** `integrations.read`, `integrations.write`, `domains.read`
 
 | Action / legacy name | Public tool | Access | Permissions | Description |
 | --- | --- | --- | --- | --- |
 | `get_integration` | `query_integrations` | Read | `read_settings_integrations` | Get one integration's sync health, including a lastRuns map of per-entity last-sync timestamps. For Autotask it also returns ticketScope: the queues, categories and statuses that decide which tickets sync, by name, plus unselectedCategories whose tickets never sync. Check ticketScope first when a ticket is missing. Never returns credentials or other configuration. |
+| `list_company_integration_mappings` | `query_integrations` | Read | **MSP staff only.** `read_settings_integrations` or `read_settings_integration_companies`; scope `integrations.read` | Per active company, by name: every record linked to it in each connected integration (provider, integration, external ID and name, last sync), plus `missing`, the active mapping providers it has no link in. The same data as **Settings > Integrations > Company mapping**, for reconciling clients across tools. Filter by company or provider; paginated. |
+| `list_dnsimple_domains` | `query_integrations` | Read | **MSP staff only.** `read_settings_integration_companies` or `read_settings_integrations`; scope `domains.read`; needs a connected DNSimple integration | Every DNSimple domain, including domains not mapped to a company: company (empty when unmapped), DNSimple state (registered, hosted = DNS only, expired), expiry, auto-renew, ignored flag, DNSimple account and last sync. `mapped=false` lists domains not billed to a client; a company filter returns only that company's mapped domains. Paginated. |
 | `list_integrations` | `query_integrations` | Read | `read_settings_integrations` | List tenant integrations with sync health (status, derived health, failure counters, last error, per-entity last-sync timestamps). Never returns credentials or configuration. Returns a detail object `{ integrations, companyIntegrations }`; companyIntegrations is null unless includeCompanyIntegrations is true. |
 | `pause_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or pause an integration. Pausing stops all background syncs for the provider until it is resumed (status becomes 'paused' with reason 'manual_pause'). |
 | `resume_integration` | `manage_integrations` | Write (confirm) | `write_settings_integrations` | Stage or resume a paused integration. Sets status to 'active' and clears the pause and failure state (paused_at, paused_reason, last error fields, consecutive failures). |

@@ -84,6 +84,17 @@ Picking a different record in a cell that already has a link adds a second link.
   </Step>
 </Steps>
 
+## Read mappings with the API
+
+`GET /api/public/v1/integrations/company-mappings` returns the grid's data, one entry per active company, sorted by name:
+
+- `links`: every record linked to the company, with the provider, integration ID, the record's ID and name in that tool, and when it last synced.
+- `missing`: the connected tools with no record linked to the company. This is the API form of **Blank links** > **Any integration**.
+
+Add `companyId` for one company, or `provider` (for example `provider=halo,ninjaone,pax8`) to limit both lists to those tools. Results come in pages of up to 100 companies (`page`, `limit`).
+
+The API key needs the **Read Integrations** (`integrations.read`) scope. The user who created it needs read access to integration settings or to **Integration Company Mapping**. Keys created by company (portal) users are refused. The **API Reference** tab lists every field under **Integrations**.
+
 ## Use the company selector
 
 The page follows the Company Selector in the top bar. With one company or an assigned set of companies selected, the grid shows only those companies. In Global View it shows every company. Changing the selector clears your **Blank links** choices.

@@ -35593,6 +35593,179 @@
         "additionalProperties": false,
         "description": "Omitted fields keep their stored values; the key cannot change. sections and rules replace the whole list when given: send each existing field's key to keep the answers and settings tied to it, and expectedUpdatedAt (the updatedAt from GET), which is required with them. The Flow webhook stays as stored unless flowWebhook is given."
       },
+      "DnsimpleDomain": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "domainName": {
+            "type": "string"
+          },
+          "unicodeName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Internationalized form when it differs from domainName"
+          },
+          "companyId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Null when the domain is not mapped"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mapped": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string",
+            "nullable": true,
+            "description": "DNSimple domain state: registered, hosted (DNS only, registered elsewhere), expired, ..."
+          },
+          "expiresOn": {
+            "type": "string",
+            "nullable": true,
+            "description": "YYYY-MM-DD"
+          },
+          "registeredOn": {
+            "type": "string",
+            "nullable": true,
+            "description": "YYYY-MM-DD"
+          },
+          "autoRenew": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "ignored": {
+            "type": "boolean",
+            "description": "Marked ignore on the Company mapping page"
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "integrationId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "accountId": {
+                "type": "string",
+                "nullable": true
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              },
+              "nickname": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "integrationId",
+              "accountId",
+              "email",
+              "nickname"
+            ],
+            "description": "The DNSimple account the domain belongs to"
+          },
+          "lastSyncedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "domainName",
+          "unicodeName",
+          "companyId",
+          "companyName",
+          "mapped",
+          "state",
+          "expiresOn",
+          "registeredOn",
+          "autoRenew",
+          "ignored",
+          "account",
+          "lastSyncedAt"
+        ]
+      },
+      "CompanyMapping": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "integrationId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "externalId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "externalName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "syncedAt": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "provider",
+                "integrationId",
+                "externalId",
+                "externalName",
+                "syncedAt"
+              ]
+            },
+            "description": "Every record linked to the company in a connected integration; a company can have several per provider (DNSimple domains, multiple sites)"
+          },
+          "missing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string"
+                },
+                "integrationId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "provider",
+                "integrationId"
+              ]
+            },
+            "description": "Active mapping providers (one entry per integration) with no record linked to this company"
+          }
+        },
+        "required": [
+          "companyId",
+          "companyName",
+          "links",
+          "missing"
+        ]
+      },
       "PlannerAssigneeUserType": {
         "type": "string",
         "nullable": true,
@@ -81922,6 +82095,248 @@
           },
           "403": {
             "description": "Forbidden - missing scope (analytics.read), read_technician_performance or read_tickets, the endpoint is staff-only, the psa_time_entries feature is off, or entryKind asks for internal or time_off without the read_staff_time permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/integrations/dnsimple/domains": {
+      "get": {
+        "summary": "List DNSimple domains",
+        "description": "Every DNSimple domain the tenant syncs, ordered by domain name, including domains not mapped to any company: company (null when unmapped), DNSimple state, expiry, auto-renew, the DNSimple account and last sync. mapped=false lists registered domains not billed to a client. companyId narrows to that company's mapped domains; unmapped domains are never returned then. Requires `domains.read` and read access to integration settings or company mapping; client (company) users are refused. Returns 403 while no DNSimple integration is connected.",
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only this company's mapped domains"
+            },
+            "required": false,
+            "description": "Only this company's mapped domains",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ],
+              "description": "true: only domains mapped to a company; false: only unmapped domains; omit for both"
+            },
+            "required": false,
+            "description": "true: only domains mapped to a company; false: only unmapped domains; omit for both",
+            "name": "mapped",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DNSimple domains",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DnsimpleDomain"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (domains.read), the linked user lacks read access to integration settings or company mapping (read_settings_integrations or read_settings_integration_companies), or the linked user is a client (company) user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/integrations/company-mappings": {
+      "get": {
+        "summary": "List company mappings across integrations",
+        "description": "One entry per active MSPortal company, ordered by name: every record linked to it in a connected integration (provider, integration id, external id and name, last sync) and `missing`, the active mapping providers it has no link in. The same data as Settings > Integrations > Company mapping, keyed by MSPortal company whichever PSA the companies sync from. provider (repeat it or comma-separate values) narrows links and missing to those providers. Requires `integrations.read` and read access to integration settings or company mapping; client (company) users are refused.",
+        "tags": [
+          "Integrations"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "One company"
+            },
+            "required": false,
+            "description": "One company",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Provider keys to include, comma-separated or repeated (for example halo,ninjaone,pax8)"
+            },
+            "required": false,
+            "description": "Provider keys to include, comma-separated or repeated (for example halo,ninjaone,pax8)",
+            "name": "provider",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company mappings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CompanyMapping"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (integrations.read), the linked user lacks read access to integration settings or company mapping (read_settings_integrations or read_settings_integration_companies), or the linked user is a client (company) user",
             "content": {
               "application/json": {
                 "schema": {
