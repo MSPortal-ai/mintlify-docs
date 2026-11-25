@@ -9091,6 +9091,9 @@
             "type": "string",
             "format": "date-time",
             "description": "Last update timestamp (ISO 8601)"
+          },
+          "assignee": {
+            "$ref": "#/components/schemas/PlannerAssigneeRef"
           }
         },
         "required": [
@@ -9121,7 +9124,8 @@
           "linkedSecureScoreCount",
           "tagCount",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "assignee"
         ]
       },
       "PlannerCompanyRef": {
@@ -9483,6 +9487,12 @@
           "isArchived": {
             "type": "boolean",
             "description": "Whether the item is archived (default: false)"
+          },
+          "assigneeUserId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Assignee user ID: an active MSP staff member, or an active user of the item's own company (only on items visible to company users, with Planner client assignees on). List candidates with GET /planner/assignees. MSP staff only."
           }
         },
         "required": [
@@ -9585,6 +9595,12 @@
           "isArchived": {
             "type": "boolean",
             "description": "Whether the item is archived"
+          },
+          "assigneeUserId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Assignee user ID: an active MSP staff member, or an active user of the item's own company (only on items visible to company users, with Planner client assignees on). List candidates with GET /planner/assignees. MSP staff only. null clears the assignee."
           }
         }
       },
@@ -35749,6 +35765,174 @@
           "links",
           "missing"
         ]
+      },
+      "PlannerAssigneeUserType": {
+        "type": "string",
+        "nullable": true,
+        "enum": [
+          "staff",
+          "company",
+          null
+        ],
+        "description": "staff or company; null when unknown"
+      },
+      "PlannerAssigneeRef": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The assignee's user ID (the value assigneeUserId takes)"
+          },
+          "name": {
+            "type": "string",
+            "description": "The assignee's name"
+          },
+          "userType": {
+            "$ref": "#/components/schemas/PlannerAssigneeUserType"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "userType"
+        ],
+        "description": "Who owns the item; null when unassigned"
+      },
+      "AssignPlannerItemsRequest": {
+        "type": "object",
+        "properties": {
+          "plannerItemIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 50,
+            "description": "Planner items to assign (1-50, distinct)"
+          },
+          "assigneeUserId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Assignee user ID: an active MSP staff member, or an active user of the item's own company (only on items visible to company users, with Planner client assignees on). List candidates with GET /planner/assignees. MSP staff only. A client user can only take items of their own company. null clears the assignee of every item."
+          }
+        },
+        "required": [
+          "plannerItemIds",
+          "assigneeUserId"
+        ]
+      },
+      "PlannerAssignResult": {
+        "type": "object",
+        "properties": {
+          "assignee": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "userType": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PlannerAssigneeUserType"
+                  },
+                  {
+                    "description": "staff = an MSP staff member; company = a user of the item's own company"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "userType"
+            ],
+            "description": "The assignee written; null when cleared"
+          },
+          "updatedIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Items now assigned (or cleared)"
+          },
+          "notUpdatedIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Items another change made unwritable between the check and the write; normally empty"
+          }
+        },
+        "required": [
+          "assignee",
+          "updatedIds",
+          "notUpdatedIds"
+        ]
+      },
+      "PlannerAssigneeOption": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "User ID"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "userType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlannerAssigneeUserType"
+              },
+              {
+                "description": "staff = an MSP staff member; company = a user of the item's own company"
+              }
+            ]
+          },
+          "roleNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isCompanyTeamMember": {
+            "type": "boolean",
+            "description": "Staff on the company's team (company roles)"
+          },
+          "isComanaged": {
+            "type": "boolean",
+            "description": "A member of a co-managed client role while co-managed support is on"
+          },
+          "isSelectable": {
+            "type": "boolean",
+            "description": "False for an item's current client assignee who can no longer be newly assigned"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "userType",
+          "roleNames",
+          "isCompanyTeamMember",
+          "isComanaged",
+          "isSelectable"
+        ]
       }
     },
     "parameters": {}
@@ -51052,7 +51236,7 @@
     "/api/public/v1/planner/items": {
       "get": {
         "summary": "List planner items",
-        "description": "Retrieve a paginated list of planner items. Supports filtering by company, type, status, business value, and date range.",
+        "description": "Retrieve a paginated list of planner items. Supports filtering by company, type, status, business value, date range, assignee and goal. Each item returns its assignee.",
         "tags": [
           "Planner"
         ],
@@ -51224,6 +51408,39 @@
             "required": false,
             "description": "Filter by due date (to)",
             "name": "dueDateTo",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only items assigned to this user ID"
+            },
+            "required": false,
+            "description": "Only items assigned to this user ID",
+            "name": "assigneeUserId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "nullable": true,
+              "description": "true returns only items with no assignee; do not combine with assigneeUserId"
+            },
+            "required": false,
+            "description": "true returns only items with no assignee; do not combine with assigneeUserId",
+            "name": "unassigned",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only items linked to this goal ID"
+            },
+            "required": false,
+            "description": "Only items linked to this goal ID",
+            "name": "goalId",
             "in": "query"
           }
         ],
@@ -82120,6 +82337,191 @@
           },
           "403": {
             "description": "Forbidden - missing scope (integrations.read), the linked user lacks read access to integration settings or company mapping (read_settings_integrations or read_settings_integration_companies), or the linked user is a client (company) user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/planner/items/assign": {
+      "post": {
+        "summary": "Assign planner items",
+        "description": "Assign one user to many planner items (assigneeUserId null clears their assignee). Any item the key's user cannot see or change, or an assignee the items cannot take, refuses the whole request. MSP staff only. Requires `planner.write` and write_planner.",
+        "tags": [
+          "Planner"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPlannerItemsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Items assigned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PlannerAssignResult"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error, or an assignee the items cannot take (INVALID_ASSIGNEE)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (planner.write) or the linked user lacks write_planner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "A selected planner item was not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/planner/assignees": {
+      "get": {
+        "summary": "List planner assignees",
+        "description": "Who planner items can be assigned to: active MSP staff, plus, given companyId, that company's own active users when Planner client assignees is on and the key's user writes that company's Planner items. MSP staff only. Requires `planner.read` and read_planner.",
+        "tags": [
+          "Planner"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The items' company; adds its own users"
+            },
+            "required": false,
+            "description": "The items' company; adds its own users",
+            "name": "companyId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "An item of that company, so its current client assignee is listed"
+            },
+            "required": false,
+            "description": "An item of that company, so its current client assignee is listed",
+            "name": "plannerItemId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignable users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PlannerAssigneeOption"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (planner.read) or the linked user lacks read_planner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Planner item not found",
             "content": {
               "application/json": {
                 "schema": {
