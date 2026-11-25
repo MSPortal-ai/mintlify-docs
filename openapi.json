@@ -35637,8 +35637,8 @@
               "format": "uuid"
             },
             "minItems": 1,
-            "maxItems": 100,
-            "description": "Planner items to assign (1-100, distinct)"
+            "maxItems": 50,
+            "description": "Planner items to assign (1-50, distinct)"
           },
           "assigneeUserId": {
             "type": "string",
@@ -35698,7 +35698,7 @@
               "type": "string",
               "format": "uuid"
             },
-            "description": "Items the key's user can read but not change (no Planner write on them)"
+            "description": "Items another change made unwritable between the check and the write; normally empty"
           }
         },
         "required": [
@@ -81936,7 +81936,7 @@
     "/api/public/v1/planner/items/assign": {
       "post": {
         "summary": "Assign planner items",
-        "description": "Assign one user to many planner items (assigneeUserId null clears their assignee). Any item the key cannot see, or an assignee the items cannot take, refuses the whole request. MSP staff only. Requires `planner.write` and write_planner.",
+        "description": "Assign one user to many planner items (assigneeUserId null clears their assignee). Any item the key's user cannot see or change, or an assignee the items cannot take, refuses the whole request. MSP staff only. Requires `planner.write` and write_planner.",
         "tags": [
           "Planner"
         ],
