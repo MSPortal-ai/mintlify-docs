@@ -1,76 +1,81 @@
 ---
 title: 'Show PSA fields on tickets'
-description: 'Show ticket UDFs and Autotask Change Management fields, such as a rollback plan, in ticket details, the change approval panel and change approval emails.'
+description: 'Show Autotask Change Management fields, such as the rollback plan, and ticket UDFs in ticket details, the change approval panel and change approval emails.'
 icon: 'clipboard-list'
 ---
 
-Your PSA holds fields that MSPortal's ticket details do not show by default: ticket UDFs (user-defined fields) and, in Autotask, the Change Management fields of Change Request tickets. Pick the ones your technicians and clients need under **Settings > Tickets > PSA fields**, and MSPortal shows them next to the ticket. For a change record this puts the impact analysis, implementation plan, rollback plan and approval status in front of the people who review and approve the change.
+Your PSA holds ticket fields that MSPortal's ticket details do not show by default: ticket UDFs (user-defined fields) and, in Autotask, the Change Management fields of Change Request tickets. MSPortal shows them in a **PSA fields** section of the ticket. For a change record this puts the impact analysis, implementation plan, rollback plan and approval status in front of the people who review and approve the change.
 
-**Audience:** MSP staff who manage ticket settings.
-
-## Before you start
-
-- Your role needs the **write** or **manage** Tickets settings permission to pick fields. Read access shows the list without changes.
-- Ticket delivery must use Autotask, ConnectWise or Halo PSA.
-- MSPortal reads the list of ticket UDFs from your PSA once a night. A UDF you just created appears after the next sync.
-- Fields are read-only in MSPortal. Edit their values in your PSA; MSPortal shows the new value after the ticket's next sync.
-
-## Pick a field
-
-<Steps>
-  <Step title="Open Settings > Tickets > PSA fields">
-    The list shows the fields you already picked, with who can see each one and which ticket types it shows on.
-  </Step>
-  <Step title="Click Add field">
-    Search by name and click **Add** beside the field. Autotask connections list the Change Management fields first: **Change Approval Status**, **Change Approval Type**, **Change Approval Board** and **Change Info Field 1** to **5**, then your ticket UDFs.
-  </Step>
-  <Step title="Set its label">
-    The field opens after you add it. Autotask's API does not include the names you gave the Change Info Fields, so type the label your team uses, such as **Impact Analysis** or **Rollback Plan**. A UDF keeps its PSA name unless you type another label.
-  </Step>
-  <Step title="Choose who can see it">
-    **Who can see it** is **Staff only** for a new field. Choose **Staff and client users** to show it to client users as well.
-  </Step>
-  <Step title="Choose the ticket types">
-    Leave **Ticket types** empty to show the field on every ticket, or pick the types it belongs to. Change Management fields start on **Change Request**, the type Autotask gives change records.
-  </Step>
-</Steps>
-
-Every change saves as you make it. **Show on tickets** hides a field without losing its label and settings.
-
-<Frame caption="Settings > Tickets > PSA fields, with Review Notes open: its label, who can see it, ticket types and Show on tickets.">
-  <img src="/images/product/settings-tickets-psa-fields-desktop.png" alt="PSA fields on tickets list with Autotask Change Management fields and an Impact UDF, and the Review Notes field expanded to show Label, Who can see it, Ticket types and Show on tickets" width="2880" height="1920" />
-</Frame>
-
-## Where the fields show
-
-- **Ticket details.** A **PSA fields** section under the ticket's details lists every picked field that has a value on the ticket and applies to its type. Picklists show their names, such as **Approved** or the name of your change approval board. Long text keeps its line breaks and folds after six lines; **Show More** opens the rest.
-- **Change approval panel.** When a ticket has a change request, its **Change record** sits above the approver's decision.
-- **Change approval email.** The email asking a client to approve a change lists the fields visible to client users under **Change details**. In a custom **Change Approval Request** email template, add the `{{psa_fields}}` variable where the list should go.
-
-<Frame caption="A Change Request ticket's PSA fields, as staff see them.">
-  <img src="/images/product/ticket-details-psa-fields-desktop.png" alt="PSA fields section in ticket details showing Change Approval Status Approved, the approval board, Impact Analysis, Implementation Plan, Rollback Plan with Show More, Review Notes and an Impact UDF" width="2880" height="1920" />
-</Frame>
+**Audience:** MSP staff who manage ticket settings or the Autotask integration.
 
 ## Who sees what
 
 | Viewer | Sees |
 |---|---|
-| Staff who can open the ticket | Every picked field that applies to the ticket |
-| Client users who can open the ticket | Only fields set to **Staff and client users** |
-| Change approval email recipients | Only fields set to **Staff and client users** |
+| MSP staff who can open the ticket | Every PSA field the ticket has a value for |
+| Client users who can open the ticket | The fields their role's [display group](/user-guides/settings/tickets#create-a-display-group-for-a-role) ticks, and none without a display group |
+| Change approval email recipients | The fields their own role can see |
 
-Client users see fields only on tickets they can already open, so the role's ticket visibility, such as **Own tickets only**, still applies.
+Client users see fields only on tickets they can already open, so the role's ticket visibility, such as **Own Tickets Only**, still applies. Empty fields are left out.
 
-<Frame caption="The change approval panel on a phone, as a client approver sees it: client-visible fields only.">
+## Name the Change Info Fields
+
+Autotask's API sends Change Info Fields 1 to 5 without the names you gave them in Autotask, so MSPortal shows them as **Change Info Field 1** to **5** until you name them.
+
+<Steps>
+  <Step title="Open the Autotask connection">
+    Go to **Settings > Integrations**, open your Autotask connection and choose the **Configure** step.
+  </Step>
+  <Step title="Name each field">
+    Under **Change Info Field names**, type the name each field has in your Autotask, such as **Impact Analysis** or **Rollback Plan**. Each name saves when you leave the box. Leave a box empty to keep the Autotask name.
+  </Step>
+</Steps>
+
+<Frame caption="Change Info Field names in the Autotask connection's Configure step.">
+  <img src="/images/product/settings-integrations-autotask-change-info-field-names-desktop.png" alt="Change Info Field names section with Change Info Field 1 named Impact Analysis and Change Info Field 3 named Rollback Plan" width="2880" height="1920" />
+</Frame>
+
+## Show fields to a client role
+
+<Steps>
+  <Step title="Open the display group">
+    Go to **Settings > Tickets > Display Groups** and edit the group assigned to the client role, or create one.
+  </Step>
+  <Step title="Tick Change Management Fields">
+    Under **Field Visibility**, open **Change Management Fields (only shown on Change Request tickets)**. It lists Autotask's **Change Approval Status**, **Change Approval Type**, **Change Approval Board** and the five Change Info Fields, with the names you gave them. These fields show only on Change Request tickets.
+  </Step>
+  <Step title="Tick Custom Fields">
+    **Custom Fields** lists the ticket UDFs synced from your PSA. A ticked field shows when the ticket has a value for it.
+  </Step>
+  <Step title="Click Update Group">
+    The group's other field settings stay as they were.
+  </Step>
+</Steps>
+
+<Frame caption="A display group with Change Management Fields and Custom Fields ticked.">
+  <img src="/images/product/settings-tickets-display-group-psa-fields-desktop.png" alt="Edit Display Group dialog with the Change Management Fields section showing Change Approval Status, Change Approval Board, Impact Analysis, Implementation Plan and Rollback Plan ticked, and the Custom Fields section with Impact ticked" width="2880" height="1920" />
+</Frame>
+
+## Where the fields show
+
+- **Ticket details.** The **PSA fields** section sits under the ticket's details. Picklists show their names, such as **Approved** or the name of your change approval board. Long text keeps its line breaks and folds after six lines; **Show More** opens the rest.
+- **Change approval panel.** When a ticket has a change request, its **Change record** sits above the approver's decision.
+- **Change approval email.** The email asking someone to approve a change lists their fields under **Change details**. In a custom **Change Approval Request** email template, add the `{{psa_fields}}` variable where the list should go.
+
+<Frame caption="A Change Request ticket's PSA fields, as staff see them.">
+  <img src="/images/product/ticket-details-psa-fields-desktop.png" alt="PSA fields section in ticket details showing Change Approval Status Approved, the approval board, Impact Analysis, Implementation Plan, Rollback Plan with Show More, Review Notes and an Impact UDF" width="2880" height="1920" />
+</Frame>
+
+<Frame caption="The change approval panel on a phone, as a client approver sees it.">
   <img src="/images/product/ticket-change-approval-psa-fields-mobile.png" alt="Change Approval panel on a phone with a Change record block listing approval status, board, Impact Analysis, Implementation Plan and Rollback Plan above the Approve and Reject buttons" width="780" height="2392" />
 </Frame>
 
 ## Halo PSA
 
-Halo sends a ticket's custom fields only when MSPortal asks for them, so a Halo UDF you pick fills in as each ticket next syncs. Tickets that have not changed since keep showing nothing for that field until they do.
+Halo sends a ticket's custom fields only when MSPortal asks for them. MSPortal asks for the Halo UDFs ticked in a display group, so a newly ticked field fills in as each ticket next syncs, for staff and client users alike.
 
 ## Related guides
 
 - [Change management](/user-guides/ticketing/change-management)
 - [Ticket settings](/user-guides/settings/tickets)
-- [Send template answers to PSA fields](/user-guides/ticketing/send-answers-to-psa-fields)
+- [Enable the Autotask integration](/user-guides/integrations/enable-autotask-integration)
