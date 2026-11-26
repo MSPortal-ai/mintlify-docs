@@ -51,17 +51,17 @@ Open **Microsoft 365** under **Client users**. Its rules read the people synced 
   <Step title="Add an import rule">
     Click **Add rule** beside **Import rules**. With no rules yet, turning the source's switch on opens the same dialog.
   </Step>
-  <Step title="Choose the role and priority">
-    **Role for imported users** lists your Company roles. With more than one role to give, none is chosen for you: pick the role with the least access these people need. **Priority** decides which rule gives the role when several rules match one person: the lowest number wins.
-  </Step>
   <Step title="Name the rule">
-    Enter a **Rule name** and, optionally, a **Description**.
+    Enter a **Rule name**, the first field in the dialog. A **Description**, under the rule's settings, is optional.
+  </Step>
+  <Step title="Choose the role and priority">
+    **Role for imported users**, beside the name, lists your Company roles. With more than one role to give, none is chosen for you: pick the role with the least access these people need. **Priority**, beside the rule's **Apply this rule** switch, decides which rule gives the role when several rules match one person: the lowest number wins.
   </Step>
   <Step title="Add the conditions">
-    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. The fields are **Microsoft 365 license**, **Microsoft 365 group**, **Microsoft 365 user type**, **Source account enabled**, **Display name**, **Email address**, **Job title**, **Department**, **Office location**, **Microsoft 365 employee type** and **Microsoft 365 employee ID**. A new import rule starts with **Microsoft 365 license** **is assigned**.
+    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. The fields are **License**, **Groups**, **User type**, **Account enabled**, **Display name**, **Email address**, **Job title**, **Department**, **Office location**, **Employee type** and **Employee ID**. A new import rule starts with **License** **is assigned**. **User type** is picked from a list, **Member** or **Guest**, and compared whole: **equals** or **does not equal**.
   </Step>
   <Step title="Preview the matches">
-    Click **Preview matches** to list up to 100 people who match. The summary shows how many will be imported out of all matches, and each person shows an outcome from [Who an import rule skips](#who-an-import-rule-skips).
+    Click **Preview matches** to list up to 100 people who match. The results scroll into view under a summary of how many will be imported out of all matches, for example **3 users to import of 12 matches**. Each person shows an outcome from [Who an import rule skips](#who-an-import-rule-skips).
   </Step>
   <Step title="Save and apply">
     Leave **Apply this rule** on and click **Save and apply**. Matching people are imported right away. A paused rule is saved but has no effect.
@@ -82,7 +82,7 @@ Open **Microsoft 365** under **Client users**. Its rules read the people synced 
 
 ### Match by Microsoft 365 license
 
-Use the **Microsoft 365 license** field with **is assigned** or **is not assigned**. The **Value** list shows the licenses synced from your clients' Microsoft 365 tenants, with how many companies have each one. A rule matches that license in every client tenant, so one rule covers all of them. **has any** and **has none** need no value: they match an account with at least one license, or with none. For example, import everyone with Microsoft 365 Business Premium, or disable accounts that have no license.
+Use the **License** field with **is assigned** or **is not assigned**. The **Value** list shows the licenses synced from your clients' Microsoft 365 tenants, with how many companies have each one. A rule matches that license in every client tenant, so one rule covers all of them. **has any** and **has none** need no value: they match an account with at least one license, or with none. For example, import everyone with Microsoft 365 Business Premium, or disable accounts that have no license.
 
 Licenses sync once a day. A license condition never judges an account that appeared after the last license sync, so a new hire is not caught by **has none** before their license is on file.
 
@@ -113,10 +113,12 @@ Licenses sync once a day. A license condition never judges an account that appea
 
 ### Keep access in sync with a group
 
-Map a Microsoft 365 group to a role: create an import rule with the condition **Microsoft 365 group** **is a member of** the group, choose the role, and turn on **Disable users who stop matching**. A group named the same in every client tenant (for example **MSPortal Access**) is matched in all of them.
+Map a Microsoft 365 group to a role: create an import rule with the condition **Groups** **include** the group, choose the role, and turn on **Disable users who stop matching**. A group named the same in every client tenant (for example **MSPortal Access**) is matched in all of them.
+
+The group list shows how many companies have each group, for example **2 companies**. Hover over a group to see which companies they are: up to 12 names, then how many more. When you move through the list with the keyboard, the highlighted group's companies show under the list. With no groups synced yet, the list says **No groups synced from Microsoft 365 yet.**
 
 - **Joining the group:** a member without a portal user gets one, with the rule's role. A member who already has a portal user keeps it, and the rule starts keeping their access in sync.
-- **Leaving the group:** once someone the rule has matched no longer matches any rule that keeps access in sync, MSPortal disables their portal user and signs them out after the next Microsoft 365 sync.
+- **Leaving the group:** once someone the rule has matched stops matching every rule that keeps access in sync, MSPortal disables their portal user and signs them out after the next Microsoft 365 sync.
 - **Rejoining:** they are turned back on after the next sync.
 - **Pausing or deleting the rule:** turning the rule off, deleting it or turning **Disable users who stop matching** off turns back on the people it disabled, within a few minutes.
 - **Roles:** people the rule created move to the role of the highest-priority synced rule they match, so a second rule for a **Managers** group can give managers a different role. Once someone changes a person's role by hand, the rules leave that role alone. People who were portal users before the rule keep their role.
@@ -131,14 +133,14 @@ Map a Microsoft 365 group to a role: create an import rule with the condition **
 - **Sign-in blocked in Microsoft 365** is built in and marked **Always on**. A client user whose Microsoft 365 accounts are all blocked is disabled, and comes back when one is unblocked. See [Microsoft 365 users](/user-guides/microsoft-365/users).
 - **Add rule** creates your own disable rule. It disables, and signs out, each Company user whose Microsoft 365 accounts all match. They are turned back on when they stop matching, or when you pause or delete the rule. If you turn someone back on yourself, the rule leaves them alone until they stop matching and match again. People come back with the status they had before, so an invited person stays invited.
 
-When a mailbox is converted to a shared mailbox, Microsoft 365 keeps the account enabled, so MSPortal cannot treat it as disabled. The licenses are usually removed, though. To disable those people, add a disable rule with **Microsoft 365 license** **has none**, and add **Microsoft 365 user type** **equals** **Member** so guests are left alone. Click **Preview matches** first: a portal user is disabled only when all of their Microsoft 365 accounts match.
+When a mailbox is converted to a shared mailbox, Microsoft 365 keeps the account enabled, so MSPortal cannot treat it as disabled. The licenses are usually removed, though. To disable those people, add a disable rule with **License** **has none**, and add **User type** **equals** **Member** so guests are left alone. Click **Preview matches** first: a portal user is disabled only when all of their Microsoft 365 accounts match.
 
 ## Create PSA contacts from Microsoft 365
 
-**PSA contacts**, in the same **Microsoft 365** row, lists each ConnectWise, Autotask and Halo connection. Turn on **Create and update contacts in** a connection to give every client user linked to Microsoft 365 a contact in that PSA.
+**PSA contacts**, in the same **Microsoft 365** row, lists each ConnectWise, Autotask and Halo connection. Turn on **Create and update contacts in** a connection to give every client user linked to Microsoft 365 a contact in that PSA. While it is off, the row explains that each person is matched to their PSA contact by email, and a contact is created only for people who have none.
 
 - **Who gets a contact:** every active Company user linked to an enabled Microsoft 365 account of their own company. Guests, and accounts an exclusion rule leaves out, never get one. The person's company has to be mapped to a company in that PSA.
-- **Finding or creating the contact:** MSPortal uses the contact already linked to the person. Otherwise it looks for a contact with the same email in the PSA company, and creates one when there is none.
+- **Matching existing contacts first:** each person gets one contact. MSPortal first looks for their existing contact by email in the mapped PSA company and links it. It creates a contact only for people who have none, and from then on updates that same contact.
 - **What is sent:** first and last name, job title, business phone and mobile phone. After the first sync, MSPortal sends a field only when Microsoft 365 changes it. It never clears a field and never changes a contact's email, so an edit made in the PSA stays until Microsoft 365 changes that field.
 - **When it runs:** after each Microsoft 365 users sync, after you save a Microsoft 365 import rule, and right after you turn the option on.
 - **What the row shows:** how many contacts are up to date, how many are waiting and how many MSPortal created. When some could not be written, the row says how many failed. Click **Show who** for each person and the reason.
@@ -157,7 +159,7 @@ Each ConnectWise, Autotask and Halo PSA connection has its own row under **Clien
     Click the PSA's row, for example **ConnectWise Manage**. With several connections to one PSA, each row shows the connection's name.
   </Step>
   <Step title="Choose the role for everyone else">
-    **Role for everyone else** is the role a contact gets when no rule below matches. Choose **No default role** to import only the contacts a rule below covers, and those of companies that set their own default import role. A company's own default import role, set on the company, comes first. Because a change here can move contacts onto those company roles, you need to be able to give them too: a role beyond your own permissions on any company's default refuses the save. Removing a rule or this role does not take a role away from contacts already imported, unless their company sets its own default: change their role on **Company Users**.
+    **Role for everyone else** is the role a contact gets when no rule below matches. Choose **No default role** to import only the contacts a rule below covers, and those of companies that set their own default import role. A company's own default import role, set on the company, comes first. Because a change here can move contacts onto those company roles, you need to be able to give them too: a role beyond your own permissions on any company's default refuses the save. Choosing **No default role** does not take a role away from contacts already imported, unless their company sets its own default: change their role on **Company Users**.
   </Step>
   <Step title="Give some contacts another role (optional)">
     Click **Add rule** to map a contact type to a portal role. In ConnectWise and Autotask the rules use contact types. In Halo PSA they use Halo roles and the Important Contact flag. When a contact matches more than one rule, the rule highest in the list wins. Use the arrows to reorder the rules.
@@ -178,6 +180,7 @@ Each ConnectWise, Autotask and Halo PSA connection has its own row under **Clien
 </Accordion>
 
 - **Changing a role rule updates existing users.** Users already imported from that connection move to the role their contact type now maps to.
+- **Removing a rule asks first.** The confirmation says what happens to the contacts the rule covered: they get the role of the next rule that matches, their company's default import role, or **Role for everyone else**. With none of these, they keep the role they have. Roles set by hand stay.
 - **Disable rules:** **Contact deactivated or deleted** is built in and marked **Always on**. A client user whose last active contact in the PSA goes away is disabled and signed out.
 - **Users must be syncing.** When the connection is not syncing users, or its API key cannot read contacts, the row's summary reads **Not importing** and the row says why. Turn on **Sync Users** under **Choose data** on the connection's page. You can still turn the import off here.
 - **Changing who gets a role checks every role.** Reordering, adding or removing a rule, changing the default role and turning the import on can all hand a role to new people, so each of those saves needs you to be able to give every role in the list.
@@ -194,22 +197,39 @@ Syncro and NinjaOne contacts are not imported automatically. Import them with [I
 The second panel, named after your MSP, creates MSP staff. Its sources are:
 
 - **Each PSA connection's technicians:** ConnectWise members, Autotask resources, Halo PSA agents, and Syncro and NinjaOne technicians. The row shows how many the connection has synced.
-- **Your own Microsoft 365 tenant:** the tenant your own team signs in with. MSPortal offers a Microsoft 365 tenant here only when your account, or a Primary Admin's, is a member of it, so a client's directory can never create staff. Membership goes by the address you sign in to MSPortal with, after you have signed in with it once. A rule reads that one tenant only. If the connection is later reconnected to a different tenant, its staff rules are removed, and the people their disable rules had turned off are turned back on. If no tenant qualifies, the panel explains that and you can connect your own tenant like any other company's.
+- **Your own Microsoft 365 tenant:** the tenant your own team signs in with. MSPortal offers a Microsoft 365 tenant here only when your account, or a Primary Admin's, is a member of it, so a client's directory can never create staff. Membership goes by the address you sign in to MSPortal with, after you have signed in with it once. A rule reads that one tenant only. If the connection is later reconnected to a different tenant, its staff rules are removed, and the people their disable rules had turned off are turned back on. If no tenant qualifies, the panel explains that and you can connect your own tenant like any other company's. Each directory is one row: when several of your companies connect the same Microsoft 365 directory, it shows once, unless more than one of those connections already has rules of its own.
 
 <Steps>
   <Step title="Open a source and add an import rule">
     Click the source's row, then **Add rule** beside **Import rules**. Turning on the switch of a source with no rules opens the same dialog.
   </Step>
-  <Step title="Choose the staff role and priority">
-    **Staff role** lists your Tenant roles. With more than one role to give, none is chosen for you, so a rule is never saved with an administrator role by accident. When several rules match one person, the rule with the lowest **Priority** number gives the role.
+  <Step title="Name the rule, then choose the staff role and priority">
+    Enter a **Rule name**. **Staff role**, beside it, lists your Tenant roles, each once. With more than one role to give, none is chosen for you, so a rule is never saved with an administrator role by accident. **Priority** sits beside the **Apply this rule** switch: when several rules match one person, the rule with the lowest number gives the role.
   </Step>
   <Step title="Add the conditions">
-    A PSA rule starts with **PSA agent or technician** **is true**, which matches every technician. Narrow it with fields such as **PSA security role**, **PSA work role**, **Team**, **PSA group**, **Job title** or **Email address**. A Microsoft 365 rule starts with **Microsoft 365 group** **is a member of**: pick the group your team is in (the list shows your own tenant's groups only), or use **Department**, **Job title** and the other directory fields. Licenses are not available on staff rules.
+    A PSA rule starts with **Email address** **is not empty**, which matches every technician the import can take: it already skips deactivated ones. Narrow it with the fields that source carries, listed below. A Microsoft 365 rule starts with **Groups** **include**: pick the group your team is in (the list shows your own tenant's groups only), or use **Department**, **Job title** and the other directory fields. Licenses are not available on staff rules.
   </Step>
   <Step title="Preview, then save and apply">
-    Click **Preview matches** to see who will be imported and why others are skipped, then click **Save and apply**. The rule runs right away and reports how many staff it imported.
+    Click **Preview matches** to see who will be imported and why others are skipped. The results scroll into view under a summary such as **2 people to import of 4 matches**. Click **Save and apply**. The rule runs right away and reports how many staff it imported.
   </Step>
 </Steps>
+
+Each source offers only the fields its own accounts carry:
+
+| Source | Fields |
+| --- | --- |
+| ConnectWise | **Departments and roles**, **Deactivated**, **Administrator**, **Job title**, **Display name**, **Email address** |
+| Autotask | **Departments, roles and lines of business**, **Deactivated**, **Job title**, **Display name**, **Email address** |
+| Halo PSA | **Teams and departments**, **Deactivated**, **Job title**, **Display name**, **Email address** |
+| Syncro | **Group**, **Deactivated**, **Administrator**, **Job title**, **Display name**, **Email address** |
+| NinjaOne | **Job title**, **Display name**, **Email address** |
+| Microsoft 365 | **Groups**, **Account enabled**, **User type**, **Display name**, **Email address**, **Job title**, **Department**, **Office location**, **Employee type**, **Employee ID** |
+
+Where the values are known, you pick them from a list:
+
+- **A PSA's groups** list that PSA's own teams, departments and roles, under headings such as **Teams**, **Departments**, **Security roles** and **Work roles**.
+- **Job title**, **Department**, **Office location** and **Employee type**, compared with **equals** or **does not equal**, list the values the source's accounts hold, with how many accounts hold each. An import rule lists the values of active people, a disable rule those of everyone. To use a value that is not listed, type it and pick **Use "…"** with your text.
+- **User type** offers **Member** or **Guest**. Yes/no fields such as **Deactivated** offer **is true** or **is false**.
 
 <Frame caption="Sample data: a ConnectWise connection's staff rules, one role for service managers and one for everyone else.">
   <img src="/images/product/automatic-import-staff-rules-preview-desktop.png" alt="Staff panel with ConnectWise Manage open, showing import rules Service managers as Service manager and Everyone else in ConnectWise as Technician with match counts, and a disable rule Inactive in ConnectWise matching accounts whose source account is disabled" width="2880" height="1128" />
@@ -245,7 +265,7 @@ Add a disable rule to the same source, so a person who is deactivated in your PS
     Open the source and click **Add rule** beside **Disable rules**.
   </Step>
   <Step title="Choose the condition">
-    A new rule starts with **Source account disabled** **is true** for a PSA, or **Source account enabled** **is false** for Microsoft 365. That is "disable the person here when they are disabled there". You can match on other facts instead, such as leaving a group.
+    A new rule starts with **Deactivated** **is true** for a PSA, or **Account enabled** **is false** for Microsoft 365. That is "disable the person here when they are disabled there". You can match on other fields too, such as leaving a group.
   </Step>
   <Step title="Preview, then save and apply">
     The preview lists the staff the rule would disable. **Protected admin** marks people a rule never disables. Click **Save and apply**.
@@ -267,7 +287,7 @@ The **Exclusion rules** panel, under your sources, lists the accounts every sour
 An account that matches an exclusion rule becomes a service account with sign-in blocked:
 
 - **No sign-in and no invitation:** it cannot sign in to the portal or be invited.
-- **Not a seat:** it no longer counts as a seat in financial reporting.
+- **Not a seat:** it does not count as a seat in financial reporting.
 - **Skipped by imports:** Microsoft 365 import rules and staff import rules skip it. A PSA contact import still adds it, as a service account that cannot sign in.
 - **Still visible:** its records, history and source links stay.
 
@@ -291,10 +311,12 @@ The first row, **Service, shared and resource accounts**, is always on: MSPortal
     Enter a **Rule name** and, optionally, a **Description**.
   </Step>
   <Step title="Add the conditions">
-    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. A rule can use facts from any source: Microsoft 365 fields such as **Microsoft 365 user type**, **Microsoft 365 group** and **Source account type**, PSA fields such as **PSA agent or technician** and **Contact type**, and fields every source has, such as **Display name** and **Email address**.
+    Choose **Match all conditions** or **Match any condition**, then click **Add condition** for each one. Every condition has a **Field**, an **Operator** and a **Value**. The list offers the fields of the sources you have connected, each named with its source, such as **Microsoft 365 user type**, **Microsoft 365 groups**, **PSA agent or technician** and **PSA contact type**, and fields every source has, such as **Email address**, **Display name**, **Integration** and **Account type**. A tenant with only Halo PSA connected, for example, sees no ConnectWise or Autotask fields.
+
+    **Integration**, **Account type** and **Microsoft 365 user type** are picked from a list and compared whole. Group fields offer **include** only, and yes/no fields **is true** or **is false**, so a condition never catches every account of a source that lacks that field.
   </Step>
   <Step title="Preview the matches">
-    Click **Preview matches** to list up to 100 synced accounts that match, with each one's source, company and current access.
+    Click **Preview matches** to list up to 100 synced accounts that match, with each one's source, company and current access. The results scroll into view under the number of matches, or **At least 100 matches** when there are more.
   </Step>
   <Step title="Save and apply">
     Leave **Apply this rule** on and click **Save and apply**. A paused rule is saved but has no effect. Closing a rule you have edited asks **Discard changes?** first.
@@ -306,7 +328,7 @@ Two common exclusion rules:
 | To leave out | Conditions |
 | --- | --- |
 | Break-glass and role accounts | **Match any condition**: **Email address** **contains** `break`, **Email address** **contains** `role` |
-| Microsoft 365 guests | **Source account type** **equals** **Guest** |
+| Microsoft 365 guests | **Account type** **equals** **Guest** |
 
 Use the switch on a rule's row to pause or resume it. It saves right away. The **⋯** menu has **Edit rule** and **Delete rule**. Pausing or deleting a rule gives back sign-in to the accounts that only this rule left out, and lets them be imported again.
 
@@ -325,7 +347,7 @@ Use the switch on a rule's row to pause or resume it. It saves right away. The *
 | No Microsoft 365 source under your staff | MSPortal reads staff only from a Microsoft tenant your own account, or a Primary Admin's, is a member of. Connect that tenant on the Microsoft 365 Companies page. The account that counts is the one you sign in to MSPortal with: its address has to be the sign-in name of a member of that tenant. |
 | A rule shows **role deleted: pick a new one** in a PSA row | A role that contact import gives was deleted. Open the row and choose another role in the picker that reads **Role deleted: pick a new one**. Contact import cannot be turned on until every role it names exists. |
 | A disable rule shows **disables held back** | It would have turned off most of your staff at once. Click **Review** on the rule's row, then confirm the number of staff it asks about. |
-| A staff source says it **is no longer connected** | Its connection was paused or removed. Its rules stay listed but do not run, the source shows **Off**, and no rule can be added. Reconnect the source, or delete the rules. |
+| A staff source says it is not connected, so its rules don't run | Its connection was paused or removed. Its rules stay listed but do not run, the source shows **Off**, and no rule can be added. Reconnect the source, or delete the rules. |
 | A staff source says **Neither your account nor a Primary Admin's is a member of this Microsoft tenant** | Another administrator, who is a member of that tenant, saved its rules. They still run. You can pause or delete them. To add or change rules there, sign in with an account that is a member of the tenant. |
 | Your Microsoft 365 staff source disappeared after a reconnect | The connection was reconnected to a different tenant, which removes its staff rules. MSPortal trusts only accounts synced from the tenant it points at now, by a users sync that starts ten minutes or more after the reconnect. Wait for that sync, then add the rules again. If the connection was pointed at another tenant and back, disconnect it and connect it again. |
 | A person under **PSA contacts** shows **Their contact belongs to another company in the PSA** | MSPortal found the person's contact under another PSA company and left it alone. Move the contact back in the PSA, or move the person to the matching company in MSPortal. |

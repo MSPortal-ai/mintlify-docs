@@ -35,12 +35,12 @@ Before connecting to MSPortal.ai, you need to create an API member and security 
       <Accordion title="Companies">
         | Permission | Add | Edit | Delete | Inquire | Used for |
         |------------|-----|------|--------|---------|----------|
-        | **Company Maintenance** | None | All | None | All | Sync companies and their sites. Edit is needed *only when* traffic light writes company custom fields. |
+        | **Company Maintenance** | None | All | None | All | Sync companies and their sites. Edit is needed *only when* [Traffic Light Review](/user-guides/msp-tools/traffic-light-review), a pilot feature in the US only, writes company custom fields. |
         | **Contacts** | All | All | None | All | Sync contacts for user import. Add creates a contact, or adds a phone number, when a company user without a ConnectWise contact submits a ticket; Edit updates the phone number from the ticket form. |
         | **Configurations** | None | All | None | All | Sync configurations as devices. Edit is needed *only when* warranty writeback is on. |
         | **Team Members** | None | None | None | All | Read each company's account team |
         | **Manage Attachments** | All | None | None | All | Upload ticket attachments and read quote documents |
-        | **Notes** | All | All | All | All | *Only when* traffic light writes a banner note to the company: add, update and remove it |
+        | **Notes** | All | All | All | All | *Only when* the Traffic Light Review pilot (US only) writes a banner note to the company: add, update and remove it |
         | **CRM/Sales Activities** | All | None | None | All | *Only when* CSAT follow-up creates an activity for a low score |
       </Accordion>
 
@@ -381,15 +381,6 @@ MSPortal checks which parts of ConnectWise your API member is allowed to read, a
 **Catchall contacts never sign in:** ConnectWise files email from senders it cannot match under its built-in **Catchall** company. Those contacts can belong to any of your clients, so MSPortal ignores them: it never imports them as users, never links them to an existing user, and never lets anyone sign in to a user in the Catchall company. To give such a person access, move their contact to the right company in ConnectWise. After the next sync they import like any other contact, and a sign-in they already had moves to their new user automatically.
 
 To create portal users from your clients' Microsoft 365 tenants instead, add a Microsoft 365 import rule on the same tab. See [Import client users from Microsoft 365](/user-guides/settings/automatic-import#import-client-users-from-microsoft-365).
-
-**Deactivate the contact when Microsoft 365 disables the person** (preview; appears once MSPortal turns it on for your MSP): with **Sync Users** on, this switch sits below the **Contact Auto-Import** row. When Microsoft 365 blocks a client user's sign-in and MSPortal disables that user, MSPortal marks each of their linked, active ConnectWise contacts inactive, so the person can no longer open or reply to tickets by email. When Microsoft 365 enables the person again, MSPortal reactivates exactly the contacts it deactivated.
-
-- It applies to people Microsoft 365 disables after you turn it on. People who are already disabled are left alone.
-- A contact that was already inactive is never recorded, so MSPortal never reactivates a contact you deactivated yourself.
-- Disabling someone yourself in MSPortal, or for any reason other than Microsoft 365, never changes their ConnectWise contact.
-- It needs a Microsoft 365 connection. Changes are sent after each Microsoft 365 users sync, and a failed change is retried up to five times.
-- Turning it off stops new deactivations. Contacts MSPortal already deactivated are still reactivated when Microsoft 365 enables the person.
-- The **Recent contact changes** button below the switch opens a dialog listing each contact MSPortal changed, and why one was left alone or failed. It refreshes while open. The button needs read access to company users. The API user must be allowed to edit ConnectWise contacts; a refusal shows there.
 
 **Planner auto-import:** with **Enable Opportunity Sync** on, turn on **Auto-import to Planner** to create a planner item for each new ConnectWise opportunity. Use **Minimum opportunity value** and **Opportunity types to auto-import** to limit which ones come through. See [Importing PSA Opportunities](/user-guides/planner/index#importing-psa-opportunities).
 
