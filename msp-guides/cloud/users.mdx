@@ -1,0 +1,132 @@
+---
+title: 'Read cloud user accounts'
+description: 'Review Microsoft and Google identities, account status, recorded security flags, and assigned license names.'
+icon: 'users'
+---
+
+{/* Generated from /user-guides/cloud/users.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Cloud > Users** to see the Microsoft 365 and Google Workspace accounts synced for your companies. This page is for MSP staff and company users. A row here is a cloud identity. It does not give anyone an MSPortal login or role.
+
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). Adobe-only license access (Storefront read) does not include the Users tab.
+- Microsoft 365 or Google Workspace must be connected for the company in **Settings > Integrations**.
+- Company users see only their own company.
+
+## Read an account
+
+<Steps>
+  <Step title="Open Cloud > Users">
+    Click **Cloud** in the sidebar, then click the **Users** tab.
+  </Step>
+  <Step title="Pick the company">
+    Use the company selector in the top bar. MSP staff can pick one company, **Global View**, or **Assigned Companies** if their access is limited.
+  </Step>
+  <Step title="Find the person">
+    Type in the filter box under the **Name** or **Email** column heading. See [Find and filter cloud users](/msp-guides/cloud/find-users) for every filter.
+  </Step>
+  <Step title="Check Status first">
+    The **Status** filter starts on **Enabled**, so disabled accounts are hidden. Open the filter and choose **Disabled** or **All** to include them.
+  </Step>
+  <Step title="Scroll to the right columns">
+    Scroll the table sideways to reach **2-step verification** and **Licenses**. Hover over the license badges to see the full list.
+  </Step>
+</Steps>
+
+The page is read only. It has no edit, password reset, or license assignment actions.
+
+## Show more columns
+
+<Steps>
+  <Step title="Open the column list">
+    Click **Columns** above the table.
+  </Step>
+  <Step title="Turn on the columns you want">
+    Check the columns to show, such as **Department**, **Job title**, **License count**, **Last login**, and **Last synced**. Drag a column to change its order.
+  </Step>
+  <Step title="Save">
+    Click **Save Changes**. Click **Cancel** to discard your changes.
+
+    <Frame caption="Your column choices apply only after you click Save Changes.">
+      <img src="/images/product/cloud-users-save-columns.png" alt="Save Changes button in the Cloud Users column preferences panel." width="248" height="80" />
+    </Frame>
+  </Step>
+</Steps>
+
+## What each column shows
+
+| Column | What it shows |
+| --- | --- |
+| **Name** and **Email** | The synced display name and email. When there is no email, the sign-in name is shown. |
+| **Provider** and **Company** | The source service and mapped company. **Provider** appears only when your scope has more than one provider. **Company** is hidden when one company is selected. |
+| **Office** | The recorded office, or **No office**. |
+| **Department** and **Job title** | Directory fields. Hidden by default. |
+| **Manager** | The user's manager in Microsoft 365. Shown for Microsoft 365 users once the users sync has run. **Manager not synced** means Microsoft 365 names a manager who is not among the synced users; see the Microsoft 365 card's data issues under **Settings > Integrations**. |
+| **Account type** | **Administrator**, **Member**, or **Guest**. Shown only when the users in scope have more than one account type. |
+| **Status** | **Enabled** or **Disabled**. |
+| **2-step verification** | Google accounts show **Enforced**, **Enrolled**, or **Not enrolled**. Microsoft accounts show **Not available**. |
+| **Licenses** | The first license name, plus **+N more** when there are others. Shows **No licenses** when none are attached. |
+| **License count** | The number of licenses attached. Hidden by default. |
+| **Last login** and **Last synced** | The last sign-in and the last sync from the provider. Hidden by default. |
+
+## Read security and license information
+
+- **Enforced** means the Google admin requires 2-step verification. **Enrolled** means the user set it up. **Not enrolled** shows when neither flag is set, including when Google sent no data.
+- **Not available** on a Microsoft row does not mean MFA is off. Microsoft MFA coverage is on [Cloud posture](/msp-guides/cloud/posture).
+- **Administrator** appears only for Google administrators, and only when the **Account type** column is shown. Microsoft administrator roles are not shown here.
+- **No licenses** means no license is attached to the synced record. It does not show whether the person pays for or uses an app elsewhere.
+- **Enabled** is a synced status. It does not prove a successful sign-in today. Check **Last login** and **Last synced**.
+
+Cloud identities are separate from [MSPortal user permissions](/user-guides/settings/change-company-user-permissions).
+
+## Ask for an account change
+
+<Steps>
+  <Step title="Company users: open a ticket">
+    [Open a ticket](/msp-guides/ticketing/open-a-ticket) with the company, provider, account, and the change you need.
+  </Step>
+  <Step title="MSP staff: make the change in the provider">
+    Disable accounts, change licenses, and reset passwords in Microsoft 365 or Google Workspace. The change shows here after the next sync.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The **Users** tab is missing | Your role does not have Cloud read access. Ask your MSP to add it. |
+| You see **No cloud users match these filters.** | Set **Status** to **All**, click **Clear Filters**, and check the company selector. |
+| A new user is missing | The page shows synced data. Wait for the next sync, and check **Last synced** on other rows. |
+| **2-step verification** says **Not available** | Expected for Microsoft 365 accounts. |
+| **Account type** is missing | Every user in scope has the same account type, so the column is hidden. |
+| You see **You do not have access to this Cloud data.** | Your role lacks Cloud read access. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does a row here mean the person can sign in to MSPortal?">
+    No. MSPortal logins, roles, and company access are managed separately.
+  </Accordion>
+  <Accordion title="Can I disable a user or reset a password here?">
+    No. This page is read only. MSP staff make account changes in the provider.
+  </Accordion>
+  <Accordion title="Why does the same person appear more than once?">
+    A person can have separate accounts in different providers or companies. Compare **Provider**, **Company**, and **Email**.
+  </Accordion>
+  <Accordion title="How do I see all the licenses behind +N more?">
+    Hover over the license badges. You can also show **License count**, or [export the users](/msp-guides/cloud/export-users) to get every license name.
+  </Accordion>
+  <Accordion title="Does Not enrolled prove 2-step verification is off?">
+    Not always. It shows when neither flag is set, which includes missing data. Check **Last synced** and confirm in Google Workspace.
+  </Accordion>
+  <Accordion title="Can I list every administrator with Account type?">
+    No. Microsoft administrator roles are not shown, and the column is hidden when all users share one type.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Find and filter cloud users](/msp-guides/cloud/find-users)
+- [Export cloud users](/msp-guides/cloud/export-users)
+- [Read cloud license usage](/msp-guides/cloud/licenses)

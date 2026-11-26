@@ -267,7 +267,7 @@ Autotask projects are two-way for status and dates. You do not need to repeat th
 
 MSPortal writes to Autotask first and updates its own copy only after Autotask accepts the change. If Autotask rejects it, MSPortal shows an error and keeps the old value.
 
-Some changes stay in MSPortal. Rename phases in Autotask, because MSPortal does not send phase renames. Phase descriptions and notes, milestones, and project and onboarding templates stay in MSPortal. Onboarding task status syncs with Autotask, and an onboarding task due date changed in the portal is written to the linked Autotask task. Onboarding phase dates stay in MSPortal. See [What writes back to your PSA](/user-guides/projects/index#what-writes-back-to-your-psa).
+Some changes stay in MSPortal. Rename phases in Autotask, because MSPortal does not send phase renames. Phase descriptions and notes, milestones, and project and onboarding templates stay in MSPortal. Onboarding task status syncs with Autotask, and an onboarding task due date changed in the portal is written to the linked Autotask task. Onboarding phase dates stay in MSPortal. See [What writes back to your PSA](/msp-guides/projects/index#what-writes-back-to-your-psa).
 
 ---
 
@@ -524,6 +524,10 @@ Set up how Autotask tickets behave in MSPortal. Each change saves straight away.
     | **Account Note Action Types to Sync** | Only company notes with these Autotask action types are imported and shown on the company **Notes** tab. Leave empty to sync none. |
   </Step>
 
+  <Step title="Name the Change Info Fields (Optional)">
+    Autotask's API sends Change Info Fields 1 to 5 without the names you gave them in Autotask. Under **Change Info Field names**, type each name, such as **Impact Analysis** or **Rollback Plan**, so tickets, display groups and change approval emails use it. The eye beside each box shows recent values of that field from your Change Request tickets. See [Show Change Management and Custom Fields on tickets](/user-guides/ticketing/show-psa-fields-on-tickets).
+  </Step>
+
   <Step title="Set a reply mailbox for emailed notes (Optional)">
     Emailing ticket notes is off until you turn it on in **Settings > Tickets > General > Email ticket notes**. To let staff and company users email a ticket note on this connection, also set **Reply mailbox** under **Emailing contacts from notes**. Enter the mailbox Autotask reads incoming email from. MSPortal sends the note from your sending domain with this mailbox as the reply address and the ticket number in the subject, so a reply is added to the ticket. Without it, the **Email to** field is not offered on this connection's tickets.
   </Step>
@@ -705,7 +709,7 @@ Only completed surveys are imported. Surveys that were sent but not answered, an
 
 | Where | How |
 |-------|-----|
-| **CSAT Dashboard** | Open **Surveys** > **CSAT Dashboard** to read scores and trends, or export responses. Autotask results are grouped under **Autotask PSA satisfaction**. See [Read and export support satisfaction feedback](/user-guides/surveys/read-csat-feedback). |
+| **CSAT Dashboard** | Open **Surveys** > **CSAT Dashboard** to read scores and trends, or export responses. Autotask results are grouped under **Autotask PSA satisfaction**. See [Read and export support satisfaction feedback](/msp-guides/surveys/read-csat-feedback). |
 | **Custom dashboards** | Add **CSAT Overview**, **CSAT Trend**, **CSAT by Company** or **Recent CSAT Feedback** from the widget library, then save the dashboard. See [Create and edit a dashboard](/user-guides/dashboards/create-and-edit-dashboard). |
 | **Reports** | Use the same CSAT blocks in the report builder, select the company and reporting period, and save. See [Reporting](/user-guides/reporting/index#native-psa-csat-in-reports). |
 
@@ -779,6 +783,7 @@ Only companies still mapped to this connection are affected. Unmapping a company
 | Connection test fails | Verify your API username and secret are correct. Ensure the API user has the MSPortal security role. Read the reported error text. |
 | A data option is unavailable | Check its result in **Permissions**, grant the named permission and select **Re-check**. |
 | Tickets not syncing | Check that the correct queues and categories are selected in **Choose data** and that ticket statuses aren't excluded. The note under **Categories** lists categories that don't sync, including ones added in Autotask after setup. See [Fix missing tickets](/user-guides/integrations/faq#fix-missing-tickets). |
+| A notification says a ticket is hidden from MSPortal | Autotask told MSPortal about a ticket the MSPortal API user is not allowed to read. Select the notification to open the ticket in Autotask. The notification names the ticket's number, title and company when MSPortal synced it before. On the API user's security level, allow every queue, ticket category and line of business that ticket is in. The ticket syncs the next time it changes. |
 | Companies or tickets are missing | Check saved filters in **Choose data**, the result in **Sync activity** and company links. |
 | New statuses are absent | Wait for metadata to sync, check the selected queues and reload the task. |
 | Webhooks not working | Ensure your API user's security role can create webhooks, then contact MSPortal support. |

@@ -1,0 +1,95 @@
+---
+title: "Read Microsoft 365 backups"
+description: "Find Exchange, OneDrive, SharePoint and Teams backup records from Cove and Acronis."
+icon: shield-halved
+---
+
+{/* Generated from /user-guides/backup/read-microsoft-365-backups.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Backup > Microsoft 365 lists the Exchange, OneDrive, SharePoint and Teams resources your backup providers protect. This guide covers the Cove and Acronis tables. MSP staff and company users with Backup read access can use it. For the other providers, see [Kaseya and Spanning health](/msp-guides/backup/read-saas-backup-health). NinjaOne SaaS Backup is covered in [Read backup details](/msp-guides/backup/read-backup-details).
+
+## Before you start
+
+- You have Backup read access.
+- Cove or Acronis has Microsoft 365 backup turned on and reports data for your selected company. The **Microsoft 365** tab is hidden until it does.
+- The company selector shows the company you want.
+
+## Open a workload
+
+<Steps>
+  <Step title="Open Microsoft 365">
+    Go to **Backup > Microsoft 365**.
+  </Step>
+  <Step title="Choose a provider">
+    If a provider selector appears, choose **Cove** or **Acronis**. With one provider, there is no selector. Company users see numbered services such as **Managed Microsoft 365 Backup 1** instead of vendor names.
+  </Step>
+  <Step title="Choose a workload">
+    Select **Exchange**, **OneDrive**, **SharePoint** or **Teams** in the summary strip. Each shows a count labeled backups.
+  </Step>
+  <Step title="Review the table">
+    Read the rows and use the filters and pager. The pager offers 25, 50 or 100 rows.
+  </Step>
+  <Step title="Open a resource">
+    Select a row to open its panel. See [Read backup details](/msp-guides/backup/read-backup-details).
+  </Step>
+</Steps>
+
+| Workload | Resource to look for |
+| --- | --- |
+| **Exchange** | A user's mailbox |
+| **OneDrive** | A user's personal file backup |
+| **SharePoint** | A site or site collection |
+| **Teams** | A team |
+
+The line above the table shows the workload, its resource count and, when the provider reports them, its seats and storage.
+
+## Read the results
+
+| Column | Meaning |
+| --- | --- |
+| **User**, **Site** or **Team** | The resource name, with its email when it differs. |
+| **Company** | The mapped company. |
+| **Status** | The last result. Cove rows also show a small daily status bar. |
+| **Last Backup** | How long ago the last backup ran. **Never** or a dash needs investigation. It is not a success. |
+| **Backups** | Acronis only. An imported activity count, not the number of messages or files. |
+| **Protected data** | Cove only. Data selected for backup in the latest session. |
+| **Used storage** | Cove only, hidden by default. Shown as an **Account total** across all workloads. |
+
+Use the column toggle to show hidden columns. You can filter by name, company, status, last backup date and item count.
+
+## Loaded limits
+
+- Acronis lists resources with activity in the last 90 days. Older inactive resources can be absent.
+- MSPortal loads up to 500 Cove records in total and up to 500 Acronis records per resource kind. Filters and paging do not fetch beyond that.
+- The Acronis workload count can be larger than the rows you can browse, because it uses the provider's total.
+
+Treat these tables as a report, not a complete inventory. If records are missing, check the provider, workload, company selection and filters, then ask your MSP to compare with the provider and check the sync.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| The **Microsoft 365** tab is missing | Cove or Acronis has no Microsoft 365 data for these companies, or Microsoft 365 backup is off. Ask your MSP. |
+| A workload shows **No ... Backup Data** | That provider reports none for the workload. Ask your MSP to check the provider. |
+| An Acronis resource is missing | It may have had no activity in 90 days, or the 500-record cap hid it. |
+| Counts look larger than the table | The count uses the provider's total. The table is capped. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Backups count recovery points?">
+    No. It counts resources, and for Acronis it can use the provider's total.
+  </Accordion>
+  <Accordion title="Does Backups mean every file or email is in the backup?">
+    No. Acronis shows an imported activity count, not a content list.
+  </Accordion>
+  <Accordion title="Can I download a mailbox backup or restore a file here?">
+    No. Ask your MSP through the Home AI Assistant, as described in [Open a ticket](/msp-guides/ticketing/open-a-ticket).
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read Kaseya and Spanning backup health](/msp-guides/backup/read-saas-backup-health)
+- [Read backup details](/msp-guides/backup/read-backup-details)
+- [Read the Backup Dashboard](/msp-guides/backup/read-dashboard)

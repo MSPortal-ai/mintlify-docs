@@ -1,16 +1,16 @@
 ---
 title: 'Project Settings'
-description: 'Configure client access, health statuses, display fields, Kanban, status mappings, and PSA custom fields'
+description: 'Configure client access, health statuses, display fields, Kanban columns, and PSA custom fields'
 icon: 'gear'
 ---
 
-This page is for MSP admins who control how projects look and who can see them. Open **Settings > Projects** to set client access, display fields, Kanban, status mappings, custom fields, project types, templates, forms, and client portals.
+This page is for MSP admins who control how projects look and who can see them. Open **Settings > Projects** to set client access, display fields, Kanban columns, custom fields, project types, templates, forms, and client portals.
 
 The unified page has three top-level tabs.
 
 | Tab | Sections |
 | --- | --- |
-| **Project Settings** | **Display Configuration**, **Client project access**, **Types**, **Status Mapping**, **Custom Fields**, and, when available, **Upcoming projects** and **Tracker** |
+| **Project Settings** | **Display Configuration**, **Client project access**, **Types**, **Kanban Columns**, **Custom Fields**, and, when available, **Upcoming projects** and **Tracker** |
 | **Templates** | **Templates**, **Checklists**, and **Forms** |
 | **Onboarding Portals** | **Portals**, **Client roles**, **Pages**, and **PSA projects** when a supported PSA is active |
 
@@ -24,7 +24,7 @@ The page opens on **Project Settings > Display Configuration**. Your role contro
 - PSA selectors (boards, lines of business, custom fields) depend on the integrations connected to your portal. See [Integrations](/user-guides/integrations/index).
 
 <Warning>
-The header **Save** button applies to **Client project access**, **Display Configuration**, **Status Mapping**, and **Upcoming projects**. **Types**, custom fields, templates, forms, and onboarding portal sections save on their own.
+The header **Save** button applies to **Client project access**, **Display Configuration**, **Kanban Columns**, and **Upcoming projects**. **Types**, custom fields, templates, forms, and onboarding portal sections save on their own.
 </Warning>
 
 ## Choose what projects show
@@ -212,32 +212,37 @@ If no synced task types appear, you can still set controls on individual tasks. 
 
 ConnectWise projects stay limited to the ConnectWise project team. The roster settings can narrow that team further.
 
-## Map statuses to columns
+## Set up Kanban columns
 
-Configure **Project Statuses** and **Ticket Statuses** separately. Project Statuses group whole projects. Ticket Statuses group tickets inside the project Kanban.
+**Kanban Columns** sets the columns of two boards. Your PSA keeps its own statuses. You choose a short set of columns and place each PSA status in one.
 
-<img src="/images/product/projects-settings-statuses.png" alt="Status Mapping with one row per group, unmapped statuses on top, and Smart Match beside the heading" width="2880" height="1920" />
+| Section | Board it sets up | Statuses you place |
+| --- | --- | --- |
+| **Projects Kanban** | The **Kanban** view on the Projects page. Project cards and the project list also show the column name as the project's status. | PSA project statuses |
+| **Project Board** | The **Board** tab inside each project | PSA ticket statuses |
+
+<img src="/images/product/projects-settings-statuses.png" alt="Kanban Columns with a Column and PSA statuses header row, one row per column, and the starred status in each" width="2880" height="1920" />
 
 <Steps>
-  <Step title="Open Status Mapping">
-    Go to **Settings > Projects > Project Settings > Status Mapping**.
+  <Step title="Open Kanban Columns">
+    Go to **Settings > Projects > Project Settings > Kanban Columns**.
   </Step>
-  <Step title="Choose raw statuses or groups">
-    Switch on **Use Raw PSA Statuses** to show the original PSA names. To group statuses, leave it off and review the columns.
+  <Step title="Choose your own columns or one per status">
+    Switch on **One column per PSA status** to show a column for every PSA status. To use your own columns, leave it off.
   </Step>
-  <Step title="Place unmapped statuses">
-    Select an unmapped status and pick a group, or drag the status onto a group's row. **Smart Match** places the rest. **Generate with AI** drafts the groups. Review either result before you save.
+  <Step title="Place each status in a column">
+    Drag a status onto a column's row, or open the arrow on a status under **Not in a column** and pick a column. **Auto-place by name** places the rest. **Suggest columns with AI** drafts a set of columns. Review either result before you save.
   </Step>
-  <Step title="Review columns and defaults">
-    Add a group with **Add custom category...**. Rename, reorder, or delete a group from its menu. Mark a status as the default for a column to set where a board move lands. A status belongs to one group at a time.
+  <Step title="Set up columns and the starred status">
+    Add a column with **New column name...** and **Add column**. Rename, delete, or use **Move left** and **Move right** from a column's menu. Columns show on the board in the listed order, left to right. Star one status in each column: a card dragged into that column gets that status in your PSA. A status belongs to one column at a time.
   </Step>
-  <Step title="Save the mappings">
-    Check both **Project Statuses** and **Ticket Statuses**, then select **Save**.
+  <Step title="Save">
+    Check both **Projects Kanban** and **Project Board**, then select **Save**.
   </Step>
 </Steps>
 
 <Warning>
-Check the **Unmapped Statuses** list before you save. Projects with an unmapped status are hidden from the dashboard. **Clear All** clears the current mapping, so review it before you save.
+Check **Not in a column** before you save. On the Projects Kanban, a project whose status is in no column goes in a column guessed from its status name, or in **Other** when no column matches. On the Project Board, such a ticket goes in **Other**. **Empty all columns** takes every status out of its column, so review it before you save.
 </Warning>
 
 ## Add PSA custom fields
@@ -439,7 +444,7 @@ Use **Templates > Checklists** for reusable checklist definitions. This section 
   </Tab>
 </Tabs>
 
-Once a template is saved, select **Projects > New project** and choose **MSPortal only** to create native delivery work. Templates live in MSPortal, so editing one never changes an existing PSA project. Choose a PSA destination, or use **Apply template** on a PSA project, to create the phases and tasks in your PSA. After that, status and date changes made in MSPortal write back to ConnectWise and Autotask. See [What writes back to your PSA](/user-guides/projects/index#what-writes-back-to-your-psa), [Project Templates](/user-guides/projects/templates), [Onboarding Templates](/user-guides/client-onboarding/templates), and [Native Projects](/user-guides/projects/native-projects).
+Once a template is saved, select **Projects > New project** and choose **MSPortal only** to create native delivery work. Templates live in MSPortal, so editing one never changes an existing PSA project. Choose a PSA destination, or use **Apply template** on a PSA project, to create the phases and tasks in your PSA. After that, status and date changes made in MSPortal write back to ConnectWise and Autotask. See [What writes back to your PSA](/msp-guides/projects/index#what-writes-back-to-your-psa), [Project Templates](/user-guides/projects/templates), [Onboarding Templates](/user-guides/client-onboarding/templates), and [Native Projects](/user-guides/projects/native-projects).
 
 ## Manage forms
 
@@ -479,7 +484,7 @@ These are reusable settings and the portal directory. To manage one portal, open
 
 ## Save, leave, or reset
 
-- The header **Save** applies your changes across Client project access, Display Configuration, Status Mapping, and Upcoming projects. You can switch between these sections, visit Templates or Onboarding Portals, and return to the same unsaved changes.
+- The header **Save** applies your changes across Client project access, Display Configuration, Kanban Columns, and Upcoming projects. You can switch between these sections, visit Templates or Onboarding Portals, and return to the same unsaved changes.
 - If you leave with unsaved changes, the app asks you to confirm.
 - **Reset** puts the product defaults in the form. Nothing is saved until you select **Save**. Reset does not undo custom field changes, which save at once.
 
@@ -490,7 +495,7 @@ These are reusable settings and the portal directory. To manage one portal, open
 | **Save** is greyed out | Check that you have write access, that you changed something, and that a save is not already running. |
 | Clients cannot find a project | Check the company scope, the client role's permissions, the access filters, and whether the project is hidden on its own page. |
 | A project is missing from health KPIs | Its exact PSA status may be marked **Inactive** under **Project health status**. |
-| A grouped board leaves out work | Map the item's PSA status under **Status Mapping**, or switch on **Use Raw PSA Statuses**. |
+| A card is in the wrong column or in **Other** | Place its PSA status in a column under **Kanban Columns**, or switch on **One column per PSA status**. |
 | A technician is missing from Kanban | Check that the person is an active PSA agent, the roster filters, and the ConnectWise project team. |
 | A custom field is missing or read-only | Allow a day for a new PSA field to sync, then check **Show on projects**, role access, **Allow edits**, and your project permissions. |
 | Clients cannot see a project tab | Check that the tab is set to **MSP + clients** under **Display Configuration > Project tabs**. |
@@ -524,8 +529,8 @@ These are reusable settings and the portal directory. To manage one portal, open
 ## Related guides
 
 <CardGroup cols={2}>
-  <Card title="Projects" icon="folder-open" href="/user-guides/projects/index">Review the portfolio and project health.</Card>
-  <Card title="Project workspace" icon="list-check" href="/user-guides/projects/workspace">Use project tabs and collaboration tools.</Card>
+  <Card title="Projects" icon="folder-open" href="/msp-guides/projects/index">Review the portfolio and project health.</Card>
+  <Card title="Project workspace" icon="list-check" href="/msp-guides/projects/workspace">Use project tabs and collaboration tools.</Card>
   <Card title="Project calendar" icon="calendar" href="/user-guides/projects/calendar">Review schedules and supported date changes.</Card>
   <Card title="Integrations" icon="plug" href="/user-guides/integrations/index">Configure your PSA connection.</Card>
 </CardGroup>

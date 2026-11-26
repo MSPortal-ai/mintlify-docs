@@ -1,0 +1,136 @@
+---
+title: 'Troubleshoot Salesbuildr quotes and PDFs'
+description: 'Find missing Salesbuildr quotes, check Company access, and resolve provider document or PDF problems.'
+icon: 'file-invoice-dollar'
+---
+
+{/* Generated from /user-guides/quotes/troubleshoot-salesbuildr-quotes.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+MSPortal supports **Salesbuildr**, **QuoteWerks**, and **Quoter**. Salesbuildr quotes offer the built-in **Download PDF** action. MSP staff also see **Open in Salesbuildr**. Company users see either **View quote** or **Open in Salesbuildr**, depending on what the MSP chose under **How clients open quotes** on the Salesbuildr integration. A visible quote does not guarantee that a provider PDF has been generated.
+
+**Audience:** Company users with quote access and MSP staff. Company users check their available quotes and documents; MSP staff repair integrations, company mappings, and user permissions.
+
+## Check as a company user
+
+<Steps>
+  <Step title="Open Quotes and check the company">
+    Click **Quotes** in the sidebar and check the company selector in the top bar.
+  </Step>
+  <Step title="Clear the filters">
+    Click **Clear Filters**, then search for the quote number. Check the other pages.
+  </Step>
+  <Step title="Check the quote">
+    Check the company, revision, stage, and totals.
+  </Step>
+  <Step title="Open it">
+    Click the **Number** to read the quote in MSPortal. If your MSP shows the Salesbuildr link, choose **... > Open in Salesbuildr** to go to the provider. On the detail page the provider link is labeled **Open quote**.
+  </Step>
+  <Step title="View or download the PDF">
+    Choose **View quote** to read the PDF in a new tab, when it is offered, or **Download PDF** to save it. Both are in the row's **...** menu and on the detail page. Wait while it reads **Preparing PDF...**.
+  </Step>
+  <Step title="Ask your MSP">
+    If the quote or document is missing, send your MSP the quote number, the expected company, and the message you see. Do not send API credentials.
+  </Step>
+</Steps>
+
+**View quote** opens the PDF in a new tab. If your browser blocks the new tab, the PDF downloads instead. **Download PDF** downloads the file, or opens it from a Salesbuildr link in a new tab. If your browser blocks that tab, it opens in the current tab. MSPortal sign-in does not give you access to the Salesbuildr page itself. Your role can also limit you to **Mine only**, **My site**, or certain statuses.
+
+## Understand PDF messages
+
+| Message or symptom | What to do |
+| --- | --- |
+| **Salesbuildr has no PDF for this quote yet. Generate the PDF in Salesbuildr, then try again.** | Ask your MSP to generate the PDF in Salesbuildr. A draft quote can show in the list without a PDF. |
+| **Salesbuildr is busy right now. Try downloading this PDF again in a moment.** | Wait a moment and try again. |
+| **Salesbuildr rejected the saved API key. Ask an administrator to reconnect the Salesbuildr integration.** | Ask an MSP administrator to check the Salesbuildr API key and reconnect. Your portal password is not involved. |
+| **This quote is no longer available.** | Go back to **Quotes** and ask your MSP to check the quote, the mapping, and your access. |
+| **Salesbuildr could not return this PDF. Try again in a few minutes.** | Try again later, or ask your MSP for a copy. |
+| **The quote PDF could not be downloaded. Please try again.** | Try again. If it keeps failing, ask your MSP. |
+| **Preparing PDF...** stays on screen | Wait for a file or a message. |
+
+For a full procedure, see [Download quote documents](/msp-guides/quotes/download-quotes). The table's CSV export is a different operation: it includes every quote that matches your filters, in the visible columns, but not the complete proposal. Neither opening a quote nor exporting it accepts the quote.
+
+## MSP checks for missing quotes
+
+<Steps>
+  <Step title="Check the connection">
+    Open the Salesbuildr connection in **Settings > Integrations**. Check its status and any error. If needed, save a working API key.
+  </Step>
+  <Step title="Check the company mapping">
+    In **Map**, check that the Salesbuildr company is linked to the right company and shows **Saved**. Only mapped companies import quotes.
+  </Step>
+  <Step title="Start a quote sync">
+    Start the quote sync and check the result after the background job finishes.
+  </Step>
+  <Step title="Check role access">
+    Check the company role's **Quotes** access, **Visibility**, and **Statuses**. See [Control company quote access](/user-guides/quotes/manage-company-access).
+  </Step>
+  <Step title="Compare with Salesbuildr">
+    Compare the quote and its line items with Salesbuildr if values or freshness look wrong.
+  </Step>
+</Steps>
+
+Unlinking a Salesbuildr company removes its imported quotes and line items from MSPortal. Relinking requires a quote sync to bring those removed records back. Ask about recent mapping changes when quotes disappear together.
+
+A successful connection test, company count, completed wizard step, or sync-started message does not prove every quote imported. An empty or failed listing can leave older records visible; verify the current provider document when a deletion or revision matters.
+
+## MSP checks for links and products
+
+For an incorrect **Open in Salesbuildr** destination, check the saved connection's Account URL and the specific quote. Use the correct `.salesbuildr.com` API account address; do not guess a customer document link. Ask support if the saved connection unexpectedly loads as a blank new-connection form.
+
+For missing budget products, verify product synchronization separately from company and quote synchronization. Then use **Budgets > Budgets Menu > Products > Import from Integrations**. Linking a source product does not update an existing catalog product's price or recurrence. See [Import and link budget products](/user-guides/budgets/import-products-from-integrations).
+
+## Ask for help with useful details
+
+Include **Salesbuildr**, the quote number, expected company, whether the issue affects the row, line items, provider link, or PDF, and the exact visible error. MSP staff should check saved mapping, integration status, and the last relevant sync result. Use the normal approved support channel for private documents.
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does Salesbuildr support PDF downloads in MSPortal?">
+    Yes. Salesbuildr quotes can use the built-in Download PDF action when the provider has a PDF available. A visible quote alone does not guarantee a generated document.
+  </Accordion>
+  <Accordion title="Why does a quote exist but its PDF is unavailable?">
+    The provider may not have generated a PDF, including for a draft quote. Ask your MSP to check the Salesbuildr document and provide a copy if needed.
+  </Accordion>
+  <Accordion title="Why does my MSP see a quote that I cannot?">
+    Your role, allowed statuses, selected view, site or company scope may exclude it. Ask the MSP to review those settings and the saved Salesbuildr company mapping.
+  </Accordion>
+  <Accordion title="Can a Company administrator change quote permissions?">
+    The MSP manages Company user permissions. Ask the MSP to review Quotes access, allowed statuses, company and site association, and the available view.
+  </Accordion>
+  <Accordion title="Why did all quotes for a Salesbuildr company disappear?">
+    The company mapping may have been unlinked, which removes its imported quotes and line items. Ask the MSP to verify the mapping and request a new quote sync after relinking.
+  </Accordion>
+  <Accordion title="Does relinking a Salesbuildr company immediately restore its removed quotes?">
+    No. Save the correct mapping and run quote synchronization to import the removed records again. Then verify the company and quote results.
+  </Accordion>
+  <Accordion title="Does a rejected API key mean my portal password is wrong?">
+    No. The PDF message refers to the MSP-managed Salesbuildr integration credential. Ask the MSP to check that connection; changing your portal password does not repair it.
+  </Accordion>
+  <Accordion title="What should I do when Salesbuildr is busy?">
+    Wait and retry later, or ask your MSP for a copy if needed. Avoid repeated immediate PDF requests.
+  </Accordion>
+  <Accordion title="Does Preparing PDF mean the download succeeded?">
+    No. Wait for the returned document or result message. Preparing PDF is an in-progress state.
+  </Accordion>
+  <Accordion title="Can I use CSV instead of the proposal document?">
+    CSV contains every matching quote row in the visible columns. It does not include the complete provider proposal or an acceptance document.
+  </Accordion>
+  <Accordion title="Does opening or downloading a Salesbuildr quote accept it?">
+    No. Opening a provider page, downloading a PDF, or exporting CSV does not accept the quote. Review the provider document and its acceptance process.
+  </Accordion>
+  <Accordion title="Do the same PDF instructions apply to Quoter and QuoteWerks?">
+    All three providers are supported, but the built-in Download PDF action is specific to Salesbuildr. Quoter and QuoteWerks use their available provider document links and the options on those pages.
+  </Accordion>
+  <Accordion title="Does a successful quote sync also import products into my budget catalog?">
+    No. Product synchronization and budget catalog import or linking are separate steps. Ask the MSP to verify product sync and use Import from Integrations.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Download quote documents](/msp-guides/quotes/download-quotes)
+- [Find and open quotes](/msp-guides/quotes/view-quotes)
+- [Map Salesbuildr companies](/user-guides/integrations/map-salesbuildr-companies)
+- [Connect and manage Salesbuildr](/user-guides/integrations/enable-salesbuildr-integration)
+- [Manage Company quote access](/user-guides/quotes/manage-company-access)

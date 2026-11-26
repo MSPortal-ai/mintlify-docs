@@ -1,0 +1,205 @@
+---
+title: 'Resolve Actuals Exceptions'
+description: 'Review unmatched invoice spend, create audited manual allocations, and correct automatic budget matches'
+icon: 'list-check'
+---
+
+{/* Generated from /user-guides/budgets/resolving-actuals-exceptions.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+The **Unmatched exceptions** queue holds invoice events that MSPortal could not fully allocate, and automatic matches that someone moved aside for review. Resolve the queue so each locked budget line's actual spend is complete and explained. This guide is for MSP staff, and for company users whose MSP has given them budget write access on top of budget and invoice read access.
+
+## Before you start
+
+- An Approved or Archived budget with an **Actuals** tab. You need invoice view access to see the tab.
+- Budget edit access (the **write_budgets** or **manage_budgets** permission) to allocate, remove, move or restore. Without it you can review exceptions, matched evidence and active allocations but cannot change them.
+- Synced invoice data in the same currency as the locked budget.
+
+Users without budget write permission can review exceptions, matched evidence, and active allocation details but cannot change them.
+
+<Note>
+Selecting a line and entering an amount prepares an allocation. **Allocate**, **Remove**, **Move to exceptions** and **Restore match** submit their changes immediately, without a later page-level Save. Wait for the result and refreshed totals. These actions change reconciliation in MSPortal, not the source invoice.
+</Note>
+
+## Allocate an exception to a budget line
+
+<Steps>
+  <Step title="Open Unmatched exceptions">
+    Click **Budgets**, click **...** then **View** on the locked budget, click **Actuals**, and scroll to **Unmatched exceptions**.
+  </Step>
+  <Step title="Read the reason">
+    Check the **Source**, **Invoice detail**, **Source amount** and **Reason** columns. The remaining amount shows under the source amount.
+  </Step>
+  <Step title="Select a budget line">
+    In **Select a budget line**, choose the line that should receive the spend. Rejected lines are not offered, because they are outside the approved baseline.
+  </Step>
+  <Step title="Enter the amount">
+    Type the **Amount to allocate**. It must not be zero, can have up to four decimal places, and must have the same sign as the remaining amount. It cannot be larger than the remainder. The remaining amount is filled in for you. Keep credit amounts negative.
+  </Step>
+  <Step title="Allocate and check">
+    Click **Allocate**. Check that the summary, the line outcome and the remaining exception amount update.
+  </Step>
+</Steps>
+
+## Understand exception reasons
+
+| Reason | What it means | What to do |
+|--------|---------------|------------|
+| **No matching reference** | No exact reference, captured project, or product identity identified one line | Select the correct line and allocate the amount |
+| **Multiple possible lines** | The best automatic method identified more than one line | Review the invoice detail, then allocate it manually |
+| **Currency mismatch** | The source currency differs from the locked budget currency | Correct an inaccurate source currency and resync; genuine foreign-currency spend cannot be allocated to this budget |
+| **Currency unknown** | Neither the invoice nor company or tenant configuration supplied a usable currency | Set the correct currency at the source or company/tenant level, then resync |
+| **Moved to exceptions** | A user paused an automatic match | Allocate it manually, or correct the source information and restore automatic matching |
+| **Source changed since allocation** | Synchronized source details changed after a manual allocation or exclusion | Review the new source, then remove or restore the previous decision |
+| **Partially allocated** | Only part of the source amount has been assigned | Allocate the remaining amount, possibly to another line |
+
+<Note>
+Currency mismatch and unknown-currency events cannot be manually allocated. MSPortal does not perform foreign-exchange conversion against a locked baseline.
+</Note>
+
+The queue starts at 25 rows per page, with 10, 25 and 50 available. Its order prioritizes the largest absolute remaining amounts, then newer event dates. Use paging and horizontal scrolling to see all fields. The queue has no search or sort control.
+
+## Split spend across budget lines
+
+You can allocate one invoice event across more than one eligible budget line.
+
+<Steps>
+  <Step title="Allocate the first portion">
+    Select the first line, replace the default amount with that line's share, and click **Allocate**.
+  </Step>
+  <Step title="Review the remaining amount">
+    The event stays in **Unmatched exceptions** as **Partially allocated** and shows the amount still unallocated.
+  </Step>
+  <Step title="Allocate the remainder">
+    Select another eligible line and allocate all or part of the remaining signed amount. Repeat until the event is fully allocated.
+  </Step>
+</Steps>
+
+For unchanged source data, another allocation to the same line adds the entered amount to its current allocation. Enter the additional portion, not the desired new total.
+
+Manual allocation suppresses automatic matching for the entire source event. This prevents the same invoice spend from being counted both automatically and manually.
+
+## Correct an automatic match
+
+If an invoice event matched the wrong line, move it to exceptions so you can allocate it yourself or correct the source and retry automatic matching.
+
+<Steps>
+  <Step title="Open the matched evidence">
+    In **Line outcomes**, click **Review N events** on the line that matched wrongly.
+  </Step>
+  <Step title="Move the event to exceptions">
+    Click **Move to exceptions**. The event is removed from the line and automatic matching is paused. Its amount still contributes to overall Actual spend and becomes unallocated; this does not exclude the invoice from spending totals.
+  </Step>
+  <Step title="Choose how to correct it">
+    To override the match, select the correct line in **Unmatched exceptions**, enter the amount, and click **Allocate**. You can split it across lines without restoring the original match first.
+
+    To retry automatic matching instead, correct the reference, project, PO, product, or other source detail in the PSA, allow it to synchronize, then click **Restore match**. MSPortal reconsiders the current source data.
+  </Step>
+  <Step title="Verify the new result">
+    Confirm the amount moved to the intended line and review any remaining exception. If automatic matching is still ambiguous, allocate the event manually.
+  </Step>
+</Steps>
+
+## Manage manual allocations
+
+The **Manual allocations** table records the source, destination line, allocated amount, operator, time, and source status for every active manual decision.
+
+### Remove a manual allocation
+
+<Steps>
+  <Step title="Find the allocation">
+    In **Manual allocations**, locate the invoice event and budget line.
+  </Step>
+  <Step title="Review its source status">
+    Pay particular attention to **Source changed**, which means the synchronized amount or details changed after allocation.
+  </Step>
+  <Step title="Click Remove">
+    Remove the allocation. If it was the event's last manual allocation, MSPortal may resume automatic matching using current source data.
+  </Step>
+  <Step title="Review the updated result">
+    Check **Line outcomes** and **Unmatched exceptions**. Reallocate the current amount if necessary.
+  </Step>
+</Steps>
+
+Removing an allocation does not edit the approved budget or the source invoice. It removes the active reconciliation decision while preserving its audit record. The **Manual allocations** table shows active decisions, not a complete list of removed decisions.
+
+## Common tasks
+
+### Resolve an ambiguous product match
+
+Compare the invoice description and SKU with the candidate budget lines. Allocate the event to the intended line, then clean up duplicate or inconsistent product identities before the next budget is approved.
+
+### Handle a changed invoice
+
+If a PSA update changes an invoice amount or detail, MSPortal flags the old manual decision instead of silently applying it to the new source. Remove the stale allocation, review the updated remaining amount, and allocate it again if automatic matching does not resolve it.
+
+### Restore an excluded event
+
+Use **Restore match** when the automatic match should be allowed again. Correct the PSA reference or relationship first if restoring the event would otherwise repeat the same incorrect match.
+
+## Troubleshooting
+
+| Issue | Resolution |
+|-------|------------|
+| Allocation controls are disabled | Confirm your role can edit budgets, the event currency matches the budget, and an eligible line exists |
+| No budget lines are available | Rejected lines cannot receive spend; confirm the approved budget contains at least one eligible line |
+| Allocation validation fails | Select a line and enter a non-zero amount with no more than four decimal places; its sign must match the remainder and its magnitude cannot exceed it |
+| The event remains after allocation | Review **Remaining**; a partial allocation stays in the queue until the full signed amount is allocated |
+| A moved event needs a different line or split | Allocate it directly from the exception queue; restoring the old match first is unnecessary |
+| A manual allocation says **Source changed** | Remove the stale allocation and review the latest synchronized invoice data |
+| Removing an allocation rematches the event automatically | This is expected when current project, product, or reference data supplies one unique automatic match |
+| The wrong line matches again after restore | Correct the reference or relationship in the PSA, let it synchronize, and then restore the event again |
+
+## Best practices
+
+- Resolve the oldest and largest exceptions first
+- Investigate source and mapping problems before creating recurring manual work
+- Allocate the exact signed remaining amount, including negative credit amounts
+- Use a single exact budget reference whenever the PSA workflow supports it
+- Review **Source changed** warnings promptly
+- Keep manual allocations limited to genuine exceptions so the audit trail stays meaningful
+- Review both Unallocated and the exception queue before presenting results; currency exceptions can remain even when Unallocated is zero
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Do allocation and removal actions need a later Save?">
+    No. Allocate, Remove, Move to exceptions and Restore match each submit their change immediately. Wait for the result and the refreshed totals before making another decision.
+  </Accordion>
+  <Accordion title="Does selecting a line or typing an allocation immediately save it?">
+    No. These prepare the row’s allocation. Click **Allocate** to submit it, then check the result.
+  </Accordion>
+  <Accordion title="Does moving an invoice to exceptions remove it from Actual spend?">
+    No. It pauses automatic allocation to a line. Eligible spend still contributes to the overall total and becomes unallocated.
+  </Accordion>
+  <Accordion title="Can I split one invoice event between several budget lines?">
+    Yes. Allocate part to one eligible line, then allocate the remaining signed amount to another. Manual decisions suppress automatic matching for the entire event.
+  </Accordion>
+  <Accordion title="Can I allocate to a rejected budget line?">
+    No. Rejected lines are outside the eligible baseline. The destination selector offers eligible lines; the approved line status cannot be changed to make it eligible.
+  </Accordion>
+  <Accordion title="Can I convert a foreign-currency exception while allocating?">
+    No. The source currency must match the budget currency. MSPortal does not perform exchange-rate conversion for allocations.
+  </Accordion>
+  <Accordion title="How do I allocate a credit?">
+    Keep the allocation negative, matching the source event’s sign. Enter a non-zero decimal amount with at most four decimal places and no currency symbol or thousands separator. Do not exceed the remaining magnitude.
+  </Accordion>
+  <Accordion title="Does another allocation to the same line replace the existing amount?">
+    For unchanged source data, the entered amount adds to that line’s existing allocation. Treat it as an additional portion of the remainder, not the new desired total.
+  </Accordion>
+  <Accordion title="Why did removing an allocation create an automatic match?">
+    When the final manual decision is removed and no exclusion remains, the current source data may produce a unique automatic match. Review Line outcomes and exceptions after removal.
+  </Accordion>
+  <Accordion title="Does Manual allocations show removed decisions?">
+    No. It lists active manual decisions. Removing a decision retains its audit record but removes it from this active table.
+  </Accordion>
+  <Accordion title="Does resolving an exception edit the original invoice?">
+    No. These actions change MSPortal reconciliation decisions. Correct invoice or reference data in the PSA through the authorized workflow, then let it synchronize.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Track budget actuals](/msp-guides/budgets/tracking-budget-actuals)
+- [Approve and lock a budget](/msp-guides/budgets/approving-and-locking-budgets)
+- [Budgets overview](/user-guides/budgets/index)
+- [Invoices](/msp-guides/invoices/index)

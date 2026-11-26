@@ -1,6 +1,6 @@
 ---
 title: 'Connect Auvik and review network data'
-description: 'Map Auvik sites, review alert history, and import network devices'
+description: 'Map Auvik sites, review alert history, import network devices, and connect Auvik SaaS Management'
 icon: 'plug'
 ---
 
@@ -35,6 +35,63 @@ Recent alert history covers alerts detected in the last 30 days, including resol
 - **Every Auvik region rejected the key:** check the username, API key, and account read permissions.
 - **Region couldn't be confirmed:** Auvik didn't answer from every region. Test again in a moment, or choose your region in the picker that appears.
 - **Auvik moved the account to another region:** for a saved connection, enter the API key again and test. If you chose a region yourself, choose the one the test names (for example `ca1.my.auvik.com`).
+
+## Auvik SaaS Management
+
+Auvik SaaS Management has its own card in **Settings > Integrations**, separate from the Auvik network card above. It reads your SaaS Management clients and, for each client you match to a company, that client's SaaS applications with their users, risk and contract spend. The applications appear in **Cloud > Applications**.
+
+The integration is in beta and available to selected tenants. Setup is for MSP staff with permission to manage integrations. MSPortal only reads from Auvik: it never creates, edits or deletes anything there.
+
+### Choose your Auvik API
+
+Auvik has two APIs for SaaS Management data. Each takes its own credentials, and one's credentials never work with the other. In **Connect**, choose the one your Auvik subscription includes under **Auvik API**.
+
+| Auvik API | Your Auvik subscription | You connect with | What MSPortal does |
+| --- | --- | --- | --- |
+| **Unified Auvik API** | Network Management with SaaS Management | An Auvik user's email address and API key | Tests the connection, then syncs clients and applications |
+| **SaaS Management API** | SaaS Management on its own | The API key and secret from the Partner Hub | Saves the credentials. It does not sync yet |
+
+The choice is fixed once the connection is saved. To use the other Auvik API, disconnect and connect again.
+
+### Connect with the Unified Auvik API
+
+<Steps>
+  <Step title="Generate the user's API key in Auvik">
+    Sign in to Auvik Network Management as the user MSPortal should connect as. Select your name in the side navigation, open your profile and select **Generate API Key**. Copy the key: Auvik shows it once. Each Auvik user has one API key, and the user's role needs access to SaaS Management.
+  </Step>
+  <Step title="Enter and test the connection">
+    In MSPortal, open **Settings > Integrations**, select **Auvik SaaS Management** and open **Connect**. Leave **Auvik API** on **Unified Auvik API**. Enter the user's email address as **Account username** and the key as **API key**, then select **Test connection**. MSPortal tries the key in each Auvik region and checks that the user can read SaaS Management clients.
+  </Step>
+  <Step title="Save and match clients">
+    Select **Save and continue**. In **Import or match companies**, match each SaaS Management client to a company. Only matched clients' applications are read.
+  </Step>
+</Steps>
+
+### Connect with the SaaS Management API
+
+<Steps>
+  <Step title="Generate the API key and secret in the Partner Hub">
+    In the Auvik SaaS Management Partner Hub, go to **Org Preferences > Integrations > API** and generate the API key. Copy the API secret before you leave the page: Auvik shows it once.
+  </Step>
+  <Step title="Choose the SaaS Management API">
+    In MSPortal, open **Settings > Integrations**, select **Auvik SaaS Management** and open **Connect**. Under **Auvik API**, choose **SaaS Management API**.
+  </Step>
+  <Step title="Enter and save the key and secret">
+    Enter the **Partner Hub API key** and **Partner Hub API secret**, then select **Save and continue**. This API has no connection test.
+  </Step>
+  <Step title="Finish setup">
+    In **Review**, select **Finish setup**.
+  </Step>
+</Steps>
+
+MSPortal stores the key and secret in its vault and notifies the MSPortal team. It can't read Auvik's SaaS Management API yet, so a connection saved this way syncs no clients or applications. A notice at the top of the connection says so. The connection has no **Import or match companies** task and no **Run sync**.
+
+### Auvik SaaS Management troubleshooting
+
+- **"This looks like a Partner Hub API secret" or "This looks like a Partner Hub API key":** you entered Partner Hub values under **Unified Auvik API**. Choose **SaaS Management API**, or enter an Auvik user's email address and the API key from that user's profile in Auvik Network Management.
+- **Every Auvik region rejected this username and API key:** use the user's Auvik email address and the API key from that user's profile in Auvik Network Management. A Partner Hub API key and secret only work with the **SaaS Management API** option.
+- **Your SaaS Management profile has no API key:** a user's API key is generated in Auvik Network Management, not in SaaS Management. If your organization has SaaS Management on its own, use the **SaaS Management API** option.
+- **No clients to match:** with the **Unified Auvik API**, allow the first sync a minute or two to list your clients. A **SaaS Management API** connection has no **Import or match companies** task, because its clients do not sync yet.
 
 ## Related guides
 

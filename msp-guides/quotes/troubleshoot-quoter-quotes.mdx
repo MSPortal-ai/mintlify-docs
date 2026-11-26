@@ -1,0 +1,158 @@
+---
+title: 'Troubleshoot missing Quoter quotes and company links'
+description: 'Check quote visibility, company association, synchronization, and Quoter document links.'
+icon: 'magnifying-glass'
+---
+
+{/* Generated from /user-guides/quotes/troubleshoot-quoter-quotes.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+A Quoter connection, a quote's company association, your portal permissions, and its external document link are separate checks. Use this guide when a quote is missing, belongs to the wrong company, has incomplete line items, or lacks **Open in Quoter**.
+
+**Audience:** Company users who need to find a quote and MSP staff who investigate the connection and access rules. Company administrators ask their MSP to change integrations or user permissions.
+
+## Company users: check what you can see
+
+<Steps>
+  <Step title="Open Quotes and check the company">
+    Click **Quotes** in the sidebar and check the company selector in the top bar.
+  </Step>
+  <Step title="Clear the filters">
+    Click **Clear Filters**, then search for the quote number.
+  </Step>
+  <Step title="Think about your role">
+    Your role can limit you to quotes where you are the contact (**Mine only**), quotes at your location (**My site**), or certain statuses. Ask your MSP which applies to you.
+  </Step>
+  <Step title="Open the quote">
+    If the quote appears, click its **Number** to read it in MSPortal, or choose **... > Open in Quoter** to go to Quoter.
+  </Step>
+  <Step title="Ask your MSP">
+    If it is still missing, send your MSP the quote number, the expected company, the approximate date, and whether the quote or only its link is missing.
+  </Step>
+</Steps>
+
+Do not send API credentials when you ask for help. A quote missing from your list does not mean it was deleted or rejected in Quoter.
+
+## MSP staff: check the import and company
+
+<Steps>
+  <Step title="Check the source quote">
+    Confirm that the intended Quoter account contains the quote and the expected revision, company or billing organization, and line items. Record the quote number for comparison.
+  </Step>
+  <Step title="Check the connection">
+    Open the existing Quoter connection in **Settings > Integrations**. Confirm that it is available for synchronization and that the saved URL name belongs to the intended account. Use [Connect and manage Quoter](/user-guides/quotes/setup) for connection controls.
+  </Step>
+  <Step title="Check the company association">
+    Quoter imports can associate a quote through a linked opportunity that has already synchronized into MSPortal with a company. If that does not resolve the company, the import falls back to the quote's billing organization name matching an existing MSPortal company name.
+
+    Compare the actual company on the portal quote. There is no manual Map Companies or Quick Match step in this Quoter wizard.
+  </Step>
+  <Step title="Correct the source or escalate an ambiguous match">
+    If the source quote has an incorrect organization or linked opportunity, correct that in the appropriate source system. For name matching, use the intended existing MSPortal company's name. Matching ignores capitalization and surrounding spaces; it is not a fuzzy search for similar businesses.
+
+    If company names are duplicated, an opportunity link resolves unexpectedly, or the portal quote belongs to the wrong company, ask support to investigate the exact record before widening Company access.
+  </Step>
+  <Step title="Request a sync and verify the result">
+    In Quoter setup, open **Complete** and select **Sync Quotes**. Check the quote after the background run finishes.
+
+    A normal sync can process only changed quotes. Changing a portal company name or opportunity mapping alone may not revisit an older unchanged Quoter quote. If the association remains stale, ask support to investigate the import history; repeated clicks do not guarantee a complete reimport.
+  </Step>
+</Steps>
+
+## Check Company access separately
+
+Once the quote has the correct company, review the affected user's assigned role and Quotes access. **All quotes**, **Mine only**, and **My site** visibility and allowed statuses can produce different lists for different people. A quote that MSP staff can see is not always visible to a company user.
+
+Use [Control Company quote access](/user-guides/quotes/manage-company-access) for the MSP workflow. A Company administrator does not manage portal users or these permissions.
+
+## Check Quoter document links
+
+A portal quote can exist without an external link. The Quoter link needs the connection's saved **Quoter URL Name** and the quote's synchronized identifier.
+
+For MSP staff:
+
+<Steps>
+  <Step title="Open the connection">
+    Open the existing Quoter connection in **Settings > Integrations** and go to its **Connect** step.
+  </Step>
+  <Step title="Check Quoter URL Name">
+    Check **Quoter URL Name**. Enter the subdomain only. If you change it, click **Save URL Name** and wait for **Saved**.
+  </Step>
+  <Step title="Check the quote again">
+    Open the quote in **Quotes**. If there is still no link, ask support to check the quote's synced identifier.
+  </Step>
+  <Step title="Check access on the provider side">
+    If the link opens Quoter but access is denied or there is no document, check access and document availability in Quoter.
+  </Step>
+</Steps>
+
+Do not construct or guess a customer document link. MSPortal login does not automatically grant access to an external Quoter page. Company users can ask their MSP for a copy of the proposal.
+
+The built-in **Download PDF** action is specific to **Salesbuildr**. Quoter and QuoteWerks remain supported through their available provider links. See [Download quote documents and export the list](/msp-guides/quotes/download-quotes).
+
+## Check incomplete or stale quote data
+
+| Symptom | What to check |
+| --- | --- |
+| Quote appears but line items are missing | Compare the source quote and wait for the import to finish. Quote and line-item results can differ; a quote row alone does not prove its line items imported successfully. |
+| Quote still has old totals or revision | Confirm the intended source quote, allow the background sync to finish, and investigate the last import if it remains stale. |
+| Correct quote appears under the wrong company | Investigate opportunity association and billing organization matching before changing Company permissions. |
+| Source correction has not changed an older portal quote | Normal sync may skip unchanged older records. Request an import investigation rather than assuming another click forces a full refresh. |
+| CSV does not contain every quote | CSV exports every quote that matches your company and filters, in the visible columns. Clear **Filters** and check the company selector. A quote that is missing from the list is also missing from the file. |
+| A quote is visible to one colleague but not another | Check both users' assigned role, quote visibility, site/contact matching, and allowed statuses. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Why can my MSP see a Quoter quote that I cannot?">
+    The quote may fall outside your company scope, assigned quote visibility, or allowed statuses. Your MSP manages those rules. MSP staff can see quotes that company users cannot.
+  </Accordion>
+  <Accordion title="Can I fix missing quotes as a Company administrator?">
+    You can check your company selection, search, and table filters. Ask your MSP to change user permissions, integration settings, or company associations.
+  </Accordion>
+  <Accordion title="What should I send my MSP about a missing quote?">
+    Provide the quote number, expected company, approximate date, and whether the record or only its document link is missing. Do not include API credentials.
+  </Accordion>
+  <Accordion title="How does Quoter choose the company for an imported quote?">
+    The import first tries available linked opportunity identifiers against already synchronized opportunities with a company. It then falls back to matching the billing organization name to an existing MSPortal company name. Verify the result on the actual quote.
+  </Accordion>
+  <Accordion title="Does Quoter company matching use Quick Match?">
+    No. The current wizard has Connect and Complete, with no manual Quick Match or Map Companies step. Quote association is resolved during synchronization.
+  </Accordion>
+  <Accordion title="Will similar company names automatically match?">
+    Do not assume that. Name fallback is based on matching the normalized billing organization and existing company name, ignoring capitalization and surrounding spaces. It is not fuzzy matching; duplicated or ambiguous names need investigation.
+  </Accordion>
+  <Accordion title="Does a linked opportunity always assign the correct company?">
+    No. The corresponding opportunity must be available in MSPortal with the correct company. Verify the actual association and escalate ambiguous or incorrect matches.
+  </Accordion>
+  <Accordion title="Will changing a portal company name immediately repair every older quote?">
+    No. Existing associations are not immediately rewritten by that change. A normal incremental quote sync may skip an unchanged older quote, so persistent cases need an import investigation.
+  </Accordion>
+  <Accordion title="Should I repeatedly click Sync Quotes until a quote appears?">
+    No. Allow the requested background run to finish, then check the result and investigate the reason it is missing. Repeated requests do not guarantee a full historical reimport.
+  </Accordion>
+  <Accordion title="Why does a quote have no Open in Quoter action?">
+    Its link may lack a saved Quoter URL Name or the synchronized quote identifier. The MSP checks these. A missing link does not prove the quote itself is absent from Quoter.
+  </Accordion>
+  <Accordion title="Does correcting Quoter URL Name fix company visibility?">
+    No. The URL name determines the account address for external quote links. Company association, user roles, and status visibility are separate checks.
+  </Accordion>
+  <Accordion title="Why is there no Download PDF on my Quoter quote?">
+    That built-in action is for Salesbuildr. Open the available Quoter provider link and use its document options, or ask your MSP for a copy. Quoter is still supported.
+  </Accordion>
+  <Accordion title="Does a successfully imported quote prove all its line items imported?">
+    No. Compare the line items and totals with the source. A quote can be present while its line-item import is incomplete or has failed.
+  </Accordion>
+  <Accordion title="Can I use the exported CSV as the complete proposal?">
+    No. It contains table data for every matching quote, in the visible columns. Use the provider's proposal for its full line items, terms, and acceptance process.
+  </Accordion>
+  <Accordion title="Should I delete and reconnect Quoter to repair one quote?">
+    Start by checking filters, permissions, company association, the URL name, and sync results. Confirmed integration deletion removes synchronized Quoter data from MSPortal and should not be used as a routine single-quote repair.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Connect and manage Quoter](/user-guides/quotes/setup)
+- [Find and open a quote](/msp-guides/quotes/view-quotes)
+- [Control Company quote access](/user-guides/quotes/manage-company-access)
+- [Download documents and export the list](/msp-guides/quotes/download-quotes)

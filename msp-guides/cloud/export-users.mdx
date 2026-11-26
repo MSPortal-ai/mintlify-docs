@@ -1,0 +1,92 @@
+---
+title: 'Export cloud users'
+description: 'Download a CSV of all matching Microsoft and Google users, including full license-name lists and directory fields.'
+icon: 'file-csv'
+---
+
+{/* Generated from /user-guides/cloud/export-users.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Export CSV** on **Cloud > Users** to download every account that matches your company selection and column filters. This page is for MSP staff and company users who can see the Users tab.
+
+## Before you start
+
+- You need Cloud read access (the **Cloud** resource with **Read** access in the role editor). You do not need write or manage access to export.
+- The export follows the company selector and the column filters on the page.
+- The **Status** filter starts on **Enabled**. Disabled accounts are left out unless you change it.
+
+## Download the CSV
+
+<Steps>
+  <Step title="Open Cloud > Users">
+    Click **Cloud** in the sidebar, then click the **Users** tab. Check the company selector in the top bar.
+  </Step>
+  <Step title="Set your filters">
+    Use the filters under the column headings to narrow the list. To include disabled accounts, open the **Status** filter and choose **All**. See [Find and filter cloud users](/msp-guides/cloud/find-users).
+  </Step>
+  <Step title="Click Export CSV">
+    Click **Export CSV** above the table.
+
+    <Frame caption="Export CSV downloads every matching user, not only the page you are viewing.">
+      <img src="/images/product/cloud-users-export-control.png" alt="Export CSV button above the Cloud Users table." width="244" height="64" />
+    </Frame>
+  </Step>
+  <Step title="Wait for the export to finish">
+    A progress message reads **Exporting users…** with a count. Keep the page open. When it finishes, a message reads **Exported** followed by the number of users, and the browser downloads the file.
+  </Step>
+  <Step title="Check the file">
+    Open the CSV and compare the row count with the total shown on the page.
+  </Step>
+</Steps>
+
+The file name is `cloud-users`. When one company is selected, the company name is added to the file name.
+
+## What the file contains
+
+The columns are **Name**, **Email**, **Provider**, **Company**, **Office**, **Department**, **Job title**, **Manager**, **Account type**, **Status**, **Licenses**, **License count**, **Last sign-in**, and **Last synced**.
+
+- Hidden table columns are still exported.
+- **Licenses** holds every license name for the user, separated by semicolons.
+- **Name** is blank when the account has no display name, even if the table shows an email address in its place.
+- The file has no 2-step verification column and no separate administrator column.
+- **Account type** is the directory type. A user the table labels **Administrator** can export as **Member**.
+
+<Note>
+This export covers all matching pages. The exports on **Cloud > Licenses** and **Cloud > Domains** also cover every matching row.
+</Note>
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Export CSV** is missing | Your role does not have Cloud read access. Ask your MSP to add it. |
+| The file has no disabled users | Set the **Status** filter to **All** or **Disabled** and export again. |
+| The progress message stops | Keep the page open and wait. If an error message appears, run the export again. |
+| The file did not appear | Check your browser's downloads list. |
+| The export returns no rows | Clear the filters and check the company selector. |
+| The file has fewer users than expected | Check the **Last synced** column. Users appear only after they sync from the provider. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does the export include users on pages I have not opened?">
+    Yes. It gathers every matching user, not only the 50 on the current page.
+  </Accordion>
+  <Accordion title="Do hidden columns or hidden license badges go missing from the file?">
+    No. The file always has the same columns and the full license list. It still follows your filters.
+  </Accordion>
+  <Accordion title="Do company users need management permission to export?">
+    No. Cloud read access is enough for the data you can already see.
+  </Accordion>
+  <Accordion title="Does the CSV include Google 2-step verification?">
+    No. Read it on screen in the **2-step verification** column. See [Read cloud user accounts](/msp-guides/cloud/users).
+  </Accordion>
+  <Accordion title="Is the export live data from Microsoft or Google?">
+    No. It exports the last synced records. The **Last synced** column shows how fresh each row is.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read cloud user accounts](/msp-guides/cloud/users)
+- [Find and filter cloud users](/msp-guides/cloud/find-users)
+- [Find, filter, and export licenses](/msp-guides/cloud/filter-licenses)

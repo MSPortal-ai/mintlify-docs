@@ -1,0 +1,210 @@
+---
+title: 'Track Budget Actuals'
+description: 'Compare an approved budget with synchronized customer invoice spend and review how each line performed'
+icon: 'chart-line'
+---
+
+{/* Generated from /user-guides/budgets/tracking-budget-actuals.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+The **Actuals** tab compares a locked budget with customer invoice spend from supported PSA integrations. Use it to see whether the company is over or under budget, see which costs matched each line, and find invoice events that still need review. This guide is for company users and MSP staff who can view both budgets and invoices.
+
+## Before you start
+
+- An **Approved** or **Archived** budget
+- Permission to view the budget and invoices (your MSP admin sets this in your role)
+- A connected ConnectWise Manage, Autotask PSA, or HaloPSA integration with invoice sync enabled
+- The PSA company mapped to the same MSPortal company as the budget
+
+<Note>
+If you can view the budget but do not have invoice access, the **Actuals** tab is hidden. Users with read-only budget access can review reconciliation results but cannot resolve exceptions.
+</Note>
+
+## Open Actuals
+
+<Steps>
+  <Step title="Open the budget">
+    Click **Budgets**, click **...** on the budget's row, then click **View**.
+  </Step>
+  <Step title="Select Actuals">
+    Click the **Actuals** tab beside **Overview** and **Monthly Breakdown**.
+  </Step>
+  <Step title="Confirm the baseline">
+    At the top, check the locked budget status, the reconciliation period, the currency, and the **Customer invoiced spend** basis.
+  </Step>
+  <Step title="Read the summary">
+    Start with the four cards under **Budget and actual summary**. Then use **Line outcomes**, matched evidence and **Unmatched exceptions** to explain the result.
+  </Step>
+</Steps>
+
+## What Counts as Actual Spend
+
+Actuals use tax-exclusive amounts that the MSP invoiced to the customer. Billed project work, licenses, services, and labor can contribute. Internal cost of goods sold, payroll, unbilled time, vendor bills, purchase commitments, and contract totals that have not been invoiced do not. Contract and project information can help match an invoice; they do not add spend on their own.
+
+| Provider | Eligible invoice data |
+|----------|-----------------------|
+| ConnectWise Manage | Closed invoices, excluding voided or cancelled invoices; payment and accounting-export status are not required |
+| Autotask PSA | Invoices with an issued invoice number, excluding voided or cancelled invoices; amounts must be available or calculable without tax |
+| HaloPSA | Posted invoices, excluding draft, voided, or cancelled invoices |
+
+- ConnectWise Manage contributes invoice totals
+- Autotask PSA and HaloPSA contribute invoice-line detail when available, with any difference from the invoice total included as an invoice-level remainder to avoid double-counting
+- Credits and refunds appear as signed amounts and reduce spend
+- Only invoice dates inside the locked reconciliation period are included
+- MSPortal does not convert currencies
+
+The locked period is January 1 through December 31 of the budget's fiscal year. **Quarterly** and **Monthly** period types do not change that date range.
+
+The **Source coverage** section shows which PSA providers and source grains contributed to the comparison. **Invoice line** means detailed billing rows were available; **Invoice total** can be a full invoice amount or the remainder not represented by its lines. Different-currency and unknown-currency events remain visible for review but are excluded from monetary totals, including Unallocated.
+
+## Understand the summary
+
+| Card | Meaning |
+|------|---------|
+| **Budgeted** | Locked annualized scheduled costs, including saved monthly overrides. All lines except rejected lines contribute, including Draft and Pending lines |
+| **Actual spend** | All eligible invoice spend for the budget's company, in the budget currency and locked period |
+| **Variance** | Budgeted minus Actual spend. A positive value is remaining budget; a negative value is over budget |
+| **Unallocated** | Eligible spend in the budget currency that has not been assigned fully to budget lines |
+
+The note under **Actual spend** shows how much spend is allocated to lines and how many source events are fully matched.
+
+<Warning>
+The total **Actual spend** includes eligible company invoice spend even when it is unmatched or unrelated to this budget's projects. References control allocation, not the overall total. For a project-only budget, use **Line outcomes** to assess project performance: the overall variance still compares against company-wide invoice spend for the period.
+</Warning>
+
+## Review line outcomes
+
+Each locked budget line shows its reference, category, approved amount, matched actual, variance, and outcome.
+
+| Outcome | Meaning |
+|---------|---------|
+| **Matched** | Spend is assigned to the line, and its assigned events have no unallocated remainder, even if split across lines |
+| **Partially matched** | At least one assigned event still has an unallocated remainder |
+| **No actuals** | No invoice spend is currently assigned to the line |
+| **Not in approved budget** | The line was rejected and is excluded from the baseline |
+
+Positive line variance means budget remains on that line. Negative line variance means matched spend exceeds its approved amount.
+
+**Matched** does not mean the actual equals the budget or that the project is complete. Older locked budgets without references or captured matching keys can still receive manual allocations.
+
+### Find a line outcome
+
+Use the **Reference** or **Budget line** text filter, **Category**, numeric amount ranges, or **Match outcome** to narrow Line outcomes. Click a sortable column heading to change the order. Filters affect the line table, not the summary cards. Use **Clear Filters** to restore the line list.
+
+Matched evidence, Unmatched exceptions and Manual allocations use separate pagination, initially 25 rows with 10, 25 or 50 available. Use their **Columns** controls to show or hide fields. These three paginated tables currently have no table filtering or sorting. None of these tables offers a dedicated CSV export.
+
+### Review matching evidence
+
+<Steps>
+  <Step title="Open a line's evidence">
+    In **Line outcomes**, click **Review N events** (for example **Review 3 events**) on a line with matched spend.
+  </Step>
+  <Step title="Confirm the source">
+    Review the provider, invoice number, date, description, source amount, and matched amount.
+  </Step>
+  <Step title="Check the match method">
+    Confirm whether MSPortal used a budget reference, linked project, linked product, product identity, or manual allocation.
+  </Step>
+  <Step title="Check source status">
+    A **Source changed** warning means the synchronized invoice details no longer match the information recorded when a manual decision was made.
+  </Step>
+</Steps>
+
+## How matching works
+
+MSPortal evaluates automatic methods in priority order:
+
+1. **Budget reference** - an exact line reference found in PSA invoice, PO, project, contract, or related details
+2. **Linked project** - the invoice event is associated with a PSA project captured through the budget line's linked Planner item
+3. **Linked product** - the synchronized invoice item points to the product captured on the budget line
+4. **Product identity** - the invoice-line SKU or product name matches the captured product identity
+
+If the highest-priority matching method identifies multiple lines, the event becomes an exception; MSPortal does not try a lower-priority method to break the tie. An explicit reference that is unknown, belongs to a different budget, or identifies an ineligible line also prevents project or product fallback. Multiple distinct references need manual review.
+
+One source event is counted once within a budget. **Manual allocation** is a user override, not another automatic method: it takes control of the event and suppresses automatic matching, including when you split the event across several lines.
+
+## Common tasks
+
+### Investigate an over-budget result
+
+1. Confirm the total **Actual spend** and overall variance
+2. Sort **Line outcomes** by variance to find the largest negative values
+3. Click **Review N events** on those lines to inspect the supporting invoices
+4. Review **Unallocated** and the exception queue for spend not yet assigned to a line
+
+### Check whether invoice sync is current
+
+Use **Source coverage** to compare the provider's **Latest event** date with the most recent eligible invoice you expect in the locked period. This is an invoice date, not the last sync time. If an expected invoice is missing, review the PSA integration and invoice sync before changing reconciliation decisions.
+
+### Improve future automatic matches
+
+Copy the line's short reference and add it to the PSA project, PO, invoice reference, or custom field that flows through to billing. For recurring services and licenses, keep synchronized product links and SKUs consistent.
+
+## Troubleshooting
+
+| Issue | Resolution |
+|-------|------------|
+| The **Actuals** tab is missing | Confirm your role can view invoices |
+| Actuals says to approve the budget | Only Approved and Archived budgets can be reconciled; approve the budget first |
+| No source events appear | Confirm invoice sync is enabled, the PSA company is mapped correctly, invoice dates fall inside the locked period, and the invoices are finalized |
+| An expected ConnectWise invoice is missing | Confirm the invoice is closed and is not voided or cancelled |
+| Actual spend differs from invoice totals including tax | Actuals deliberately exclude sales tax |
+| Actual spend is present but a line says **No actuals** | The spend is unallocated; review **Unmatched exceptions** |
+| A matched amount is negative | Review whether the source is a credit or refund |
+| Exceptions are visible but Unallocated is zero | Check their currencies; different-currency and unknown-currency amounts are excluded from monetary totals |
+| An archived budget's actuals changed | Archiving freezes the plan, not synchronized invoices or reconciliation decisions |
+| A source uses an inferred currency | MSPortal used the company or tenant currency because the invoice did not provide one; verify that configuration before relying on the result |
+| Actuals cannot be loaded | Use **Try again**. If the error persists, ask the MSP to investigate; do not treat the error as zero spend or duplicate and approve another budget to clear it |
+
+## Best practices
+
+- Review Source coverage before interpreting the totals
+- Resolve exceptions regularly so line outcomes explain the overall spend
+- Use matched evidence to support QBR and budget-review conversations
+- Add a single budget reference to each project, purchase, or billed item
+- Keep company mappings, product identities, and invoice currencies accurate in the PSA
+- Preserve archived budgets as historical baselines
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Where do I compare a budget with invoice spending?">
+    Click **Budgets**, click **...** then **View** on the budget's row, and click **Actuals**. The budget must be Approved or Archived, and you need both budget and invoice access.
+  </Accordion>
+  <Accordion title="Why does Actuals Budgeted differ from the Overview Total?">
+    Actuals uses the locked annualized scheduled amounts, including saved monthly overrides, and excludes rejected lines. Overview sums quantity times unit price once for every line, including rejected lines.
+  </Accordion>
+  <Accordion title="Does overall Actual spend include only invoices matched to this budget?">
+    No. It includes eligible company invoice spend in the locked period and budget currency, including unmatched events. Use Line outcomes to review allocations to particular work.
+  </Accordion>
+  <Accordion title="Does Actuals include tax, unpaid invoices or internal costs?">
+    Actuals uses eligible tax-exclusive customer invoice spend. Payment is not required. Internal costs, vendor bills, unbilled time and uninvoiced commitments are not added as spend.
+  </Accordion>
+  <Accordion title="What does a positive Variance mean?">
+    Variance is Budgeted minus Actual spend. A positive result is under budget; a negative result is over budget. Always review source coverage and unallocated events before relying on the comparison.
+  </Accordion>
+  <Accordion title="Does Matched mean a project is finished or exactly on budget?">
+    No. Matched describes allocation of the source events. It does not prove project completion or equality between budgeted and actual amounts.
+  </Accordion>
+  <Accordion title="Why can exceptions remain when Unallocated is zero?">
+    Currency-mismatch and unknown-currency events are excluded from monetary totals. Also, signed positive and negative remainders can offset. Review the exception rows and count as well as the net amount.
+  </Accordion>
+  <Accordion title="Is Latest event the most recent synchronization time?">
+    No. It is the latest eligible invoice-event date contributing to that provider and source-grain group. Check the integration separately if expected invoices are missing.
+  </Accordion>
+  <Accordion title="Can I filter every Actuals table?">
+    Line outcomes supports column filters and sorting. The paginated matched-evidence, Unmatched exceptions and Manual allocations tables currently provide paging and Columns controls without table search or sorting.
+  </Accordion>
+  <Accordion title="How do I see invoices behind a line’s matched amount?">
+    In Line outcomes, click **Review N events**. Read the invoice, provider, date, source amount, matched amount and match method in the evidence dialog. A line with no events has no review button.
+  </Accordion>
+  <Accordion title="What should I do when Actuals are temporarily unavailable?">
+    Use Try again. If the error persists, keep the existing approved budget and ask the MSP to investigate. Overview and Monthly Breakdown remain separate views; an Actuals error is not zero spend and is not a reason to approve a duplicate.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Approve and lock a budget](/msp-guides/budgets/approving-and-locking-budgets)
+- [Resolve actuals exceptions](/msp-guides/budgets/resolving-actuals-exceptions)
+- [Budgets overview](/user-guides/budgets/index)
+- [Invoices](/msp-guides/invoices/index)

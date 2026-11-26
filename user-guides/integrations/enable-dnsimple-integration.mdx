@@ -218,6 +218,19 @@ After setup, manage your integration from **Settings > Integrations**:
 | **Company Mapping** | Manage domain-to-company links under Settings > Integrations > Company Mapping |
 | **Delete** | Remove the integration (available in the wizard footer); stored credentials and synced domain records are deleted. Domains and DNS records in DNSimple are not touched |
 
+### Reading Domains with the API
+
+`GET /api/public/v1/integrations/dnsimple/domains` lists every synced domain, sorted by name, including domains not mapped to a company. Use it to check that every registered domain is billed to a client. Each domain includes:
+
+- The mapped company's ID and name, both empty when the domain is unmapped
+- The DNSimple state: `registered`, `hosted` (DNS only, registered elsewhere) or `expired`
+- The expiry date, auto-renew, and whether the domain is ignored on the Company Mapping page
+- The DNSimple account it belongs to (account ID, account email and nickname) and when it last synced
+
+Add `mapped=false` for unmapped domains only, or `mapped=true` for mapped ones. `companyId` returns one company's mapped domains; unmapped domains are never included then. Results come in pages of up to 100 domains (`page`, `limit`).
+
+Create the key under **Settings > Integrations** > **API Access** > **Manage API Keys** with the **Read Domains** (`domains.read`) scope. The user who creates it needs read access to integration settings or to **Integration Company Mapping**. Keys created by company (portal) users are refused, and the endpoint returns `403` until DNSimple is connected. The **API Reference** tab lists every field under **Integrations**.
+
 ### Rotating Your API Token
 
 <Steps>

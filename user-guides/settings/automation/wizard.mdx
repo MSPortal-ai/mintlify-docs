@@ -92,6 +92,7 @@ The **Trigger Configuration** section is below **Basic Information**. Pick an **
 | **DNSimple Domain** | DNSimple domains and their registration and expiration dates |
 | **CIPP finding** | Microsoft 365 findings and SharePoint capacity synced from CIPP |
 | **Onboarding** | Onboarding portal events, tasks, forms, email steps and reports |
+| **Traffic Light** | Traffic Light changes saved for a client. Only tenants in the Traffic Light Review pilot see it |
 
 The entity decides which fields you can use in conditions and as the date field in a **Date Threshold** trigger.
 
@@ -101,6 +102,7 @@ The **Trigger** list depends on the entity.
 
 - **Survey Response** only offers **Survey Response Received**.
 - **Onboarding** only offers **Onboarding Event**.
+- **Traffic Light** (Traffic Light Review pilot tenants only) only offers **Traffic Light Changes**.
 - **CIPP finding** only offers **Scheduled**.
 - All other entities offer **Date Threshold** and **Scheduled**.
 
@@ -114,6 +116,7 @@ The **Trigger** list depends on the entity.
     | **Days** (required) | A number from 0 to 3650 |
     | **Direction** | **Upcoming** acts before the date. **Expired** acts after the date has passed |
     | **Mode** | **Within N days** (**N+ days ago** when **Direction** is **Expired**) matches every record inside the window. **Exactly N days** matches only records that are exactly N days from the date |
+    | **Send time** | **Any time of day** checks about every 24 hours, so matches can go out at any hour. **At a set time** adds a time and timezone; matches found earlier in the day wait until then |
 
     The **Preview** box shows the rule in plain language, for example "Triggers within 30 days before Warranty End Date".
 
@@ -124,10 +127,11 @@ The **Trigger** list depends on the entity.
 
     | Field | What it does |
     |-------|--------------|
-    | **Frequency** | **Every Hour**, **Every 6 Hours**, **Every 12 Hours**, **Daily** or **Weekly** |
-    | **Time** | Time of day to run. Shown for **Daily** and **Weekly** |
+    | **Frequency** | **Every Hour**, **Every 6 Hours**, **Every 12 Hours**, **Daily**, **Weekly** or **Monthly** |
+    | **Time** | Time of day to run. Shown for **Daily**, **Weekly** and **Monthly** |
     | **Day of the week** | Shown for **Weekly**. The default is Monday |
-    | **Timezone** | Timezone for **Time**. Shown for **Daily** and **Weekly**. The default is UTC |
+    | **Day of the month** | Shown for **Monthly**, from 1 to 31. The default is 1. In a month without that day, such as the 31st in April, the rule runs on the month's last day |
+    | **Timezone** | Timezone for **Time**. Shown for **Daily**, **Weekly** and **Monthly**. The default is UTC |
     | **Deduplication** | **Once per entity** skips records the rule already handled on an earlier run. **Every run** acts on every match on every run, which can send repeats |
 
     A line under the fields describes the schedule, for example "Daily at 08:00 (UTC)".
@@ -140,9 +144,24 @@ The **Trigger** list depends on the entity.
   <Tab title="Onboarding Event">
     Acts on events in client onboarding portals. Choose **Onboarding** as the entity.
   </Tab>
+  <Tab title="Traffic Light Changes">
+    Only tenants in the Traffic Light Review pilot have this trigger. Acts each time a Traffic Light change is saved for a client. Choose **Traffic Light** as the entity. See [Traffic Light rules](#traffic-light-rules).
+  </Tab>
 </Tabs>
 
 To act on a group of matches at once instead of one at a time, see [Bundling automation matches](/user-guides/settings/automation/bundling).
+
+### Traffic Light rules
+
+Only tenants in the [Traffic Light Review](/user-guides/msp-tools/traffic-light-review) pilot see the **Traffic Light** entity. Use it to email people when a client's Traffic Light changes.
+
+- The rule acts once for each client every time a change is saved: a new status, a status saved again with new details, or Purple set, updated or cleared. Weekly reviews do not trigger it.
+- A bulk status update acts once for each client it changed, in a single run, so no client is emailed about twice.
+- Add conditions to narrow it. For example, **New Status** equals **Red** with **Change** equals **Status changed** emails only when a client turns Red.
+- Fields you can use: **Client**, **Change**, **New Status**, **Previous Status** (**Not set** for a client's first status), **Purple**, **Note**, **Reason**, **Owner**, **Next Review Date**, **Approved By**, **Changed By** and **Bulk Change**.
+- Use them in the email, for example `{{entity.company_name}} is now {{entity.status}} (was {{entity.previous_status}})`.
+- Traffic Light statuses are internal, so **Send To** offers team members, role members and custom addresses, never client contacts, and **Send Survey** is not available.
+- **Run Test** and **Run Now** are not available: the rule only runs when a change is saved.
 
 ## Conditions (optional)
 
@@ -412,7 +431,7 @@ Click **Execution Log** in the page header to see each run, its status, how many
 |---------|-----------|
 | **Create Rule** shows an error list | Fix each item listed. Common causes are a missing **Rule Name**, no **Date Field**, no action, or **Specific Companies** with no companies picked |
 | An action type is missing | The entity does not support it. **Update Field** and **Set Relative Date** only appear for entities with fields rules may change |
-| The **Trigger** list is short | **Survey Response**, **Onboarding** and **CIPP finding** each support one trigger |
+| The **Trigger** list is short | **Survey Response**, **Onboarding** and **CIPP finding** each support one trigger. So does **Traffic Light**, for Traffic Light Review pilot tenants |
 | A dropdown value is missing in a condition | Finish the related sync (for example your PSA), then reopen the dropdown |
 | **Run Test** shows fewer rows than the match count | The table shows a sample. The line above it says how many rows it shows out of the total |
 | **Run Now** is disabled | Turn the rule on first. You also need the write permission |

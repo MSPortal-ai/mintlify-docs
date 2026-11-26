@@ -30,6 +30,8 @@ Your tenant must be included in the pilot and have **Use Traffic Light Review** 
 
 Every change is kept in the panel's **History**. Technicians see the status and guidance on the company record, on tickets, and in your PSA if PSA banners are on.
 
+Tenants in the Traffic Light Review pilot can also email people when a change is saved. See [Email people when a status changes](#email-people-when-a-status-changes).
+
 <Frame><img src="/images/product/traffic-light-status-desktop-preview.png" alt="Change status dialog with Red selected, accountable owner, approver, reason and technician guidance" width="1280" height="853" /></Frame>
 
 ## Return a customer to Green
@@ -84,6 +86,18 @@ Logging a review keeps the status as it is. Change the status separately when th
 - **Client Health list:** the **Traffic Light** column shows each non-Green customer's status.
 - **PSA:** a Halo PSA pop-up note, an Autotask company alert, or a flagged ConnectWise company note, when PSA banners are on.
 
+## Email people when a status changes
+
+Tenants in the Traffic Light Review pilot can send an email each time a Traffic Light change is saved, with an automation rule:
+
+1. Go to **Settings > Automation** and create a rule.
+2. Choose **Traffic Light** as the entity. The trigger is **Traffic Light Changes**.
+3. Add conditions if you only want some changes, for example **New Status** equals **Red**.
+4. Add a **Send Email** action and pick the recipients: specific team members, members of a team role for that client (such as its account manager), or custom addresses.
+5. Use the client, the new and previous status and the note in the email, for example `{{entity.company_name}} is now {{entity.status}} (was {{entity.previous_status}}): {{entity.note}}`.
+
+A bulk status update emails once for each client it changed. Weekly reviews do not send an email. See [Traffic Light rules](/user-guides/settings/automation/wizard#traffic-light-rules) for every field.
+
 ## FAQs
 
 <AccordionGroup>
@@ -101,6 +115,9 @@ Logging a review keeps the status as it is. Change the status separately when th
   </Accordion>
   <Accordion title="Why don't I see Change status?">
     Changing a status needs Client Health Write permission. Ask your MSP administrator.
+  </Accordion>
+  <Accordion title="Can I get an email when a customer turns Red?">
+    Yes, in tenants in the Traffic Light Review pilot. Create an automation rule on the **Traffic Light** entity with the condition **New Status** equals **Red** and a **Send Email** action. See [Email people when a status changes](#email-people-when-a-status-changes).
   </Accordion>
   <Accordion title="Can company users see the status?">
     No. Traffic Light statuses and guidance are internal to your MSP.

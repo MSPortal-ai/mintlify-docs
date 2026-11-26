@@ -1,0 +1,116 @@
+---
+title: 'Link ConnectWise Ticket Emails to MSPortal'
+description: 'Add a link to ConnectWise ticket emails that opens the same ticket in MSPortal'
+icon: 'envelope-open-text'
+---
+
+ConnectWise PSA emails your clients when a ticket is opened, updated or closed. Add a link to those emails so the recipient can open the same ticket in MSPortal, read its updates and reply there. You add the link in ConnectWise, so MSPortal sends nothing new. This guide is for MSP staff who manage ConnectWise email templates.
+
+## How the link works
+
+Every MSPortal ticket can be opened at this address:
+
+```text
+https://<your portal domain>/tickets?ticket_id=<ticket number>
+```
+
+ConnectWise replaces the `[srnumber]` token with the ticket number when it sends the email. Put the token where the ticket number goes:
+
+```text
+https://app.msportal.ai/tickets?ticket_id=[srnumber]
+```
+
+For ticket 48213, the email contains `https://app.msportal.ai/tickets?ticket_id=48213`. Clicking it opens **Tickets** with ticket 48213 already open.
+
+## Before you start
+
+- [Connect ConnectWise Manage](/user-guides/integrations/enable-connectwise-integration) and sync its tickets to MSPortal. The link opens a ticket only after MSPortal has synced it.
+- You need ConnectWise access to edit service board statuses or the **Email Formats** setup table.
+- Choose the domain for the link. If your clients sign in on your own domain, such as `portal.yourcompany.com`, use it. Otherwise use `app.msportal.ai`. See [Add a custom domain](/user-guides/settings/branding#add-a-custom-domain).
+- Recipients need an MSPortal sign-in. A client contact sees only the tickets your [company roles](/user-guides/getting-started/onboarding/company-roles) allow, such as their own requests or every ticket for their company.
+
+## Add the link to a status email
+
+Status emails go out when a ticket on a board moves into a status. Repeat these steps for each status that emails your clients, such as **New**, **Waiting Customer** and **Closed**.
+
+<Steps>
+  <Step title="Open the board's statuses">
+    In ConnectWise PSA, go to **System > Setup Tables > Service Board**. Open the board, then open its **Statuses** tab.
+  </Step>
+  <Step title="Open the status email">
+    Open a status that emails clients. Under **Email Template Setup**, check that **External Contact Notifications** is selected. Status emails go to the contacts listed in its email notifications, such as **Contact for this item**.
+  </Step>
+  <Step title="Switch the editor to Source">
+    Click **Source** in the email editor's toolbar. Adding the link as HTML keeps `[srnumber]` in the address exactly as typed.
+  </Step>
+  <Step title="Paste the link">
+    Paste this where the link should appear, replacing `app.msportal.ai` with your portal domain if you use one:
+
+    ```html
+    <p>
+      <a href="https://app.msportal.ai/tickets?ticket_id=[srnumber]">View ticket #[srnumber] in the portal</a>
+    </p>
+    ```
+  </Step>
+  <Step title="Save">
+    Click **Save HTML Template**, then **Save and Close** the status.
+  </Step>
+</Steps>
+
+<Tip>
+If you use the ConnectWise email connector, keep the ticket number in the subject in a format it recognizes, such as `Ticket #[srnumber]/`. That format keeps replies threading onto the ticket. The MSPortal link goes in the body and does not change the subject.
+</Tip>
+
+## Add the link for every board
+
+ConnectWise's **Email Formats** setup table holds the default emails used for all boards, such as **Service Email to Customer (Closed Ticket)**.
+
+<Steps>
+  <Step title="Open Email Formats">
+    Go to **System > Setup Tables** and open **Email Formats**.
+  </Step>
+  <Step title="Open the email type">
+    Open the entry for the email you want to change. If it does not exist, click **New** and choose it from **Template Types**.
+  </Step>
+  <Step title="Add the link and save">
+    Paste the same HTML link into the message, then save.
+  </Step>
+</Steps>
+
+## Plain-text emails
+
+A plain-text email cannot show link text. Add the address on its own line, and most email apps make it clickable:
+
+```text
+View this ticket in the portal: https://app.msportal.ai/tickets?ticket_id=[srnumber]
+```
+
+## Test the link
+
+<Steps>
+  <Step title="Send yourself a status email">
+    Create a test ticket on the board with yourself as the contact. Select **Internal Contact Notifications** on the status if your contact belongs to your own company. Move the ticket into the status you edited.
+  </Step>
+  <Step title="Check the address">
+    Hover over the link in the email. The address should end in `ticket_id=` followed by the ticket number, not the text `[srnumber]`.
+  </Step>
+  <Step title="Click the link">
+    **Tickets** opens with the ticket open. If you are signed out, MSPortal asks you to sign in first and then opens the ticket.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| The address contains `[srnumber]`, `%5Bsrnumber%5D` or nothing after `ticket_id=` | The token did not get filled in. Add the link again in **Source** view, and type `[srnumber]` in lowercase with square brackets. |
+| **Tickets** opens, but no ticket is open | MSPortal has not synced the ticket yet, or the recipient's role cannot see it. Wait for the next ticket sync, see [sync schedules](/user-guides/integrations/sync-schedules), then try again. For a client contact, check what their [company role](/user-guides/getting-started/onboarding/company-roles) allows. |
+| The recipient sees an access message | Their role cannot view tickets. Give the role ticket access in [Users & Roles](/user-guides/settings/users-roles). |
+| The recipient is asked to sign in on the wrong domain | Use the domain your clients sign in on in the link, then send a new email. Emails already sent keep the old address. |
+| No email arrives | ConnectWise did not send it. Check the status's email notifications, and check **Notify on Service Status** on the **Owner** tab of ConnectWise's **My Company** screen. |
+
+## Related guides
+
+- [Configure ConnectWise Manage Integration](/user-guides/integrations/enable-connectwise-integration)
+- [Find and follow up on a ticket](/user-guides/ticketing/follow-up-on-a-ticket)
+- [Branding Settings](/user-guides/settings/branding)

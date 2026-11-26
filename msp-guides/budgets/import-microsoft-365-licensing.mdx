@@ -1,0 +1,101 @@
+---
+title: 'Add Microsoft 365 licensing costs to a budget'
+description: 'Match purchased Microsoft 365 seats to MSP catalog pricing and review the resulting budget lines.'
+icon: 'key'
+---
+
+{/* Generated from /user-guides/budgets/import-microsoft-365-licensing.mdx by scripts/sync-msp-guides.py. Edit the source page, then rerun the script. */}
+
+Use **Import > Import Microsoft 365 licensing** to turn a company's purchased Microsoft 365 seats into planned budget lines. You match each license to an MSP product, import the rows, then save the budget. This is a planning task. It does not buy licenses or assign them to users. It is for MSP staff and for company users whose MSP has given them the access below.
+
+## Before you start
+
+- The budget must be Draft or Pending Approval and must belong to a company.
+- The MSP needs an active Microsoft 365 integration with synced license data for that company.
+- Your role needs budget edit access and Microsoft 365 read access (**read_m365** or **manage_m365**). The menu item is missing without them.
+- Your catalog should hold the Microsoft products you sell, with unit prices, billing recurrence and, where possible, the exact Microsoft SKU. See [Create and edit budget products](/msp-guides/budgets/manage-products).
+
+## Match and import licenses
+
+<Steps>
+  <Step title="Open the import">
+    Check the budget's company and currency. Click **Import**, then click **Import Microsoft 365 licensing**. Wait for the licenses to load.
+
+    <img src="/images/product/budget-import-menu.png" alt="Budget Import menu showing Import Microsoft 365 licensing." width="576" height="212" />
+  </Step>
+  <Step title="Read the seat counts">
+    Each row shows the license name, the number of **purchased** seats and the number **assigned**. The budget quantity is the purchased count, including seats nobody uses yet. The summary at the top reads like **3 matched · 2 need a product**.
+  </Step>
+  <Step title="Choose the MSP product">
+    MSPortal suggests a product when a SKU or name matches exactly, ignoring capitalization and extra spaces. For any row that still needs one, click **Choose an MSP product**, search, and pick the product that supplies the license.
+
+    The list offers tenant-wide products and products for this company. Products that belong only to another company are not shown. A row stays unselected until it has a product.
+  </Step>
+  <Step title="Check price and billing">
+    Each row shows the product's unit price, billing cadence and the **Line total** (purchased seats times unit price). A row with a zero price or a one-time cadence shows **Review the zero price or one-time cadence before importing.** Fix the product's price or recurrence in the catalog, or adjust the line after import.
+  </Step>
+  <Step title="Select the rows">
+    Matched rows start checked. Check or clear rows, or click **Select All**. A product already on this budget shows **Already in budget** and cannot be imported again. Review the existing line instead.
+  </Step>
+  <Step title="Import">
+    Click **Import N licenses**. The new lines appear in the editor.
+  </Step>
+  <Step title="Adjust and save">
+    The new lines start in January with **Pending** status and use the budget currency without conversion. Set the right **Start month**, check the category and notes, then click **Save**. Open **Monthly Breakdown** to check the schedule.
+  </Step>
+</Steps>
+
+## How license values become budget lines
+
+| Source | Budget line |
+| --- | --- |
+| Purchased seats | Quantity |
+| MSP product name | Description |
+| MSP product unit price | Unit price |
+| MSP product default recurrence | Recurrence, such as One-time, Monthly, Quarterly, Annual or Custom |
+| MSP product category | The budget category with the same name, if one exists |
+| MSP product description | Line notes |
+
+The line also links to the product, so the same product cannot be added twice.
+
+If a company has more than one Microsoft connection, licenses with the same SKU combine into one row with the total purchased seats. Rows with no purchased seats are left out. So are free, trial and similar non-commercial licenses.
+
+The import is a snapshot. Later seat or price changes do not update a saved budget. Setup fees are not added by this import. Add them as separate lines.
+
+## Troubleshooting
+
+| Problem | What to do |
+| --- | --- |
+| **Import Microsoft 365 licensing** is missing | Check that the Microsoft 365 integration is active and that your role has Microsoft 365 read access. |
+| **Import** is unavailable | The budget has no company, or it is locked. |
+| **No Microsoft 365 licenses with purchased seats were found for this company.** | Check the company, the license sync and the purchased counts. Free and trial licenses are not listed. |
+| A row says **Choose the product that supplies this license.** | Pick a catalog product, or add one first. |
+| A product is missing from the picker | It may belong only to another company, already be on this budget, or already be chosen for another row. Try the search box. |
+| **Already in budget** | Edit the existing line. This import does not update it. |
+| **Failed to load Microsoft 365 licensing.** | Check the integration with your MSP admin and try again. |
+
+## Frequently asked questions
+
+<AccordionGroup>
+  <Accordion title="Does this use purchased or assigned seats?">
+    Purchased seats. Seats nobody has been assigned still cost money.
+  </Accordion>
+  <Accordion title="Where does the price come from?">
+    From the matched MSP product. The Microsoft license data supplies only the seat count.
+  </Accordion>
+  <Accordion title="Why are some licenses missing?">
+    Licenses with no purchased seats, and free or trial-only licenses, are left out.
+  </Accordion>
+  <Accordion title="Will the budget follow later seat changes?">
+    No. The import is a snapshot. Edit the budget when seats or prices change.
+  </Accordion>
+  <Accordion title="Does importing assign users or order seats?">
+    No. It only adds proposed budget lines.
+  </Accordion>
+</AccordionGroup>
+
+## Related guides
+
+- [Read cloud license usage](/msp-guides/cloud/licenses)
+- [Add and edit budget line items](/msp-guides/budgets/edit-line-items)
+- [Create and edit budget products](/msp-guides/budgets/manage-products)
