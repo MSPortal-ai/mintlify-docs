@@ -3690,6 +3690,74 @@
           "lastActivityAt"
         ]
       },
+      "CompanyLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "companyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "psaProvider": {
+            "type": "string",
+            "nullable": true,
+            "description": "PSA the location was imported from; null when added in MSPortal"
+          },
+          "psaSiteId": {
+            "type": "string",
+            "nullable": true,
+            "description": "That PSA's site id"
+          }
+        },
+        "required": [
+          "id",
+          "companyId",
+          "name",
+          "address",
+          "city",
+          "state",
+          "postalCode",
+          "country",
+          "phone",
+          "email",
+          "psaProvider",
+          "psaSiteId"
+        ]
+      },
       "CompanyUser": {
         "type": "object",
         "properties": {
@@ -40483,6 +40551,96 @@
           },
           "403": {
             "description": "Forbidden - missing scope (companies.write), the linked user lacks write_settings_companies, or a company user addressed another company",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/companies/{id}/locations": {
+      "get": {
+        "summary": "List company locations",
+        "description": "One company's Working Location list: the locations its ticket forms' Location field offers, one per name and city, ordered by name, with the PSA site each was imported from. Requires `companies.read` and read_settings_companies.",
+        "tags": [
+          "Companies"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Company ID"
+            },
+            "required": true,
+            "description": "Company ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Working Location list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CompanyLocation"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (companies.read), the linked user lacks read_settings_companies, or a company user addressed another company",
             "content": {
               "application/json": {
                 "schema": {
