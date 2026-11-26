@@ -40,9 +40,9 @@ Use **Cloud > Domains** to see the domains synced from Microsoft 365, Google Wor
   </Step>
 </Steps>
 
-The same domain name can appear more than once. A Microsoft row describes the Microsoft 365 tenant, and a DNSimple row describes the registrar record. Compare **Provider** and **Company** before you treat two rows as duplicates.
+Each domain appears once per company. When Microsoft 365, Google Workspace, and DNSimple list the same name, its row shows a tag for each one under **Provider**. Hover over or focus a tag to see that provider's own record: the name as the provider writes it, whether it marks the domain primary or verified, and when it last synced. Names match regardless of letter case or a trailing dot, and the row shows the name in lower case. The same name under two companies stays two rows.
 
-Company users see DNSimple rows labeled **Managed by** followed by their MSP name.
+Company users see the DNSimple tag labeled **Managed by** followed by their MSP name.
 
 ## Show more columns
 
@@ -62,23 +62,23 @@ Company users see DNSimple rows labeled **Managed by** followed by their MSP nam
 
 | Column | What it shows |
 | --- | --- |
-| **Domain** | The domain name. A star marks a cloud primary domain. A **Secondary** badge marks a DNSimple domain that is not in any synced Microsoft 365 or Google Workspace tenant. |
+| **Domain** | The domain name. A star marks a domain that Microsoft 365 or Google Workspace marks as primary. A **Secondary** badge marks a domain that only DNSimple lists and that is not in any synced Microsoft 365 or Google Workspace tenant. |
 | **Email security** | The latest email security result, with **SPF**, **DMARC** and **DKIM** badges. Click the status to open the details. A dash means the domain is not in the company's domain inventory. Shown only when email domain security checks are on. |
 | **Problems** | What to fix, most serious first, such as **No DMARC record**. Shown with **Email security**. |
-| **Provider** and **Company** | The source and the mapped company. **Provider** appears only when your scope has more than one provider. |
-| **Verification** | **Verified** or **Unverified**. |
-| **Services** | The services Microsoft reports for the domain. Google and DNSimple rows show a dash. |
-| **Authentication** | The Microsoft authentication type, such as Managed or Federated. Other providers show a dash. |
-| **Expires** | The DNSimple expiry date. Microsoft and Google rows show a dash. |
+| **Provider** and **Company** | A tag for each provider that lists the domain, and the mapped company. **Provider** appears only when your scope has more than one provider. |
+| **Verification** | **Verified** when Microsoft 365 or Google Workspace verified the domain, otherwise **Unverified**. |
+| **Services** | The services Microsoft reports for the domain. A dash when Microsoft 365 does not list it. |
+| **Authentication** | The Microsoft authentication type, such as Managed or Federated. A dash when Microsoft 365 does not list it. |
+| **Expires** | The DNSimple expiry date. A dash when DNSimple does not list the domain. |
 | **Primary** | Hidden by default. **Primary** or **Secondary** for the domain's role in its cloud tenant. |
 | **Cloud presence** | Hidden by default. **In cloud tenant** or **Secondary domain**. |
-| **Auto-renew** | Hidden by default. **On** or **Off** for DNSimple domains. |
+| **Auto-renew** | Hidden by default. **On** or **Off** from DNSimple. |
 | **Registrar status** | Hidden by default. The DNSimple state of the domain. |
-| **Aliases** | Hidden by default. Google domain aliases. Microsoft and DNSimple rows show a dash. |
-| **Created** | Hidden by default. When the domain was created or registered. |
+| **Aliases** | Hidden by default. Google domain aliases. A dash when Google Workspace does not list the domain. |
+| **Created** | Hidden by default. The earliest date any provider gives for creating or registering the domain. |
 
 <Note>
-DNSimple does not report a verification flag, so every DNSimple row shows **Unverified**. That label does not mean the domain failed verification. Check the matching Microsoft 365 or Google Workspace row for the real verification state.
+DNSimple does not report a verification flag, so a domain that only DNSimple lists shows **Unverified**. That label does not mean the domain failed verification. When Microsoft 365 or Google Workspace also lists the domain, the row shows their verification state.
 </Note>
 
 ## Check email security
@@ -118,12 +118,12 @@ Cloud > Domains shows the same email security results as [Documentation > Domain
 ## Tell the two kinds of Secondary apart
 
 - **Primary = Secondary** means the domain is not the primary domain in its cloud tenant. It is still a normal domain in Microsoft 365 or Google Workspace.
-- **Cloud presence = Secondary domain** means a DNSimple domain has no matching name in any synced Microsoft 365 or Google Workspace tenant under your MSP. The same name also gets a **Secondary** badge next to it.
+- **Cloud presence = Secondary domain** means only DNSimple lists the domain, and no synced Microsoft 365 or Google Workspace tenant under your MSP has that name. The same name also gets a **Secondary** badge next to it.
 - **In cloud tenant** means the name was found in some Microsoft 365 or Google Workspace tenant under your MSP. It can be a different company's tenant.
 
 ## Summary counts and filters
 
-The summary counts follow the company selector and the **Provider** filter. They do not follow the **Domain**, **Verification**, **Primary**, **Cloud presence**, or **Authentication** filters. The table can be empty while the summary still shows domains. The summary counts rows, not unique domain names.
+The summary counts follow the company selector and the **Provider** filter. They do not follow the **Domain**, **Verification**, **Primary**, **Cloud presence**, or **Authentication** filters. The table can be empty while the summary still shows domains. Each domain counts once per company, however many providers list it. With the **Provider** filter set, a domain counts when any of its providers matches.
 
 ## Troubleshooting
 
@@ -146,11 +146,11 @@ The summary counts follow the company selector and the **Provider** filter. They
   <Accordion title="Can I add, verify, renew, or delete a domain here?">
     No. Domain records are read only here. Make domain changes in the provider, then wait for the next sync. The only actions are rechecking email security and creating Planner items.
   </Accordion>
-  <Accordion title="Why does the same domain appear twice?">
-    Each provider and each company mapping creates its own row. Compare **Provider** and **Company**.
+  <Accordion title="Why does one domain show several providers?">
+    Each provider that lists the domain adds a tag to its row. Hover over a tag to see what that provider reports. The same name under two companies is two rows, so compare **Company**.
   </Accordion>
-  <Accordion title="Does Unverified on a DNSimple row mean my email is broken?">
-    No. DNSimple rows always show **Unverified** because DNSimple does not report that flag.
+  <Accordion title="Does Unverified on a DNSimple-only domain mean my email is broken?">
+    No. A domain that only DNSimple lists shows **Unverified** because DNSimple does not report that flag.
   </Accordion>
   <Accordion title="Why do the summary counts not change when I filter by Verification?">
     The summary follows only the company selector and the **Provider** filter.
