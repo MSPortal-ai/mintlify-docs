@@ -1,10 +1,10 @@
 ---
-title: 'Show PSA fields on tickets'
+title: 'Show Change Management and Custom Fields on tickets'
 description: 'Show Autotask Change Management fields, such as the rollback plan, and ticket UDFs in ticket details, the change approval panel and change approval emails.'
 icon: 'clipboard-list'
 ---
 
-Your PSA holds ticket fields that MSPortal's ticket details do not show by default: ticket UDFs (user-defined fields) and, in Autotask, the Change Management fields of Change Request tickets. MSPortal shows them in a **PSA fields** section of the ticket. For a change record this puts the impact analysis, implementation plan, rollback plan and approval status in front of the people who review and approve the change.
+Your PSA holds ticket fields that MSPortal's ticket details do not show by default: ticket UDFs (user-defined fields) and, in Autotask, the Change Management fields of Change Request tickets. MSPortal shows them in two sections of the ticket: **Change Management Fields** and **Custom Fields**. Nothing shows until a display group ticks a field, so tickets look the same as before until you set this up. For a change record this puts the impact analysis, implementation plan, rollback plan and approval status in front of the people who review and approve the change.
 
 **Audience:** MSP staff who manage ticket settings or the Autotask integration.
 
@@ -12,11 +12,11 @@ Your PSA holds ticket fields that MSPortal's ticket details do not show by defau
 
 | Viewer | Sees |
 |---|---|
-| MSP staff who can open the ticket | Every PSA field the ticket has a value for |
+| MSP staff who can open the ticket | The fields any display group ticks |
 | Client users who can open the ticket | The fields their role's [display group](/user-guides/settings/tickets#create-a-display-group-for-a-role) ticks, and none without a display group |
 | Change approval email recipients | The fields their own role can see |
 
-Client users see fields only on tickets they can already open, so the role's ticket visibility, such as **Own Tickets Only**, still applies. Empty fields are left out.
+Every field starts unticked in every display group. Client users see fields only on tickets they can already open, so the role's ticket visibility, such as **Own Tickets Only**, still applies. Empty fields are left out.
 
 ## Name the Change Info Fields
 
@@ -42,11 +42,11 @@ Autotask's API sends Change Info Fields 1 to 5 without the names you gave them i
   <img src="/images/product/settings-integrations-autotask-change-info-field-names-desktop.png" alt="Change Info Field names section with Change Info Field 1 named Impact Analysis and Change Info Field 3 named Rollback Plan" width="2880" height="1920" />
 </Frame>
 
-## Show fields to a client role
+## Choose the fields to show
 
 <Steps>
   <Step title="Open the display group">
-    Go to **Settings > Tickets > Display Groups** and edit the group assigned to the client role, or create one.
+    Go to **Settings > Tickets > Display Groups** and edit the group assigned to the client role, or create one. Staff see every field any group ticks, so to show a field to staff only, tick it in a group with no client roles.
   </Step>
   <Step title="Tick Change Management Fields">
     Under **Field Visibility**, open **Change Management Fields (only shown on Change Request tickets)**. It lists Autotask's **Change Approval Status**, **Change Approval Type**, **Change Approval Board** and the five Change Info Fields, with the names you gave them. These fields show only on Change Request tickets.
@@ -65,16 +65,16 @@ Autotask's API sends Change Info Fields 1 to 5 without the names you gave them i
 
 ## Where the fields show
 
-- **Ticket details.** The **PSA fields** section sits under the ticket's details. Picklists show their names, such as **Approved** or the name of your change approval board. Long text keeps its line breaks and folds after six lines; **Show More** opens the rest.
-- **Change approval panel.** When a ticket has a change request, its **Change record** sits above the approver's decision.
+- **Ticket details.** **Change Management Fields** and **Custom Fields** sit under the ticket's details, each in its own section. Picklists show their names, such as **Approved** or the name of your change approval board. Long text keeps its line breaks and folds after six lines; **Show More** opens the rest.
+- **Change approval panel.** When a ticket has a change request, the same two sections sit above the approver's decision.
 - **Change approval email.** The email asking someone to approve a change lists their fields under **Change details**. In a custom **Change Approval Request** email template, add the `{{psa_fields}}` variable where the list should go.
 
-<Frame caption="A Change Request ticket's PSA fields, as staff see them.">
-  <img src="/images/product/ticket-details-psa-fields-desktop.png" alt="PSA fields section in ticket details showing Change Approval Status Approved, the approval board, Impact Analysis, Implementation Plan, Rollback Plan with Show More, Review Notes and an Impact UDF" width="2880" height="1920" />
+<Frame caption="A Change Request ticket's Change Management Fields and Custom Fields, as staff see them.">
+  <img src="/images/product/ticket-details-psa-fields-desktop.png" alt="Change Management Fields section in ticket details showing Change Approval Status Approved, the approval board, Impact Analysis, Implementation Plan, Rollback Plan with Show More and Review Notes, and a Custom Fields section with an Impact UDF" width="2880" height="1920" />
 </Frame>
 
 <Frame caption="The change approval panel on a phone, as a client approver sees it.">
-  <img src="/images/product/ticket-change-approval-psa-fields-mobile.png" alt="Change Approval panel on a phone with a Change record block listing approval status, board, Impact Analysis, Implementation Plan and Rollback Plan above the Approve and Reject buttons" width="780" height="2392" />
+  <img src="/images/product/ticket-change-approval-psa-fields-mobile.png" alt="Change Approval panel on a phone with a Change Management Fields block listing approval status, board, Impact Analysis, Implementation Plan and Rollback Plan above the Approve and Reject buttons" width="780" height="2392" />
 </Frame>
 
 ## Halo PSA
