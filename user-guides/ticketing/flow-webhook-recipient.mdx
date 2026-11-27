@@ -44,6 +44,10 @@ This guide is for MSP staff whose role can write or manage ticket settings.
     Enter a random string in **Shared secret (optional)**. Every request then carries an `X-MSPortal-Signature` header your flow can verify. Leave it blank to skip signing. Do not put secrets in the URL.
   </Step>
 
+  <Step title="Add failure alert emails (optional)">
+    Type an address into **Failure alert emails** and press Enter, up to five. If a request is still not delivered after its last attempt, each address gets an email naming the form, the company and the submission ID. See [Failure alerts](#failure-alerts).
+  </Step>
+
   <Step title="Send a test event">
     Click **Send test event**. MSPortal posts a `ticket.test` request using your template's field keys with sample values. The company and contact IDs in a test are samples too (`TEST-COMPANY`, `TEST-CONTACT`), so no real client is named. A message such as "Test sent (HTTP 200). Check your Flow run history." confirms delivery. The test does not save the template, and your receiving flow can still take real actions.
   </Step>
@@ -187,6 +191,17 @@ MSPortal sends each request once while the person submits. If that attempt fails
 - **Same request every time:** each attempt sends the identical body, with the same `request_id` and `X-MSPortal-Request-Id`, and the same signature. `X-MSPortal-Delivery-Attempt` counts the attempts. If your workflow processed an attempt that MSPortal timed out on, the repeat carries a `request_id` you have already seen, so store that ID and skip a request you have handled.
 - **Current settings:** a retry goes to the form's webhook as it is saved at that moment. Fix a wrong URL and save, and the waiting requests reach the corrected URL. Turn the webhook off and a waiting request is treated as failed at its next attempt.
 - **When every attempt fails:** a request whose only destination was the webhook (**Webhook only**, or no PSA connected) is emailed to your fallback inbox, the same inbox used when PSA ticket creation fails. A request that also created a PSA ticket is not emailed, because the ticket holds it.
+
+### Failure alerts
+
+When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails the template's **Failure alert emails**, if any are set. The alert goes out once per request and does not include the submitted answers. It lists:
+
+- the form, and the branch if a branch was submitted;
+- the company and the person who submitted it;
+- the submission ID, which is the payload's `request_id` and the `X-MSPortal-Request-Id` header, so you can find the request in your workflow's run history and in [Submissions](#list-and-export-submissions);
+- when it was submitted, how many attempts were made, and the last error.
+
+The alert is sent whether or not the request is also emailed to your fallback inbox, so it covers **Create PSA ticket + webhook** templates too. A branch without its own webhook uses the main template's alert addresses. Requests from the demo company are not alerted.
 
 The requester is not asked to do anything while MSPortal retries. Do not submit the same real request again after a timeout: check [Submissions](#list-and-export-submissions) first.
 
