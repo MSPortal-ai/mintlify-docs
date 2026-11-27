@@ -55,6 +55,8 @@ MSPortal checks once a day. An agreement is queued when it is active in the PSA 
 | **Renewal** | The agreement has an end date that falls inside the lead window. |
 | **Annual review** | The agreement has no end date, and the next anniversary of its start date falls inside the lead window. |
 
+A renewal whose end date passed in the last 30 days is queued too, as overdue, while the agreement is still active in the PSA. That covers an agreement that ended just before you turned contract review on. A one-time agreement (one the PSA bills once) gets no annual review.
+
 An agreement the PSA marks as open-ended counts as having no end date, even when it still carries an old end date. So does an agreement whose end date is ten or more years away, such as the 12/31/2099 date HaloPSA gives an agreement with no end date: it gets an annual review, and the page shows it with no end date.
 
 Each agreement has one open review at a time. When you close a review, it moves to **Closed** and stays there as history. Next year's review is a new one.
@@ -128,6 +130,9 @@ If someone else changes a review while you have it open, your change is not save
   <Step title="Choose the contacts under To">
     The list holds the company's contacts that have an email address. Each contact gets their own email, so the greeting uses their name. The emails go out together: all of them, or none if the send fails.
   </Step>
+  <Step title="Add a Message, if you want">
+    Write anything for this client only, such as their new price. It appears where the template has the `{{message}}` block, as **Default Contract Review** does. Leave it empty to send the template as it is.
+  </Step>
   <Step title="Untick any Standards you do not want to mention">
     See [Raise missing Standards](#raise-missing-standards).
   </Step>
@@ -154,6 +159,8 @@ A **Contract Review** template can use these variables:
 | `{{agreement_name}}` | The agreement. |
 | `{{agreement_start_date}}`, `{{agreement_end_date}}` | The agreement's dates. The end date is empty for an open-ended agreement. |
 | `{{review_date}}` | The end date, or the anniversary under review. |
+| `{{agreement_billing}}` | What the agreement bills now in the PSA, such as "1,500.00 · Monthly". Empty when the PSA has no amount. |
+| `{{message}}` | The message you wrote in the dialog. Empty when you wrote none. |
 | `{{qualifying_standards}}` | A line and a list of the missing Standards you left ticked. Empty when there are none. |
 | `{{sender_name}}`, `{{sender_company}}` | You and your MSP. |
 | `{{today}}`, `{{portal_name}}`, `{{company_logo_url}}` | The date, your portal name and your logo. |
