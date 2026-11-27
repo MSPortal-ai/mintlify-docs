@@ -44,10 +44,6 @@ This guide is for MSP staff whose role can write or manage ticket settings.
     Enter a random string in **Shared secret (optional)**. Every request then carries an `X-MSPortal-Signature` header your flow can verify. Leave it blank to skip signing. Do not put secrets in the URL.
   </Step>
 
-  <Step title="Add failure alert emails (optional)">
-    Type an address into **Failure alert emails** and press Enter, up to five. If a request is still not delivered after its last attempt, each address gets an email naming the form, the company and the submission ID. See [Failure alerts](#failure-alerts).
-  </Step>
-
   <Step title="Send a test event">
     Click **Send test event**. MSPortal posts a `ticket.test` request using your template's field keys with sample values. The company and contact IDs in a test are samples too (`TEST-COMPANY`, `TEST-CONTACT`), so no real client is named. A message such as "Test sent (HTTP 200). Check your Flow run history." confirms delivery. The test does not save the template, and your receiving flow can still take real actions.
   </Step>
@@ -194,7 +190,7 @@ MSPortal sends each request once while the person submits. If that attempt fails
 
 ### Failure alerts
 
-When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails the template's **Failure alert emails**, if any are set. The alert goes out once each time MSPortal gives up on a request, and does not include the submitted answers. It lists:
+When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails your **Webhook failure alert emails**, if any are set. Set them once for every template in **Settings > Tickets**: type an address and press Enter, up to five. Each one saves as you add or remove it. The alert goes out once each time MSPortal gives up on a request, and does not include the submitted answers. It lists:
 
 - the form, and the branch if a branch was submitted;
 - the company and the person who submitted it;
@@ -203,7 +199,7 @@ When a request will not be retried again, because every attempt failed or the wo
 
 The alert never quotes your workflow's response, because a response can repeat submitted answers. The full response is saved with the request in [Submissions](#list-and-export-submissions).
 
-The alert is sent whether or not the request is also emailed to your fallback inbox, so it covers **Create PSA ticket + webhook** templates too. A branch without its own webhook uses the main template's alert addresses. Requests from the demo company are not alerted.
+The alert is sent whether or not the request is also emailed to your fallback inbox, so it covers **Create PSA ticket + webhook** templates too. Requests from the demo company are not alerted.
 
 The requester is not asked to do anything while MSPortal retries. Do not submit the same real request again after a timeout: check [Submissions](#list-and-export-submissions) first.
 
