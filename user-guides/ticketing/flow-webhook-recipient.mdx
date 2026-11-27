@@ -188,6 +188,19 @@ MSPortal sends each request once while the person submits. If that attempt fails
 - **Current settings:** a retry goes to the form's webhook as it is saved at that moment. Fix a wrong URL and save, and the waiting requests reach the corrected URL. Turn the webhook off and a waiting request is treated as failed at its next attempt.
 - **When every attempt fails:** a request whose only destination was the webhook (**Webhook only**, or no PSA connected) is emailed to your fallback inbox, the same inbox used when PSA ticket creation fails. A request that also created a PSA ticket is not emailed, because the ticket holds it.
 
+### Failure alerts
+
+When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails your **Webhook failure alert emails**, if any are set. Set them once for every template in **Settings > Tickets**: type an address and press Enter, up to five. Each one saves as you add or remove it. The alert goes out once each time MSPortal gives up on a request, and does not include the submitted answers. It lists:
+
+- the form, and the branch if a branch was submitted;
+- the company and the person who submitted it;
+- the submission ID, which is the payload's `request_id` and the `X-MSPortal-Request-Id` header, so you can find the request in your workflow's run history and in [Submissions](#list-and-export-submissions);
+- when it was submitted, how many attempts were made, and why it failed, such as the HTTP status your workflow answered with.
+
+The alert never quotes your workflow's response, because a response can repeat submitted answers. The full response is saved with the request in [Submissions](#list-and-export-submissions).
+
+The alert is sent whether or not the request is also emailed to your fallback inbox, so it covers **Create PSA ticket + webhook** templates too. Requests from the demo company are not alerted.
+
 The requester is not asked to do anything while MSPortal retries. Do not submit the same real request again after a timeout: check [Submissions](#list-and-export-submissions) first.
 
 ### Resend a failed request
