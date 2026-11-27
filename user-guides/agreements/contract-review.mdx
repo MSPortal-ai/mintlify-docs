@@ -16,7 +16,7 @@ This guide is for MSP staff. Company users never see the tab.
 ## Before you start
 
 - MSPortal turns **Contract review** on for your MSP. Until then the tab does not appear.
-- You need **read agreements** and the **Agreements: Contract review** permission. **Read** opens the queue. **Manage** also lets you assign and update reviews, email clients, and change the settings. No role has the permission at first, so a Primary Admin grants it in **Settings > Users & Roles**. See [Users and roles](/user-guides/settings/users-roles).
+- You need **read agreements** and the **Agreements: Contract review** permission. **Read** opens the queue and shows the review settings. **Manage** also lets you assign and update reviews, email clients, and change the settings. No role has the permission at first, so a Primary Admin grants it in **Settings > Users & Roles**. See [Users and roles](/user-guides/settings/users-roles).
 - Agreements come from your PSA. Contract review reads them and never changes the PSA.
 
 ## Set up the queue
@@ -25,24 +25,39 @@ Nothing is queued until someone with **Manage** saves the settings once.
 
 <Steps>
   <Step title="Open Review settings">
-    Click **Agreements**, then the **Review settings** tab.
+    Click **Agreements**, then the **Contract review** tab, then the **Review settings** button in the toolbar above the list. The settings open in a panel on the right. Until the queue is set up, the empty list has a **Review settings** button too.
   </Step>
-  <Step title="Set the Lead window (days)">
+  <Step title="Set the Lead window">
     An agreement enters the queue this many days before its end date. An agreement with no end date enters the same number of days before each anniversary of its start date. The default is 90. Use 1 to 365.
   </Step>
-  <Step title="Pick the Contract reviewer">
-    This person is told about every agreement that enters the queue. Only people with **Manage** on Contract review are listed, because the reviewer assigns reviews. You can leave it empty.
+  <Step title="Choose the Contract reviewer">
+    The contract reviewer is who MSPortal tells when agreements enter the queue. Pick one of:
+    - **Team role at each company**, then the **Team role** your MSP uses for this, such as an account manager or vCIO role. For each agreement, whoever holds that role on the company's **Team** tab is told, so each company gets its own person. Optionally pick a **Fallback person**, who is told about a company's agreements when nobody there holds the role.
+    - **One person**, then the **Person**. They are told about every agreement, whatever the company.
+    - **Nobody**. Nobody is told. Agreements still enter the queue.
+
+    A first setup starts on **Team role at each company**, so you choose who is told before you save. Switching from **One person** to a team role keeps that person as the **Fallback person**.
+
+    Only people with **Manage** on Contract review are told, because the notice asks them to assign the review. Team roles are set up in **Settings > Users & Roles > Team Roles**.
   </Step>
   <Step title="Click Save">
-    Agreements already inside the window are queued straight away, and the message tells you how many.
+    Agreements already inside the window are queued straight away, and the message tells you how many. The panel closes.
   </Step>
 </Steps>
 
-<Frame caption="Branch preview: the Review settings tab, with sample data.">
-  <img src="/images/product/agreements-contract-review-settings.png"
-    alt="Review settings tab showing the Lead window field set to 90 days and the Contract reviewer picker"
+<Frame caption="Branch preview: the Review settings button on the Contract review list, with sample data.">
+  <img src="/images/product/agreements-contract-review-settings-button.png"
+    alt="Contract review list with the Review settings button in the toolbar above the table"
     width="1440" height="960" />
 </Frame>
+
+<Frame caption="Branch preview: Review settings with a team role as the Contract reviewer, with sample data.">
+  <img src="/images/product/agreements-contract-review-settings.png"
+    alt="Review settings panel with the Lead window set to 90 days, Contract reviewer set to Team role at each company, the vCIO team role and a fallback person chosen"
+    width="1440" height="960" />
+</Frame>
+
+Without **Manage**, you can open the panel and read the settings, but not change them. If you close the panel with changes you have not saved, MSPortal asks before it discards them.
 
 Reviews already in the queue stay there if you make the window shorter.
 
@@ -63,12 +78,15 @@ Each agreement has one open review at a time. When you close a review, it moves 
 
 ## Who is notified
 
-When agreements enter the queue, MSPortal sends one email and one in-app notification to:
+When agreements enter the queue, MSPortal sends one email and one in-app notification to the **Contract reviewer** from Review settings:
 
-- the company's **account manager**: whoever holds the role mapped to your PSA's account manager, or a role named **Account Manager**, on the company's **Team** tab, and
-- the **Contract reviewer** from Review settings.
+- with **Team role at each company**: whoever holds the chosen role on the agreement's company **Team** tab. When nobody there holds it, or nobody who holds it has **Manage** on Contract review, the **Fallback person** is told instead. With no fallback person, nobody is told about that company's agreement yet: it waits in the queue, and MSPortal tells whoever is given the role there later.
+- with **One person**: that person, for every agreement.
 
-Only people with the **Manage** permission for Contract review are notified, because the notice asks them to assign the review. An account manager with read access only sees the queue but gets no notice. Someone with several agreements gets one message listing them all. A review that someone assigns before the daily check is still announced. Agreements of the demo company are queued but never announced.
+If the chosen team role is deleted later, the **Fallback person** is told about every agreement until someone picks a new role, and **Review settings** says the role was deleted.
+- with **Nobody**: nobody. The queue still fills.
+
+Only people with the **Manage** permission for Contract review are notified, because the notice asks them to assign the review. Someone with read access only sees the queue but gets no notice. Someone with several agreements gets one message listing them all. A review that someone assigns before the daily check is still announced. Agreements of the demo company are queued but never announced.
 
 MSPortal never emails a client contact by itself. Only a person sends the client email, from a review.
 
@@ -191,10 +209,12 @@ In a review, **Standards to raise** lists every marked standard that applies to 
 | Problem | What to check |
 | --- | --- |
 | No **Contract review** tab | MSPortal has not turned it on for your MSP, or your role lacks **read agreements** or the **Agreements: Contract review** permission. |
-| The queue says it is not set up | Save **Review settings** once. |
+| The queue says it is not set up | Click **Review settings** above the list and save the settings once. |
+| No **Review settings** tab | Review settings are a button in the toolbar of the **Contract review** tab, not a tab. Old links to the settings open that panel. |
 | An agreement is missing from the queue | It must be active in the PSA, and its end date or anniversary must be inside the lead window. The queue updates once a day and when settings are saved. An agreement with an open review does not get a second one. |
-| An account manager was not notified | They need the **Manage** permission for Contract review, and the account manager role on the company's **Team** tab. Reviews queued before they had both are not announced later; they are in the queue. |
-| A person is missing from **Assignee** or **Contract reviewer** | Only active staff with **Manage** on Contract review are listed. |
+| A person is missing from **Assignee** or **Person** | Only active staff with **Manage** on Contract review are listed. |
+| Someone in the reviewer role was not notified | They need **Manage** on Contract review and the chosen role on that company's **Team** tab. When nobody there qualifies, the **Fallback person** is told instead. Reviews already announced are not announced again; they are in the queue. |
+| **Team role** has nothing to choose | Your MSP has no team roles yet. Add them in **Settings > Users & Roles > Team Roles**. |
 | **Standards to raise** is empty | No standard is marked, or the company has them all. A standard outside the company's plan or applicability rules is not listed. |
 | No contacts under **To** | The company has no contacts with an email address. |
 
