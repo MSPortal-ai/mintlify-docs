@@ -111,7 +111,7 @@ Save the template and submit a real request with the inspector URL still in plac
 
     A schema generated from one sample accepts only that sample's types, and some properties change type between requests. Before you rely on the schema, edit it so these allow both:
 
-    - `company.id`, `company.external_id` and `contact.external_id`: text or `null`.
+    - `company.id`, `company.external_id`, `company.time_zone` and `contact.external_id`: text or `null`.
     - `contact.impersonated_by`: `null`, or an object with `name` and `email`.
     - Every key under `fields` that is optional on the form: its type or `null`.
 
@@ -190,6 +190,15 @@ MSPortal sends each request once while the person submits. If that attempt fails
 
 The requester is not asked to do anything while MSPortal retries. Do not submit the same real request again after a timeout: check [Submissions](#list-and-export-submissions) first.
 
+### Resend a failed request
+
+When every attempt failed, for example because your workflow was down longer than the retries last, you can send the request again instead of asking the client to submit it again. Resending is available through the [MCP server](/user-guides/mcp-server/tools-reference#ticket-templates) (`list_flow_webhook_deliveries`, then `resend_flow_webhook_delivery`) and the public API (`GET /api/public/v1/ticket-templates/{id}/deliveries`, then `POST /api/public/v1/ticket-templates/deliveries/{id}/resend`). Both need Settings > Tickets Write.
+
+- **What is sent:** the identical body, with the same `request_id`. The request goes to the form's webhook as it is saved now, so fix the URL or the workflow first.
+- **Retries:** a resent request gets a fresh set of the [attempts above](#retries) and shows **Retrying** in **Submissions** until it is delivered or fails again.
+- **Fallback email:** a request that was already emailed to your fallback inbox is not emailed again. One that could not be emailed is tried again if the resend fails.
+- **How long:** a failed request can be resent for 30 days after it was submitted. A request that reached nobody (no PSA ticket, and the fallback email could not be sent) stays available for longer. Delivered requests cannot be resent.
+
 ## The JSON payload
 
 <AccordionGroup>
@@ -203,7 +212,7 @@ The requester is not asked to do anything while MSPortal retries. Do not submit 
       "template": { "id": "...", "name": "...", "key": "..." },
       "ticket":   { "id": ..., "number": "...", "summary": "...", "description": "...",
                     "external_url": "...", "board": "...", "status": "...", "priority": "..." },
-      "company":  { "id": "...", "name": "...", "external_id": "..." },
+      "company":  { "id": "...", "name": "...", "external_id": "...", "time_zone": "America/New_York" },
       "contact":  { "name": "...", "email": "...", "external_id": "...", "user_type": "company",
                     "impersonated_by": null },
       "fields":   { "<your_field_key>": ..., "<your_field_key>": ... }
@@ -221,6 +230,7 @@ The requester is not asked to do anything while MSPortal retries. Do not submit 
     | `company.id` | MSPortal's ID for the client company. |
     | `company.name` | The client company's name in MSPortal. |
     | `company.external_id` | The client's company ID in your PSA (ConnectWise, Autotask or HaloPSA), as text. |
+    | `company.time_zone` | The company's default time zone, as an IANA name such as `America/New_York`. `null` when none is set. Set it under **Settings > Companies**, the company, **Defaults** tab, **Default Time Zone**. |
 
     `company.external_id` is filled whenever the client company is linked to a company in the PSA you selected for tickets. It is the same on a main form and on its branches, in both delivery modes, and for requests made by client contacts and by your staff on a client's behalf. It is `null` when:
 
