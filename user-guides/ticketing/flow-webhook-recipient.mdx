@@ -194,12 +194,14 @@ MSPortal sends each request once while the person submits. If that attempt fails
 
 ### Failure alerts
 
-When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails the template's **Failure alert emails**, if any are set. The alert goes out once per request and does not include the submitted answers. It lists:
+When a request will not be retried again, because every attempt failed or the workflow refused it, MSPortal emails the template's **Failure alert emails**, if any are set. The alert goes out once each time MSPortal gives up on a request, and does not include the submitted answers. It lists:
 
 - the form, and the branch if a branch was submitted;
 - the company and the person who submitted it;
 - the submission ID, which is the payload's `request_id` and the `X-MSPortal-Request-Id` header, so you can find the request in your workflow's run history and in [Submissions](#list-and-export-submissions);
-- when it was submitted, how many attempts were made, and the last error.
+- when it was submitted, how many attempts were made, and why it failed, such as the HTTP status your workflow answered with.
+
+The alert never quotes your workflow's response, because a response can repeat submitted answers. The full response is saved with the request in [Submissions](#list-and-export-submissions).
 
 The alert is sent whether or not the request is also emailed to your fallback inbox, so it covers **Create PSA ticket + webhook** templates too. A branch without its own webhook uses the main template's alert addresses. Requests from the demo company are not alerted.
 
