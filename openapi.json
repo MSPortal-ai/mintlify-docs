@@ -5372,6 +5372,20 @@
             "nullable": true,
             "description": "Number of devices at this location (when requested)"
           },
+          "isActive": {
+            "type": "boolean",
+            "description": "False when the location is inactive: hidden from location pickers and lists, kept on records that use it"
+          },
+          "activeSetBy": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "sync",
+              "user",
+              null
+            ],
+            "description": "Who last set isActive: sync (its PSA site is Inactive) or user (marked by hand; no sync changes it). Null when never set"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -5397,6 +5411,8 @@
           "phone",
           "email",
           "deviceCount",
+          "isActive",
+          "activeSetBy",
           "createdAt",
           "updatedAt"
         ]
@@ -45421,6 +45437,22 @@
             "description": "Include count of devices per location",
             "name": "includeDeviceCount",
             "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "active",
+                "inactive",
+                "all"
+              ],
+              "default": "active",
+              "description": "Active (default), inactive or all locations"
+            },
+            "required": false,
+            "description": "Active (default), inactive or all locations",
+            "name": "status",
+            "in": "query"
           }
         ],
         "responses": {
@@ -45525,6 +45557,102 @@
           },
           "403": {
             "description": "Forbidden - missing scope (devices.read) or the linked user lacks the module permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Set location active",
+        "description": "Mark a location inactive (hidden from location pickers and lists; devices, contacts and settings that use it keep it) or active again. No PSA sync changes a flag set here. Mirrors the MCP tool set_location_active.",
+        "tags": [
+          "Devices"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Location ID"
+            },
+            "required": true,
+            "description": "Location ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "active": {
+                    "type": "boolean",
+                    "description": "true shows the location again; false hides it"
+                  }
+                },
+                "required": [
+                  "active"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated location",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationSingleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid location ID or body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (companies.write), the linked user lacks write_settings_companies, or the location belongs to another company",
             "content": {
               "application/json": {
                 "schema": {
