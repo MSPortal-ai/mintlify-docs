@@ -9,7 +9,7 @@ Use this guide to read the CSAT dashboard and export its responses. CSAT is the 
 ## Before you start
 
 - Your role needs **Surveys** read access and **View CSAT dashboards**. An MSP administrator turns this on per role in **Settings > Users & Roles**, under **Surveys**. General survey access is not enough.
-- CSAT must be available for your portal. That means built-in CSAT campaigns are turned on, or an integration that imports ratings (HaloPSA, Autotask, Simplesat, CrewHu or SmileBack) is active.
+- CSAT must be available for your portal. That means an integration that imports ratings (HaloPSA, Autotask, Simplesat, CrewHu, SmileBack or TeamGPS) is active.
 - Company users see only their permitted company. The **CSAT by Company** comparison table is for MSP staff.
 
 ## Open the CSAT dashboard
@@ -104,6 +104,16 @@ This is for MSP staff.
 The export has a fixed set of columns. They include the rating, scale, normalized score, source, company, respondent name and email, ticket details, the assigned technician and the feedback text when there is any. It covers every matching record, not only the rows you can see. The default period is 90 days, even when the dashboard uses a different period.
 
 If the download fails or stops, check your browser's download status before you use the file as a complete report.
+
+## Read responses through the API
+
+For an automated workflow, such as following up with clients who gave a top rating, use the public API instead of the CSV. `GET /api/public/v1/surveys/csat-responses` lists individual ratings, newest first, with no 90-day limit. Each response includes its source, rating, scale, comment, company, contact, ticket and technician.
+
+- Filter with `dateFrom`, `dateTo`, `minRating`, `minNormalizedScore`, `hasComment`, `source` and `companyId`.
+- To pick up new ratings, call it on a schedule with `dateFrom` set to the newest `submittedAt` you already have.
+- The API key needs the **surveys.read** scope, and the user it acts as needs Surveys read access and **View CSAT dashboards**. The ticket summary, closed date and ticket id also need the **tickets.read** scope and access to every ticket.
+
+See the **API Reference** tab for every field and filter.
 
 ## Import HaloPSA and Autotask satisfaction ratings
 
