@@ -110,7 +110,7 @@ If the download fails or stops, check your browser's download status before you 
 For an automated workflow, such as following up with clients who gave a top rating, use the public API instead of the CSV. `GET /api/public/v1/surveys/csat-responses` lists individual ratings, newest first, with no 90-day limit. Each response includes its source, rating, scale, comment, company, contact, ticket and technician.
 
 - Filter with `dateFrom`, `dateTo`, `minRating`, `minNormalizedScore`, `hasComment`, `source` and `companyId`.
-- To pick up new ratings, call it on a schedule with `dateFrom` set to the newest `submittedAt` you already have.
+- To pick up new ratings, call it on a schedule with a `dateFrom` that overlaps your previous call by at least a day, and skip responses whose `id` you already have. Imported ratings arrive when each integration syncs, so a rating can show up after a later call with an earlier `submittedAt`. A CSAT review correction changes the rating but keeps `submittedAt`.
 - The API key needs the **surveys.read** scope, and the user it acts as needs Surveys read access and **View CSAT dashboards**. The ticket summary, closed date and ticket id also need the **tickets.read** scope and access to every ticket.
 
 See the **API Reference** tab for every field and filter.
