@@ -38,7 +38,7 @@ Recent alert history covers alerts detected in the last 30 days, including resol
 
 ## Auvik SaaS Management
 
-Auvik SaaS Management has its own card in **Settings > Integrations**, separate from the Auvik network card above. It reads your SaaS Management clients and, for each client you match to a company, that client's SaaS applications with their users, risk and contract spend. The applications appear in **Cloud > Applications**.
+Auvik SaaS Management has its own card in **Settings > Integrations**, separate from the Auvik network card above. It reads your SaaS Management clients and, for each client you match to a company, that client's SaaS applications with their users, risk and contract spend, their licenses, the people Auvik monitors and the credential events it logs. All of it appears in **Cloud > Applications**.
 
 The integration is in beta and available to selected tenants. Setup is for MSP staff with permission to manage integrations. MSPortal only reads from Auvik: it never creates, edits or deletes anything there.
 
@@ -86,6 +86,21 @@ The choice is fixed once the connection is saved. To use the other Auvik API, di
 
 MSPortal stores the key and secret in its vault and only reads from Auvik. Both APIs sync the same clients and applications into the same places, so **Cloud > Applications** looks the same whichever one you connect with.
 
+### Choose what syncs
+
+In the connection's **Choose data** task, a switch turns each dataset on or off. All four are on for a new connection.
+
+| Switch | What it syncs | Where it appears |
+|---|---|---|
+| **SaaS applications** | Each matched client's applications, with users, risk and contract spend | **Cloud > Applications**, **SaaS applications** |
+| **Licenses** | License holders per application, with license type, last sign-in and underused licenses | **Licenses** and **Underutilized** columns on **SaaS applications**; select a license count to see who holds them |
+| **SaaS users** | The people Auvik monitors at each client, with their credentials and applications | **Cloud > Applications**, **SaaS users** |
+| **Security logs** | Credential events: shared, generic and personal credentials used to sign in | **Cloud > Applications**, **Credential events** (the last 90 days) |
+
+MSPortal checks which of these Auvik has for each client and only reads those on the schedule. A switch shows **No data in Auvik yet** when Auvik had nothing for it at the last check; MSPortal checks again about once a week. Licenses come only from applications with a SaaS Ops integration set up in Auvik SaaS Management, and the licenses switch needs **SaaS applications** on.
+
+Turning a switch off removes the data MSPortal synced for it, after you confirm. Turning it back on syncs it again.
+
 ### Auvik SaaS Management troubleshooting
 
 - **"This looks like a Partner Hub API secret" or "This looks like a Partner Hub API key":** you entered Partner Hub values under **Unified Auvik API**. Choose **SaaS Management API**, or enter an Auvik user's email address and the API key from that user's profile in Auvik Network Management.
@@ -93,6 +108,7 @@ MSPortal stores the key and secret in its vault and only reads from Auvik. Both 
 - **Your SaaS Management profile has no API key:** a user's API key is generated in Auvik Network Management, not in SaaS Management. If your organization has SaaS Management on its own, use the **SaaS Management API** option.
 - **Auvik rejected the Partner Hub API key, or the secret:** copy the value again from the Partner Hub. The secret is long and contains `=` characters in the middle and at the end; enter all of it. If you no longer have the secret, generate a new key and secret in the Partner Hub. That replaces the old pair, so update any other tool that uses it.
 - **No clients to match:** allow the first sync a minute or two to list your clients.
+- **Licenses shows "No data in Auvik yet":** Auvik only has license data for applications with a SaaS Ops integration. Set one up in Auvik SaaS Management; the next weekly check finds it.
 
 ## Related guides
 
