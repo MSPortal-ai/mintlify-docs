@@ -36017,6 +36017,190 @@
           "isComanaged",
           "isSelectable"
         ]
+      },
+      "CsatResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "halo",
+              "autotask",
+              "simplesat",
+              "crewhu",
+              "smileback",
+              "teamgps",
+              "native"
+            ],
+            "description": "The system the rating came from"
+          },
+          "sourceResponseId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The rating's id in the source system, for example the HaloPSA feedback id"
+          },
+          "rating": {
+            "type": "integer",
+            "description": "Current rating; a CSAT review correction replaces the original"
+          },
+          "scale": {
+            "type": "integer",
+            "description": "Highest rating on this response's scale (3, 5 or 10)"
+          },
+          "normalizedScore": {
+            "type": "integer",
+            "nullable": true,
+            "description": "The rating on a 0-100 scale, comparable across scales"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "submittedAt": {
+            "type": "string",
+            "description": "When the client rated"
+          },
+          "company": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "description": "Null when the rating matched no company"
+          },
+          "contact": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "externalId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The PSA contact id, when the rating recorded one"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "externalId",
+              "name",
+              "email"
+            ]
+          },
+          "ticket": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": {
+                "type": "string",
+                "nullable": true,
+                "description": "Cached ticket id: GET /tickets/{id}?byInternalId=true&integrationId={integrationId}"
+              },
+              "integrationId": {
+                "type": "string",
+                "nullable": true,
+                "format": "uuid"
+              },
+              "externalId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The ticket's id in the PSA"
+              },
+              "number": {
+                "type": "string",
+                "nullable": true,
+                "description": "Ticket number"
+              },
+              "provider": {
+                "type": "string",
+                "nullable": true
+              },
+              "summary": {
+                "type": "string",
+                "nullable": true
+              },
+              "closedAt": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "id",
+              "integrationId",
+              "externalId",
+              "number",
+              "provider",
+              "summary",
+              "closedAt"
+            ],
+            "description": "id, integrationId, summary and closedAt come from the synced ticket and need the tickets.read scope and access to every ticket; otherwise they are null"
+          },
+          "technician": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "userId": {
+                "type": "string",
+                "nullable": true,
+                "format": "uuid",
+                "description": "Portal user id, when the technician has an account"
+              },
+              "externalId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The technician's PSA member id"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": [
+              "userId",
+              "externalId",
+              "name",
+              "email"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "sourceResponseId",
+          "rating",
+          "scale",
+          "normalizedScore",
+          "comment",
+          "submittedAt",
+          "company",
+          "contact",
+          "ticket",
+          "technician"
+        ]
       }
     },
     "parameters": {}
@@ -49229,6 +49413,191 @@
                   "required": [
                     "data",
                     "truncated"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - missing scope (surveys.read) or the linked user lacks the surveys permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/v1/surveys/csat-responses": {
+      "get": {
+        "summary": "List CSAT responses",
+        "description": "Individual CSAT ratings, newest first, from HaloPSA, Autotask, Simplesat, CrewHu, SmileBack and TeamGPS, each with its ticket, company, contact and technician. Company users see their own company's ratings. dateFrom and dateTo filter on submittedAt, when the client rated. Imported ratings arrive on each integration's sync, so a rating can reach MSPortal after a later poll with an older submittedAt, and a CSAT review correction changes rating but keeps submittedAt. To pick up new ratings, poll with a window that overlaps the previous one by at least a day and de-duplicate by id. Scope surveys.read; permissions view_csat and surveys read. Ticket summary, closed date and cached ticket id also need the tickets.read scope and access to every ticket; otherwise they are null.",
+        "tags": [
+          "Surveys"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Page number"
+            },
+            "required": false,
+            "description": "Page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Items per page"
+            },
+            "required": false,
+            "description": "Items per page",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Ratings submitted at or after this time. ISO 8601 date-time with offset, or a date (YYYY-MM-DD, UTC day)."
+            },
+            "required": false,
+            "description": "Ratings submitted at or after this time. ISO 8601 date-time with offset, or a date (YYYY-MM-DD, UTC day).",
+            "name": "dateFrom",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Ratings submitted at or before this time. ISO 8601 date-time with offset, or a date (YYYY-MM-DD, UTC day)."
+            },
+            "required": false,
+            "description": "Ratings submitted at or before this time. ISO 8601 date-time with offset, or a date (YYYY-MM-DD, UTC day).",
+            "name": "dateTo",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0,
+              "maximum": 10,
+              "description": "Lowest rating to include, on the response's own scale (for example 4 for 4 and 5 out of 5)"
+            },
+            "required": false,
+            "description": "Lowest rating to include, on the response's own scale (for example 4 for 4 and 5 out of 5)",
+            "name": "minRating",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "nullable": true,
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Lowest 0-100 score to include; compares ratings across scales (80 or more counts as satisfied)"
+            },
+            "required": false,
+            "description": "Lowest 0-100 score to include; compares ratings across scales (80 or more counts as satisfied)",
+            "name": "minNormalizedScore",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "boolean",
+              "description": "true: only ratings with a comment; false: only ratings without one"
+            },
+            "required": false,
+            "description": "true: only ratings with a comment; false: only ratings without one",
+            "name": "hasComment",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "halo",
+                  "autotask",
+                  "simplesat",
+                  "crewhu",
+                  "smileback",
+                  "teamgps",
+                  "native"
+                ]
+              },
+              "description": "Repeat the key or comma-separate"
+            },
+            "required": false,
+            "description": "Repeat the key or comma-separate",
+            "name": "source",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "companyId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CSAT responses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CsatResponse"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "pagination"
                   ]
                 }
               }
